@@ -19,17 +19,15 @@
 package au.com.integradev.delphi.symbol;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 
 public final class DelphiNameOccurrence implements NameOccurrence {
   private final SymbolicNode location;
-  private DelphiNameDeclaration declaration;
-  private DelphiNameOccurrence qualifiedName;
+  private NameDeclaration declaration;
+  private NameOccurrence qualifiedName;
   private String image;
   private boolean isExplicitInvocation;
   private boolean isMethodReference;
@@ -62,22 +60,25 @@ public final class DelphiNameOccurrence implements NameOccurrence {
     return image;
   }
 
-  public void setNameWhichThisQualifies(DelphiNameOccurrence qualifiedName) {
+  public void setNameWhichThisQualifies(NameOccurrence qualifiedName) {
     this.qualifiedName = qualifiedName;
   }
 
-  public DelphiNameOccurrence getNameForWhichThisIsAQualifier() {
+  @Override
+  public NameOccurrence getNameForWhichThisIsAQualifier() {
     return qualifiedName;
   }
 
-  public void setNameDeclaration(DelphiNameDeclaration declaration) {
+  public void setNameDeclaration(NameDeclaration declaration) {
     this.declaration = declaration;
   }
 
-  public DelphiNameDeclaration getNameDeclaration() {
+  @Override
+  public NameDeclaration getNameDeclaration() {
     return declaration;
   }
 
+  @Override
   public boolean isPartOfQualifiedName() {
     return qualifiedName != null;
   }
@@ -86,6 +87,7 @@ public final class DelphiNameOccurrence implements NameOccurrence {
     this.isExplicitInvocation = isExplicitInvocation;
   }
 
+  @Override
   public boolean isExplicitInvocation() {
     return isExplicitInvocation;
   }
@@ -94,6 +96,7 @@ public final class DelphiNameOccurrence implements NameOccurrence {
     this.isMethodReference = true;
   }
 
+  @Override
   public boolean isMethodReference() {
     return isMethodReference;
   }
@@ -102,6 +105,7 @@ public final class DelphiNameOccurrence implements NameOccurrence {
     this.isGeneric = true;
   }
 
+  @Override
   public boolean isGeneric() {
     return isGeneric;
   }
@@ -110,10 +114,12 @@ public final class DelphiNameOccurrence implements NameOccurrence {
     this.typeParameters = typeParameters;
   }
 
+  @Override
   public List<Type> getTypeArguments() {
     return typeParameters;
   }
 
+  @Override
   public boolean isSelf() {
     return "Self".equals(getImage());
   }

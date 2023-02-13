@@ -21,7 +21,8 @@ package au.com.integradev.delphi.symbol.scope;
 import static au.com.integradev.delphi.symbol.scope.DelphiScope.unknownScope;
 import static au.com.integradev.delphi.type.DelphiType.unknownType;
 
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.HelperType;
 import au.com.integradev.delphi.type.Type.ScopedType;
@@ -29,8 +30,6 @@ import au.com.integradev.delphi.type.Typed;
 import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import java.util.Set;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -98,7 +97,7 @@ public class TypeScope extends AbstractDelphiScope implements Typed {
     private SpecializedTypeScope(DelphiScope scope, TypeSpecializationContext context) {
       this.genericScope = scope;
       scope.getAllDeclarations().stream()
-          .map(DelphiNameDeclaration.class::cast)
+          .map(NameDeclaration.class::cast)
           .map(declaration -> declaration.specialize(context))
           .forEach(super::addDeclaration);
     }

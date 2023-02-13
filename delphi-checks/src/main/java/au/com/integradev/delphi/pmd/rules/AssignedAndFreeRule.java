@@ -33,7 +33,7 @@ import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.StatementNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import org.jetbrains.annotations.Nullable;
 
 public class AssignedAndFreeRule extends AbstractDelphiRule {

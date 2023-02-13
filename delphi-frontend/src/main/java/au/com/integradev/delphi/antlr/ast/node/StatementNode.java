@@ -18,14 +18,4 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import org.antlr.runtime.Token;
-
-public abstract class StatementNode extends DelphiNode {
-  protected StatementNode(Token token) {
-    super(token);
-  }
-
-  protected StatementNode(int tokenType) {
-    super(tokenType);
-  }
-}
+public interface StatementNode extends DelphiNode { }

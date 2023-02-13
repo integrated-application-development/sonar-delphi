@@ -24,7 +24,7 @@ import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
 import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class DuplicatesRule extends AbstractDelphiRule {
 

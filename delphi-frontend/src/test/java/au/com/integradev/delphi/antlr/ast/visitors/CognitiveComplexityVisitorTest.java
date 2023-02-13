@@ -20,7 +20,7 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
@@ -135,7 +135,7 @@ class CognitiveComplexityVisitorTest {
       throw new UncheckedIOException(e);
     }
     DelphiFile delphiFile = DelphiFile.from(path.toFile(), DelphiFileUtils.mockConfig());
-    DelphiAST ast = delphiFile.getAst();
+    DelphiAst ast = delphiFile.getAst();
     return visitor.visit(ast, new Data()).getComplexity();
   }
 }

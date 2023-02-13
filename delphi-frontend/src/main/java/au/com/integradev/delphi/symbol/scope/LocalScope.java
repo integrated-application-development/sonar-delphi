@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import com.google.common.base.Preconditions;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 
 public class LocalScope extends AbstractDelphiScope {
 

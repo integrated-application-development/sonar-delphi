@@ -23,7 +23,7 @@ import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
@@ -33,7 +33,7 @@ import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class PlatformDependentCastRule extends AbstractDelphiRule {
   @Override
@@ -65,7 +65,7 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
     Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
     if (previous instanceof NameReferenceNode) {
       NameReferenceNode nameReference = ((NameReferenceNode) previous);
-      DelphiNameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
+      NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
       if (declaration instanceof TypeNameDeclaration) {
         return ((TypeNameDeclaration) declaration).getType();
       }

@@ -21,13 +21,15 @@ package au.com.integradev.delphi.symbol.scope;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.IndexedNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
+import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
@@ -40,22 +42,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 
 abstract class AbstractFileScope extends AbstractDelphiScope implements FileScope {
   private final String name;
   private final Deque<FileScope> imports = new ArrayDeque<>();
   private Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
-  private Map<Integer, DelphiNameDeclaration> registeredDeclarations = new HashMap<>();
-  private Map<Integer, DelphiNameOccurrence> registeredOccurrences = new HashMap<>();
+  private Map<Integer, NameDeclaration> registeredDeclarations = new HashMap<>();
+  private Map<Integer, NameOccurrence> registeredOccurrences =
+      new HashMap<>();
 
   protected AbstractFileScope(String name) {
     this.name = name;
   }
 
   @Override
-  public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
+  public Set<NameDeclaration> findDeclaration(NameOccurrence occurrence) {
     Set<NameDeclaration> result = super.findDeclaration(occurrence);
     for (FileScope importScope : imports) {
       if (result.isEmpty()) {
@@ -87,10 +88,10 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
   }
 
   @Override
-  public Set<NameDeclaration> shallowFindDeclaration(DelphiNameOccurrence occurrence) {
+  public Set<NameDeclaration> shallowFindDeclaration(NameOccurrence occurrence) {
     return super.findDeclaration(occurrence).stream()
-        .map(DelphiNameDeclaration.class::cast)
-        .filter(not(DelphiNameDeclaration::isImplementationDeclaration))
+        .map(NameDeclaration.class::cast)
+        .filter(not(NameDeclaration::isImplementationDeclaration))
         .filter(not(UnitImportNameDeclaration.class::isInstance))
         .collect(Collectors.toSet());
   }
@@ -120,28 +121,29 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
   }
 
   @Override
-  public void registerScope(IndexedNode node, DelphiScope scope) {
+  public void registerScope(Node node, DelphiScope scope) {
     registeredScopes.put(node.getTokenIndex(), scope);
   }
 
   @Override
-  public void registerDeclaration(IndexedNode node, NameDeclaration declaration) {
-    registeredDeclarations.put(node.getTokenIndex(), (DelphiNameDeclaration) declaration);
+  public void registerDeclaration(Node node, NameDeclaration declaration) {
+    registeredDeclarations.put(node.getTokenIndex(), declaration);
   }
 
   @Override
-  public void registerOccurrence(IndexedNode node, NameOccurrence occurrence) {
-    registeredOccurrences.put(node.getTokenIndex(), (DelphiNameOccurrence) occurrence);
+  public void registerOccurrence(Node node, NameOccurrence occurrence) {
+    registeredOccurrences.put(node.getTokenIndex(), occurrence);
   }
 
   @Override
-  public void attach(DelphiNode node) {
+  public void attach(MutableDelphiNode node) {
     node.setScope(registeredScopes.get(node.getTokenIndex()));
   }
 
   @Override
   public void attach(NameDeclarationNode node) {
-    node.setNameDeclaration(registeredDeclarations.get(node.getTokenIndex()));
+    ((NameDeclarationNodeImpl) node)
+        .setNameDeclaration(registeredDeclarations.get(node.getTokenIndex()));
   }
 
   @Override
@@ -167,7 +169,8 @@ abstract class AbstractFileScope extends AbstractDelphiScope implements FileScop
 
   @Override
   public void attach(NameReferenceNode node) {
-    node.setNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+    ((NameReferenceNodeImpl) node)
+        .setNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
   }
 
   @Override

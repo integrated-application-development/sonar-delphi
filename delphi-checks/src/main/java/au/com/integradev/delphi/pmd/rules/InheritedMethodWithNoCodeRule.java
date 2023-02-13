@@ -42,7 +42,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class InheritedMethodWithNoCodeRule extends AbstractDelphiRule {
 

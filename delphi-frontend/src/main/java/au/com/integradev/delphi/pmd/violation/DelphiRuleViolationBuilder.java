@@ -76,7 +76,7 @@ public class DelphiRuleViolationBuilder {
   }
 
   private void findLogicalLocation(DelphiNode node) {
-    FileHeaderNode fileHeader = node.getASTTree().getFileHeader();
+    FileHeaderNode fileHeader = node.getAst().getFileHeader();
     ruleViolation.setPackageName(fileHeader.getName());
 
     TypeDeclarationNode typeNode = node.getFirstParentOfType(TypeDeclarationNode.class);

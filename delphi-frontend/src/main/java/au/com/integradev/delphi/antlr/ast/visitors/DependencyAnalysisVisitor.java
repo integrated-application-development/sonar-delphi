@@ -26,11 +26,12 @@ import au.com.integradev.delphi.antlr.ast.node.InitializationSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodDirective;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
@@ -43,8 +44,6 @@ import au.com.integradev.delphi.symbol.scope.TypeScope;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.ScopedType;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 
 public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<Data> {
   private static final String TCOMPONENT = "System.Classes.TComponent";
@@ -101,7 +100,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
   @Override
   public Data visit(TypeDeclarationNode typeDeclaration, Data data) {
-    if (typeDeclaration.isInterfaceSection()) {
+    if (typeDeclaration.getFirstParentOfType(InterfaceSectionNode.class) != null) {
       addDependenciesForComponentTypeDeclaration(typeDeclaration.getType(), data);
     }
     return DelphiParserVisitor.super.visit(typeDeclaration, data);
@@ -124,7 +123,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
   @Override
   public Data visit(NameReferenceNode nameNode, Data data) {
-    DelphiNameDeclaration declaration = nameNode.getNameDeclaration();
+    NameDeclaration declaration = nameNode.getNameDeclaration();
 
     if (isNameStart(nameNode) || isFromHelperType(declaration)) {
       addDependenciesForDeclaration(declaration, data);
@@ -143,21 +142,20 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     return DelphiParserVisitor.super.visit(nameNode, data);
   }
 
-  private void handleExplicitImportReferences(
-      @Nullable DelphiNameDeclaration declaration, Data data) {
+  private void handleExplicitImportReferences(@Nullable NameDeclaration declaration, Data data) {
     if (declaration instanceof UnitImportNameDeclaration) {
       addDependenciesForDeclaration(
           ((UnitImportNameDeclaration) declaration).getOriginalDeclaration(), data);
     }
   }
 
-  private void handleTypeAliases(@Nullable DelphiNameDeclaration declaration, Data data) {
+  private void handleTypeAliases(@Nullable NameDeclaration declaration, Data data) {
     if (declaration instanceof TypeNameDeclaration) {
       addDependenciesForDeclaration(((TypeNameDeclaration) declaration).getAliased(), data);
     }
   }
 
-  private void handleInlineMethods(@Nullable DelphiNameDeclaration declaration, Data data) {
+  private void handleInlineMethods(@Nullable NameDeclaration declaration, Data data) {
     if (isInlineMethodReference(declaration)) {
       addDependenciesRequiredByMethod(declaration, data);
     }
@@ -172,7 +170,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
   @Override
   public Data visit(ArrayAccessorNode accessorNode, Data data) {
-    DelphiNameOccurrence implicitOccurrence = accessorNode.getImplicitNameOccurrence();
+    NameOccurrence implicitOccurrence = accessorNode.getImplicitNameOccurrence();
     if (implicitOccurrence != null) {
       handleInlineMethods(implicitOccurrence.getNameDeclaration(), data);
     }

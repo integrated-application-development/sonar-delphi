@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
+import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
@@ -70,7 +71,7 @@ public abstract class AbstractImportRule extends AbstractDelphiRule {
       return true;
     }
 
-    if (unitImport.isInterfaceSection()) {
+    if (unitImport.getFirstParentOfType(InterfaceSectionNode.class) != null) {
       UnitImportNameDeclaration importDeclaration = unitImport.getImportNameDeclaration();
       UnitNameDeclaration dependency = importDeclaration.getOriginalDeclaration();
       Objects.requireNonNull(dependency);

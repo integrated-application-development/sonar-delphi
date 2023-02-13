@@ -18,9 +18,10 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import java.util.List;
 
-public interface GenerifiableDeclaration extends DelphiNameDeclaration {
+public interface GenerifiableDeclaration extends NameDeclaration {
   List<TypedDeclaration> getTypeParameters();
 
   default boolean isGeneric() {

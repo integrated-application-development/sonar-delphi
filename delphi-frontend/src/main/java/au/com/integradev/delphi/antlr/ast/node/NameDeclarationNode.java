@@ -1,78 +1,22 @@
-/*
- * Sonar Delphi Plugin
- * Copyright (C) 2019-2022 Integrated Application Development
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
- */
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
-import java.util.Collections;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import java.util.List;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import org.antlr.runtime.Token;
 
-public abstract class NameDeclarationNode extends DelphiNode {
-  private DelphiNameDeclaration declaration;
-  private List<NameOccurrence> usages;
+public interface NameDeclarationNode extends DelphiNode {
+  GenericDefinitionNode getGenericDefinition();
 
-  protected NameDeclarationNode(Token token) {
-    super(token);
-  }
+  List<TypeParameter> getTypeParameters();
 
-  protected NameDeclarationNode(int tokenType) {
-    super(tokenType);
-  }
+  NameDeclaration getNameDeclaration();
 
-  public GenericDefinitionNode getGenericDefinition() {
-    Node result = jjtGetChild(jjtGetNumChildren() - 1);
-    return (result instanceof GenericDefinitionNode) ? (GenericDefinitionNode) result : null;
-  }
+  List<NameOccurrence> getUsages();
 
-  public List<TypeParameter> getTypeParameters() {
-    GenericDefinitionNode genericDefinition = getGenericDefinition();
-    if (genericDefinition != null) {
-      return genericDefinition.getTypeParameters();
-    }
-    return Collections.emptyList();
-  }
+  DeclarationKind getKind();
 
-  public DelphiNameDeclaration getNameDeclaration() {
-    return declaration;
-  }
-
-  public void setNameDeclaration(DelphiNameDeclaration declaration) {
-    this.declaration = declaration;
-  }
-
-  public List<NameOccurrence> getUsages() {
-    if (usages == null) {
-      if (declaration != null) {
-        usages = declaration.getScope().getOccurrencesFor(declaration);
-      } else {
-        usages = Collections.emptyList();
-      }
-    }
-    return usages;
-  }
-
-  public abstract DeclarationKind getKind();
-
-  public enum DeclarationKind {
+  enum DeclarationKind {
     CONST,
     ENUM_ELEMENT,
     EXCEPT_ITEM,

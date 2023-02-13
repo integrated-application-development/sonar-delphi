@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static java.util.regex.Pattern.compile;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.pmd.FilePosition;
 import com.google.common.base.Splitter;
@@ -137,7 +137,7 @@ public class CommentedOutCodeRule extends AbstractDelphiRule {
   private static final Pattern NEW_LINE_DELIMITER = compile("\r\n?|\n");
 
   @Override
-  public RuleContext visit(DelphiAST ast, RuleContext data) {
+  public RuleContext visit(DelphiAst ast, RuleContext data) {
     List<Integer> commentedOutCodeLines = new ArrayList<>();
     for (DelphiToken comment : ast.getComments()) {
       commentedOutCodeLines.addAll(handleComment(comment));

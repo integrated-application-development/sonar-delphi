@@ -19,19 +19,22 @@
 package au.com.integradev.delphi.symbol;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.IndexedNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.symbol.scope.FileScope;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.sourceforge.pmd.lang.ast.AbstractNode;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.ScopedNode;
 
-public final class SymbolicNode extends AbstractNode implements ScopedNode, IndexedNode {
+public final class SymbolicNode implements Node {
   private static final AtomicInteger IMAGINARY_TOKEN_INDEX = new AtomicInteger(Integer.MIN_VALUE);
-  private final DelphiScope scope;
+  private final int id;
   private final int tokenIndex;
+  private final String image;
+  private final int beginLine;
+  private final int endLine;
+  private final int beginColumn;
+  private final int endColumn;
+  private final DelphiScope scope;
 
   public SymbolicNode(DelphiNode node) {
     this(node, node.getScope());
@@ -40,54 +43,88 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
   public SymbolicNode(DelphiNode node, DelphiScope scope) {
     this(
         node.jjtGetId(),
+        node.getTokenIndex(),
+        node.getImage(),
         node.getBeginLine(),
         node.getEndLine(),
         node.getBeginColumn(),
         node.getEndColumn(),
-        node.getImage(),
-        scope,
-        node.getTokenIndex());
+        scope);
   }
 
   private SymbolicNode(
       int id,
+      int tokenIndex,
+      String image,
       int beginLine,
       int endLine,
       int beginColumn,
       int endColumn,
-      String image,
-      DelphiScope scope,
-      int tokenIndex) {
-    super(id, beginLine, endLine, beginColumn, endColumn);
-    this.setImage(image);
-    this.scope = scope;
+      DelphiScope scope) {
+    this.id = id;
     this.tokenIndex = tokenIndex;
+    this.image = image;
+    this.beginLine = beginLine;
+    this.endLine = endLine;
+    this.beginColumn = beginColumn;
+    this.endColumn = endColumn;
+    this.scope = scope;
   }
 
   public static SymbolicNode imaginary(String image, DelphiScope scope) {
-    return new SymbolicNode(0, 0, 0, 0, 0, image, scope, IMAGINARY_TOKEN_INDEX.incrementAndGet());
+    return new SymbolicNode(0, IMAGINARY_TOKEN_INDEX.incrementAndGet(), image, 0, 0, 0, 0, scope);
   }
 
   public static SymbolicNode fromRange(String image, DelphiNode begin, Node end) {
     return new SymbolicNode(
         begin.jjtGetId(),
+        begin.getTokenIndex(),
+        image,
         begin.getBeginLine(),
         end.getEndLine(),
         begin.getBeginColumn(),
         end.getEndColumn(),
-        image,
-        begin.getScope(),
-        begin.getTokenIndex());
+        begin.getScope());
   }
 
   @Override
-  public DelphiScope getScope() {
-    return scope;
+  public int jjtGetId() {
+    return id;
   }
 
   @Override
   public int getTokenIndex() {
     return tokenIndex;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
+  }
+
+  @Override
+  public int getBeginLine() {
+    return beginLine;
+  }
+
+  @Override
+  public int getBeginColumn() {
+    return beginColumn;
+  }
+
+  @Override
+  public int getEndLine() {
+    return endLine;
+  }
+
+  @Override
+  public int getEndColumn() {
+    return endColumn;
+  }
+
+  @Override
+  public DelphiScope getScope() {
+    return scope;
   }
 
   public String getUnitName() {
@@ -96,10 +133,5 @@ public final class SymbolicNode extends AbstractNode implements ScopedNode, Inde
       return UnitNameDeclaration.UNKNOWN_UNIT;
     }
     return fileScope.getUnitDeclaration().fullyQualifiedName();
-  }
-
-  @Override
-  public String getXPathNodeName() {
-    return getImage();
   }
 }

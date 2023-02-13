@@ -23,13 +23,13 @@
 package au.com.integradev.delphi.antlr.ast;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNode;
+import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
+import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import com.google.common.base.Preconditions;
 import java.lang.reflect.Constructor;
-import net.sourceforge.pmd.lang.ast.GenericToken;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
@@ -41,9 +41,9 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   @Override
   public Object create(Token token) {
     if (token != null && token.getType() == DelphiLexer.TkIdentifier) {
-      return new IdentifierNode(token);
+      return new IdentifierNodeImpl(token);
     }
-    return new CommonDelphiNode(token);
+    return new CommonDelphiNodeImpl(token);
   }
 
   @Override
@@ -64,8 +64,8 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   @Override
   public void setTokenBoundaries(Object node, Token startToken, Token stopToken) {
     if (node != null) {
-      ((DelphiNode) node).jjtSetFirstToken(new DelphiToken(startToken));
-      ((DelphiNode) node).jjtSetLastToken(new DelphiToken(stopToken));
+      ((MutableDelphiNode) node).jjtSetFirstToken(new DelphiToken(startToken));
+      ((MutableDelphiNode) node).jjtSetLastToken(new DelphiToken(stopToken));
     }
   }
 
@@ -109,7 +109,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   public Object dupNode(Object node) {
     try {
       Constructor<?> constructor = node.getClass().getConstructor(Token.class);
-      DelphiNode dupNode = (DelphiNode) constructor.newInstance(getToken(node));
+      MutableDelphiNode dupNode = (MutableDelphiNode) constructor.newInstance(getToken(node));
       dupNode.jjtSetFirstToken(getFirstToken(node));
       dupNode.jjtSetLastToken(getLastToken(node));
       return dupNode;
@@ -204,34 +204,34 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public void setParent(Object node, Object parent) {
-    ((DelphiNode) node).jjtSetParent((DelphiNode) parent);
+    ((MutableDelphiNode) node).jjtSetParent((DelphiNode) parent);
   }
 
   @Override
   public int getTokenStartIndex(Object node) {
-    throw new UnsupportedOperationException("Out of scope for PMD implementation");
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public int getTokenStopIndex(Object node) {
-    throw new UnsupportedOperationException("Out of scope for PMD implementation");
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public Object deleteChild(Object t, int i) {
-    throw new UnsupportedOperationException("Out of scope for PMD implementation");
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object node) {
-    throw new UnsupportedOperationException("Out of scope for PMD implementation");
+    throw new UnsupportedOperationException();
   }
 
-  private GenericToken getFirstToken(Object node) {
+  private DelphiToken getFirstToken(Object node) {
     return ((DelphiNode) node).jjtGetFirstToken();
   }
 
-  private GenericToken getLastToken(Object node) {
+  private DelphiToken getLastToken(Object node) {
     return ((DelphiNode) node).jjtGetLastToken();
   }
 }

@@ -40,7 +40,7 @@ public class TooLongLineRule extends AbstractDelphiRule {
 
     if (lineNumber > lastLineChecked) {
       lastLineChecked = lineNumber;
-      String line = node.getASTTree().getDelphiFile().getSourceCodeLine(lineNumber);
+      String line = node.getAst().getDelphiFile().getSourceCodeLine(lineNumber);
       int lineLength = getLineLength(line);
       int lineLimit = getProperty(LIMIT);
 

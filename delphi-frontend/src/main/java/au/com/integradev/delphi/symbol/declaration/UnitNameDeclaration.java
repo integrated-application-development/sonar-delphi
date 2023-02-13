@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.scope.FileScope;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
-public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
+public final class UnitNameDeclaration extends QualifiedNameDeclaration {
   public static final String UNKNOWN_UNIT = "<unknown unit>";
   private final FileScope fileScope;
   private final String namespace;
@@ -40,7 +41,7 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
     super(node.getNameNode(), fileScope);
     this.fileScope = fileScope;
     this.namespace = node.getNamespace();
-    this.path = Path.of(node.getASTTree().getFileName());
+    this.path = Path.of(node.getAst().getFileName());
     this.interfaceDependencies = new HashSet<>();
     this.implementationDependencies = new HashSet<>();
   }
@@ -96,7 +97,7 @@ public final class UnitNameDeclaration extends QualifiedDelphiNameDeclaration {
   }
 
   @Override
-  public int compareTo(@NotNull DelphiNameDeclaration other) {
+  public int compareTo(@NotNull NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       UnitNameDeclaration that = (UnitNameDeclaration) other;

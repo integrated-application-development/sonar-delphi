@@ -22,7 +22,7 @@ import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
 
@@ -50,7 +50,7 @@ public class FreeAndNilTObjectRule extends AbstractDelphiRule {
       return false;
     }
 
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    NameDeclaration declaration = reference.getNameDeclaration();
     if (declaration instanceof MethodNameDeclaration) {
       MethodNameDeclaration method = (MethodNameDeclaration) declaration;
       if (method.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")) {

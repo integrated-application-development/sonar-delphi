@@ -21,7 +21,7 @@ package au.com.integradev.delphi.symbol.declaration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNode;
+import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
 import au.com.integradev.delphi.type.Type.TypeParameterType;
 import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
 import org.antlr.runtime.CommonToken;
@@ -62,7 +62,7 @@ class TypeParameterNameDeclarationTest {
 
   private static TypeParameterNameDeclaration createTypeParameter(TypeParameterType type) {
     return new TypeParameterNameDeclaration(
-        new CommonDelphiNode(new CommonToken(DelphiLexer.TkNameDeclaration, type.getImage())),
+        new CommonDelphiNodeImpl(new CommonToken(DelphiLexer.TkNameDeclaration, type.getImage())),
         type);
   }
 }

@@ -19,8 +19,7 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +53,7 @@ public class ForbiddenTypeRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(NameReferenceNode reference, RuleContext data) {
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    NameDeclaration declaration = reference.getNameDeclaration();
     if (declaration instanceof TypeNameDeclaration) {
       String fullyQualifiedMethodName = ((TypeNameDeclaration) declaration).fullyQualifiedName();
       if (blacklist.contains(fullyQualifiedMethodName)) {

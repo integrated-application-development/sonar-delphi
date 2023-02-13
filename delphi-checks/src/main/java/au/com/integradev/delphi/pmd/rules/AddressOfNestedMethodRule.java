@@ -23,11 +23,11 @@ import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.UnaryExpressionNode;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
+import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.symbol.scope.MethodScope;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.Scope;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 
 public class AddressOfNestedMethodRule extends AbstractDelphiRule {
   @Override
@@ -63,7 +63,7 @@ public class AddressOfNestedMethodRule extends AbstractDelphiRule {
       return false;
     }
 
-    Scope scope = declaration.getScope();
+    DelphiScope scope = declaration.getScope();
     return scope instanceof MethodScope && scope.getParent() instanceof MethodScope;
   }
 }

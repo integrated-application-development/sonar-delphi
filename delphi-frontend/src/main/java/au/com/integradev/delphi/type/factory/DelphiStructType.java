@@ -20,6 +20,7 @@ package au.com.integradev.delphi.type.factory;
 
 import static java.util.function.Predicate.not;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
@@ -37,7 +38,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
 
 class DelphiStructType extends DelphiGenerifiableType implements StructType {

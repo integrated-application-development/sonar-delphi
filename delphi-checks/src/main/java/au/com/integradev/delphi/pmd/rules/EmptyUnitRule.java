@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.ConstDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNode;
@@ -30,7 +30,7 @@ import net.sourceforge.pmd.RuleContext;
 
 public class EmptyUnitRule extends AbstractDelphiRule {
   @Override
-  public RuleContext visit(DelphiAST ast, RuleContext data) {
+  public RuleContext visit(DelphiAst ast, RuleContext data) {
     if (!ast.isPackage() && !hasMeaningfulCode(ast)) {
       newViolation(data).atPosition(FilePosition.atFileLevel()).save();
     }

@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodParametersNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
@@ -26,7 +27,7 @@ import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Typed;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class EmptyBracketsRule extends AbstractDelphiRule {
   private static final String SYSTEM_ASSIGNED_IMAGE = "System.Assigned";
@@ -69,11 +70,12 @@ public class EmptyBracketsRule extends AbstractDelphiRule {
   }
 
   private static boolean isPartOfSystemAssignedArgumentExpression(ArgumentListNode arguments) {
-    Node parent = arguments.jjtGetParent();
+    DelphiNode parent = arguments.jjtGetParent();
     if (parent instanceof PrimaryExpressionNode) {
-      Node grandparent = parent.jjtGetParent();
+      DelphiNode grandparent = parent.jjtGetParent();
       if (grandparent instanceof ArgumentListNode) {
-        Node prev = grandparent.jjtGetParent().jjtGetChild(grandparent.jjtGetChildIndex() - 1);
+        DelphiNode prev =
+            grandparent.jjtGetParent().jjtGetChild(grandparent.jjtGetChildIndex() - 1);
         if (prev instanceof NameReferenceNode) {
           var declaration = ((NameReferenceNode) prev).getLastName().getNameDeclaration();
           return declaration instanceof MethodNameDeclaration

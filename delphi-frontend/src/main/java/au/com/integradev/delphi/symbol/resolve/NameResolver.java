@@ -33,19 +33,22 @@ import au.com.integradev.delphi.antlr.ast.node.GenericArgumentsNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.ParenthesizedExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
 import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.Search;
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.QualifiedDelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.declaration.QualifiedNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
@@ -89,8 +92,6 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.apache.commons.lang3.StringUtils;
 
 public class NameResolver {
@@ -203,7 +204,7 @@ public class NameResolver {
 
     for (int i = 0; i < resolvedDeclarations.size(); ++i) {
       DelphiNameOccurrence name = names.get(i);
-      DelphiNameDeclaration declaration = (DelphiNameDeclaration) resolvedDeclarations.get(i);
+      NameDeclaration declaration = resolvedDeclarations.get(i);
       name.setNameDeclaration(declaration);
 
       declaration.getScope().addNameOccurrence(name);
@@ -319,7 +320,7 @@ public class NameResolver {
 
     if (node.isBareInherited()) {
       MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
-      DelphiNode inheritedNode = (DelphiNode) node.jjtGetChild(0);
+      DelphiNode inheritedNode = node.jjtGetChild(0);
 
       DelphiNameOccurrence occurrence =
           new DelphiNameOccurrence(inheritedNode, method.simpleName());
@@ -347,7 +348,7 @@ public class NameResolver {
 
       NameReferenceNode nextName = methodName.nextName();
       if (!declarations.isEmpty()) {
-        methodName.setNameOccurrence(occurrence);
+        ((NameReferenceNodeImpl) methodName).setNameOccurrence(occurrence);
         if (nextName != null) {
           disambiguateImplicitEmptyArgumentList();
           addResolvedDeclaration();
@@ -469,7 +470,7 @@ public class NameResolver {
         addResolvedDeclaration();
       }
 
-      reference.setNameOccurrence(occurrence);
+      ((NameReferenceNodeImpl) reference).setNameOccurrence(occurrence);
     }
   }
 
@@ -488,7 +489,7 @@ public class NameResolver {
       DelphiNameOccurrence occurrence = new DelphiNameOccurrence(typeReference);
 
       occurrence.setNameDeclaration(declaration);
-      typeReference.setNameOccurrence(occurrence);
+      ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
       NameResolver resolver = new NameResolver(typeReference.getTypeFactory());
       resolver.resolvedDeclarations.add(declaration);
@@ -502,12 +503,12 @@ public class NameResolver {
     for (TypeReferenceNode typeNode : typeReferences) {
       NameReferenceNode typeReference = typeNode.getNameNode();
       TypeParameterType type = DelphiTypeParameterType.create(typeReference.getImage());
-      DelphiNameDeclaration declaration = new TypeParameterNameDeclaration(typeReference, type);
+      NameDeclaration declaration = new TypeParameterNameDeclaration(typeReference, type);
       methodScope.addDeclaration(declaration);
 
       DelphiNameOccurrence occurrence = new DelphiNameOccurrence(typeReference);
       occurrence.setNameDeclaration(declaration);
-      typeReference.setNameOccurrence(occurrence);
+      ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
       NameResolver resolver = new NameResolver(typeNode.getTypeFactory());
       resolver.resolvedDeclarations.add(declaration);
@@ -549,7 +550,7 @@ public class NameResolver {
         return;
       }
 
-      reference.setNameOccurrence(occurrence);
+      ((NameReferenceNodeImpl) reference).setNameOccurrence(occurrence);
     }
   }
 
@@ -570,10 +571,10 @@ public class NameResolver {
     return names.size() != resolvedDeclarations.size() + Math.min(1, declarations.size());
   }
 
-  private void specializeDeclarations(DelphiNameOccurrence occurrence) {
+  private void specializeDeclarations(NameOccurrence occurrence) {
     declarations =
         declarations.stream()
-            .map(DelphiNameDeclaration.class::cast)
+            .map(NameDeclaration.class::cast)
             .map(
                 declaration -> {
                   List<Type> typeArguments = occurrence.getTypeArguments();
@@ -610,12 +611,12 @@ public class NameResolver {
   private boolean readUnitNameReference(NameReferenceNode node) {
     FileScope fileScope = node.getScope().getEnclosingScope(FileScope.class);
 
-    List<QualifiedDelphiNameDeclaration> unitDeclarations = new ArrayList<>();
+    List<QualifiedNameDeclaration> unitDeclarations = new ArrayList<>();
     unitDeclarations.addAll(fileScope.getUnitDeclarations());
     unitDeclarations.addAll(fileScope.getImportDeclarations());
-    unitDeclarations.sort(Comparator.comparing(DelphiNameDeclaration::getImage).reversed());
+    unitDeclarations.sort(Comparator.comparing(NameDeclaration::getImage).reversed());
 
-    for (QualifiedDelphiNameDeclaration declaration : unitDeclarations) {
+    for (QualifiedNameDeclaration declaration : unitDeclarations) {
       if (matchReferenceToUnitNameDeclaration(node, declaration)) {
         return true;
       }
@@ -624,7 +625,7 @@ public class NameResolver {
   }
 
   private boolean matchReferenceToUnitNameDeclaration(
-      NameReferenceNode node, QualifiedDelphiNameDeclaration declaration) {
+      NameReferenceNode node, QualifiedNameDeclaration declaration) {
     List<String> declarationParts = declaration.getQualifiedNameParts();
     List<NameReferenceNode> references = node.flatten();
 
@@ -653,7 +654,7 @@ public class NameResolver {
             references.get(declarationParts.size() - 1).getIdentifier());
 
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(symbolicNode);
-    node.setNameOccurrence(occurrence);
+    ((NameReferenceNodeImpl) node).setNameOccurrence(occurrence);
     addName(occurrence);
     declarations.add(declaration);
     addResolvedDeclaration();
@@ -1100,8 +1101,8 @@ public class NameResolver {
         declarations.stream().map(MethodNameDeclaration.class::cast).collect(Collectors.toSet());
 
     if (methodDeclarations.stream()
-        .map(DelphiNameDeclaration::getNode)
-        .map(SymbolicNode::getUnitName)
+        .map(NameDeclaration::getNode)
+        .map(Node::getUnitName)
         .anyMatch(currentUnit::equals)) {
       declarations =
           methodDeclarations.stream()
@@ -1152,13 +1153,12 @@ public class NameResolver {
 
   private void disambiguateWithinUnit(String unitName) {
     declarations.removeIf(
-        declaration ->
-            !((DelphiNameDeclaration) declaration).getNode().getUnitName().equals(unitName));
+        declaration -> !((NameDeclaration) declaration).getNode().getUnitName().equals(unitName));
   }
 
   private boolean isVisibleDeclaration(NameDeclaration declaration) {
     if (declaration instanceof MethodNameDeclaration) {
-      DelphiNameOccurrence name = Iterables.getLast(names);
+      NameOccurrence name = Iterables.getLast(names);
       MethodScope fromScope = name.getLocation().getScope().getEnclosingScope(MethodScope.class);
       if (fromScope != null) {
         MethodNameDeclaration method = (MethodNameDeclaration) declaration;
@@ -1250,7 +1250,7 @@ public class NameResolver {
     }
   }
 
-  void searchForDeclaration(DelphiNameOccurrence occurrence) {
+  void searchForDeclaration(NameOccurrence occurrence) {
     if (currentType.isTypeParameter()) {
       searchForDeclarationInConstraintTypes(occurrence);
       return;
@@ -1284,7 +1284,7 @@ public class NameResolver {
    * @see <a href="bit.ly/constraints-in-generics-type-inferencing">Constraints in Generics: Type
    *     Inferencing</a>
    */
-  private void searchForDeclarationInConstraintTypes(DelphiNameOccurrence occurrence) {
+  private void searchForDeclarationInConstraintTypes(NameOccurrence occurrence) {
     TypeParameterType type = (TypeParameterType) currentType;
     for (Type constraint : type.constraints()) {
       if (constraint instanceof ScopedType) {
@@ -1346,7 +1346,7 @@ public class NameResolver {
   }
 
   private static class DisambiguationException extends RuntimeException {
-    DisambiguationException(Set<NameDeclaration> declarations, DelphiNameOccurrence occurrence) {
+    DisambiguationException(Set<NameDeclaration> declarations, NameOccurrence occurrence) {
       super(
           "Ambiguous declarations could not be resolved\n[Occurrence]  "
               + occurrence

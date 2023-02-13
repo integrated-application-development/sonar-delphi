@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicsInjector;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 
 public class SystemScope extends AbstractFileScope {
   private TypeNameDeclaration objectDeclaration;

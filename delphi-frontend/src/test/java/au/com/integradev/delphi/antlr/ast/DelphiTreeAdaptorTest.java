@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
+import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNodeImpl;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
@@ -53,7 +54,7 @@ class DelphiTreeAdaptorTest {
 
   @Test
   void testDupNode() {
-    MethodDeclarationNode methodNode = new MethodDeclarationNode(DelphiLexer.TkMethodDeclaration);
+    MethodDeclarationNode methodNode = new MethodDeclarationNodeImpl(DelphiLexer.TkMethodDeclaration);
     Object dupNode = adaptor.dupNode(methodNode);
     assertThat(methodNode).isNotEqualTo(dupNode).isInstanceOf(dupNode.getClass());
   }

@@ -23,7 +23,7 @@ import au.com.integradev.delphi.symbol.scope.FileScope;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
-public final class UnitImportNameDeclaration extends QualifiedDelphiNameDeclaration {
+public final class UnitImportNameDeclaration extends QualifiedNameDeclaration {
   private final UnitNameDeclaration originalDeclaration;
 
   public UnitImportNameDeclaration(

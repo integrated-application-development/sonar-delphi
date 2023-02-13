@@ -19,11 +19,12 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.antlr.ast.node.EnumElementNode;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-public class EnumElementNameDeclaration extends AbstractDelphiNameDeclaration
+public class EnumElementNameDeclaration extends AbstractNameDeclaration
     implements TypedDeclaration {
   private final Type type;
 
@@ -49,7 +50,7 @@ public class EnumElementNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public int compareTo(@NotNull DelphiNameDeclaration other) {
+  public int compareTo(@NotNull NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       EnumElementNameDeclaration that = (EnumElementNameDeclaration) other;

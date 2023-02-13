@@ -37,6 +37,7 @@ import au.com.integradev.delphi.antlr.ast.node.MethodParametersNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodReturnTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.PropertyNode;
 import au.com.integradev.delphi.antlr.ast.node.PropertyReadSpecifierNode;
@@ -46,10 +47,13 @@ import au.com.integradev.delphi.antlr.ast.node.StructTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.SubRangeTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeNode;
+import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.UnaryExpressionNode;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
@@ -67,8 +71,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;
@@ -87,9 +89,9 @@ public class NameResolutionHelper {
   }
 
   public void resolve(TypeNode type) {
-    type.clearCachedType();
+    ((TypeNodeImpl) type).clearCachedType();
 
-    List<Node> nodes = new ArrayList<>();
+    List<DelphiNode> nodes = new ArrayList<>();
     nodes.add(type);
 
     if (type instanceof SubRangeTypeNode) {
@@ -118,7 +120,7 @@ public class NameResolutionHelper {
       nodes.add(((HelperTypeNode) type).getFor());
     }
 
-    for (Node node : nodes) {
+    for (DelphiNode node : nodes) {
       node.findChildrenOfType(NameReferenceNode.class).forEach(this::resolve);
     }
   }
@@ -377,7 +379,7 @@ public class NameResolutionHelper {
   }
 
   private boolean handleMethodReference(PrimaryExpressionNode expression, NameResolver resolver) {
-    Node parent = expression.jjtGetParent();
+    DelphiNode parent = expression.jjtGetParent();
 
     if (parent instanceof UnaryExpressionNode) {
       UnaryExpressionNode unary = (UnaryExpressionNode) parent;
@@ -474,7 +476,7 @@ public class NameResolutionHelper {
       TypedDeclaration parameterDeclaration = typeParameters.get(i);
       TypeReferenceNode parameterReference = typeArguments.get(i);
 
-      DelphiNameOccurrence occurrence = parameterReference.getNameNode().getNameOccurrence();
+      NameOccurrence occurrence = parameterReference.getNameNode().getNameOccurrence();
       if (occurrence != null) {
         parameterDeclaration.setForwardDeclaration(occurrence.getNameDeclaration());
       }

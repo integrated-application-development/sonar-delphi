@@ -20,6 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.symbol.scope.MethodScope;
 import au.com.integradev.delphi.symbol.scope.TypeScope;
@@ -27,8 +28,6 @@ import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.HelperType;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import net.sourceforge.pmd.lang.symboltable.Scope;
 
 public class UnusedTypesRule extends AbstractDelphiRule {
   @Override
@@ -47,9 +46,9 @@ public class UnusedTypesRule extends AbstractDelphiRule {
   }
 
   private static boolean isWithinType(NameOccurrence occurrence, Type type) {
-    Scope scope = occurrence.getLocation().getScope();
+    DelphiScope scope = occurrence.getLocation().getScope();
     while (scope != null) {
-      Scope typeScope = DelphiScope.unknownScope();
+      DelphiScope typeScope = DelphiScope.unknownScope();
       if (scope instanceof MethodScope) {
         typeScope = ((MethodScope) scope).getTypeScope();
       } else if (scope instanceof TypeScope) {

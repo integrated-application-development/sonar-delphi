@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.type.Typed;
 
-public interface TypedDeclaration extends DelphiNameDeclaration, Typed {}
+public interface TypedDeclaration extends NameDeclaration, Typed {}

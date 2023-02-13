@@ -21,12 +21,12 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 import au.com.integradev.delphi.antlr.ast.node.EnumElementNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
-import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
@@ -34,14 +34,14 @@ import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTable> {
 
   private static void createSymbol(
-      @Nullable DelphiNameDeclaration declaration,
+      @Nullable NameDeclaration declaration,
       @NotNull List<NameOccurrence> occurrences,
       @NotNull NewSymbolTable table) {
     if (declaration == null) {
       return;
     }
 
-    SymbolicNode location = declaration.getNode();
+    Node location = declaration.getNode();
     String symbolUnit = location.getUnitName();
 
     NewSymbol newSymbol =
@@ -51,7 +51,7 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
             location.getEndLine(),
             location.getEndColumn());
 
-    DelphiNameDeclaration forward = declaration.getForwardDeclaration();
+    NameDeclaration forward = declaration.getForwardDeclaration();
     if (forward != null) {
       List<NameOccurrence> forwardUsages = forward.getScope().getOccurrencesFor(forward);
       occurrences = Lists.newArrayList(occurrences);
@@ -66,7 +66,7 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
     }
 
     for (NameOccurrence occurrence : occurrences) {
-      location = (SymbolicNode) occurrence.getLocation();
+      location = occurrence.getLocation();
       String referenceUnit = location.getUnitName();
 
       if (symbolUnit.equals(referenceUnit)) {

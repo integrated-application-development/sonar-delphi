@@ -21,12 +21,12 @@ package au.com.integradev.delphi.symbol.resolve;
 import au.com.integradev.delphi.antlr.ast.node.ArrayConstructorNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.LiteralNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.CollectionType;
 import au.com.integradev.delphi.type.Type.IntegerType;
 import java.math.BigInteger;
 import java.util.Objects;
-import net.sourceforge.pmd.lang.ast.Node;
 
 interface BoundsChecker {
   static BoundsChecker forType(Type type) {

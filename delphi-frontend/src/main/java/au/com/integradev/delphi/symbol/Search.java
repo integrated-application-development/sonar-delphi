@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
@@ -37,10 +36,10 @@ public class Search {
   private static final Logger LOG = Loggers.get(Search.class);
   private static final boolean TRACE = false;
 
-  private final DelphiNameOccurrence occurrence;
+  private final NameOccurrence occurrence;
   private final Set<NameDeclaration> declarations = new HashSet<>();
 
-  public Search(DelphiNameOccurrence occurrence) {
+  public Search(NameOccurrence occurrence) {
     if (TRACE) {
       LOG.info("new search for reference " + occurrence);
     }

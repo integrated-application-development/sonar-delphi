@@ -98,7 +98,7 @@ public class ForbiddenImportFilePatternRule extends AbstractDelphiRule {
 
   private boolean isViolation(UnitImportNode node) {
     UnitNameDeclaration importUnit = node.getImportNameDeclaration().getOriginalDeclaration();
-    Path currentPath = node.getASTTree().getDelphiFile().getSourceCodeFile().toPath();
+    Path currentPath = node.getAst().getDelphiFile().getSourceCodeFile().toPath();
     return importUnit != null
         && isForbiddenImport(importUnit.getPath())
         && !isWhitelisted(currentPath);

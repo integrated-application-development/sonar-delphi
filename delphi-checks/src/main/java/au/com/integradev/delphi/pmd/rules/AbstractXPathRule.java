@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import java.util.Set;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import net.sourceforge.pmd.lang.rule.XPathRule;
 
 public abstract class AbstractXPathRule extends XPathRule implements DelphiRule {
@@ -32,7 +32,7 @@ public abstract class AbstractXPathRule extends XPathRule implements DelphiRule 
 
   @Override
   public void addViolation(Object data, Node node, String arg) {
-    suppressions = ((DelphiNode) node).getASTTree().getSuppressions();
+    suppressions = ((DelphiNode) node).getAst().getSuppressions();
     super.addViolation(data, node, arg);
   }
 

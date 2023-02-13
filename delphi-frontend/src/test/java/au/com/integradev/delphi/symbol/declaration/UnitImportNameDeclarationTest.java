@@ -23,11 +23,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
-import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
+import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
+import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
+import au.com.integradev.delphi.antlr.ast.node.UnitImportNodeImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 
@@ -63,28 +66,28 @@ class UnitImportNameDeclarationTest {
 
   private static UnitImportNameDeclaration createImport(
       String name, UnitNameDeclaration originalDeclaration) {
-    UnitImportNode location = new UnitImportNode(DelphiLexer.TkUnitImport);
+    UnitImportNode location = new UnitImportNodeImpl(DelphiLexer.TkUnitImport);
     location.jjtAddChild(createNameNode(name));
     return new UnitImportNameDeclaration(location, originalDeclaration);
   }
 
   private static UnitNameDeclaration createUnit(String name) {
-    DelphiAST ast = mock(DelphiAST.class);
+    DelphiAst ast = mock(DelphiAst.class);
     when(ast.getFileName()).thenReturn(name + ".pas");
 
     FileHeaderNode location = mock(FileHeaderNode.class);
     when(location.getNameNode()).thenReturn(createNameNode(name));
     when(location.getNamespace()).thenReturn("");
-    when(location.getASTTree()).thenReturn(ast);
+    when(location.getAst()).thenReturn(ast);
 
     return new UnitNameDeclaration(location, null);
   }
 
   private static QualifiedNameDeclarationNode createNameNode(String name) {
     var identifierToken = new CommonToken(DelphiLexer.TkIdentifier, name);
-    var identifierNode = new IdentifierNode(identifierToken);
+    var identifierNode = new IdentifierNodeImpl(identifierToken);
 
-    var nameNode = new QualifiedNameDeclarationNode(DelphiLexer.TkNameDeclaration);
+    var nameNode = new QualifiedNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
     nameNode.jjtAddChild(identifierNode);
 
     return nameNode;

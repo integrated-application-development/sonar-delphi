@@ -42,7 +42,7 @@ public enum StructKind {
 
   public static StructKind fromNode(DelphiNode node) {
     for (StructKind kind : StructKind.values()) {
-      if (kind.nodeType == node.getClass()) {
+      if (kind.nodeType.isInstance(node)) {
         return kind;
       }
     }

@@ -27,11 +27,12 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Set;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.junit.jupiter.api.Test;
 
 class UnknownScopeTest {
@@ -145,7 +146,7 @@ class UnknownScopeTest {
     assertThat(unknownScope.getVariableDeclarations()).isEmpty();
   }
 
-  private static DelphiNameOccurrence makeNameOccurrence() {
+  private static NameOccurrence makeNameOccurrence() {
     DelphiNode location = mock(DelphiNode.class);
     when(location.getScope()).thenReturn(unknownScope());
     return new DelphiNameOccurrence(location, "Image");

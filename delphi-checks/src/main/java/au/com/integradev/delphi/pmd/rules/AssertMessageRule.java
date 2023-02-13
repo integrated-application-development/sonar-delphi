@@ -23,8 +23,8 @@ import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 
 public class AssertMessageRule extends AbstractDelphiRule {
   @Override

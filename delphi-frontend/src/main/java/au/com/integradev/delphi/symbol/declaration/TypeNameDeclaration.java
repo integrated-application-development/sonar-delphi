@@ -24,6 +24,7 @@ import au.com.integradev.delphi.antlr.ast.node.TypeAliasNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeReferenceNode;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
@@ -32,10 +33,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
+public final class TypeNameDeclaration extends AbstractNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration {
   private final String fullyQualifiedName;
   private final Type type;
@@ -88,7 +89,7 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
     TypeNode typeNode = node.getTypeNode();
     if (typeNode instanceof TypeAliasNode) {
       TypeReferenceNode original = ((TypeAliasNode) typeNode).getAliasedTypeNode();
-      DelphiNameDeclaration originalDeclaration = original.getTypeDeclaration();
+      NameDeclaration originalDeclaration = original.getTypeDeclaration();
       if (originalDeclaration instanceof TypeNameDeclaration) {
         return (TypeNameDeclaration) originalDeclaration;
       }
@@ -97,7 +98,7 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Type getType() {
     return type;
   }
@@ -117,9 +118,9 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
+  protected NameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new TypeNameDeclaration(
-        getNode(),
+        node,
         type.specialize(context),
         fullyQualifiedName,
         typeParameters.stream()
@@ -146,7 +147,7 @@ public final class TypeNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public int compareTo(@NotNull DelphiNameDeclaration other) {
+  public int compareTo(@Nonnull NameDeclaration other) {
     int result = super.compareTo(other);
 
     if (result == 0) {

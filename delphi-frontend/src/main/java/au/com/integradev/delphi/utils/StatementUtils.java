@@ -22,14 +22,14 @@ import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.StatementNode;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 
 public class StatementUtils {
   private StatementUtils() {

@@ -25,17 +25,17 @@ package au.com.integradev.delphi.pmd.rules;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CaseItemStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptItemNode;
+import au.com.integradev.delphi.antlr.ast.node.ExceptItemNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
 import au.com.integradev.delphi.antlr.ast.node.StatementNode;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class NoSemicolonRule extends AbstractDelphiRule {
 
   private static final Set<Class<?>> VALID_PARENTS =
-      Set.of(CaseItemStatementNode.class, ExceptItemNode.class, StatementListNode.class);
+      Set.of(CaseItemStatementNode.class, ExceptItemNodeImpl.class, StatementListNode.class);
 
   @Override
   public RuleContext visit(StatementNode node, RuleContext data) {
@@ -55,7 +55,7 @@ public class NoSemicolonRule extends AbstractDelphiRule {
   }
 
   private DelphiNode findViolationNode(DelphiNode node) {
-    Node nextNode = node.nextNode();
+    Node nextNode = node.jjtGetParent().jjtGetChild(node.jjtGetChildIndex() + 1);
     if (nextNode == null || nextNode.jjtGetId() != DelphiLexer.SEMI) {
       return findNodePrecedingMissingSemicolon(node);
     }
@@ -63,7 +63,7 @@ public class NoSemicolonRule extends AbstractDelphiRule {
   }
 
   private DelphiNode findNodePrecedingMissingSemicolon(DelphiNode node) {
-    Node lastNode = node;
+    DelphiNode lastNode = node;
     int childCount = lastNode.jjtGetNumChildren();
 
     while (childCount > 0) {
@@ -71,6 +71,6 @@ public class NoSemicolonRule extends AbstractDelphiRule {
       childCount = lastNode.jjtGetNumChildren();
     }
 
-    return (DelphiNode) lastNode;
+    return lastNode;
   }
 }

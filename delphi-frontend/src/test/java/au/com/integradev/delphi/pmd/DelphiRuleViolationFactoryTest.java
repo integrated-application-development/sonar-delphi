@@ -22,12 +22,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.AbstractDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.FileHeaderNode;
-import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
+import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.node.UnitDeclarationNode;
+import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.UnitDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
@@ -131,8 +135,8 @@ class DelphiRuleViolationFactoryTest {
   }
 
   private static DelphiNode createNode(Token token) {
-    DelphiNode result =
-        new DelphiNode(token) {
+    MutableDelphiNode result =
+        new AbstractDelphiNode(token) {
           @Override
           public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
             return null;
@@ -150,12 +154,12 @@ class DelphiRuleViolationFactoryTest {
     return token;
   }
 
-  private static DelphiAST createRootNode() {
-    DelphiAST ast = new DelphiAST(mock(DelphiFile.class), null);
-    FileHeaderNode header = new UnitDeclarationNode(Token.INVALID_TOKEN);
+  private static DelphiAst createRootNode() {
+    DelphiAst ast = new DelphiAst(mock(DelphiFile.class), null);
+    FileHeaderNode header = new UnitDeclarationNodeImpl(Token.INVALID_TOKEN);
     ast.jjtAddChild(header);
-    QualifiedNameDeclarationNode nameNode = new QualifiedNameDeclarationNode(Token.INVALID_TOKEN);
-    nameNode.jjtAddChild(new IdentifierNode(Token.INVALID_TOKEN));
+    QualifiedNameDeclarationNode nameNode = new QualifiedNameDeclarationNodeImpl(Token.INVALID_TOKEN);
+    nameNode.jjtAddChild(new IdentifierNodeImpl(Token.INVALID_TOKEN));
     header.jjtAddChild(nameNode);
     return ast;
   }

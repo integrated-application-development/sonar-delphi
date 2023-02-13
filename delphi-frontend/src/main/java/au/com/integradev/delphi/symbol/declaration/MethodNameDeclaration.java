@@ -27,6 +27,7 @@ import au.com.integradev.delphi.antlr.ast.node.MethodNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.Visibility;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.Invocable;
 import au.com.integradev.delphi.type.Type;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
+public final class MethodNameDeclaration extends AbstractNameDeclaration
     implements GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
   private final String fullyQualifiedName;
   private final Type returnType;
@@ -235,7 +236,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public MethodNameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new MethodNameDeclaration(
-        getNode(),
+        node,
         fullyQualifiedName,
         returnType.specialize(context),
         directives,
@@ -284,7 +285,7 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public int compareTo(@NotNull DelphiNameDeclaration other) {
+  public int compareTo(@NotNull NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       MethodNameDeclaration that = (MethodNameDeclaration) other;
@@ -314,9 +315,9 @@ public final class MethodNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public String toString() {
     return "Method "
-        + node.getImage()
+        + getNode().getImage()
         + ", line "
-        + node.getBeginLine()
+        + getNode().getBeginLine()
         + ", params = "
         + getParameters().size()
         + " <"

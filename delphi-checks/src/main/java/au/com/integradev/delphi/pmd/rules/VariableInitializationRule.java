@@ -41,7 +41,7 @@ import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.VarSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
 import au.com.integradev.delphi.operator.UnaryOperator;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
@@ -61,8 +61,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class VariableInitializationRule extends AbstractDelphiRule {
   private final IdentityHashMap<NameDeclaration, InitializationState> initializationStateMap =
@@ -125,7 +124,7 @@ public class VariableInitializationRule extends AbstractDelphiRule {
     }
   }
 
-  private void visitStatements(Node node, RuleContext data) {
+  private void visitStatements(DelphiNode node, RuleContext data) {
     boolean visitChildrenFirst = node instanceof RepeatStatementNode;
 
     if (!visitChildrenFirst) {
@@ -353,7 +352,7 @@ public class VariableInitializationRule extends AbstractDelphiRule {
     Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
     if (previous instanceof NameReferenceNode) {
       NameReferenceNode nameReference = ((NameReferenceNode) previous);
-      DelphiNameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
+      NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
       return declaration instanceof TypeNameDeclaration;
     } else if (previous instanceof CommonDelphiNode) {
       int tokenType = ((CommonDelphiNode) previous).getToken().getType();
@@ -466,7 +465,7 @@ public class VariableInitializationRule extends AbstractDelphiRule {
       return false;
     }
 
-    Node node = name;
+    DelphiNode node = name;
     do {
       node = node.jjtGetParent();
     } while (node instanceof NameReferenceNode);
@@ -534,12 +533,12 @@ public class VariableInitializationRule extends AbstractDelphiRule {
     return references;
   }
 
-  private static void findNameReferences(Node node, List<NameReferenceNode> references) {
+  private static void findNameReferences(DelphiNode node, List<NameReferenceNode> references) {
     if (node instanceof NameReferenceNode) {
       references.add((NameReferenceNode) node);
     } else {
       for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
-        Node child = node.jjtGetChild(i);
+        DelphiNode child = node.jjtGetChild(i);
         if (!(child instanceof StatementNode)) {
           findNameReferences(child, references);
         }

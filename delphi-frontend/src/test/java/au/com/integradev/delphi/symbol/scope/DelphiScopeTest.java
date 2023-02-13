@@ -24,8 +24,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
@@ -70,7 +71,7 @@ class DelphiScopeTest {
         typeParameters);
   }
 
-  private static DelphiNameOccurrence createOccurrenceOf(DelphiNameDeclaration declaration) {
+  private static NameOccurrence createOccurrenceOf(NameDeclaration declaration) {
     var symbolicNode = SymbolicNode.imaginary(declaration.getName(), unknownScope());
     DelphiNameOccurrence occurrence = new DelphiNameOccurrence(symbolicNode);
     occurrence.setNameDeclaration(declaration);
@@ -82,7 +83,7 @@ class DelphiScopeTest {
     VariableNameDeclaration declaration = createVariable();
     scope.addDeclaration(declaration);
 
-    DelphiNameOccurrence occurrence = createOccurrenceOf(declaration);
+    NameOccurrence occurrence = createOccurrenceOf(declaration);
     scope.addNameOccurrence(occurrence);
 
     assertThat(scope.contains(occurrence)).isTrue();

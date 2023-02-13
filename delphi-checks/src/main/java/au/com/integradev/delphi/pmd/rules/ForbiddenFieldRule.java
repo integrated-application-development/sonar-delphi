@@ -18,8 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.TypeScope;
 import au.com.integradev.delphi.type.Type;
@@ -62,7 +61,7 @@ public class ForbiddenFieldRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(NameReferenceNode reference, RuleContext data) {
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    NameDeclaration declaration = reference.getNameDeclaration();
     if (declaration instanceof VariableNameDeclaration) {
       TypeScope scope = declaration.getScope().getEnclosingScope(TypeScope.class);
       if (scope != null) {

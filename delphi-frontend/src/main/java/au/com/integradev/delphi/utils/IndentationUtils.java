@@ -14,8 +14,7 @@ public class IndentationUtils {
    * @return a string containing the leading whitespace.
    */
   public static String getLineIndentation(DelphiNode node) {
-    return getLineIndentation(
-        node.getASTTree().getDelphiFile().getSourceCodeLine(node.getBeginLine()));
+    return getLineIndentation(node.getAst().getDelphiFile().getSourceCodeLine(node.getBeginLine()));
   }
 
   /**

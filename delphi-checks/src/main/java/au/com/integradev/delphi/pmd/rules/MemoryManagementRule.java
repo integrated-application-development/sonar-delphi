@@ -21,12 +21,14 @@ package au.com.integradev.delphi.pmd.rules;
 import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
 import au.com.integradev.delphi.antlr.ast.node.AssignmentStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
+import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.RaiseStatementNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
@@ -41,8 +43,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
 
@@ -92,6 +92,8 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     return super.visit(expression, data);
   }
 
+  private void addViolation(RuleContext data, IdentifierNode violationNode) {}
+
   private boolean shouldVisit(PrimaryExpressionNode expression) {
     if (expression.isInheritedCall()) {
       return false;
@@ -113,7 +115,7 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private static boolean isInterfaceVariableAssignment(PrimaryExpressionNode expression) {
-    Node assignStatement = findParentSkipCasts(expression);
+    DelphiNode assignStatement = findParentSkipCasts(expression);
     if (assignStatement instanceof AssignmentStatementNode) {
       Type assignedType = ((AssignmentStatementNode) assignStatement).getAssignee().getType();
       return assignedType.isInterface();
@@ -122,13 +124,13 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private static boolean isInterfaceParameter(ExpressionNode expression) {
-    Node parent = findParentSkipCasts(expression);
+    DelphiNode parent = findParentSkipCasts(expression);
 
     if (!(parent instanceof ArgumentListNode)) {
       return false;
     }
 
-    Node previous = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
+    DelphiNode previous = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
     if (!(previous instanceof Typed)) {
       return false;
     }
@@ -138,7 +140,7 @@ public class MemoryManagementRule extends AbstractDelphiRule {
       return false;
     }
 
-    Node argument = expression;
+    DelphiNode argument = expression;
     while (argument.jjtGetParent() != parent) {
       argument = argument.jjtGetParent();
     }
@@ -155,13 +157,13 @@ public class MemoryManagementRule extends AbstractDelphiRule {
   }
 
   private boolean isMemoryManaged(PrimaryExpressionNode expression) {
-    Node parent = findParentSkipCasts(expression);
+    DelphiNode parent = findParentSkipCasts(expression);
 
     if (!(parent instanceof ArgumentListNode)) {
       return false;
     }
 
-    Node node = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
+    DelphiNode node = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
     if (!(node instanceof NameReferenceNode)) {
       return false;
     }
@@ -176,8 +178,8 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     return false;
   }
 
-  private static Node findParentSkipCasts(ExpressionNode expression) {
-    Node result = getParentSkipParentheses(expression);
+  private static DelphiNode findParentSkipCasts(ExpressionNode expression) {
+    DelphiNode result = getParentSkipParentheses(expression);
     while (true) {
       if (isSoftCast(result)) {
         result = getParentSkipParentheses(result);
@@ -189,11 +191,11 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     }
   }
 
-  private static Node getParentSkipParentheses(Node node) {
+  private static DelphiNode getParentSkipParentheses(DelphiNode node) {
     return getNthParentSkipParentheses(node, 1);
   }
 
-  private static Node getNthParentSkipParentheses(Node node, int n) {
+  private static DelphiNode getNthParentSkipParentheses(DelphiNode node, int n) {
     for (int i = 0; i < n; ++i) {
       if (node instanceof ExpressionNode) {
         node = ((ExpressionNode) node).findParentheses();
@@ -203,30 +205,31 @@ public class MemoryManagementRule extends AbstractDelphiRule {
     return node;
   }
 
-  private static boolean isSoftCast(Node node) {
+  private static boolean isSoftCast(DelphiNode node) {
     return node instanceof BinaryExpressionNode
         && ((BinaryExpressionNode) node).getOperator() == BinaryOperator.AS;
   }
 
-  private static boolean isHardCast(Node node) {
+  private static boolean isHardCast(DelphiNode node) {
     if (node instanceof ArgumentListNode) {
       ArgumentListNode argumentList = (ArgumentListNode) node;
-      Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+      DelphiNode previous =
+          argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
       if (previous instanceof NameReferenceNode && isLastChild(argumentList)) {
         NameReferenceNode nameReference = ((NameReferenceNode) previous);
-        DelphiNameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
+        NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
         return declaration instanceof TypeNameDeclaration;
       }
     }
     return false;
   }
 
-  private static boolean isLastChild(Node node) {
+  private static boolean isLastChild(DelphiNode node) {
     return node.jjtGetChildIndex() == node.jjtGetParent().jjtGetNumChildren() - 1;
   }
 
   private static boolean requiresMemoryManagement(NameReferenceNode reference) {
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    NameDeclaration declaration = reference.getNameDeclaration();
     if (declaration instanceof MethodNameDeclaration) {
       MethodNameDeclaration method = (MethodNameDeclaration) declaration;
       MethodKind kind = method.getMethodKind();

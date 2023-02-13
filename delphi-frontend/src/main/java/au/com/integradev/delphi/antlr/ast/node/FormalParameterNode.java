@@ -1,152 +1,51 @@
-/*
- * Sonar Delphi Plugin
- * Copyright (C) 2019-2022 Integrated Application Development
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
- */
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Typed;
 import java.util.List;
-import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.Node;
-import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
 
-public final class FormalParameterNode extends DelphiNode implements Typed {
-  private List<FormalParameterData> parameters;
-
-  public FormalParameterNode(Token token) {
-    super(token);
-  }
-
-  public FormalParameterNode(int tokenType) {
-    super(tokenType);
-  }
-
-  @Override
-  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
-    return visitor.visit(this, data);
-  }
-
-  public List<FormalParameterData> getParameters() {
-    if (parameters == null) {
-      NameDeclarationListNode identifierList = (NameDeclarationListNode) jjtGetChild(0);
-      Type type = getType();
-      ExpressionNode defaultValue = getDefaultValue();
-
-      parameters =
-          identifierList.getDeclarations().stream()
-              .map(
-                  identifier ->
-                      new FormalParameterData(
-                          identifier, type, defaultValue, isOut(), isVar(), isConst()))
-              .collect(Collectors.toList());
-    }
-    return parameters;
-  }
+public interface FormalParameterNode extends DelphiNode, Typed {
+  List<FormalParameterData> getParameters();
 
   @Nullable
-  public TypeNode getTypeNode() {
-    Node typeNode = jjtGetChild(1);
-    return (typeNode instanceof TypeNode) ? (TypeNode) typeNode : null;
-  }
+  TypeNode getTypeNode();
 
-  @Override
-  @NotNull
-  public Type getType() {
-    TypeNode typeNode = getTypeNode();
-    return (typeNode == null) ? DelphiType.untypedType() : typeNode.getType();
-  }
-
-  private ExpressionNode getDefaultValue() {
+  default ExpressionNode getDefaultValue() {
     return getFirstChildOfType(ExpressionNode.class);
   }
 
-  private boolean isOut() {
+  default boolean isOut() {
     return getFirstChildWithId(DelphiLexer.OUT) != null;
   }
 
-  private boolean isVar() {
+  default boolean isVar() {
     return getFirstChildWithId(DelphiLexer.VAR) != null;
   }
 
-  private boolean isConst() {
+  default boolean isConst() {
     return getFirstChildWithId(DelphiLexer.CONST) != null;
   }
 
-  public static class FormalParameterData implements Typed {
-    private final NameDeclarationNode node;
-    private final Type type;
-    private final ExpressionNode defaultValue;
-    private final boolean isOut;
-    private final boolean isVar;
-    private final boolean isConst;
-
-    private FormalParameterData(
-        NameDeclarationNode node,
-        Type type,
-        ExpressionNode defaultValue,
-        boolean isOut,
-        boolean isVar,
-        boolean isConst) {
-      this.node = node;
-      this.type = type;
-      this.defaultValue = defaultValue;
-      this.isOut = isOut;
-      this.isVar = isVar;
-      this.isConst = isConst;
-    }
-
-    public NameDeclarationNode getNode() {
-      return node;
-    }
+  interface FormalParameterData extends Typed {
+    NameDeclarationNode getNode();
 
     @Override
-    @NotNull
-    public Type getType() {
-      return type;
-    }
+    @Nonnull
+    Type getType();
 
-    public String getImage() {
-      return node.getImage();
-    }
+    String getImage();
 
-    public boolean hasDefaultValue() {
-      return defaultValue != null;
-    }
+    boolean hasDefaultValue();
 
-    public ExpressionNode getDefaultValue() {
-      return defaultValue;
-    }
+    ExpressionNode getDefaultValue();
 
-    public boolean isOut() {
-      return isOut;
-    }
+    boolean isOut();
 
-    public boolean isVar() {
-      return isVar;
-    }
+    boolean isVar();
 
-    public boolean isConst() {
-      return isConst;
-    }
+    boolean isConst();
   }
 }

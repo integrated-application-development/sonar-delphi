@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.TypeParameterType;
@@ -26,7 +27,7 @@ import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-public class TypeParameterNameDeclaration extends AbstractDelphiNameDeclaration
+public class TypeParameterNameDeclaration extends AbstractNameDeclaration
     implements TypedDeclaration {
   private final Type type;
 
@@ -46,10 +47,10 @@ public class TypeParameterNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  public DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
+  public NameDeclaration doSpecialization(TypeSpecializationContext context) {
     Type specialized = type.specialize(context);
     if (type.isTypeParameter() && specialized != type) {
-      return new TypeParameterNameDeclaration(getNode(), specialized);
+      return new TypeParameterNameDeclaration(node, specialized);
     }
     return this;
   }

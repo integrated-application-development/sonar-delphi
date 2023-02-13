@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import net.sourceforge.pmd.RuleContext;
 
 /** Rule type which only applies to program files */
 public abstract class AbstractDprRule extends AbstractDelphiRule {
   @Override
-  public RuleContext visit(DelphiAST ast, RuleContext data) {
+  public RuleContext visit(DelphiAst ast, RuleContext data) {
     if (ast.isProgram()) {
       return super.visit(ast, data);
     }

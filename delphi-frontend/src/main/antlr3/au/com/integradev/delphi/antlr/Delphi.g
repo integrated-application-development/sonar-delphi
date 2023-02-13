@@ -116,58 +116,58 @@ fileWithoutImplementation    : program | library | unitWithoutImplementation | p
 
 program                      : (programHead)? (usesFileClause)? block '.'
                              ;
-programHead                  : 'program'<ProgramDeclarationNode>^ qualifiedNameDeclaration (programParmSeq)? ';'!
+programHead                  : 'program'<ProgramDeclarationNodeImpl>^ qualifiedNameDeclaration (programParmSeq)? ';'!
                              ;
 programParmSeq               : '(' (ident (',' ident)* )? ')'
                              ;
 library                      : libraryHead (usesFileClause)? block '.'
                              ;
-libraryHead                  : 'library'<LibraryDeclarationNode>^ qualifiedNameDeclaration (portabilityDirective!)* ';'!
+libraryHead                  : 'library'<LibraryDeclarationNodeImpl>^ qualifiedNameDeclaration (portabilityDirective!)* ';'!
                              ;
 package_                     : packageHead requiresClause? containsClause 'end' '.'
                              ;
-packageHead                  : 'package'<PackageDeclarationNode>^ qualifiedNameDeclaration ';'!
+packageHead                  : 'package'<PackageDeclarationNodeImpl>^ qualifiedNameDeclaration ';'!
                              ;
 unit                         : unitHead unitInterface unitImplementation unitBlock '.'
                              ;
 unitWithoutImplementation    : unitHead unitInterface
                              ;
-unitHead                     : 'unit'<UnitDeclarationNode>^ qualifiedNameDeclaration portabilityDirective* ';'!
+unitHead                     : 'unit'<UnitDeclarationNodeImpl>^ qualifiedNameDeclaration portabilityDirective* ';'!
                              ;
-unitInterface                : 'interface'<InterfaceSectionNode>^ usesClause? interfaceDecl*
+unitInterface                : 'interface'<InterfaceSectionNodeImpl>^ usesClause? interfaceDecl*
                              ;
-unitImplementation           : 'implementation'<ImplementationSectionNode>^ usesClause? declSection*
+unitImplementation           : 'implementation'<ImplementationSectionNodeImpl>^ usesClause? declSection*
                              ;
 unitBlock                    : initializationFinalization? 'end'
                              | compoundStatement
                              ;
 initializationFinalization   : initializationSection finalizationSection?
                              ;
-initializationSection        : 'initialization'<InitializationSectionNode>^ statementList
+initializationSection        : 'initialization'<InitializationSectionNodeImpl>^ statementList
                              ;
-finalizationSection          : 'finalization'<FinalizationSectionNode>^ statementList
+finalizationSection          : 'finalization'<FinalizationSectionNodeImpl>^ statementList
                              ;
 
 //----------------------------------------------------------------------------
 // File usage
 //----------------------------------------------------------------------------
-containsClause               : 'contains'<ContainsClauseNode>^ unitInFileImportList
+containsClause               : 'contains'<ContainsClauseNodeImpl>^ unitInFileImportList
                              ;
-requiresClause               : 'requires'<RequiresClauseNode>^ unitImportList
+requiresClause               : 'requires'<RequiresClauseNodeImpl>^ unitImportList
                              ;
-usesClause                   : 'uses'<UsesClauseNode>^ unitImportList
+usesClause                   : 'uses'<UsesClauseNodeImpl>^ unitImportList
                              ;
-usesFileClause               : 'uses'<UsesClauseNode>^ unitInFileImportList
+usesFileClause               : 'uses'<UsesClauseNodeImpl>^ unitInFileImportList
                              ;
 unitInFileImportList         : unitInFileImport (','! unitInFileImport)* ';'!
                              ;
 unitImportList               : unitImport (','! unitImport)* ';'!
                              ;
 unitImport                   : qualifiedNameDeclaration
-                             -> ^(TkUnitImport<UnitImportNode> qualifiedNameDeclaration)
+                             -> ^(TkUnitImport<UnitImportNodeImpl> qualifiedNameDeclaration)
                              ;
 unitInFileImport             : qualifiedNameDeclaration ('in' textLiteral)?
-                             -> ^(TkUnitImport<UnitImportNode> qualifiedNameDeclaration ('in' textLiteral)?)
+                             -> ^(TkUnitImport<UnitImportNodeImpl> qualifiedNameDeclaration ('in' textLiteral)?)
                              ;
 
 //----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ unitInFileImport             : qualifiedNameDeclaration ('in' textLiteral)?
 //----------------------------------------------------------------------------
 block                        : blockDeclSection? blockBody
                              ;
-blockDeclSection             : declSection+ -> ^(TkBlockDeclSection<BlockDeclarationSectionNode> declSection+)
+blockDeclSection             : declSection+ -> ^(TkBlockDeclSection<BlockDeclarationSectionNodeImpl> declSection+)
                              ;
 blockBody                    : compoundStatement
                              | assemblerStatement
@@ -195,25 +195,25 @@ interfaceDecl                : constSection
                              ;
 labelDeclSection             : 'label' (label (','!)?)+ ';'
                              ;
-constSection                 : ('const'<ConstSectionNode>^ | 'resourcestring'<ConstSectionNode>^) constDeclaration*
+constSection                 : ('const'<ConstSectionNodeImpl>^ | 'resourcestring'<ConstSectionNodeImpl>^) constDeclaration*
                              // constSection was changed at some point from "constDeclaration+" to "constDeclaration*" to cater to invalid includes
                              // example: "const {$include versioninfo.inc}"
                              // Is this really the appropriate solution?
                              ;
 constDeclaration             : customAttribute? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
-                             -> ^(TkConstDeclaration<ConstDeclarationNode> nameDeclaration constExpression varType? portabilityDirective*)
+                             -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration constExpression varType? portabilityDirective*)
                              ;
-typeSection                  : 'type'<TypeSectionNode>^ typeDeclaration+
+typeSection                  : 'type'<TypeSectionNodeImpl>^ typeDeclaration+
                              ;
-innerTypeSection             : 'type'<TypeSectionNode>^ typeDeclaration*
+innerTypeSection             : 'type'<TypeSectionNodeImpl>^ typeDeclaration*
                              ;
 typeDeclaration              : customAttribute? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
-                             -> ^(TkNewType<TypeDeclarationNode> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
+                             -> ^(TkNewType<TypeDeclarationNodeImpl> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
                              ;
-varSection                   : ('var'<VarSectionNode>^ | 'threadvar'<VarSectionNode>^) varDeclaration varDeclaration*
+varSection                   : ('var'<VarSectionNodeImpl>^ | 'threadvar'<VarSectionNodeImpl>^) varDeclaration varDeclaration*
                              ;
 varDeclaration               : customAttribute? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
-                             -> ^(TkVarDeclaration<VarDeclarationNode> nameDeclarationList varType varValueSpec? customAttribute?)
+                             -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList varType varValueSpec? customAttribute?)
                              ;
 varValueSpec                 : 'absolute' constExpression
                              | '=' constExpression
@@ -264,7 +264,7 @@ parameterType                : stringType
                              | 'packed' parameterType^
                              ;
 arrayType                    :  'array' arrayIndices? 'of' arraySubType
-                             -> ^('array'<ArrayTypeNode> 'of' arraySubType arrayIndices? )
+                             -> ^('array'<ArrayTypeNodeImpl> 'of' arraySubType arrayIndices? )
                              ;
 lbrack                       : '['
                              | '(.'
@@ -273,65 +273,65 @@ rbrack                       : ']'
                              | '.)'
                              ;
 arrayIndices                 : lbrack (varType ','?)+ rbrack
-                             -> ^(TkArrayIndices<ArrayIndicesNode> lbrack (varType ','?)+ rbrack)
+                             -> ^(TkArrayIndices<ArrayIndicesNodeImpl> lbrack (varType ','?)+ rbrack)
                              ;
-arraySubType                 : 'const'<ConstArraySubTypeNode>
+arraySubType                 : 'const'<ConstArraySubTypeNodeImpl>
                              | varType
                              ;
-setType                      : 'set'<SetTypeNode>^ 'of' varType
+setType                      : 'set'<SetTypeNodeImpl>^ 'of' varType
                              ;
-fileType                     : 'file'<FileTypeNode>^ ('of' varType)?
+fileType                     : 'file'<FileTypeNodeImpl>^ ('of' varType)?
                              ;
-pointerType                  : '^'<PointerTypeNode>^ varType
+pointerType                  : '^'<PointerTypeNodeImpl>^ varType
                              ;
-stringType                   : 'string'<StringTypeNode>^ (lbrack! expression rbrack!)?
-                             | ANSISTRING<AnsiStringTypeNode>^ ('('! expression ')'!)?
+stringType                   : 'string'<StringTypeNodeImpl>^ (lbrack! expression rbrack!)?
+                             | ANSISTRING<AnsiStringTypeNodeImpl>^ ('('! expression ')'!)?
                              ;
 procedureType                : methodType
                              | procedureReference
                              | simpleProcedureType
                              ;
-methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNode>^ ((';')? interfaceDirective)*
+methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNodeImpl>^ ((';')? interfaceDirective)*
                              ;
-procedureReference           : 'reference'<ProcedureReferenceTypeNode>^ 'to'! procedureTypeHeading
+procedureReference           : 'reference'<ProcedureReferenceTypeNodeImpl>^ 'to'! procedureTypeHeading
                              ;
-simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<ProcedureTypeNode> procedureTypeHeading)
+simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<ProcedureTypeNodeImpl> procedureTypeHeading)
                              ;
-procedureTypeHeading         : 'function'<ProcedureTypeHeadingNode>^ methodParameters? methodReturnType? ((';')? interfaceDirective)*
-                             | 'procedure'<ProcedureTypeHeadingNode>^ methodParameters? ((';')? interfaceDirective)*
+procedureTypeHeading         : 'function'<ProcedureTypeHeadingNodeImpl>^ methodParameters? methodReturnType? ((';')? interfaceDirective)*
+                             | 'procedure'<ProcedureTypeHeadingNodeImpl>^ methodParameters? ((';')? interfaceDirective)*
                              ;
-typeOfType                   : 'type'<TypeOfTypeNode>^ 'of' typeDecl
+typeOfType                   : 'type'<TypeOfTypeNodeImpl>^ 'of' typeDecl
                              ;
-typeType                     : 'type'<TypeTypeNode>^ typeDecl
+typeType                     : 'type'<TypeTypeNodeImpl>^ typeDecl
                              ;
-typeAlias                    : typeReference -> ^(TkTypeAlias<TypeAliasNode> typeReference)
+typeAlias                    : typeReference -> ^(TkTypeAlias<TypeAliasNodeImpl> typeReference)
                              ;
-subRangeType                 : expression '..'<SubRangeTypeNode>^ expression
+subRangeType                 : expression '..'<SubRangeTypeNodeImpl>^ expression
                              ;
-enumType                     : '('<EnumTypeNode>^ (enumTypeElement (',')?)* ')'!
+enumType                     : '('<EnumTypeNodeImpl>^ (enumTypeElement (',')?)* ')'!
                              ;
-enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNode> nameDeclaration expression?)
+enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNodeImpl> nameDeclaration expression?)
                              ;
 typeReference                : stringType
-                             | 'file'<FileTypeNode>^
-                             | nameReference -> ^(TkTypeReference<TypeReferenceNode> nameReference)
+                             | 'file'<FileTypeNodeImpl>^
+                             | nameReference -> ^(TkTypeReference<TypeReferenceNodeImpl> nameReference)
                              ;
 
 //----------------------------------------------------------------------------
 // Struct Types
 //----------------------------------------------------------------------------
-classReferenceType           : 'class'<ClassReferenceTypeNode>^ 'of' typeReference
+classReferenceType           : 'class'<ClassReferenceTypeNodeImpl>^ 'of' typeReference
                              ;
 classType                    : 'class' classState? classParent? (visibilitySection* 'end')?
-                             -> ^('class'<ClassTypeNode> classParent? classState? (visibilitySection* 'end')?)
+                             -> ^('class'<ClassTypeNodeImpl> classParent? classState? (visibilitySection* 'end')?)
                              ;
 classState                   : 'sealed'
                              | 'abstract'
                              ;
 classParent                  : '(' typeReference (',' typeReference)* ')'
-                             -> ^(TkClassParents<AncestorListNode> typeReference typeReference*)
+                             -> ^(TkClassParents<AncestorListNodeImpl> typeReference typeReference*)
                              ;
-visibilitySection            : visibilitySection_ -> ^(TkVisibilitySection<VisibilitySectionNode> visibilitySection_)
+visibilitySection            : visibilitySection_ -> ^(TkVisibilitySection<VisibilitySectionNodeImpl> visibilitySection_)
                              ;
 visibilitySection_           : visibility visibilitySectionItem*
                              | visibilitySectionItem+
@@ -346,39 +346,39 @@ visibilitySectionItem        : fieldSection
 fieldSectionKey              : 'var'
                              | 'threadvar'
                              ;
-fieldSection                 : 'class'? fieldSectionKey fieldDecl* -> ^(TkFieldSection<FieldSectionNode> 'class'? fieldSectionKey fieldDecl*)
-                             | fieldDecl+ -> ^(TkFieldSection<FieldSectionNode> fieldDecl+)
+fieldSection                 : 'class'? fieldSectionKey fieldDecl* -> ^(TkFieldSection<FieldSectionNodeImpl> 'class'? fieldSectionKey fieldDecl*)
+                             | fieldDecl+ -> ^(TkFieldSection<FieldSectionNodeImpl> fieldDecl+)
                              ;
 fieldDecl                    : customAttribute? nameDeclarationList ':' varType portabilityDirective* ';'?
-                             -> ^(TkFieldDeclaration<FieldDeclarationNode> nameDeclarationList varType portabilityDirective* ';'?)
+                             -> ^(TkFieldDeclaration<FieldDeclarationNodeImpl> nameDeclarationList varType portabilityDirective* ';'?)
                              ;
-classHelperType              : 'class'<ClassHelperTypeNode>^ 'helper' classParent? 'for' typeReference visibilitySection* 'end'
+classHelperType              : 'class'<ClassHelperTypeNodeImpl>^ 'helper' classParent? 'for' typeReference visibilitySection* 'end'
                              ;
-interfaceType                : ('interface'<InterfaceTypeNode>^ | 'dispinterface'<InterfaceTypeNode>^) classParent? (interfaceGuid? interfaceItems? 'end')?
+interfaceType                : ('interface'<InterfaceTypeNodeImpl>^ | 'dispinterface'<InterfaceTypeNodeImpl>^) classParent? (interfaceGuid? interfaceItems? 'end')?
                              ;
-interfaceGuid                : lbrack expression rbrack -> ^(TkGuid<InterfaceGuidNode> expression)
+interfaceGuid                : lbrack expression rbrack -> ^(TkGuid<InterfaceGuidNodeImpl> expression)
                              ;
-interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNode> interfaceItem+)
+interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNodeImpl> interfaceItem+)
                              ;
 interfaceItem                : methodInterface
                              | property
                              ;
-objectType                   : 'object'<ObjectTypeNode>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
+objectType                   : 'object'<ObjectTypeNodeImpl>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
                              ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
-recordType                   : 'record'<RecordTypeNode>^ visibilitySection* recordVariantSection? 'end' ('align' constExpression)?
+recordType                   : 'record'<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? 'end' ('align' constExpression)?
                              ;
-recordVariantSection         : 'case'<RecordVariantSectionNode>^ recordVariantTag 'of' recordVariant+
+recordVariantSection         : 'case'<RecordVariantSectionNodeImpl>^ recordVariantTag 'of' recordVariant+
                              ;
 recordVariantTag             : (nameDeclaration ':')? typeReference
-                             -> ^(TkRecordVariantTag<RecordVariantTagNode> nameDeclaration? typeReference)
+                             -> ^(TkRecordVariantTag<RecordVariantTagNodeImpl> nameDeclaration? typeReference)
                              ;
 recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSection? ')' ';'?
-                             -> ^(TkRecordVariantItem<RecordVariantItemNode> expressionList fieldDecl* recordVariantSection? ';'?)
+                             -> ^(TkRecordVariantItem<RecordVariantItemNodeImpl> expressionList fieldDecl* recordVariantSection? ';'?)
                              ;
-recordHelperType             : 'record'<RecordHelperTypeNode>^ 'helper' 'for' typeReference visibilitySection* 'end'
+recordHelperType             : 'record'<RecordHelperTypeNodeImpl>^ 'helper' 'for' typeReference visibilitySection* 'end'
                              ;
 property                     : customAttribute? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
-                             -> ^('property'<PropertyNode> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
+                             -> ^('property'<PropertyNodeImpl> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
                              ;
 propertyArray                : lbrack! formalParameterList rbrack!
                              ;
@@ -391,29 +391,29 @@ propertyDirective            : ';' 'default'
                              | 'nodefault'
                              | STORED expression
                              ;
-propertyReadWrite            : ('read'<PropertyReadSpecifierNode>^ | 'write'<PropertyWriteSpecifierNode>^) primaryExpression
+propertyReadWrite            : ('read'<PropertyReadSpecifierNodeImpl>^ | 'write'<PropertyWriteSpecifierNodeImpl>^) primaryExpression
                              ;
 propertyDispInterface        : 'readonly'
                              | 'writeonly'
                              | dispIDDirective
                              ;
-visibility                   : STRICT? 'protected'<VisibilityNode>^
-                             | STRICT? 'private'<VisibilityNode>^
-                             | 'public'<VisibilityNode>
-                             | 'published'<VisibilityNode>
-                             | 'automated'<VisibilityNode> // Obselete directive used for RTTI.
+visibility                   : STRICT? 'protected'<VisibilityNodeImpl>^
+                             | STRICT? 'private'<VisibilityNodeImpl>^
+                             | 'public'<VisibilityNodeImpl>
+                             | 'published'<VisibilityNodeImpl>
+                             | 'automated'<VisibilityNodeImpl> // Obselete directive used for RTTI.
                              ;                             // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re24.html
 
 //----------------------------------------------------------------------------
 // Generics
 //----------------------------------------------------------------------------
 genericDefinition            : '<' typeParameterList '>'
-                             -> ^(TkGenericDefinition<GenericDefinitionNode> typeParameterList)
+                             -> ^(TkGenericDefinition<GenericDefinitionNodeImpl> typeParameterList)
                              ;
 typeParameterList            : typeParameter (';'! typeParameter)*
                              ;
 typeParameter                :  nameDeclaration (',' nameDeclaration)* (':' genericConstraint (',' genericConstraint)*)?
-                             -> ^(TkTypeParameter<TypeParameterNode>
+                             -> ^(TkTypeParameter<TypeParameterNodeImpl>
                                     nameDeclaration (nameDeclaration)* (genericConstraint genericConstraint*)?
                                  )
                              ;
@@ -423,19 +423,19 @@ genericConstraint            : typeReference
                              | 'constructor'
                              ;
 genericArguments             : '<' typeReference (',' typeReference)* '>'
-                             -> ^(TkGenericArguments<GenericArgumentsNode> typeReference typeReference*)
+                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> typeReference typeReference*)
                              ;
 
 //----------------------------------------------------------------------------
 // Methods
 //----------------------------------------------------------------------------
 methodResolutionClause       : key=('function' | 'procedure') interfaceMethod=nameReference '=' implemented=nameReference ';'
-                             -> ^(TkMethodResolveClause<MethodResolutionClauseNode>
+                             -> ^(TkMethodResolveClause<MethodResolutionClauseNodeImpl>
                                     $key $interfaceMethod $implemented
                                  )
                              ;
 methodInterface              : methodInterfaceHeading
-                             -> ^(TkMethodDeclaration<MethodDeclarationNode>
+                             -> ^(TkMethodDeclaration<MethodDeclarationNodeImpl>
                                     methodInterfaceHeading
                                  )
                              ;
@@ -444,23 +444,23 @@ methodImplementation         : fullMethodImplementation
                              | forwardMethod
                              ;
 fullMethodImplementation     : methodImplementationHeading methodBody
-                             -> ^(TkMethodImplementation<MethodImplementationNode>
+                             -> ^(TkMethodImplementation<MethodImplementationNodeImpl>
                                     methodImplementationHeading
                                     methodBody
                                  )
                              ;
 externalMethod               : externalMethodHeading
-                             -> ^(TkMethodImplementation<MethodImplementationNode>
+                             -> ^(TkMethodImplementation<MethodImplementationNodeImpl>
                                     externalMethodHeading
                                  )
                              ;
 forwardMethod                : forwardMethodHeading
-                             -> ^(TkMethodDeclaration<MethodDeclarationNode>
+                             -> ^(TkMethodDeclaration<MethodDeclarationNodeImpl>
                                     forwardMethodHeading
                                  )
                              ;
 methodInterfaceHeading       : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? interfaceDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNode>
+                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodDeclarationName
                                     methodParameters?
@@ -471,7 +471,7 @@ methodInterfaceHeading       : customAttribute? 'class'? methodKey methodDeclara
                                  )
                              ;
 methodImplementationHeading  : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? implDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNode>
+                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodImplementationName
                                     methodParameters?
@@ -482,7 +482,7 @@ methodImplementationHeading  : customAttribute? 'class'? methodKey methodImpleme
                                  )
                              ;
 externalMethodHeading        : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? externalDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNode>
+                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodImplementationName
                                     methodParameters?
@@ -493,7 +493,7 @@ externalMethodHeading        : customAttribute? 'class'? methodKey methodImpleme
                                  )
                              ;
 forwardMethodHeading         : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? forwardDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNode>
+                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodDeclarationName
                                     methodParameters?
@@ -503,9 +503,9 @@ forwardMethodHeading         : customAttribute? 'class'? methodKey methodDeclara
                                     forwardDirectiveSection
                                  )
                              ;
-methodDeclarationName        : genericNameDeclaration -> ^(TkMethodName<MethodNameNode> genericNameDeclaration)
+methodDeclarationName        : genericNameDeclaration -> ^(TkMethodName<MethodNameNodeImpl> genericNameDeclaration)
                              ;
-methodImplementationName     : nameReference -> ^(TkMethodName<MethodNameNode> nameReference)
+methodImplementationName     : nameReference -> ^(TkMethodName<MethodNameNodeImpl> nameReference)
                              ;
 methodKey                    : 'procedure'
                              | 'constructor'
@@ -513,34 +513,34 @@ methodKey                    : 'procedure'
                              | 'function'
                              | 'operator'
                              ;
-methodReturnType             : ':' customAttribute? returnType -> ^(TkMethodReturn<MethodReturnTypeNode> returnType customAttribute?)
+methodReturnType             : ':' customAttribute? returnType -> ^(TkMethodReturn<MethodReturnTypeNodeImpl> returnType customAttribute?)
                              ;
 returnType                   : stringType
                              | typeReference
                              ;
-methodParameters             : '(' formalParameterList? ')' -> ^(TkMethodParameters<MethodParametersNode> '(' formalParameterList? ')')
+methodParameters             : '(' formalParameterList? ')' -> ^(TkMethodParameters<MethodParametersNodeImpl> '(' formalParameterList? ')')
                              ;
-formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFormalParameterList<FormalParameterListNode> formalParameter formalParameter*)
+formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFormalParameterList<FormalParameterListNodeImpl> formalParameter formalParameter*)
                              ;
 formalParameter              : a1=customAttribute? (paramSpecifier a2=customAttribute?)? nameDeclarationList (':' parameterType)? ('=' expression)?
-                             -> ^(TkFormalParameter<FormalParameterNode> nameDeclarationList parameterType? paramSpecifier? expression? $a1? $a2?)
+                             -> ^(TkFormalParameter<FormalParameterNodeImpl> nameDeclarationList parameterType? paramSpecifier? expression? $a1? $a2?)
                              ;
 paramSpecifier               : 'const'
                              | 'var'
                              | 'out'
                              ;
-methodBody                   : block ';' -> ^(TkMethodBody<MethodBodyNode> block)
+methodBody                   : block ';' -> ^(TkMethodBody<MethodBodyNodeImpl> block)
                              ;
 
 //----------------------------------------------------------------------------
 // Custom Attributes
 //----------------------------------------------------------------------------
-customAttribute              : customAttributeList -> ^(TkCustomAttributeList<CustomAttributeListNode> customAttributeList)
+customAttribute              : customAttributeList -> ^(TkCustomAttributeList<CustomAttributeListNodeImpl> customAttributeList)
                              ;
 customAttributeList          : customAttributeDecl+
                              ;
 customAttributeDecl          : lbrack (nameReference argumentList? ','?)+ rbrack
-                             -> ^(TkCustomAttribute<CustomAttributeNode> lbrack (nameReference argumentList?)+ rbrack)
+                             -> ^(TkCustomAttribute<CustomAttributeNodeImpl> lbrack (nameReference argumentList?)+ rbrack)
                              ;
 
 //----------------------------------------------------------------------------
@@ -557,11 +557,11 @@ multiplicativeExpression     : unaryExpression (multOperator^ unaryExpression)*
 unaryExpression              : unaryOperator^ unaryExpression
                              | primaryExpression
                              ;
-primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNode> atom)
+primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNodeImpl> atom)
                              | parenthesizedExpression
-                             | 'inherited' (nameReference? particleItem*)? -> ^(TkPrimaryExpression<PrimaryExpressionNode> 'inherited' (nameReference? particleItem*)?)
+                             | 'inherited' (nameReference? particleItem*)? -> ^(TkPrimaryExpression<PrimaryExpressionNodeImpl> 'inherited' (nameReference? particleItem*)?)
                              ;
-parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNode> '(' expression ')')
+parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNodeImpl> '(' expression ')')
                              ;
 atom                         : particle particleItem*
                              ;
@@ -583,19 +583,19 @@ particleItem                 : '.' extendedNameReference
                              | '^'
                              ;
 arrayAccessor                : lbrack expressionList rbrack
-                             -> ^(TkArrayAccessorNode<ArrayAccessorNode> expressionList)
+                             -> ^(TkArrayAccessorNode<ArrayAccessorNodeImpl> expressionList)
                              ;
-argumentList                 : '('<ArgumentListNode>^ (argument ','?)* ')'
+argumentList                 : '('<ArgumentListNodeImpl>^ (argument ','?)* ')'
                              ;
 argument                     : anonymousMethod
                              | expression (':' expression! (':' expression!)?)? // This strange colon construct at the end is the result
                              ;                                                  // of compiler hackery for intrinsic procedures like Str and WriteLn
                                                                                 // See: http://www.delphibasics.co.uk/RTL.asp?Name=str
                                                                                 // See: https://stackoverflow.com/questions/617654/how-does-writeln-really-work
-anonymousMethod              : 'procedure'<AnonymousMethodNode>^ methodParameters? block
-                             | 'function'<AnonymousMethodNode>^ methodParameters? methodReturnType block
+anonymousMethod              : 'procedure'<AnonymousMethodNodeImpl>^ methodParameters? block
+                             | 'function'<AnonymousMethodNodeImpl>^ methodParameters? methodReturnType block
                              ;
-expressionOrRange            : expression ('..'<RangeExpressionNode>^ expression)?
+expressionOrRange            : expression ('..'<RangeExpressionNodeImpl>^ expression)?
                              ;
 expressionOrAnonymousMethod  : anonymousMethod
                              | expression
@@ -604,7 +604,7 @@ expressionList               : (expression (','!)?)+
                              ;
 expressionOrRangeList        : (expressionOrRange (','!)?)+
                              ;
-textLiteral                  : textLiteral_ -> ^(TkTextLiteral<TextLiteralNode> textLiteral_)
+textLiteral                  : textLiteral_ -> ^(TkTextLiteral<TextLiteralNodeImpl> textLiteral_)
                              ;
 textLiteral_                 : TkQuotedString (escapedCharacter+ TkQuotedString)* escapedCharacter*
                              | escapedCharacter+ (TkQuotedString escapedCharacter+)* TkQuotedString?
@@ -612,49 +612,49 @@ textLiteral_                 : TkQuotedString (escapedCharacter+ TkQuotedString)
 escapedCharacter             : TkCharacterEscapeCode
                              | '^' (TkIdentifier | TkIntNum | TkAnyChar) -> ^({changeTokenType(TkEscapedCharacter)})
                              ;
-nilLiteral                   : 'nil'<NilLiteralNode>
+nilLiteral                   : 'nil'<NilLiteralNodeImpl>
                              ;
 arrayConstructor             : lbrack expressionOrRangeList? rbrack
-                             -> ^(TkArrayConstructor<ArrayConstructorNode> lbrack expressionOrRangeList? rbrack)
+                             -> ^(TkArrayConstructor<ArrayConstructorNodeImpl> lbrack expressionOrRangeList? rbrack)
                              ;
-addOperator                  : '+'<BinaryExpressionNode>
-                             | '-'<BinaryExpressionNode>
-                             | 'or'<BinaryExpressionNode>
-                             | 'xor'<BinaryExpressionNode>
+addOperator                  : '+'<BinaryExpressionNodeImpl>
+                             | '-'<BinaryExpressionNodeImpl>
+                             | 'or'<BinaryExpressionNodeImpl>
+                             | 'xor'<BinaryExpressionNodeImpl>
                              ;
-multOperator                 : '*'<BinaryExpressionNode>
-                             | '/'<BinaryExpressionNode>
-                             | 'div'<BinaryExpressionNode>
-                             | 'mod'<BinaryExpressionNode>
-                             | 'and'<BinaryExpressionNode>
-                             | 'shl'<BinaryExpressionNode>
-                             | 'shr'<BinaryExpressionNode>
-                             | 'as'<BinaryExpressionNode>
+multOperator                 : '*'<BinaryExpressionNodeImpl>
+                             | '/'<BinaryExpressionNodeImpl>
+                             | 'div'<BinaryExpressionNodeImpl>
+                             | 'mod'<BinaryExpressionNodeImpl>
+                             | 'and'<BinaryExpressionNodeImpl>
+                             | 'shl'<BinaryExpressionNodeImpl>
+                             | 'shr'<BinaryExpressionNodeImpl>
+                             | 'as'<BinaryExpressionNodeImpl>
                              ;
-unaryOperator                : 'not'<UnaryExpressionNode>
-                             | '+'<UnaryExpressionNode>
-                             | '-'<UnaryExpressionNode>
-                             | '@'<UnaryExpressionNode>
+unaryOperator                : 'not'<UnaryExpressionNodeImpl>
+                             | '+'<UnaryExpressionNodeImpl>
+                             | '-'<UnaryExpressionNodeImpl>
+                             | '@'<UnaryExpressionNodeImpl>
                              ;
-relationalOperator           : '='<BinaryExpressionNode>
-                             | '>'<BinaryExpressionNode>
-                             | '<'<BinaryExpressionNode>
-                             | '<='<BinaryExpressionNode>
-                             | '>='<BinaryExpressionNode>
-                             | '<>'<BinaryExpressionNode>
-                             | 'in'<BinaryExpressionNode>
-                             | 'is'<BinaryExpressionNode>
+relationalOperator           : '='<BinaryExpressionNodeImpl>
+                             | '>'<BinaryExpressionNodeImpl>
+                             | '<'<BinaryExpressionNodeImpl>
+                             | '<='<BinaryExpressionNodeImpl>
+                             | '>='<BinaryExpressionNodeImpl>
+                             | '<>'<BinaryExpressionNodeImpl>
+                             | 'in'<BinaryExpressionNodeImpl>
+                             | 'is'<BinaryExpressionNodeImpl>
                              ;
 constExpression              : expression
                              | recordExpression
                              | arrayExpression
                              ;
-recordExpression             : '('<RecordExpressionNode>^ (recordExpressionItem (';')?)+ ')'
+recordExpression             : '('<RecordExpressionNodeImpl>^ (recordExpressionItem (';')?)+ ')'
                              ;
 recordExpressionItem         : ident ':' constExpression
-                             -> ^(TkRecordExpressionItem<RecordExpressionItemNode> ident constExpression)
+                             -> ^(TkRecordExpressionItem<RecordExpressionItemNodeImpl> ident constExpression)
                              ;
-arrayExpression              : '('<ArrayExpressionNode>^ (constExpression (','!)?)* ')'
+arrayExpression              : '('<ArrayExpressionNodeImpl>^ (constExpression (','!)?)* ')'
                              ;
 
 //----------------------------------------------------------------------------
@@ -677,61 +677,61 @@ statement                    : ifStatement
                              | expressionStatement
                              | gotoStatement
                              ;
-ifStatement                  : 'if'<IfStatementNode>^ expression 'then' statement? ('else' statement?)?
+ifStatement                  : 'if'<IfStatementNodeImpl>^ expression 'then' statement? ('else' statement?)?
                              ;
 varStatement                 : 'var' customAttribute? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
-                             -> ^('var'<VarStatementNode> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? customAttribute?)
+                             -> ^('var'<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? customAttribute?)
                              ;
 constStatement               : 'const' customAttribute? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
-                             -> ^('const'<ConstStatementNode> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod customAttribute?)
+                             -> ^('const'<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod customAttribute?)
                              ;
-caseStatement                : 'case'<CaseStatementNode>^ expression 'of' caseItem* elseBlock? 'end'
+caseStatement                : 'case'<CaseStatementNodeImpl>^ expression 'of' caseItem* elseBlock? 'end'
                              ;
-elseBlock                    : 'else'<ElseBlockNode>^ statementList
+elseBlock                    : 'else'<ElseBlockNodeImpl>^ statementList
                              ;
-caseItem                     : expressionOrRangeList ':' (statement)? (';')? -> ^(TkCaseItem<CaseItemStatementNode> expressionOrRangeList (statement)? (';')? )
+caseItem                     : expressionOrRangeList ':' (statement)? (';')? -> ^(TkCaseItem<CaseItemStatementNodeImpl> expressionOrRangeList (statement)? (';')? )
                              ;
-repeatStatement              : 'repeat'<RepeatStatementNode>^ statementList 'until' expression
+repeatStatement              : 'repeat'<RepeatStatementNodeImpl>^ statementList 'until' expression
                              ;
-whileStatement               : 'while'<WhileStatementNode>^ expression 'do' statement?
+whileStatement               : 'while'<WhileStatementNodeImpl>^ expression 'do' statement?
                              ;
-forStatement                 : 'for'<ForToStatementNode>^ forVar ':=' expression 'to' expression 'do' statement?
-                             | 'for'<ForToStatementNode>^ forVar ':=' expression 'downto' expression 'do' statement?
-                             | 'for'<ForInStatementNode>^ forVar 'in' expression 'do' statement?
+forStatement                 : 'for'<ForToStatementNodeImpl>^ forVar ':=' expression 'to' expression 'do' statement?
+                             | 'for'<ForToStatementNodeImpl>^ forVar ':=' expression 'downto' expression 'do' statement?
+                             | 'for'<ForInStatementNodeImpl>^ forVar 'in' expression 'do' statement?
                              ;
-forVar                       : 'var' nameDeclaration (':' varType)? -> ^(TkForLoopVar<ForLoopVarDeclarationNode> nameDeclaration varType?)
-                             | simpleNameReference -> ^(TkForLoopVar<ForLoopVarReferenceNode> simpleNameReference)
+forVar                       : 'var' nameDeclaration (':' varType)? -> ^(TkForLoopVar<ForLoopVarDeclarationNodeImpl> nameDeclaration varType?)
+                             | simpleNameReference -> ^(TkForLoopVar<ForLoopVarReferenceNodeImpl> simpleNameReference)
                              ;
-withStatement                : 'with'<WithStatementNode>^ expressionList 'do' statement?
+withStatement                : 'with'<WithStatementNodeImpl>^ expressionList 'do' statement?
                              ;
-compoundStatement            : 'begin'<CompoundStatementNode>^ statementList 'end'
+compoundStatement            : 'begin'<CompoundStatementNodeImpl>^ statementList 'end'
                              ;
-statementList                : delimitedStatements? -> ^(TkStatementList<StatementListNode> delimitedStatements?)
+statementList                : delimitedStatements? -> ^(TkStatementList<StatementListNodeImpl> delimitedStatements?)
                              ;
 delimitedStatements          : (statement | ';')+
                              ;
-labelStatement               : label ':' statement? -> ^(TkLabelStatement<LabelStatementNode> label statement?)
+labelStatement               : label ':' statement? -> ^(TkLabelStatement<LabelStatementNodeImpl> label statement?)
                              ;
-assignmentStatement          : expression ':='<AssignmentStatementNode>^ expressionOrAnonymousMethod
+assignmentStatement          : expression ':='<AssignmentStatementNodeImpl>^ expressionOrAnonymousMethod
                              ;
-expressionStatement          : expression -> ^(TkExpressionStatement<ExpressionStatementNode> expression)
+expressionStatement          : expression -> ^(TkExpressionStatement<ExpressionStatementNodeImpl> expression)
                              ;
-gotoStatement                : 'goto'<GotoStatementNode>^ label
+gotoStatement                : 'goto'<GotoStatementNodeImpl>^ label
                              ;
-tryStatement                 : 'try'<TryStatementNode>^ statementList (exceptBlock | finallyBlock) 'end'
+tryStatement                 : 'try'<TryStatementNodeImpl>^ statementList (exceptBlock | finallyBlock) 'end'
                              ;
-exceptBlock                  : 'except'<ExceptBlockNode>^ handlerList
+exceptBlock                  : 'except'<ExceptBlockNodeImpl>^ handlerList
                              ;
-finallyBlock                 : 'finally'<FinallyBlockNode>^ statementList
+finallyBlock                 : 'finally'<FinallyBlockNodeImpl>^ statementList
                              ;
 handlerList                  : handler+ elseBlock?
                              | statementList
                              ;
-handler                      : 'on'<ExceptItemNode>^ (nameDeclaration ':'!)? typeReference 'do' statement? (';')?
+handler                      : 'on'<ExceptItemNodeImpl>^ (nameDeclaration ':'!)? typeReference 'do' statement? (';')?
                              ;
-raiseStatement               : 'raise'<RaiseStatementNode>^ expression? (AT! expression)?
+raiseStatement               : 'raise'<RaiseStatementNodeImpl>^ expression? (AT! expression)?
                              ;
-assemblerStatement           : 'asm'<AsmStatementNode>^ assemblerInstructions 'end'
+assemblerStatement           : 'asm'<AsmStatementNodeImpl>^ assemblerInstructions 'end'
                              ;
 assemblerInstructions        : ~('end')* // Skip asm statements
                              ;
@@ -838,27 +838,27 @@ keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ALIGN |ANSISTR
                              | (STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS)
                              | (VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR)
                              ;
-nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNode> nameDeclaration nameDeclaration*)
+nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration nameDeclaration*)
                              ;
 label                        : ident
                              | intNum
                              ;
-nameDeclaration              : ident -> ^(TkNameDeclaration<SimpleNameDeclarationNode> ident)
+nameDeclaration              : ident -> ^(TkNameDeclaration<SimpleNameDeclarationNodeImpl> ident)
                              ;
 genericNameDeclaration       : ident ('.' extendedIdent)* genericDefinition?
-                             -> ^(TkNameDeclaration<SimpleNameDeclarationNode> ident extendedIdent* genericDefinition?)
+                             -> ^(TkNameDeclaration<SimpleNameDeclarationNodeImpl> ident extendedIdent* genericDefinition?)
                              ;
 qualifiedNameDeclaration     : ident ('.' extendedIdent)*
-                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident extendedIdent*)
+                             -> ^(TkNameDeclaration<QualifiedNameDeclarationNodeImpl> ident extendedIdent*)
                              ;
 nameReference                : ident genericArguments? ('.' extendedNameReference)?
-                             -> ^(TkNameReference<NameReferenceNode> ident genericArguments? ('.' extendedNameReference)?)
+                             -> ^(TkNameReference<NameReferenceNodeImpl> ident genericArguments? ('.' extendedNameReference)?)
                              ;
 simpleNameReference          : ident
-                             -> ^(TkNameReference<NameReferenceNode> ident)
+                             -> ^(TkNameReference<NameReferenceNodeImpl> ident)
                              ;
 extendedNameReference        : extendedIdent genericArguments? ('.' extendedNameReference)?
-                             -> ^(TkNameReference<NameReferenceNode> extendedIdent genericArguments? ('.' extendedNameReference)?)
+                             -> ^(TkNameReference<NameReferenceNodeImpl> extendedIdent genericArguments? ('.' extendedNameReference)?)
                              ;
 extendedIdent                : ident
                              | keywords -> ^({changeTokenType(TkIdentifier)})
@@ -866,11 +866,11 @@ extendedIdent                : ident
 //----------------------------------------------------------------------------
 // Literals
 //----------------------------------------------------------------------------
-intNum                       : TkIntNum<IntegerLiteralNode>
-                             | TkHexNum<IntegerLiteralNode>
-                             | TkBinaryNum<IntegerLiteralNode>
+intNum                       : TkIntNum<IntegerLiteralNodeImpl>
+                             | TkHexNum<IntegerLiteralNodeImpl>
+                             | TkBinaryNum<IntegerLiteralNodeImpl>
                              ;
-realNum                      : TkRealNum<DecimalLiteralNode>
+realNum                      : TkRealNum<DecimalLiteralNodeImpl>
                              ;
 
 //----------------------------------------------------------------------------

@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.ConstSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
@@ -49,7 +49,7 @@ public class UnitLevelKeywordIndentationRule extends AbstractDelphiRule {
   }
 
   @Override
-  public RuleContext visit(DelphiAST ast, RuleContext data) {
+  public RuleContext visit(DelphiAst ast, RuleContext data) {
     DelphiNode end = getEnd(ast);
     if (end != null) {
       checkNodeIndentation(getEnd(ast), data);
@@ -128,7 +128,7 @@ public class UnitLevelKeywordIndentationRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(CompoundStatementNode compoundStatementNode, RuleContext data) {
-    if (compoundStatementNode.jjtGetParent() instanceof DelphiAST) {
+    if (compoundStatementNode.jjtGetParent() instanceof DelphiAst) {
       checkNodeIndentation(compoundStatementNode, data);
       checkNodeIndentation(getEnd(compoundStatementNode), data);
     }

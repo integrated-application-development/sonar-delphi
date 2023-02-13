@@ -18,7 +18,8 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
@@ -28,13 +29,14 @@ import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.HelperType;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import net.sourceforge.pmd.lang.symboltable.Scope;
 
-public interface DelphiScope extends Scope {
+public interface DelphiScope {
+  void addDeclaration(NameDeclaration var1);
+
+  Set<NameDeclaration> addNameOccurrence(NameOccurrence occurrence);
 
   /**
    * Find declarations in this scope based off of some name occurrence
@@ -42,7 +44,7 @@ public interface DelphiScope extends Scope {
    * @param occurrence The name for which we are trying to find a matching declaration
    * @return Set of name declarations matching the name occurrence
    */
-  Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence);
+  Set<NameDeclaration> findDeclaration(NameOccurrence occurrence);
 
   /**
    * Find a helper type in this scope based off of some type
@@ -60,11 +62,18 @@ public interface DelphiScope extends Scope {
    * @param occurrence The name occurrence that we're accumulating declarations for
    * @param result The set of declarations that overloads will be added to, if applicable
    */
-  void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result);
+  void findMethodOverloads(NameOccurrence occurrence, Set<NameDeclaration> result);
 
   @Nullable
-  @Override
   DelphiScope getParent();
+
+  void setParent(DelphiScope parent);
+
+  <T extends DelphiScope> T getEnclosingScope(Class<T> type);
+
+  Map<NameDeclaration, List<NameOccurrence>> getDeclarations();
+
+  <T extends NameDeclaration> Map<T, List<NameOccurrence>> getDeclarations(Class<T> var1);
 
   List<NameOccurrence> getOccurrencesFor(NameDeclaration declaration);
 
@@ -96,9 +105,8 @@ public interface DelphiScope extends Scope {
     return getDeclarationSet(VariableNameDeclaration.class);
   }
 
-  @Override
   default boolean contains(NameOccurrence occurrence) {
-    return !findDeclaration((DelphiNameOccurrence) occurrence).isEmpty();
+    return !findDeclaration(occurrence).isEmpty();
   }
 
   static UnknownScope unknownScope() {

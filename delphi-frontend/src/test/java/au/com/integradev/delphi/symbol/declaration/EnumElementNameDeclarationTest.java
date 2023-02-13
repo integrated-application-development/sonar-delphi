@@ -24,11 +24,14 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.EnumElementNode;
+import au.com.integradev.delphi.antlr.ast.node.EnumElementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.EnumTypeNode;
-import au.com.integradev.delphi.antlr.ast.node.IdentifierNode;
-import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNode;
+import au.com.integradev.delphi.antlr.ast.node.EnumTypeNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNodeImpl;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import org.antlr.runtime.CommonToken;
@@ -61,21 +64,21 @@ class EnumElementNameDeclarationTest {
 
   private static EnumElementNameDeclaration createEnumElement(String name) {
     var identifierToken = new CommonToken(DelphiLexer.TkIdentifier, name);
-    var identifierNode = new IdentifierNode(identifierToken);
+    var identifierNode = new IdentifierNodeImpl(identifierToken);
 
-    var nameNode = new SimpleNameDeclarationNode(DelphiLexer.TkNameDeclaration);
+    var nameNode = new SimpleNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
     nameNode.jjtAddChild(identifierNode);
 
-    EnumElementNode element = new EnumElementNode(DelphiLexer.TkEnumElement);
+    EnumElementNode element = new EnumElementNodeImpl(DelphiLexer.TkEnumElement);
     element.jjtAddChild(nameNode);
 
-    EnumTypeNode enumType = new EnumTypeNode(new CommonToken(DelphiLexer.LPAREN));
+    EnumTypeNode enumType = new EnumTypeNodeImpl(new CommonToken(DelphiLexer.LPAREN));
     enumType.jjtAddChild(element);
 
     DelphiFile delphiFile = mock(DelphiFile.class);
     when(delphiFile.getTypeFactory()).thenReturn(TypeFactoryUtils.defaultFactory());
 
-    DelphiAST ast = spy(new DelphiAST(delphiFile, null));
+    DelphiAst ast = spy(new DelphiAst(delphiFile, null));
     ast.jjtAddChild(enumType);
 
     return new EnumElementNameDeclaration(element);

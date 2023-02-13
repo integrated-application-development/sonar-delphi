@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
@@ -77,7 +77,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     this.baseDir = baseDir;
   }
 
-  public DelphiAST parse() {
+  public DelphiAst parse() {
     DelphiFile file = DelphiInputFile.from(inputFile(), mockConfig());
     return file.getAst();
   }

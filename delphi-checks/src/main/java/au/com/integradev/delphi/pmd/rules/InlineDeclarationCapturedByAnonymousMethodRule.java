@@ -23,7 +23,7 @@ import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 
 public class InlineDeclarationCapturedByAnonymousMethodRule extends AbstractDelphiRule {
   @Override

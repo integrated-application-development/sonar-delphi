@@ -11,6 +11,7 @@
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -22,15 +23,15 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.pmd.DelphiLanguageModule;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.LanguageRegistry;
-import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.rule.AbstractRule;
 
 /** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
@@ -38,7 +39,7 @@ public abstract class AbstractDelphiRule extends AbstractRule implements DelphiR
   private Set<Integer> suppressions = new HashSet<>();
 
   protected AbstractDelphiRule() {
-    setLanguage(LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME));
+    setLanguage(LanguageRegistry.getLanguage("Delphi"));
     defineBaseProperties();
   }
 
@@ -51,13 +52,13 @@ public abstract class AbstractDelphiRule extends AbstractRule implements DelphiR
   @Override
   public void apply(List<? extends Node> acus, RuleContext ctx) {
     for (Node acu : acus) {
-      DelphiAST ast = (DelphiAST) acu;
+      DelphiAst ast = (DelphiAst) acu;
       updateSuppressions(ast);
       visit(ast, ctx);
     }
   }
 
-  private void updateSuppressions(DelphiAST ast) {
+  private void updateSuppressions(DelphiAst ast) {
     suppressions = ast.getSuppressions();
   }
 

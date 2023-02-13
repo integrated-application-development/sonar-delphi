@@ -25,11 +25,13 @@ import au.com.integradev.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.ForToStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode.DeclarationKind;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.RecordVariantItemNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeNode;
 import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.Visibility;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
@@ -42,10 +44,9 @@ import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import java.util.Objects;
-import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.NotNull;
 
-public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
+public final class VariableNameDeclaration extends AbstractNameDeclaration
     implements TypedDeclaration, Visibility {
   private final Type type;
   private final VisibilityType visibility;
@@ -253,9 +254,9 @@ public final class VariableNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
+  protected NameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new VariableNameDeclaration(
-        getNode(), type.specialize(context), visibility, inline, field, classVar, union);
+        node, type.specialize(context), visibility, inline, field, classVar, union);
   }
 
   @Override

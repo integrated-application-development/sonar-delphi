@@ -21,7 +21,6 @@ package au.com.integradev.delphi.symbol;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.DelphiType;
 import java.util.List;
@@ -34,7 +33,7 @@ class DelphiNameOccurrenceTest {
     DelphiNameOccurrence occurrenceA = new DelphiNameOccurrence(foo);
 
     SymbolicNode bar = SymbolicNode.imaginary("Bar", DelphiScope.unknownScope());
-    DelphiNameOccurrence occurrenceB = new DelphiNameOccurrence(bar);
+    NameOccurrence occurrenceB = new DelphiNameOccurrence(bar);
 
     assertThat(occurrenceA.isPartOfQualifiedName()).isFalse();
     assertThat(occurrenceA.getNameForWhichThisIsAQualifier()).isNull();
@@ -72,7 +71,7 @@ class DelphiNameOccurrenceTest {
   @Test
   void testIsSelf() {
     SymbolicNode symbolicNode = SymbolicNode.imaginary("Self", DelphiScope.unknownScope());
-    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(symbolicNode);
+    NameOccurrence occurrence = new DelphiNameOccurrence(symbolicNode);
     assertThat(occurrence.isSelf()).isTrue();
   }
 
@@ -80,14 +79,14 @@ class DelphiNameOccurrenceTest {
   void testEquals() {
     SymbolicNode foo = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
 
-    DelphiNameOccurrence occurrenceA = new DelphiNameOccurrence(foo);
+    NameOccurrence occurrenceA = new DelphiNameOccurrence(foo);
     assertThat(occurrenceA).isEqualTo(occurrenceA).isNotEqualTo(null).isNotEqualTo(new Object());
 
-    DelphiNameOccurrence occurrenceB = new DelphiNameOccurrence(foo);
+    NameOccurrence occurrenceB = new DelphiNameOccurrence(foo);
     assertThat(occurrenceA).isEqualTo(occurrenceB);
 
     SymbolicNode bar = SymbolicNode.imaginary("Bar", DelphiScope.unknownScope());
-    DelphiNameOccurrence occurrenceC = new DelphiNameOccurrence(bar);
+    NameOccurrence occurrenceC = new DelphiNameOccurrence(bar);
     assertThat(occurrenceA).isNotEqualTo(occurrenceC);
 
     DelphiNameOccurrence occurrenceD = new DelphiNameOccurrence(foo);
@@ -103,7 +102,7 @@ class DelphiNameOccurrenceTest {
     assertThat(occurrenceA).isNotEqualTo(occurrenceF);
 
     DelphiNameOccurrence occurrenceG = new DelphiNameOccurrence(foo);
-    occurrenceG.setNameDeclaration(mock(DelphiNameDeclaration.class));
+    occurrenceG.setNameDeclaration(mock(NameDeclaration.class));
     assertThat(occurrenceA).isNotEqualTo(occurrenceG);
 
     DelphiNameOccurrence occurrenceH = new DelphiNameOccurrence(foo);

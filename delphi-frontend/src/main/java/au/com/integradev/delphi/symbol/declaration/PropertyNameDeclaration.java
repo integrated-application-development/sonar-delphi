@@ -19,12 +19,14 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.PropertyNode;
 import au.com.integradev.delphi.antlr.ast.node.PropertyReadSpecifierNode;
 import au.com.integradev.delphi.antlr.ast.node.PropertyWriteSpecifierNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.Visibility;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.Invocable;
 import au.com.integradev.delphi.type.Type;
@@ -36,11 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
+public final class PropertyNameDeclaration extends AbstractNameDeclaration
     implements TypedDeclaration, Invocable, Visibility {
 
   private final String fullyQualifiedName;
@@ -48,8 +49,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   private final boolean isClassInvocable;
   private final boolean isDefaultProperty;
   private final Type type;
-  private final DelphiNameDeclaration readDeclaration;
-  private final DelphiNameDeclaration writeDeclaration;
+  private final NameDeclaration readDeclaration;
+  private final NameDeclaration writeDeclaration;
   private final VisibilityType visibility;
   private final List<PropertyNameDeclaration> redeclarations;
   private int hashCode;
@@ -75,8 +76,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
       boolean isClassInvocable,
       boolean isDefaultProperty,
       Type type,
-      DelphiNameDeclaration readDeclaration,
-      DelphiNameDeclaration writeDeclaration,
+      NameDeclaration readDeclaration,
+      NameDeclaration writeDeclaration,
       VisibilityType visibility) {
     super(location);
     this.fullyQualifiedName = fullyQualifiedName;
@@ -114,7 +115,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     return node.getType();
   }
 
-  private static DelphiNameDeclaration extractReadDeclaration(
+  private static NameDeclaration extractReadDeclaration(
       PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
     if (concreteDeclaration != null) {
       return concreteDeclaration.getReadDeclaration();
@@ -128,7 +129,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     return null;
   }
 
-  private static DelphiNameDeclaration extractWriteDeclaration(
+  private static NameDeclaration extractWriteDeclaration(
       PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
     if (concreteDeclaration != null) {
       return concreteDeclaration.getWriteDeclaration();
@@ -142,8 +143,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
     return null;
   }
 
-  private static DelphiNameDeclaration extractSpecifierDeclaration(PrimaryExpressionNode node) {
-    DelphiNameDeclaration result = null;
+  private static NameDeclaration extractSpecifierDeclaration(PrimaryExpressionNode node) {
+    NameDeclaration result = null;
     for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
       Node child = node.jjtGetChild(i);
       if (child instanceof NameReferenceNode) {
@@ -164,12 +165,12 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Nullable
-  public DelphiNameDeclaration getReadDeclaration() {
+  public NameDeclaration getReadDeclaration() {
     return readDeclaration;
   }
 
   @Nullable
-  public DelphiNameDeclaration getWriteDeclaration() {
+  public NameDeclaration getWriteDeclaration() {
     return writeDeclaration;
   }
 
@@ -215,9 +216,9 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   }
 
   @Override
-  protected DelphiNameDeclaration doSpecialization(TypeSpecializationContext context) {
+  protected NameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new PropertyNameDeclaration(
-        getNode(),
+        node,
         fullyQualifiedName,
         parameters.stream()
             .map(parameter -> parameter.specialize(context))
@@ -230,8 +231,8 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
         visibility);
   }
 
-  private static DelphiNameDeclaration specializeIfNotNull(
-      DelphiNameDeclaration declaration, TypeSpecializationContext context) {
+  private static NameDeclaration specializeIfNotNull(
+      NameDeclaration declaration, TypeSpecializationContext context) {
     if (declaration != null) {
       return declaration.specialize(context);
     }
@@ -244,7 +245,7 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
       return false;
     }
     PropertyNameDeclaration that = (PropertyNameDeclaration) other;
-    return that.node.getImage().equalsIgnoreCase(node.getImage())
+    return that.getNode().getImage().equalsIgnoreCase(getNode().getImage())
         && parameters.equals(that.parameters)
         && type.is(that.type);
   }
@@ -252,13 +253,13 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public int hashCode() {
     if (hashCode == 0) {
-      hashCode = Objects.hash(node.getImage().toLowerCase(), parameters);
+      hashCode = Objects.hash(getNode().getImage().toLowerCase(), parameters);
     }
     return hashCode;
   }
 
   @Override
-  public int compareTo(@NotNull DelphiNameDeclaration other) {
+  public int compareTo(@NotNull NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       PropertyNameDeclaration that = (PropertyNameDeclaration) other;
@@ -284,9 +285,9 @@ public final class PropertyNameDeclaration extends AbstractDelphiNameDeclaration
   @Override
   public String toString() {
     return "Property: image = '"
-        + node.getImage()
+        + getNode().getImage()
         + "', line = "
-        + node.getBeginLine()
+        + getNode().getBeginLine()
         + ", params = "
         + parameters.size()
         + " <"

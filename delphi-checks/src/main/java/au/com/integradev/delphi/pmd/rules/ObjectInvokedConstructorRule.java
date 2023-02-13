@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
@@ -37,7 +37,7 @@ public class ObjectInvokedConstructorRule extends AbstractDelphiRule {
   }
 
   private static boolean isConstructor(NameReferenceNode reference) {
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
+    NameDeclaration declaration = reference.getNameDeclaration();
     return declaration instanceof MethodNameDeclaration
         && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
   }
@@ -52,7 +52,7 @@ public class ObjectInvokedConstructorRule extends AbstractDelphiRule {
       return false;
     }
 
-    DelphiNameDeclaration declaration = previous.getNameDeclaration();
+    NameDeclaration declaration = previous.getNameDeclaration();
     return declaration instanceof VariableNameDeclaration
         && !((Typed) declaration).getType().isClassReference()
         && !previous.getNameOccurrence().isSelf();

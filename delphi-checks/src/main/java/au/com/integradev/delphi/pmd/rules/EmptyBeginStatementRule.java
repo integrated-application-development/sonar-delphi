@@ -21,13 +21,13 @@ package au.com.integradev.delphi.pmd.rules;
 import au.com.integradev.delphi.antlr.ast.node.CaseItemStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.CaseStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.ElseBlockNode;
 import au.com.integradev.delphi.antlr.ast.node.ExceptBlockNode;
 import au.com.integradev.delphi.antlr.ast.node.ExceptItemNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
 import au.com.integradev.delphi.antlr.ast.node.StatementListNode;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
 
 public class EmptyBeginStatementRule extends AbstractDelphiRule {
 
@@ -41,7 +41,7 @@ public class EmptyBeginStatementRule extends AbstractDelphiRule {
   }
 
   private boolean shouldAddViolation(CompoundStatementNode block) {
-    Node parent = block.jjtGetParent();
+    DelphiNode parent = block.jjtGetParent();
 
     if (parent instanceof MethodBodyNode) {
       // Handled by EmptyMethodRule
@@ -61,7 +61,7 @@ public class EmptyBeginStatementRule extends AbstractDelphiRule {
 
     if (parent instanceof StatementListNode) {
       StatementListNode statementList = (StatementListNode) parent;
-      Node grandparent = parent.jjtGetParent();
+      DelphiNode grandparent = parent.jjtGetParent();
 
       if (statementList.getStatements().size() == 1) {
         if (grandparent instanceof ElseBlockNode

@@ -18,10 +18,11 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
@@ -53,7 +54,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(DelphiAST node, Data data) {
+  public Data visit(DelphiAst node, Data data) {
     String filePath = node.getDelphiFile().getSourceCodeFile().getAbsolutePath();
 
     UnitNameDeclaration declaration = data.symbolTable.getUnitByPath(filePath);
@@ -70,7 +71,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(DelphiNode node, Data data) {
-    data.fileScope.attach(node);
+    data.fileScope.attach((MutableDelphiNode) node);
     return DelphiParserVisitor.super.visit(node, data);
   }
 

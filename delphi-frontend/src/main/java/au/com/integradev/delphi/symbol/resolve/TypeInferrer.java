@@ -20,6 +20,7 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayConstructorNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.type.ArrayOption;
 import au.com.integradev.delphi.type.DelphiType;
 import au.com.integradev.delphi.type.Type;
@@ -29,7 +30,6 @@ import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Comparator;
 import java.util.Set;
-import net.sourceforge.pmd.lang.ast.Node;
 
 public final class TypeInferrer {
   private final TypeFactory typeFactory;

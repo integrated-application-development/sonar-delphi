@@ -22,20 +22,19 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNode;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import org.apache.commons.lang3.StringUtils;
 
 public class MixedNamesRule extends AbstractDelphiRule {
   private void checkNameOccurrenceForViolations(
-      Node node, RuleContext data, DelphiNameOccurrence occurrence) {
-    DelphiNameDeclaration declaration = occurrence.getNameDeclaration();
+      Node node, RuleContext data, NameOccurrence occurrence) {
+    NameDeclaration declaration = occurrence.getNameDeclaration();
 
     if (declaration != null && !occurrence.isSelf()) {
       String actual = occurrence.getImage();
@@ -73,8 +72,8 @@ public class MixedNamesRule extends AbstractDelphiRule {
 
   @Override
   public RuleContext visit(NameReferenceNode reference, RuleContext data) {
-    DelphiNameDeclaration declaration = reference.getNameDeclaration();
-    DelphiNameOccurrence occurrence = reference.getNameOccurrence();
+    NameDeclaration declaration = reference.getNameDeclaration();
+    NameOccurrence occurrence = reference.getNameOccurrence();
 
     if (occurrence != null) {
       if (declaration instanceof UnitImportNameDeclaration) {

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.file;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -30,7 +30,7 @@ import java.util.Set;
 class DefaultDelphiFile implements DelphiFile {
   private File sourceCodeFile;
   private List<String> sourceCodeLines;
-  private DelphiAST ast;
+  private DelphiAst ast;
   private List<DelphiToken> tokens;
   private List<DelphiToken> comments;
   private Set<Integer> suppressions;
@@ -54,7 +54,7 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
-  public DelphiAST getAst() {
+  public DelphiAst getAst() {
     return ast;
   }
 
@@ -91,7 +91,7 @@ class DefaultDelphiFile implements DelphiFile {
     this.sourceCodeLines = sourceCodeLines;
   }
 
-  void setAst(DelphiAST ast) {
+  void setAst(DelphiAst ast) {
     this.ast = ast;
   }
 

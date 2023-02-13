@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.ClassTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodBodyNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
@@ -69,7 +69,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(DelphiAST ast, Data data) {
+  public Data visit(DelphiAst ast, Data data) {
     var cyclomaticVisitor = new CyclomaticComplexityVisitor();
     var cyclomaticComplexity = cyclomaticVisitor.visit(ast, new CyclomaticComplexityVisitor.Data());
     data.complexity = cyclomaticComplexity.getComplexity();

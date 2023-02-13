@@ -29,14 +29,15 @@ import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.UnaryExpressionNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.operator.Operator;
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
 import au.com.integradev.delphi.operator.UnaryOperator;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodKind;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
@@ -59,7 +60,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.Node;
 
 public final class ExpressionTypeResolver {
   private final TypeFactory typeFactory;
@@ -129,7 +129,7 @@ public final class ExpressionTypeResolver {
   }
 
   @Nullable
-  private static DelphiNameDeclaration extractNameDeclaration(Node node) {
+  private static NameDeclaration extractNameDeclaration(Node node) {
     if (node instanceof NameReferenceNode) {
       return ((NameReferenceNode) node).getLastName().getNameDeclaration();
     }
@@ -137,13 +137,13 @@ public final class ExpressionTypeResolver {
   }
 
   private static boolean isRegularArrayProperty(Node node) {
-    DelphiNameDeclaration declaration = extractNameDeclaration(node);
+    NameDeclaration declaration = extractNameDeclaration(node);
     return declaration instanceof PropertyNameDeclaration
         && ((PropertyNameDeclaration) declaration).isArrayProperty();
   }
 
   private static boolean isClassReference(Node node) {
-    DelphiNameDeclaration declaration = extractNameDeclaration(node);
+    NameDeclaration declaration = extractNameDeclaration(node);
     if (declaration instanceof TypeNameDeclaration) {
       return true;
     }
@@ -239,7 +239,7 @@ public final class ExpressionTypeResolver {
     Type type = null;
 
     for (NameReferenceNode name : reference.flatten()) {
-      DelphiNameOccurrence occurrence = name.getNameOccurrence();
+      NameOccurrence occurrence = name.getNameOccurrence();
       if (occurrence == null) {
         continue;
       }
@@ -275,14 +275,14 @@ public final class ExpressionTypeResolver {
     return unknownType();
   }
 
-  private static boolean isConstructor(DelphiNameOccurrence occurrence) {
-    DelphiNameDeclaration declaration = occurrence.getNameDeclaration();
+  private static boolean isConstructor(NameOccurrence occurrence) {
+    NameDeclaration declaration = occurrence.getNameDeclaration();
     return declaration instanceof MethodNameDeclaration
         && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
   }
 
-  private Type handleNameOccurrence(DelphiNameOccurrence occurrence) {
-    DelphiNameDeclaration declaration = occurrence.getNameDeclaration();
+  private Type handleNameOccurrence(NameOccurrence occurrence) {
+    NameDeclaration declaration = occurrence.getNameDeclaration();
 
     if (declaration instanceof Typed) {
       Type type = ((Typed) declaration).getType();

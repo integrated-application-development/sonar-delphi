@@ -21,7 +21,7 @@ package au.com.integradev.delphi.pmd.rules;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 
 public class ExplicitDefaultPropertyReferenceRule extends AbstractDelphiRule {
   @Override

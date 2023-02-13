@@ -19,19 +19,18 @@
 package au.com.integradev.delphi.symbol.scope;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNode;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
-import au.com.integradev.delphi.antlr.ast.node.IndexedNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNameNode;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.HelperType;
 import java.util.Set;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 
 public interface FileScope extends DelphiScope {
 
@@ -42,7 +41,7 @@ public interface FileScope extends DelphiScope {
    * @param occurrence The name for which we are trying to find a matching declaration
    * @return Set of name declarations matching the name occurrence
    */
-  Set<NameDeclaration> shallowFindDeclaration(DelphiNameOccurrence occurrence);
+  Set<NameDeclaration> shallowFindDeclaration(NameOccurrence occurrence);
 
   /**
    * Find a helper type in this scope without traversing imports
@@ -59,7 +58,7 @@ public interface FileScope extends DelphiScope {
    * @param node The node which we are registering
    * @param scope The scope we want to associate the node to
    */
-  void registerScope(IndexedNode node, DelphiScope scope);
+  void registerScope(Node node, DelphiScope scope);
 
   /**
    * Registers a node as being associated with a declaration so it can be re-attached later
@@ -67,7 +66,7 @@ public interface FileScope extends DelphiScope {
    * @param node The node which we want to associate the declaration with
    * @param declaration The declaration we are registering
    */
-  void registerDeclaration(IndexedNode node, NameDeclaration declaration);
+  void registerDeclaration(Node node, NameDeclaration declaration);
 
   /**
    * Registers a node as being associated with an occurrence so it can be re-attached later
@@ -75,14 +74,14 @@ public interface FileScope extends DelphiScope {
    * @param node The node which we want to associate the name occurrence with
    * @param occurrence The occurrence we are registering
    */
-  void registerOccurrence(IndexedNode node, NameOccurrence occurrence);
+  void registerOccurrence(Node node, NameOccurrence occurrence);
 
   /**
    * Attaches scope information to a particular node
    *
    * @param node The node which we want to attach symbol information to
    */
-  void attach(DelphiNode node);
+  void attach(MutableDelphiNode node);
 
   /**
    * Attaches symbol declaration information to a particular node

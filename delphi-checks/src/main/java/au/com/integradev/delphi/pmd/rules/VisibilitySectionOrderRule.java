@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class VisibilitySectionOrderRule extends AbstractDelphiRule {
   private static final Map<VisibilityType, Integer> VISIBILITY_ORDER =

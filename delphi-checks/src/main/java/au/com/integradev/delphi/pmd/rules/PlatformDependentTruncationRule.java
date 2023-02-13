@@ -30,8 +30,8 @@ import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.type.parameter.Parameter;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 
 public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   @Override

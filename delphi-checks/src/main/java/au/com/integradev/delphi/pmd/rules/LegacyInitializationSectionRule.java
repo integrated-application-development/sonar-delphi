@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import net.sourceforge.pmd.RuleContext;
 
 public class LegacyInitializationSectionRule extends AbstractDelphiRule {
   @Override
-  public RuleContext visit(DelphiAST ast, RuleContext data) {
+  public RuleContext visit(DelphiAst ast, RuleContext data) {
     if (ast.isUnit()) {
       DelphiNode compoundStatement = ast.getFirstChildOfType(CompoundStatementNode.class);
       if (compoundStatement != null) {

@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.AbstractDelphiNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.DelphiNameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
+import au.com.integradev.delphi.symbol.declaration.AbstractNameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
 import au.com.integradev.delphi.symbol.declaration.MethodDirective;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
@@ -42,9 +42,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import net.sourceforge.pmd.lang.symboltable.Scope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +49,7 @@ class AbstractDelphiScope implements DelphiScope {
   private final Set<NameDeclaration> declarationSet;
   private final ListMultimap<NameDeclaration, NameOccurrence> occurrencesByDeclaration;
   private final SetMultimap<Class<? extends NameDeclaration>, NameDeclaration> declarationsByClass;
-  private final SetMultimap<String, DelphiNameDeclaration> declarationsByName;
+  private final SetMultimap<String, NameDeclaration> declarationsByName;
   private final Map<Type, HelperType> helpersByType;
 
   private DelphiScope parent;
@@ -67,12 +64,11 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public void addDeclaration(NameDeclaration declaration) {
-    DelphiNameDeclaration delphiDeclaration = (DelphiNameDeclaration) declaration;
     checkForwardTypeDeclarations(declaration);
     checkForDuplicatedNameDeclaration(declaration);
     declarationSet.add(declaration);
-    declarationsByName.put(declaration.getImage(), delphiDeclaration);
-    declarationsByClass.put(declaration.getClass(), delphiDeclaration);
+    declarationsByName.put(declaration.getImage(), declaration);
+    declarationsByClass.put(declaration.getClass(), declaration);
     handleHelperDeclaration(declaration);
   }
 
@@ -132,7 +128,7 @@ class AbstractDelphiScope implements DelphiScope {
       return true;
     }
 
-    Set<DelphiNameDeclaration> duplicates = declarationsByName.get(declaration.getImage());
+    Set<NameDeclaration> duplicates = declarationsByName.get(declaration.getImage());
 
     if (declaration instanceof GenerifiableDeclaration) {
       GenerifiableDeclaration generic = (GenerifiableDeclaration) declaration;
@@ -176,8 +172,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public Set<NameDeclaration> addNameOccurrence(@NotNull NameOccurrence occurrence) {
-    DelphiNameOccurrence delphiOccurrence = (DelphiNameOccurrence) occurrence;
-    DelphiNameDeclaration declaration = getDeclaration(delphiOccurrence.getNameDeclaration());
+    NameDeclaration declaration = getDeclaration(occurrence.getNameDeclaration());
     occurrencesByDeclaration.put(declaration, occurrence);
     return Set.of(declaration);
   }
@@ -187,7 +182,7 @@ class AbstractDelphiScope implements DelphiScope {
     return occurrencesByDeclaration.get(getDeclaration(declaration));
   }
 
-  private void handleGenerics(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
+  private void handleGenerics(NameOccurrence occurrence, Set<NameDeclaration> result) {
     int typeArgumentCount = occurrence.getTypeArguments().size();
     result.removeIf(
         declaration -> {
@@ -206,7 +201,7 @@ class AbstractDelphiScope implements DelphiScope {
   }
 
   @Override
-  public void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
+  public void findMethodOverloads(NameOccurrence occurrence, Set<NameDeclaration> result) {
     if (result.isEmpty() || !result.stream().allMatch(AbstractDelphiScope::canBeOverloaded)) {
       return;
     }
@@ -263,7 +258,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   private static boolean isMethodOverload(
       MethodNameDeclaration declaration,
-      DelphiNameOccurrence occurrence,
+      NameOccurrence occurrence,
       Set<NameDeclaration> matchedMethods,
       boolean requireOverloadDirective) {
     return (!requireOverloadDirective || declaration.hasDirective(MethodDirective.OVERLOAD))
@@ -285,10 +280,10 @@ class AbstractDelphiScope implements DelphiScope {
   }
 
   @Override
-  public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
+  public Set<NameDeclaration> findDeclaration(NameOccurrence occurrence) {
     Set<NameDeclaration> result = Collections.emptySet();
 
-    Set<DelphiNameDeclaration> found = declarationsByName.get(occurrence.getImage());
+    Set<NameDeclaration> found = declarationsByName.get(occurrence.getImage());
     if (!found.isEmpty()) {
       result = new HashSet<>(found);
       findMethodOverloads(occurrence, result);
@@ -305,8 +300,8 @@ class AbstractDelphiScope implements DelphiScope {
   }
 
   @Override
-  public void setParent(Scope parent) {
-    this.parent = (DelphiScope) parent;
+  public void setParent(DelphiScope parent) {
+    this.parent = parent;
   }
 
   @Override
@@ -320,7 +315,7 @@ class AbstractDelphiScope implements DelphiScope {
 
   @Override
   public <T extends NameDeclaration> Map<T, List<NameOccurrence>> getDeclarations(Class<T> clazz) {
-    Preconditions.checkArgument(AbstractDelphiNameDeclaration.class.isAssignableFrom(clazz));
+    Preconditions.checkArgument(AbstractNameDeclaration.class.isAssignableFrom(clazz));
     Map<T, List<NameOccurrence>> result = new HashMap<>();
     for (T declaration : getDeclarationSet(clazz)) {
       result.put(declaration, occurrencesByDeclaration.get(declaration));
@@ -329,8 +324,8 @@ class AbstractDelphiScope implements DelphiScope {
   }
 
   @Override
-  public <T extends Scope> T getEnclosingScope(Class<T> clazz) {
-    for (Scope current = this; current != null; current = current.getParent()) {
+  public <T extends DelphiScope> T getEnclosingScope(Class<T> clazz) {
+    for (DelphiScope current = this; current != null; current = current.getParent()) {
       if (clazz.isAssignableFrom(current.getClass())) {
         return clazz.cast(current);
       }
@@ -352,8 +347,8 @@ class AbstractDelphiScope implements DelphiScope {
     return helpersByType.get(type);
   }
 
-  private static DelphiNameDeclaration getDeclaration(NameDeclaration declaration) {
-    DelphiNameDeclaration result = (DelphiNameDeclaration) declaration;
+  private static NameDeclaration getDeclaration(NameDeclaration declaration) {
+    NameDeclaration result = declaration;
     while (result.isSpecializedDeclaration()) {
       result = result.getGenericDeclaration();
     }

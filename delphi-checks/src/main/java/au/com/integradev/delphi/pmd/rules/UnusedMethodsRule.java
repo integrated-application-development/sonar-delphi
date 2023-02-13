@@ -20,26 +20,27 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.utils.MethodUtils.isMethodStubWithStackUnwinding;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodNode;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodDirective;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
+import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.symbol.scope.MethodScope;
 import au.com.integradev.delphi.symbol.scope.UnitScope;
 import au.com.integradev.delphi.utils.InterfaceUtils;
 import java.util.HashSet;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import net.sourceforge.pmd.lang.symboltable.Scope;
 
 public class UnusedMethodsRule extends AbstractDelphiRule {
   private final Set<MethodNameDeclaration> seenMethods = new HashSet<>();
 
   @Override
-  public RuleContext visit(DelphiAST ast, RuleContext data) {
+  public RuleContext visit(DelphiAst ast, RuleContext data) {
     seenMethods.clear();
     return super.visit(ast, data);
   }
@@ -98,7 +99,7 @@ public class UnusedMethodsRule extends AbstractDelphiRule {
 
   private static boolean isForbiddenConstructor(MethodNode method) {
     if (method instanceof MethodDeclarationNode && method.isConstructor()) {
-      DelphiAST ast = method.getASTTree();
+      DelphiAst ast = method.getAst();
       return ast.findDescendantsOfType(MethodImplementationNode.class).stream()
           .anyMatch(
               implementation -> {
@@ -112,7 +113,7 @@ public class UnusedMethodsRule extends AbstractDelphiRule {
   }
 
   private static boolean isWithinMethod(NameOccurrence occurrence, MethodNameDeclaration method) {
-    Scope scope = occurrence.getLocation().getScope();
+    DelphiScope scope = occurrence.getLocation().getScope();
     while (scope != null) {
       if (scope instanceof MethodScope) {
         MethodScope methodScope = (MethodScope) scope;

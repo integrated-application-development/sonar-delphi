@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.utils;
 
+import au.com.integradev.delphi.antlr.ast.node.InterfaceSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.VarSectionNode;
 import au.com.integradev.delphi.symbol.scope.FileScope;
@@ -29,7 +30,7 @@ public class VariableUtils {
 
   public static boolean isGeneratedFormVariable(VarDeclarationNode varDecl) {
     VarSectionNode varSection = varDecl.getVarSection();
-    if (!varSection.isInterfaceSection()) {
+    if (varSection.getFirstParentOfType(InterfaceSectionNode.class) == null) {
       return false;
     }
 

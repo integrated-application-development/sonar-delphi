@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.type.generic;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
 import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
 import au.com.integradev.delphi.type.Type;
@@ -28,7 +29,6 @@ import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 
 public final class TypeSpecializationContext {
   private static final Comparator<Type> COMPARATOR = Comparator.comparing(Type::getImage);

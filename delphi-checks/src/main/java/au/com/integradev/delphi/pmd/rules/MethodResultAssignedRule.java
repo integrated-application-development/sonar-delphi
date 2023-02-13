@@ -45,7 +45,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 
 public class MethodResultAssignedRule extends AbstractDelphiRule {
   private final Deque<MethodResultContext> methodResultStack = new ArrayDeque<>();

@@ -25,6 +25,7 @@ import au.com.integradev.delphi.antlr.ast.node.ClassHelperTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
 import au.com.integradev.delphi.antlr.ast.node.HelperTypeNode;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 import au.com.integradev.delphi.antlr.ast.node.TypeDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.TypeNode;
 import au.com.integradev.delphi.compiler.Architecture;
@@ -66,7 +67,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.ast.Node;
 import org.jetbrains.annotations.Nullable;
 
 public class TypeFactory {
@@ -460,7 +460,7 @@ public class TypeFactory {
 
   public StructType struct(TypeNode node) {
     List<ImagePart> imageParts = new ArrayList<>();
-    ImagePart unitPart = new ImagePart(node.findUnitName());
+    ImagePart unitPart = new ImagePart(node.getUnitName());
     imageParts.add(unitPart);
 
     Set<Type> ancestors = Collections.emptySet();

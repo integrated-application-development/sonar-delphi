@@ -22,7 +22,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.AncestorListNode;
 import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNode;
 import au.com.integradev.delphi.antlr.ast.node.AnsiStringTypeNode;
@@ -168,7 +168,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(DelphiAST node, T data) {
+  default T visit(DelphiAst node, T data) {
     for (DelphiToken token : node.getTokens()) {
       visitToken(token, data);
     }

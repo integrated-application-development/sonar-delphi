@@ -26,7 +26,8 @@ import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
@@ -55,7 +56,7 @@ public interface DelphiFile {
 
   String getSourceCodeLine(int index);
 
-  DelphiAST getAst();
+  DelphiAst getAst();
 
   List<DelphiToken> getTokens();
 
@@ -133,7 +134,7 @@ public interface DelphiFile {
     return preprocessor;
   }
 
-  private static DelphiAST createAST(
+  private static DelphiAst createAST(
       DelphiFile delphiFile, BufferedTokenStream tokenStream, DelphiFileConfig config)
       throws RecognitionException {
     List<?> tokens = tokenStream.getTokens();
@@ -158,7 +159,7 @@ public interface DelphiFile {
       root = (DelphiNode) parser.file().getTree();
     }
 
-    return new DelphiAST(delphiFile, root);
+    return new DelphiAstImpl(delphiFile, root);
   }
 
   private static List<DelphiToken> createTokenList(

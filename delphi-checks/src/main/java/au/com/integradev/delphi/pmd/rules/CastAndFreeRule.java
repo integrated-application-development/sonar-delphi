@@ -24,6 +24,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
 import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
@@ -31,7 +32,7 @@ import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.PointerType;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 /** Don't cast an object only to free it. */
 public class CastAndFreeRule extends AbstractDelphiRule {
@@ -54,7 +55,7 @@ public class CastAndFreeRule extends AbstractDelphiRule {
   }
 
   private static boolean isHardCast(ExpressionNode expr) {
-    return expr instanceof PrimaryExpressionNode
+    return expr instanceof PrimaryExpressionNodeImpl
         && expr.jjtGetChild(0) instanceof NameReferenceNode
         && expr.jjtGetChild(1) instanceof ArgumentListNode
         && expr.jjtGetNumChildren() < 6;
@@ -95,8 +96,8 @@ public class CastAndFreeRule extends AbstractDelphiRule {
   }
 
   private static boolean isFreeAndNil(ExpressionNode expr) {
-    Node argList = expr.findParentheses().jjtGetParent();
-    Node freeAndNil = argList.jjtGetParent().jjtGetChild(argList.jjtGetChildIndex() - 1);
+    DelphiNode argList = expr.findParentheses().jjtGetParent();
+    DelphiNode freeAndNil = argList.jjtGetParent().jjtGetChild(argList.jjtGetChildIndex() - 1);
 
     return argList instanceof ArgumentListNode
         && freeAndNil instanceof NameReferenceNode

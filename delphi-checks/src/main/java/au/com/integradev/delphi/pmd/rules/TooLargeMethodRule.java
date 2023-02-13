@@ -25,7 +25,7 @@ package au.com.integradev.delphi.pmd.rules;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
 import au.com.integradev.delphi.antlr.ast.node.CompoundStatementNode;
-import au.com.integradev.delphi.antlr.ast.node.ExceptItemNode;
+import au.com.integradev.delphi.antlr.ast.node.ExceptItemNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MethodImplementationNode;
 import java.util.function.Predicate;
 import net.sourceforge.pmd.RuleContext;
@@ -52,7 +52,7 @@ public class TooLargeMethodRule extends AbstractDelphiRule {
   private long countStatements(MethodImplementationNode method) {
     CompoundStatementNode block = method.getStatementBlock();
     if (block != null) {
-      int handlers = block.findDescendantsOfType(ExceptItemNode.class).size();
+      int handlers = block.findDescendantsOfType(ExceptItemNodeImpl.class).size();
       long statements =
           block
               .descendantStatementStream()

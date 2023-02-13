@@ -25,7 +25,7 @@ import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.type.Type;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class RedundantBooleanRule extends AbstractDelphiRule {
 

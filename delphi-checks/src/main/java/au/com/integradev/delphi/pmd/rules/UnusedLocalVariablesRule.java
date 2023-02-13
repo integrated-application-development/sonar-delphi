@@ -27,12 +27,12 @@ import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.VarDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.VarStatementNode;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
 
 public class UnusedLocalVariablesRule extends AbstractDelphiRule {
   @Override

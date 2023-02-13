@@ -21,7 +21,8 @@ package au.com.integradev.delphi.symbol.scope;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
+import au.com.integradev.delphi.symbol.NameDeclaration;
+import au.com.integradev.delphi.symbol.NameOccurrence;
 import au.com.integradev.delphi.type.Type;
 import au.com.integradev.delphi.type.Type.HelperType;
 import java.util.Collections;
@@ -29,9 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
-import net.sourceforge.pmd.lang.symboltable.NameOccurrence;
-import net.sourceforge.pmd.lang.symboltable.Scope;
 
 public final class UnknownScope implements DelphiScope {
   private static final UnknownScope UNKNOWN_SCOPE = new UnknownScope();
@@ -45,7 +43,7 @@ public final class UnknownScope implements DelphiScope {
   }
 
   @Override
-  public <T extends Scope> T getEnclosingScope(Class<T> clazz) {
+  public <T extends DelphiScope> T getEnclosingScope(Class<T> clazz) {
     return null;
   }
 
@@ -70,7 +68,7 @@ public final class UnknownScope implements DelphiScope {
   }
 
   @Override
-  public Set<NameDeclaration> findDeclaration(DelphiNameOccurrence occurrence) {
+  public Set<NameDeclaration> findDeclaration(NameOccurrence occurrence) {
     return emptySet();
   }
 
@@ -80,7 +78,7 @@ public final class UnknownScope implements DelphiScope {
   }
 
   @Override
-  public void findMethodOverloads(DelphiNameOccurrence occurrence, Set<NameDeclaration> result) {
+  public void findMethodOverloads(NameOccurrence occurrence, Set<NameDeclaration> result) {
     // Do nothing
   }
 
@@ -90,7 +88,7 @@ public final class UnknownScope implements DelphiScope {
   }
 
   @Override
-  public void setParent(Scope scope) {
+  public void setParent(DelphiScope scope) {
     // Do nothing
   }
 

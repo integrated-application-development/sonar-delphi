@@ -20,6 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.ast.node.ArgumentListNode;
 import au.com.integradev.delphi.antlr.ast.node.BinaryExpressionNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.ExpressionNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.PrimaryExpressionNode;
@@ -30,17 +31,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
+import au.com.integradev.delphi.antlr.ast.node.Node;
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import org.apache.commons.lang3.StringUtils;
 
 public class IfThenShortCircuitRule extends AbstractDelphiRule {
   @Override
   public RuleContext visit(NameReferenceNode nameReference, RuleContext data) {
-    Node parent = nameReference.jjtGetParent();
+    DelphiNode parent = nameReference.jjtGetParent();
     if (parent instanceof PrimaryExpressionNode
         && nameReference.getLastName().getIdentifier().getImage().equalsIgnoreCase("IfThen")) {
-      Node argumentList = parent.jjtGetChild(nameReference.jjtGetChildIndex() + 1);
+      DelphiNode argumentList = parent.jjtGetChild(nameReference.jjtGetChildIndex() + 1);
       if (argumentList instanceof ArgumentListNode) {
         List<ExpressionNode> arguments = ((ArgumentListNode) argumentList).getArguments();
         if (isViolation(arguments)) {
@@ -118,7 +119,7 @@ public class IfThenShortCircuitRule extends AbstractDelphiRule {
             });
   }
 
-  private static <T extends Node> List<T> findDescendentsOrSelf(Node node, Class<T> clazz) {
+  private static <T extends Node> List<T> findDescendentsOrSelf(DelphiNode node, Class<T> clazz) {
     List<T> result = node.findDescendantsOfType(clazz);
     if (clazz.isInstance(node)) {
       result.add(clazz.cast(node));

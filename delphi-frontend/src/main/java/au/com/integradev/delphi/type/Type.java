@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.type;
 
+import au.com.integradev.delphi.symbol.NameDeclaration;
 import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
@@ -25,7 +26,6 @@ import au.com.integradev.delphi.type.parameter.Parameter;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
-import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jetbrains.annotations.NotNull;
 
 public interface Type {

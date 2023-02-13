@@ -87,7 +87,7 @@ public class DelphiPmdExecutor implements Executor {
     this.pmdConfiguration = pmdConfiguration;
     this.violationRecorder = violationRecorder;
     this.pmdRuleSetDefinitionProvider = pmdRuleSetDefinitionProvider;
-    this.language = LanguageRegistry.getLanguage(DelphiLanguageModule.LANGUAGE_NAME);
+    this.language = LanguageRegistry.getLanguage("Delphi");
     this.ctx = new RuleContext();
   }
 

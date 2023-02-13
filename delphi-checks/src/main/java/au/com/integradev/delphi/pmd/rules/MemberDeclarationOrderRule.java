@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import au.com.integradev.delphi.antlr.ast.node.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.FieldDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.FieldSectionNode;
 import au.com.integradev.delphi.antlr.ast.node.MethodDeclarationNode;
@@ -26,7 +27,7 @@ import au.com.integradev.delphi.antlr.ast.node.VisibilitySectionNode;
 import java.util.ArrayList;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.lang.ast.Node;
+import au.com.integradev.delphi.antlr.ast.node.Node;
 
 public class MemberDeclarationOrderRule extends AbstractDelphiRule {
   private enum BodySegment {
@@ -40,7 +41,7 @@ public class MemberDeclarationOrderRule extends AbstractDelphiRule {
     List<Node> outOfOrderDeclarations = new ArrayList<>();
 
     for (int i = 0; i < sectionNode.jjtGetNumChildren(); i++) {
-      Node itemNode = sectionNode.jjtGetChild(i);
+      DelphiNode itemNode = sectionNode.jjtGetChild(i);
 
       if (itemNode instanceof FieldSectionNode && currentSegment != BodySegment.FIELDS) {
         outOfOrderDeclarations.addAll(itemNode.findChildrenOfType(FieldDeclarationNode.class));

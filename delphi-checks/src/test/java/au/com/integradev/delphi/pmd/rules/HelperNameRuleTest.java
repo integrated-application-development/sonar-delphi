@@ -22,10 +22,8 @@ import static au.com.integradev.delphi.utils.conditions.RuleKey.ruleKey;
 import static au.com.integradev.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.antlr.ast.DelphiAST;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.node.SetTypeNode;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import au.com.integradev.delphi.utils.builders.DelphiTestUnitBuilder;
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
@@ -164,7 +162,7 @@ class HelperNameRuleTest extends BasePmdRuleTest {
 
   @Test
   void testGetUnknownExtendedTypeSimpleName() {
-    DelphiAST ast =
+    DelphiAst ast =
         new DelphiTestUnitBuilder()
             .appendDecl("type")
             .appendDecl("  TMySet = set of string;")
