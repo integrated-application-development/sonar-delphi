@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.DecimalType;
+import org.sonar.plugins.communitydelphi.api.type.Type.DecimalType;
 
 class DelphiDecimalType extends DelphiType implements DecimalType {
   private final String image;

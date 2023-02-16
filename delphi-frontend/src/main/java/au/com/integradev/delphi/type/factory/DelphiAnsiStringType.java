@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.Type.AnsiStringType;
+import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 
 class DelphiAnsiStringType extends DelphiStringType implements AnsiStringType {

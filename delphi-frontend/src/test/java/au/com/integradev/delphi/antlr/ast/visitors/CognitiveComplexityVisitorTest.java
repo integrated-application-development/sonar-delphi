@@ -20,7 +20,6 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import au.com.integradev.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
@@ -31,6 +30,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 
 class CognitiveComplexityVisitorTest {
   private CognitiveComplexityVisitor visitor;

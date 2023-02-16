@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.StringType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 
 class DelphiStringType extends DelphiType implements StringType {
   private final String image;

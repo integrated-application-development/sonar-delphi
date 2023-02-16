@@ -21,22 +21,14 @@ package au.com.integradev.delphi.symbol;
 import static au.com.integradev.delphi.utils.DelphiUtils.stopProgressReport;
 
 import au.com.integradev.delphi.DelphiProperties;
-import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.symbol.declaration.MethodDirective;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.FileScope;
-import au.com.integradev.delphi.symbol.scope.SysInitScope;
-import au.com.integradev.delphi.symbol.scope.SystemScope;
-import au.com.integradev.delphi.type.Type.ScopedType;
+import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclarationImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.IOException;
@@ -59,6 +51,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.SysInitScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 public class SymbolTableBuilder {
@@ -197,7 +200,7 @@ public class SymbolTableBuilder {
               + " **Failed to locate unit**");
     }
 
-    return new UnitImportNameDeclaration(node, unitDeclaration);
+    return new UnitImportNameDeclarationImpl(node, unitDeclaration);
   }
 
   @Nullable

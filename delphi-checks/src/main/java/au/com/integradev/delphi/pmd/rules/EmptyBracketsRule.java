@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 

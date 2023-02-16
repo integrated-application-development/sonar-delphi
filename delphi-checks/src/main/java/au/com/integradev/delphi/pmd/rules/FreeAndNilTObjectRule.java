@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import net.sourceforge.pmd.RuleContext;
 
 public class FreeAndNilTObjectRule extends AbstractDelphiRule {

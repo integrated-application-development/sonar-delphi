@@ -25,8 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 
-public final class GenericArgumentsNodeImpl extends DelphiNodeImpl
-    implements GenericArgumentsNode {
+public final class GenericArgumentsNodeImpl extends DelphiNodeImpl implements GenericArgumentsNode {
   private String image;
 
   public GenericArgumentsNodeImpl(Token token) {

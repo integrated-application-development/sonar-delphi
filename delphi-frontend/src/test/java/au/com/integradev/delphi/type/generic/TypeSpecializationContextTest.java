@@ -22,13 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
 import au.com.integradev.delphi.type.DelphiType;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 
 class TypeSpecializationContextTest {
   @Test

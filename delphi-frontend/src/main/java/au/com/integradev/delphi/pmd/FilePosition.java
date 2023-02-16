@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.pmd;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public abstract class FilePosition implements Serializable {
   public static final int UNDEFINED_LINE = 0;

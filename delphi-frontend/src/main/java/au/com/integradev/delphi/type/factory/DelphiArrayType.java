@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import java.util.Set;

@@ -20,20 +20,20 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.utils.MethodUtils.isMethodStubWithStackUnwinding;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.MethodDirective;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.MethodScope;
-import au.com.integradev.delphi.symbol.scope.UnitScope;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.utils.InterfaceUtils;
 import java.util.HashSet;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.UnitScope;
 
 public class UnusedMethodsRule extends AbstractDelphiRule {
   private final Set<MethodNameDeclaration> seenMethods = new HashSet<>();

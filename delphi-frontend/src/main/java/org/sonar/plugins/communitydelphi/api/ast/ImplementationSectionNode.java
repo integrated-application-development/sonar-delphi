@@ -1,6 +1,3 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface ImplementationSectionNode extends
-    DelphiNode {
-
-}
+public interface ImplementationSectionNode extends DelphiNode {}

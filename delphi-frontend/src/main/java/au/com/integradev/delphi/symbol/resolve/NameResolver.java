@@ -19,66 +19,39 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.symbol.scope.DelphiScope.unknownScope;
 import static au.com.integradev.delphi.type.DelphiType.unknownType;
 import static au.com.integradev.delphi.type.DelphiType.voidType;
 import static java.util.function.Predicate.not;
+import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
-import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
-import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
-import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
+import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.Search;
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.QualifiedNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.FileScope;
-import au.com.integradev.delphi.symbol.scope.MethodScope;
-import au.com.integradev.delphi.symbol.scope.TypeScope;
-import au.com.integradev.delphi.symbol.scope.UnknownScope;
+import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import au.com.integradev.delphi.type.DelphiUnresolvedType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ClassReferenceType;
-import au.com.integradev.delphi.type.Type.CollectionType;
-import au.com.integradev.delphi.type.Type.HelperType;
-import au.com.integradev.delphi.type.Type.PointerType;
-import au.com.integradev.delphi.type.Type.ProceduralType;
-import au.com.integradev.delphi.type.Type.ScopedType;
-import au.com.integradev.delphi.type.Type.StringType;
-import au.com.integradev.delphi.type.Type.StructType;
-import au.com.integradev.delphi.type.Type.TypeParameterType;
-import au.com.integradev.delphi.type.TypeUtils;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Iterables;
@@ -93,10 +66,40 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
+import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.QualifiedNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.UnknownScope;
 
 public class NameResolver {
   private final TypeFactory typeFactory;
-  private final List<DelphiNameOccurrence> names = new ArrayList<>();
+  private final List<NameOccurrenceImpl> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
 
   private Set<NameDeclaration> declarations = new HashSet<>();
@@ -203,11 +206,11 @@ public class NameResolver {
     addResolvedDeclaration();
 
     for (int i = 0; i < resolvedDeclarations.size(); ++i) {
-      DelphiNameOccurrence name = names.get(i);
+      NameOccurrenceImpl name = names.get(i);
       NameDeclaration declaration = resolvedDeclarations.get(i);
       name.setNameDeclaration(declaration);
 
-      declaration.getScope().addNameOccurrence(name);
+      ((DelphiScopeImpl) declaration.getScope()).addNameOccurrence(name);
       registerOccurrence(name);
     }
   }
@@ -322,8 +325,8 @@ public class NameResolver {
       MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
       DelphiNode inheritedNode = node.jjtGetChild(0);
 
-      DelphiNameOccurrence occurrence =
-          new DelphiNameOccurrence(inheritedNode, method.simpleName());
+      NameOccurrenceImpl occurrence =
+          new NameOccurrenceImpl(inheritedNode, method.simpleName());
       occurrence.setIsExplicitInvocation(true);
       addName(occurrence);
       searchForDeclaration(occurrence);
@@ -333,7 +336,7 @@ public class NameResolver {
       addResolvedDeclaration();
     } else {
       NameReferenceNode methodName = (NameReferenceNode) node.jjtGetChild(1);
-      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(methodName.getIdentifier());
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(methodName.getIdentifier());
       addName(occurrence);
 
       declarations = currentScope.findDeclaration(occurrence);
@@ -406,7 +409,7 @@ public class NameResolver {
 
     for (NameReferenceNode reference : node.flatten()) {
       IdentifierNode identifier = reference.getIdentifier();
-      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(identifier);
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(identifier);
 
       GenericArgumentsNode genericArguments = reference.getGenericArguments();
       List<TypeReferenceNode> typeArguments = Collections.emptyList();
@@ -486,7 +489,7 @@ public class NameResolver {
     for (int i = 0; i < typeParameters.size(); ++i) {
       TypedDeclaration declaration = typeParameters.get(i);
       NameReferenceNode typeReference = typeReferences.get(i).getNameNode();
-      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(typeReference);
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference);
 
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
@@ -503,10 +506,10 @@ public class NameResolver {
     for (TypeReferenceNode typeNode : typeReferences) {
       NameReferenceNode typeReference = typeNode.getNameNode();
       TypeParameterType type = DelphiTypeParameterType.create(typeReference.getImage());
-      NameDeclaration declaration = new TypeParameterNameDeclaration(typeReference, type);
-      methodScope.addDeclaration(declaration);
+      NameDeclaration declaration = new TypeParameterNameDeclarationImpl(typeReference, type);
+      ((DelphiScopeImpl) methodScope).addDeclaration(declaration);
 
-      DelphiNameOccurrence occurrence = new DelphiNameOccurrence(typeReference);
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference);
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
@@ -527,7 +530,7 @@ public class NameResolver {
         return;
       }
 
-      DelphiNameOccurrence occurrence = createNameOccurrence(reference);
+      NameOccurrenceImpl occurrence = createNameOccurrence(reference);
       addName(occurrence);
       searchForDeclaration(occurrence);
 
@@ -554,8 +557,8 @@ public class NameResolver {
     }
   }
 
-  private DelphiNameOccurrence createNameOccurrence(NameReferenceNode reference) {
-    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(reference.getIdentifier());
+  private NameOccurrenceImpl createNameOccurrence(NameReferenceNode reference) {
+    NameOccurrenceImpl occurrence = new NameOccurrenceImpl(reference.getIdentifier());
     GenericArgumentsNode genericArguments = reference.getGenericArguments();
     if (genericArguments != null) {
       List<TypeNode> typeArgumentNodes = genericArguments.getTypeArguments();
@@ -653,7 +656,7 @@ public class NameResolver {
             node,
             references.get(declarationParts.size() - 1).getIdentifier());
 
-    DelphiNameOccurrence occurrence = new DelphiNameOccurrence(symbolicNode);
+    NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
     ((NameReferenceNodeImpl) node).setNameOccurrence(occurrence);
     addName(occurrence);
     declarations.add(declaration);
@@ -738,10 +741,10 @@ public class NameResolver {
         NameDeclaration propertyDeclaration =
             Iterables.getLast(propertyResolver.resolvedDeclarations);
         if (propertyDeclaration instanceof PropertyNameDeclaration) {
-          DelphiNameOccurrence implicitOccurrence = new DelphiNameOccurrence(accessor);
-          implicitOccurrence.setNameDeclaration((PropertyNameDeclaration) propertyDeclaration);
+          NameOccurrenceImpl implicitOccurrence = new NameOccurrenceImpl(accessor);
+          implicitOccurrence.setNameDeclaration(propertyDeclaration);
           accessor.setImplicitNameOccurrence(implicitOccurrence);
-          propertyDeclaration.getScope().addNameOccurrence(implicitOccurrence);
+          ((DelphiScopeImpl) propertyDeclaration.getScope()).addNameOccurrence(implicitOccurrence);
           registerOccurrence(implicitOccurrence);
         }
 
@@ -1242,10 +1245,10 @@ public class NameResolver {
     }
   }
 
-  void addName(DelphiNameOccurrence name) {
+  void addName(NameOccurrenceImpl name) {
     names.add(name);
     if (names.size() > 1) {
-      DelphiNameOccurrence qualifiedName = names.get(names.size() - 2);
+      NameOccurrenceImpl qualifiedName = names.get(names.size() - 2);
       qualifiedName.setNameWhichThisQualifies(name);
     }
   }
@@ -1337,7 +1340,7 @@ public class NameResolver {
     return (type instanceof ScopedType) ? (ScopedType) type : null;
   }
 
-  private static void registerOccurrence(DelphiNameOccurrence occurrence) {
+  private static void registerOccurrence(NameOccurrenceImpl occurrence) {
     occurrence
         .getLocation()
         .getScope()

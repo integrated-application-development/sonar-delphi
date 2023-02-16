@@ -1,10 +1,10 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 
 public interface PropertyNode extends DelphiNode, Typed, Visibility {
   NameDeclarationNode getPropertyName();

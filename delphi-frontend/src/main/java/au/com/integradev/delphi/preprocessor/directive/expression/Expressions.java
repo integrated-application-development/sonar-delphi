@@ -30,7 +30,7 @@ import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Express
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.BinaryEvaluator;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.UnaryEvaluator;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.base.Preconditions;

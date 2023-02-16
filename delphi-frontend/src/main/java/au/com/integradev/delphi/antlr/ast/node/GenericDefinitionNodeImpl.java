@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.TypeParameterType;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
 import com.google.common.collect.ImmutableList;
 import java.util.List;

@@ -1,8 +1,8 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 
 public interface ForInStatementNode extends ForStatementNode {
   @Nullable

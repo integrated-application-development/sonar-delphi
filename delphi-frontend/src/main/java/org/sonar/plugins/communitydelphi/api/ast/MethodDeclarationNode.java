@@ -1,7 +1,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 
 public interface MethodDeclarationNode extends MethodNode, Visibility {
   boolean isOverride();

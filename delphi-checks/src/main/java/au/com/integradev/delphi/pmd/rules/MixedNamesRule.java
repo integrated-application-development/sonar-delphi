@@ -22,11 +22,12 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.apache.commons.lang3.StringUtils;

@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.operator;
 
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 
 public interface Operator {
   Set<String> getNames();

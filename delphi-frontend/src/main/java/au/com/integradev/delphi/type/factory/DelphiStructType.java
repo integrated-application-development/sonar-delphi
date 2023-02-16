@@ -20,15 +20,10 @@ package au.com.integradev.delphi.type.factory;
 
 import static java.util.function.Predicate.not;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.TypeScope;
-import au.com.integradev.delphi.type.StructKind;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.StructType;
+import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import com.google.common.collect.ImmutableSet;
@@ -39,6 +34,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 class DelphiStructType extends DelphiGenerifiableType implements StructType {
   private final List<ImagePart> imageParts;
@@ -234,7 +234,7 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
         parents.stream()
             .map(parent -> parent.specialize(context))
             .collect(Collectors.toUnmodifiableSet()));
-    this.scope = TypeScope.specializedScope(scope, this, context);
+    this.scope = TypeScopeImpl.specializedScope(scope, this, context);
   }
 
   private static void findDefaultArrayProperties(StructType type, Set<NameDeclaration> result) {

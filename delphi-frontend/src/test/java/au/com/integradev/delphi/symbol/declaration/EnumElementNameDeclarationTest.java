@@ -24,10 +24,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.node.EnumElementNodeImpl;
-import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import au.com.integradev.delphi.antlr.ast.node.EnumTypeNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNodeImpl;
@@ -35,6 +33,10 @@ import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
+import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
 
 class EnumElementNameDeclarationTest {
   @Test
@@ -77,9 +79,9 @@ class EnumElementNameDeclarationTest {
     DelphiFile delphiFile = mock(DelphiFile.class);
     when(delphiFile.getTypeFactory()).thenReturn(TypeFactoryUtils.defaultFactory());
 
-    DelphiAst ast = spy(new DelphiAst(delphiFile, null));
+    DelphiAst ast = spy(new DelphiAstImpl(delphiFile, null));
     ast.jjtAddChild(enumType);
 
-    return new EnumElementNameDeclaration(element);
+    return new EnumElementNameDeclarationImpl(element);
   }
 }

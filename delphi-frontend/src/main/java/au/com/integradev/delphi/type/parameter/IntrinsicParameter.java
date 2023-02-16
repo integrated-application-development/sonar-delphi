@@ -18,8 +18,9 @@
  */
 package au.com.integradev.delphi.type.parameter;
 
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicMethod.IntrinsicParameterData;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 
 public class IntrinsicParameter extends AbstractParameter {
   private IntrinsicParameter(

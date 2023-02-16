@@ -1,9 +1,9 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public interface NameDeclarationNode extends DelphiNode {
   GenericDefinitionNode getGenericDefinition();

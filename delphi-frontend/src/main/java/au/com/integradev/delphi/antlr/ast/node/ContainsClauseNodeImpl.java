@@ -22,8 +22,8 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ContainsClauseNode;
 
-public final class ContainsClauseNodeImpl extends ImportClauseNodeImpl implements
-    ContainsClauseNode {
+public final class ContainsClauseNodeImpl extends ImportClauseNodeImpl
+    implements ContainsClauseNode {
   public ContainsClauseNodeImpl(Token token) {
     super(token);
   }

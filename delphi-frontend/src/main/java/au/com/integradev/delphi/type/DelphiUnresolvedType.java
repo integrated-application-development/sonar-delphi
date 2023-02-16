@@ -18,6 +18,8 @@
  */
 package au.com.integradev.delphi.type;
 
+import org.sonar.plugins.communitydelphi.api.type.Type;
+
 public class DelphiUnresolvedType extends DelphiType {
   private final String image;
 

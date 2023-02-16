@@ -20,7 +20,6 @@ package au.com.integradev.delphi.antlr.ast;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -40,6 +39,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public final class DelphiNodeUtils {
   public static final JavaClasses NODE_PACKAGE =

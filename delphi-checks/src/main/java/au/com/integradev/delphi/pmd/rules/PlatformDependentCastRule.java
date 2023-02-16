@@ -19,17 +19,17 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ProceduralType;
-import au.com.integradev.delphi.type.Type.StructType;
-import au.com.integradev.delphi.type.TypeUtils;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;

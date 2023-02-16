@@ -22,15 +22,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 
 class ParameterTest {
   private static final Type TYPE_PARAMETER = DelphiTypeParameterType.create("T");

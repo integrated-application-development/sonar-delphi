@@ -20,6 +20,22 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.type.DelphiType.unknownType;
 
+import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
+import au.com.integradev.delphi.operator.UnaryOperator;
+import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
@@ -47,30 +63,16 @@ import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SubRangeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
-import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
-import au.com.integradev.delphi.operator.UnaryOperator;
-import au.com.integradev.delphi.symbol.DelphiNameOccurrence;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.MethodScope;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ProceduralType;
-import au.com.integradev.delphi.type.Type.ScopedType;
-import au.com.integradev.delphi.type.Type.TypeParameterType;
-import au.com.integradev.delphi.type.factory.TypeFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;
@@ -243,7 +245,7 @@ public class NameResolutionHelper {
     resolver.readMethodNameInterfaceReference(method.getNameReferenceNode());
 
     MethodScope methodScope = method.getScope().getEnclosingScope(MethodScope.class);
-    methodScope.setTypeScope(findTypeScope(resolver));
+    ((MethodScopeImpl) methodScope).setTypeScope(findTypeScope(resolver));
     resolveMethod(method);
 
     if (!isBareInterfaceMethodReference(method, resolver)) {
@@ -318,7 +320,7 @@ public class NameResolutionHelper {
   }
 
   private NameResolver memberResolver(DelphiNode node, Type type, String name) {
-    DelphiNameOccurrence implicitOccurrence = new DelphiNameOccurrence(node, name);
+    NameOccurrenceImpl implicitOccurrence = new NameOccurrenceImpl(node, name);
     NameResolver resolver = createNameResolver();
     resolver.updateType(type);
     resolver.addName(implicitOccurrence);

@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;

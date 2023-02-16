@@ -18,15 +18,15 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
+import java.math.BigInteger;
+import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.CollectionType;
-import au.com.integradev.delphi.type.Type.IntegerType;
-import java.math.BigInteger;
-import java.util.Objects;
 
 interface BoundsChecker {
   static BoundsChecker forType(Type type) {

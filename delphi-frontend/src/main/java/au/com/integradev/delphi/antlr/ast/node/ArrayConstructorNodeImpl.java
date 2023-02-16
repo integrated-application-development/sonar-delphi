@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;

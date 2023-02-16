@@ -19,7 +19,8 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.QualifiedName;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,7 +67,7 @@ public final class QualifiedNameDeclarationNodeImpl extends NameDeclarationNodeI
 
       Collections.reverse(names);
 
-      qualifiedName = new QualifiedName(names);
+      qualifiedName = new QualifiedNameImpl(names);
     }
     return qualifiedName;
   }

@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 
 public interface UnitImportNode extends DelphiNode {
   QualifiedNameDeclarationNode getNameNode();

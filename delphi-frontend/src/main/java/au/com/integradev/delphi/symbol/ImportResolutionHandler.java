@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.symbol;
 
-import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
-import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 @FunctionalInterface
 public interface ImportResolutionHandler {

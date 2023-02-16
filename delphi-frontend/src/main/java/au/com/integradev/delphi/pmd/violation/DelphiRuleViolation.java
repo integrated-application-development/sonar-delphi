@@ -26,7 +26,7 @@ import static au.com.integradev.delphi.type.DelphiType.unknownType;
 
 import au.com.integradev.delphi.pmd.FilePosition;
 import au.com.integradev.delphi.pmd.rules.DelphiRule;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;

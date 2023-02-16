@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import java.util.List;
 
 public interface GenericDefinitionNode extends DelphiNode {

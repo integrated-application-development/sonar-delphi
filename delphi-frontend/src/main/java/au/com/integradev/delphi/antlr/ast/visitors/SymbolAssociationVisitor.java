@@ -18,8 +18,11 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
+import au.com.integradev.delphi.symbol.SymbolTable;
+import com.google.common.base.Preconditions;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
@@ -27,8 +30,8 @@ import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import com.google.common.base.Preconditions;
 import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 

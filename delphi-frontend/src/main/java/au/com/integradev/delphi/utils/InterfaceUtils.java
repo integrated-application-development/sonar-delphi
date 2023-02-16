@@ -1,11 +1,11 @@
 package au.com.integradev.delphi.utils;
 
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 
 public class InterfaceUtils {
   private InterfaceUtils() {

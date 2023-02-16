@@ -18,9 +18,10 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;

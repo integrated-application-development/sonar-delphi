@@ -18,12 +18,13 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.collect.Iterables;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.symbol.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public class DateFormatSettingsRule extends AbstractDelphiRule {
   private static final String TFORMATSETTINGS = "System.SysUtils.TFormatSettings";

@@ -21,7 +21,7 @@ package au.com.integradev.delphi.utils;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
-import au.com.integradev.delphi.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 
 public class VariableUtils {
   private VariableUtils() {

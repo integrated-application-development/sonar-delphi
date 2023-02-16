@@ -21,6 +21,8 @@ package au.com.integradev.delphi.pmd.rules;
 import static au.com.integradev.delphi.utils.MethodUtils.isMethodStubWithStackUnwinding;
 import static au.com.integradev.delphi.utils.StatementUtils.isMethodInvocation;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AsmStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
@@ -35,9 +37,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import au.com.integradev.delphi.operator.UnaryOperator;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -45,7 +45,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.symbol.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public class MethodResultAssignedRule extends AbstractDelphiRule {
   private final Deque<MethodResultContext> methodResultStack = new ArrayDeque<>();

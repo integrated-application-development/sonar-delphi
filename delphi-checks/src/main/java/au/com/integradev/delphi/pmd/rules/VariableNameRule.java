@@ -20,6 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static au.com.integradev.delphi.utils.VariableUtils.isGeneratedFormVariable;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
@@ -27,8 +28,6 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.UnitScope;
 import au.com.integradev.delphi.utils.InterfaceUtils;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import java.util.HashSet;
@@ -39,6 +38,7 @@ import java.util.stream.IntStream;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
 import net.sourceforge.pmd.properties.PropertyFactory;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.UnitScope;
 
 public class VariableNameRule extends AbstractDelphiRule {
   private static final PropertyDescriptor<List<String>> GLOBAL_PREFIXES =

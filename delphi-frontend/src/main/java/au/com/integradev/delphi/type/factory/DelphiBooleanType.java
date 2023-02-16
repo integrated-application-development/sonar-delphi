@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.BooleanType;
+import org.sonar.plugins.communitydelphi.api.type.Type.BooleanType;
 
 class DelphiBooleanType extends DelphiType implements BooleanType {
   private final String image;

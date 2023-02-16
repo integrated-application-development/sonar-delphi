@@ -23,15 +23,15 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.rule.AbstractRule;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
 
 /** Basic rule class, extend this class to make your own rules. Do NOT extend from AbstractRule. */
 public abstract class AbstractDelphiRule extends AbstractRule implements DelphiRule {

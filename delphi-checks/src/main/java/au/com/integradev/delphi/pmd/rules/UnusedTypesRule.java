@@ -20,13 +20,13 @@ package au.com.integradev.delphi.pmd.rules;
 
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.MethodScope;
-import au.com.integradev.delphi.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import net.sourceforge.pmd.RuleContext;
 
 public class UnusedTypesRule extends AbstractDelphiRule {

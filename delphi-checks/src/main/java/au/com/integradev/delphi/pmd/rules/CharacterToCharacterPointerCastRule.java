@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.TypeUtils;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
 public class CharacterToCharacterPointerCastRule extends AbstractCastRule {
   @Override

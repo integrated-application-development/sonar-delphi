@@ -26,8 +26,8 @@ import org.junit.jupiter.api.Test;
 class QualifiedNameTest {
   @Test
   void testEmptyQualifiedNameShouldThrow() {
-    assertThatThrownBy(() -> new QualifiedName(Collections.emptyList()))
+    assertThatThrownBy(() -> new QualifiedNameImpl(Collections.emptyList()))
         .isInstanceOf(IllegalArgumentException.class);
-    assertThatThrownBy(QualifiedName::of).isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(QualifiedNameImpl::of).isInstanceOf(IllegalArgumentException.class);
   }
 }

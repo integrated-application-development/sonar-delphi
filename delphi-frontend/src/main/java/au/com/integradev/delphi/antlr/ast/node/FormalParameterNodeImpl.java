@@ -20,7 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -33,8 +33,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
-public final class FormalParameterNodeImpl extends DelphiNodeImpl
-    implements FormalParameterNode {
+public final class FormalParameterNodeImpl extends DelphiNodeImpl implements FormalParameterNode {
   private List<FormalParameterData> parameters;
 
   public FormalParameterNodeImpl(Token token) {

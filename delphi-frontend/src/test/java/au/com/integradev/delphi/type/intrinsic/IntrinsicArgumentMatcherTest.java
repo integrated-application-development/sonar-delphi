@@ -28,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.type.ArrayOption;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.StructKind;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;

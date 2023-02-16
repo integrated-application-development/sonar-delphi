@@ -18,11 +18,11 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -21,8 +21,9 @@ package au.com.integradev.delphi.type;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
 
 class StructKindTest {
   @Test

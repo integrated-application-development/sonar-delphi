@@ -1,6 +1,5 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 
-public interface QualifiedNameDeclarationNode
-    extends NameDeclarationNode, Qualifiable {}
+public interface QualifiedNameDeclarationNode extends NameDeclarationNode, Qualifiable {}

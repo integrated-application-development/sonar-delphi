@@ -18,18 +18,18 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
+import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTable> {
 

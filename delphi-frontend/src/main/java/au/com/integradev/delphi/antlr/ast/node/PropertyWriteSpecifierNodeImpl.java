@@ -23,8 +23,8 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 
-public final class PropertyWriteSpecifierNodeImpl extends DelphiNodeImpl implements
-    PropertyWriteSpecifierNode {
+public final class PropertyWriteSpecifierNodeImpl extends DelphiNodeImpl
+    implements PropertyWriteSpecifierNode {
   public PropertyWriteSpecifierNodeImpl(Token token) {
     super(token);
   }

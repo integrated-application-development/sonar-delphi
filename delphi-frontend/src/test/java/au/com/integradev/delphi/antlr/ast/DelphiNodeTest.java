@@ -28,10 +28,10 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 class DelphiNodeTest {
   @Test

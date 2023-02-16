@@ -21,19 +21,24 @@ package au.com.integradev.delphi.symbol.declaration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 class MethodNameDeclarationTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
@@ -48,7 +53,7 @@ class MethodNameDeclarationTest {
   private static final ProceduralType METHOD_TYPE =
       FACTORY.method(List.of(mock(Parameter.class)), RETURN_TYPE);
   private static final TypeNameDeclaration TYPE_NAME_DECLARATION =
-      new TypeNameDeclaration(
+      new TypeNameDeclarationImpl(
           SymbolicNode.imaginary("Baz", DelphiScope.unknownScope()),
           DelphiType.unknownType(),
           "Flarp.Baz");
@@ -57,7 +62,7 @@ class MethodNameDeclarationTest {
       List.of(mock(TypedDeclaration.class));
 
   private static final MethodNameDeclaration METHOD =
-      new MethodNameDeclaration(
+      new MethodNameDeclarationImpl(
           LOCATION,
           FULLY_QUALIFIED_NAME,
           RETURN_TYPE,
@@ -73,7 +78,7 @@ class MethodNameDeclarationTest {
   @Test
   void testEquals() {
     MethodNameDeclaration equals =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -87,7 +92,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration forwardMethod =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -102,7 +107,7 @@ class MethodNameDeclarationTest {
     forwardMethod.setIsForwardDeclaration();
 
     MethodNameDeclaration implementationMethod =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -117,7 +122,7 @@ class MethodNameDeclarationTest {
     implementationMethod.setIsImplementationDeclaration();
 
     MethodNameDeclaration differentLocation =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             SymbolicNode.imaginary("Baz", DelphiScope.unknownScope()),
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -131,7 +136,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentFullyQualifiedName =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             "Flarp",
             RETURN_TYPE,
@@ -145,7 +150,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentReturnType =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             DelphiType.untypedType(),
@@ -159,7 +164,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentDirectives =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -173,7 +178,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentIsClassInvocable =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -187,7 +192,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentIsCallable =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -201,7 +206,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentMethodType =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,
@@ -215,7 +220,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
 
     MethodNameDeclaration differentTypeParameters =
-        new MethodNameDeclaration(
+        new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
             RETURN_TYPE,

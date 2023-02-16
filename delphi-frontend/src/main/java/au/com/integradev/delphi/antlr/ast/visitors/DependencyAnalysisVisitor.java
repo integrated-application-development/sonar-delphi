@@ -18,6 +18,13 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
+import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
@@ -29,21 +36,16 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
-import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.declaration.MethodDirective;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.FileScope;
-import au.com.integradev.delphi.symbol.scope.TypeScope;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ScopedType;
-import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 
 public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<Data> {
   private static final String TCOMPONENT = "System.Classes.TComponent";
@@ -59,13 +61,13 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
     private void addDependency(UnitNameDeclaration dependency) {
       if (method != null) {
-        method.addDependency(dependency);
+        ((MethodNameDeclarationImpl) method).addDependency(dependency);
       }
 
       if (implementation) {
-        unitDeclaration.addImplementationDependency(dependency);
+        ((UnitNameDeclarationImpl) unitDeclaration).addImplementationDependency(dependency);
       } else {
-        unitDeclaration.addInterfaceDependency(dependency);
+        ((UnitNameDeclarationImpl) unitDeclaration).addInterfaceDependency(dependency);
       }
     }
   }
@@ -215,7 +217,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   }
 
   private void addDependenciesRequiredByMethod(NameDeclaration declaration, Data data) {
-    ((MethodNameDeclaration) declaration).getDependencies().forEach(data::addDependency);
+    ((MethodNameDeclarationImpl) declaration).getDependencies().forEach(data::addDependency);
     addDependenciesForDeclaration(declaration, data);
   }
 

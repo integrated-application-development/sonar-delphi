@@ -18,10 +18,7 @@
  */
 package au.com.integradev.delphi.type.generic;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.GenerifiableDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +26,9 @@ import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 
 public final class TypeSpecializationContext {
   private static final Comparator<Type> COMPARATOR = Comparator.comparing(Type::getImage);

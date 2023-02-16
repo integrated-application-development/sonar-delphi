@@ -29,8 +29,8 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 

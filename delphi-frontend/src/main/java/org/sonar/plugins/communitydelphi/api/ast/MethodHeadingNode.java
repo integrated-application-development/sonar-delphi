@@ -1,11 +1,11 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import au.com.integradev.delphi.symbol.declaration.MethodDirective;
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 
 public interface MethodHeadingNode extends DelphiNode {
   MethodNameNode getMethodNameNode();

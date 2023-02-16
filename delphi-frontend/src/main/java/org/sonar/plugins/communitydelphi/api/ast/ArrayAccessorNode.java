@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import java.util.List;
 import javax.annotation.Nullable;
 

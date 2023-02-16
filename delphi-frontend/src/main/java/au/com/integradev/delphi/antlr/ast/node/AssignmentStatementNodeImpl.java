@@ -23,8 +23,8 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
-public final class AssignmentStatementNodeImpl extends DelphiNodeImpl implements
-    AssignmentStatementNode {
+public final class AssignmentStatementNodeImpl extends DelphiNodeImpl
+    implements AssignmentStatementNode {
   public AssignmentStatementNodeImpl(Token token) {
     super(token);
   }

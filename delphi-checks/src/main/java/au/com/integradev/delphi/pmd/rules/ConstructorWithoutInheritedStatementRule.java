@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
 
 public class ConstructorWithoutInheritedStatementRule extends NoInheritedStatementRule {

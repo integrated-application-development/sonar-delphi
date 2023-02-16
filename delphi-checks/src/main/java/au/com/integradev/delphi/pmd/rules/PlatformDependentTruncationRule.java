@@ -22,16 +22,16 @@ import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ProceduralType;
-import au.com.integradev.delphi.type.TypeUtils;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.util.List;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
-import au.com.integradev.delphi.symbol.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public class PlatformDependentTruncationRule extends AbstractDelphiRule {
   @Override

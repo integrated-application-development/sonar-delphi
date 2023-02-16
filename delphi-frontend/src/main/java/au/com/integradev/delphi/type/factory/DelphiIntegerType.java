@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.IntegerType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import com.google.common.math.BigIntegerMath;
 import java.math.BigInteger;
 import java.math.RoundingMode;

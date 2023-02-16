@@ -1,11 +1,10 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
-import static au.com.integradev.delphi.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   private final int id;

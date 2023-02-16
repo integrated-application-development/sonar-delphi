@@ -25,7 +25,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import au.com.integradev.delphi.antlr.ast.DelphiNodeUtils;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -33,6 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import net.sourceforge.pmd.lang.ast.RootNode;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 class DelphiParserVisitorTest {
 

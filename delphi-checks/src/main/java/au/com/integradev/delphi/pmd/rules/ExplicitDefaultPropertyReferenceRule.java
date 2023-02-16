@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.symbol.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public class ExplicitDefaultPropertyReferenceRule extends AbstractDelphiRule {
   @Override

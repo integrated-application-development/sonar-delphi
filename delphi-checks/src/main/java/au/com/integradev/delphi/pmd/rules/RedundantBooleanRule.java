@@ -23,7 +23,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.operator.UnaryOperator;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import net.sourceforge.pmd.RuleContext;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 

@@ -22,8 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 
-public final class RepeatStatementNodeImpl extends DelphiNodeImpl implements
-    RepeatStatementNode {
+public final class RepeatStatementNodeImpl extends DelphiNodeImpl implements RepeatStatementNode {
   public RepeatStatementNodeImpl(Token token) {
     super(token);
   }

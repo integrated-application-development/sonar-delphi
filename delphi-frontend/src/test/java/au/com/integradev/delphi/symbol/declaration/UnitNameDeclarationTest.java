@@ -23,12 +23,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 class UnitNameDeclarationTest {
   @Test
@@ -73,6 +74,6 @@ class UnitNameDeclarationTest {
     when(location.getNamespace()).thenReturn("");
     when(location.getAst()).thenReturn(ast);
 
-    return new UnitNameDeclaration(location, null);
+    return new UnitNameDeclarationImpl(location, null);
   }
 }

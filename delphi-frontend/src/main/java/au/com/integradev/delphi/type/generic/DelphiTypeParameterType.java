@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.generic;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;

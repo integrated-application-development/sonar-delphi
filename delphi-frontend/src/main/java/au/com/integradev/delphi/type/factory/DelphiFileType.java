@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.FileType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 
 class DelphiFileType extends DelphiType implements FileType {

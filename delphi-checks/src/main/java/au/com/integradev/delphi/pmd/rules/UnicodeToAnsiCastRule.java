@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.StringType;
-import au.com.integradev.delphi.type.TypeUtils;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
 public class UnicodeToAnsiCastRule extends AbstractCastRule {
   @Override

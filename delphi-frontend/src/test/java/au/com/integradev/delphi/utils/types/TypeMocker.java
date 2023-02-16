@@ -18,17 +18,17 @@
  */
 package au.com.integradev.delphi.utils.types;
 
-import static au.com.integradev.delphi.symbol.scope.DelphiScope.unknownScope;
 import static au.com.integradev.delphi.type.DelphiType.unknownType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
-import au.com.integradev.delphi.type.StructKind;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.StructType;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 
 public final class TypeMocker {
   private TypeMocker() {

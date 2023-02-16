@@ -18,17 +18,17 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import javax.annotation.Nonnull;
-import org.antlr.runtime.Token;
 import javax.annotation.Nullable;
+import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public abstract class ExpressionNodeImpl extends DelphiNodeImpl implements ExpressionNode {
   private Type type;

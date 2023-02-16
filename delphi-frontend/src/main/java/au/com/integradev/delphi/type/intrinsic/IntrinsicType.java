@@ -18,8 +18,9 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
-import au.com.integradev.delphi.symbol.Qualifiable;
-import au.com.integradev.delphi.symbol.QualifiedName;
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 
 public enum IntrinsicType implements Qualifiable {
   BOOLEAN("Boolean"),
@@ -65,7 +66,7 @@ public enum IntrinsicType implements Qualifiable {
   private final QualifiedName qualifiedName;
 
   IntrinsicType(String name) {
-    this.qualifiedName = QualifiedName.of("System", name);
+    this.qualifiedName = QualifiedNameImpl.of("System", name);
   }
 
   @Override

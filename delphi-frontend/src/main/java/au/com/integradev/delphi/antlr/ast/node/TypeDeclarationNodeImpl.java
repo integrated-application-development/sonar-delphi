@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.QualifiedName;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import org.antlr.runtime.Token;
@@ -42,9 +42,9 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 
-public final class TypeDeclarationNodeImpl extends DelphiNodeImpl
-    implements TypeDeclarationNode {
+public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements TypeDeclarationNode {
   private Boolean isSubType;
   private QualifiedName qualifiedName;
   private String qualifiedNameExcludingUnit;
@@ -117,7 +117,7 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl
     this.qualifiedNameExcludingUnit = StringUtils.join(names, ".");
     names.addFirst(getUnitName());
 
-    qualifiedName = new QualifiedName(names);
+    qualifiedName = new QualifiedNameImpl(names);
   }
 
   @Override

@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.math.BigInteger;
 
 public interface LiteralNode extends DelphiNode, Typed {

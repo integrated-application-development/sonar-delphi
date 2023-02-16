@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
 
 public class ImportSpecificityRule extends AbstractImportRule {

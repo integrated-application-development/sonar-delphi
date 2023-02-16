@@ -26,10 +26,8 @@ import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
@@ -50,6 +48,8 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public interface DelphiFile {
   File getSourceCodeFile();

@@ -23,14 +23,13 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
-import au.com.integradev.delphi.symbol.resolve.Invocable;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ArrayConstructorType;
-import au.com.integradev.delphi.type.Type.CollectionType;
-import au.com.integradev.delphi.type.Type.PointerType;
-import au.com.integradev.delphi.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.collect.Sets;
@@ -40,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 
 public class OperatorInvocableCollector {
   private final TypeFactory typeFactory;

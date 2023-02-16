@@ -21,8 +21,8 @@ package au.com.integradev.delphi.symbol.resolve;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 
 import au.com.integradev.delphi.symbol.resolve.TypeConverter.TypeConversion.Source;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import java.util.Set;
 
 public final class TypeConverter {

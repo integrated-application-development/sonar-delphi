@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 
 class MethodKindTest {
   @Test

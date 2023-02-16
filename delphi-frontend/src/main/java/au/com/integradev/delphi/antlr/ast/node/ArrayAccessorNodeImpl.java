@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;

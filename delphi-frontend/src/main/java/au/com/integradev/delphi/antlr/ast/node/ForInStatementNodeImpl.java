@@ -21,11 +21,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 import static java.util.Collections.emptyList;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import au.com.integradev.delphi.symbol.resolve.NameResolutionHelper;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.common.base.Suppliers;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
@@ -33,9 +31,11 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 
-public final class ForInStatementNodeImpl extends ForStatementNodeImpl implements
-    ForInStatementNode {
+public final class ForInStatementNodeImpl extends ForStatementNodeImpl
+    implements ForInStatementNode {
   private final Supplier<NameResolutionHelper> nameResolutionHelper =
       Suppliers.memoize(() -> new NameResolutionHelper(getAst().getDelphiFile().getTypeFactory()));
 

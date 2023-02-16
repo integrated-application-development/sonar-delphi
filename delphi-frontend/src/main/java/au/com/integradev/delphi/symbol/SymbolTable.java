@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.symbol;
 
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
 import java.util.HashMap;
 import java.util.Map;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 public class SymbolTable {
   private final Map<String, UnitNameDeclaration> unitsByFilePath = new HashMap<>();

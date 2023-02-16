@@ -18,15 +18,15 @@
  */
 package au.com.integradev.delphi.pmd.violation;
 
+import au.com.integradev.delphi.pmd.FilePosition;
+import au.com.integradev.delphi.pmd.rules.DelphiRule;
+import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.RuleViolation;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
-import au.com.integradev.delphi.pmd.FilePosition;
-import au.com.integradev.delphi.pmd.rules.DelphiRule;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.RuleViolation;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 
 public class DelphiRuleViolationBuilder {
   private final DelphiRule rule;

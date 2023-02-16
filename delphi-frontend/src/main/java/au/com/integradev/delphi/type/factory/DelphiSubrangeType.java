@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.SubrangeType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.jetbrains.annotations.NotNull;
 
 class DelphiSubrangeType extends DelphiType implements SubrangeType {

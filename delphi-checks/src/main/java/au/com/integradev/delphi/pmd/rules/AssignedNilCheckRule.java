@@ -22,8 +22,8 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import au.com.integradev.delphi.operator.BinaryOperator;
-import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 
 public class AssignedNilCheckRule extends AbstractDelphiRule {
 

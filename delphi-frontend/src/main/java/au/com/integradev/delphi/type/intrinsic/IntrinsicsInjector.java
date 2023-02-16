@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
-import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration.compilerVariable;
+import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.compilerVariable;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
@@ -47,19 +47,22 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.WIDESTRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.WORD;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.type.Type;
+import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 public final class IntrinsicsInjector {
   private final TypeFactory typeFactory;
   private final List<IntrinsicMethod.Builder> methods;
-  private DelphiScope scope;
+  private DelphiScopeImpl scope;
 
   public IntrinsicsInjector(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
@@ -69,7 +72,7 @@ public final class IntrinsicsInjector {
   }
 
   public void inject(DelphiScope scope) {
-    this.scope = scope;
+    this.scope = (DelphiScopeImpl) scope;
     injectTypes();
     injectMethods();
     injectConstants();
@@ -302,7 +305,7 @@ public final class IntrinsicsInjector {
     SymbolicNode node = SymbolicNode.imaginary(intrinsic.simpleName(), scope);
     Type type = typeFactory.getIntrinsic(intrinsic);
     TypeNameDeclaration declaration =
-        new TypeNameDeclaration(node, type, intrinsic.fullyQualifiedName());
+        new TypeNameDeclarationImpl(node, type, intrinsic.fullyQualifiedName());
 
     scope.addDeclaration(declaration);
   }
@@ -314,7 +317,7 @@ public final class IntrinsicsInjector {
   private void injectMethod(IntrinsicMethod.Builder builder) {
     IntrinsicMethod method = builder.build();
     SymbolicNode node = SymbolicNode.imaginary(method.simpleName(), scope);
-    MethodNameDeclaration declaration = MethodNameDeclaration.create(node, method, typeFactory);
+    MethodNameDeclaration declaration = MethodNameDeclarationImpl.create(node, method, typeFactory);
 
     scope.addDeclaration(declaration);
   }

@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.symbol;
 
+import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
-import au.com.integradev.delphi.symbol.declaration.UnitNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
-import au.com.integradev.delphi.symbol.scope.FileScope;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 
 public final class SymbolicNode implements Node {
   private static final AtomicInteger IMAGINARY_TOKEN_INDEX = new AtomicInteger(Integer.MIN_VALUE);
@@ -130,7 +130,7 @@ public final class SymbolicNode implements Node {
   public String getUnitName() {
     FileScope fileScope = scope.getEnclosingScope(FileScope.class);
     if (fileScope == null) {
-      return UnitNameDeclaration.UNKNOWN_UNIT;
+      return UnitNameDeclarationImpl.UNKNOWN_UNIT;
     }
     return fileScope.getUnitDeclaration().fullyQualifiedName();
   }

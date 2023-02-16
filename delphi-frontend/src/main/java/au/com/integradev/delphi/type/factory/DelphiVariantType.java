@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.VariantType;
+import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
 
 class DelphiVariantType extends DelphiType implements VariantType {
   private final String image;

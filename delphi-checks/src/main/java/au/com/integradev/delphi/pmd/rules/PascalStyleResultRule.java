@@ -18,11 +18,11 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
 import java.util.Objects;
 import net.sourceforge.pmd.RuleContext;
 

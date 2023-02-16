@@ -23,8 +23,7 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
-public final class MethodReturnTypeNodeImpl extends DelphiNodeImpl
-    implements MethodReturnTypeNode {
+public final class MethodReturnTypeNodeImpl extends DelphiNodeImpl implements MethodReturnTypeNode {
   public MethodReturnTypeNodeImpl(Token token) {
     super(token);
   }

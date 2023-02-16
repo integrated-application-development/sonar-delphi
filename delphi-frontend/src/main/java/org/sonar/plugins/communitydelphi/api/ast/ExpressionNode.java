@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -32,14 +32,16 @@ public interface ExpressionNode extends DelphiNode, Typed {
   @Nullable
   LiteralNode extractLiteral();
 
-  @Nullable NameReferenceNode extractSimpleNameReference();
+  @Nullable
+  NameReferenceNode extractSimpleNameReference();
 
   /**
    * Traverses nested parenthesized expressions and returns the expression inside of them
    *
    * @return Nested expression
    */
-  @Nonnull ExpressionNode skipParentheses();
+  @Nonnull
+  ExpressionNode skipParentheses();
 
   /**
    * From a potentially nested expression, traverses any parenthesized expressions ancestors and
@@ -47,5 +49,6 @@ public interface ExpressionNode extends DelphiNode, Typed {
    *
    * @return Top-level expression
    */
-  @Nonnull ExpressionNode findParentheses();
+  @Nonnull
+  ExpressionNode findParentheses();
 }

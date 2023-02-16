@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
     implements NameDeclarationNode {

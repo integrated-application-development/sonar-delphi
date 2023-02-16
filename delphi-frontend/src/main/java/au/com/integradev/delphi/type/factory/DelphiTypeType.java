@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.TypeType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 
 class DelphiTypeType extends DelphiType implements TypeType {

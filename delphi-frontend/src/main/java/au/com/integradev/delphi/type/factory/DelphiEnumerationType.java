@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.EnumType;
+import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 class DelphiEnumerationType extends DelphiType implements EnumType {
   private final String image;

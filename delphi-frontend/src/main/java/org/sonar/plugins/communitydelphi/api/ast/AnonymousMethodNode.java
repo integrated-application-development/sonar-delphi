@@ -1,7 +1,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 
 public interface AnonymousMethodNode extends ExpressionNode {
   MethodParametersNode getMethodParametersNode();

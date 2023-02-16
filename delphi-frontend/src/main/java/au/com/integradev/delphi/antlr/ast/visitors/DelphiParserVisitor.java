@@ -22,7 +22,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.ast.AncestorListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.AnsiStringTypeNode;
@@ -51,6 +51,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ContainsClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
@@ -156,7 +157,6 @@ import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 
 public interface DelphiParserVisitor<T> {
 

@@ -19,10 +19,9 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.QualifiedName;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -33,6 +32,8 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public final class MethodNameNodeImpl extends DelphiNodeImpl implements MethodNameNode {
   private QualifiedName qualifiedName;
@@ -69,7 +70,7 @@ public final class MethodNameNodeImpl extends DelphiNodeImpl implements MethodNa
       if (nameReference != null) {
         qualifiedName = nameReference.getQualifiedName();
       } else {
-        qualifiedName = QualifiedName.of(getNameDeclarationNode().getImage());
+        qualifiedName = QualifiedNameImpl.of(getNameDeclarationNode().getImage());
       }
     }
     return qualifiedName;

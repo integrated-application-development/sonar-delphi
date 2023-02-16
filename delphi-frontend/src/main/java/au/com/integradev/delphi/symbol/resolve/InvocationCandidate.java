@@ -19,18 +19,19 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.operator.OperatorIntrinsic;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 
 /**
  * Stores information about an invocation candidate, used for overload resolution. Based directly

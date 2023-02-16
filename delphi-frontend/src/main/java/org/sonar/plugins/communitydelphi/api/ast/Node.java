@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 public interface Node {
   int jjtGetId();

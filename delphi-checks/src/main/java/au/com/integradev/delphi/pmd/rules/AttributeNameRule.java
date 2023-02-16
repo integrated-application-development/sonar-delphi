@@ -1,7 +1,7 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import java.util.Map;
 import java.util.TreeMap;

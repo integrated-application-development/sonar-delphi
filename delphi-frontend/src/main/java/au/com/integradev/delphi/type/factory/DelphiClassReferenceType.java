@@ -18,16 +18,16 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import static au.com.integradev.delphi.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Type.ClassReferenceType;
-import au.com.integradev.delphi.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 class DelphiClassReferenceType extends DelphiType implements ClassReferenceType, ScopedType {
   private final String image;

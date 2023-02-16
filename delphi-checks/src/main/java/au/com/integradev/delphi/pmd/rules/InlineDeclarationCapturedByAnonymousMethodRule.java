@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import au.com.integradev.delphi.symbol.declaration.VariableNameDeclaration;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import net.sourceforge.pmd.RuleContext;
-import au.com.integradev.delphi.symbol.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public class InlineDeclarationCapturedByAnonymousMethodRule extends AbstractDelphiRule {
   @Override

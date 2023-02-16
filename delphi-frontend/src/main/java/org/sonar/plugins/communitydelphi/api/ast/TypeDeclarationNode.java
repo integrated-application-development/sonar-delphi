@@ -1,10 +1,10 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.Qualifiable;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.Deque;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 
 public interface TypeDeclarationNode extends DelphiNode, Typed, Qualifiable {
   SimpleNameDeclarationNode getTypeNameNode();

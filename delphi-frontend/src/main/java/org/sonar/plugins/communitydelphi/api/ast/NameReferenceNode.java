@@ -1,10 +1,10 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.Qualifiable;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public interface NameReferenceNode extends DelphiNode, Qualifiable, Typed {
   List<NameReferenceNode> flatten();

@@ -24,9 +24,7 @@ package au.com.integradev.delphi.antlr.ast;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
-import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import com.google.common.base.Preconditions;
 import java.lang.reflect.Constructor;
@@ -35,6 +33,8 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.BaseTreeAdaptor;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
 
 public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 

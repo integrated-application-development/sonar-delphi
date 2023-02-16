@@ -21,7 +21,7 @@ package au.com.integradev.delphi.pmd.rules;
 import static au.com.integradev.delphi.utils.VariableUtils.isGeneratedFormVariable;
 
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
-import au.com.integradev.delphi.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import net.sourceforge.pmd.RuleContext;
 
 public class UnusedGlobalVariablesRule extends AbstractDelphiRule {

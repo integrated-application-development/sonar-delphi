@@ -23,15 +23,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
-import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
-import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNodeImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 class UnitImportNameDeclarationTest {
   @Test
@@ -67,7 +69,7 @@ class UnitImportNameDeclarationTest {
       String name, UnitNameDeclaration originalDeclaration) {
     UnitImportNode location = new UnitImportNodeImpl(DelphiLexer.TkUnitImport);
     location.jjtAddChild(createNameNode(name));
-    return new UnitImportNameDeclaration(location, originalDeclaration);
+    return new UnitImportNameDeclarationImpl(location, originalDeclaration);
   }
 
   private static UnitNameDeclaration createUnit(String name) {
@@ -79,7 +81,7 @@ class UnitImportNameDeclarationTest {
     when(location.getNamespace()).thenReturn("");
     when(location.getAst()).thenReturn(ast);
 
-    return new UnitNameDeclaration(location, null);
+    return new UnitNameDeclarationImpl(location, null);
   }
 
   private static QualifiedNameDeclarationNode createNameNode(String name) {

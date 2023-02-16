@@ -23,6 +23,7 @@ import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public abstract class DelphiType implements Type {
   public static Type unknownType() {

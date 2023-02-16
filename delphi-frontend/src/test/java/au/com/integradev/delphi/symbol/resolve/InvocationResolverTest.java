@@ -20,8 +20,8 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.type.DelphiType.unknownType;
 import static au.com.integradev.delphi.type.DelphiType.untypedType;
-import static au.com.integradev.delphi.type.StructKind.CLASS;
-import static au.com.integradev.delphi.type.StructKind.RECORD;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.ANSISTRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.BOOLEAN;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.BYTE;
@@ -51,14 +51,13 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import au.com.integradev.delphi.symbol.scope.DelphiScope;
 import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.ArrayList;
@@ -68,6 +67,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 class InvocationResolverTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();

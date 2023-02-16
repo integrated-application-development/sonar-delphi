@@ -19,16 +19,16 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.QualifiedName;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import au.com.integradev.delphi.type.DelphiUnresolvedType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public final class TypeReferenceNodeImpl extends TypeNodeImpl implements TypeReferenceNode {
   public TypeReferenceNodeImpl(Token token) {

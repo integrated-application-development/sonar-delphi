@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.operator;
 
-import au.com.integradev.delphi.symbol.resolve.Invocable;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
-import au.com.integradev.delphi.type.parameter.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

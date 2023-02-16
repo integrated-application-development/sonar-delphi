@@ -1,8 +1,8 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public interface TypeReferenceNode extends TypeNode, Qualifiable {
   @Nullable

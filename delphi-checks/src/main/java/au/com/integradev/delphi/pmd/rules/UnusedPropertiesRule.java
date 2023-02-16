@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
-import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclaration;
 import net.sourceforge.pmd.RuleContext;
 
 public class UnusedPropertiesRule extends AbstractDelphiRule {

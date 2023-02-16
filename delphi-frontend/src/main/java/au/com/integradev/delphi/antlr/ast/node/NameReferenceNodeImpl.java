@@ -19,14 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.NameDeclaration;
-import au.com.integradev.delphi.symbol.NameOccurrence;
-import au.com.integradev.delphi.symbol.QualifiedName;
-import au.com.integradev.delphi.symbol.declaration.TypeNameDeclaration;
-import au.com.integradev.delphi.symbol.declaration.TypedDeclaration;
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
-import au.com.integradev.delphi.type.Typed;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
@@ -35,6 +33,9 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 
 public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameReferenceNode {
   private NameDeclaration declaration;
@@ -91,7 +92,7 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
         builder.setLength(0);
       }
 
-      qualifiedName = new QualifiedName(nameParts);
+      qualifiedName = new QualifiedNameImpl(nameParts);
     }
     return qualifiedName;
   }

@@ -22,8 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 
-public final class InterfaceSectionNodeImpl extends DelphiNodeImpl
-    implements InterfaceSectionNode {
+public final class InterfaceSectionNodeImpl extends DelphiNodeImpl implements InterfaceSectionNode {
   public InterfaceSectionNodeImpl(Token token) {
     super(token);
   }

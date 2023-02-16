@@ -18,14 +18,15 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
-import au.com.integradev.delphi.symbol.Qualifiable;
-import au.com.integradev.delphi.symbol.QualifiedName;
-import au.com.integradev.delphi.symbol.declaration.MethodKind;
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 
 public class IntrinsicMethod implements Qualifiable {
   private final QualifiedName qualifiedName;
@@ -35,7 +36,7 @@ public class IntrinsicMethod implements Qualifiable {
 
   private IntrinsicMethod(
       String name, List<IntrinsicParameterData> parameters, Type returnType, boolean isVariadic) {
-    this.qualifiedName = QualifiedName.of("System", name);
+    this.qualifiedName = QualifiedNameImpl.of("System", name);
     this.parameters = parameters;
     this.returnType = returnType;
     this.isVariadic = isVariadic;

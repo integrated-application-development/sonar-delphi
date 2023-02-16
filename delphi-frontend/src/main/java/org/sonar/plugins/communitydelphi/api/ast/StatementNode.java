@@ -18,4 +18,4 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface StatementNode extends DelphiNode { }
+public interface StatementNode extends DelphiNode {}

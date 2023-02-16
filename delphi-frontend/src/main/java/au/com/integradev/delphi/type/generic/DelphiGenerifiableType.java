@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.generic;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.HashMap;
 import java.util.Map;
 

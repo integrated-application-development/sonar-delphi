@@ -24,6 +24,8 @@ import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
 class TypeUtilsTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();

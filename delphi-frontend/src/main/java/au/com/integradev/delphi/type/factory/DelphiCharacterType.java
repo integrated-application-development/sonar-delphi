@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.DelphiType;
-import au.com.integradev.delphi.type.Type.CharacterType;
+import org.sonar.plugins.communitydelphi.api.type.Type.CharacterType;
 
 class DelphiCharacterType extends DelphiType implements CharacterType {
   private final String image;

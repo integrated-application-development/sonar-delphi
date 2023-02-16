@@ -18,6 +18,8 @@
  */
 package au.com.integradev.delphi.type;
 
+import org.sonar.plugins.communitydelphi.api.type.Type;
+
 class DelphiUnknownType extends DelphiType {
   private static final DelphiUnknownType INSTANCE = new DelphiUnknownType();
 
