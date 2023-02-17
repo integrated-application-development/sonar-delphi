@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.type.parameter;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public abstract class AbstractParameter implements Parameter {
   private final Type type;

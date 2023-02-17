@@ -31,7 +31,13 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
 
+import au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher;
+import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
+import com.google.common.annotations.VisibleForTesting;
+import java.util.Comparator;
+import java.util.List;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
@@ -47,12 +53,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
-import com.google.common.annotations.VisibleForTesting;
-import java.util.Comparator;
-import java.util.List;
 
 class TypeComparer {
   private TypeComparer() {

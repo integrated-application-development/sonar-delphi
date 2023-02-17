@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.type.generic;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.HashMap;
 import java.util.Map;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 /**

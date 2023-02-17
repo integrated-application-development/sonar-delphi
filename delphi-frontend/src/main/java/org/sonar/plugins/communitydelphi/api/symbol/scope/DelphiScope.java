@@ -18,13 +18,11 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.scope;
 
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.scope.UnknownScopeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
@@ -32,6 +30,8 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclarat
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 
 public interface DelphiScope {
   /**

@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 
 public final class QualifiedNameDeclarationNodeImpl extends NameDeclarationNodeImpl
     implements QualifiedNameDeclarationNode {

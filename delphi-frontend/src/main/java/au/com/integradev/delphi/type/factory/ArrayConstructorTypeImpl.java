@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 
 public final class ArrayConstructorTypeImpl extends TypeImpl implements ArrayConstructorType {
   private final ImmutableList<Type> elementTypes;

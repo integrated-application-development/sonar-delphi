@@ -19,8 +19,6 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ComparisonChain;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +35,8 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class TypeNameDeclarationImpl extends NameDeclarationImpl
     implements TypeNameDeclaration {

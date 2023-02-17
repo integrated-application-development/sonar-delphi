@@ -20,11 +20,7 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +41,10 @@ import org.sonar.plugins.communitydelphi.api.ast.Visibility;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     implements VariableNameDeclaration {

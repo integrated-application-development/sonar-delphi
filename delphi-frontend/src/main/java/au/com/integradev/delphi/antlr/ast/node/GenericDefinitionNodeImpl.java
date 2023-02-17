@@ -19,9 +19,6 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -31,6 +28,9 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
     implements GenericDefinitionNode {

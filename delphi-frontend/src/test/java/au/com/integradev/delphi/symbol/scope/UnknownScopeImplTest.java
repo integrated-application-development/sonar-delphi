@@ -26,12 +26,12 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 

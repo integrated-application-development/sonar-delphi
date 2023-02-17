@@ -18,9 +18,6 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import com.google.common.base.Preconditions;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -28,6 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public class InvocationArgument implements Typed {
   private final ExpressionNode expression;

@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.jetbrains.annotations.NotNull;
 
 public final class SubrangeTypeImpl extends TypeImpl implements SubrangeType {
   private final String image;

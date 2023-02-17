@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class MethodParametersNodeImpl extends DelphiNodeImpl implements MethodParametersNode {
   private String image;

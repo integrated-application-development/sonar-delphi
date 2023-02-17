@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordVariantTagNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class RecordVariantTagNodeImpl extends DelphiNodeImpl implements RecordVariantTagNode {
   public RecordVariantTagNodeImpl(Token token) {

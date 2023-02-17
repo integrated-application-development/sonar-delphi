@@ -19,10 +19,7 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.collect.ComparisonChain;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +36,9 @@ import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     implements PropertyNameDeclaration {

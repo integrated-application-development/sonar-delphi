@@ -1,8 +1,8 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import javax.annotation.Nonnull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
-import javax.annotation.Nonnull;
 
 public interface ConstDeclarationNode extends DelphiNode, Typed, Visibility {
   NameDeclarationNode getNameDeclarationNode();

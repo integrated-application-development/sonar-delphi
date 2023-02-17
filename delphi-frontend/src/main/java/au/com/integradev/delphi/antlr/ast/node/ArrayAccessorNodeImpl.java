@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 
 public final class ArrayAccessorNodeImpl extends DelphiNodeImpl implements ArrayAccessorNode {
   private NameOccurrence implicitNameOccurrence;

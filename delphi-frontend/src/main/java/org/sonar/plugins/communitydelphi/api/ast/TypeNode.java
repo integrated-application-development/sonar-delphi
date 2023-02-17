@@ -1,9 +1,9 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public interface TypeNode extends DelphiNode, Typed {
 

@@ -1,11 +1,11 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public interface FormalParameterNode extends DelphiNode, Typed {
   List<FormalParameterData> getParameters();

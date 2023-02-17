@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -27,6 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public abstract class NameDeclarationImpl implements NameDeclaration {
   protected final SymbolicNode node;

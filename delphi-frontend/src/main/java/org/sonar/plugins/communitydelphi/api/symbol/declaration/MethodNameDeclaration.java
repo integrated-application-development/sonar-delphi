@@ -1,9 +1,9 @@
 package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 
-import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import java.util.Set;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 
 public interface MethodNameDeclaration
     extends GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {

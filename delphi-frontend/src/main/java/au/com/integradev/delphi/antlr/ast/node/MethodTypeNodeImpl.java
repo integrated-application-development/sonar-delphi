@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.MethodTypeNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class MethodTypeNodeImpl extends ProceduralTypeNodeImpl implements MethodTypeNode {
   public MethodTypeNodeImpl(Token token) {

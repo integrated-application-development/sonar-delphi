@@ -28,7 +28,6 @@ import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclarationImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.IOException;
@@ -62,6 +61,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SysInitScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 public class SymbolTableBuilder {

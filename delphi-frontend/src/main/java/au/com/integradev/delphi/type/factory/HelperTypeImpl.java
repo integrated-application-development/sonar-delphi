@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import org.sonar.plugins.communitydelphi.api.type.StructKind;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import java.util.List;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 
 public final class HelperTypeImpl extends StructTypeImpl implements HelperType {
   private final Type extendedType;

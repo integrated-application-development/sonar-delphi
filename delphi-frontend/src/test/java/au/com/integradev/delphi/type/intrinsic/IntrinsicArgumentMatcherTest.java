@@ -27,14 +27,14 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.P
 import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
-import org.sonar.plugins.communitydelphi.api.type.StructKind;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 class IntrinsicArgumentMatcherTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();

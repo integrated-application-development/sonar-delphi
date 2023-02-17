@@ -18,9 +18,6 @@
  */
 package au.com.integradev.delphi.symbol;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +30,9 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.WithScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
 public class Search {
   private static final Logger LOG = Loggers.get(Search.class);

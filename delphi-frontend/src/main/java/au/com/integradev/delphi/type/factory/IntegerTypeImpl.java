@@ -19,10 +19,10 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import com.google.common.math.BigIntegerMath;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 
 public final class IntegerTypeImpl extends TypeImpl implements IntegerType {
   private final String image;

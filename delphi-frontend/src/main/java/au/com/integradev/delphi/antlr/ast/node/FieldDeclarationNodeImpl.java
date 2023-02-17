@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -27,6 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class FieldDeclarationNodeImpl extends DelphiNodeImpl implements FieldDeclarationNode {
   public FieldDeclarationNodeImpl(Token token) {

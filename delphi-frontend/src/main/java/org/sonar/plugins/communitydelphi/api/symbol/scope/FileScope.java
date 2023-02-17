@@ -18,9 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.scope;
 
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
@@ -29,8 +26,11 @@ import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 
 public interface FileScope extends DelphiScope {
   /**

@@ -21,10 +21,6 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
@@ -33,9 +29,13 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameReferenceNode {
   private NameDeclaration declaration;

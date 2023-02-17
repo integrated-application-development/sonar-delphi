@@ -19,11 +19,8 @@
 package au.com.integradev.delphi.antlr.ast.visitors;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
@@ -36,6 +33,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -46,6 +44,8 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
 public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<Data> {
   private static final String TCOMPONENT = "System.Classes.TComponent";

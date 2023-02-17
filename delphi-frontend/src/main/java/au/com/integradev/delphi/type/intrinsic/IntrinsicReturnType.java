@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.type.intrinsic;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public abstract class IntrinsicReturnType extends TypeImpl {
   @Override

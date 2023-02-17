@@ -32,10 +32,6 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_
 import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
 import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
-import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
-import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
-import static org.sonar.plugins.communitydelphi.api.type.StructKind.OBJECT;
-import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
@@ -45,8 +41,21 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.OBJECT;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
+import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
+import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
+import au.com.integradev.delphi.utils.types.TypeMocker;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
@@ -60,15 +69,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
-import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
-import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
-import au.com.integradev.delphi.utils.types.TypeMocker;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
 
 class TypeComparerTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();

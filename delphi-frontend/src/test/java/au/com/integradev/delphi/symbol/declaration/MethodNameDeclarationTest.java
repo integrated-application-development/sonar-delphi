@@ -22,10 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +35,9 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclar
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 
 class MethodNameDeclarationTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();

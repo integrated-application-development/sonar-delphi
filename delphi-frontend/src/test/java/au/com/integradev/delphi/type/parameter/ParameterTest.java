@@ -23,16 +23,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
+import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 class ParameterTest {
   private static final Type TYPE_PARAMETER = TypeParameterTypeImpl.create("T");

@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.operator;
 
-import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class OperatorIntrinsic implements Invocable {
   private final String name;

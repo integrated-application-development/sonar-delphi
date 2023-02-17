@@ -20,12 +20,12 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.math.BigInteger;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements IntegerLiteralNode {
   private String image;

@@ -20,9 +20,9 @@ package org.sonar.plugins.communitydelphi.api.symbol;
 
 import static java.util.function.Predicate.not;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface Invocable {
   String getName();

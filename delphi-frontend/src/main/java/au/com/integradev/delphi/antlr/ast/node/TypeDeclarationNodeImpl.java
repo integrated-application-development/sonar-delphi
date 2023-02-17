@@ -19,9 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import org.antlr.runtime.Token;
@@ -42,7 +40,9 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements TypeDeclarationNode {
   private Boolean isSubType;

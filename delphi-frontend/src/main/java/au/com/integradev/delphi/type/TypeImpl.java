@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.type;
 
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public abstract class TypeImpl implements Type {
 

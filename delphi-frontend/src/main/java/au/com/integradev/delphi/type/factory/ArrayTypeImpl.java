@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class ArrayTypeImpl extends GenerifiableTypeImpl implements CollectionType {
   private final String image;

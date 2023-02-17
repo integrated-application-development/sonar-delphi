@@ -40,7 +40,8 @@ class TypeSpecializationContextTest {
 
     assertThat(context)
         .isEqualTo(
-            new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList()));
+            new TypeSpecializationContextImpl(
+                mock(NameDeclaration.class), Collections.emptyList()));
   }
 
   @Test
@@ -58,7 +59,8 @@ class TypeSpecializationContextTest {
 
     assertThat(invalidContext.hasSignatureMismatch()).isTrue();
     assertThat(invalidContext)
-        .isEqualTo(new TypeSpecializationContextImpl(generifiableDeclaration, Collections.emptyList()));
+        .isEqualTo(
+            new TypeSpecializationContextImpl(generifiableDeclaration, Collections.emptyList()));
   }
 
   @Test

@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
-import org.jetbrains.annotations.NotNull;
 
 public final class SetTypeImpl extends TypeImpl implements CollectionType {
   private final Type elementType;

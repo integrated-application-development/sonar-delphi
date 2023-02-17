@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 
 public final class EnumerationTypeImpl extends TypeImpl implements EnumType {
   private final String image;

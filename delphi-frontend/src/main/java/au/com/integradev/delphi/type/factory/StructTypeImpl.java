@@ -21,11 +21,7 @@ package au.com.integradev.delphi.type.factory;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
-import org.sonar.plugins.communitydelphi.api.type.StructKind;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import java.util.Collections;
@@ -39,6 +35,10 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclar
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private final List<ImagePart> imageParts;

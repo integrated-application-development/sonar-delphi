@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class TypeAliasNodeImpl extends TypeNodeImpl implements TypeAliasNode {
   public TypeAliasNodeImpl(Token token) {

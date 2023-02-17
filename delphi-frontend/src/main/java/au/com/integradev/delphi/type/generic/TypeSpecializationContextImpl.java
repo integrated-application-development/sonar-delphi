@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.type.generic;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class TypeSpecializationContextImpl implements TypeSpecializationContext {

@@ -47,6 +47,14 @@ import static java.lang.Math.abs;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.symbol.resolve.TypeConverter.TypeConversion;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ComparisonChain;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
@@ -55,14 +63,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ComparisonChain;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Resolves an invocation to the correct declaration. Based directly off of the tcallcandidates

@@ -1,9 +1,9 @@
 package org.sonar.plugins.communitydelphi.api.symbol;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface NameOccurrence {
 

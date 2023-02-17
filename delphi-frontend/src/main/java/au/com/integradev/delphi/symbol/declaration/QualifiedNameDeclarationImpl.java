@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.QualifiedNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 

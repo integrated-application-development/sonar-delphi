@@ -24,12 +24,12 @@ import static org.mockito.Mockito.mock;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 
 class MethodScopeImplTest {
   @Test

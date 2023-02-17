@@ -22,11 +22,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 
 class TypeParameterNameDeclarationTest {
   @Test

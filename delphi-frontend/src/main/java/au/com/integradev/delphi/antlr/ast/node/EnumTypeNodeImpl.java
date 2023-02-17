@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -28,6 +27,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class EnumTypeNodeImpl extends TypeNodeImpl implements EnumTypeNode {
   public EnumTypeNodeImpl(Token token) {

@@ -19,14 +19,14 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.CodePages;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AnsiStringTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.type.CodePages;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class AnsiStringTypeNodeImpl extends TypeNodeImpl implements AnsiStringTypeNode {
   public AnsiStringTypeNodeImpl(Token token) {

@@ -21,7 +21,6 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -36,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNode {
   private VisibilityType visibility;

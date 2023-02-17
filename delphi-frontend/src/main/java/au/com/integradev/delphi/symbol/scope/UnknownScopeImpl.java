@@ -21,16 +21,16 @@ package au.com.integradev.delphi.symbol.scope;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.UnknownScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 
 public final class UnknownScopeImpl extends DelphiScopeImpl implements UnknownScope {
   private static final UnknownScopeImpl UNKNOWN_SCOPE = new UnknownScopeImpl();

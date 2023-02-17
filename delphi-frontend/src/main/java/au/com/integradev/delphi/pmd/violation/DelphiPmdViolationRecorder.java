@@ -23,8 +23,6 @@ import static au.com.integradev.delphi.pmd.DelphiPmdConstants.SCOPE;
 
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import net.sourceforge.pmd.RuleViolation;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -38,6 +36,8 @@ import org.sonar.api.rule.RuleScope;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide

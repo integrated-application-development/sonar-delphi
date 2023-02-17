@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.StringTypeNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class StringTypeNodeImpl extends TypeNodeImpl implements StringTypeNode {
   public StringTypeNodeImpl(Token token) {

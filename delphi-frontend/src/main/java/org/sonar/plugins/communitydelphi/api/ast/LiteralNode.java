@@ -1,7 +1,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.math.BigInteger;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public interface LiteralNode extends DelphiNode, Typed {
   boolean isTextLiteral();

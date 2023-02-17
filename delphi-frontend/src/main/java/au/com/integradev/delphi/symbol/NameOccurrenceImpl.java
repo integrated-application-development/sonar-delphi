@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.symbol;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class NameOccurrenceImpl implements NameOccurrence {
   private final SymbolicNode location;

@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class FormalParameterListNodeImpl extends DelphiNodeImpl
     implements FormalParameterListNode {

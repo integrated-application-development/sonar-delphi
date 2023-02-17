@@ -35,8 +35,6 @@ import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import java.io.File;
 import java.util.Collections;
 import java.util.Optional;
@@ -58,6 +56,8 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
 class DelphiPmdViolationRecorderTest {
   private static final String RULE_KEY = "RULE";

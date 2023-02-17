@@ -19,9 +19,6 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Comparator;
@@ -29,6 +26,9 @@ import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class TypeInferrer {
   private final TypeFactory typeFactory;

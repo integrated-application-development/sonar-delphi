@@ -20,8 +20,6 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -32,6 +30,8 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 

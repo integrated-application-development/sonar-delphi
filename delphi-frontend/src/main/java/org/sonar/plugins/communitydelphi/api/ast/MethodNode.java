@@ -1,6 +1,5 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -9,6 +8,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface MethodNode extends DelphiNode, Visibility {
   MethodHeadingNode getMethodHeading();

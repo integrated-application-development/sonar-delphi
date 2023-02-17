@@ -26,10 +26,10 @@ import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.pmd.FilePosition;
 import au.com.integradev.delphi.pmd.rules.DelphiRule;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.RuleViolation;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 /** Delphi pmd rule violation */
 public class DelphiRuleViolation implements RuleViolation {

@@ -24,20 +24,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
-import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
 
 class DelphiScopeImplTest {
   private DelphiScopeImpl scope;

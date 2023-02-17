@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 
 public final class AnsiStringTypeImpl extends StringTypeImpl implements AnsiStringType {
   private final int codePage;

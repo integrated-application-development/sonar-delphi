@@ -21,18 +21,18 @@ package au.com.integradev.delphi.symbol.scope;
 import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public class TypeScopeImpl extends DelphiScopeImpl implements TypeScope {
   private Type type = unknownType();
@@ -81,9 +81,7 @@ public class TypeScopeImpl extends DelphiScopeImpl implements TypeScope {
   }
 
   public static TypeScope specializedScope(
-      DelphiScope scope,
-      GenerifiableTypeImpl specializedType,
-      TypeSpecializationContext context) {
+      DelphiScope scope, GenerifiableTypeImpl specializedType, TypeSpecializationContext context) {
     SpecializedTypeScope result = new SpecializedTypeScope(scope, context);
     result.setType(specializedType);
     return result;

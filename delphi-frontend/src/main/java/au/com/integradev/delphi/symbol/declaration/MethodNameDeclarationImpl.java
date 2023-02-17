@@ -21,14 +21,10 @@ package au.com.integradev.delphi.symbol.declaration;
 import static java.util.Collections.emptySet;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicMethod;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ComparisonChain;
 import java.util.Collections;
@@ -52,6 +48,10 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class MethodNameDeclarationImpl extends NameDeclarationImpl
     implements MethodNameDeclaration {

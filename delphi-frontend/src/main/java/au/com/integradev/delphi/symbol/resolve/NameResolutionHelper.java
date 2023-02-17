@@ -23,15 +23,9 @@ import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
-import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
-import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -66,6 +60,8 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -74,6 +70,10 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclarat
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;

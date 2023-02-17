@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.type.generic;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public class TypeParameterTypeImpl extends TypeImpl implements TypeParameterType {

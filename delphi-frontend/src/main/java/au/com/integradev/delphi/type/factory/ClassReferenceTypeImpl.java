@@ -21,15 +21,16 @@ package au.com.integradev.delphi.type.factory;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
-public final class ClassReferenceTypeImpl extends TypeImpl implements ClassReferenceType, ScopedType {
+public final class ClassReferenceTypeImpl extends TypeImpl
+    implements ClassReferenceType, ScopedType {
   private final String image;
   private Type classType;
   private final int size;
@@ -65,7 +66,6 @@ public final class ClassReferenceTypeImpl extends TypeImpl implements ClassRefer
   public Type classType() {
     return classType;
   }
-
 
   /**
    * Sets the classOf type. Used for type completion at the end of a type section.

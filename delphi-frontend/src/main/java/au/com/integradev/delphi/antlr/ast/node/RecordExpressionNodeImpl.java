@@ -20,12 +20,12 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionNode;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class RecordExpressionNodeImpl extends ExpressionNodeImpl
     implements RecordExpressionNode {

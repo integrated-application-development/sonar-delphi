@@ -20,13 +20,13 @@ package au.com.integradev.delphi.type.intrinsic;
 
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
-import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
+import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public class IntrinsicMethod implements Qualifiable {
   private final QualifiedName qualifiedName;

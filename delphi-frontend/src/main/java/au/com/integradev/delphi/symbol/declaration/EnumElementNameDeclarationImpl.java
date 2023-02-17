@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public class EnumElementNameDeclarationImpl extends NameDeclarationImpl
     implements EnumElementNameDeclaration {

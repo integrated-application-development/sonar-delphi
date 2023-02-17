@@ -27,8 +27,8 @@ import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.WithStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
-import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.ImportResolutionHandler;
+import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.EnumElementNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
@@ -49,11 +49,6 @@ import au.com.integradev.delphi.symbol.scope.UnitScopeImpl;
 import au.com.integradev.delphi.symbol.scope.WithScopeImpl;
 import au.com.integradev.delphi.type.factory.ClassReferenceTypeImpl;
 import au.com.integradev.delphi.type.factory.PointerTypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
@@ -129,6 +124,11 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SysInitScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
 /**
  * Visitor for symbol table creation.

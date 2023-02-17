@@ -23,7 +23,6 @@ import static java.util.Collections.emptyList;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.resolve.NameResolutionHelper;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.common.base.Suppliers;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
@@ -33,6 +32,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class ForInStatementNodeImpl extends ForStatementNodeImpl
     implements ForInStatementNode {

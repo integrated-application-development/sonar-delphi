@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
-import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements ProceduralType {
   private final int size;
