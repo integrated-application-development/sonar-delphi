@@ -18,13 +18,11 @@
  */
 package org.sonar.plugins.communitydelphi.api.type;
 
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 public interface Type {
@@ -406,14 +404,6 @@ public interface Type {
     boolean isForwardType();
 
     /**
-     * Adds the full type declaration's information. Also marks this StructType instance as a
-     * forward type.
-     *
-     * @param fullType Type representing the full type declaration
-     */
-    void setFullType(StructType fullType);
-
-    /**
      * Returns a set of types that this type defines implicit conversion to
      *
      * @return set of types that this type defines implicit conversion to
@@ -426,13 +416,6 @@ public interface Type {
      * @return set of types that this type defines implicit conversion from
      */
     Set<Type> typesWithImplicitConversionsToThis();
-
-    /**
-     * Returns a set of all default array properties that can be called on this type.
-     *
-     * @return set of default array property declarations
-     */
-    Set<NameDeclaration> findDefaultArrayProperties();
   }
 
   interface HelperType extends StructType {
@@ -467,16 +450,6 @@ public interface Type {
      * @return true if this pointer is untyped
      */
     boolean isUntypedPointer();
-
-    /**
-     * Sets the dereferenced type. Used for type completion at the end of a type section.
-     *
-     * @param type The dereferenced type
-     */
-    void setDereferencedType(Type type);
-
-    /** Flag this pointer type as allowing */
-    void setAllowsPointerMath();
 
     /**
      * Check if this pointer type was declared with {$POINTERMATH ON}
@@ -566,13 +539,6 @@ public interface Type {
      * @return Class type
      */
     Type classType();
-
-    /**
-     * Sets the classOf type. Used for type completion at the end of a type section.
-     *
-     * @param type The classOf type
-     */
-    void setClassType(Type type);
   }
 
   interface TypeType extends Type {
@@ -597,13 +563,6 @@ public interface Type {
      *     Constraints in Generics</a>
      */
     List<Type> constraints();
-
-    /**
-     * Adds information from the full type parameter declaration.
-     *
-     * @param fullType Type representing the full type declaration
-     */
-    void setFullType(TypeParameterType fullType);
   }
 
   interface IntegerType extends Type {

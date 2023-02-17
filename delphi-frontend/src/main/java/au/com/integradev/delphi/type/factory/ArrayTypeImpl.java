@@ -18,23 +18,22 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.ArrayOption;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
-import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class DelphiArrayType extends DelphiGenerifiableType implements CollectionType {
+public final class ArrayTypeImpl extends GenerifiableTypeImpl implements CollectionType {
   private final String image;
   private final int size;
   private final Type elementType;
   private final Set<ArrayOption> options;
 
-  DelphiArrayType(@Nullable String image, int size, Type elementType, Set<ArrayOption> options) {
+  ArrayTypeImpl(@Nullable String image, int size, Type elementType, Set<ArrayOption> options) {
     if (image == null) {
       image = createImage(elementType, options);
     }
@@ -99,9 +98,9 @@ class DelphiArrayType extends DelphiGenerifiableType implements CollectionType {
   }
 
   @Override
-  public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
+  public GenerifiableTypeImpl doSpecialization(TypeSpecializationContext context) {
     Type specializedElement = elementType.specialize(context);
     String specializedImage = createImage(specializedElement, options);
-    return new DelphiArrayType(specializedImage, size, specializedElement, options);
+    return new ArrayTypeImpl(specializedImage, size, specializedElement, options);
   }
 }

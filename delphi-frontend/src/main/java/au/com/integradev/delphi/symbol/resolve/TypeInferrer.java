@@ -18,8 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.ArrayOption;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
@@ -39,7 +38,7 @@ public final class TypeInferrer {
   }
 
   public Type infer(Typed typed) {
-    Type type = typed == null ? DelphiType.unknownType() : typed.getType();
+    Type type = typed == null ? TypeFactory.unknownType() : typed.getType();
 
     if (typed instanceof ExpressionNode) {
       ExpressionNode expression = (ExpressionNode) typed;
@@ -67,7 +66,7 @@ public final class TypeInferrer {
         arrayConstructor.getElements().stream()
             .map(this::infer)
             .max(Comparator.comparingInt(Type::size))
-            .orElse(DelphiType.voidType());
+            .orElse(TypeFactory.voidType());
 
     return typeFactory.array(null, element, Set.of(ArrayOption.DYNAMIC));
   }

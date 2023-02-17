@@ -24,7 +24,7 @@ import au.com.integradev.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicMethod;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;

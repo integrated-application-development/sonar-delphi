@@ -22,7 +22,7 @@ import static java.util.Collections.emptyList;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.resolve.NameResolutionHelper;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.common.base.Suppliers;
 import java.util.function.Supplier;
@@ -92,7 +92,7 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
     if (enumerator != null) {
       return enumerator.getReturnType();
     }
-    return DelphiType.unknownType();
+    return TypeFactory.unknownType();
   }
 
   @Override

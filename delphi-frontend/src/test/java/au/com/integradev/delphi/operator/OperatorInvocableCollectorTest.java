@@ -22,8 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
@@ -35,7 +34,7 @@ class OperatorInvocableCollectorTest {
   void testUnhandledOperatorShouldThrow() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThatThrownBy(() -> collector.collect(DelphiType.unknownType(), mock(Operator.class)))
+    assertThatThrownBy(() -> collector.collect(TypeFactory.unknownType(), mock(Operator.class)))
         .withFailMessage("Unhandled Operator")
         .isInstanceOf(AssertionError.class);
   }
@@ -92,6 +91,6 @@ class OperatorInvocableCollectorTest {
   void testNothingShouldCollectAddressOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(collector.collect(typeFactory.untypedType(), UnaryOperator.ADDRESS)).isEmpty();
+    assertThat(collector.collect(TypeFactory.untypedType(), UnaryOperator.ADDRESS)).isEmpty();
   }
 }

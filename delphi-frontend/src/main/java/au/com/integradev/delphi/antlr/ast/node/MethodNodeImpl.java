@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import java.util.Set;
@@ -80,7 +80,7 @@ public abstract class MethodNodeImpl extends DelphiNodeImpl implements MethodNod
   @Override
   public Type getReturnType() {
     if (isProcedure() || isConstructor()) {
-      return DelphiType.voidType();
+      return TypeFactory.voidType();
     }
 
     MethodReturnTypeNode returnTypeNode = getMethodHeading().getMethodReturnType();
@@ -88,7 +88,7 @@ public abstract class MethodNodeImpl extends DelphiNodeImpl implements MethodNod
       return returnTypeNode.getTypeNode().getType();
     }
 
-    return DelphiType.unknownType();
+    return TypeFactory.unknownType();
   }
 
   @Override

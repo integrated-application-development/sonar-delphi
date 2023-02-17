@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
@@ -38,13 +38,13 @@ class LocalScopeImplTest {
 
     VariableNameDeclaration variable =
         VariableNameDeclarationImpl.compilerVariable(
-            "Foo", DelphiType.unknownType(), DelphiScope.unknownScope());
+            "Foo", TypeFactory.unknownType(), DelphiScope.unknownScope());
 
     scope.addDeclaration(variable);
 
     SymbolicNode symbolicNode = SymbolicNode.imaginary("Bar", DelphiScope.unknownScope());
     TypeNameDeclaration type =
-        new TypeNameDeclarationImpl(symbolicNode, DelphiType.unknownType(), "Bar");
+        new TypeNameDeclarationImpl(symbolicNode, TypeFactory.unknownType(), "Bar");
 
     assertThatThrownBy(() -> scope.addDeclaration(type))
         .isInstanceOf(IllegalArgumentException.class);

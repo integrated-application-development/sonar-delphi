@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
 import javax.annotation.Nullable;

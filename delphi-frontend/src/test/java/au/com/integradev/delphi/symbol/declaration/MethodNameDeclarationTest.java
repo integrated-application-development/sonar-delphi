@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -45,7 +44,7 @@ class MethodNameDeclarationTest {
   private static final SymbolicNode LOCATION =
       SymbolicNode.imaginary("Bar", DelphiScope.unknownScope());
   private static final String FULLY_QUALIFIED_NAME = "Foo.Bar";
-  private static final Type RETURN_TYPE = DelphiType.voidType();
+  private static final Type RETURN_TYPE = TypeFactory.voidType();
   private static final Set<MethodDirective> DIRECTIVES = Set.of(MethodDirective.VIRTUAL);
   private static final boolean IS_CLASS_INVOCABLE = false;
   private static final boolean IS_CALLABLE = true;
@@ -55,7 +54,7 @@ class MethodNameDeclarationTest {
   private static final TypeNameDeclaration TYPE_NAME_DECLARATION =
       new TypeNameDeclarationImpl(
           SymbolicNode.imaginary("Baz", DelphiScope.unknownScope()),
-          DelphiType.unknownType(),
+          TypeFactory.unknownType(),
           "Flarp.Baz");
   private static final VisibilityType VISIBILITY = VisibilityType.PUBLIC;
   private static final List<TypedDeclaration> TYPE_PARAMETERS =
@@ -153,7 +152,7 @@ class MethodNameDeclarationTest {
         new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
-            DelphiType.untypedType(),
+            TypeFactory.untypedType(),
             DIRECTIVES,
             IS_CLASS_INVOCABLE,
             IS_CALLABLE,
@@ -214,7 +213,7 @@ class MethodNameDeclarationTest {
             IS_CLASS_INVOCABLE,
             IS_CALLABLE,
             KIND,
-            FACTORY.method(Collections.emptyList(), DelphiType.untypedType()),
+            FACTORY.method(Collections.emptyList(), TypeFactory.untypedType()),
             TYPE_NAME_DECLARATION,
             VISIBILITY,
             TYPE_PARAMETERS);

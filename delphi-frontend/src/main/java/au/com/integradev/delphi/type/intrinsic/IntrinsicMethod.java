@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.type.intrinsic;
 
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
@@ -140,7 +140,7 @@ public class IntrinsicMethod implements Qualifiable {
       this.methodName = methodName;
       this.parameters = new ArrayList<>();
       this.requiredParameters = -1;
-      this.returnType = DelphiType.voidType();
+      this.returnType = TypeFactory.voidType();
     }
 
     @CanIgnoreReturnValue

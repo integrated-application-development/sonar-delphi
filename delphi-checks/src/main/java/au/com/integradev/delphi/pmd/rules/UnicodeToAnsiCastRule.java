@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
@@ -43,7 +43,7 @@ public class UnicodeToAnsiCastRule extends AbstractCastRule {
       type = ((StringType) type).characterType();
     }
     if (!type.isChar()) {
-      type = DelphiType.unknownType();
+      type = TypeFactory.unknownType();
     }
     return type.size();
   }

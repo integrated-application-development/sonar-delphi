@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.ArrayOption;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +64,7 @@ public final class ArrayExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   @Nonnull
   protected Type createType() {
-    Type elementType = DelphiType.unknownType();
+    Type elementType = TypeFactory.unknownType();
     List<ExpressionNode> elements = getElements();
     if (!elements.isEmpty()) {
       elementType = elements.get(0).getType();

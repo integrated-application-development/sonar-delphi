@@ -16,20 +16,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type;
+package au.com.integradev.delphi.type.factory;
 
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-class DelphiUnknownType extends DelphiType {
-  private static final DelphiUnknownType INSTANCE = new DelphiUnknownType();
+public final class ArrayConstructorTypeImpl extends TypeImpl implements ArrayConstructorType {
+  private final ImmutableList<Type> elementTypes;
 
-  private DelphiUnknownType() {
-    // Hide constructor
+  ArrayConstructorTypeImpl(List<Type> elementTypes) {
+    this.elementTypes = ImmutableList.copyOf(elementTypes);
   }
 
   @Override
   public String getImage() {
-    return "<Unknown>";
+    return "[" + elementTypes.stream().map(Type::getImage).collect(Collectors.joining(",")) + "]";
   }
 
   @Override
@@ -39,11 +44,12 @@ class DelphiUnknownType extends DelphiType {
   }
 
   @Override
-  public boolean isUnknown() {
-    return true;
+  public List<Type> elementTypes() {
+    return elementTypes;
   }
 
-  static Type instance() {
-    return INSTANCE;
+  @Override
+  public boolean isArrayConstructor() {
+    return true;
   }
 }

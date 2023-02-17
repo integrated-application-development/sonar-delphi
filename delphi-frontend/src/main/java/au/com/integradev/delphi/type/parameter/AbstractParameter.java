@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.type.parameter;
 
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;

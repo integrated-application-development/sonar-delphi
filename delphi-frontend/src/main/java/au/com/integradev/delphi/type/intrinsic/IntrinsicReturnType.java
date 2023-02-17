@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 
-public abstract class IntrinsicReturnType extends DelphiType {
+public abstract class IntrinsicReturnType extends TypeImpl {
   @Override
   public String getImage() {
     return "<" + getClass().getSimpleName() + ">";
@@ -59,7 +59,7 @@ public abstract class IntrinsicReturnType extends DelphiType {
     return new ClassReferenceValueType();
   }
 
-  private static class HighLowReturnType extends IntrinsicReturnType {
+  private static final class HighLowReturnType extends IntrinsicReturnType {
     private final Type integerType;
 
     private HighLowReturnType(TypeFactory typeFactory) {
@@ -82,7 +82,7 @@ public abstract class IntrinsicReturnType extends DelphiType {
     }
   }
 
-  private static class RoundTruncReturnType extends IntrinsicReturnType {
+  private static final class RoundTruncReturnType extends IntrinsicReturnType {
     private final String name;
     private final Type int64Type;
 
@@ -101,20 +101,20 @@ public abstract class IntrinsicReturnType extends DelphiType {
                 .filter(method -> method.getImage().equalsIgnoreCase(name))
                 .map(MethodNameDeclaration::getReturnType)
                 .findFirst()
-                .orElseGet(DelphiType::unknownType);
+                .orElseGet(TypeFactory::unknownType);
       }
       return int64Type;
     }
   }
 
-  private static class ClassReferenceValueType extends IntrinsicReturnType {
+  private static final class ClassReferenceValueType extends IntrinsicReturnType {
     @Override
     public Type getReturnType(List<Type> arguments) {
       Type type = arguments.get(0);
       if (type.isClassReference()) {
         return ((ClassReferenceType) type).classType();
       }
-      return unknownType();
+      return TypeFactory.unknownType();
     }
   }
 }

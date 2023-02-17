@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
@@ -75,7 +75,7 @@ public class PlatformDependentCastRule extends AbstractDelphiRule {
         return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.UNICODESTRING);
       }
     }
-    return DelphiType.unknownType();
+    return TypeFactory.unknownType();
   }
 
   private static boolean isPlatformDependentCast(Type originalType, Type castedType) {

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class MethodScopeImplTest {
         new MethodNameDeclarationImpl(
             symbolicNode,
             "Unit.Foo",
-            DelphiType.unknownType(),
+            TypeFactory.unknownType(),
             Collections.emptySet(),
             false,
             true,

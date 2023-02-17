@@ -20,21 +20,21 @@ package au.com.integradev.delphi.type.factory;
 
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class DelphiProceduralType extends DelphiGenerifiableType implements ProceduralType {
+public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements ProceduralType {
   private final int size;
   private final ProceduralKind kind;
   private final List<Parameter> parameters;
   private final Type returnType;
   private final boolean variadic;
 
-  DelphiProceduralType(
+  ProceduralTypeImpl(
       int size,
       ProceduralKind kind,
       List<Parameter> parameters,
@@ -80,7 +80,7 @@ class DelphiProceduralType extends DelphiGenerifiableType implements ProceduralT
   private static String makeSignature(List<Parameter> parameters, Type returnType) {
     return "("
         + parameters.stream()
-            .map(DelphiProceduralType::makeSignature)
+            .map(ProceduralTypeImpl::makeSignature)
             .collect(Collectors.joining("; "))
         + "): "
         + returnType.getImage();
@@ -143,8 +143,8 @@ class DelphiProceduralType extends DelphiGenerifiableType implements ProceduralT
   }
 
   @Override
-  public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
-    return new DelphiProceduralType(
+  public GenerifiableTypeImpl doSpecialization(TypeSpecializationContext context) {
+    return new ProceduralTypeImpl(
         size,
         kind,
         parameters.stream()

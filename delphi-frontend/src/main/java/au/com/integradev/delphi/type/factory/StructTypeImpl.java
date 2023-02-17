@@ -24,8 +24,8 @@ import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
-import au.com.integradev.delphi.type.generic.DelphiGenerifiableType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import java.util.Collections;
@@ -40,7 +40,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
-class DelphiStructType extends DelphiGenerifiableType implements StructType {
+public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private final List<ImagePart> imageParts;
   private final int size;
   private DelphiScope scope;
@@ -51,7 +51,7 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
   private Set<Type> typesWithImplicitConversionsFromThis;
   private boolean isForwardType;
 
-  DelphiStructType(
+  StructTypeImpl(
       List<ImagePart> imageParts, int size, DelphiScope scope, Set<Type> parents, StructKind kind) {
     this.imageParts = imageParts;
     this.size = size;
@@ -63,14 +63,14 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
   private void setParents(Set<Type> parents) {
     this.parents = Set.copyOf(parents);
     if (isInterface()) {
-      this.superType = Iterables.getFirst(parents, unknownType());
+      this.superType = Iterables.getFirst(parents, TypeFactory.unknownType());
     } else {
       this.superType =
           this.parents.stream()
-              .filter(DelphiStructType.class::isInstance)
+              .filter(StructTypeImpl.class::isInstance)
               .filter(not(Type::isInterface))
               .findFirst()
-              .orElse(unknownType());
+              .orElse(TypeFactory.unknownType());
     }
   }
 
@@ -141,7 +141,12 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
     return isForwardType;
   }
 
-  @Override
+  /**
+   * Adds the full type declaration's information. Also marks this StructType instance as a forward
+   * type.
+   *
+   * @param fullType Type representing the full type declaration
+   */
   public void setFullType(StructType fullType) {
     this.scope = fullType.typeScope();
     this.parents = ImmutableSet.copyOf(fullType.parents());
@@ -190,13 +195,6 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
   }
 
   @Override
-  public Set<NameDeclaration> findDefaultArrayProperties() {
-    Set<NameDeclaration> result = new HashSet<>();
-    findDefaultArrayProperties(this, result);
-    return result;
-  }
-
-  @Override
   public boolean canBeSpecialized(TypeSpecializationContext context) {
     for (ImagePart part : imageParts) {
       for (Type parameter : part.getTypeParameters()) {
@@ -211,14 +209,14 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
     }
 
     return parents.stream()
-        .filter(DelphiStructType.class::isInstance)
-        .map(DelphiStructType.class::cast)
+        .filter(StructTypeImpl.class::isInstance)
+        .map(StructTypeImpl.class::cast)
         .anyMatch(parent -> parent.canBeSpecialized(context));
   }
 
   @Override
-  public DelphiGenerifiableType doSpecialization(TypeSpecializationContext context) {
-    return new DelphiStructType(
+  public GenerifiableTypeImpl doSpecialization(TypeSpecializationContext context) {
+    return new StructTypeImpl(
         imageParts.stream()
             .map(imagePart -> imagePart.specialize(context))
             .collect(Collectors.toUnmodifiableList()),
@@ -235,6 +233,17 @@ class DelphiStructType extends DelphiGenerifiableType implements StructType {
             .map(parent -> parent.specialize(context))
             .collect(Collectors.toUnmodifiableSet()));
     this.scope = TypeScopeImpl.specializedScope(scope, this, context);
+  }
+
+  /**
+   * Returns a set of all default array properties that can be called on this type.
+   *
+   * @return set of default array property declarations
+   */
+  public Set<NameDeclaration> findDefaultArrayProperties() {
+    Set<NameDeclaration> result = new HashSet<>();
+    findDefaultArrayProperties(this, result);
+    return result;
   }
 
   private static void findDefaultArrayProperties(StructType type, Set<NameDeclaration> result) {

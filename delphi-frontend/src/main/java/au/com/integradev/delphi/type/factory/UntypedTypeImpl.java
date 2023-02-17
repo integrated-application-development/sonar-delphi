@@ -18,39 +18,34 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
-import org.jetbrains.annotations.NotNull;
 
-public class DelphiSetType extends DelphiType implements CollectionType {
-  private final Type elementType;
+public final class UntypedTypeImpl extends TypeImpl {
+  private static final UntypedTypeImpl INSTANCE = new UntypedTypeImpl();
 
-  DelphiSetType(Type elementType) {
-    this.elementType = elementType;
+  private UntypedTypeImpl() {
+    // Hide constructor
   }
 
   @Override
   public String getImage() {
-    return "set of " + elementType().getImage();
+    return "<Untyped>";
   }
 
   @Override
   public int size() {
-    // We're assuming the largest possible size here, but Delphi will actually try to store sets in
-    // less bytes if possible.
-    // See: https://stackoverflow.com/a/30338451
-    return 32;
+    // SizeOf returns 0 when the argument is an untyped variable.
+    // See: http://docwiki.embarcadero.com/Libraries/en/System.SizeOf
+    return 0;
   }
 
   @Override
-  @NotNull
-  public Type elementType() {
-    return elementType;
-  }
-
-  @Override
-  public boolean isSet() {
+  public boolean isUntyped() {
     return true;
+  }
+
+  static Type instance() {
+    return INSTANCE;
   }
 }

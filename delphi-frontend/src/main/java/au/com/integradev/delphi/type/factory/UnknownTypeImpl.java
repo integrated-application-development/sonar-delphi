@@ -18,23 +18,19 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
-import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-class DelphiArrayConstructorType extends DelphiType implements ArrayConstructorType {
-  private final ImmutableList<Type> elementTypes;
+public final class UnknownTypeImpl extends TypeImpl {
+  private static final UnknownTypeImpl INSTANCE = new UnknownTypeImpl();
 
-  DelphiArrayConstructorType(List<Type> elementTypes) {
-    this.elementTypes = ImmutableList.copyOf(elementTypes);
+  private UnknownTypeImpl() {
+    // Hide constructor
   }
 
   @Override
   public String getImage() {
-    return "[" + elementTypes.stream().map(Type::getImage).collect(Collectors.joining(",")) + "]";
+    return "<Unknown>";
   }
 
   @Override
@@ -44,12 +40,11 @@ class DelphiArrayConstructorType extends DelphiType implements ArrayConstructorT
   }
 
   @Override
-  public List<Type> elementTypes() {
-    return elementTypes;
+  public boolean isUnknown() {
+    return true;
   }
 
-  @Override
-  public boolean isArrayConstructor() {
-    return true;
+  static Type instance() {
+    return INSTANCE;
   }
 }

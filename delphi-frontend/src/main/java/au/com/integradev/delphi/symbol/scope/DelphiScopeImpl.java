@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
+import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -110,7 +111,7 @@ public class DelphiScopeImpl implements DelphiScope {
 
                 Type forwardType = forwardDeclaration.getType();
                 if (forwardType.isStruct()) {
-                  ((StructType) forwardType).setFullType((StructType) fullType);
+                  ((StructTypeImpl) forwardType).setFullType((StructType) fullType);
                   fullTypeDeclaration.setForwardDeclaration(forwardDeclaration);
                   forwardDeclaration.setIsForwardDeclaration();
                   return true;

@@ -20,12 +20,11 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import java.util.Objects;
@@ -126,7 +125,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     Type type = ((Typed) node.jjtGetParent()).getType();
     if (type.isArrayConstructor()) {
       List<Type> elementTypes = ((ArrayConstructorType) type).elementTypes();
-      Type elementType = elementTypes.stream().findFirst().orElse(DelphiType.voidType());
+      Type elementType = elementTypes.stream().findFirst().orElse(TypeFactory.voidType());
       TypeFactory typeFactory = node.getTypeFactory();
       if (elementType.isInteger()) {
         elementType = typeFactory.getIntrinsic(IntrinsicType.BYTE);

@@ -16,34 +16,43 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type;
+package au.com.integradev.delphi.type.factory;
 
+import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import java.util.List;
+import java.util.Set;
+import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
-public class DelphiUnresolvedType extends DelphiType {
-  private final String image;
+public final class HelperTypeImpl extends StructTypeImpl implements HelperType {
+  private final Type extendedType;
 
-  private DelphiUnresolvedType(String image) {
-    this.image = image;
-  }
-
-  public static Type referenceTo(String image) {
-    return new DelphiUnresolvedType(image);
-  }
-
-  @Override
-  public String getImage() {
-    return image;
-  }
-
-  @Override
-  public int size() {
-    // meta type
-    return 0;
+  HelperTypeImpl(
+      List<ImagePart> imageParts,
+      int size,
+      DelphiScope scope,
+      Set<Type> parents,
+      Type extendedType,
+      StructKind kind) {
+    super(imageParts, size, scope, parents, kind);
+    this.extendedType = extendedType;
   }
 
   @Override
-  public boolean isUnresolved() {
+  @NotNull
+  public Type extendedType() {
+    return extendedType;
+  }
+
+  @Override
+  public boolean isForwardType() {
+    return false;
+  }
+
+  @Override
+  public boolean isHelper() {
     return true;
   }
 }

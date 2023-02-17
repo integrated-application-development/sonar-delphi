@@ -20,7 +20,7 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import com.google.common.collect.ComparisonChain;

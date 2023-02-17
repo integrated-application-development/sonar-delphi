@@ -18,45 +18,39 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.jetbrains.annotations.NotNull;
 
-class DelphiFileType extends DelphiType implements FileType {
-  private final Type fileType;
-  private final int size;
+public final class SetTypeImpl extends TypeImpl implements CollectionType {
+  private final Type elementType;
 
-  DelphiFileType(Type fileType, int size) {
-    this.fileType = fileType;
-    this.size = size;
+  SetTypeImpl(Type elementType) {
+    this.elementType = elementType;
   }
 
   @Override
   public String getImage() {
-    return "file of " + fileType().getImage();
+    return "set of " + elementType().getImage();
   }
 
   @Override
   public int size() {
-    return size;
+    // We're assuming the largest possible size here, but Delphi will actually try to store sets in
+    // less bytes if possible.
+    // See: https://stackoverflow.com/a/30338451
+    return 32;
   }
 
   @Override
-  public Type fileType() {
-    return fileType;
+  @NotNull
+  public Type elementType() {
+    return elementType;
   }
 
   @Override
-  public boolean isFile() {
+  public boolean isSet() {
     return true;
-  }
-
-  @Override
-  public Type specialize(TypeSpecializationContext context) {
-    if (fileType().isTypeParameter()) {
-      return new DelphiFileType(fileType().specialize(context), size);
-    }
-    return this;
   }
 }

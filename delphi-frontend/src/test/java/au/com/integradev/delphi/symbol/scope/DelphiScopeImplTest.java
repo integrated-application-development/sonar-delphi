@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;

@@ -22,7 +22,7 @@
  */
 package au.com.integradev.delphi.pmd.violation;
 
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.pmd.FilePosition;
 import au.com.integradev.delphi.pmd.rules.DelphiRule;

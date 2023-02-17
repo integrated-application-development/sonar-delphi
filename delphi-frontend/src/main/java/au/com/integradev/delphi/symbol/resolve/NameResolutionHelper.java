@@ -18,11 +18,12 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
@@ -486,7 +487,7 @@ public class NameResolutionHelper {
       TypeParameterType parameterType = (TypeParameterType) parameterDeclaration.getType();
       Type argumentType = parameterReference.getType();
       if (argumentType.isTypeParameter()) {
-        ((TypeParameterType) argumentType).setFullType(parameterType);
+        ((TypeParameterTypeImpl) argumentType).setFullType(parameterType);
       }
     }
   }

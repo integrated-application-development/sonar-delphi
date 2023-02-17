@@ -86,7 +86,7 @@ public final class IntrinsicsInjector {
     method("Abs").param(type(REAL)).returns(type(REAL));
     method("Abs").param(type(INTEGER)).returns(type(INTEGER));
     method("Abs").param(type(INT64)).returns(type(INT64));
-    method("Addr").varParam(typeFactory.untypedType()).returns(typeFactory.untypedPointer());
+    method("Addr").varParam(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
     method("Append").varParam(type(TEXT)).returns(type(INTEGER));
     method("Assert").varParam(type(BOOLEAN)).param(type(UNICODESTRING)).required(1);
     method("Assign")
@@ -94,54 +94,54 @@ public final class IntrinsicsInjector {
         .param(type(UNICODESTRING))
         .param(type(WORD))
         .required(2);
-    method("Assigned").varParam(typeFactory.untypedType()).returns(type(BOOLEAN));
+    method("Assigned").varParam(TypeFactory.untypedType()).returns(type(BOOLEAN));
     method("AssignFile")
         .varParam(typeFactory.untypedFile())
         .param(type(UNICODESTRING))
         .param(type(WORD))
         .required(2);
     method("AtomicCmpExchange")
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .param(type(INTEGER))
         .outParam(type(BOOLEAN))
         .required(3)
         .returns(type(INTEGER));
     method("AtomicCmpExchange")
-        .varParam(typeFactory.untypedType())
-        .param(typeFactory.untypedType())
-        .param(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
+        .param(TypeFactory.untypedType())
+        .param(TypeFactory.untypedType())
         .outParam(type(BOOLEAN))
         .required(3)
         .returns(typeFactory.untypedPointer());
     method("AtomicDecrement")
-        .varParam(typeFactory.untypedType())
-        .param(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
+        .param(TypeFactory.untypedType())
         .required(1)
         .returns(type(INTEGER));
     method("AtomicExchange")
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .returns(type(INTEGER));
     method("AtomicExchange")
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .param(typeFactory.untypedPointer())
         .returns(typeFactory.untypedPointer());
     method("AtomicIncrement")
-        .varParam(typeFactory.untypedType())
-        .param(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
+        .param(TypeFactory.untypedType())
         .required(1)
         .returns(type(INTEGER));
     method("BlockRead")
         .varParam(typeFactory.untypedFile())
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .varParam(type(INTEGER))
         .required(3)
         .returns(type(INTEGER));
     method("BlockWrite")
         .varParam(typeFactory.untypedFile())
-        .constParam(typeFactory.untypedType())
+        .constParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .varParam(type(INTEGER))
         .required(3)
@@ -191,12 +191,12 @@ public final class IntrinsicsInjector {
     method("Eoln").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
     method("Erase").varParam(typeFactory.untypedFile());
     method("Exclude").varParam(ANY_SET).param(ANY_ORDINAL);
-    method("Exit").varParam(typeFactory.untypedType()).required(0);
+    method("Exit").varParam(TypeFactory.untypedType()).required(0);
     method("Fail");
     method("FilePos").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
     method("FileSize").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
-    method("FillChar").varParam(typeFactory.untypedType()).param(type(INTEGER)).param(ANY_ORDINAL);
-    method("Finalize").varParam(typeFactory.untypedType()).param(type(NATIVEUINT)).required(1);
+    method("FillChar").varParam(TypeFactory.untypedType()).param(type(INTEGER)).param(ANY_ORDINAL);
+    method("Finalize").varParam(TypeFactory.untypedType()).param(type(NATIVEUINT)).required(1);
     method("FreeMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER)).required(1);
     method("GetDir").param(type(BYTE)).varParam(type(UNICODESTRING));
     method("GetMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
@@ -204,19 +204,19 @@ public final class IntrinsicsInjector {
     method("HasWeakRef").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
     method("Hi").param(type(INTEGER)).returns(type(BYTE));
     method("High")
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.high(typeFactory));
     method("Inc").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
     method("Include").varParam(ANY_SET).param(ANY_ORDINAL);
-    method("Initialize").varParam(typeFactory.untypedType()).param(type(NATIVEINT)).required(1);
+    method("Initialize").varParam(TypeFactory.untypedType()).param(type(NATIVEINT)).required(1);
     method("Insert").param(type(UNICODESTRING)).varParam(type(UNICODESTRING)).param(type(INTEGER));
     method("Insert").param(ANY_DYNAMIC_ARRAY).varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER));
-    method("IsConstValue").param(typeFactory.untypedType()).returns(type(BOOLEAN));
+    method("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
     method("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
     method("Length").param(type(UNICODESTRING)).returns(type(INTEGER));
     method("Length").param(ANY_ARRAY).returns(type(INTEGER));
     method("Lo").param(type(INTEGER)).returns(type(BYTE));
-    method("Low").varParam(typeFactory.untypedType()).returns(IntrinsicReturnType.low(typeFactory));
+    method("Low").varParam(TypeFactory.untypedType()).returns(IntrinsicReturnType.low(typeFactory));
     method("MemoryBarrier");
     method("MulDivInt64")
         .param(type(INT64))
@@ -233,15 +233,15 @@ public final class IntrinsicsInjector {
     method("Ptr").param(type(INTEGER)).returns(typeFactory.untypedPointer());
     method("Read")
         .varParam(typeFactory.untypedFile())
-        .param(typeFactory.untypedType())
-        .variadic(typeFactory.untypedType());
-    method("ReadLn").varParam(typeFactory.untypedFile()).variadic(typeFactory.untypedType());
+        .param(TypeFactory.untypedType())
+        .variadic(TypeFactory.untypedType());
+    method("ReadLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
     method("ReallocMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
     method("Rename").varParam(typeFactory.untypedFile()).param(type(UNICODESTRING));
     method("Reset").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
     method("Rewrite").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
     method("Round")
-        .param(typeFactory.untypedType())
+        .param(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.round(typeFactory));
     method("RunError").param(type(BYTE)).required(0);
     method("Seek").varParam(typeFactory.untypedFile()).param(type(INTEGER));
@@ -256,27 +256,27 @@ public final class IntrinsicsInjector {
     method("SetString").varParam(type(UNICODESTRING)).param(type(PCHAR)).param(type(INTEGER));
     method("SetTextBuf")
         .varParam(type(TEXT))
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .required(2);
-    method("SizeOf").param(typeFactory.untypedType()).returns(type(INTEGER));
+    method("SizeOf").param(TypeFactory.untypedType()).returns(type(INTEGER));
     method("Slice").varParam(ANY_ARRAY).param(type(INTEGER)).returns(typeFactory.untypedPointer());
     method("Sqr").param(type(EXTENDED)).returns(type(EXTENDED));
     method("Sqr").param(type(INTEGER)).returns(type(INTEGER));
     method("Sqr").param(type(REAL)).returns(type(INT64));
-    method("Str").constParam(typeFactory.untypedType()).varParam(type(UNICODESTRING));
+    method("Str").constParam(TypeFactory.untypedType()).varParam(type(UNICODESTRING));
     method("Succ").param(ANY_ORDINAL).returns(type(INTEGER));
     method("Swap").param(type(INTEGER)).returns(type(INTEGER));
     method("Trunc")
-        .param(typeFactory.untypedType())
+        .param(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.trunc(typeFactory));
     method("Truncate").varParam(typeFactory.untypedFile());
-    method("TypeHandle").param(typeFactory.untypedType()).returns(typeFactory.untypedPointer());
-    method("TypeInfo").param(typeFactory.untypedType()).returns(typeFactory.untypedPointer());
+    method("TypeHandle").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
+    method("TypeInfo").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
     method("TypeOf").param(ANY_OBJECT).returns(typeFactory.untypedPointer());
     method("Val")
         .param(type(UNICODESTRING))
-        .varParam(typeFactory.untypedType())
+        .varParam(TypeFactory.untypedType())
         .varParam(type(INTEGER));
     method("VarArrayRedim").varParam(type(VARIANT)).param(type(INTEGER));
     method("VarCast").varParam(type(VARIANT)).param(type(VARIANT)).param(type(INTEGER));
@@ -284,11 +284,11 @@ public final class IntrinsicsInjector {
     method("VarCopy").varParam(type(VARIANT)).param(type(VARIANT));
     method("Write")
         .varParam(typeFactory.untypedFile())
-        .param(typeFactory.untypedType())
-        .variadic(typeFactory.untypedType());
-    method("Write").varParam(typeFactory.untypedType()).variadic(typeFactory.untypedType());
-    method("WriteLn").varParam(typeFactory.untypedFile()).variadic(typeFactory.untypedType());
-    method("WriteLn").variadic(typeFactory.untypedType());
+        .param(TypeFactory.untypedType())
+        .variadic(TypeFactory.untypedType());
+    method("Write").varParam(TypeFactory.untypedType()).variadic(TypeFactory.untypedType());
+    method("WriteLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
+    method("WriteLn").variadic(TypeFactory.untypedType());
   }
 
   private IntrinsicMethod.Builder method(String name) {

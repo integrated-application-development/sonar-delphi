@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.ArrayOption;
+import au.com.integradev.delphi.type.factory.ArrayOption;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.EnumSet;
 import java.util.Set;

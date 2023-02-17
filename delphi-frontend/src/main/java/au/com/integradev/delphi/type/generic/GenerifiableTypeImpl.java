@@ -18,10 +18,11 @@
  */
 package au.com.integradev.delphi.type.generic;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.HashMap;
 import java.util.Map;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 /**
  * Types that can be declared as generics are considered generifiable.
@@ -39,10 +40,10 @@ import java.util.Map;
  * @see <a href="http://docwiki.embarcadero.com/RADStudio/Rio/en/Declaring_Generics">Declaring
  *     Generics</a>
  */
-public abstract class DelphiGenerifiableType extends DelphiType {
-  private final Map<TypeSpecializationContext, DelphiGenerifiableType> cache;
+public abstract class GenerifiableTypeImpl extends TypeImpl {
+  private final Map<TypeSpecializationContext, GenerifiableTypeImpl> cache;
 
-  protected DelphiGenerifiableType() {
+  protected GenerifiableTypeImpl() {
     cache = new HashMap<>();
   }
 
@@ -58,7 +59,7 @@ public abstract class DelphiGenerifiableType extends DelphiType {
       return this;
     }
 
-    DelphiGenerifiableType result = cache.get(context);
+    GenerifiableTypeImpl result = cache.get(context);
     if (result == null) {
       result = this.doSpecialization(context);
       if (result.is(this)) {
@@ -79,7 +80,7 @@ public abstract class DelphiGenerifiableType extends DelphiType {
    * @return the specialized type, or unknown type if generic specialization fails
    * @see Type#specialize(TypeSpecializationContext)
    */
-  protected abstract DelphiGenerifiableType doSpecialization(TypeSpecializationContext context);
+  protected abstract GenerifiableTypeImpl doSpecialization(TypeSpecializationContext context);
 
   /**
    * This method is called on the specialized type after it has been instantiated and cached.

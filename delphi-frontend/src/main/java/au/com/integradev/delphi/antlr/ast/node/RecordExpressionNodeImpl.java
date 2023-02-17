@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -66,6 +66,6 @@ public final class RecordExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   @Nonnull
   protected Type createType() {
-    return DelphiType.unknownType();
+    return TypeFactory.unknownType();
   }
 }

@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
-import static au.com.integradev.delphi.type.DelphiType.untypedType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.ANSISTRING;
@@ -51,7 +51,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.type.ArrayOption;
+import au.com.integradev.delphi.type.factory.ArrayOption;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.operator.BinaryOperator;
@@ -27,7 +27,6 @@ import au.com.integradev.delphi.operator.OperatorInvocableCollector;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
@@ -178,7 +177,7 @@ public final class ExpressionTypeResolver {
       return invocable.getReturnType();
     }
 
-    return DelphiType.unknownType();
+    return TypeFactory.unknownType();
   }
 
   private Set<Invocable> createOperatorInvocables(Type type, Operator operator) {

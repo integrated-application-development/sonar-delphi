@@ -18,13 +18,12 @@
  */
 package au.com.integradev.delphi.operator;
 
-import static au.com.integradev.delphi.type.DelphiType.untypedType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
@@ -240,7 +239,7 @@ public class OperatorInvocableCollector {
     Type elementType =
         type.elementTypes().stream()
             .max(Comparator.comparingInt(Type::size))
-            .orElse(DelphiType.voidType());
+            .orElse(TypeFactory.voidType());
     return typeFactory.arrayConstructor(List.of(elementType));
   }
 

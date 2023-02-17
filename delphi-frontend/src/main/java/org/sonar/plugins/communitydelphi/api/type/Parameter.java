@@ -18,8 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.type;
 
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
-
 public interface Parameter extends Typed, Comparable<Parameter> {
   String getImage();
 

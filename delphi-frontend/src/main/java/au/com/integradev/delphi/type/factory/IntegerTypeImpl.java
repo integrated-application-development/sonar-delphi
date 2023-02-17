@@ -18,19 +18,19 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import com.google.common.math.BigIntegerMath;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-class DelphiIntegerType extends DelphiType implements IntegerType {
+public final class IntegerTypeImpl extends TypeImpl implements IntegerType {
   private final String image;
   private final BigInteger min;
   private final BigInteger max;
   private final int size;
 
-  DelphiIntegerType(String image, int size, boolean signed) {
+  IntegerTypeImpl(String image, int size, boolean signed) {
     this.image = image;
     this.size = size;
     BigInteger capacity = BigInteger.valueOf(256).pow(size).subtract(BigInteger.ONE);

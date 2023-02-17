@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +45,7 @@ public abstract class ProceduralTypeNodeImpl extends TypeNodeImpl implements Pro
   @Override
   public Type getReturnType() {
     MethodReturnTypeNode returnTypeNode = getHeading().getMethodReturnTypeNode();
-    return returnTypeNode == null ? DelphiType.voidType() : returnTypeNode.getTypeNode().getType();
+    return returnTypeNode == null ? TypeFactory.voidType() : returnTypeNode.getTypeNode().getType();
   }
 
   @Override

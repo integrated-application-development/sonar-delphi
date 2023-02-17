@@ -18,37 +18,33 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
-import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
+import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
+import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 
-class DelphiVariantType extends DelphiType implements VariantType {
-  private final String image;
-  private final int size;
-  private final VariantKind kind;
+public final class AnsiStringTypeImpl extends StringTypeImpl implements AnsiStringType {
+  private final int codePage;
 
-  DelphiVariantType(String image, int size, VariantKind kind) {
-    this.image = image;
-    this.size = size;
-    this.kind = kind;
+  AnsiStringTypeImpl(int size, CharacterType characterType, int codePage) {
+    super(null, size, characterType);
+    this.codePage = codePage;
   }
 
   @Override
   public String getImage() {
+    String image = IntrinsicType.ANSISTRING.fullyQualifiedName();
+    if (codePage != 0) {
+      image += "(" + codePage + ")";
+    }
     return image;
   }
 
   @Override
-  public int size() {
-    return size;
-  }
-
-  @Override
-  public boolean isVariant() {
+  public boolean isAnsiString() {
     return true;
   }
 
   @Override
-  public VariantKind kind() {
-    return kind;
+  public int codePage() {
+    return codePage;
   }
 }

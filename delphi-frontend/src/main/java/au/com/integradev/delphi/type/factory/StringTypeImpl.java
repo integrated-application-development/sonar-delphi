@@ -16,35 +16,39 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type;
+package au.com.integradev.delphi.type.factory;
 
-import org.sonar.plugins.communitydelphi.api.type.Type;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 
-class DelphiUntypedType extends DelphiType {
-  private static final DelphiUntypedType INSTANCE = new DelphiUntypedType();
+public class StringTypeImpl extends TypeImpl implements StringType {
+  private final String image;
+  private final int size;
+  private final CharacterType characterType;
 
-  private DelphiUntypedType() {
-    // Hide constructor
+  StringTypeImpl(String image, int size, CharacterType characterType) {
+    this.image = image;
+    this.size = size;
+    this.characterType = characterType;
   }
 
   @Override
   public String getImage() {
-    return "<Untyped>";
+    return image;
+  }
+
+  @Override
+  public CharacterType characterType() {
+    return characterType;
   }
 
   @Override
   public int size() {
-    // SizeOf returns 0 when the argument is an untyped variable.
-    // See: http://docwiki.embarcadero.com/Libraries/en/System.SizeOf
-    return 0;
+    return size;
   }
 
   @Override
-  public boolean isUntyped() {
+  public boolean isString() {
     return true;
-  }
-
-  static Type instance() {
-    return INSTANCE;
   }
 }

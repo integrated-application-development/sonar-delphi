@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
-import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
@@ -31,7 +31,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNam
 class TypeParameterNameDeclarationTest {
   @Test
   void testEquals() {
-    TypeParameterType fooType = DelphiTypeParameterType.create("Foo");
+    TypeParameterType fooType = TypeParameterTypeImpl.create("Foo");
 
     TypeParameterNameDeclaration foo = createTypeParameter(fooType);
     TypeParameterNameDeclaration otherFoo = createTypeParameter(fooType);
@@ -58,7 +58,7 @@ class TypeParameterNameDeclarationTest {
   }
 
   private static TypeParameterNameDeclaration createTypeParameter(String name) {
-    return createTypeParameter(DelphiTypeParameterType.create(name));
+    return createTypeParameter(TypeParameterTypeImpl.create(name));
   }
 
   private static TypeParameterNameDeclaration createTypeParameter(TypeParameterType type) {

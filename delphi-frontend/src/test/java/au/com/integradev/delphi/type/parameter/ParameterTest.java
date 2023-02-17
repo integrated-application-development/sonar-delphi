@@ -22,10 +22,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
@@ -34,8 +35,8 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 
 class ParameterTest {
-  private static final Type TYPE_PARAMETER = DelphiTypeParameterType.create("T");
-  private static final Type TYPE_ARGUMENT = DelphiType.untypedType();
+  private static final Type TYPE_PARAMETER = TypeParameterTypeImpl.create("T");
+  private static final Type TYPE_ARGUMENT = TypeFactory.untypedType();
 
   @Test
   void testIntrinsicParametersCannotBeSpecialized() {
@@ -81,6 +82,6 @@ class ParameterTest {
     when(generifiableDeclaration.isGeneric()).thenReturn(true);
     when(generifiableDeclaration.getTypeParameters()).thenReturn(List.of(typedDeclaration));
 
-    return new TypeSpecializationContext(generifiableDeclaration, List.of(TYPE_ARGUMENT));
+    return new TypeSpecializationContextImpl(generifiableDeclaration, List.of(TYPE_ARGUMENT));
   }
 }

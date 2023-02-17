@@ -18,37 +18,33 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
-import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
-class DelphiStringType extends DelphiType implements StringType {
-  private final String image;
-  private final int size;
-  private final CharacterType characterType;
+public final class VoidTypeImpl extends TypeImpl {
+  private static final VoidTypeImpl INSTANCE = new VoidTypeImpl();
 
-  DelphiStringType(String image, int size, CharacterType characterType) {
-    this.image = image;
-    this.size = size;
-    this.characterType = characterType;
+  private VoidTypeImpl() {
+    // Hide constructor
   }
 
   @Override
   public String getImage() {
-    return image;
-  }
-
-  @Override
-  public CharacterType characterType() {
-    return characterType;
+    return "<Void>";
   }
 
   @Override
   public int size() {
-    return size;
+    // meta type
+    return 0;
   }
 
   @Override
-  public boolean isString() {
+  public boolean isVoid() {
     return true;
+  }
+
+  static Type instance() {
+    return INSTANCE;
   }
 }

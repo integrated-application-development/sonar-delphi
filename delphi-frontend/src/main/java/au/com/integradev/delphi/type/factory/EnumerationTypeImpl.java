@@ -18,16 +18,18 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
-import org.sonar.plugins.communitydelphi.api.type.Type.BooleanType;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
+import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
-class DelphiBooleanType extends DelphiType implements BooleanType {
+public final class EnumerationTypeImpl extends TypeImpl implements EnumType {
   private final String image;
-  private final int size;
+  private final DelphiScope scope;
 
-  DelphiBooleanType(String image, int size) {
+  EnumerationTypeImpl(String image, DelphiScope scope) {
     this.image = image;
-    this.size = size;
+    this.scope = scope;
   }
 
   @Override
@@ -37,11 +39,19 @@ class DelphiBooleanType extends DelphiType implements BooleanType {
 
   @Override
   public int size() {
-    return size;
+    // Assumes $MinEnumSize 1 and 256 elements or less.
+    // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re440.html
+    return 1;
   }
 
   @Override
-  public boolean isBoolean() {
+  @NotNull
+  public DelphiScope typeScope() {
+    return scope;
+  }
+
+  @Override
+  public boolean isEnum() {
     return true;
   }
 }

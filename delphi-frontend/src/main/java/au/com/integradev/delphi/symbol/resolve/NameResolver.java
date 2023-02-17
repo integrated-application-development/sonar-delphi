@@ -19,21 +19,23 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
-import static au.com.integradev.delphi.type.DelphiType.voidType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
+import au.com.integradev.delphi.type.factory.StructTypeImpl;
+import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import au.com.integradev.delphi.symbol.Search;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
-import au.com.integradev.delphi.type.DelphiUnresolvedType;
+import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
@@ -47,8 +49,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
@@ -325,8 +326,7 @@ public class NameResolver {
       MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
       DelphiNode inheritedNode = node.jjtGetChild(0);
 
-      NameOccurrenceImpl occurrence =
-          new NameOccurrenceImpl(inheritedNode, method.simpleName());
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(inheritedNode, method.simpleName());
       occurrence.setIsExplicitInvocation(true);
       addName(occurrence);
       searchForDeclaration(occurrence);
@@ -425,7 +425,7 @@ public class NameResolver {
             genericArguments.findChildrenOfType(TypeReferenceNode.class).stream()
                 .map(TypeReferenceNode::getNameNode)
                 .map(Node::getImage)
-                .map(DelphiUnresolvedType::referenceTo)
+                .map(UnresolvedTypeImpl::referenceTo)
                 .collect(Collectors.toUnmodifiableList()));
       }
 
@@ -505,7 +505,7 @@ public class NameResolver {
       MethodScope methodScope, List<TypeReferenceNode> typeReferences) {
     for (TypeReferenceNode typeNode : typeReferences) {
       NameReferenceNode typeReference = typeNode.getNameNode();
-      TypeParameterType type = DelphiTypeParameterType.create(typeReference.getImage());
+      TypeParameterType type = TypeParameterTypeImpl.create(typeReference.getImage());
       NameDeclaration declaration = new TypeParameterNameDeclarationImpl(typeReference, type);
       ((DelphiScopeImpl) methodScope).addDeclaration(declaration);
 
@@ -581,7 +581,7 @@ public class NameResolver {
             .map(
                 declaration -> {
                   List<Type> typeArguments = occurrence.getTypeArguments();
-                  var context = new TypeSpecializationContext(declaration, typeArguments);
+                  var context = new TypeSpecializationContextImpl(declaration, typeArguments);
                   return declaration.specialize(context);
                 })
             .collect(Collectors.toSet());
@@ -732,7 +732,7 @@ public class NameResolver {
 
     if (type.isStruct()) {
       StructType structType = (StructType) type;
-      Set<NameDeclaration> defaultArrayProperties = structType.findDefaultArrayProperties();
+      var defaultArrayProperties = ((StructTypeImpl) structType).findDefaultArrayProperties();
       if (!defaultArrayProperties.isEmpty()) {
         NameResolver propertyResolver = new NameResolver(this);
         propertyResolver.declarations = defaultArrayProperties;

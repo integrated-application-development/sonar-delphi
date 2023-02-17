@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.operator.OperatorIntrinsic;
+import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.util.ArrayList;
@@ -215,7 +215,7 @@ public final class InvocationCandidate {
             .map(argumentsByTypeParameters::get)
             .collect(Collectors.toUnmodifiableList());
 
-    var context = new TypeSpecializationContext(methodDeclaration, typeArguments);
+    var context = new TypeSpecializationContextImpl(methodDeclaration, typeArguments);
     Invocable specialized = (Invocable) methodDeclaration.specialize(context);
 
     return new InvocationCandidate(specialized);

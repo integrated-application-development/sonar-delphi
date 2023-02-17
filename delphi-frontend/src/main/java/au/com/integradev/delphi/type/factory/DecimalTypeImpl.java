@@ -18,18 +18,16 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.DecimalType;
 
-class DelphiTypeType extends DelphiType implements TypeType {
+public final class DecimalTypeImpl extends TypeImpl implements DecimalType {
   private final String image;
-  private final Type originalType;
+  private final int size;
 
-  DelphiTypeType(String image, Type originalType) {
+  DecimalTypeImpl(String image, int size) {
     this.image = image;
-    this.originalType = originalType;
+    this.size = size;
   }
 
   @Override
@@ -38,25 +36,12 @@ class DelphiTypeType extends DelphiType implements TypeType {
   }
 
   @Override
-  public int size() {
-    return originalType.size();
-  }
-
-  @Override
-  public Type originalType() {
-    return originalType;
-  }
-
-  @Override
-  public boolean isTypeType() {
+  public boolean isDecimal() {
     return true;
   }
 
   @Override
-  public Type specialize(TypeSpecializationContext context) {
-    if (originalType.isTypeParameter()) {
-      return new DelphiTypeType(getImage(), originalType.specialize(context));
-    }
-    return this;
+  public int size() {
+    return size;
   }
 }

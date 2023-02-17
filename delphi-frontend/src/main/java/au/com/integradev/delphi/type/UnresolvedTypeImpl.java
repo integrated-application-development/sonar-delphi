@@ -16,20 +16,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type.factory;
+package au.com.integradev.delphi.type;
 
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.jetbrains.annotations.NotNull;
 
-class DelphiSubrangeType extends DelphiType implements SubrangeType {
+public final class UnresolvedTypeImpl extends TypeImpl {
   private final String image;
-  private final Type hostType;
 
-  DelphiSubrangeType(String image, Type hostType) {
+  private UnresolvedTypeImpl(String image) {
     this.image = image;
-    this.hostType = hostType;
+  }
+
+  public static Type referenceTo(String image) {
+    return new UnresolvedTypeImpl(image);
   }
 
   @Override
@@ -39,17 +38,12 @@ class DelphiSubrangeType extends DelphiType implements SubrangeType {
 
   @Override
   public int size() {
-    return hostType.size();
+    // meta type
+    return 0;
   }
 
   @Override
-  @NotNull
-  public Type hostType() {
-    return hostType;
-  }
-
-  @Override
-  public boolean isSubrange() {
+  public boolean isUnresolved() {
     return true;
   }
 }

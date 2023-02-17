@@ -16,34 +16,47 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type;
+package au.com.integradev.delphi.type.factory;
 
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-class DelphiVoidType extends DelphiType {
-  private static final DelphiVoidType INSTANCE = new DelphiVoidType();
+public final class TypeTypeImpl extends TypeImpl implements TypeType {
+  private final String image;
+  private final Type originalType;
 
-  private DelphiVoidType() {
-    // Hide constructor
+  TypeTypeImpl(String image, Type originalType) {
+    this.image = image;
+    this.originalType = originalType;
   }
 
   @Override
   public String getImage() {
-    return "<Void>";
+    return image;
   }
 
   @Override
   public int size() {
-    // meta type
-    return 0;
+    return originalType.size();
   }
 
   @Override
-  public boolean isVoid() {
+  public Type originalType() {
+    return originalType;
+  }
+
+  @Override
+  public boolean isTypeType() {
     return true;
   }
 
-  static Type instance() {
-    return INSTANCE;
+  @Override
+  public Type specialize(TypeSpecializationContext context) {
+    if (originalType.isTypeParameter()) {
+      return new TypeTypeImpl(getImage(), originalType.specialize(context));
+    }
+    return this;
   }
 }

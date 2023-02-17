@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,7 +78,7 @@ public final class FormalParameterNodeImpl extends DelphiNodeImpl implements For
   @Nonnull
   public Type getType() {
     TypeNode typeNode = getTypeNode();
-    return (typeNode == null) ? DelphiType.untypedType() : typeNode.getType();
+    return (typeNode == null) ? TypeFactory.untypedType() : typeNode.getType();
   }
 
   private static final class FormalParameterDataImpl implements FormalParameterData {

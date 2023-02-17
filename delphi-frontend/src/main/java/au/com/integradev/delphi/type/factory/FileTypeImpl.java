@@ -18,40 +18,45 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
-import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
-import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-class DelphiEnumerationType extends DelphiType implements EnumType {
-  private final String image;
-  private final DelphiScope scope;
+public class FileTypeImpl extends TypeImpl implements FileType {
+  private final Type fileType;
+  private final int size;
 
-  DelphiEnumerationType(String image, DelphiScope scope) {
-    this.image = image;
-    this.scope = scope;
+  FileTypeImpl(Type fileType, int size) {
+    this.fileType = fileType;
+    this.size = size;
   }
 
   @Override
   public String getImage() {
-    return image;
+    return "file of " + fileType().getImage();
   }
 
   @Override
   public int size() {
-    // Assumes $MinEnumSize 1 and 256 elements or less.
-    // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re440.html
-    return 1;
+    return size;
   }
 
   @Override
-  @NotNull
-  public DelphiScope typeScope() {
-    return scope;
+  public Type fileType() {
+    return fileType;
   }
 
   @Override
-  public boolean isEnum() {
+  public boolean isFile() {
     return true;
+  }
+
+  @Override
+  public Type specialize(TypeSpecializationContext context) {
+    if (fileType().isTypeParameter()) {
+      return new FileTypeImpl(fileType().specialize(context), size);
+    }
+    return this;
   }
 }

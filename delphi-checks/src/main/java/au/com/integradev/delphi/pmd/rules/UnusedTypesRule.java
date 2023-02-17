@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import net.sourceforge.pmd.RuleContext;
@@ -55,7 +55,7 @@ public class UnusedTypesRule extends AbstractDelphiRule {
         typeScope = scope;
       }
 
-      Type foundType = DelphiType.unknownType();
+      Type foundType = TypeFactory.unknownType();
       if (typeScope instanceof TypeScope) {
         foundType = ((TypeScope) typeScope).getType();
       }

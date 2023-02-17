@@ -18,56 +18,38 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
-
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
-import java.util.Objects;
+import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
-class DelphiClassReferenceType extends DelphiType implements ClassReferenceType, ScopedType {
+public final class SubrangeTypeImpl extends TypeImpl implements SubrangeType {
   private final String image;
-  private Type classType;
-  private final int size;
+  private final Type hostType;
 
-  DelphiClassReferenceType(@Nullable String image, Type classType, int size) {
+  SubrangeTypeImpl(String image, Type hostType) {
     this.image = image;
-    this.classType = classType;
-    this.size = size;
+    this.hostType = hostType;
   }
 
   @Override
   public String getImage() {
-    return Objects.requireNonNullElse(image, "class of " + classType.getImage());
+    return image;
   }
 
   @Override
   public int size() {
-    return size;
-  }
-
-  @Override
-  public boolean isClassReference() {
-    return true;
+    return hostType.size();
   }
 
   @Override
   @NotNull
-  public DelphiScope typeScope() {
-    return classType instanceof ScopedType ? ((ScopedType) classType).typeScope() : unknownScope();
+  public Type hostType() {
+    return hostType;
   }
 
   @Override
-  public Type classType() {
-    return classType;
-  }
-
-  @Override
-  public void setClassType(Type type) {
-    this.classType = type;
+  public boolean isSubrange() {
+    return true;
   }
 }

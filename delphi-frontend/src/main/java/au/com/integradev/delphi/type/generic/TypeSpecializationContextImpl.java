@@ -29,12 +29,13 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-public final class TypeSpecializationContext {
+public final class TypeSpecializationContextImpl implements TypeSpecializationContext {
   private static final Comparator<Type> COMPARATOR = Comparator.comparing(Type::getImage);
   private final Map<Type, Type> argumentsByParameter;
 
-  public TypeSpecializationContext(NameDeclaration declaration, List<Type> typeArguments) {
+  public TypeSpecializationContextImpl(NameDeclaration declaration, List<Type> typeArguments) {
     argumentsByParameter = new TreeMap<>(COMPARATOR);
 
     if (!(declaration instanceof GenerifiableDeclaration)) {
@@ -58,11 +59,13 @@ public final class TypeSpecializationContext {
     }
   }
 
+  @Override
   @Nullable
   public Type getArgument(Type parameter) {
     return argumentsByParameter.get(parameter);
   }
 
+  @Override
   public boolean hasSignatureMismatch() {
     return argumentsByParameter.isEmpty();
   }
@@ -75,7 +78,7 @@ public final class TypeSpecializationContext {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TypeSpecializationContext that = (TypeSpecializationContext) o;
+    TypeSpecializationContextImpl that = (TypeSpecializationContextImpl) o;
     return argumentsByParameter.equals(that.argumentsByParameter);
   }
 

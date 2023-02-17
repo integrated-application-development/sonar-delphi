@@ -21,7 +21,7 @@ package au.com.integradev.delphi.symbol;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
@@ -112,7 +112,7 @@ class NameOccurrenceImplTest {
     assertThat(occurrenceA).isNotEqualTo(occurrenceH);
 
     NameOccurrenceImpl occurrenceI = new NameOccurrenceImpl(foo);
-    occurrenceI.setTypeArguments(List.of(DelphiType.unknownType()));
+    occurrenceI.setTypeArguments(List.of(TypeFactory.unknownType()));
     assertThat(occurrenceA).isNotEqualTo(occurrenceI);
   }
 

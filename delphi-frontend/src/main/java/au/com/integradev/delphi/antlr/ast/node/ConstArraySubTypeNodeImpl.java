@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
@@ -45,6 +45,6 @@ public final class ConstArraySubTypeNodeImpl extends TypeNodeImpl implements Con
       TypeNameDeclaration varRec = fileScope.getSystemScope().getTVarRecDeclaration();
       return varRec.getType();
     }
-    return DelphiType.unknownType();
+    return TypeFactory.unknownType();
   }
 }

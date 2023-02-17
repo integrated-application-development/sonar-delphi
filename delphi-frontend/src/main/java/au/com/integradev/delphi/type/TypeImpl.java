@@ -18,30 +18,20 @@
  */
 package au.com.integradev.delphi.type;
 
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import au.com.integradev.delphi.type.factory.TypeFactory;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public abstract class DelphiType implements Type {
-  public static Type unknownType() {
-    return DelphiUnknownType.instance();
-  }
-
-  public static Type untypedType() {
-    return DelphiUntypedType.instance();
-  }
-
-  public static Type voidType() {
-    return DelphiVoidType.instance();
-  }
+public abstract class TypeImpl implements Type {
 
   @NotNull
   @Override
   public Type superType() {
-    return unknownType();
+    return TypeFactory.unknownType();
   }
 
   @Override

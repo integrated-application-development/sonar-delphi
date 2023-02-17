@@ -29,9 +29,9 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EQUAL;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
-import static au.com.integradev.delphi.type.DelphiType.untypedType;
-import static au.com.integradev.delphi.type.DelphiType.voidType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.OBJECT;
@@ -46,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
-import au.com.integradev.delphi.type.ArrayOption;
+import au.com.integradev.delphi.type.factory.ArrayOption;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;

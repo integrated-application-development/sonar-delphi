@@ -20,9 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import java.util.ArrayList;
@@ -152,7 +152,7 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
     if (typedDeclaration instanceof TypedDeclaration) {
       return ((Typed) typedDeclaration).getType();
     } else {
-      return DelphiType.unknownType();
+      return TypeFactory.unknownType();
     }
   }
 

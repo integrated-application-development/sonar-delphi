@@ -26,8 +26,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.ArrayOption;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -45,14 +44,14 @@ class IntrinsicArgumentMatcherTest {
     assertThat(
             matches(
                 ANY_DYNAMIC_ARRAY,
-                FACTORY.array("TFoo", DelphiType.untypedType(), Set.of(ArrayOption.DYNAMIC))))
+                FACTORY.array("TFoo", TypeFactory.untypedType(), Set.of(ArrayOption.DYNAMIC))))
         .isTrue();
     assertThat(
             matches(
                 ANY_DYNAMIC_ARRAY,
-                FACTORY.array("TBar", DelphiType.untypedType(), Set.of(ArrayOption.FIXED))))
+                FACTORY.array("TBar", TypeFactory.untypedType(), Set.of(ArrayOption.FIXED))))
         .isFalse();
-    assertThat(matches(ANY_DYNAMIC_ARRAY, FACTORY.set(DelphiType.untypedType()))).isFalse();
+    assertThat(matches(ANY_DYNAMIC_ARRAY, FACTORY.set(TypeFactory.untypedType()))).isFalse();
   }
 
   @Test
@@ -62,7 +61,7 @@ class IntrinsicArgumentMatcherTest {
     assertThat(
             matches(
                 ANY_SET,
-                FACTORY.array("TFoo", DelphiType.untypedType(), Set.of(ArrayOption.DYNAMIC))))
+                FACTORY.array("TFoo", TypeFactory.untypedType(), Set.of(ArrayOption.DYNAMIC))))
         .isFalse();
   }
 

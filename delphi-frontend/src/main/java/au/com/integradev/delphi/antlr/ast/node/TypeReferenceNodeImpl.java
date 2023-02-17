@@ -20,7 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
-import au.com.integradev.delphi.type.DelphiUnresolvedType;
+import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import javax.annotation.Nonnull;
@@ -62,7 +62,7 @@ public final class TypeReferenceNodeImpl extends TypeNodeImpl implements TypeRef
     if (declaration instanceof Typed) {
       return ((Typed) declaration).getType();
     }
-    return DelphiUnresolvedType.referenceTo(getNameNode().getImage());
+    return UnresolvedTypeImpl.referenceTo(getNameNode().getImage());
   }
 
   @Override

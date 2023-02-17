@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.Collections;
@@ -105,7 +105,7 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
                     .map(FormalParameter::create)
                     .collect(Collectors.toUnmodifiableList()),
             returnTypeNode == null
-                ? DelphiType.voidType()
+                ? TypeFactory.voidType()
                 : returnTypeNode.getTypeNode().getType());
   }
 }

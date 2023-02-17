@@ -18,14 +18,14 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
-import org.sonar.plugins.communitydelphi.api.type.Type.CharacterType;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.BooleanType;
 
-class DelphiCharacterType extends DelphiType implements CharacterType {
+public final class BooleanTypeImpl extends TypeImpl implements BooleanType {
   private final String image;
   private final int size;
 
-  DelphiCharacterType(String image, int size) {
+  BooleanTypeImpl(String image, int size) {
     this.image = image;
     this.size = size;
   }
@@ -41,7 +41,7 @@ class DelphiCharacterType extends DelphiType implements CharacterType {
   }
 
   @Override
-  public boolean isChar() {
+  public boolean isBoolean() {
     return true;
   }
 }

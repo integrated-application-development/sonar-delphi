@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.symbol.scope;
 
 import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.compilerVariable;
-import static au.com.integradev.delphi.type.DelphiType.unknownType;
+import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

@@ -22,50 +22,51 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 class TypeSpecializationContextTest {
   @Test
   void testInvalidDeclarationProducesEmptyContext() {
     TypeSpecializationContext context =
-        new TypeSpecializationContext(
-            mock(NameDeclaration.class), List.of(DelphiType.untypedType()));
+        new TypeSpecializationContextImpl(
+            mock(NameDeclaration.class), List.of(TypeFactory.untypedType()));
 
     assertThat(context)
         .isEqualTo(
-            new TypeSpecializationContext(mock(NameDeclaration.class), Collections.emptyList()));
+            new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList()));
   }
 
   @Test
   void testParameterArgumentMismatchProducesInvalidContext() {
     TypedDeclaration typedDeclaration = mock(TypedDeclaration.class);
-    when(typedDeclaration.getType()).thenReturn(DelphiTypeParameterType.create("T"));
+    when(typedDeclaration.getType()).thenReturn(TypeParameterTypeImpl.create("T"));
 
     GenerifiableDeclaration generifiableDeclaration = mock(GenerifiableDeclaration.class);
     when(generifiableDeclaration.isGeneric()).thenReturn(true);
     when(generifiableDeclaration.getTypeParameters()).thenReturn(List.of(typedDeclaration));
 
     TypeSpecializationContext invalidContext =
-        new TypeSpecializationContext(
-            generifiableDeclaration, List.of(DelphiType.untypedType(), DelphiType.untypedType()));
+        new TypeSpecializationContextImpl(
+            generifiableDeclaration, List.of(TypeFactory.untypedType(), TypeFactory.untypedType()));
 
     assertThat(invalidContext.hasSignatureMismatch()).isTrue();
     assertThat(invalidContext)
-        .isEqualTo(new TypeSpecializationContext(generifiableDeclaration, Collections.emptyList()));
+        .isEqualTo(new TypeSpecializationContextImpl(generifiableDeclaration, Collections.emptyList()));
   }
 
   @Test
   void testEquals() {
     TypeSpecializationContext context =
-        new TypeSpecializationContext(mock(NameDeclaration.class), Collections.emptyList());
+        new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList());
     TypeSpecializationContext other =
-        new TypeSpecializationContext(mock(NameDeclaration.class), Collections.emptyList());
+        new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList());
 
     assertThat(context)
         .isEqualTo(context)

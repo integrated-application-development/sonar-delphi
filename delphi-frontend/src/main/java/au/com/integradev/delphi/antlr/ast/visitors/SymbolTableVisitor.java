@@ -47,10 +47,10 @@ import au.com.integradev.delphi.symbol.scope.SystemScopeImpl;
 import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
 import au.com.integradev.delphi.symbol.scope.UnitScopeImpl;
 import au.com.integradev.delphi.symbol.scope.WithScopeImpl;
+import au.com.integradev.delphi.type.factory.ClassReferenceTypeImpl;
+import au.com.integradev.delphi.type.factory.PointerTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
-import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
@@ -694,12 +694,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         var classReference = (ClassReferenceTypeNode) typeDeclaration.getTypeNode();
         TypeNode classOf = classReference.getClassOfTypeNode();
         data.nameResolutionHelper.resolve(classOf);
-        ((ClassReferenceType) classReference.getType()).setClassType(classOf.getType());
+        ((ClassReferenceTypeImpl) classReference.getType()).setClassType(classOf.getType());
       } else if (typeDeclaration.isPointer()) {
         var pointer = (PointerTypeNode) typeDeclaration.getTypeNode();
         TypeNode dereferenced = pointer.getDereferencedTypeNode();
         data.nameResolutionHelper.resolve(dereferenced);
-        ((PointerType) pointer.getType()).setDereferencedType(dereferenced.getType());
+        ((PointerTypeImpl) pointer.getType()).setDereferencedType(dereferenced.getType());
       }
     }
 
@@ -737,7 +737,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     if (!node.isTypeAlias()
         && type.isPointer()
         && data.switchRegistry.isActiveSwitch(POINTERMATH, node.getTokenIndex())) {
-      ((PointerType) type).setAllowsPointerMath();
+      ((PointerTypeImpl) type).setAllowsPointerMath();
     }
 
     DelphiScope parent = Objects.requireNonNull(data.currentScope().getParent());

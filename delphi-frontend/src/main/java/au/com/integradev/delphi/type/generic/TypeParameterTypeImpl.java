@@ -18,25 +18,26 @@
  */
 package au.com.integradev.delphi.type.generic;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-public class DelphiTypeParameterType extends DelphiType implements TypeParameterType {
+public class TypeParameterTypeImpl extends TypeImpl implements TypeParameterType {
   private final String image;
   private List<Type> constraints;
 
-  private DelphiTypeParameterType(String image, List<Type> constraints) {
+  private TypeParameterTypeImpl(String image, List<Type> constraints) {
     this.image = image;
     this.constraints = ImmutableList.copyOf(constraints);
   }
 
   public static TypeParameterType create(String image, List<Type> constraints) {
-    return new DelphiTypeParameterType(image, constraints);
+    return new TypeParameterTypeImpl(image, constraints);
   }
 
   public static TypeParameterType create(String image) {
@@ -75,7 +76,11 @@ public class DelphiTypeParameterType extends DelphiType implements TypeParameter
     return Objects.requireNonNullElse(type, this);
   }
 
-  @Override
+  /**
+   * Adds information from the full type parameter declaration.
+   *
+   * @param fullType Type representing the full type declaration
+   */
   public void setFullType(TypeParameterType fullType) {
     this.constraints = fullType.constraints();
   }

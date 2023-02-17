@@ -18,41 +18,30 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import org.sonar.plugins.communitydelphi.api.type.StructKind;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
-import java.util.List;
-import java.util.Set;
-import org.jetbrains.annotations.NotNull;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.CharacterType;
 
-class DelphiHelperType extends DelphiStructType implements HelperType {
-  private final Type extendedType;
+public final class CharacterTypeImpl extends TypeImpl implements CharacterType {
+  private final String image;
+  private final int size;
 
-  DelphiHelperType(
-      List<ImagePart> imageParts,
-      int size,
-      DelphiScope scope,
-      Set<Type> parents,
-      Type extendedType,
-      StructKind kind) {
-    super(imageParts, size, scope, parents, kind);
-    this.extendedType = extendedType;
+  CharacterTypeImpl(String image, int size) {
+    this.image = image;
+    this.size = size;
   }
 
   @Override
-  @NotNull
-  public Type extendedType() {
-    return extendedType;
+  public String getImage() {
+    return image;
   }
 
   @Override
-  public boolean isForwardType() {
-    return false;
+  public int size() {
+    return size;
   }
 
   @Override
-  public boolean isHelper() {
+  public boolean isChar() {
     return true;
   }
 }

@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
-public final class IntrinsicArgumentMatcher extends DelphiType {
+public final class IntrinsicArgumentMatcher extends TypeImpl {
   public static final Type ANY_DYNAMIC_ARRAY =
       new IntrinsicArgumentMatcher("<dynamic array>", Type::isDynamicArray);
 

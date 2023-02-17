@@ -16,11 +16,39 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type;
+package au.com.integradev.delphi.type.factory;
 
-public enum ArrayOption {
-  FIXED,
-  DYNAMIC,
-  OPEN,
-  ARRAY_OF_CONST
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
+
+public final class VariantTypeImpl extends TypeImpl implements VariantType {
+  private final String image;
+  private final int size;
+  private final VariantKind kind;
+
+  VariantTypeImpl(String image, int size, VariantKind kind) {
+    this.image = image;
+    this.size = size;
+    this.kind = kind;
+  }
+
+  @Override
+  public String getImage() {
+    return image;
+  }
+
+  @Override
+  public int size() {
+    return size;
+  }
+
+  @Override
+  public boolean isVariant() {
+    return true;
+  }
+
+  @Override
+  public VariantKind kind() {
+    return kind;
+  }
 }

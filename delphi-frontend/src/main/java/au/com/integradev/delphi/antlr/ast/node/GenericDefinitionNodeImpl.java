@@ -22,7 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
-import au.com.integradev.delphi.type.generic.DelphiTypeParameterType;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +62,7 @@ public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
                 .collect(Collectors.toUnmodifiableList());
 
         for (NameDeclarationNode name : parameterNode.getTypeParameterNameNodes()) {
-          TypeParameterType type = DelphiTypeParameterType.create(name.getImage(), constraints);
+          TypeParameterType type = TypeParameterTypeImpl.create(name.getImage(), constraints);
           TypeParameter typeParameter = new TypeParameterImpl(name, type);
           builder.add(typeParameter);
         }

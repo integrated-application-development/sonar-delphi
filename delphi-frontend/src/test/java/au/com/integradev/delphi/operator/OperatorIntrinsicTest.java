@@ -20,7 +20,7 @@ package au.com.integradev.delphi.operator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 class OperatorIntrinsicTest {
   private static final OperatorIntrinsic INTRINSIC =
-      new OperatorIntrinsic("Foo", List.of(DelphiType.untypedType()), DelphiType.voidType());
+      new OperatorIntrinsic("Foo", List.of(TypeFactory.untypedType()), TypeFactory.voidType());
 
   @Test
   void testGetName() {
@@ -38,12 +38,12 @@ class OperatorIntrinsicTest {
   @Test
   void testGetParameters() {
     assertThat(INTRINSIC.getParameters())
-        .isEqualTo(List.of(IntrinsicParameter.create(DelphiType.untypedType())));
+        .isEqualTo(List.of(IntrinsicParameter.create(TypeFactory.untypedType())));
   }
 
   @Test
   void testGetReturnType() {
-    assertThat(INTRINSIC.getReturnType()).isEqualTo(DelphiType.voidType());
+    assertThat(INTRINSIC.getReturnType()).isEqualTo(TypeFactory.voidType());
   }
 
   @Test
@@ -59,13 +59,13 @@ class OperatorIntrinsicTest {
   @Test
   void testEquals() {
     OperatorIntrinsic equal =
-        new OperatorIntrinsic("Foo", List.of(DelphiType.untypedType()), DelphiType.voidType());
+        new OperatorIntrinsic("Foo", List.of(TypeFactory.untypedType()), TypeFactory.voidType());
     OperatorIntrinsic differentName =
-        new OperatorIntrinsic("Bar", List.of(DelphiType.untypedType()), DelphiType.voidType());
+        new OperatorIntrinsic("Bar", List.of(TypeFactory.untypedType()), TypeFactory.voidType());
     OperatorIntrinsic differentParameters =
-        new OperatorIntrinsic("Foo", Collections.emptyList(), DelphiType.voidType());
+        new OperatorIntrinsic("Foo", Collections.emptyList(), TypeFactory.voidType());
     OperatorIntrinsic differentReturnType =
-        new OperatorIntrinsic("Foo", List.of(DelphiType.untypedType()), DelphiType.untypedType());
+        new OperatorIntrinsic("Foo", List.of(TypeFactory.untypedType()), TypeFactory.untypedType());
 
     assertThat(INTRINSIC)
         .isEqualTo(INTRINSIC)

@@ -25,8 +25,6 @@ import au.com.integradev.delphi.compiler.Architecture;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.compiler.Toolchain;
-import au.com.integradev.delphi.type.ArrayOption;
-import au.com.integradev.delphi.type.DelphiType;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
@@ -45,7 +43,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
-import au.com.integradev.delphi.type.factory.DelphiStructType.ImagePart;
+import au.com.integradev.delphi.type.factory.StructTypeImpl.ImagePart;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import java.math.BigInteger;
@@ -87,9 +85,9 @@ public class TypeFactory {
     this.toolchain = toolchain;
     this.compilerVersion = compilerVersion;
     this.intrinsicTypes = new EnumMap<>(IntrinsicType.class);
-    this.nilPointer = pointerTo("nil", DelphiType.voidType());
-    this.untypedFile = fileOf(DelphiType.untypedType());
-    this.emptySet = new DelphiSetType(DelphiType.voidType());
+    this.nilPointer = pointerTo("nil", voidType());
+    this.untypedFile = fileOf(untypedType());
+    this.emptySet = new SetTypeImpl(voidType());
     createIntrinsicTypes();
   }
 
@@ -153,26 +151,26 @@ public class TypeFactory {
   }
 
   private void addBoolean(IntrinsicType intrinsic, int size) {
-    intrinsicTypes.put(intrinsic, new DelphiBooleanType(intrinsic.fullyQualifiedName(), size));
+    intrinsicTypes.put(intrinsic, new BooleanTypeImpl(intrinsic.fullyQualifiedName(), size));
   }
 
   private void addDecimal(IntrinsicType intrinsic, int size) {
-    intrinsicTypes.put(intrinsic, new DelphiDecimalType(intrinsic.fullyQualifiedName(), size));
+    intrinsicTypes.put(intrinsic, new DecimalTypeImpl(intrinsic.fullyQualifiedName(), size));
   }
 
   private void addInteger(IntrinsicType intrinsic, int size, boolean signed) {
     intrinsicTypes.put(
-        intrinsic, new DelphiIntegerType(intrinsic.fullyQualifiedName(), size, signed));
+        intrinsic, new IntegerTypeImpl(intrinsic.fullyQualifiedName(), size, signed));
   }
 
   private void addChar(IntrinsicType intrinsic, int size) {
-    intrinsicTypes.put(intrinsic, new DelphiCharacterType(intrinsic.fullyQualifiedName(), size));
+    intrinsicTypes.put(intrinsic, new CharacterTypeImpl(intrinsic.fullyQualifiedName(), size));
   }
 
   private void addString(IntrinsicType intrinsic, int size, IntrinsicType charType) {
     intrinsicTypes.put(
         intrinsic,
-        new DelphiStringType(
+        new StringTypeImpl(
             intrinsic.fullyQualifiedName(), size, (CharacterType) getIntrinsic(charType)));
   }
 
@@ -180,12 +178,11 @@ public class TypeFactory {
       IntrinsicType intrinsic, Type dereferenced, int size, boolean pointerMath) {
     intrinsicTypes.put(
         intrinsic,
-        new DelphiPointerType(intrinsic.fullyQualifiedName(), dereferenced, size, pointerMath));
+        new PointerTypeImpl(intrinsic.fullyQualifiedName(), dereferenced, size, pointerMath));
   }
 
   private void addVariant(IntrinsicType intrinsic, int size, VariantKind kind) {
-    intrinsicTypes.put(
-        intrinsic, new DelphiVariantType(intrinsic.fullyQualifiedName(), size, kind));
+    intrinsicTypes.put(intrinsic, new VariantTypeImpl(intrinsic.fullyQualifiedName(), size, kind));
   }
 
   private void addAlias(IntrinsicType alias, IntrinsicType concrete) {
@@ -236,7 +233,7 @@ public class TypeFactory {
 
     intrinsicTypes.put(
         IntrinsicType.ANSISTRING,
-        new DelphiAnsiStringType(
+        new AnsiStringTypeImpl(
             pointerSize(), (CharacterType) getIntrinsic(IntrinsicType.ANSICHAR), 0));
 
     addString(IntrinsicType.WIDESTRING, pointerSize(), IntrinsicType.WIDECHAR);
@@ -251,7 +248,7 @@ public class TypeFactory {
       addAlias(IntrinsicType.CHAR, IntrinsicType.ANSICHAR);
     }
 
-    addPointer(IntrinsicType.POINTER, DelphiType.untypedType(), pointerSize(), false);
+    addPointer(IntrinsicType.POINTER, untypedType(), pointerSize(), false);
     addPointer(IntrinsicType.PWIDECHAR, getIntrinsic(IntrinsicType.WIDECHAR), pointerSize(), true);
     addPointer(IntrinsicType.PANSICHAR, getIntrinsic(IntrinsicType.ANSICHAR), pointerSize(), true);
 
@@ -267,7 +264,7 @@ public class TypeFactory {
 
     intrinsicTypes.put(
         IntrinsicType.TEXT,
-        new DelphiFileType(DelphiType.untypedType(), sizeByArchitecture(730, 754)) {
+        new FileTypeImpl(untypedType(), sizeByArchitecture(730, 754)) {
           @Override
           public String getImage() {
             return IntrinsicType.TEXT.fullyQualifiedName();
@@ -353,11 +350,7 @@ public class TypeFactory {
 
   private ProceduralType createProcedural(
       ProceduralKind kind, List<Parameter> parameters, Type returnType, boolean variadic) {
-    return new DelphiProceduralType(proceduralSize(kind), kind, parameters, returnType, variadic);
-  }
-
-  public Type untypedType() {
-    return DelphiType.untypedType();
+    return new ProceduralTypeImpl(proceduralSize(kind), kind, parameters, returnType, variadic);
   }
 
   public Type getIntrinsic(IntrinsicType intrinsic) {
@@ -369,12 +362,12 @@ public class TypeFactory {
       return (AnsiStringType) getIntrinsic(IntrinsicType.ANSISTRING);
     }
 
-    return new DelphiAnsiStringType(
+    return new AnsiStringTypeImpl(
         pointerSize(), (CharacterType) getIntrinsic(IntrinsicType.ANSICHAR), codePage);
   }
 
   public CollectionType array(@Nullable String image, Type elementType, Set<ArrayOption> options) {
-    return new DelphiArrayType(image, pointerSize(), elementType, options);
+    return new ArrayTypeImpl(image, pointerSize(), elementType, options);
   }
 
   public CollectionType multiDimensionalArray(
@@ -387,11 +380,11 @@ public class TypeFactory {
   }
 
   public ArrayConstructorType arrayConstructor(List<Type> types) {
-    return new DelphiArrayConstructorType(types);
+    return new ArrayConstructorTypeImpl(types);
   }
 
   public CollectionType set(Type type) {
-    return new DelphiSetType(type);
+    return new SetTypeImpl(type);
   }
 
   public CollectionType emptySet() {
@@ -399,15 +392,15 @@ public class TypeFactory {
   }
 
   public EnumType enumeration(String image, DelphiScope scope) {
-    return new DelphiEnumerationType(image, scope);
+    return new EnumerationTypeImpl(image, scope);
   }
 
   public SubrangeType subRange(String image, Type type) {
-    return new DelphiSubrangeType(image, type);
+    return new SubrangeTypeImpl(image, type);
   }
 
   public PointerType pointerTo(@Nullable String image, Type type) {
-    return new DelphiPointerType(image, type, pointerSize(), false);
+    return new PointerTypeImpl(image, type, pointerSize(), false);
   }
 
   public PointerType untypedPointer() {
@@ -419,7 +412,7 @@ public class TypeFactory {
   }
 
   public FileType fileOf(Type type) {
-    return new DelphiFileType(type, sizeByArchitecture(592, 616));
+    return new FileTypeImpl(type, sizeByArchitecture(592, 616));
   }
 
   public FileType untypedFile() {
@@ -427,7 +420,7 @@ public class TypeFactory {
   }
 
   public ClassReferenceType classOf(@Nullable String image, Type type) {
-    return new DelphiClassReferenceType(image, type, pointerSize());
+    return new ClassReferenceTypeImpl(image, type, pointerSize());
   }
 
   public ProceduralType procedure(List<Parameter> parameters, Type returnType) {
@@ -455,7 +448,7 @@ public class TypeFactory {
   }
 
   public TypeType typeType(String image, Type type) {
-    return new DelphiTypeType(image, type);
+    return new TypeTypeImpl(image, type);
   }
 
   public StructType struct(TypeNode node) {
@@ -476,14 +469,14 @@ public class TypeFactory {
       imageParts.add(new ImagePart(anonymousImage));
     }
 
-    return new DelphiStructType(imageParts, pointerSize(), node.getScope(), ancestors, kind);
+    return new StructTypeImpl(imageParts, pointerSize(), node.getScope(), ancestors, kind);
   }
 
   public HelperType helper(HelperTypeNode node) {
     TypeDeclarationNode declaration = (TypeDeclarationNode) node.jjtGetParent();
     StructKind kind = (node instanceof ClassHelperTypeNode) ? CLASS_HELPER : RECORD_HELPER;
 
-    return new DelphiHelperType(
+    return new HelperTypeImpl(
         createImageParts(declaration),
         pointerSize(),
         node.getScope(),
@@ -499,5 +492,17 @@ public class TypeFactory {
         .filter(type -> type.min().compareTo(value) <= 0 && type.max().compareTo(value) >= 0)
         .findFirst()
         .orElseThrow(IllegalStateException::new);
+  }
+
+  public static Type unknownType() {
+    return UnknownTypeImpl.instance();
+  }
+
+  public static Type untypedType() {
+    return UntypedTypeImpl.instance();
+  }
+
+  public static Type voidType() {
+    return VoidTypeImpl.instance();
   }
 }

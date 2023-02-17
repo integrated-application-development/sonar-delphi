@@ -18,20 +18,20 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.DelphiType;
+import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
-import au.com.integradev.delphi.type.generic.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-class DelphiPointerType extends DelphiType implements PointerType {
+public final class PointerTypeImpl extends TypeImpl implements PointerType {
   private final String image;
   private Type dereferencedType;
   private final int size;
   private boolean allowsPointerMath;
 
-  DelphiPointerType(String image, Type dereferencedType, int size, boolean allowsPointerMath) {
+  PointerTypeImpl(String image, Type dereferencedType, int size, boolean allowsPointerMath) {
     this.image = image;
     this.dereferencedType = dereferencedType;
     this.size = size;
@@ -59,12 +59,16 @@ class DelphiPointerType extends DelphiType implements PointerType {
     return allowsPointerMath;
   }
 
-  @Override
+  /**
+   * Sets the dereferenced type. Used for type completion at the end of a type section.
+   *
+   * @param type The dereferenced type
+   */
   public void setDereferencedType(Type type) {
     this.dereferencedType = type;
   }
 
-  @Override
+  /** Flag that this pointer type was declared with {$POINTERMATH ON} */
   public void setAllowsPointerMath() {
     this.allowsPointerMath = true;
   }
@@ -87,7 +91,7 @@ class DelphiPointerType extends DelphiType implements PointerType {
   @Override
   public Type specialize(TypeSpecializationContext context) {
     if (dereferencedType().isTypeParameter()) {
-      return new DelphiPointerType(
+      return new PointerTypeImpl(
           null, dereferencedType().specialize(context), size, allowsPointerMath);
     }
     return this;
