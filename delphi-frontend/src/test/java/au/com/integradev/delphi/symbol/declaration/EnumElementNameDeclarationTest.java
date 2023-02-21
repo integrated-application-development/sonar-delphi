@@ -24,7 +24,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
+import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.node.EnumElementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.EnumTypeNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;

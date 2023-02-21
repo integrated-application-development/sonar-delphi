@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.file;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import com.google.common.base.Preconditions;

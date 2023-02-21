@@ -22,13 +22,13 @@ import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class ElseIfDirective extends BranchDirective {
   private final CompilerDirective.Expression expression;
 
   ElseIfDirective(
-      Token token, CompilerDirectiveType type, CompilerDirective.Expression expression) {
+      DelphiToken token, CompilerDirectiveType type, CompilerDirective.Expression expression) {
     super(token, type);
     this.expression = expression;
   }

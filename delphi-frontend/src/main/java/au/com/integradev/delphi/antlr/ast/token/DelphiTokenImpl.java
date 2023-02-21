@@ -20,14 +20,14 @@ package au.com.integradev.delphi.antlr.ast.token;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.core.DelphiKeywords;
-import au.com.integradev.delphi.pmd.FilePosition;
 import javax.annotation.Nullable;
-import net.sourceforge.pmd.lang.ast.GenericToken;
 import org.antlr.runtime.Token;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonarsource.analyzer.commons.TokenLocation;
 
-public class DelphiToken implements GenericToken {
+public class DelphiTokenImpl implements DelphiToken {
   public static final String STRING_LITERAL = "STRING_LITERAL";
   public static final String NUMERIC_LITERAL = "NUMERIC_LITERAL";
 
@@ -38,7 +38,7 @@ public class DelphiToken implements GenericToken {
   private Integer endLine;
   private Integer endColumn;
 
-  public DelphiToken(final Token token) {
+  public DelphiTokenImpl(final Token token) {
     this.token = token;
   }
 
@@ -105,19 +105,11 @@ public class DelphiToken implements GenericToken {
   }
 
   @Override
-  public GenericToken getNext() {
-    throw new UnsupportedOperationException("Out of scope for antlr tokens");
-  }
-
-  @Override
-  public GenericToken getPreviousComment() {
-    throw new UnsupportedOperationException("Out of scope for antlr tokens");
-  }
-
   public boolean isEof() {
     return !isNil() && token.getType() == Token.EOF;
   }
 
+  @Override
   public boolean isImaginary() {
     return isNil() || token.getLine() == FilePosition.UNDEFINED_LINE;
   }
@@ -132,14 +124,17 @@ public class DelphiToken implements GenericToken {
         || token.getType() == DelphiLexer.TkHexNum;
   }
 
+  @Override
   public boolean isWhitespace() {
     return token.getType() == DelphiLexer.WS;
   }
 
+  @Override
   public boolean isComment() {
     return token.getType() == DelphiLexer.COMMENT;
   }
 
+  @Override
   public boolean isCompilerDirective() {
     return token.getType() == DelphiLexer.TkCompilerDirective;
   }
@@ -152,22 +147,22 @@ public class DelphiToken implements GenericToken {
     return token instanceof IncludeToken;
   }
 
+  @Override
   public boolean isNil() {
     return token == null;
   }
 
+  @Override
   public int getIndex() {
     return isNil() ? -1 : token.getTokenIndex();
   }
 
+  @Override
   public int getType() {
     return isNil() ? Token.INVALID_TOKEN_TYPE : token.getType();
   }
 
-  public Token getAntlrToken() {
-    return token;
-  }
-
+  @Override
   public String getNormalizedImage() {
     if (isStringLiteral()) {
       return STRING_LITERAL;
@@ -180,6 +175,7 @@ public class DelphiToken implements GenericToken {
     return token.getText().toLowerCase();
   }
 
+  @Override
   @Nullable
   public TypeOfText getHighlightingType() {
     TypeOfText type = null;
@@ -197,5 +193,9 @@ public class DelphiToken implements GenericToken {
     }
 
     return type;
+  }
+
+  public Token getAntlrToken() {
+    return token;
   }
 }

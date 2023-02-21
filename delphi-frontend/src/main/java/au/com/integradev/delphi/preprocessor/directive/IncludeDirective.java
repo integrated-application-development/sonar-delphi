@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class IncludeDirective extends DefaultCompilerDirective {
   private final String includeFile;
 
-  IncludeDirective(Token token, CompilerDirectiveType type, String includeFile) {
+  IncludeDirective(DelphiToken token, CompilerDirectiveType type, String includeFile) {
     super(token, type);
     this.includeFile = includeFile;
   }

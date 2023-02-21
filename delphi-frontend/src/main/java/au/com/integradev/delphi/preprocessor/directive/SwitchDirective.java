@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class SwitchDirective extends AbstractCompilerDirective {
   private final boolean value;
 
-  SwitchDirective(Token token, CompilerDirectiveType type, boolean value) {
+  SwitchDirective(DelphiToken token, CompilerDirectiveType type, boolean value) {
     super(token, type);
     this.value = value;
   }

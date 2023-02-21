@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.visitors.MetricsVisitor.Data;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +27,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class MetricsVisitor implements DelphiParserVisitor<Data> {
   public static class Data {

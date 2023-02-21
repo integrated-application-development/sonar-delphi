@@ -1,10 +1,9 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.file.DelphiFile;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface DelphiAst extends DelphiNode {
 
@@ -25,8 +24,6 @@ public interface DelphiAst extends DelphiNode {
   DelphiFile getDelphiFile();
 
   String getFileName();
-
-  Set<Integer> getSuppressions();
 
   FileHeaderNode getFileHeader();
 

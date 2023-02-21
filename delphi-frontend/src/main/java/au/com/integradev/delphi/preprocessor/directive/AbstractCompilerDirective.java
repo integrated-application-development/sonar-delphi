@@ -18,19 +18,19 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public abstract class AbstractCompilerDirective implements CompilerDirective {
-  private final Token token;
+  private final DelphiToken token;
   private final CompilerDirectiveType type;
 
-  protected AbstractCompilerDirective(Token token, CompilerDirectiveType type) {
+  protected AbstractCompilerDirective(DelphiToken token, CompilerDirectiveType type) {
     this.token = token;
     this.type = type;
   }
 
   @Override
-  public Token getToken() {
+  public DelphiToken getToken() {
     return token;
   }
 

@@ -24,10 +24,10 @@ import static au.com.integradev.delphi.pmd.DelphiPmdConstants.SCOPE;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TEMPLATE;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TYPE;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.pmd.FilePosition;
-import au.com.integradev.delphi.pmd.violation.DelphiRuleViolationBuilder;
+import au.com.integradev.delphi.reporting.DelphiIssueBuilder;
 import net.sourceforge.pmd.Rule;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.lang.rule.ImmutableLanguage;
@@ -72,7 +72,7 @@ public interface DelphiRule extends Rule, DelphiParserVisitor<RuleContext>, Immu
     newViolation(data).atPosition(FilePosition.from(token)).message(msg).save();
   }
 
-  default DelphiRuleViolationBuilder newViolation(Object data) {
-    return DelphiRuleViolationBuilder.newViolation(this, (RuleContext) data);
+  default DelphiIssueBuilder newViolation(Object data) {
+    return DelphiIssueBuilder.newViolation(this, (RuleContext) data);
   }
 }

@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class DefaultCompilerDirective extends AbstractCompilerDirective {
 
-  public DefaultCompilerDirective(Token token, CompilerDirectiveType type) {
+  public DefaultCompilerDirective(DelphiToken token, CompilerDirectiveType type) {
     super(token, type);
   }
 

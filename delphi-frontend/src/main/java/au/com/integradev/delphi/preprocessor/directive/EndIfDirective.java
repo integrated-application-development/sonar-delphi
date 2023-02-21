@@ -19,10 +19,10 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class EndIfDirective extends AbstractCompilerDirective {
-  EndIfDirective(Token token, CompilerDirectiveType type) {
+  EndIfDirective(DelphiToken token, CompilerDirectiveType type) {
     super(token, type);
   }
 

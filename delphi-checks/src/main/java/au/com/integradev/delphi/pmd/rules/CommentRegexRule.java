@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import java.util.regex.Pattern;
 import net.sourceforge.pmd.RuleContext;
 import net.sourceforge.pmd.properties.PropertyDescriptor;

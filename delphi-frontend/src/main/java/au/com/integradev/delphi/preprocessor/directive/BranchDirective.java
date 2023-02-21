@@ -22,12 +22,13 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public abstract class BranchDirective extends AbstractCompilerDirective {
   private final List<CompilerDirective> directives;
   private final List<Token> tokens;
 
-  BranchDirective(Token token, CompilerDirectiveType type) {
+  BranchDirective(DelphiToken token, CompilerDirectiveType type) {
     super(token, type);
     this.directives = new ArrayList<>();
     this.tokens = new ArrayList<>();

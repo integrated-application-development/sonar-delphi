@@ -19,14 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodHeadingNode;
@@ -37,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements MethodHeadingNode {
@@ -195,7 +194,7 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
     if (directives == null) {
       var builder = new ImmutableSet.Builder<MethodDirective>();
       for (int i = 0; i < jjtGetNumChildren(); ++i) {
-        DelphiToken token = ((DelphiNode) jjtGetChild(i)).getToken();
+        DelphiToken token = jjtGetChild(i).getToken();
         MethodDirective directive = MethodDirective.fromToken(token);
         if (directive != null) {
           builder.add(directive);

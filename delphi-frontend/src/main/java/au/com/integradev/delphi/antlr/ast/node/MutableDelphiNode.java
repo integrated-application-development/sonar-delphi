@@ -1,7 +1,8 @@
-package org.sonar.plugins.communitydelphi.api.ast;
+package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface MutableDelphiNode extends DelphiNode {
   void jjtSetFirstToken(DelphiToken token);

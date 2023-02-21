@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class DefineDirective extends AbstractCompilerDirective {
   private final String define;
 
-  DefineDirective(Token token, CompilerDirectiveType type, String define) {
+  DefineDirective(DelphiToken token, CompilerDirectiveType type, String define) {
     super(token, type);
     this.define = define;
   }

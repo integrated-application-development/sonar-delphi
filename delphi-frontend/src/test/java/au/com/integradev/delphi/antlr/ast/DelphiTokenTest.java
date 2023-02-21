@@ -22,13 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DelphiTokenTest {
-  private DelphiToken commentToken;
+  private DelphiTokenImpl commentToken;
 
   @BeforeEach
   void setup() {
@@ -36,7 +36,7 @@ class DelphiTokenTest {
     commonToken.setText("{ This is my multiline comment.\n As you can see, it's 3 whole lines.\n}");
     commonToken.setLine(5);
     commonToken.setCharPositionInLine(12);
-    commentToken = new DelphiToken(commonToken);
+    commentToken = new DelphiTokenImpl(commonToken);
   }
 
   @Test

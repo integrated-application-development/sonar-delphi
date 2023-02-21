@@ -25,7 +25,8 @@ package au.com.integradev.delphi.antlr.ast;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import com.google.common.base.Preconditions;
 import java.lang.reflect.Constructor;
 import org.antlr.runtime.CommonToken;
@@ -34,7 +35,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.BaseTreeAdaptor;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
@@ -64,8 +65,8 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   @Override
   public void setTokenBoundaries(Object node, Token startToken, Token stopToken) {
     if (node != null) {
-      ((MutableDelphiNode) node).jjtSetFirstToken(new DelphiToken(startToken));
-      ((MutableDelphiNode) node).jjtSetLastToken(new DelphiToken(stopToken));
+      ((MutableDelphiNode) node).jjtSetFirstToken(new DelphiTokenImpl(startToken));
+      ((MutableDelphiNode) node).jjtSetLastToken(new DelphiTokenImpl(stopToken));
     }
   }
 
@@ -169,7 +170,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public Token getToken(Object node) {
-    return ((DelphiNode) node).getToken().getAntlrToken();
+    return ((DelphiTokenImpl) ((DelphiNode) node).getToken()).getAntlrToken();
   }
 
   @Override
@@ -227,11 +228,11 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
     throw new UnsupportedOperationException();
   }
 
-  private DelphiToken getFirstToken(Object node) {
+  private static DelphiToken getFirstToken(Object node) {
     return ((DelphiNode) node).jjtGetFirstToken();
   }
 
-  private DelphiToken getLastToken(Object node) {
+  private static DelphiToken getLastToken(Object node) {
     return ((DelphiNode) node).jjtGetLastToken();
   }
 }

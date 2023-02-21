@@ -18,9 +18,10 @@
  */
 package au.com.integradev.delphi.antlr.ast.token;
 
-import au.com.integradev.delphi.pmd.FilePosition;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class IncludeToken extends CommonToken {
   private final FilePosition insertionPosition;

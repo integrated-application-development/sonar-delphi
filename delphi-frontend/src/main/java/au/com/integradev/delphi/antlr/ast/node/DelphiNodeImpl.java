@@ -4,7 +4,7 @@ import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unk
 
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
@@ -16,11 +16,10 @@ import org.antlr.runtime.Token;
 import org.apache.commons.lang3.ArrayUtils;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
-  private final int id;
   private final DelphiToken token;
   protected DelphiNode parent;
   private DelphiNode[] children;
@@ -35,9 +34,8 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
    *
    * @param token Token to create the node with
    */
-  protected DelphiNodeImpl(@Nonnull Token token) {
-    this.id = token.getType();
-    this.token = new DelphiToken(token);
+  protected DelphiNodeImpl(Token token) {
+    this.token = new DelphiTokenImpl(token);
   }
 
   /**
@@ -51,7 +49,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
 
   @Override
   public int jjtGetId() {
-    return this.id;
+    return this.token.getType();
   }
 
   @Override
@@ -113,7 +111,9 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
 
       int count = node.jjtGetNumChildren();
       for (int i = 0; i < count; ++i) {
-        jjtAddChild(node.jjtGetChild(i), jjtGetNumChildren());
+        DelphiNodeImpl grandchild = (DelphiNodeImpl) node.jjtGetChild(i);
+        jjtAddChild(grandchild, jjtGetNumChildren());
+        grandchild.jjtSetParent(this);
       }
     } else {
       jjtAddChild(node, jjtGetNumChildren());

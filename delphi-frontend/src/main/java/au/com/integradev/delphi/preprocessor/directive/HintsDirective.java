@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class HintsDirective extends SwitchDirective {
-  public HintsDirective(Token token, CompilerDirectiveType type, String value) {
+  public HintsDirective(DelphiToken token, CompilerDirectiveType type, String value) {
     super(token, type, value.equalsIgnoreCase("ON"));
   }
 }

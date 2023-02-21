@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.executor;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;

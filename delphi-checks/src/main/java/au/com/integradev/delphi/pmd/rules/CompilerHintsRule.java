@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirective;
 import au.com.integradev.delphi.preprocessor.directive.HintsDirective;
 import net.sourceforge.pmd.RuleContext;
@@ -27,7 +27,7 @@ public class CompilerHintsRule extends AbstractDelphiRule {
   @Override
   public void visitToken(DelphiToken token, RuleContext context) {
     if (token.isCompilerDirective()) {
-      CompilerDirective directive = CompilerDirective.fromToken(token.getAntlrToken());
+      CompilerDirective directive = CompilerDirective.fromToken(token);
       if (directive instanceof HintsDirective && !((HintsDirective) directive).isActive()) {
         addViolation(context, token);
       }

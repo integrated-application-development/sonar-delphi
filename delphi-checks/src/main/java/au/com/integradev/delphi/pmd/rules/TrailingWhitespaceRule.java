@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import static java.util.regex.Pattern.compile;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.pmd.FilePosition;
 import com.google.common.base.Splitter;
 import java.util.regex.Pattern;

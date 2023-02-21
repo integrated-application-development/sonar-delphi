@@ -20,21 +20,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.antlr.ast.node;
+package au.com.integradev.delphi.antlr.ast;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.pmd.FilePosition;
 import java.util.List;
-import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 /** DelphiLanguage AST tree. */
 public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
@@ -105,11 +105,6 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
   @Override
   public String getFileName() {
     return delphiFile.getSourceCodeFile().getAbsolutePath();
-  }
-
-  @Override
-  public Set<Integer> getSuppressions() {
-    return delphiFile.getSuppressions();
   }
 
   @Override

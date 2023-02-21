@@ -23,7 +23,8 @@ import static java.util.Comparator.comparingInt;
 import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.directive.BranchDirective;
@@ -131,7 +132,7 @@ public class DelphiPreprocessor {
     tokenIndex++;
 
     if (token.getType() == DelphiLexer.TkCompilerDirective) {
-      CompilerDirective directive = CompilerDirective.fromToken(token);
+      CompilerDirective directive = CompilerDirective.fromToken(new DelphiTokenImpl(token));
       processDirective(directive);
     } else if (!parentDirective.isEmpty()) {
       parentDirective.peek().addToken(token);
@@ -170,7 +171,7 @@ public class DelphiPreprocessor {
     String includeFileName = includeFile.getFileName().toString();
     Path includePath = includeFile.getParent();
 
-    DelphiToken location = new DelphiToken(insertionToken);
+    DelphiToken location = new DelphiTokenImpl(insertionToken);
     List<Token> includeTokens = processIncludeFile(includeFileName, includePath, location);
 
     offsetTokenIndices(location.getIndex(), getTokenOffset(includeTokens));

@@ -87,7 +87,7 @@ public final class MethodBodyNodeImpl extends DelphiNodeImpl implements MethodBo
   @Override
   public DelphiNode getBlock() {
     if (block == null) {
-      block = (DelphiNode) jjtGetChild(hasDeclarationSection() ? 1 : 0);
+      block = jjtGetChild(hasDeclarationSection() ? 1 : 0);
     }
     return block;
   }

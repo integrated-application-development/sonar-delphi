@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class PointerMathDirective extends SwitchDirective {
-  PointerMathDirective(Token token, CompilerDirectiveType type, String value) {
+  PointerMathDirective(DelphiToken token, CompilerDirectiveType type, String value) {
     super(token, type, value.equalsIgnoreCase("ON"));
   }
 }

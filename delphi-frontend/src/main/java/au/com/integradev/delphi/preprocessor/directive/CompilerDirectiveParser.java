@@ -26,7 +26,7 @@ import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexe
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 /**
  * Parses a CompilerDirective object from a TkCompilerDirective token.
@@ -36,8 +36,8 @@ import org.antlr.runtime.Token;
  */
 class CompilerDirectiveParser {
   static class CompilerDirectiveParserError extends RuntimeException {
-    private CompilerDirectiveParserError(Exception e, Token token) {
-      super(e.getMessage() + " <Line " + token.getLine() + ">", e);
+    private CompilerDirectiveParserError(Exception e, DelphiToken token) {
+      super(e.getMessage() + " <Line " + token.getBeginLine() + ">", e);
     }
   }
 
@@ -56,7 +56,7 @@ class CompilerDirectiveParser {
   private int position;
 
   // Current directive state
-  private Token token;
+  private DelphiToken token;
   private DirectiveBracketType directiveBracketType;
   private CompilerDirectiveType type;
   private final StringBuilder directiveName = new StringBuilder();
@@ -69,8 +69,8 @@ class CompilerDirectiveParser {
    * @param token Token to parse into a CompilerDirective object
    * @return Compiler directive
    */
-  public CompilerDirective parse(Token token) {
-    this.data = token.getText();
+  public CompilerDirective parse(DelphiToken token) {
+    this.data = token.getImage();
     this.position = 0;
 
     this.token = token;

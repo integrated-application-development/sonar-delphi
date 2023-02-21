@@ -19,10 +19,10 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class IfOptDirective extends BranchDirective {
-  IfOptDirective(Token token, CompilerDirectiveType type) {
+  IfOptDirective(DelphiToken token, CompilerDirectiveType type) {
     super(token, type);
   }
 

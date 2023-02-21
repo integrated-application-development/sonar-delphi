@@ -196,16 +196,15 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     return DelphiParserVisitor.super.visit(forInStatementNode, data);
   }
 
-  private void addDependenciesForDeclaration(@Nullable NameDeclaration declaration, Data data) {
+  private static void addDependenciesForDeclaration(
+      @Nullable NameDeclaration declaration, Data data) {
     if (declaration != null) {
       FileScope scope = declaration.getScope().getEnclosingScope(FileScope.class);
-      if (scope != null) {
-        data.addDependency(scope.getUnitDeclaration());
-      }
+      addDependencyByFileScope(scope, data);
     }
   }
 
-  private void addDependenciesForComponentTypeDeclaration(Type type, Data data) {
+  private static void addDependenciesForComponentTypeDeclaration(Type type, Data data) {
     if (isComponent(type)) {
       ((ScopedType) type)
           .typeScope()
@@ -216,12 +215,13 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     }
   }
 
-  private void addDependenciesRequiredByMethod(NameDeclaration declaration, Data data) {
+  private static void addDependenciesRequiredByMethod(NameDeclaration declaration, Data data) {
     ((MethodNameDeclarationImpl) declaration).getDependencies().forEach(data::addDependency);
     addDependenciesForDeclaration(declaration, data);
   }
 
-  private void addDependenciesForComponentTypeField(VariableNameDeclaration field, Data data) {
+  private static void addDependenciesForComponentTypeField(
+      VariableNameDeclaration field, Data data) {
     Type type = field.getType();
     if (field.isPublished() && isComponent(type)) {
       while (addDependenciesDeclaringType(type, data)) {
@@ -230,13 +230,19 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     }
   }
 
-  private boolean addDependenciesDeclaringType(Type type, Data data) {
+  private static boolean addDependenciesDeclaringType(Type type, Data data) {
     FileScope fileScope = getFileScopeFromType(type);
     if (fileScope != null) {
-      data.addDependency(fileScope.getUnitDeclaration());
+      addDependencyByFileScope(fileScope, data);
       return true;
     }
     return false;
+  }
+
+  private static void addDependencyByFileScope(FileScope fileScope, Data data) {
+    if (fileScope != data.unitDeclaration.getFileScope()) {
+      data.addDependency(fileScope.getUnitDeclaration());
+    }
   }
 
   private static boolean isComponent(Type type) {

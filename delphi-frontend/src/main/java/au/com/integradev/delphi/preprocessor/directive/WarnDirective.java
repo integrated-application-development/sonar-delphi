@@ -24,7 +24,7 @@ import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class WarnDirective extends AbstractCompilerDirective {
   public enum WarnDirectiveValue {
@@ -38,7 +38,7 @@ public class WarnDirective extends AbstractCompilerDirective {
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
   private final WarnDirectiveValue value;
 
-  public WarnDirective(Token token, CompilerDirectiveType type, String item) {
+  public WarnDirective(DelphiToken token, CompilerDirectiveType type, String item) {
     super(token, type);
     String valueString = extractValueString(item);
     this.value =

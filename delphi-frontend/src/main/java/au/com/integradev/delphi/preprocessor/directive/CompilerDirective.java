@@ -25,15 +25,16 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface CompilerDirective {
-  Token getToken();
+  DelphiToken getToken();
 
   CompilerDirectiveType getType();
 
   void execute(DelphiPreprocessor preprocessor);
 
-  static CompilerDirective fromToken(Token token) {
+  static CompilerDirective fromToken(DelphiToken token) {
     CompilerDirectiveParser parser = new CompilerDirectiveParser();
     return parser.parse(token);
   }

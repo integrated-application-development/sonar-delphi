@@ -22,7 +22,8 @@ import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveT
 import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveType.SCOPEDENUMS;
 import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.compilerVariable;
 
-import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
+import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
+import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.WithStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
@@ -88,7 +89,6 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
-import org.sonar.plugins.communitydelphi.api.ast.MutableDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
@@ -108,6 +108,7 @@ import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;

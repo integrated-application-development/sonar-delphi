@@ -26,7 +26,8 @@ import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.UnitDeclarationNodeImpl;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
@@ -108,7 +109,7 @@ class DelphiRuleViolationFactoryTest {
   @Test
   void testIncludeToken() {
     Token token = mockToken(LINE, START_COLUMN);
-    DelphiToken insertionToken = new DelphiToken(mockToken(INCLUDE_LINE, INCLUDE_START_COLUMN));
+    DelphiToken insertionToken = new DelphiTokenImpl(mockToken(INCLUDE_LINE, INCLUDE_START_COLUMN));
     IncludeToken includeToken = new IncludeToken(token, insertionToken);
 
     factory.addViolation(context, rule, createNode(includeToken), MESSAGE, Arrays.array());

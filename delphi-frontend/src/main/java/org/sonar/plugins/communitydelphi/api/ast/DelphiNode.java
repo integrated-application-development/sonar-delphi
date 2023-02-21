@@ -1,9 +1,9 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface DelphiNode extends Node {
   DelphiToken getToken();

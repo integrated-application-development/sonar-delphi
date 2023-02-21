@@ -28,7 +28,9 @@ import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
-import au.com.integradev.delphi.antlr.ast.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
@@ -41,7 +43,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.ast.GenericToken;
 import org.antlr.runtime.BufferedTokenStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
@@ -172,7 +173,7 @@ public interface DelphiFile {
     List<DelphiToken> tokenList =
         tokenStream.getTokens().stream()
             .map(CommonToken.class::cast)
-            .map(DelphiToken::new)
+            .map(DelphiTokenImpl::new)
             .filter(not(DelphiToken::isEof))
             .collect(Collectors.toUnmodifiableList());
 
@@ -196,7 +197,8 @@ public interface DelphiFile {
 
   private static void offsetTokenIndices(List<DelphiToken> tokens, int startIndex, int offset) {
     tokens.stream()
-        .map(DelphiToken::getAntlrToken)
+        .map(DelphiTokenImpl.class::cast)
+        .map(DelphiTokenImpl::getAntlrToken)
         .filter(token -> token.getTokenIndex() > startIndex)
         .forEach(token -> token.setTokenIndex(token.getTokenIndex() + offset));
   }
@@ -210,7 +212,7 @@ public interface DelphiFile {
   private static Set<Integer> findSuppressionLines(List<DelphiToken> commentList) {
     return commentList.stream()
         .filter(comment -> comment.getImage().contains(DelphiPmdConstants.SUPPRESSION_TAG))
-        .map(GenericToken::getBeginLine)
+        .map(DelphiToken::getBeginLine)
         .collect(Collectors.toUnmodifiableSet());
   }
 }

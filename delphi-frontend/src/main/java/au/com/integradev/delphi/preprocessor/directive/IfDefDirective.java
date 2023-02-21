@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class IfDefDirective extends BranchDirective {
   private final String define;
   private final boolean isPositive;
 
-  IfDefDirective(Token token, CompilerDirectiveType type, String define, boolean isPositive) {
+  IfDefDirective(DelphiToken token, CompilerDirectiveType type, String define, boolean isPositive) {
     super(token, type);
     this.define = define;
     this.isPositive = isPositive;
