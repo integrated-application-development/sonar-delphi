@@ -35,6 +35,7 @@ import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -97,7 +98,8 @@ public class DelphiSensor implements Sensor {
     LOG.info("Compiler version: {}", compilerVersion.number().toString());
     LOG.info("Conditional defines: {}", delphiProjectHelper.getConditionalDefines());
 
-    TypeFactory typeFactory = new TypeFactory(toolchain, compilerVersion);
+    var preprocessorFactory = new DelphiPreprocessorFactory(toolchain.platform);
+    var typeFactory = new TypeFactory(toolchain, compilerVersion);
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
 
@@ -108,6 +110,7 @@ public class DelphiSensor implements Sensor {
 
     SymbolTable symbolTable =
         SymbolTable.builder()
+            .preprocessorFactory(preprocessorFactory)
             .typeFactory(typeFactory)
             .sourceFiles(sourceFiles)
             .encoding(delphiProjectHelper.encoding())
@@ -128,6 +131,7 @@ public class DelphiSensor implements Sensor {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             delphiProjectHelper.encoding(),
+            preprocessorFactory,
             typeFactory,
             searchPath,
             delphiProjectHelper.getConditionalDefines());

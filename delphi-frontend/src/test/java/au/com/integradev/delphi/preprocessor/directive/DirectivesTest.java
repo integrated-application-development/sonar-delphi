@@ -18,28 +18,23 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveType.ELSE;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveType.ELSEIF;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveType.ENDIF;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expressions.nameReference;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import org.antlr.runtime.Token;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class DirectivesTest {
 
   @Test
   void testIfSuccessfulBranch() {
-    IfDirective trueBranch = new IfDirective(mock(Token.class), ELSEIF, nameReference("True"));
-
-    IfDirective falseBranch = new IfDirective(mock(Token.class), ELSEIF, nameReference("False"));
-
-    IfDirective unknownBranch =
-        new IfDirective(mock(Token.class), ELSEIF, nameReference("Unknown"));
+    var trueBranch = new IfDirective(mock(DelphiToken.class), nameReference("True"));
+    var falseBranch = new IfDirective(mock(DelphiToken.class), nameReference("False"));
+    var unknownBranch = new IfDirective(mock(DelphiToken.class), nameReference("Unknown"));
 
     assertThat(trueBranch.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isTrue();
     assertThat(falseBranch.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isFalse();
@@ -48,14 +43,9 @@ class DirectivesTest {
 
   @Test
   void testElseIfSuccessfulBranch() {
-    ElseIfDirective trueBranch =
-        new ElseIfDirective(mock(Token.class), ELSEIF, nameReference("True"));
-
-    ElseIfDirective falseBranch =
-        new ElseIfDirective(mock(Token.class), ELSEIF, nameReference("False"));
-
-    ElseIfDirective unknownBranch =
-        new ElseIfDirective(mock(Token.class), ELSEIF, nameReference("Unknown"));
+    var trueBranch = new ElseIfDirective(mock(DelphiToken.class), nameReference("True"));
+    var falseBranch = new ElseIfDirective(mock(DelphiToken.class), nameReference("False"));
+    var unknownBranch = new ElseIfDirective(mock(DelphiToken.class), nameReference("Unknown"));
 
     assertThat(trueBranch.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isTrue();
     assertThat(falseBranch.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isFalse();
@@ -64,13 +54,13 @@ class DirectivesTest {
 
   @Test
   void testElseIsAlwaysSuccessfulBranch() {
-    ElseDirective elseBranch = new ElseDirective(mock(Token.class), ELSE);
+    var elseBranch = new ElseDirective(mock(DelphiToken.class));
     assertThat(elseBranch.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isTrue();
   }
 
   @Test
   void testEndIfHasNoExecutionAction() {
-    EndIfDirective elseBranch = new EndIfDirective(mock(Token.class), ENDIF);
+    var elseBranch = new EndIfDirective(mock(DelphiToken.class));
     DelphiPreprocessor preprocessor = mock(DelphiPreprocessor.class);
     elseBranch.execute(preprocessor);
     verifyNoMoreInteractions(preprocessor);
@@ -78,7 +68,7 @@ class DirectivesTest {
 
   @Test
   void testIfOptIsNeverSuccessfulBranchShouldFailOnUpgrade() {
-    IfOptDirective directive = new IfOptDirective(mock(Token.class), CompilerDirectiveType.IFOPT);
+    var directive = new IfOptDirective(mock(DelphiToken.class), SwitchKind.ALIGN, false);
     assertThat(directive.isSuccessfulBranch(mock(DelphiPreprocessor.class))).isFalse();
   }
 }

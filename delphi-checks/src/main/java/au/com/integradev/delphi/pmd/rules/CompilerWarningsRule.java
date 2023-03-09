@@ -19,9 +19,9 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective;
-import au.com.integradev.delphi.preprocessor.directive.WarnDirective;
-import au.com.integradev.delphi.preprocessor.directive.WarnDirective.WarnDirectiveValue;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
+import org.sonar.plugins.communitydelphi.api.directive.WarnDirective;
+import org.sonar.plugins.communitydelphi.api.directive.WarnDirective.WarnParameterValue;
 import au.com.integradev.delphi.preprocessor.directive.WarningsDirective;
 import net.sourceforge.pmd.RuleContext;
 
@@ -41,7 +41,7 @@ public class CompilerWarningsRule extends AbstractDelphiRule {
       case WARNINGS:
         return !((WarningsDirective) directive).isActive();
       case WARN:
-        return ((WarnDirective) directive).getValue() == WarnDirectiveValue.OFF;
+        return ((WarnDirective) directive).getValue() == WarnParameterValue.OFF;
       default:
         return false;
     }

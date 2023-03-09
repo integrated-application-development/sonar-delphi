@@ -29,6 +29,7 @@ import au.com.integradev.delphi.antlr.DelphiTokenStream;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
@@ -88,18 +89,28 @@ public interface DelphiFile {
   }
 
   static DelphiFileConfig createConfig(
-      String encoding, TypeFactory typeFactory, SearchPath searchPath, Set<String> definitions) {
-    return createConfig(encoding, typeFactory, searchPath, definitions, false);
+      String encoding,
+      DelphiPreprocessorFactory preprocessorFactory,
+      TypeFactory typeFactory,
+      SearchPath searchPath,
+      Set<String> definitions) {
+    return createConfig(encoding, preprocessorFactory, typeFactory, searchPath, definitions, false);
   }
 
   static DelphiFileConfig createConfig(
       @Nullable String encoding,
+      DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
       SearchPath searchPath,
       Set<String> definitions,
       boolean shouldSkipImplementation) {
     return new DefaultDelphiFileConfig(
-        encoding, typeFactory, searchPath, definitions, shouldSkipImplementation);
+        encoding,
+        preprocessorFactory,
+        typeFactory,
+        searchPath,
+        definitions,
+        shouldSkipImplementation);
   }
 
   static DelphiFile from(File sourceFile, DelphiFileConfig config) {
@@ -130,7 +141,8 @@ public interface DelphiFile {
     DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
     DelphiLexer lexer = new DelphiLexer(fileStream, config.shouldSkipImplementation());
-    DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
+    DelphiPreprocessorFactory preprocessorFactory = config.getPreprocessorFactory();
+    DelphiPreprocessor preprocessor = preprocessorFactory.createPreprocessor(lexer, config);
     preprocessor.process();
     return preprocessor;
   }

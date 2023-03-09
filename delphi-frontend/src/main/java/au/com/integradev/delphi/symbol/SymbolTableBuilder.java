@@ -26,6 +26,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclarationImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -72,6 +73,7 @@ public class SymbolTableBuilder {
   private final HashMap<String, UnitData> allUnitsByName = new HashMap<>();
   private final Set<Path> unitPaths = new HashSet<>();
   private String encoding;
+  private DelphiPreprocessorFactory preprocessorFactory;
   private TypeFactory typeFactory;
   private Path standardLibraryPath;
   private SearchPath searchPath = SearchPath.create(Collections.emptyList());
@@ -100,6 +102,11 @@ public class SymbolTableBuilder {
 
   public SymbolTableBuilder encoding(String encoding) {
     this.encoding = encoding;
+    return this;
+  }
+
+  public SymbolTableBuilder preprocessorFactory(DelphiPreprocessorFactory preprocessorFactory) {
+    this.preprocessorFactory = preprocessorFactory;
     return this;
   }
 
@@ -244,6 +251,7 @@ public class SymbolTableBuilder {
   private DelphiFileConfig createFileConfig(UnitData unit, boolean shouldSkipImplementation) {
     return DelphiFile.createConfig(
         sourceFileUnits.contains(unit) ? encoding : null,
+        preprocessorFactory,
         typeFactory,
         searchPath,
         conditionalDefines,
@@ -429,8 +437,12 @@ public class SymbolTableBuilder {
   }
 
   public SymbolTable build() {
+    if (preprocessorFactory == null) {
+      throw new SymbolTableConstructionException("preprocessorFactory was not supplied.");
+    }
+
     if (typeFactory == null) {
-      throw new SymbolTableConstructionException("TypeFactory was not supplied.");
+      throw new SymbolTableConstructionException("typeFactory was not supplied.");
     }
 
     processStandardLibrarySearchPaths();

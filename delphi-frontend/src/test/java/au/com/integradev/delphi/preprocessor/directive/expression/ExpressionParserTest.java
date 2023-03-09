@@ -21,7 +21,6 @@ package au.com.integradev.delphi.preprocessor.directive.expression;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expressions.BinaryExpression;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expressions.InvocationExpression;

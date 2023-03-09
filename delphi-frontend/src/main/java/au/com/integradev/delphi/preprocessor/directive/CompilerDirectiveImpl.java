@@ -18,10 +18,21 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class HintsDirective extends SwitchDirective {
-  public HintsDirective(DelphiToken token, CompilerDirectiveType type, String value) {
-    super(token, type, value.equalsIgnoreCase("ON"));
+public abstract class CompilerDirectiveImpl implements CompilerDirective {
+  private final DelphiToken token;
+
+  protected CompilerDirectiveImpl(DelphiToken token) {
+    this.token = token;
   }
+
+  @Override
+  public DelphiToken getToken() {
+    return token;
+  }
+
+  public abstract void execute(DelphiPreprocessor preprocessor);
 }

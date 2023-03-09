@@ -18,10 +18,25 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.UndefineDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class WarningsDirective extends SwitchDirective {
-  public WarningsDirective(DelphiToken token, CompilerDirectiveType type, String value) {
-    super(token, type, value.equalsIgnoreCase("ON"));
+public class UndefineDirectiveImpl extends ParameterDirectiveImpl implements UndefineDirective {
+  private final String symbol;
+
+  UndefineDirectiveImpl(DelphiToken token, String symbol) {
+    super(token, ParameterKind.UNDEF);
+    this.symbol = symbol;
+  }
+
+  @Override
+  public void execute(DelphiPreprocessor preprocessor) {
+    preprocessor.undefine(symbol);
+  }
+
+  @Override
+  public String getSymbol() {
+    return symbol;
   }
 }

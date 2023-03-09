@@ -18,19 +18,26 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.IncludeDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class DefineDirective extends AbstractCompilerDirective {
-  private final String define;
+class IncludeDirectiveImpl extends ParameterDirectiveImpl implements IncludeDirective {
+  private final String includeFile;
 
-  DefineDirective(DelphiToken token, CompilerDirectiveType type, String define) {
-    super(token, type);
-    this.define = define;
+  IncludeDirectiveImpl(DelphiToken token, String includeFile) {
+    super(token, ParameterKind.INCLUDE);
+    this.includeFile = includeFile;
   }
 
   @Override
   public void execute(DelphiPreprocessor preprocessor) {
-    preprocessor.define(define);
+    preprocessor.resolveInclude(((DelphiTokenImpl) getToken()).getAntlrToken(), includeFile);
+  }
+
+  @Override
+  public String getIncludeFile() {
+    return includeFile;
   }
 }

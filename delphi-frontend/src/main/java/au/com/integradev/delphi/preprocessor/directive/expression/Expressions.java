@@ -26,9 +26,8 @@ import static au.com.integradev.delphi.preprocessor.directive.expression.Express
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.unknownValue;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.BinaryEvaluator;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue.UnaryEvaluator;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue.BinaryEvaluator;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue.UnaryEvaluator;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;

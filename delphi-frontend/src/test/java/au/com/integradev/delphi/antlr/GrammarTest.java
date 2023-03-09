@@ -24,9 +24,11 @@ package au.com.integradev.delphi.antlr;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
@@ -220,6 +222,7 @@ class GrammarTest {
     fileConfig =
         DelphiFile.createConfig(
             StandardCharsets.UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             Set.of("Defined"));

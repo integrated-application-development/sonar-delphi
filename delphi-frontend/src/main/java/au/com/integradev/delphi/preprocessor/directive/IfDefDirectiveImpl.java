@@ -18,10 +18,25 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.IfDefDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class ScopedEnumsDirective extends SwitchDirective {
-  ScopedEnumsDirective(DelphiToken token, CompilerDirectiveType type, String value) {
-    super(token, type, value.equalsIgnoreCase("ON"));
+class IfDefDirectiveImpl extends BranchDirective implements IfDefDirective {
+  private final String symbol;
+
+  IfDefDirectiveImpl(DelphiToken token, String symbol) {
+    super(token, ConditionalKind.IFDEF);
+    this.symbol = symbol;
+  }
+
+  @Override
+  public boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
+    return preprocessor.isDefined(symbol);
+  }
+
+  @Override
+  public String getSymbol() {
+    return symbol;
   }
 }

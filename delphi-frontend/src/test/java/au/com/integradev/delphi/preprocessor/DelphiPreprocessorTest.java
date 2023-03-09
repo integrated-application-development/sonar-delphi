@@ -26,6 +26,7 @@ import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
@@ -106,7 +107,7 @@ class DelphiPreprocessorTest {
     DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
     DelphiLexer lexer = new DelphiLexer(fileStream);
-    DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
+    DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config, Platform.WINDOWS);
     preprocessor.process();
 
     assertThatThrownBy(preprocessor::process).isInstanceOf(IllegalStateException.class);
@@ -116,6 +117,7 @@ class DelphiPreprocessorTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             new HashSet<>(Arrays.asList(defines)));
@@ -130,7 +132,14 @@ class DelphiPreprocessorTest {
                 .map(dir -> DelphiUtils.getResource(BASE_DIR + dir).toPath())
                 .collect(Collectors.toList()));
 
-    execute(filename, DelphiFile.createConfig(UTF_8.name(), typeFactory, searchPath, emptySet()));
+    execute(
+        filename,
+        DelphiFile.createConfig(
+            UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            typeFactory,
+            searchPath,
+            emptySet()));
   }
 
   private static void execute(String filename) {
@@ -143,7 +152,8 @@ class DelphiPreprocessorTest {
       DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
       DelphiLexer lexer = new DelphiLexer(fileStream);
-      DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config);
+      DelphiPreprocessor preprocessor =
+          config.getPreprocessorFactory().createPreprocessor(lexer, config);
       preprocessor.process();
       BufferedTokenStream tokenStream = preprocessor.getTokenStream();
 

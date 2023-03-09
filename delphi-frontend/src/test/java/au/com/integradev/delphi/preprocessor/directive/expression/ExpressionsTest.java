@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.UNKNOWN;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.UNKNOWN;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expressions.binary;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expressions.literal;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expressions.unary;
@@ -29,8 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;

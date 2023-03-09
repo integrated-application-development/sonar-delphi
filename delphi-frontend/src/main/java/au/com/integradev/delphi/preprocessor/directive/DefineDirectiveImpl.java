@@ -19,16 +19,24 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.DefineDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-class DefaultCompilerDirective extends AbstractCompilerDirective {
+public class DefineDirectiveImpl extends ParameterDirectiveImpl implements DefineDirective {
+  private final String symbol;
 
-  public DefaultCompilerDirective(DelphiToken token, CompilerDirectiveType type) {
-    super(token, type);
+  DefineDirectiveImpl(DelphiToken token, String symbol) {
+    super(token, ParameterKind.DEFINE);
+    this.symbol = symbol;
   }
 
   @Override
   public void execute(DelphiPreprocessor preprocessor) {
-    // Do nothing
+    preprocessor.define(symbol);
+  }
+
+  @Override
+  public String getSymbol() {
+    return symbol;
   }
 }

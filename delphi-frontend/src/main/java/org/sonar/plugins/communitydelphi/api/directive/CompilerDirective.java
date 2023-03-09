@@ -16,25 +16,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.preprocessor.directive;
+package org.sonar.plugins.communitydelphi.api.directive;
 
-import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class SwitchDirective extends AbstractCompilerDirective {
-  private final boolean value;
-
-  SwitchDirective(DelphiToken token, CompilerDirectiveType type, boolean value) {
-    super(token, type);
-    this.value = value;
-  }
-
-  @Override
-  public void execute(DelphiPreprocessor preprocessor) {
-    preprocessor.handleSwitch(getType(), getToken().getTokenIndex(), value);
-  }
-
-  public boolean isActive() {
-    return value;
-  }
+public interface CompilerDirective {
+  DelphiToken getToken();
 }

@@ -21,9 +21,9 @@ package au.com.integradev.delphi.preprocessor.directive;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class EndIfDirective extends AbstractCompilerDirective {
-  EndIfDirective(DelphiToken token, CompilerDirectiveType type) {
-    super(token, type);
+public class EndIfDirective extends ConditionalDirectiveImpl {
+  EndIfDirective(DelphiToken token) {
+    super(token, ConditionalKind.ENDIF);
   }
 
   @Override

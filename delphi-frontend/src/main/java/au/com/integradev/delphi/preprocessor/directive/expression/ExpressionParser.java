@@ -39,7 +39,6 @@ import static au.com.integradev.delphi.preprocessor.directive.expression.Token.T
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.XOR;
 import static java.util.Objects.requireNonNullElse;
 
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;

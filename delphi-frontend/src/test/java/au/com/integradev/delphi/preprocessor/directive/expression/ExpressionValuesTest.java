@@ -26,8 +26,8 @@ import static au.com.integradev.delphi.preprocessor.directive.expression.Express
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.unknownValue;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
 import java.util.Collections;
 import java.util.Set;
 import org.junit.jupiter.api.Test;

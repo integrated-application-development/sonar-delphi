@@ -23,15 +23,14 @@ import static java.util.Comparator.comparingInt;
 import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.directive.BranchDirective;
 import au.com.integradev.delphi.preprocessor.directive.BranchingDirective;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveType;
-import au.com.integradev.delphi.preprocessor.directive.EndIfDirective;
+import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveImpl;
+import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Preconditions;
@@ -52,15 +51,21 @@ import org.antlr.runtime.Token;
 import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
+import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class DelphiPreprocessor {
   private static final Logger LOG = Loggers.get(DelphiPreprocessor.class);
   private final DelphiLexer lexer;
   private final DelphiFileConfig config;
+  private final Platform platform;
   private final Set<String> definitions;
   private final List<CompilerDirective> directives;
   private final Deque<BranchingDirective> parentDirective;
-  private final Map<CompilerDirectiveType, Integer> currentSwitches;
+  private final Map<SwitchKind, Integer> currentSwitches;
   private final CompilerSwitchRegistry switchRegistry;
   private final boolean processingIncludeFile;
 
@@ -68,12 +73,13 @@ public class DelphiPreprocessor {
   private Set<Token> tokens;
   private int tokenIndex;
 
-  public DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config) {
+  DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config, Platform platform) {
     this(
         lexer,
         config,
+        platform,
         caseInsensitiveSet(config.getDefinitions()),
-        new EnumMap<>(CompilerDirectiveType.class),
+        new EnumMap<>(SwitchKind.class),
         new CompilerSwitchRegistry(),
         0,
         false);
@@ -82,13 +88,15 @@ public class DelphiPreprocessor {
   private DelphiPreprocessor(
       DelphiLexer lexer,
       DelphiFileConfig config,
+      Platform platform,
       Set<String> definitions,
-      Map<CompilerDirectiveType, Integer> currentSwitches,
+      Map<SwitchKind, Integer> currentSwitches,
       CompilerSwitchRegistry switchRegistry,
       int tokenIndexStart,
       boolean processingIncludeFile) {
     this.lexer = lexer;
     this.config = config;
+    this.platform = platform;
     this.switchRegistry = switchRegistry;
     this.definitions = definitions;
     this.directives = new ArrayList<>();
@@ -112,7 +120,9 @@ public class DelphiPreprocessor {
     tokenStream.fill();
     tokens = extractTokens(tokenStream);
     tokens.forEach(this::processToken);
-    directives.forEach(directive -> directive.execute(this));
+    directives.stream()
+        .map(CompilerDirectiveImpl.class::cast)
+        .forEach(directive -> directive.execute(this));
     tokenStream.setTokens(new ArrayList<>(tokens));
     tokenStream.reset();
 
@@ -132,20 +142,32 @@ public class DelphiPreprocessor {
     tokenIndex++;
 
     if (token.getType() == DelphiLexer.TkCompilerDirective) {
-      CompilerDirective directive = CompilerDirective.fromToken(new DelphiTokenImpl(token));
-      processDirective(directive);
+      CompilerDirectiveParser parser = new CompilerDirectiveParserImpl(platform);
+      DelphiToken directiveToken = new DelphiTokenImpl(token);
+      parser.parse(directiveToken).ifPresent(this::processDirective);
     } else if (!parentDirective.isEmpty()) {
       parentDirective.peek().addToken(token);
     }
   }
 
   private void processDirective(CompilerDirective directive) {
-    if (directive instanceof BranchingDirective) {
-      addBranchingDirective((BranchingDirective) directive);
-    } else if (directive instanceof BranchDirective) {
-      addBranch((BranchDirective) directive);
-    } else if (directive instanceof EndIfDirective) {
-      endBranchingDirective();
+    if (directive instanceof ConditionalDirective) {
+      switch (((ConditionalDirective) directive).kind()) {
+        case IF:
+        case IFDEF:
+        case IFNDEF:
+        case IFOPT:
+          addBranchingDirective(new BranchingDirective((BranchDirective) directive));
+          break;
+        case ELSEIF:
+        case ELSE:
+          addBranch((BranchDirective) directive);
+          break;
+        case IFEND:
+        case ENDIF:
+          endBranchingDirective();
+          break;
+      }
     } else if (parentDirective.isEmpty()) {
       directives.add(directive);
     } else {
@@ -167,6 +189,7 @@ public class DelphiPreprocessor {
     if (!includeFile.isAbsolute()) {
       includeFile = Path.of(currentParentPath, includeFilePath);
     }
+    includeFile = includeFile.normalize();
 
     String includeFileName = includeFile.getFileName().toString();
     Path includePath = includeFile.getParent();
@@ -210,6 +233,7 @@ public class DelphiPreprocessor {
             new DelphiPreprocessor(
                 includeLexer,
                 config,
+                platform,
                 definitions,
                 currentSwitches,
                 switchRegistry,
@@ -264,15 +288,15 @@ public class DelphiPreprocessor {
     definitions.remove(define);
   }
 
-  public void handleSwitch(CompilerDirectiveType type, int tokenIndex, boolean value) {
+  public void handleSwitch(SwitchKind kind, int tokenIndex, boolean value) {
     if (value) {
-      currentSwitches.put(type, tokenIndex);
+      currentSwitches.put(kind, tokenIndex);
       return;
     }
 
-    Integer startIndex = currentSwitches.remove(type);
+    Integer startIndex = currentSwitches.remove(kind);
     if (startIndex != null) {
-      switchRegistry.addSwitch(type, startIndex, tokenIndex);
+      switchRegistry.addSwitch(kind, startIndex, tokenIndex);
     }
   }
 

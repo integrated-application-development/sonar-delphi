@@ -21,18 +21,14 @@ package au.com.integradev.delphi.preprocessor.directive;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-class IfDefDirective extends BranchDirective {
-  private final String define;
-  private final boolean isPositive;
-
-  IfDefDirective(DelphiToken token, CompilerDirectiveType type, String define, boolean isPositive) {
-    super(token, type);
-    this.define = define;
-    this.isPositive = isPositive;
+public class IfEndDirective extends ConditionalDirectiveImpl {
+  IfEndDirective(DelphiToken token) {
+    super(token, ConditionalKind.IFEND);
   }
 
   @Override
-  boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
-    return preprocessor.isDefined(define) == isPositive;
+  public void execute(DelphiPreprocessor preprocessor) {
+    // The preprocessor uses this directive as a flag to pop a branching directive off the stack.
+    // It doesn't actually do anything at execution time.
   }
 }

@@ -22,34 +22,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParser.CompilerDirectiveParserError;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
+import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl.CompilerDirectiveParserError;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
+import org.sonar.plugins.communitydelphi.api.directive.DefineDirective;
+import org.sonar.plugins.communitydelphi.api.directive.IfDefDirective;
+import org.sonar.plugins.communitydelphi.api.directive.IfnDefDirective;
+import org.sonar.plugins.communitydelphi.api.directive.IncludeDirective;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
+import org.sonar.plugins.communitydelphi.api.directive.UndefineDirective;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class CompilerDirectiveParserTest {
   private CompilerDirectiveParser parser;
 
   @BeforeEach
   void setup() {
-    parser = new CompilerDirectiveParser();
+    parser = new CompilerDirectiveParserImpl(Platform.WINDOWS);
   }
 
   @Test
   void testCreateIncludeDirective() {
     CompilerDirective directive = parse("{$include file.inc}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.INCLUDE);
+    assertThat(directive).isInstanceOf(IncludeDirective.class);
 
     directive = parse("{$I file.inc}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.INCLUDE);
+    assertThat(directive).isInstanceOf(IncludeDirective.class);
   }
 
   @Test
   void testCreateIfDirective() {
     CompilerDirective directive = parse("{$if True}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IF);
+    assertThat(directive).isInstanceOf(IfDirective.class);
 
     assertThatThrownBy(() -> parse("{$if 1..2}"))
         .isInstanceOf(CompilerDirectiveParserError.class)
@@ -58,75 +71,97 @@ class CompilerDirectiveParserTest {
 
   @Test
   void testCreateIfDef() {
-    CompilerDirective ifdef = parse("{$IFDEF MY_DEFINITION}");
-    CompilerDirective ifndef = parse("{$IFNDEF MY_DEFINITION}");
+    CompilerDirective directive = parse("{$IFDEF MY_DEFINITION}");
 
-    assertThat(ifdef.getType()).isEqualTo(CompilerDirectiveType.IFDEF);
-    assertThat(ifndef.getType()).isEqualTo(CompilerDirectiveType.IFNDEF);
+    assertThat(directive).isInstanceOf(IfDefDirective.class);
+  }
+
+  @Test
+  void testCreateIfnDef() {
+    CompilerDirective directive = parse("{$IFNDEF MY_DEFINITION}");
+
+    assertThat(directive).isInstanceOf(IfnDefDirective.class);
   }
 
   @Test
   void testCreateIfOpt() {
     CompilerDirective directive = parse("{$IFOPT O+}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IFOPT);
+
+    assertThat(directive).isInstanceOf(IfOptDirective.class);
   }
 
   @Test
   void testCreateUndefineDirective() {
     CompilerDirective directive = parse("{$undef _DEBUG}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNDEFINE);
+
+    assertThat(directive).isInstanceOf(UndefineDirective.class);
   }
 
   @Test
   void testCreateElseDirective() {
     CompilerDirective directive = parse("{$else}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+
+    assertThat(directive).isInstanceOf(ElseDirective.class);
 
     directive = parse("(*$else*)");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+
+    assertThat(directive).isInstanceOf(ElseDirective.class);
 
     directive = parse("{$ELSE}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSE);
+
+    assertThat(directive).isInstanceOf(ElseDirective.class);
+  }
+
+  @Test
+  void testCreateElseIfDirective() {
+    CompilerDirective directive = parse("{$elseif  Defined(MSWINDOWS)  }");
+
+    assertThat(directive).isInstanceOf(ElseIfDirective.class);
 
     assertThatThrownBy(() -> parse("{$elseif}"))
         .isInstanceOf(CompilerDirectiveParserError.class)
         .hasCauseInstanceOf(ExpressionParserError.class);
-
-    directive = parse("{$elseif  Defined(MSWINDOWS)  }");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ELSEIF);
   }
 
   @Test
   void testCreateIfEndDirective() {
     CompilerDirective directive = parse("{$ifend}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.IFEND);
+
+    assertThat(directive).isInstanceOf(IfEndDirective.class);
   }
 
   @Test
   void testCreateEndIfDirective() {
     CompilerDirective directive = parse("{$endif}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.ENDIF);
+
+    assertThat(directive).isInstanceOf(EndIfDirective.class);
   }
 
   @Test
-  void testCreateDefinreDirective() {
+  void testCreateDefineDirective() {
     CompilerDirective directive = parse("{$define _DEBUG}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.DEFINE);
+
+    assertThat(directive).isInstanceOf(DefineDirective.class);
+  }
+
+  @Test
+  void testCreateSwitchDirective() {
+    CompilerDirective directive = parse("{$i+}");
+
+    assertThat(directive).isInstanceOf(SwitchDirective.class);
+    assertThat(((SwitchDirective) directive).kind()).isEqualTo(SwitchKind.IOCHECKS);
+    assertThat(((SwitchDirective) directive).isActive()).isTrue();
   }
 
   @Test
   void testCreateUnsupportedDirectives() {
-    CompilerDirective directive = parse("{$i+}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
-
-    directive = parse("{$FOO}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
-
-    directive = parse("{$R}");
-    assertThat(directive.getType()).isEqualTo(CompilerDirectiveType.UNSUPPORTED);
+    CompilerDirective directive = parse("{$FOO}");
+    assertThat(directive).isNull();
   }
 
   private CompilerDirective parse(String data) {
-    return parser.parse(new CommonToken(DelphiLexer.TkCompilerDirective, data));
+    Token token = new CommonToken(DelphiLexer.TkCompilerDirective, data);
+    DelphiToken delphiToken = new DelphiTokenImpl(token);
+    return parser.parse(delphiToken).orElse(null);
   }
 }

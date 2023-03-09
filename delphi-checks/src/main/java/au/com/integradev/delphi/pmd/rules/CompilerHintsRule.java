@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.pmd.rules;
 
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import au.com.integradev.delphi.preprocessor.directive.HintsDirective;
 import net.sourceforge.pmd.RuleContext;
 

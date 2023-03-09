@@ -22,12 +22,12 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class ElseDirective extends BranchDirective {
-  ElseDirective(DelphiToken token, CompilerDirectiveType type) {
-    super(token, type);
+  ElseDirective(DelphiToken token) {
+    super(token, ConditionalKind.ELSE);
   }
 
   @Override
-  boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
+  public boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
     return true;
   }
 }

@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.file;
 
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.Set;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class DefaultDelphiFileConfig implements DelphiFileConfig {
   private final String encoding;
+  private final DelphiPreprocessorFactory preprocessorFactory;
   private final TypeFactory typeFactory;
   private final SearchPath searchPath;
   private final Set<String> definitions;
@@ -32,11 +34,13 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
 
   DefaultDelphiFileConfig(
       String encoding,
+      DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
       SearchPath searchPath,
       Set<String> definitions,
       boolean skipImplementation) {
     this.encoding = encoding;
+    this.preprocessorFactory = preprocessorFactory;
     this.typeFactory = typeFactory;
     this.searchPath = searchPath;
     this.definitions = definitions;
@@ -47,6 +51,11 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
   @Override
   public String getEncoding() {
     return encoding;
+  }
+
+  @Override
+  public DelphiPreprocessorFactory getPreprocessorFactory() {
+    return preprocessorFactory;
   }
 
   @Override

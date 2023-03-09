@@ -19,15 +19,29 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class IfOptDirective extends BranchDirective {
-  IfOptDirective(DelphiToken token, CompilerDirectiveType type) {
-    super(token, type);
+  private final SwitchKind switchKind;
+  private final boolean switchValue;
+
+  IfOptDirective(DelphiToken token, SwitchKind switchKind, boolean switchValue) {
+    super(token, ConditionalKind.IFOPT);
+    this.switchKind = switchKind;
+    this.switchValue = switchValue;
+  }
+
+  public SwitchKind switchKind() {
+    return switchKind;
+  }
+
+  public boolean getSwitchValue() {
+    return switchValue;
   }
 
   @Override
-  boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
+  public boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
     return false;
   }
 }

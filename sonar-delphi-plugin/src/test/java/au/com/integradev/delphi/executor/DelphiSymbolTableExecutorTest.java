@@ -25,9 +25,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -1217,12 +1219,14 @@ class DelphiSymbolTableExecutorTest {
             .setType(InputFile.Type.MAIN)
             .build();
 
-    TypeFactory typeFactory =
+    var preprocessorFactory = new DelphiPreprocessorFactory(Platform.WINDOWS);
+    var typeFactory =
         new TypeFactory(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
 
     DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);
     when(fileConfig.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(fileConfig.getPreprocessorFactory()).thenReturn(preprocessorFactory);
     when(fileConfig.getTypeFactory()).thenReturn(typeFactory);
     when(fileConfig.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(fileConfig.getDefinitions()).thenReturn(Collections.emptySet());
@@ -1239,6 +1243,7 @@ class DelphiSymbolTableExecutorTest {
 
     symbolTable =
         SymbolTable.builder()
+            .preprocessorFactory(preprocessorFactory)
             .typeFactory(typeFactory)
             .sourceFiles(sourceFiles)
             .searchPath(searchPath)

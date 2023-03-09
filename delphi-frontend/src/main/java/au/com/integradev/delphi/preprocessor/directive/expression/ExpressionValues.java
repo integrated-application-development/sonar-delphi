@@ -18,16 +18,16 @@
  */
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.BOOLEAN;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.DECIMAL;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.INTEGER;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.SET;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.STRING;
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.UNKNOWN;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.BOOLEAN;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.DECIMAL;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.INTEGER;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.SET;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.STRING;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.UNKNOWN;
 import static java.lang.Math.ulp;
 
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
 import com.google.common.math.DoubleMath;
 import java.math.BigDecimal;
 import java.math.BigInteger;

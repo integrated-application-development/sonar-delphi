@@ -24,6 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTableBuilder.SymbolTableConstructionException;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -48,6 +50,7 @@ class SymbolTableBuilderTest {
   void testNonexistentStandardLibraryPath(@TempDir Path tempDir) {
     SymbolTableBuilder builder =
         SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
             .typeFactory(TypeFactoryUtils.defaultFactory())
             .standardLibraryPath(tempDir.resolve("nonexistent"));
     assertThatThrownBy(builder::build).isInstanceOf(SymbolTableConstructionException.class);
@@ -76,8 +79,15 @@ class SymbolTableBuilderTest {
   }
 
   @Test
-  void testBuildWithoutTypeFactory() {
+  void testBuildWithoutPreprocessorFactory() {
     SymbolTableBuilder builder = SymbolTable.builder();
+    assertThatThrownBy(builder::build).isInstanceOf(SymbolTableConstructionException.class);
+  }
+
+  @Test
+  void testBuildWithoutTypeFactory() {
+    SymbolTableBuilder builder =
+        SymbolTable.builder().preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS));
     assertThatThrownBy(builder::build).isInstanceOf(SymbolTableConstructionException.class);
   }
 
@@ -85,6 +95,7 @@ class SymbolTableBuilderTest {
   void testEmptyStandardLibrary(@TempDir Path standardLibraryPath) {
     SymbolTableBuilder builder =
         SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
             .typeFactory(TypeFactoryUtils.defaultFactory())
             .standardLibraryPath(standardLibraryPath);
 
@@ -103,6 +114,7 @@ class SymbolTableBuilderTest {
 
     SymbolTableBuilder builder =
         SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
             .typeFactory(TypeFactoryUtils.defaultFactory())
             .standardLibraryPath(standardLibraryPath);
 
@@ -124,6 +136,7 @@ class SymbolTableBuilderTest {
 
     SymbolTable symbolTable =
         SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
             .typeFactory(TypeFactoryUtils.defaultFactory())
             .standardLibraryPath(STANDARD_LIBRARY)
             .sourceFiles(List.of(sourceFilePath))

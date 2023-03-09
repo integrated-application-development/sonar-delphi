@@ -18,22 +18,23 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
-import static au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ConstExpressionType.BOOLEAN;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.BOOLEAN;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirective.Expression.ExpressionValue;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression;
+import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class IfDirective extends BranchDirective {
-  private final CompilerDirective.Expression expression;
+  private final Expression expression;
 
-  IfDirective(DelphiToken token, CompilerDirectiveType type, CompilerDirective.Expression expression) {
-    super(token, type);
+  IfDirective(DelphiToken token, Expression expression) {
+    super(token, ConditionalKind.IF);
     this.expression = expression;
   }
 
   @Override
-  boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
+  public boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
     ExpressionValue value = expression.evaluate(preprocessor);
     return value.type() == BOOLEAN && value.asBoolean();
   }

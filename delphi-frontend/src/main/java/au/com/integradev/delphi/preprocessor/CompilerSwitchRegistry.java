@@ -18,26 +18,25 @@
  */
 package au.com.integradev.delphi.preprocessor;
 
-import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveType;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Range;
 import java.util.HashSet;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 
 public class CompilerSwitchRegistry {
-  private final Multimap<CompilerDirectiveType, Range<Integer>> rangesByDirectiveType;
+  private final Multimap<SwitchKind, Range<Integer>> rangesBySwitchKind;
 
   CompilerSwitchRegistry() {
-    rangesByDirectiveType =
-        Multimaps.newSetMultimap(Maps.newEnumMap(CompilerDirectiveType.class), HashSet::new);
+    rangesBySwitchKind = Multimaps.newSetMultimap(Maps.newEnumMap(SwitchKind.class), HashSet::new);
   }
 
-  void addSwitch(CompilerDirectiveType type, int startIndex, int endIndex) {
-    rangesByDirectiveType.put(type, Range.closed(startIndex, endIndex));
+  void addSwitch(SwitchKind kind, int startIndex, int endIndex) {
+    rangesBySwitchKind.put(kind, Range.closed(startIndex, endIndex));
   }
 
-  public boolean isActiveSwitch(CompilerDirectiveType type, int tokenIndex) {
-    return rangesByDirectiveType.get(type).stream().anyMatch(range -> range.contains(tokenIndex));
+  public boolean isActiveSwitch(SwitchKind kind, int tokenIndex) {
+    return rangesBySwitchKind.get(kind).stream().anyMatch(range -> range.contains(tokenIndex));
   }
 }

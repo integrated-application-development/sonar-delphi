@@ -18,10 +18,32 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
-public class PointerMathDirective extends SwitchDirective {
-  PointerMathDirective(DelphiToken token, CompilerDirectiveType type, String value) {
-    super(token, type, value.equalsIgnoreCase("ON"));
+public class SwitchDirectiveImpl extends CompilerDirectiveImpl implements SwitchDirective {
+  private final SwitchKind kind;
+  private final boolean value;
+
+  SwitchDirectiveImpl(DelphiToken token, SwitchKind kind, boolean value) {
+    super(token);
+    this.kind = kind;
+    this.value = value;
+  }
+
+  @Override
+  public void execute(DelphiPreprocessor preprocessor) {
+    preprocessor.handleSwitch(kind, getToken().getIndex(), value);
+  }
+
+  @Override
+  public SwitchKind kind() {
+    return kind;
+  }
+
+  @Override
+  public boolean isActive() {
+    return value;
   }
 }

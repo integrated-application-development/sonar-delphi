@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.file;
 
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.Set;
@@ -31,6 +32,13 @@ public interface DelphiFileConfig {
    */
   @Nullable
   String getEncoding();
+
+  /**
+   * Returns the preprocessor factory, which can be used to create a preprocessor for this platform
+   *
+   * @return Preprocessor factory
+   */
+  DelphiPreprocessorFactory getPreprocessorFactory();
 
   /**
    * Returns the type factory, which can be used to create different types

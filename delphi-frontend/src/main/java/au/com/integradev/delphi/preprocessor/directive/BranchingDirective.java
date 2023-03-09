@@ -24,12 +24,13 @@ import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 
-public class BranchingDirective extends AbstractCompilerDirective {
+public class BranchingDirective extends CompilerDirectiveImpl {
   private final Deque<BranchDirective> branches;
 
-  BranchingDirective(BranchDirective directive) {
-    super(directive.getToken(), directive.getType());
+  public BranchingDirective(BranchDirective directive) {
+    super(directive.getToken());
     branches = new ArrayDeque<>();
     addBranch(directive);
   }
