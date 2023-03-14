@@ -35,6 +35,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.INTEGER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.LONGINT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.NATIVEINT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.NATIVEUINT;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.OLEVARIANT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.PANSICHAR;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.PCHAR;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.POINTER;
@@ -279,8 +280,10 @@ public final class IntrinsicsInjector {
         .varParam(TypeFactory.untypedType())
         .varParam(type(INTEGER));
     method("VarArrayRedim").varParam(type(VARIANT)).param(type(INTEGER));
+    method("VarArrayRedim").varParam(type(OLEVARIANT)).param(type(INTEGER));
     method("VarCast").varParam(type(VARIANT)).param(type(VARIANT)).param(type(INTEGER));
     method("VarClear").varParam(type(VARIANT));
+    method("VarClear").varParam(type(OLEVARIANT));
     method("VarCopy").varParam(type(VARIANT)).param(type(VARIANT));
     method("Write")
         .varParam(typeFactory.untypedFile())

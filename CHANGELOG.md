@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
+
 ## [0.40.0] - 2023-01-10
 
 ### Added
