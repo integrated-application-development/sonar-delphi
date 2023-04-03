@@ -1155,8 +1155,7 @@ public class NameResolver {
   }
 
   private void disambiguateWithinUnit(String unitName) {
-    declarations.removeIf(
-        declaration -> !((NameDeclaration) declaration).getNode().getUnitName().equals(unitName));
+    declarations.removeIf(declaration -> !declaration.getNode().getUnitName().equals(unitName));
   }
 
   private boolean isVisibleDeclaration(NameDeclaration declaration) {

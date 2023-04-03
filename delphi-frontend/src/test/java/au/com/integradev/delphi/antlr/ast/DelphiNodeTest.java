@@ -21,15 +21,17 @@ package au.com.integradev.delphi.antlr.ast;
 import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.ARE_DELPHI_NODES;
 import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.HAVE_TOKEN_CONSTRUCTOR;
 import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.IMPLEMENT_ACCEPT;
-import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.NODE_PACKAGE;
+import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.NODE_IMPL_PACKAGE;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
@@ -42,12 +44,16 @@ class DelphiNodeTest {
         .haveModifier(JavaModifier.ABSTRACT)
         .orShould()
         .haveModifier(JavaModifier.FINAL)
-        .check(NODE_PACKAGE);
+        .check(NODE_IMPL_PACKAGE);
   }
 
   @Test
-  void testAllNodesShouldEndNameWithNode() {
-    classes().that(ARE_DELPHI_NODES).should().haveSimpleNameEndingWith("Node").check(NODE_PACKAGE);
+  void testAllNodesShouldEndNameWithNodeImpl() {
+    classes()
+        .that(ARE_DELPHI_NODES)
+        .should()
+        .haveSimpleNameEndingWith("NodeImpl")
+        .check(NODE_IMPL_PACKAGE);
   }
 
   @Test
@@ -57,15 +63,35 @@ class DelphiNodeTest {
         .and(IMPLEMENT_ACCEPT)
         .should()
         .notHaveModifier(JavaModifier.ABSTRACT)
-        .check(NODE_PACKAGE);
+        .check(NODE_IMPL_PACKAGE);
   }
 
   @Test
   void testAcceptShouldCallCorrectVisitorMethod() {
     for (DelphiNode node : DelphiNodeUtils.getNodeInstances()) {
-      DelphiParserVisitor<?> visitor = spy(new DelphiParserVisitor<>() {});
-      node.accept(visitor, null);
-      verify(visitor, atLeastOnce()).visit(any(node.getClass()), any());
+      DelphiParserVisitor<?> visitor = new DelphiParserVisitor<>() {};
+      DelphiParserVisitor<?> visitorSpy = spy(visitor);
+      node.accept(visitorSpy, null);
+
+      assertCorrectVisitMethodCalled(visitor, visitorSpy, node);
+    }
+  }
+
+  private static void assertCorrectVisitMethodCalled(
+      DelphiParserVisitor<?> visitor, DelphiParserVisitor<?> visitorSpy, DelphiNode node) {
+    try {
+      Optional<Class<?>> interfaceType =
+          Arrays.stream(node.getClass().getInterfaces())
+              .filter(intf -> node.getClass().getSimpleName().equals(intf.getSimpleName() + "Impl"))
+              .findFirst();
+
+      assertThat(interfaceType).isPresent();
+
+      final Object verify = verify(visitorSpy);
+      Method method = visitor.getClass().getMethod("visit", interfaceType.get(), Object.class);
+      method.invoke(verify, node, null);
+    } catch (Exception e) {
+      throw new AssertionError(e);
     }
   }
 
@@ -75,6 +101,6 @@ class DelphiNodeTest {
         .that(ARE_DELPHI_NODES)
         .should(HAVE_TOKEN_CONSTRUCTOR)
         .because("this is needed for reflective instantiation")
-        .check(NODE_PACKAGE);
+        .check(NODE_IMPL_PACKAGE);
   }
 }

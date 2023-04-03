@@ -33,18 +33,9 @@ import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
-import javax.xml.XMLConstants;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.utils.log.Logger;
@@ -64,19 +55,7 @@ class GrammarTest {
     try {
       String path = BASE_DIR + fileName;
       LOG.info("Parsing file: " + path);
-      DelphiFile delphiFile = DelphiFile.from(DelphiUtils.getResource(path), fileConfig);
-
-      Source source = new DOMSource(delphiFile.getAst().getAsDocument());
-      String prefix = "AST_" + StringUtils.removeEnd(fileName, ".pas");
-      File outputFile = File.createTempFile(prefix, ".xml");
-
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-      Transformer transformer = transformerFactory.newTransformer();
-      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-      transformer.transform(source, new StreamResult(outputFile));
-
-      LOG.info("Generated AST XML file at: " + outputFile.getName());
+      DelphiFile.from(DelphiUtils.getResource(path), fileConfig);
     } catch (Exception e) {
       throw new AssertionError(e);
     }

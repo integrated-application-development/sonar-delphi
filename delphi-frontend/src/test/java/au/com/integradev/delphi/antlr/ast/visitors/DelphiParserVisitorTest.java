@@ -62,7 +62,7 @@ class DelphiParserVisitorTest {
   void testAllASTNodesAreHandled() {
     Set<Class<?>> handledTypes = getTypesHandledByParserVisitor();
     Set<String> unhandledTypes =
-        DelphiNodeUtils.getNodeTypes().stream()
+        DelphiNodeUtils.getNodeInterfaceTypes().stream()
             .filter(nodeType -> !handledTypes.contains(nodeType))
             .map(Class::getSimpleName)
             .collect(Collectors.toSet());

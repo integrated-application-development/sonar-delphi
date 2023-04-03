@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -42,12 +43,14 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public final class DelphiNodeUtils {
-  public static final JavaClasses NODE_PACKAGE =
+  public static final JavaClasses NODE_INTERFACE_PACKAGE =
+      new ClassFileImporter().importPackages("org.sonar.plugins.communitydelphi.api.ast");
+  public static final JavaClasses NODE_IMPL_PACKAGE =
       new ClassFileImporter().importPackages("au.com.integradev.delphi.antlr.ast.node");
 
   public static final DescribedPredicate<JavaClass> ARE_DELPHI_NODES =
       DescribedPredicate.describe(
-          "inherit from DelphiNode", Predicates.assignableTo(DelphiNode.class));
+          "inherit from DelphiNode", Predicates.assignableTo(DelphiNodeImpl.class));
 
   public static final DescribedPredicate<JavaClass> IMPLEMENT_ACCEPT =
       new DescribedPredicate<>("have a method that implements accept(DelphiParserVisitor, T)") {
@@ -95,15 +98,23 @@ public final class DelphiNodeUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static Set<Class<? extends DelphiNode>> getNodeTypes() {
-    return NODE_PACKAGE.stream()
+  public static Set<Class<? extends DelphiNode>> getNodeInterfaceTypes() {
+    return NODE_INTERFACE_PACKAGE.stream()
         .filter(clazz -> clazz.isAssignableTo(DelphiNode.class))
         .map(clazz -> (Class<? extends DelphiNode>) clazz.reflect())
         .collect(Collectors.toUnmodifiableSet());
   }
 
+  @SuppressWarnings("unchecked")
+  public static Set<Class<? extends DelphiNode>> getNodeImplTypes() {
+    return NODE_IMPL_PACKAGE.stream()
+        .filter(clazz -> clazz.isAssignableTo(DelphiNodeImpl.class))
+        .map(clazz -> (Class<? extends DelphiNode>) clazz.reflect())
+        .collect(Collectors.toUnmodifiableSet());
+  }
+
   public static Set<? extends DelphiNode> getNodeInstances() {
-    return getNodeTypes().stream()
+    return getNodeImplTypes().stream()
         .filter(nodeType -> !Modifier.isAbstract(nodeType.getModifiers()))
         .map(DelphiNodeUtils::instantiateNode)
         .collect(Collectors.toSet());

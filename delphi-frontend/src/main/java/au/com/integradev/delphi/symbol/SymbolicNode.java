@@ -127,6 +127,7 @@ public final class SymbolicNode implements Node {
     return scope;
   }
 
+  @Override
   public String getUnitName() {
     FileScope fileScope = scope.getEnclosingScope(FileScope.class);
     if (fileScope == null) {

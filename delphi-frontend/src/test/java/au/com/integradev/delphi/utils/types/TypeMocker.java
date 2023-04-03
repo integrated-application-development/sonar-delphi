@@ -25,6 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
+import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -40,7 +41,7 @@ public final class TypeMocker {
   }
 
   public static StructType struct(String image, StructKind kind, Type superType) {
-    StructType type = mock(StructType.class);
+    StructType type = mock(StructTypeImpl.class);
     when(type.typeScope()).thenReturn(unknownScope());
     when(type.isStruct()).thenReturn(true);
     when(type.isInterface()).thenReturn(kind == StructKind.INTERFACE);

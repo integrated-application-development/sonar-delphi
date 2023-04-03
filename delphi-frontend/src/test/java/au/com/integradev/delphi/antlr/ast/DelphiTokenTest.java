@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.antlr.ast;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
@@ -57,17 +56,5 @@ class DelphiTokenTest {
   @Test
   void testGetEndColumn() {
     assertThat(commentToken.getEndColumn()).isEqualTo(1);
-  }
-
-  @Test
-  void testGetNext() {
-    assertThatThrownBy(() -> commentToken.getNext())
-        .isInstanceOf(UnsupportedOperationException.class);
-  }
-
-  @Test
-  void testGetPreviousComment() {
-    assertThatThrownBy(() -> commentToken.getPreviousComment())
-        .isInstanceOf(UnsupportedOperationException.class);
   }
 }

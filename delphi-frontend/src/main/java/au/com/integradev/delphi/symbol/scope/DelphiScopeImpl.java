@@ -343,26 +343,32 @@ public class DelphiScopeImpl implements DelphiScope {
     return (Set<T>) declarationsByClass.get(clazz);
   }
 
+  @Override
   public Set<UnitNameDeclaration> getUnitDeclarations() {
     return getDeclarationSet(UnitNameDeclaration.class);
   }
 
+  @Override
   public Set<UnitImportNameDeclaration> getImportDeclarations() {
     return getDeclarationSet(UnitImportNameDeclaration.class);
   }
 
+  @Override
   public Set<TypeNameDeclaration> getTypeDeclarations() {
     return getDeclarationSet(TypeNameDeclaration.class);
   }
 
+  @Override
   public Set<PropertyNameDeclaration> getPropertyDeclarations() {
     return getDeclarationSet(PropertyNameDeclaration.class);
   }
 
+  @Override
   public Set<MethodNameDeclaration> getMethodDeclarations() {
     return getDeclarationSet(MethodNameDeclaration.class);
   }
 
+  @Override
   public Set<VariableNameDeclaration> getVariableDeclarations() {
     return getDeclarationSet(VariableNameDeclaration.class);
   }

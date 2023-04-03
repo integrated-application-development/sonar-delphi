@@ -19,9 +19,9 @@
 package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import java.util.HashMap;
 import java.util.Map;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public enum MethodDirective {
   OVERLOAD(DelphiLexer.OVERLOAD),

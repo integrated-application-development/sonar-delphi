@@ -1,7 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.token;
 
 import javax.annotation.Nullable;
-import org.antlr.runtime.Token;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 
 public interface DelphiToken {
