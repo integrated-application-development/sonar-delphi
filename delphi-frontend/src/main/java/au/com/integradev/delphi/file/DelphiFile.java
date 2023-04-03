@@ -26,16 +26,13 @@ import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
+import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
-import au.com.integradev.delphi.antlr.ast.node.DelphiAstImpl;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
-import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
-import au.com.integradev.delphi.pmd.DelphiPmdConstants;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -52,19 +49,18 @@ import org.jetbrains.annotations.Nullable;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface DelphiFile {
   File getSourceCodeFile();
 
-  String getSourceCodeLine(int index);
+  List<String> getSourceCodeFilesLines();
 
   DelphiAst getAst();
 
   List<DelphiToken> getTokens();
 
   List<DelphiToken> getComments();
-
-  Set<Integer> getSuppressions();
 
   CompilerSwitchRegistry getCompilerSwitchRegistry();
 
@@ -129,7 +125,6 @@ public interface DelphiFile {
       delphiFile.setSourceCodeLines(readLines(sourceFile, config.getEncoding()));
       delphiFile.setTokens(createTokenList(delphiFile, preprocessor.getTokenStream()));
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
-      delphiFile.setSuppressions(findSuppressionLines(delphiFile.getComments()));
     } catch (IOException | RecognitionException | RuntimeException e) {
       throw new DelphiFileConstructionException(e);
     }
@@ -219,12 +214,5 @@ public interface DelphiFile {
     return tokenList.stream()
         .filter(DelphiToken::isComment)
         .collect(Collectors.toUnmodifiableList());
-  }
-
-  private static Set<Integer> findSuppressionLines(List<DelphiToken> commentList) {
-    return commentList.stream()
-        .filter(comment -> comment.getImage().contains(DelphiPmdConstants.SUPPRESSION_TAG))
-        .map(DelphiToken::getBeginLine)
-        .collect(Collectors.toUnmodifiableSet());
   }
 }

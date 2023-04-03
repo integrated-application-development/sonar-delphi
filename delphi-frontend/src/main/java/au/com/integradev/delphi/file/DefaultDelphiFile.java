@@ -18,14 +18,12 @@
  */
 package au.com.integradev.delphi.file;
 
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import com.google.common.base.Preconditions;
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class DefaultDelphiFile implements DelphiFile {
   private File sourceCodeFile;
@@ -33,7 +31,6 @@ class DefaultDelphiFile implements DelphiFile {
   private DelphiAst ast;
   private List<DelphiToken> tokens;
   private List<DelphiToken> comments;
-  private Set<Integer> suppressions;
   private CompilerSwitchRegistry switchRegistry;
   private TypeFactory typeFactory;
 
@@ -47,10 +44,8 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
-  public String getSourceCodeLine(int line) {
-    int index = line - 1;
-    Preconditions.checkPositionIndex(index, sourceCodeLines.size());
-    return sourceCodeLines.get(index);
+  public List<String> getSourceCodeFilesLines() {
+    return sourceCodeLines;
   }
 
   @Override
@@ -69,11 +64,6 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
-  public Set<Integer> getSuppressions() {
-    return suppressions;
-  }
-
-  @Override
   public CompilerSwitchRegistry getCompilerSwitchRegistry() {
     return switchRegistry;
   }
@@ -88,7 +78,7 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   void setSourceCodeLines(List<String> sourceCodeLines) {
-    this.sourceCodeLines = sourceCodeLines;
+    this.sourceCodeLines = List.copyOf(sourceCodeLines);
   }
 
   void setAst(DelphiAst ast) {
@@ -96,15 +86,11 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   void setTokens(List<DelphiToken> tokens) {
-    this.tokens = tokens;
+    this.tokens = List.copyOf(tokens);
   }
 
   void setComments(List<DelphiToken> comments) {
-    this.comments = comments;
-  }
-
-  void setSuppressions(Set<Integer> suppressions) {
-    this.suppressions = suppressions;
+    this.comments = List.copyOf(comments);
   }
 
   void setCompilerSwitchRegistry(CompilerSwitchRegistry switchRegistry) {
