@@ -817,7 +817,7 @@ identifierOrKeyword          : TkIdentifier
                              | keywords -> ^({changeTokenType(TkIdentifier)})
                              ;
 keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ADD | ALIGN | ANSISTRING | ASSEMBLER | AT | AUTOMATED | CDECL)
-                             | (CONTAINS |  DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
+                             | (CONTAINS | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
                              | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
                              | (PRIVATE | PROTECTED | PUBLIC | PUBLISHED | READ | READONLY | REFERENCE | REGISTER | REINTRODUCE)

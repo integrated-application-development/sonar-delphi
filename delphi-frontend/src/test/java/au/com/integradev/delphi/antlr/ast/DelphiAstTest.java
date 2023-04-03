@@ -35,7 +35,6 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 class DelphiAstTest {
-
   private static final String TEST_FILE = "/au/com/integradev/delphi/grammar/GrammarTest.pas";
   private final DelphiAst ast =
       DelphiFile.from(DelphiUtils.getResource(TEST_FILE), DelphiFileUtils.mockConfig()).getAst();

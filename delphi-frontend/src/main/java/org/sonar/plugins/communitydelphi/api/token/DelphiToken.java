@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 
 public interface DelphiToken {
-
   String getImage();
 
   int getBeginLine();
