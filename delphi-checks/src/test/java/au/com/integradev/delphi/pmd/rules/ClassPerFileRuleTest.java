@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.pmd.rules;
 
-import static au.com.integradev.delphi.pmd.FilePosition.UNDEFINED_LINE;
+import static org.sonar.plugins.communitydelphi.api.check.FilePosition.UNDEFINED_LINE;
 import static au.com.integradev.delphi.utils.conditions.RuleKey.ruleKey;
 import static au.com.integradev.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 

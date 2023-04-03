@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.utils.conditions;
 
-import au.com.integradev.delphi.pmd.FilePosition;
 import org.assertj.core.api.Condition;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 
 public class AtLine extends Condition<Issue> {
   private final int line;

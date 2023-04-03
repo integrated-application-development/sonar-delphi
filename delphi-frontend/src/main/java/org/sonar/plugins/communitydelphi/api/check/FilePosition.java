@@ -16,12 +16,12 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.pmd;
+package org.sonar.plugins.communitydelphi.api.check;
 
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public abstract class FilePosition implements Serializable {
   public static final int UNDEFINED_LINE = 0;

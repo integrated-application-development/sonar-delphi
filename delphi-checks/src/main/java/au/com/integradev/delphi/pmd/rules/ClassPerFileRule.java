@@ -26,7 +26,7 @@ import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
 import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 
 public class ClassPerFileRule extends AbstractDelphiRule {

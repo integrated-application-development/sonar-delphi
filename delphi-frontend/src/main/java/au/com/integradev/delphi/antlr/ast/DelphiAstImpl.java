@@ -26,7 +26,6 @@ import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
-import au.com.integradev.delphi.pmd.FilePosition;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -34,6 +33,7 @@ import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 /** DelphiLanguage AST tree. */

@@ -21,7 +21,7 @@ package au.com.integradev.delphi.pmd.rules;
 import static au.com.integradev.delphi.utils.conditions.RuleKey.ruleKey;
 import static au.com.integradev.delphi.utils.conditions.RuleKeyAtLine.ruleKeyAtLine;
 
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import au.com.integradev.delphi.utils.builders.DelphiTestFileBuilder;
 import au.com.integradev.delphi.utils.builders.DelphiTestFileBuilder.ResourceBuilder;
 import au.com.integradev.delphi.utils.builders.DelphiTestUnitBuilder;

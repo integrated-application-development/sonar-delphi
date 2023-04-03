@@ -21,7 +21,7 @@ package au.com.integradev.delphi.pmd.rules;
 import static au.com.integradev.delphi.pmd.DelphiPmdConstants.LIMIT;
 
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 
 /** Class for counting line characters. If too long, creates a violation. */

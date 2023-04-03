@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.pmd;
+package au.com.integradev.delphi.check;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -26,6 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 
 class FilePositionTest {
   static class InvalidPrecisePositionArgumentsProvider implements ArgumentsProvider {

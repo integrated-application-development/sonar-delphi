@@ -33,7 +33,7 @@ import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.pmd.DelphiPmdConfiguration;
 import au.com.integradev.delphi.pmd.DelphiPmdConstants;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import au.com.integradev.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
 import au.com.integradev.delphi.pmd.violation.DelphiPmdViolationRecorder;
 import au.com.integradev.delphi.pmd.xml.DelphiRule;

@@ -25,7 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 
 public class EmptyUnitRule extends AbstractDelphiRule {

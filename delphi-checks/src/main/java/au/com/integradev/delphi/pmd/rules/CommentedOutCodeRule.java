@@ -22,7 +22,7 @@ import static java.util.regex.Pattern.compile;
 
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import com.google.common.base.Splitter;
 import java.util.ArrayList;
 import java.util.Collections;

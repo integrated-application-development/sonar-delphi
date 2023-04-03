@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.countMatches;
 
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 
 public class TabulationCharactersRule extends AbstractDelphiRule {

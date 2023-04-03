@@ -20,7 +20,7 @@ package au.com.integradev.delphi.pmd.rules;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import au.com.integradev.delphi.pmd.FilePosition;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import net.sourceforge.pmd.RuleContext;
 
 public class AvoidWithRule extends AbstractDelphiRule {
