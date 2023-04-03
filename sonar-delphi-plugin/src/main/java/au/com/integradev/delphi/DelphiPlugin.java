@@ -30,7 +30,7 @@ import au.com.integradev.delphi.executor.DelphiCpdExecutor;
 import au.com.integradev.delphi.executor.DelphiHighlightExecutor;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.executor.DelphiMetricsExecutor;
-import au.com.integradev.delphi.executor.DelphiPmdExecutor;
+import au.com.integradev.delphi.executor.DelphiChecksExecutor;
 import au.com.integradev.delphi.executor.DelphiSymbolTableExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.nunit.DelphiNUnitSensor;
@@ -60,7 +60,7 @@ public class DelphiPlugin implements Plugin {
         // Executors
         DelphiMasterExecutor.class,
         DelphiSymbolTableExecutor.class,
-        DelphiPmdExecutor.class,
+        DelphiChecksExecutor.class,
         // Core helpers
         DelphiProjectHelper.class,
         // Environment

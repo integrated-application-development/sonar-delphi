@@ -110,6 +110,7 @@
     <commons-text.version>1.10.0</commons-text.version>
     <pmd.version>6.18.0</pmd.version>
     <jdom.version>2.0.6.1</jdom.version>
+    <json-simple.version>1.1.1</json-simple.version>
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
     <jsr305.version>3.0.2</jsr305.version>
     <guava.version>31.1-jre</guava.version>
@@ -118,7 +119,7 @@
     <junit.version>5.9.0</junit.version>
     <junit-platform-suite-engine.version>1.9.0-M1</junit-platform-suite-engine.version>
     <assertj.version>3.23.1</assertj.version>
-    <mockito.version>4.7.0</mockito.version>
+    <mockito.version>5.2.0</mockito.version>
     <archunit.version>0.23.1</archunit.version>
     <slf4j.version>1.7.30</slf4j.version>
     <errorprone.version>2.15.0</errorprone.version>
@@ -199,6 +200,11 @@
         <groupId>org.jdom</groupId>
         <artifactId>jdom2</artifactId>
         <version>${jdom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>${json-simple.version}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>

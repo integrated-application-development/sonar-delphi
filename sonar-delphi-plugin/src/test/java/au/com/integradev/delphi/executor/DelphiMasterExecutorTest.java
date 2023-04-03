@@ -92,7 +92,7 @@ class DelphiMasterExecutorTest {
   @Test
   void testDependenciesShouldBeExecutedInOrder() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
-    Executor executor = mock(DelphiPmdExecutor.class);
+    Executor executor = mock(DelphiChecksExecutor.class);
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
@@ -107,7 +107,7 @@ class DelphiMasterExecutorTest {
   @Test
   void testUnresolvedDependencyShouldSkipExecutor() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
-    Executor executor = mock(DelphiPmdExecutor.class);
+    Executor executor = mock(DelphiChecksExecutor.class);
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor);
@@ -121,7 +121,7 @@ class DelphiMasterExecutorTest {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
     doThrow(new RuntimeException("Test")).when(dependency).execute(any(), any());
 
-    Executor executor = mock(DelphiPmdExecutor.class);
+    Executor executor = mock(DelphiChecksExecutor.class);
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
@@ -137,7 +137,7 @@ class DelphiMasterExecutorTest {
         .when(dependency)
         .execute(any(), any());
 
-    Executor executor = mock(DelphiPmdExecutor.class);
+    Executor executor = mock(DelphiChecksExecutor.class);
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
