@@ -34,18 +34,11 @@ import au.com.integradev.delphi.executor.DelphiPmdExecutor;
 import au.com.integradev.delphi.executor.DelphiSymbolTableExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.nunit.DelphiNUnitSensor;
-import au.com.integradev.delphi.pmd.DelphiPmdConfiguration;
-import au.com.integradev.delphi.pmd.profile.DefaultDelphiProfile;
-import au.com.integradev.delphi.pmd.profile.DelphiPmdProfileExporter;
-import au.com.integradev.delphi.pmd.profile.DelphiPmdProfileImporter;
-import au.com.integradev.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
-import au.com.integradev.delphi.pmd.profile.DelphiPmdRulesDefinition;
-import au.com.integradev.delphi.pmd.violation.DelphiPmdViolationRecorder;
+import au.com.integradev.delphi.profile.DefaultDelphiProfile;
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarProduct;
 
-/** Main Sonar DelphiLanguage plugin class */
 public class DelphiPlugin implements Plugin {
   @Override
   public String toString() {
@@ -59,24 +52,17 @@ public class DelphiPlugin implements Plugin {
     builder.addAll(DelphiProperties.getProperties());
 
     builder.add(
+        // Core
+        DelphiLanguage.class,
+        DefaultDelphiProfile.class,
         // Sensors
         DelphiSensor.class,
         // Executors
         DelphiMasterExecutor.class,
         DelphiSymbolTableExecutor.class,
         DelphiPmdExecutor.class,
-        // Core
-        DelphiLanguage.class,
         // Core helpers
         DelphiProjectHelper.class,
-        // PMD
-        DelphiPmdConfiguration.class,
-        DelphiPmdRulesDefinition.class,
-        DelphiPmdRuleSetDefinitionProvider.class,
-        DefaultDelphiProfile.class,
-        DelphiPmdProfileExporter.class,
-        DelphiPmdProfileImporter.class,
-        DelphiPmdViolationRecorder.class,
         // Environment
         DefaultEnvironmentVariableProvider.class);
 
