@@ -107,6 +107,20 @@ package org.sonar.plugins.delphi.antlr;
   public String getErrorHeader(RecognitionException e) {
     return "line " + e.line + ":" + e.charPositionInLine;
   }
+
+  private void resetBinaryExpressionTokens(Object rootExpression) {
+    if (!(rootExpression instanceof BinaryExpressionNode)) {
+      return;
+    }
+
+    var binaryExpression = (BinaryExpressionNode) rootExpression;
+
+    binaryExpression.jjtSetFirstToken(null);
+    binaryExpression.jjtSetLastToken(null);
+
+    resetBinaryExpressionTokens(binaryExpression.getLeft());
+    resetBinaryExpressionTokens(binaryExpression.getRight());
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -559,11 +573,16 @@ customAttributeDecl          : lbrack (nameReference argumentList? ','?)+ rbrack
 //----------------------------------------------------------------------------
 expression                   : relationalExpression
                              ;
-relationalExpression         : additiveExpression (relationalOperator^ additiveExpression)*
+// ANTLR sets the begin and end tokens for nested binary expression nodes
+// in relationalOperator, not relationalExpression, meaning that their
+// token range only contains the operator. resetBinaryExpressionTokens is needed
+// to reset the start and end tokens so that they must be recalculated
+// when retrieved (i.e., after their children have been correctly assigned).
+relationalExpression         : additiveExpression (relationalOperator^ additiveExpression)* { resetBinaryExpressionTokens(root_0); }
                              ;
-additiveExpression           : multiplicativeExpression (addOperator^ multiplicativeExpression)*
+additiveExpression           : multiplicativeExpression (addOperator^ multiplicativeExpression)* { resetBinaryExpressionTokens(root_0); }
                              ;
-multiplicativeExpression     : unaryExpression (multOperator^ unaryExpression)*
+multiplicativeExpression     : unaryExpression (multOperator^ unaryExpression)* { resetBinaryExpressionTokens(root_0); }
                              ;
 unaryExpression              : unaryOperator^ unaryExpression
                              | primaryExpression
