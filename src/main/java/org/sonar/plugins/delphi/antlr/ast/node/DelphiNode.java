@@ -195,17 +195,16 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode, Ind
 
   private GenericToken findFirstToken() {
     DelphiToken result = this.token;
-    if (result.isImaginary()) {
-      int index = result.getIndex();
+    int index = result.getIndex();
 
-      for (int i = 0; i < jjtGetNumChildren(); ++i) {
-        DelphiToken childToken = ((DelphiNode) jjtGetChild(i)).jjtGetFirstToken();
-        int childIndex = childToken.getIndex();
-        if (!childToken.isImaginary() && childIndex < index) {
-          result = childToken;
-        }
+    for (int i = 0; i < jjtGetNumChildren(); ++i) {
+      DelphiToken childToken = ((DelphiNode) jjtGetChild(i)).jjtGetFirstToken();
+      int childIndex = childToken.getIndex();
+      if (!childToken.isImaginary() && childIndex < index) {
+        result = childToken;
       }
     }
+
     return result;
   }
 
@@ -214,7 +213,7 @@ public abstract class DelphiNode extends AbstractNode implements ScopedNode, Ind
     int index = result.getIndex();
 
     for (int i = 0; i < jjtGetNumChildren(); ++i) {
-      DelphiToken childToken = ((DelphiNode) jjtGetChild(i)).jjtGetFirstToken();
+      DelphiToken childToken = ((DelphiNode) jjtGetChild(i)).jjtGetLastToken();
       int childIndex = childToken.getIndex();
       if (!childToken.isImaginary() && childIndex > index) {
         result = childToken;
