@@ -214,6 +214,8 @@ public final class ExpressionTypeResolver {
         type = handleNameOccurrence(accessor.getImplicitNameOccurrence());
       } else if (type.isArray()) {
         type = ((CollectionType) type).elementType();
+      } else if (type.isVariant()) {
+        type = typeFactory.getIntrinsic(IntrinsicType.VARIANT);
       } else if (TypeUtils.isNarrowString(type)) {
         type = typeFactory.getIntrinsic(IntrinsicType.ANSICHAR);
       } else if (TypeUtils.isWideString(type)) {
