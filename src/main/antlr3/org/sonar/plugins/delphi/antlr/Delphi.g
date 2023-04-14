@@ -89,6 +89,13 @@ package org.sonar.plugins.delphi.antlr;
     return t;
   }
 
+  private Token combineLastNTokens(int count) {
+    CommonToken firstToken = (CommonToken) input.LT(-count);
+    CommonToken lastToken = (CommonToken) input.LT(-1);
+    lastToken.setStartIndex(firstToken.getStartIndex());
+    return lastToken;
+  }
+
   @Override
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
@@ -815,6 +822,7 @@ dispIDDirective              : 'dispid' expression
 //----------------------------------------------------------------------------
 ident                        : TkIdentifier
                              | '&'! identifierOrKeyword
+                             | '&' '&' identifierOrKeyword -> ^({combineLastNTokens(2)})
                              | keywordsUsedAsNames -> ^({changeTokenType(TkIdentifier)})
                              ;
 identifierOrKeyword          : TkIdentifier

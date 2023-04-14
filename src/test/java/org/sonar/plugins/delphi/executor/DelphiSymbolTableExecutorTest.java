@@ -853,6 +853,13 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testAmpersands() {
+    execute("Ampersands.pas");
+    verifyUsages(7, 11, reference(17, 2), reference(18, 2));
+    verifyUsages(11, 11, reference(19, 2));
+  }
+
+  @Test
   void testRegularMethodPreferredOverImplicitSpecializations() {
     execute("generics/RegularMethodPreferredOverImplicitSpecialization.pas");
     verifyUsages(10, 20, reference(10, 26));
