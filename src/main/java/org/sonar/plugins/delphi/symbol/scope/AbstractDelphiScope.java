@@ -83,11 +83,6 @@ class AbstractDelphiScope implements DelphiScope {
     }
 
     TypeNameDeclaration fullTypeDeclaration = (TypeNameDeclaration) typeDeclaration;
-    if (fullTypeDeclaration.isGeneric()) {
-      // Generic types cannot be forward-declared
-      return;
-    }
-
     Type fullType = fullTypeDeclaration.getType();
     if (!fullType.isStruct()) {
       return;
@@ -99,8 +94,16 @@ class AbstractDelphiScope implements DelphiScope {
             declaration -> {
               if (declaration instanceof TypeNameDeclaration) {
                 TypeNameDeclaration forwardDeclaration = (TypeNameDeclaration) declaration;
-                if (forwardDeclaration.isGeneric()) {
-                  // Generic types cannot be forward-declared
+
+                // A generic type's forward declaration must also be generic, or vice versa
+                if (forwardDeclaration.isGeneric() != fullTypeDeclaration.isGeneric()) {
+                  return false;
+                }
+
+                // A generic type's forward declaration must have matching type parameters
+                if (forwardDeclaration.isGeneric()
+                    && forwardDeclaration.getTypeParameters().size()
+                        != fullTypeDeclaration.getTypeParameters().size()) {
                   return false;
                 }
 
