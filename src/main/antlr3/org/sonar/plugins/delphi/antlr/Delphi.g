@@ -503,7 +503,11 @@ forwardMethodHeading         : customAttribute? 'class'? methodKey methodDeclara
                                     forwardDirectiveSection
                                  )
                              ;
-methodDeclarationName        : genericNameDeclaration -> ^(TkMethodName<MethodNameNode> genericNameDeclaration)
+methodDeclarationName        : (
+                                 decl=genericNameDeclaration
+                               | decl=specialOpNameDeclaration
+                             )
+                             -> ^(TkMethodName<MethodNameNode> $decl)
                              ;
 methodImplementationName     : nameReference -> ^(TkMethodName<MethodNameNode> nameReference)
                              ;
@@ -850,6 +854,11 @@ genericNameDeclaration       : ident ('.' extendedIdent)* genericDefinition?
                              ;
 qualifiedNameDeclaration     : ident ('.' extendedIdent)*
                              -> ^(TkNameDeclaration<QualifiedNameDeclarationNode> ident extendedIdent*)
+                             ;
+specialOpNameDeclaration     : specialOperatorName
+                             -> ^(TkNameDeclaration<SimpleNameDeclarationNode> specialOperatorName)
+                             ;
+specialOperatorName          : 'in' -> ^({changeTokenType(TkIdentifier)})
                              ;
 nameReference                : ident genericArguments? ('.' extendedNameReference)?
                              -> ^(TkNameReference<NameReferenceNode> ident genericArguments? ('.' extendedNameReference)?)

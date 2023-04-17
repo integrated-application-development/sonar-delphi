@@ -232,6 +232,11 @@ class GrammarTest {
   }
 
   @Test
+  void testClassOperators() {
+    parseFile("ClassOperators.pas");
+  }
+
+  @Test
   void testEmptyFileShouldThrow() {
     assertThatThrownBy(() -> DelphiTestFileBuilder.fromResource(BASE_DIR + "EmptyFile.pas").parse())
         .isInstanceOf(DelphiFileConstructionException.class);
