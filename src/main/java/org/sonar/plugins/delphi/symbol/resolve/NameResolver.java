@@ -56,6 +56,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeNode;
 import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
 import org.sonar.plugins.delphi.symbol.Search;
+import org.sonar.plugins.delphi.symbol.SearchMode;
 import org.sonar.plugins.delphi.symbol.SymbolicNode;
 import org.sonar.plugins.delphi.symbol.declaration.DelphiNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
@@ -98,7 +99,7 @@ public class NameResolver {
   private final TypeFactory typeFactory;
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
-
+  private SearchMode searchMode = SearchMode.DEFAULT;
   private Set<NameDeclaration> declarations = new HashSet<>();
   private DelphiScope currentScope;
   private Type currentType = unknownType();
@@ -110,8 +111,14 @@ public class NameResolver {
     this.typeFactory = typeFactory;
   }
 
+  NameResolver(TypeFactory typeFactory, SearchMode searchMode) {
+    this.typeFactory = typeFactory;
+    this.searchMode = searchMode;
+  }
+
   NameResolver(NameResolver resolver) {
     typeFactory = resolver.typeFactory;
+    searchMode = resolver.searchMode;
     declarations.addAll(resolver.declarations);
     currentScope = resolver.currentScope;
     currentType = resolver.currentType;
@@ -1262,7 +1269,7 @@ public class NameResolver {
 
     checkForRecordHelperScope(occurrenceScope);
 
-    Search search = new Search(occurrence);
+    Search search = new Search(occurrence, searchMode);
     search.execute(currentScope);
     declarations = search.getResult();
   }

@@ -57,6 +57,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.TypeReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.UnaryExpressionNode;
 import org.sonar.plugins.delphi.operator.UnaryOperator;
 import org.sonar.plugins.delphi.symbol.DelphiNameOccurrence;
+import org.sonar.plugins.delphi.symbol.SearchMode;
 import org.sonar.plugins.delphi.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.delphi.symbol.declaration.PropertyNameDeclaration;
@@ -72,13 +73,14 @@ import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;
+  private SearchMode searchMode = SearchMode.DEFAULT;
 
   public NameResolutionHelper(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
   }
 
   private NameResolver createNameResolver() {
-    return new NameResolver(typeFactory);
+    return new NameResolver(typeFactory, searchMode);
   }
 
   public void resolve(TypeDeclarationNode typeDeclaration) {
@@ -264,8 +266,13 @@ public class NameResolutionHelper {
   }
 
   private void resolveMethod(MethodNode method) {
-    resolve(method.getMethodHeading().getMethodParametersNode());
-    resolve(method.getMethodHeading().getMethodReturnType());
+    try {
+      searchMode = SearchMode.METHOD_HEADING;
+      resolve(method.getMethodHeading().getMethodParametersNode());
+      resolve(method.getMethodHeading().getMethodReturnType());
+    } finally {
+      searchMode = SearchMode.DEFAULT;
+    }
   }
 
   public void resolve(@Nullable MethodParametersNode parameters) {
