@@ -50,6 +50,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForLoopVarReferenceNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForStatementNode;
 import org.sonar.plugins.delphi.antlr.ast.node.ForToStatementNode;
+import org.sonar.plugins.delphi.antlr.ast.node.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode;
 import org.sonar.plugins.delphi.antlr.ast.node.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.delphi.antlr.ast.node.ImplementationSectionNode;
@@ -60,6 +61,7 @@ import org.sonar.plugins.delphi.antlr.ast.node.MethodDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodImplementationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNameNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodNode;
+import org.sonar.plugins.delphi.antlr.ast.node.MethodParametersNode;
 import org.sonar.plugins.delphi.antlr.ast.node.MethodResolutionClauseNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameDeclarationNode;
 import org.sonar.plugins.delphi.antlr.ast.node.NameReferenceNode;
@@ -403,10 +405,22 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.addDeclarationToCurrentScope(result);
     }
 
-    Type selfType = findSelfType(node, methodDeclaration, data);
-    if (selfType != null) {
-      DelphiNameDeclaration self = compilerVariable("Self", selfType, scope);
-      data.addDeclarationToCurrentScope(self);
+    boolean hasSelfParameter = false;
+
+    MethodParametersNode parametersNode = node.getMethodHeading().getMethodParametersNode();
+    if (parametersNode != null) {
+      hasSelfParameter =
+          parametersNode.getParameters().stream()
+              .map(FormalParameterData::getImage)
+              .anyMatch(image -> image.equalsIgnoreCase("Self"));
+    }
+
+    if (!hasSelfParameter) {
+      Type selfType = findSelfType(node, methodDeclaration, data);
+      if (selfType != null) {
+        DelphiNameDeclaration self = compilerVariable("Self", selfType, scope);
+        data.addDeclarationToCurrentScope(self);
+      }
     }
 
     return visitScope(node, data);
