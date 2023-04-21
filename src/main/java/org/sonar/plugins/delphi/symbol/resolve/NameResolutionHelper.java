@@ -73,10 +73,15 @@ import org.sonar.plugins.delphi.type.factory.TypeFactory;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;
-  private SearchMode searchMode = SearchMode.DEFAULT;
+  private SearchMode searchMode;
 
   public NameResolutionHelper(TypeFactory typeFactory) {
+    this(typeFactory, SearchMode.DEFAULT);
+  }
+
+  public NameResolutionHelper(TypeFactory typeFactory, SearchMode searchMode) {
     this.typeFactory = typeFactory;
+    this.searchMode = searchMode;
   }
 
   private NameResolver createNameResolver() {
@@ -266,12 +271,13 @@ public class NameResolutionHelper {
   }
 
   private void resolveMethod(MethodNode method) {
+    var previousSearchMode = searchMode;
     try {
       searchMode = SearchMode.METHOD_HEADING;
       resolve(method.getMethodHeading().getMethodParametersNode());
       resolve(method.getMethodHeading().getMethodReturnType());
     } finally {
-      searchMode = SearchMode.DEFAULT;
+      searchMode = previousSearchMode;
     }
   }
 

@@ -99,26 +99,25 @@ public class NameResolver {
   private final TypeFactory typeFactory;
   private final List<DelphiNameOccurrence> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
-  private SearchMode searchMode = SearchMode.DEFAULT;
+  private final SearchMode searchMode;
+  private final Supplier<NameResolutionHelper> nameResolutionHelper;
   private Set<NameDeclaration> declarations = new HashSet<>();
   private DelphiScope currentScope;
   private Type currentType = unknownType();
 
-  private final Supplier<NameResolutionHelper> nameResolutionHelper =
-      Suppliers.memoize(() -> new NameResolutionHelper(getTypeFactory()));
-
   NameResolver(TypeFactory typeFactory) {
-    this.typeFactory = typeFactory;
+    this(typeFactory, SearchMode.DEFAULT);
   }
 
   NameResolver(TypeFactory typeFactory, SearchMode searchMode) {
     this.typeFactory = typeFactory;
     this.searchMode = searchMode;
+    this.nameResolutionHelper =
+        Suppliers.memoize(() -> new NameResolutionHelper(getTypeFactory(), searchMode));
   }
 
   NameResolver(NameResolver resolver) {
-    typeFactory = resolver.typeFactory;
-    searchMode = resolver.searchMode;
+    this(resolver.typeFactory, resolver.searchMode);
     declarations.addAll(resolver.declarations);
     currentScope = resolver.currentScope;
     currentType = resolver.currentType;
@@ -498,7 +497,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       typeReference.setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver(typeReference.getTypeFactory());
+      NameResolver resolver = new NameResolver(typeReference.getTypeFactory(), searchMode);
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -517,7 +516,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       typeReference.setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver(typeNode.getTypeFactory());
+      NameResolver resolver = new NameResolver(typeNode.getTypeFactory(), searchMode);
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -602,7 +601,7 @@ public class NameResolver {
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node) {
-    NameResolver unitNameResolver = new NameResolver(node.getTypeFactory());
+    NameResolver unitNameResolver = new NameResolver(node.getTypeFactory(), searchMode);
     if (unitNameResolver.readUnitNameReference(node)) {
       this.currentType = unknownType();
       this.names.clear();
