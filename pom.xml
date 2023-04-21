@@ -124,7 +124,7 @@
     <slf4j.version>1.7.30</slf4j.version>
     <errorprone.version>2.15.0</errorprone.version>
     <!-- Plugin versions -->
-    <compiler-plugin.version>3.10.1</compiler-plugin.version>
+    <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
     <surefire-plugin.version>3.0.0-M6</surefire-plugin.version>
     <failsafe-plugin.version>3.0.0-M6</failsafe-plugin.version>
