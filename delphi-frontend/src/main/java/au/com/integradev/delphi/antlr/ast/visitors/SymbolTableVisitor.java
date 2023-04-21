@@ -26,7 +26,6 @@ import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.WithStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
-import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import au.com.integradev.delphi.symbol.ImportResolutionHandler;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;

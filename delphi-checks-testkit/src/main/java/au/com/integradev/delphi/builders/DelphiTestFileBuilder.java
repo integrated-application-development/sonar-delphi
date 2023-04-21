@@ -23,7 +23,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
@@ -45,6 +44,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 
 public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
   private static final Logger LOG = Loggers.get(DelphiTestFileBuilder.class);
