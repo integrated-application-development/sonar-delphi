@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
 
+### Changed
+
+- Rename all rule keys. (For example, `ClassNameRule` is now `ClassName`)
+
+### Removed
+
+- `XPathTemplateRule` analysis rule template.
+
 ## [0.40.0] - 2023-01-10
 
 ### Added

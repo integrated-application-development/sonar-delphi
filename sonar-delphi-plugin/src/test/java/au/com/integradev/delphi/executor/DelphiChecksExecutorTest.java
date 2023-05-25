@@ -52,6 +52,7 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.Configuration;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
 
 class DelphiChecksExecutorTest {
 
@@ -170,6 +171,6 @@ class DelphiChecksExecutorTest {
         .dumpXmlReport(any(Report.class));
 
     doThrow(new RuntimeException()).when(violationRecorder).saveViolation(any(), any());
-    assertThatThrownBy(() -> executor.complete()).isInstanceOf(FatalExecutorError.class);
+    assertThatThrownBy(() -> executor.complete()).isInstanceOf(FatalAnalysisError.class);
   }
 }

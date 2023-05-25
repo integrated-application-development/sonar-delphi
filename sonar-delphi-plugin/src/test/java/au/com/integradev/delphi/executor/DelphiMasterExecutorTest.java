@@ -45,6 +45,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
 
 class DelphiMasterExecutorTest {
   private static final File BASE_DIR =
@@ -79,12 +80,12 @@ class DelphiMasterExecutorTest {
     Executor workingExecutor = mock(Executor.class);
     DelphiMasterExecutor executor = new DelphiMasterExecutor(brokenExecutor, workingExecutor);
 
-    doThrow(new FatalExecutorError("Test", new RuntimeException("This was a test.")))
+    doThrow(new FatalAnalysisError("Test", new RuntimeException("This was a test.")))
         .when(brokenExecutor)
         .execute(context, TEST_INPUT_FILE);
 
     assertThatThrownBy(() -> executor.execute(context, TEST_INPUT_FILE))
-        .isInstanceOf(FatalExecutorError.class);
+        .isInstanceOf(FatalAnalysisError.class);
 
     verify(workingExecutor, never()).execute(context, TEST_INPUT_FILE);
   }
@@ -133,7 +134,7 @@ class DelphiMasterExecutorTest {
   @Test
   void testFatalErrorInDependencyExecutionShouldAbortExecution() {
     Executor dependency = mock(DelphiSymbolTableExecutor.class);
-    doThrow(new FatalExecutorError("Test", new RuntimeException("Test")))
+    doThrow(new FatalAnalysisError("Test", new RuntimeException("Test")))
         .when(dependency)
         .execute(any(), any());
 
@@ -143,7 +144,7 @@ class DelphiMasterExecutorTest {
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
 
     assertThatThrownBy(() -> masterExecutor.execute(mock(Context.class), TEST_INPUT_FILE))
-        .isInstanceOf(FatalExecutorError.class);
+        .isInstanceOf(FatalAnalysisError.class);
 
     verify(executor, never()).execute(any(), any());
   }

@@ -24,10 +24,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.utils.DelphiUtils;
-import au.com.integradev.delphi.utils.builders.DelphiTestFileBuilder;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Set;

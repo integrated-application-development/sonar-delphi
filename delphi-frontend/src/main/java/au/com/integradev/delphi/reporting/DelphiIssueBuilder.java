@@ -65,17 +65,16 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 public final class DelphiIssueBuilder {
   private static final Logger LOG = Loggers.get(DelphiIssueBuilder.class);
 
-  private static final String RULE_NAME = "rule";
   private static final String POSITION_NAME = "position";
   private static final String MESSAGE_NAME = "message";
   private static final String FLOWS_NAME = "flows";
   private static final String SECONDARIES_NAME = "secondaries";
 
+  private final DelphiCheck check;
   private final SensorContext context;
   private final DelphiInputFile delphiFile;
   private final MasterCheckRegistrar checkRegistrar;
   private final ScopeMetadataLoader scopeMetadataLoader;
-  private DelphiCheck rule;
   private FilePosition position;
   private String message;
   @Nullable private List<DelphiCheckContext.Location> secondaries;
@@ -84,10 +83,12 @@ public final class DelphiIssueBuilder {
   private boolean reported;
 
   public DelphiIssueBuilder(
+      DelphiCheck check,
       SensorContext context,
       DelphiInputFile delphiFile,
       MasterCheckRegistrar checkRegistrar,
       ScopeMetadataLoader scopeMetadataLoader) {
+    this.check = check;
     this.context = context;
     this.delphiFile = delphiFile;
     this.checkRegistrar = checkRegistrar;
@@ -105,13 +106,6 @@ public final class DelphiIssueBuilder {
 
   private static void requiresSetOnlyOnce(Object target, String targetName) {
     Preconditions.checkState(target == null, "Cannot set %s multiple times.", targetName);
-  }
-
-  public DelphiIssueBuilder forRule(DelphiCheck rule) {
-    requiresSetOnlyOnce(this.rule, RULE_NAME);
-
-    this.rule = rule;
-    return this;
   }
 
   public DelphiIssueBuilder onNode(DelphiNode node) {
@@ -175,7 +169,6 @@ public final class DelphiIssueBuilder {
 
   public void report() {
     Preconditions.checkState(!reported, "Can only be reported once.");
-    requiresValueToBeSet(rule, RULE_NAME);
     requiresValueToBeSet(position, POSITION_NAME);
     requiresValueToBeSet(message, MESSAGE_NAME);
 
@@ -183,7 +176,7 @@ public final class DelphiIssueBuilder {
       return;
     }
 
-    Optional<RuleKey> ruleKey = checkRegistrar.getRuleKey(rule);
+    Optional<RuleKey> ruleKey = checkRegistrar.getRuleKey(check);
     if (ruleKey.isEmpty()) {
       LOG.trace("Rule not enabled - discarding issue");
       return;
@@ -236,7 +229,7 @@ public final class DelphiIssueBuilder {
   }
 
   private boolean isOutOfScope() {
-    switch (scopeMetadataLoader.getScope(rule.getClass())) {
+    switch (scopeMetadataLoader.getScope(check.getClass())) {
       case MAIN:
         return isWithinTestCode();
       case TEST:

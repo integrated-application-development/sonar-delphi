@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.builders;
 
-public class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
+public final class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
   private String programName = "omTestProgram";
 
   @Override

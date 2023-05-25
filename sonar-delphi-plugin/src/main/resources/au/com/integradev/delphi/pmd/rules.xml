@@ -3,7 +3,7 @@
 
   <!-- PRIORITY: 1 - blocker, 2 - critical, 3 - major, 4 - minor, 5 - info -->
 
-  <rule class="au.com.integradev.delphi.pmd.rules.NoFunctionReturnTypeRule"
+  <rule class="au.com.integradev.delphi.checks.UnspecifiedReturnTypeCheck"
     message="Function return types should always be specified"
     name="NoFunctionReturnTypeRule">
     <priority>3</priority>
@@ -24,14 +24,15 @@
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ClassPerFileRule"
+  <rule class="au.com.integradev.delphi.checks.ClassPerFileCheck"
     message="Files should not contain too many classes"
     name="ClassPerFileRule">
     <priority>3</priority>
     <description>
       A file should not include too many classes.
       &lt;br&gt;
-      This rule does not apply to nested classes or one-liner classes such as &lt;code&gt;ECustomException = class(Exception);&lt;/code&gt;
+      This rule does not apply to nested classes or one-liner classes such as &lt;code&gt;ECustomException
+      = class(Exception);&lt;/code&gt;
     </description>
     <properties>
       <property name="baseEffort" value="1h"/>
@@ -39,7 +40,7 @@
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InheritedMethodWithNoCodeRule"
+  <rule class="au.com.integradev.delphi.checks.InheritedMethodWithNoCodeCheck"
     message="Overriding methods should do more than simply call the same method in the super class"
     name="InheritedMethodWithNoCodeRule">
     <priority>3</priority>
@@ -52,7 +53,7 @@
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.SwallowedExceptionsRule"
+  <rule class="au.com.integradev.delphi.checks.SwallowedExceptionCheck"
     message="Exceptions should not be swallowed"
     name="SwallowedExceptionsRule">
     <priority>3</priority>
@@ -93,7 +94,7 @@
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ObjectInvokedConstructorRule"
+  <rule class="au.com.integradev.delphi.checks.ObjectInvokedConstructorCheck"
     message="Constructors should not be invoked on object variables"
     name="ObjectInvokedConstructorRule">
     <priority>3</priority>
@@ -123,7 +124,7 @@
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MethodResultAssignedRule"
+  <rule class="au.com.integradev.delphi.checks.MethodResultAssignedCheck"
     message="Method results should be assigned a value"
     name="MethodResultAssignedRule">
     <priority>2</priority>
@@ -167,20 +168,22 @@
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.PascalStyleResultRule"
+  <rule class="au.com.integradev.delphi.checks.PascalStyleResultCheck"
     message="Pascal-style function result assignments should not be used"
     name="PascalStyleResultRule">
     <priority>4</priority>
     <description>
       In earlier versions of Pascal, function results were assigned to the function identifier.
       &lt;/a&gt;
-      In Delphi, function results are assigned to the special &lt;code&gt;Result&lt;/code&gt; variable.
+      In Delphi, function results are assigned to the special &lt;code&gt;Result&lt;/code&gt;
+      variable.
       &lt;/a&gt;
       The Delphi style should be used instead.
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero wiki page for
-      &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
+      &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Procedures_and_Functions_(Delphi)#Function_Declarations'&gt;
       Function Declarations
       &lt;/a&gt;
     </description>
@@ -221,7 +224,7 @@
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.EmptyInterfaceRule"
+  <rule class="au.com.integradev.delphi.checks.EmptyInterfaceCheck"
     message="Interface declarations should not be empty"
     name="EmptyInterfaceRule">
     <priority>3</priority>
@@ -231,7 +234,7 @@
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TooLargeMethodRule"
+  <rule class="au.com.integradev.delphi.checks.TooLargeMethodCheck"
     message="Methods should not be too large"
     name="TooLargeMethodRule">
     <priority>2</priority>
@@ -249,7 +252,7 @@
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TooManyArgumentsRule"
+  <rule class="au.com.integradev.delphi.checks.TooManyParametersCheck"
     message="Methods should not have too many arguments"
     name="TooManyArgumentsRule">
     <priority>3</priority>
@@ -264,7 +267,7 @@
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TooManyVariablesRule"
+  <rule class="au.com.integradev.delphi.checks.TooManyVariablesCheck"
     message="Methods should not have too many variables"
     name="TooManyVariablesRule">
     <priority>3</priority>
@@ -372,7 +375,7 @@ Foo(1, 2, 3); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InterfaceNameRule"
+  <rule class="au.com.integradev.delphi.checks.InterfaceNameCheck"
     message="Interface names should comply with a naming convention"
     name="InterfaceNameRule">
     <priority>4</priority>
@@ -387,7 +390,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.RecordNameRule"
+  <rule class="au.com.integradev.delphi.checks.RecordNameCheck"
     message="Record names should comply with a naming convention"
     name="RecordNameRule">
     <priority>4</priority>
@@ -402,7 +405,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.PointerNameRule"
+  <rule class="au.com.integradev.delphi.checks.PointerNameCheck"
     message="Pointer names should comply with a naming convention"
     name="PointerNameRule">
     <priority>4</priority>
@@ -422,7 +425,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MethodNameRule"
+  <rule class="au.com.integradev.delphi.checks.MethodNameCheck"
     message="Method names should comply with a naming convention"
     name="MethodNameRule">
     <priority>4</priority>
@@ -436,7 +439,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.FieldNameRule"
+  <rule class="au.com.integradev.delphi.checks.FieldNameCheck"
     message="Field names should comply with a naming convention"
     name="FieldNameRule">
     <priority>4</priority>
@@ -451,7 +454,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnitNameRule"
+  <rule class="au.com.integradev.delphi.checks.UnitNameCheck"
     message="Unit names should comply with a naming convention"
     name="UnitNameRule">
     <priority>4</priority>
@@ -464,7 +467,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ConstantNotationRule"
+  <rule class="au.com.integradev.delphi.checks.ConstantNameCheck"
     message="Constants should comply with a naming convention"
     name="ConstantNotationRule">
     <priority>4</priority>
@@ -479,7 +482,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ClassNameRule"
+  <rule class="au.com.integradev.delphi.checks.ClassNameCheck"
     message="Class names should comply with a naming convention"
     name="ClassNameRule">
     <priority>4</priority>
@@ -494,7 +497,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.EnumNameRule"
+  <rule class="au.com.integradev.delphi.checks.EnumNameCheck"
     message="Enumeration names should comply with a naming convention"
     name="EnumNameRule">
     <priority>4</priority>
@@ -509,23 +512,25 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.AttributeNameRule"
-  message="Attribute names should comply with a naming convention"
-  name="AttributeNameRule">
-  <priority>4</priority>
-  <description>
-    Attribute names should follow Pascal case and possess an &lt;code&gt;Attribute&lt;/code&gt; suffix.
-    &lt;br&gt;
-    &lt;code&gt;attributeSuffix&lt;/code&gt; can be &lt;code&gt;allowed&lt;/code&gt; for an optional
-    suffix, &lt;code&gt;required&lt;/code&gt;, or &lt;code&gt;forbidden&lt;/code&gt;.
-  </description>
-  <properties>
-    <property name="attributeSuffix" value="allowed"/>
-    <property name="baseEffort" value="15min"/>
-  </properties>
-</rule>
+  <rule class="au.com.integradev.delphi.checks.AttributeNameCheck"
+    message="Attribute names should comply with a naming convention"
+    name="AttributeNameRule">
+    <priority>4</priority>
+    <description>
+      Attribute names should follow Pascal case and possess an &lt;code&gt;Attribute&lt;/code&gt;
+      suffix.
+      &lt;br&gt;
+      &lt;code&gt;attributeSuffix&lt;/code&gt; can be &lt;code&gt;allowed&lt;/code&gt; for an
+      optional
+      suffix, &lt;code&gt;required&lt;/code&gt;, or &lt;code&gt;forbidden&lt;/code&gt;.
+    </description>
+    <properties>
+      <property name="attributeSuffix" value="allowed"/>
+      <property name="baseEffort" value="15min"/>
+    </properties>
+  </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.HelperNameRule"
+  <rule class="au.com.integradev.delphi.checks.HelperNameCheck"
     message="Helper names should comply with a naming convention"
     name="HelperNameRule">
     <priority>4</priority>
@@ -542,7 +547,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ConstructorCreateRule"
+  <rule class="au.com.integradev.delphi.checks.ConstructorNameCheck"
     message="Constructor names should comply with a naming convention"
     name="ConstructorCreateRule">
     <priority>4</priority>
@@ -556,7 +561,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.VariableNameRule"
+  <rule class="au.com.integradev.delphi.checks.VariableNameCheck"
     message="Variable names should comply with a naming convention"
     name="VariableNameRule">
     <priority>4</priority>
@@ -572,7 +577,7 @@ Foo(1, 2, 3); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CatchingGeneralExceptionRule"
+  <rule class="au.com.integradev.delphi.checks.CatchingRawExceptionCheck"
     message="General exceptions should not be caught"
     name="CatchingGeneralExceptionRule">
     <priority>2</priority>
@@ -602,7 +607,7 @@ Foo(1, 2, 3); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.RaisingGeneralExceptionRule"
+  <rule class="au.com.integradev.delphi.checks.RaisingRawExceptionCheck"
     message="General exceptions should not be raised"
     name="RaisingGeneralExceptionRule">
     <priority>2</priority>
@@ -621,7 +626,7 @@ Foo(1, 2, 3); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.RedundantBooleanRule"
+  <rule class="au.com.integradev.delphi.checks.RedundantBooleanCheck"
     message="Boolean literals should not be redundant"
     name="RedundantBooleanRule">
     <priority>4</priority>
@@ -656,7 +661,7 @@ DoSomething(True); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.RedundantAssignmentRule"
+  <rule class="au.com.integradev.delphi.checks.RedundantAssignmentCheck"
     message="Assignments should not be redundant"
     name="RedundantAssignmentRule">
     <priority>4</priority>
@@ -673,7 +678,7 @@ Foo := Foo; // Noncompliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.PublicFieldsRule"
+  <rule class="au.com.integradev.delphi.checks.PublicFieldCheck"
     message="Fields should not have public visibility"
     name="PublicFieldsRule">
     <priority>3</priority>
@@ -684,7 +689,7 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MemberDeclarationOrderRule"
+  <rule class="au.com.integradev.delphi.checks.MemberDeclarationOrderCheck"
     message="Declarations in visibility sections should follow an expected order"
     name="MemberDeclarationOrderRule">
     <priority>4</priority>
@@ -697,8 +702,10 @@ Foo := Foo; // Noncompliant
       3. Property declarations
       &lt;br&gt;
       &lt;br&gt;
-      For more information, see the Class Body Organization section of the Embarcadero style guide page on
-      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_Body_Organization'&gt;
+      For more information, see the Class Body Organization section of the Embarcadero style guide
+      page on
+      &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_Body_Organization'&gt;
       Type Declarations
       &lt;/a&gt;
     </description>
@@ -707,7 +714,7 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.VisibilitySectionOrderRule"
+  <rule class="au.com.integradev.delphi.checks.VisibilitySectionOrderCheck"
     message="Access specifiers should be in ascending order of accessibility"
     name="VisibilitySectionOrderRule">
     <priority>3</priority>
@@ -728,7 +735,8 @@ Foo := Foo; // Noncompliant
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero style guide page on
-      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
+      &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
       Type Declarations
       &lt;/a&gt;
     </description>
@@ -737,7 +745,7 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.VariableInitializationRule"
+  <rule class="au.com.integradev.delphi.checks.VariableInitializationCheck"
     message="Variables must be initialized before being used"
     name="VariableInitializationRule">
     <priority>3</priority>
@@ -761,7 +769,7 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.DateFormatSettingsRule"
+  <rule class="au.com.integradev.delphi.checks.DateFormatSettingsCheck"
     message="Date formatting should not use the default TFormatSettings"
     name="DateFormatSettingsRule">
     <priority>3</priority>
@@ -810,12 +818,13 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.LegacyInitializationSectionRule"
+  <rule class="au.com.integradev.delphi.checks.LegacyInitializationSectionCheck"
     message="Legacy initialization sections should not be used"
     name="LegacyInitializationSectionRule">
     <priority>3</priority>
     <description>
-      Legacy initialization sections using &lt;code&gt;begin .. end&lt;/code&gt; are functionally equivalent to a
+      Legacy initialization sections using &lt;code&gt;begin .. end&lt;/code&gt; are functionally
+      equivalent to a
       regular initialization section. However:
       &lt;br&gt;
       - A finalization section cannot be specified.
@@ -825,7 +834,8 @@ Foo := Foo; // Noncompliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#The_Initialization_Section'&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#The_Initialization_Section'&gt;
       The Initialization Section
       &lt;/a&gt;
     </description>
@@ -852,7 +862,7 @@ Foo := Foo; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.AssignedAndFreeRule"
+  <rule class="au.com.integradev.delphi.checks.AssignedAndFreeCheck"
     message="Objects should not be checked for assignment before being freed"
     name="AssignedAndFreeRule">
     <priority>3</priority>
@@ -887,7 +897,7 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.FreeAndNilTObjectRule"
+  <rule class="au.com.integradev.delphi.checks.FreeAndNilTObjectCheck"
     message="FreeAndNil must only be passed an instance of a TObject descendant"
     name="FreeAndNilTObjectRule">
     <priority>1</priority>
@@ -911,17 +921,18 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.RedundantCastRule"
+  <rule class="au.com.integradev.delphi.checks.RedundantCastCheck"
     message="Redundant casts should not be used"
     name="RedundantCastRule">
     <priority>4</priority>
-    <description>Unnecessary casting expressions make the code harder to read and understand.</description>
+    <description>Unnecessary casting expressions make the code harder to read and understand.
+    </description>
     <properties>
       <property name="baseEffort" value="2min"/>
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CharacterToCharacterPointerCastRule"
+  <rule class="au.com.integradev.delphi.checks.CharacterToCharacterPointerCastCheck"
     message="Character types should not be cast to Character Pointer types"
     name="CharacterToCharacterPointerCastRule">
     <priority>2</priority>
@@ -967,27 +978,28 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnicodeToAnsiCastRule"
+  <rule class="au.com.integradev.delphi.checks.UnicodeToAnsiCastCheck"
     message="Unicode types should not be cast to ANSI types"
     name="UnicodeToAnsiCastRule">
     <priority>2</priority>
     <description>
-        Casting a Unicode type like &lt;code&gt;String&lt;/code&gt; to an ANSI type like
-        &lt;code&gt;AnsiString&lt;/code&gt; can lead to data loss.
-        &lt;br&gt;
-        Only a small subset of Unicode characters can be represented in a given ANSI code page.
+      Casting a Unicode type like &lt;code&gt;String&lt;/code&gt; to an ANSI type like
+      &lt;code&gt;AnsiString&lt;/code&gt; can lead to data loss.
+      &lt;br&gt;
+      Only a small subset of Unicode characters can be represented in a given ANSI code page.
     </description>
     <properties>
       <property name="baseEffort" value="20min"/>
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.PlatformDependentCastRule"
+  <rule class="au.com.integradev.delphi.checks.PlatformDependentCastCheck"
     message="Platform-dependent casts should not be used"
     name="PlatformDependentCastRule">
     <priority>2</priority>
     <description>
-      &lt;b&gt;Platform-dependent types&lt;/b&gt; have different sizes on different target platforms.
+      &lt;b&gt;Platform-dependent types&lt;/b&gt; have different sizes on different target
+      platforms.
       &lt;br&gt;
       &lt;b&gt;Platform-independent types&lt;/b&gt; have the same size on all target platforms.
       &lt;br&gt;
@@ -997,7 +1009,8 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows'&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows'&gt;
       Converting 32-bit Delphi Applications to 64-bit Windows
       &lt;/a&gt;
     </description>
@@ -1006,12 +1019,13 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.PlatformDependentTruncationRule"
+  <rule class="au.com.integradev.delphi.checks.PlatformDependentTruncationCheck"
     message="Platform-dependent truncation should be avoided"
     name="PlatformDependentTruncationRule">
     <priority>2</priority>
     <description>
-      &lt;b&gt;Platform-dependent types&lt;/b&gt; have different sizes on different target platforms.
+      &lt;b&gt;Platform-dependent types&lt;/b&gt; have different sizes on different target
+      platforms.
       &lt;br&gt;
       &lt;b&gt;Platform-independent types&lt;/b&gt; have the same size on all target platforms.
       &lt;br&gt;
@@ -1021,7 +1035,8 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows'&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows'&gt;
       Converting 32-bit Delphi Applications to 64-bit Windows
       &lt;/a&gt;
     </description>
@@ -1030,16 +1045,18 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MathFunctionSingleOverloadRule"
+  <rule class="au.com.integradev.delphi.checks.MathFunctionSingleOverloadCheck"
     message="The Single overloads of the standard math functions should not be used"
     name="MathFunctionSingleOverloadRule">
     <priority>1</priority>
     <description>
-      The &lt;code&gt;Single&lt;/code&gt; overloads of the standard math functions are less accurate in 64-bit due to the reduced precision of the &lt;code&gt;Extended&lt;/code&gt; type.
+      The &lt;code&gt;Single&lt;/code&gt; overloads of the standard math functions are less accurate
+      in 64-bit due to the reduced precision of the &lt;code&gt;Extended&lt;/code&gt; type.
       &lt;br&gt;
       In 32-bit: Floating-point calculations use the x87 FPU, which gives 80 bits of precision.
       &lt;br&gt;
-      In 64-bit: Floating-point calculations use SSE2 instructions. This only gives 64 bits of precision, but is faster.
+      In 64-bit: Floating-point calculations use SSE2 instructions. This only gives 64 bits of
+      precision, but is faster.
       &lt;br&gt;
       &lt;br&gt;
       These accuracy issues can produce incorrect results on 64-bit.
@@ -1053,7 +1070,8 @@ FreeAndNil(Foo); // Compliant
       &lt;br&gt;
       - &lt;a href='https://en.wikipedia.org/wiki/X87'&gt;x87&lt;/a&gt;
       &lt;br&gt;
-      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms'&gt;
+      - &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms'&gt;
       The Extended Data Type is different on different platforms
       &lt;/a&gt;
       &lt;br&gt;
@@ -1085,7 +1103,7 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ExplicitDefaultPropertyReferenceRule"
+  <rule class="au.com.integradev.delphi.checks.ExplicitDefaultPropertyReferenceCheck"
     message="Default array properties should not be explicitly referenced"
     name="ExplicitDefaultPropertyReferenceRule">
     <priority>4</priority>
@@ -1110,7 +1128,7 @@ FreeAndNil(Foo); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.EmptyBeginStatementRule"
+  <rule class="au.com.integradev.delphi.checks.EmptyBlockCheck"
     message="Code blocks should not be empty"
     name="EmptyBeginStatementRule">
     <priority>4</priority>
@@ -1123,7 +1141,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.EmptyMethodRule"
+  <rule class="au.com.integradev.delphi.checks.EmptyMethodCheck"
     message="Methods should not be empty"
     name="EmptyMethodRule">
     <priority>3</priority>
@@ -1143,7 +1161,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.EmptyUnitRule"
+  <rule class="au.com.integradev.delphi.checks.EmptyFileCheck"
     message="Units should not be empty"
     name="EmptyUnitRule">
     <priority>4</priority>
@@ -1155,7 +1173,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.DprFunctionRule"
+  <rule class="au.com.integradev.delphi.checks.ProjectFileMethodCheck"
     message="Project files should not have methods"
     name="ProjectFileNoFunctionsRule">
     <priority>3</priority>
@@ -1165,7 +1183,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.DprVariableRule"
+  <rule class="au.com.integradev.delphi.checks.ProjectFileVariableCheck"
     message="Project files should not have variables"
     name="ProjectFileNoVariablesRule">
     <priority>3</priority>
@@ -1175,7 +1193,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TypeAliasRule"
+  <rule class="au.com.integradev.delphi.checks.TypeAliasCheck"
     message="Track uses of type aliases"
     name="TypeAliasRule">
     <priority>5</priority>
@@ -1189,7 +1207,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MixedNamesRule"
+  <rule class="au.com.integradev.delphi.checks.MixedNamesCheck"
     message="Name casing should be kept consistent"
     name="MixedNamesRule">
     <priority>3</priority>
@@ -1201,7 +1219,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ConstructorWithoutInheritedStatementRule"
+  <rule class="au.com.integradev.delphi.checks.ConstructorWithoutInheritedCheck"
     message="Constructors should contain an 'inherited' statement"
     name="ConstructorWithoutInheritedStatementRule">
     <priority>3</priority>
@@ -1212,7 +1230,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.DestructorWithoutInheritedStatementRule"
+  <rule class="au.com.integradev.delphi.checks.DestructorWithoutInheritedCheck"
     message="Destructors should contain an 'inherited' statement"
     name="DestructorWithoutInheritedStatementRule">
     <priority>3</priority>
@@ -1223,7 +1241,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.BeginEndRequiredRule"
+  <rule class="au.com.integradev.delphi.checks.BeginEndRequiredCheck"
     message="'begin'..'end' should always be used"
     name="BeginEndRequiredRule">
     <priority>4</priority>
@@ -1238,7 +1256,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.NoSemicolonRule"
+  <rule class="au.com.integradev.delphi.checks.MissingSemicolonCheck"
     message="Statements should end in a semicolon"
     name="NoSemicolonRule">
     <priority>4</priority>
@@ -1261,7 +1279,7 @@ FreeAndNil(Foo); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CastAndFreeRule"
+  <rule class="au.com.integradev.delphi.checks.CastAndFreeCheck"
     message="Objects should not be casted only to be freed"
     name="CastAndFreeRule">
     <priority>3</priority>
@@ -1282,7 +1300,7 @@ FreeAndNil(MyVar); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CyclomaticComplexityRule"
+  <rule class="au.com.integradev.delphi.checks.CyclomaticComplexityMethodCheck"
     message="Cyclomatic complexity of methods should not be too high"
     name="MethodCyclomaticComplexityRule">
     <priority>2</priority>
@@ -1297,7 +1315,7 @@ FreeAndNil(MyVar); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CognitiveComplexityRule"
+  <rule class="au.com.integradev.delphi.checks.CognitiveComplexityMethodCheck"
     message="Cognitive complexity of methods should not be too high"
     name="MethodCognitiveComplexityRule">
     <priority>2</priority>
@@ -1320,7 +1338,7 @@ FreeAndNil(MyVar); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TooManySubProceduresRule"
+  <rule class="au.com.integradev.delphi.checks.TooManySubroutinesCheck"
     message="Methods should not contain too many sub-procedures"
     name="TooManySubProceduresRule">
     <priority>2</priority>
@@ -1348,7 +1366,7 @@ FreeAndNil(MyVar); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TooLongLineRule"
+  <rule class="au.com.integradev.delphi.checks.TooLongLineCheck"
     message="Lines should not be too long"
     name="TooLongLineRule">
     <priority>3</priority>
@@ -1365,7 +1383,7 @@ FreeAndNil(MyVar); // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ReRaiseExceptionRule"
+  <rule class="au.com.integradev.delphi.checks.ReRaiseExceptionCheck"
     message="Caught exceptions should not be explicitly re-raised"
     name="ReRaiseExceptionRule">
     <priority>1</priority>
@@ -1410,7 +1428,7 @@ FreeAndNil(MyVar); // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.EmptyBracketsRule"
+  <rule class="au.com.integradev.delphi.checks.EmptyArgumentListCheck"
     message="Methods should not be followed by empty brackets"
     name="EmptyBracketsRule">
     <priority>4</priority>
@@ -1434,7 +1452,7 @@ FunctionWithoutArguments;	// Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.DuplicatesRule"
+  <rule class="au.com.integradev.delphi.checks.StringListDuplicatesCheck"
     message="TStringLists should be sorted when setting Duplicates"
     name="DuplicatesRule">
     <priority>1</priority>
@@ -1472,7 +1490,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.LowerCaseReservedWordsRule"
+  <rule class="au.com.integradev.delphi.checks.LowercaseKeywordCheck"
     message="Keywords should be lowercase"
     name="LowerCaseReservedWordsRule">
     <priority>3</priority>
@@ -1487,7 +1505,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ShortIdentifiersRule"
+  <rule class="au.com.integradev.delphi.checks.ShortIdentifierCheck"
     message="Identifiers should not be too short"
     name="ShortIdentifiersRule">
     <priority>3</priority>
@@ -1504,7 +1522,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MemoryManagementRule"
+  <rule class="au.com.integradev.delphi.checks.MemoryManagementCheck"
     message="Memory management should be used"
     name="MemoryManagementRule">
     <priority>2</priority>
@@ -1523,7 +1541,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.MethodNestingDepthRule"
+  <rule class="au.com.integradev.delphi.checks.MethodNestingDepthCheck"
     message="Methods should not be nested too deeply"
     name="MethodNestingDepthRule">
     <priority>3</priority>
@@ -1538,7 +1556,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ExplicitTObjectRule"
+  <rule class="au.com.integradev.delphi.checks.ExplicitTObjectInheritanceCheck"
     message="Top-level classes should explicitly inherit from TObject"
     name="ExplicitTObjectRule">
     <priority>4</priority>
@@ -1558,7 +1576,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.DestructorDestroyRule"
+  <rule class="au.com.integradev.delphi.checks.DestructorNameCheck"
     message="Destructors should override TObject.Destroy"
     name="DestructorDestroyRule">
     <priority>3</priority>
@@ -1576,7 +1594,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CaseStatementSizeRule"
+  <rule class="au.com.integradev.delphi.checks.CaseStatementSizeCheck"
     message="Case statements should have at least 2 case items"
     name="CaseStatementSizeRule">
     <priority>4</priority>
@@ -1588,7 +1606,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.GroupedVariableDeclarationRule"
+  <rule class="au.com.integradev.delphi.checks.GroupedVariableDeclarationCheck"
     message="Variables should be declared individually"
     name="GroupedVariableDeclarationRule">
     <priority>4</priority>
@@ -1597,7 +1615,8 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero style guide page on
-      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations'&gt;
+      &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations'&gt;
       Delphi Statements
       &lt;/a&gt;
     </description>
@@ -1606,7 +1625,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.GroupedFieldDeclarationRule"
+  <rule class="au.com.integradev.delphi.checks.GroupedFieldDeclarationCheck"
     message="Fields should be declared individually"
     name="GroupedFieldDeclarationRule">
     <priority>4</priority>
@@ -1615,7 +1634,8 @@ List5.Duplicates := <i>dupError</i>; // Compliant
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Embarcadero style guide page on
-      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations'&gt;
+      &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations'&gt;
       Delphi Statements
       &lt;/a&gt;
     </description>
@@ -1624,7 +1644,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.GroupedParameterDeclarationRule"
+  <rule class="au.com.integradev.delphi.checks.GroupedParameterDeclarationCheck"
     message="Parameters should be declared individually"
     name="GroupedParameterDeclarationRule">
     <priority>4</priority>
@@ -1637,7 +1657,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TabulationCharactersRule"
+  <rule class="au.com.integradev.delphi.checks.TabulationCharacterCheck"
     message="Tabulation characters should not be used"
     name="TabulationCharactersRule">
     <priority>5</priority>
@@ -1656,7 +1676,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.TrailingWhitespaceRule"
+  <rule class="au.com.integradev.delphi.checks.TrailingWhitespaceCheck"
     message="Code should have no trailing whitespace"
     name="TrailingWhitespaceRule">
     <priority>5</priority>
@@ -1670,7 +1690,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.AssignedNilCheckRule"
+  <rule class="au.com.integradev.delphi.checks.NilComparisonCheck"
     message="Nil checks should be performed with Assigned"
     name="AssignedNilCheckRule">
     <priority>4</priority>
@@ -1688,7 +1708,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.IfThenShortCircuitRule"
+  <rule class="au.com.integradev.delphi.checks.IfThenShortCircuitCheck"
     message="IfThen should not be used like a short-circuit operator"
     name="IfThenShortCircuitRule">
     <priority>1</priority>
@@ -1727,7 +1747,7 @@ List5.Duplicates := <i>dupError</i>; // Compliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.RedundantParenthesesRule"
+  <rule class="au.com.integradev.delphi.checks.RedundantParenthesesCheck"
     message="Redundant pairs of parentheses should be removed"
     name="RedundantParenthesesRule">
     <priority>4</priority>
@@ -1750,7 +1770,7 @@ Result := ((X + 1)); // Noncompliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.SuperfluousSemicolonsRule"
+  <rule class="au.com.integradev.delphi.checks.SuperfluousSemicolonCheck"
     message="Stray semicolons should be removed"
     name="SuperfluousSemicolonsRule">
     <priority>4</priority>
@@ -1773,7 +1793,7 @@ Result := 123;; // Noncompliant
     </example>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CommentedOutCodeRule"
+  <rule class="au.com.integradev.delphi.checks.CommentedOutCodeCheck"
     message="Sections of code should not be commented out"
     name="CommentedOutCodeRule">
     <priority>4</priority>
@@ -1792,7 +1812,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedLocalVariablesRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedLocalVariableCheck"
     message="Unused local variables should be removed"
     name="UnusedLocalVariablesRule">
     <priority>3</priority>
@@ -1806,7 +1826,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedGlobalVariablesRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedGlobalVariableCheck"
     message="Unused global variables should be removed"
     name="UnusedGlobalVariablesRule">
     <priority>3</priority>
@@ -1833,7 +1853,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedConstantsRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedConstantCheck"
     message="Unused constants should be removed"
     name="UnusedConstantsRule">
     <priority>3</priority>
@@ -1847,7 +1867,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedFieldsRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedFieldCheck"
     message="Unused fields should be removed"
     name="UnusedFieldsRule">
     <priority>3</priority>
@@ -1866,7 +1886,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedPropertiesRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedPropertyCheck"
     message="Unused properties should be removed"
     name="UnusedPropertiesRule">
     <priority>3</priority>
@@ -1885,7 +1905,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedMethodsRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedMethodCheck"
     message="Unused methods should be removed"
     name="UnusedMethodsRule">
     <priority>3</priority>
@@ -1906,7 +1926,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedTypesRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedTypeCheck"
     message="Unused types should be removed"
     name="UnusedTypesRule">
     <priority>3</priority>
@@ -1927,7 +1947,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnusedImportsRule"
+  <rule class="au.com.integradev.delphi.checks.UnusedImportCheck"
     message="Unnecessary imports should be removed"
     name="UnusedImportsRule">
     <priority>4</priority>
@@ -1937,7 +1957,8 @@ Result := 123;; // Noncompliant
       Leaving them in reduces the code's readability, since their presence can be confusing.
       &lt;br&gt;
       &lt;br&gt;
-      WARNING: Take care when removing imports of units with a Register procedure or initialization/finalization section.
+      WARNING: Take care when removing imports of units with a Register procedure or
+      initialization/finalization section.
       &lt;br&gt;
       A unit must be imported at least once for code in these locations to be executed.
       &lt;br&gt;
@@ -1948,16 +1969,18 @@ Result := 123;; // Noncompliant
     </description>
     <properties>
       <property name="baseEffort" value="3min"/>
-      <property name="exclusions" value="Winapi.Windows|Winapi.Messages|System.SysUtils|System.Variants|System.Classes|System.Types|Vcl.Graphics|Vcl.Controls|Vcl.Forms|Vcl.Dialogs|FMX.Types|FMX.Controls|FMX.Forms|FMX.Dialogs|QTypes|QGraphics|QControls|QForms|QDialogs|QStdCtrls"/>
+      <property name="exclusions"
+        value="Winapi.Windows|Winapi.Messages|System.SysUtils|System.Variants|System.Classes|System.Types|Vcl.Graphics|Vcl.Controls|Vcl.Forms|Vcl.Dialogs|FMX.Types|FMX.Controls|FMX.Forms|FMX.Dialogs|QTypes|QGraphics|QControls|QForms|QDialogs|QStdCtrls"/>
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ImportSpecificityRule"
+  <rule class="au.com.integradev.delphi.checks.ImportSpecificityCheck"
     message="Imports should be moved to the implementation section where possible"
     name="ImportSpecificityRule">
     <priority>4</priority>
     <description>
-      The interface uses clause should only contain imports that are required for the interface section.
+      The interface uses clause should only contain imports that are required for the interface
+      section.
       &lt;br&gt;
       Anything else should be moved to the implementation section.
       &lt;br&gt;
@@ -1967,11 +1990,12 @@ Result := 123;; // Noncompliant
     </description>
     <properties>
       <property name="baseEffort" value="3min"/>
-      <property name="exclusions" value="Winapi.Windows|Winapi.Messages|System.SysUtils|System.Variants|System.Classes|System.Types|Vcl.Graphics|Vcl.Controls|Vcl.Forms|Vcl.Dialogs|FMX.Types|FMX.Controls|FMX.Forms|FMX.Dialogs|QTypes|QGraphics|QControls|QForms|QDialogs|QStdCtrls"/>
+      <property name="exclusions"
+        value="Winapi.Windows|Winapi.Messages|System.SysUtils|System.Variants|System.Classes|System.Types|Vcl.Graphics|Vcl.Controls|Vcl.Forms|Vcl.Dialogs|FMX.Types|FMX.Controls|FMX.Forms|FMX.Dialogs|QTypes|QGraphics|QControls|QForms|QDialogs|QStdCtrls"/>
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.AssertMessageRule"
+  <rule class="au.com.integradev.delphi.checks.AssertMessageCheck"
     message="Assertions in main code should have an error message"
     name="AssertMessageRule">
     <priority>3</priority>
@@ -1992,7 +2016,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CompilerHintsRule"
+  <rule class="au.com.integradev.delphi.checks.CompilerHintsCheck"
     message="Compiler hints should not be disabled"
     name="CompilerHintsRule">
     <priority>2</priority>
@@ -2004,7 +2028,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CompilerWarningsRule"
+  <rule class="au.com.integradev.delphi.checks.CompilerWarningsCheck"
     message="Compiler warnings should not be disabled"
     name="CompilerWarningsRule">
     <priority>2</priority>
@@ -2016,7 +2040,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.NoSonarRule"
+  <rule class="au.com.integradev.delphi.checks.NoSonarCheck"
     message="Track uses of &quot;NOSONAR&quot; comments"
     name="NoSonarRule">
     <priority>3</priority>
@@ -2033,7 +2057,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InlineVarExplicitTypeRule"
+  <rule class="au.com.integradev.delphi.checks.InlineVarExplicitTypeCheck"
     message="Inline var declarations should not use type inference"
     name="InlineVarExplicitTypeRule">
     <priority>3</priority>
@@ -2052,7 +2076,8 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
       Type Inference for Inlined Variables
       &lt;/a&gt;
     </description>
@@ -2070,7 +2095,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InlineConstExplicitTypeRule"
+  <rule class="au.com.integradev.delphi.checks.InlineConstExplicitTypeCheck"
     message="Inline const declarations should not use type inference"
     name="InlineConstExplicitTypeRule">
     <priority>3</priority>
@@ -2091,7 +2116,8 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
       Type Inference for Inlined Variables
       &lt;/a&gt;
     </description>
@@ -2125,7 +2151,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InlineLoopVarExplicitTypeRule"
+  <rule class="au.com.integradev.delphi.checks.InlineLoopVarExplicitTypeCheck"
     message="Inline loop var declarations should not use type inference"
     name="InlineLoopVarExplicitTypeRule">
     <priority>3</priority>
@@ -2144,7 +2170,8 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
+      - &lt;a
+      href='http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables'&gt;
       Type Inference for Inlined Variables
       &lt;/a&gt;
     </description>
@@ -2162,7 +2189,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InlineDeclarationCapturedByAnonymousMethodRule"
+  <rule class="au.com.integradev.delphi.checks.InlineDeclarationCapturedByAnonymousMethodRule"
     message="Inline variables should not be captured by anonymous methods"
     name="InlineDeclarationCapturedByAnonymousMethodRule">
     <priority>2</priority>
@@ -2198,7 +2225,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.AddressOfNestedMethodRule"
+  <rule class="au.com.integradev.delphi.checks.AddressOfSubroutineCheck"
     message="Nested methods must not be used as procedural values"
     name="AddressOfNestedMethodRule">
     <priority>1</priority>
@@ -2213,7 +2240,8 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       &lt;b&gt;See:&lt;/b&gt;
       &lt;br&gt;
-      - &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Procedural_Types_(Delphi)#Method_Pointers'&gt;
+      - &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Procedural_Types_(Delphi)#Method_Pointers'&gt;
       Method Pointers
       &lt;/a&gt;
       &lt;br&gt;
@@ -2225,7 +2253,8 @@ Result := 123;; // Noncompliant
       Local values not properly compiled in Nested Function
       &lt;/a&gt;
       &lt;br&gt;
-      - &lt;a href='https://stackoverflow.com/questions/10162749/why-cannot-take-address-to-a-nested-local-function-in-64-bit-delphi/10162859'&gt;
+      - &lt;a
+      href='https://stackoverflow.com/questions/10162749/why-cannot-take-address-to-a-nested-local-function-in-64-bit-delphi/10162859'&gt;
       Why cannot take address to a nested local function in 64 bit Delphi?
       &lt;/a&gt;
     </description>
@@ -2235,7 +2264,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.UnitLevelKeywordIndentationRule"
+  <rule class="au.com.integradev.delphi.checks.UnitLevelKeywordIndentationCheck"
     message="Unit-level keywords should not be indented"
     name="UnitLevelKeywordIndentationRule">
     <priority>3</priority>
@@ -2244,10 +2273,13 @@ Result := 123;; // Noncompliant
       indicates a form of scope.
       &lt;br&gt;
       This includes
-      &lt;code&gt;unit&lt;/code&gt;/&lt;code&gt;program&lt;/code&gt;/&lt;code&gt;package&lt;/code&gt;/&lt;code&gt;library&lt;/code&gt; file headings,
+      &lt;code&gt;unit&lt;/code&gt;/&lt;code&gt;program&lt;/code&gt;/&lt;code&gt;package&lt;/code&gt;/&lt;code&gt;library&lt;/code&gt;
+      file headings,
       &lt;code&gt;interface&lt;/code&gt;/&lt;code&gt;implementation&lt;/code&gt; section headings,
-      &lt;code&gt;initialization&lt;/code&gt;/&lt;code&gt;finalization&lt;/code&gt; section headings,
-      top-level &lt;code&gt;uses&lt;/code&gt;/&lt;code&gt;type&lt;/code&gt;/&lt;code&gt;var&lt;/code&gt;/&lt;code&gt;const&lt;/code&gt; keywords,
+      &lt;code&gt;initialization&lt;/code&gt;/&lt;code&gt;finalization&lt;/code&gt; section
+      headings,
+      top-level &lt;code&gt;uses&lt;/code&gt;/&lt;code&gt;type&lt;/code&gt;/&lt;code&gt;var&lt;/code&gt;/&lt;code&gt;const&lt;/code&gt;
+      keywords,
       and the final &lt;code&gt;end.&lt;/code&gt;.
       &lt;br&gt;
       &lt;br&gt;
@@ -2261,7 +2293,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.VisibilityKeywordIndentationRule"
+  <rule class="au.com.integradev.delphi.checks.VisibilityKeywordIndentationCheck"
     message="Visibility specifiers should be indented to the level of the containing type"
     name="VisibilityKeywordIndentationRule">
     <priority>3</priority>
@@ -2274,12 +2306,14 @@ Result := 123;; // Noncompliant
       &lt;br&gt;
       Please note:
       &lt;br&gt;
-      - This rule checks for an exact match on trailing whitespace - mixed indentation may yield unexpected results. 
+      - This rule checks for an exact match on trailing whitespace - mixed indentation may yield
+      unexpected results.
       &lt;br&gt;
       &lt;br&gt;
       For more information, see the Class and Record Declarations section of the Embarcadero style
       guide page on
-      &lt;a href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
+      &lt;a
+      href='https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations'&gt;
       Type Declarations
       &lt;/a&gt;
     </description>
@@ -2378,7 +2412,9 @@ Result := 123;; // Noncompliant
     <description>
       &lt;code&gt;goto&lt;/code&gt; is an unstructured control flow statement.
       It makes code less readable and maintainable.
-      Structured control flow statements such as &lt;code&gt;if&lt;/code&gt;, &lt;code&gt;for&lt;/code&gt;, &lt;code&gt;while&lt;/code&gt;, &lt;code&gt;Continue&lt;/code&gt;, or &lt;code&gt;Break&lt;/code&gt; should be used instead.
+      Structured control flow statements such as &lt;code&gt;if&lt;/code&gt;, &lt;code&gt;for&lt;/code&gt;,
+      &lt;code&gt;while&lt;/code&gt;, &lt;code&gt;Continue&lt;/code&gt;, or &lt;code&gt;Break&lt;/code&gt;
+      should be used instead.
     </description>
     <properties>
       <property name="baseEffort" value="30min"/>
@@ -2405,7 +2441,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenIdentifierRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenIdentifierCheck"
     message="Track uses of disallowed identifiers"
     name="ForbiddenIdentifierRule">
     <priority>3</priority>
@@ -2421,7 +2457,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenPropertyRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenPropertyCheck"
     message="Track uses of disallowed properties"
     name="ForbiddenPropertyRule">
     <priority>3</priority>
@@ -2442,7 +2478,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenMethodRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenMethodCheck"
     message="Track uses of disallowed methods"
     name="ForbiddenMethodRule">
     <priority>3</priority>
@@ -2465,7 +2501,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenTypeRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenTypeCheck"
     message="Track uses of disallowed types"
     name="ForbiddenTypeRule">
     <priority>3</priority>
@@ -2483,7 +2519,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenFieldRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenFieldCheck"
     message="Track uses of disallowed fields"
     name="ForbiddenFieldRule">
     <priority>3</priority>
@@ -2506,7 +2542,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenConstantRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenConstantCheck"
     message="Track uses of disallowed constants"
     name="ForbiddenConstantRule">
     <priority>3</priority>
@@ -2530,7 +2566,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenEnumValueRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenEnumValueCheck"
     message="Track uses of disallowed enum values"
     name="ForbiddenEnumValueRule">
     <priority>3</priority>
@@ -2553,7 +2589,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.ForbiddenImportFilePatternRule"
+  <rule class="au.com.integradev.delphi.checks.ForbiddenImportFilePatternCheck"
     message="Track use of disallowed imports by file path"
     name="ForbiddenImportFilePatternRule">
     <priority>3</priority>
@@ -2561,10 +2597,12 @@ Result := 123;; // Noncompliant
       This rule allows banning certain imports.
       It will flag any import of a unit with a file path matching the forbiddenImportPattern.
       &lt;br&gt;
-      Units with a file path matching the optional whitelistPattern are permitted to import banned units.
+      Units with a file path matching the optional whitelistPattern are permitted to import banned
+      units.
       &lt;br&gt;
       &lt;br&gt;
-      Patterns can use glob or regex syntax, as specified by forbiddenImportPatternSyntax and whitelistPatternSyntax.
+      Patterns can use glob or regex syntax, as specified by forbiddenImportPatternSyntax and
+      whitelistPatternSyntax.
       &lt;br&gt;
       Patterns are compared against absolute paths.
     </description>
@@ -2579,7 +2617,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.CommentRegexRule"
+  <rule class="au.com.integradev.delphi.checks.CommentRegularExpressionCheck"
     message="Track comments matching a regular expression"
     name="CommentRegexRule">
     <priority>3</priority>
@@ -2606,7 +2644,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.StringLiteralRegexRule"
+  <rule class="au.com.integradev.delphi.checks.StringLiteralRegexCheck"
     message="Track string literals matching a regular expression"
     name="StringLiteralRegexRule">
     <priority>3</priority>
@@ -2634,7 +2672,7 @@ Result := 123;; // Noncompliant
     </properties>
   </rule>
 
-  <rule class="au.com.integradev.delphi.pmd.rules.InheritedTypeNameRule"
+  <rule class="au.com.integradev.delphi.checks.InheritedTypeNameCheck"
     message="Types which inherit from some other specified type should comply with a naming convention"
     name="InheritedTypeNameRule">
     <priority>3</priority>

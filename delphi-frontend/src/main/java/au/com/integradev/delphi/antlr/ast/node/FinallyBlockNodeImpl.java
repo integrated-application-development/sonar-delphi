@@ -21,6 +21,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
 public final class FinallyBlockNodeImpl extends DelphiNodeImpl implements FinallyBlockNode {
   public FinallyBlockNodeImpl(Token token) {
@@ -30,5 +31,10 @@ public final class FinallyBlockNodeImpl extends DelphiNodeImpl implements Finall
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public StatementListNode getStatementList() {
+    return (StatementListNode) jjtGetChild(0);
   }
 }

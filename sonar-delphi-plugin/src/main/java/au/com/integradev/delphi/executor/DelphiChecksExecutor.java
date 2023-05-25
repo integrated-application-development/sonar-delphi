@@ -21,14 +21,17 @@ package au.com.integradev.delphi.executor;
 import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.check.ScopeMetadataLoader;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
 import java.util.Set;
-import org.sonar.api.batch.fs.InputFile.Type;
-
+import java.util.function.Function;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.rule.RuleScope;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 
 public class DelphiChecksExecutor implements Executor {
   private final DelphiProjectHelper delphiProjectHelper;
@@ -46,25 +49,35 @@ public class DelphiChecksExecutor implements Executor {
 
   @Override
   public void execute(Context context, DelphiInputFile delphiFile) {
-    DelphiCheckContext checkContext =
-        new DelphiCheckContextImpl(
-            context.sensorContext(),
-            delphiFile,
-            new CompilerDirectiveParserImpl(delphiProjectHelper.getToolchain().platform),
-            checkRegistrar,
-            scopeMetadataLoader);
+    Platform platform = delphiProjectHelper.getToolchain().platform;
+    CompilerDirectiveParser compilerDirectiveParser = new CompilerDirectiveParserImpl(platform);
+    Function<DelphiCheck, DelphiCheckContext> createCheckContext =
+        check ->
+            new DelphiCheckContextImpl(
+                check,
+                context.sensorContext(),
+                delphiFile,
+                compilerDirectiveParser,
+                checkRegistrar,
+                scopeMetadataLoader);
 
-    runChecks(checkContext, RuleScope.ALL);
-
+    runChecks(RuleScope.ALL, createCheckContext);
     runChecks(
-        checkContext,
-        delphiFile.getInputFile().type() == Type.MAIN ? RuleScope.MAIN : RuleScope.TEST);
+        delphiFile.getInputFile().type() == InputFile.Type.MAIN ? RuleScope.MAIN : RuleScope.TEST,
+        createCheckContext);
   }
 
-  private void runChecks(DelphiCheckContext checkContext, RuleScope scope) {
+  private void runChecks(
+      RuleScope scope, Function<DelphiCheck, DelphiCheckContext> createCheckContext) {
     checkRegistrar
         .getChecks(scope)
-        .forEach(check -> check.visit(checkContext.getAst(), checkContext));
+        .forEach(
+            check -> {
+              DelphiCheckContext context = createCheckContext.apply(check);
+              check.start(context);
+              check.visit(context.getAst(), context);
+              check.end(context);
+            });
   }
 
   @Override

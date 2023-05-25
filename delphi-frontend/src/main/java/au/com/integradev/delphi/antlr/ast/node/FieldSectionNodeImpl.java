@@ -20,7 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
@@ -46,5 +48,10 @@ public final class FieldSectionNodeImpl extends DelphiNodeImpl implements FieldS
   @Override
   public boolean isClassFieldSection() {
     return getFirstChildWithId(DelphiLexer.CLASS) != null;
+  }
+
+  @Override
+  public List<FieldDeclarationNode> getDeclarations() {
+    return findChildrenOfType(FieldDeclarationNode.class);
   }
 }

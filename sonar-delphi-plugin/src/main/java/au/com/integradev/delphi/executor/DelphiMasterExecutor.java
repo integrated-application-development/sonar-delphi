@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
 
 public class DelphiMasterExecutor implements Executor {
   private static final Logger LOG = Loggers.get(DelphiMasterExecutor.class);
@@ -49,7 +50,7 @@ public class DelphiMasterExecutor implements Executor {
     for (Executor executor : executors) {
       try {
         executeExecutor(executor, context, file);
-      } catch (FatalExecutorError e) {
+      } catch (FatalAnalysisError e) {
         throw e;
       } catch (Exception e) {
         String executorName = executor.getClass().getSimpleName();
@@ -89,7 +90,7 @@ public class DelphiMasterExecutor implements Executor {
 
       try {
         executeExecutor(dependencyExecutor, context, file);
-      } catch (FatalExecutorError e) {
+      } catch (FatalAnalysisError e) {
         throw e;
       } catch (Exception e) {
         throw new UnsatisfiedExecutorDependencyException(executor, dependency, e);

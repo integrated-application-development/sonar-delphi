@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceGuidNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
 
 public final class InterfaceTypeNodeImpl extends StructTypeNodeImpl implements InterfaceTypeNode {
@@ -30,5 +31,15 @@ public final class InterfaceTypeNodeImpl extends StructTypeNodeImpl implements I
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public boolean isForwardDeclaration() {
+    return jjtGetNumChildren() == 0;
+  }
+
+  @Override
+  public InterfaceGuidNode getGuid() {
+    return getFirstChildOfType(InterfaceGuidNode.class);
   }
 }

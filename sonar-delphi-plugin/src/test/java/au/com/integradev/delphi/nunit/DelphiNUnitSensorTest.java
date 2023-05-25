@@ -24,7 +24,6 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.sonar.api.measures.CoreMetrics.*;
 
-import au.com.integradev.delphi.DelphiPlugin;
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -91,7 +90,8 @@ class DelphiNUnitSensorTest {
 
   @Test
   void testExecuteWithInvalidReportPath() {
-    settings.setProperty(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY, UUID.randomUUID().toString());
+    settings.setProperty(
+        DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY, UUID.randomUUID().toString());
     sensor.execute(context);
     assertAllMeasuresEmpty();
   }

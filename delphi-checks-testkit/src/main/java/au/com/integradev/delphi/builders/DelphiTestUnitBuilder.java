@@ -22,7 +22,7 @@
  */
 package au.com.integradev.delphi.builders;
 
-public class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
+public final class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
 
   private String unitName = "Test";
 

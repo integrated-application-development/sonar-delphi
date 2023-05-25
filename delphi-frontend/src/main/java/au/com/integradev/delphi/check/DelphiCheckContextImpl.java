@@ -7,11 +7,13 @@ import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class DelphiCheckContextImpl implements DelphiCheckContext {
+  private final DelphiCheck check;
   private final SensorContext sensorContext;
   private final DelphiInputFile delphiFile;
   private final CompilerDirectiveParser compilerDirectiveParser;
@@ -19,11 +21,13 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
   private final ScopeMetadataLoader scopeMetadataLoader;
 
   public DelphiCheckContextImpl(
+      DelphiCheck check,
       SensorContext sensorContext,
       DelphiInputFile delphiFile,
       CompilerDirectiveParser compilerDirectiveParser,
       MasterCheckRegistrar checkRegistrar,
       ScopeMetadataLoader scopeMetadataLoader) {
+    this.check = check;
     this.sensorContext = sensorContext;
     this.delphiFile = delphiFile;
     this.compilerDirectiveParser = compilerDirectiveParser;
@@ -63,6 +67,7 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
 
   @Override
   public DelphiIssueBuilder newIssue() {
-    return new DelphiIssueBuilder(sensorContext, delphiFile, checkRegistrar, scopeMetadataLoader);
+    return new DelphiIssueBuilder(
+        check, sensorContext, delphiFile, checkRegistrar, scopeMetadataLoader);
   }
 }
