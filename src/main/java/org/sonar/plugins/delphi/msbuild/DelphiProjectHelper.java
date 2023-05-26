@@ -30,6 +30,7 @@ import com.google.common.collect.Iterables;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -351,7 +352,7 @@ public class DelphiProjectHelper {
   }
 
   public InputFile getFile(String path) {
-    return fs.inputFile(fs.predicates().hasPath(path));
+    return fs.inputFile(fs.predicates().hasURI(Paths.get(path).toUri()));
   }
 
   public InputFile getFile(File file) {
