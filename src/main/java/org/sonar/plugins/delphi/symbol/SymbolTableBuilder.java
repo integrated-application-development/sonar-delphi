@@ -74,6 +74,7 @@ public class SymbolTableBuilder {
   private Path standardLibraryPath;
   private SearchPath searchPath = SearchPath.create(Collections.emptyList());
   private List<Path> sourceFiles = Collections.emptyList();
+  private List<Path> referencedFiles = Collections.emptyList();
   private Set<String> conditionalDefines = Collections.emptySet();
   private Set<String> unitScopeNames = Collections.emptySet();
   private Map<String, String> unitAliases = Collections.emptyMap();
@@ -93,6 +94,11 @@ public class SymbolTableBuilder {
 
   public SymbolTableBuilder sourceFiles(@NotNull List<Path> sourceFiles) {
     this.sourceFiles = sourceFiles;
+    return this;
+  }
+
+  public SymbolTableBuilder referencedFiles(@NotNull List<Path> referencedFiles) {
+    this.referencedFiles = referencedFiles;
     return this;
   }
 
@@ -431,6 +437,7 @@ public class SymbolTableBuilder {
 
     processStandardLibrarySearchPaths();
     searchPath.getRootDirectories().forEach(this::processSearchPath);
+    referencedFiles.forEach(file -> this.createUnitData(file, false));
     sourceFiles.forEach(file -> this.createUnitData(file, true));
 
     ProgressReport progressReport =
