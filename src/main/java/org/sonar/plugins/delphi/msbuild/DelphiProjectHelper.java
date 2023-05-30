@@ -70,6 +70,7 @@ public class DelphiProjectHelper {
   private final CompilerVersion compilerVersion;
   private final List<Path> searchDirectories;
   private final List<Path> debugSourceDirectories;
+  private final List<Path> referencedFiles;
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
   private final Map<String, String> unitAliases;
@@ -93,6 +94,7 @@ public class DelphiProjectHelper {
     this.compilerVersion = getCompilerVersionFromSettings();
     this.searchDirectories = getSearchDirectoriesFromSettings();
     this.debugSourceDirectories = new ArrayList<>();
+    this.referencedFiles = new ArrayList<>();
     this.conditionalDefines = getPredefinedConditionalDefines();
     this.unitScopeNames = getSetFromSettings(DelphiPlugin.UNIT_SCOPE_NAMES_KEY);
     this.unitAliases = getUnitAliasesFromSettings();
@@ -201,6 +203,7 @@ public class DelphiProjectHelper {
       searchDirectories.addAll(project.getSearchDirectories());
       debugSourceDirectories.addAll(project.getDebugSourceDirectories());
       conditionalDefines.addAll(project.getConditionalDefines());
+      referencedFiles.addAll(project.getSourceFiles());
       unitScopeNames.addAll(project.getUnitScopeNames());
       unitAliases.putAll(project.getUnitAliases());
     }
@@ -340,6 +343,11 @@ public class DelphiProjectHelper {
   public Map<String, String> getUnitAliases() {
     indexProjects();
     return unitAliases;
+  }
+
+  public List<Path> getReferencedFiles() {
+    indexProjects();
+    return referencedFiles;
   }
 
   public Iterable<InputFile> mainFiles() {
