@@ -30,8 +30,8 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.sourceforge.pmd.lang.ast.RootNode;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 class DelphiParserVisitorTest {
@@ -71,7 +71,7 @@ class DelphiParserVisitorTest {
       throw new AssertionError(
           String.format(
               "Expected the following types to be handled by DelphiParserVisitor: %s",
-              unhandledTypes.toString()));
+              unhandledTypes));
     }
   }
 
@@ -85,7 +85,7 @@ class DelphiParserVisitorTest {
   }
 
   private static <T extends DelphiNode> T getNodeInstance(Class<T> clazz) {
-    if (Modifier.isAbstract(clazz.getModifiers()) || RootNode.class.isAssignableFrom(clazz)) {
+    if (Modifier.isAbstract(clazz.getModifiers()) || DelphiAst.class.isAssignableFrom(clazz)) {
       return mock(clazz);
     }
     return DelphiNodeUtils.instantiateNode(clazz);

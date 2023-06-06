@@ -25,8 +25,7 @@ public final class DelphiProperties {
   public static final String COVERAGE_TOOL_KEY = "sonar.delphi.coverage.tool";
   public static final String COVERAGE_REPORT_KEY = "sonar.delphi.coverage.reportPaths";
   public static final String NUNIT_REPORT_PATHS_PROPERTY = "sonar.delphi.nunit.reportPaths";
-  public static final String GENERATE_PMD_REPORT_XML_KEY = "sonar.delphi.pmd.generateXml";
-  public static final String TEST_SUITE_TYPE_KEY = "sonar.delphi.pmd.testSuiteType";
+  public static final String TEST_SUITE_TYPE_KEY = "sonar.delphi.testSuiteType";
 
   public static final String COVERAGE_TOOL_DELPHI_CODE_COVERAGE = "dcc";
 
@@ -117,12 +116,6 @@ public final class DelphiProperties {
             .name("NUnit Report Paths")
             .description("List of paths to NUnit report directories")
             .multiValues(true)
-            .onQualifiers(Qualifiers.PROJECT)
-            .build(),
-        PropertyDefinition.builder(DelphiProperties.GENERATE_PMD_REPORT_XML_KEY)
-            .name("Generate XML Report")
-            .defaultValue("false")
-            .description("Whether a PMD Report XML file should be generated")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiProperties.TEST_SUITE_TYPE_KEY)

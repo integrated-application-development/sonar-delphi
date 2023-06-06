@@ -18,9 +18,6 @@
  */
 package au.com.integradev.delphi.executor;
 
-import static au.com.integradev.delphi.pmd.DelphiPmdConstants.BASE_EFFORT;
-import static au.com.integradev.delphi.pmd.DelphiPmdConstants.SCOPE;
-import static au.com.integradev.delphi.pmd.DelphiPmdConstants.TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,17 +31,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.pmd.DelphiPmdConfiguration;
-import au.com.integradev.delphi.pmd.DelphiPmdConstants;
-import au.com.integradev.delphi.pmd.profile.DelphiPmdRuleSetDefinitionProvider;
-import au.com.integradev.delphi.pmd.violation.DelphiPmdViolationRecorder;
-import au.com.integradev.delphi.pmd.violation.DelphiRuleViolation;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleSet;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
-import net.sourceforge.pmd.Report;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;

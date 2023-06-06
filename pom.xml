@@ -97,18 +97,12 @@
     <!-- Exclude generated files. -->
     <sonar.issue.ignore.allfile>r1</sonar.issue.ignore.allfile>
     <sonar.issue.ignore.allfile.r1.fileRegexp>@(javax\\.annotation\\.)?Generated</sonar.issue.ignore.allfile.r1.fileRegexp>
-    <!-- Sonar wants equals() and hashcode() overrides on a bunch of DelphiRules.
-         The existing methods in PMD's AbstractRule already handle all the important data. -->
-    <sonar.issue.ignore.multicriteria>j1</sonar.issue.ignore.multicriteria>
-    <sonar.issue.ignore.multicriteria.j1.ruleKey>java:S2160</sonar.issue.ignore.multicriteria.j1.ruleKey>
-    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/pmd/rules/*.java</sonar.issue.ignore.multicriteria.j1.resourceKey>
     <!-- Dependency versions -->
     <sonar.version>7.9</sonar.version>
     <sonar-analyzers-commons.version>2.1.0.1111</sonar-analyzers-commons.version>
     <sonar-orchestrator.version>3.40.0.183</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <commons-text.version>1.10.0</commons-text.version>
-    <pmd.version>6.18.0</pmd.version>
     <jdom.version>2.0.6.1</jdom.version>
     <json-simple.version>1.1.1</json-simple.version>
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
@@ -190,11 +184,6 @@
         <groupId>org.antlr</groupId>
         <artifactId>antlr-runtime</artifactId>
         <version>${antlr-runtime.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sourceforge.pmd</groupId>
-        <artifactId>pmd-core</artifactId>
-        <version>${pmd.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jdom</groupId>

@@ -20,7 +20,6 @@ package au.com.integradev.delphi.symbol.scope;
 
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.SetMultimap;
@@ -53,8 +52,13 @@ import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 public class DelphiScopeImpl implements DelphiScope {
   private final Set<NameDeclaration> declarationSet;
   private final ListMultimap<NameDeclaration, NameOccurrence> occurrencesByDeclaration;
-  private final SetMultimap<Class<? extends NameDeclaration>, NameDeclaration> declarationsByClass;
   private final SetMultimap<String, NameDeclaration> declarationsByName;
+  private final Set<UnitNameDeclaration> unitDeclarations;
+  private final Set<UnitImportNameDeclaration> importDeclarations;
+  private final Set<TypeNameDeclaration> typeDeclarations;
+  private final Set<PropertyNameDeclaration> propertyDeclarations;
+  private final Set<MethodNameDeclaration> methodDeclarations;
+  private final Set<VariableNameDeclaration> variableDeclarations;
   private final Map<Type, HelperType> helpersByType;
 
   private DelphiScope parent;
@@ -62,8 +66,13 @@ public class DelphiScopeImpl implements DelphiScope {
   protected DelphiScopeImpl() {
     declarationSet = new HashSet<>();
     occurrencesByDeclaration = ArrayListMultimap.create();
-    declarationsByClass = HashMultimap.create();
     declarationsByName = TreeMultimap.create(String.CASE_INSENSITIVE_ORDER, Ordering.natural());
+    unitDeclarations = new HashSet<>();
+    importDeclarations = new HashSet<>();
+    typeDeclarations = new HashSet<>();
+    propertyDeclarations = new HashSet<>();
+    methodDeclarations = new HashSet<>();
+    variableDeclarations = new HashSet<>();
     helpersByType = new HashMap<>();
   }
 
@@ -78,8 +87,24 @@ public class DelphiScopeImpl implements DelphiScope {
     checkForDuplicatedNameDeclaration(declaration);
     declarationSet.add(declaration);
     declarationsByName.put(declaration.getImage(), declaration);
-    declarationsByClass.put(declaration.getClass(), declaration);
+    addDeclarationByClass(declaration);
     handleHelperDeclaration(declaration);
+  }
+
+  private void addDeclarationByClass(NameDeclaration declaration) {
+    if (declaration instanceof VariableNameDeclaration) {
+      variableDeclarations.add((VariableNameDeclaration) declaration);
+    } else if (declaration instanceof MethodNameDeclaration) {
+      methodDeclarations.add((MethodNameDeclaration) declaration);
+    } else if (declaration instanceof PropertyNameDeclaration) {
+      propertyDeclarations.add((PropertyNameDeclaration) declaration);
+    } else if (declaration instanceof UnitImportNameDeclaration) {
+      importDeclarations.add((UnitImportNameDeclaration) declaration);
+    } else if (declaration instanceof TypeNameDeclaration) {
+      typeDeclarations.add((TypeNameDeclaration) declaration);
+    } else if (declaration instanceof UnitNameDeclaration) {
+      unitDeclarations.add((UnitNameDeclaration) declaration);
+    }
   }
 
   private void checkForwardTypeDeclarations(NameDeclaration typeDeclaration) {
@@ -338,38 +363,33 @@ public class DelphiScopeImpl implements DelphiScope {
     return result;
   }
 
-  @SuppressWarnings("unchecked")
-  private <T extends NameDeclaration> Set<T> getDeclarationSet(Class<T> clazz) {
-    return (Set<T>) declarationsByClass.get(clazz);
-  }
-
   @Override
   public Set<UnitNameDeclaration> getUnitDeclarations() {
-    return getDeclarationSet(UnitNameDeclaration.class);
+    return Collections.unmodifiableSet(unitDeclarations);
   }
 
   @Override
   public Set<UnitImportNameDeclaration> getImportDeclarations() {
-    return getDeclarationSet(UnitImportNameDeclaration.class);
+    return Collections.unmodifiableSet(importDeclarations);
   }
 
   @Override
   public Set<TypeNameDeclaration> getTypeDeclarations() {
-    return getDeclarationSet(TypeNameDeclaration.class);
+    return Collections.unmodifiableSet(typeDeclarations);
   }
 
   @Override
   public Set<PropertyNameDeclaration> getPropertyDeclarations() {
-    return getDeclarationSet(PropertyNameDeclaration.class);
+    return Collections.unmodifiableSet(propertyDeclarations);
   }
 
   @Override
   public Set<MethodNameDeclaration> getMethodDeclarations() {
-    return getDeclarationSet(MethodNameDeclaration.class);
+    return Collections.unmodifiableSet(methodDeclarations);
   }
 
   @Override
   public Set<VariableNameDeclaration> getVariableDeclarations() {
-    return getDeclarationSet(VariableNameDeclaration.class);
+    return Collections.unmodifiableSet(variableDeclarations);
   }
 }
