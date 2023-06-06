@@ -1,0 +1,13 @@
+{
+  "title": "Exceptions should not be swallowed",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "scope": "MAIN",
+  "quickfix": "unknown"
+}

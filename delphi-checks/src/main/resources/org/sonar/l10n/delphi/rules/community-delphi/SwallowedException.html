@@ -1,0 +1,30 @@
+<p>
+  Exceptions should not be swallowed.
+  <br />
+  Exception handlers should contain logic to handle the caught exception.
+</p>
+<pre>
+    
+<b>try</b>
+  RaiseException;
+<b>except</b>	// Noncompliant
+  // Do nothing
+<b>end;</b>
+
+<b>try</b>
+  RaiseException;
+<b>except</b>	// Noncompliant
+  <b>on</b> E: Exception <b>do begin</b>
+    // Do nothing
+  <b>end;</b>
+<b>end;</b>
+
+<b>try</b>
+  RaiseException;
+<b>except</b>	// Compliant
+  <b>on</b> E: Exception <b>do begin</b>
+    Log.Audit(<i>'He''s dead, Jim!'</i>);
+  <b>end;</b>
+<b>end;</b>
+        
+</pre>

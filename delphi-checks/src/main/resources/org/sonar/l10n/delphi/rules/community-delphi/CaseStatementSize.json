@@ -1,0 +1,13 @@
+{
+  "title": "Case statements should have at least 2 case items",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

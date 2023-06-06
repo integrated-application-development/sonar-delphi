@@ -1,0 +1,13 @@
+{
+  "title": "Caught exceptions should not be explicitly re-raised",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Blocker",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

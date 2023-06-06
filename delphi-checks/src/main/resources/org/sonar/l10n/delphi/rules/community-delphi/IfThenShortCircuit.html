@@ -1,0 +1,29 @@
+<p>
+  While the IfThen function has similar use cases to the ternary operator found in other languages,
+  there is one important distinction between them.
+  <br />
+  IfThen does not perform short-circuit evaluation. Both arguments are evaluated when the function
+  is invoked.
+  <br />
+  <br />
+  This rule will flag problematic usages of IfThen that could cause access violations.
+</p>
+<pre>
+    
+<b>var</b>
+  Foo: TFoo;
+<b>begin</b>
+  Foo := <b>nil</b>;
+
+  // Noncompliant: Access violation
+  Result := IfThen(Assigned(Foo), Foo.Bar, 'Baz');
+
+  // Compliant
+  if Assigned(Foo) then begin
+    Result := Foo.Bar;
+  end
+  else begin
+    Result := 'Baz';
+  end;
+        
+</pre>

@@ -1,0 +1,51 @@
+<p>
+  The <code>Single</code> overloads of the standard math functions are less accurate in 64-bit due
+  to the reduced precision of the <code>Extended</code> type.
+  <br />
+  In 32-bit: Floating-point calculations use the x87 FPU, which gives 80 bits of precision.
+  <br />
+  In 64-bit: Floating-point calculations use SSE2 instructions. This only gives 64 bits of
+  precision, but is faster.
+  <br />
+  <br />
+  These accuracy issues can produce incorrect results on 64-bit.
+  <br />
+  In 32-bit: <code>Power(10, 12)</code> produces 1,000,000,000,000
+  <br />
+  In 64-bit: <code>Power(10, 12)</code> produces 999,999,995,904
+  <br />
+  <br />
+  <b>See:</b>
+  <br />
+  - <a href="https://en.wikipedia.org/wiki/X87">x87</a>
+  <br />
+  -
+  <a
+    href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms"
+  >
+    The Extended Data Type is different on different platforms
+  </a>
+  <br />
+  -
+  <a href="https://docwiki.embarcadero.com/RADStudio/en/About_Floating-Point_Arithmetic">
+    About Floating-Point Arithmetic
+  </a>
+</p>
+<pre>
+    
+<b>procedure</b> Example(I: Integer; S: Single; D: Double; E: Extended);
+<b>begin</b>
+  Power(I, 2); // Noncompliant (Integer arguments cause the Single overload to be selected)
+  Power(S, 2); // Noncompliant
+
+  Power(D, 2); // Compliant
+  Power(E, 2); // Compliant
+
+  Power(Double(I), 2); // Compliant
+  Power(Double(S), 2); // Compliant
+
+  Power(10, 2); // Noncompliant (Integer literals cause the Single overload to be selected)
+  Power(10.0, 2); // Compliant (Floating-point literals cause the Extended overload to be selected)
+<b>end</b>;
+        
+</pre>

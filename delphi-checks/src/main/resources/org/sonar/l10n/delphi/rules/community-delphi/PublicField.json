@@ -1,0 +1,13 @@
+{
+  "title": "Fields should not have public visibility",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "3min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

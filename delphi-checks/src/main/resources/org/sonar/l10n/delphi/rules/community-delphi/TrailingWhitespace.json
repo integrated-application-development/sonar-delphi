@@ -1,0 +1,13 @@
+{
+  "title": "Code should have no trailing whitespace",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [],
+  "defaultSeverity": "Info",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

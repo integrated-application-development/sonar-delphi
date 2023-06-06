@@ -1,0 +1,36 @@
+<p>
+    
+      In functions, <code>Result</code> must be assigned a value.
+      <br>
+      <br>
+      Any parameter with an <code>out</code> specifier must also be assigned a value.
+      <br>
+      For more information, see the Embarcadero wiki page for
+      <a href='http://docwiki.embarcadero.com/RADStudio/en/Parameters_(Delphi)#Out_Parameters'>
+      Out Parameters
+      </a>
+    
+</p>
+<pre>
+    
+<b>function</b> Test: String;
+<b>begin</b>
+  // Noncompliant
+<b>end</b>;
+
+<b>function</b> Test: TArray<String>;
+<b>begin</b>
+  // Noncompliant
+<b>end</b>;
+
+<b>function</b> Test: String;
+<b>begin</b>
+  Result := ''; // Compliant
+<b>end</b>;
+
+<b>function</b> Test: TArray<String>;
+<b>begin</b>
+  Result := TArray<String>.Create(); // Compliant
+<b>end</b>;
+        
+</pre>

@@ -1,0 +1,13 @@
+{
+  "title": "Pascal-style function result assignments should not be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "3min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

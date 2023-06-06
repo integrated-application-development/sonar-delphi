@@ -1,0 +1,49 @@
+<p>
+  Inline const declarations can omit the type and allow the compiler to infer it.
+  <br />
+  <br />
+  The downside is that untyped inline const declarations use different type inference rules from
+  traditional untyped const declarations. They use the same rules as inline var declarations, with
+  the same caveats and pitfalls.
+  <br />
+  As a consequence, it's possible for a traditional and inline const declaration to have identical
+  values, but different inferred types.
+  <br />
+  <br />
+  This can cause confusion and negatively impact code readability.
+  <br />
+  <br />
+  <b>See:</b>
+  <br />
+  -
+  <a
+    href="http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables"
+  >
+    Type Inference for Inlined Variables
+  </a>
+</p>
+<pre>
+    
+<b>procedure</b> Example;
+<b>const</b>
+  <i>{
+    Foo: ShortInt
+    Bar: set of Byte
+  }</i>
+  Foo = 123;
+  Bar = [1, 2, 3];
+<b>type</b>
+  TByteSet = <b>set</b> of Byte;
+<b>begin</b>
+  <i>{
+    Glomp: Integer
+    Flarp: array of Integer
+  }</i>
+  <b>const</b> Glomp = 123; // Noncompliant
+  <b>const</b> Flarp = [1, 2, 3]; // Noncompliant
+
+  <b>const</b> Beep: ShortInt = 123; // Compliant
+  <b>const</b> Boop: TByteSet = [1, 2, 3]; // Compliant
+<b>end</b>;
+        
+</pre>

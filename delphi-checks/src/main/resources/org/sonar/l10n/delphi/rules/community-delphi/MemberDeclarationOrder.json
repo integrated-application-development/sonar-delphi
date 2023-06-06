@@ -1,0 +1,13 @@
+{
+  "title": "Declarations in visibility sections should follow an expected order",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "3min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

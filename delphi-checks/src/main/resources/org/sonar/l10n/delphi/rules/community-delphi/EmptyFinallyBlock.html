@@ -1,0 +1,16 @@
+<p>Empty finally blocks are superfluous.</p>
+<pre>
+    
+<b>try</b>
+  DoSomething;
+<b>finally</b>	// Noncompliant
+  // Do nothing
+<b>end;</b>
+
+<b>try</b>
+  DoSomething;
+<b>finally</b>	// Compliant
+  Log.Info(<i>'All done!'</i>);
+<b>end;</b>
+        
+</pre>

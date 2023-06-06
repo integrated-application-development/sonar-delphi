@@ -1,0 +1,12 @@
+<p>
+  Delphi allows function return types to be omitted in the implementation section.
+  <br />
+  For the sake of code readability, function return types should always be specified.
+</p>
+<pre>
+    
+<b>function</b> TClass.Foo(Bar: Byte); // Noncompliant
+
+<b>function</b> TClass.Foo(Bar: Byte): Integer;	// Compliant
+        
+</pre>

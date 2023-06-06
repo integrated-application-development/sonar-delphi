@@ -1,0 +1,13 @@
+{
+  "title": "IfThen should not be used like a short-circuit operator",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Blocker",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

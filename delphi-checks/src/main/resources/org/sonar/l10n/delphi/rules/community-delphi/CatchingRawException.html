@@ -1,0 +1,20 @@
+<p>Raw exceptions should not be caught. Catch specific exception types instead.</p>
+<pre>
+    
+<b>try</b>
+  ThrowMyException;
+<b>except</b>
+  <b>on</b> e : Exception <b>do begin</b>	// Noncompliant
+    HandleException;
+  <b>end;</b>
+<b>end;</b>
+
+<b>try</b>
+  ThrowMyException;
+<b>except</b>
+  <b>on</b> e : MyException <b>do begin</b> // Compliant
+    HandleException;
+  <b>end;</b>
+<b>end;</b>
+        
+</pre>

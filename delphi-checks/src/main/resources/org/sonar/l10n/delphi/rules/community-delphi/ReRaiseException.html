@@ -1,0 +1,36 @@
+<p>
+  You should never explicitly re-raise a caught exception.
+  <br />
+  The exception will still be freed at the end of the exception handler, causing tricky access
+  violations.
+  <br />
+  Use 'raise;' instead of 'raise E;'.
+  <br />
+  <br />
+  <b> See: </b>
+  <br />
+  -
+  <a
+    href="http://zerolith.com/delphi/on-delphi-exception-raising-re-raising-and-try-except-blocks.html"
+  >
+    On Delphi Exception raising, re-raising and try-except blocks
+  </a>
+  <br />
+  -
+  <a href="http://delphi.org/2017/06/really-bad-exception-abuse/">
+    Exceptionally Bad Exception Abuse
+  </a>
+</p>
+<pre>
+    
+<b>on</b> E: Exception <b>do begin</b>
+  Log.Debug(<i>'Exception message = '</i> + E.Message);
+  <b>raise</b> E; // Noncompliant
+<b>end;</b>
+
+<b>on</b> E: Exception <b>do begin</b>
+  Log.Debug(<i>'Exception message = '</i> + E.Message);
+  <b>raise</b>; // Compliant
+<b>end;</b>
+        
+</pre>

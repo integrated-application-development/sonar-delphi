@@ -1,0 +1,13 @@
+{
+  "title": "FreeAndNil must only be passed an instance of a TObject descendant",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [],
+  "defaultSeverity": "Blocker",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

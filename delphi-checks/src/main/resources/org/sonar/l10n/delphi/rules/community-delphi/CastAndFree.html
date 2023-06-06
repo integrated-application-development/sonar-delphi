@@ -1,0 +1,12 @@
+<p>Casting an object only to free it is superfluous.</p>
+<pre>
+    
+TMyObject(MyVar).Free; // Noncompliant
+(MyVar <b>as</b> TMyObject).Free; // Noncompliant
+MyVar.Free; // Compliant
+
+FreeAndNil(TMyObject(MyVar)); // Noncompliant
+FreeAndNil(MyVar <b>as</b> TMyObject); // Noncompliant
+FreeAndNil(MyVar); // Compliant
+        
+</pre>

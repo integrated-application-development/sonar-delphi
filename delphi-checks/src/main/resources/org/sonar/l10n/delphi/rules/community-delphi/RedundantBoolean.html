@@ -1,0 +1,24 @@
+<p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
+<pre>
+    
+<b>if</b> Foo = True <b>then begin</b> // Noncompliant
+  DoSomething;
+<b>end;</b>
+
+<b>if</b> Bar = False <b>then begin</b> // Noncompliant
+  DoSomething;
+<b>end;</b>
+
+DoSomething(not False); // Noncompliant
+
+<b>if</b> Foo <b>then begin</b> // Compliant
+  DoSomething;
+<b>end;</b>
+
+<b>if</b> <b>not</b> Bar <b>then begin</b> // Compliant
+  DoSomething;
+<b>end;</b>
+
+DoSomething(True); // Compliant
+        
+</pre>

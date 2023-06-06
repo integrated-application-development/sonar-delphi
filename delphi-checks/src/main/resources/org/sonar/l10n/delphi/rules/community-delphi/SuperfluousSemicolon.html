@@ -1,0 +1,14 @@
+<p>
+  Stray semicolons are usually introduced by mistake, for example because:
+  <br />
+  - It was meant to be replaced by an actual statement, but this was forgotten.
+  <br />
+  - There was a typo which lead the semicolon to be doubled, i.e ;;.
+</p>
+<pre>
+    
+Result := 123; // Compliant
+
+Result := 123;; // Noncompliant
+        
+</pre>

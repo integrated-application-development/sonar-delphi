@@ -1,0 +1,16 @@
+<p>
+  Unused and useless imports should be removed.
+  <br />
+  Leaving them in reduces the code's readability, since their presence can be confusing.
+  <br />
+  <br />
+  WARNING: Take care when removing imports of units with a Register procedure or
+  initialization/finalization section.
+  <br />
+  A unit must be imported at least once for code in these locations to be executed.
+  <br />
+  <br />
+  Known false-positives:
+  <br />
+  - Imports that are only referenced in the DFM file.
+</p>

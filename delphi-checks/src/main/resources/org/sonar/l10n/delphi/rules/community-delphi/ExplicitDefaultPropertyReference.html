@@ -1,0 +1,16 @@
+<p>
+  Default array properties should not be explicitly referenced.
+  <br />
+  Use the [] accessor directly on the object instead.
+</p>
+<pre>
+    
+<b>procedure</b> Foo(Bar: TObjectList);
+<b>var</b>
+  Baz: TObject;
+<b>begin</b>
+  Baz := Bar.Items[0]; // Noncompliant
+  Baz := Bar[0]; // Compliant
+<b>end</b>;
+        
+</pre>

@@ -1,0 +1,27 @@
+<p>
+  The TObject.Free method already checks for assignment before freeing. Additional checks are
+  redundant.
+</p>
+<pre>
+    
+<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
+  Foo.Free;
+<b>end;</b>
+
+<b>if</b> Foo &lt;&gt; <b>nil</b> <b>then begin</b> // Noncompliant
+  Foo.Free;
+<b>end;</b>
+
+<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
+  FreeAndNil(Foo);
+<b>end;</b>
+
+<b>if</b> Foo &lt;&gt; <b>nil</b> <b>then begin</b> // Noncompliant
+  FreeAndNil(Foo);
+<b>end;</b>
+
+Foo.Free; // Compliant
+
+FreeAndNil(Foo); // Compliant
+        
+</pre>

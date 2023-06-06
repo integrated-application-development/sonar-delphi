@@ -1,0 +1,8 @@
+<p>General exceptions should not be raised. Instead, raise a specific exception type.</p>
+<pre>
+    
+<b>raise</b> Exception.create(<i>'blah'</i>); // Noncompliant
+
+<b>raise</b> MyException.create(<i>'blah'</i>); // Compliant
+        
+</pre>

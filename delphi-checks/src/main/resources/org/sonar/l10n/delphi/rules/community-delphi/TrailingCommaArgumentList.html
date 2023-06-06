@@ -1,0 +1,14 @@
+<p>
+  Earlier versions of the Delphi parser (including XE3) allow a trailing comma in argument lists.
+  <br />
+  This is no longer permitted in Delphi Rio. Therefore, these extraneous commas should be removed.
+  <br />
+  <br />
+</p>
+<pre>
+    
+Foo(1, 2, 3,); // Noncompliant
+
+Foo(1, 2, 3); // Compliant
+        
+</pre>

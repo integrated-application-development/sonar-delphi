@@ -1,0 +1,38 @@
+<p>
+  A <code>TFormatSettings</code> argument can be provided to the <code>TDate</code> and
+  <code>TDateTime</code> string formatting functions in <code>System.SysUtils</code>.
+  <br />
+  If a <code>TFormatSettings</code> argument is not provided, then the global
+  <code>TFormatSettings</code> will be used by default.
+  <br />
+  <br />
+  Relying on the global <code>TFormatSettings</code> is problematic because it is populated with
+  system default values from the OS, leading to different behavior on different machines.
+  <br />
+  <br />
+  <b>Relevant functions:</b>
+  <br />
+  - <code>System.SysUtils.DateToStr</code>
+  <br />
+  - <code>System.SysUtils.DateTimeToStr</code>
+  <br />
+  - <code>System.SysUtils.StrToDate</code>
+  <br />
+  - <code>System.SysUtils.StrToDateDef</code>
+  <br />
+  - <code>System.SysUtils.TryStrToDate</code>
+  <br />
+  - <code>System.SysUtils.StrToDateTime</code>
+  <br />
+  - <code>System.SysUtils.StrToDateTimeDef</code>
+  <br />
+  - <code>System.SysUtils.TryStrToDateTime</code>
+  <br />
+  <br />
+  <b>See:</b>
+  <br />
+  -
+  <a href="http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings">
+    System.SysUtils.TFormatSettings
+  </a>
+</p>
