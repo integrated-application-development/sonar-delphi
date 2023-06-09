@@ -18,22 +18,32 @@
  */
 package au.com.integradev.delphi.executor;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
+import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -127,10 +137,22 @@ class DelphiMetricsExecutorTest {
     checkCodeLines(Set.of(1, 3, 5, 6, 7, 8, 9, 10, 12, 14, 15, 20, 21, 22, 23, 24, 25, 27), 27);
   }
 
-  private void execute(String filename) {
-    DelphiInputFile file = DelphiTestFileBuilder.fromResource(ROOT_PATH + filename).delphiFile();
-    componentKey = file.getInputFile().key();
-    executor.execute(context, file);
+  private void execute(String resourcePath) {
+    try {
+      File resource = DelphiUtils.getResource(resourcePath);
+      DelphiInputFile file =
+          DelphiInputFile.from(
+              TestInputFileBuilder.create("moduleKey", ROOT_DIR, resource)
+                  .setContents(FileUtils.readFileToString(resource, UTF_8.name()))
+                  .setLanguage(DelphiLanguage.KEY)
+                  .setType(InputFile.Type.MAIN)
+                  .build(),
+              mockConfig());
+      componentKey = file.getInputFile().key();
+      executor.execute(context, file);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   private <T extends Serializable> void checkMetric(Metric<T> metric, T value) {
@@ -144,5 +166,17 @@ class DelphiMetricsExecutorTest {
       verify(fileLinesContext)
           .setIntValue(CoreMetrics.NCLOC_DATA_KEY, i, codeLines.contains(i) ? 1 : 0);
     }
+  }
+
+  private static DelphiFileConfig mockConfig() {
+    TypeFactory typeFactory =
+        new TypeFactory(
+            DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
+    DelphiFileConfig mock = mock(DelphiFileConfig.class);
+    when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(mock.getTypeFactory()).thenReturn(typeFactory);
+    when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
+    when(mock.getDefinitions()).thenReturn(Collections.emptySet());
+    return mock;
   }
 }
