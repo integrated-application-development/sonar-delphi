@@ -51,23 +51,27 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.Configuration;
 
 class DelphiProjectHelperTest {
-  private static final String BDS_PATH =
-      DelphiUtils.getResource("/au/com/integradev/delphi/bds").getAbsolutePath();
-  private static final String STANDARD_LIBRARY_PATH =
-      DelphiUtils.getResource("/au/com/integradev/delphi/bds/source").getAbsolutePath();
   private static final String PROJECTS_PATH = "/au/com/integradev/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(PROJECTS_PATH);
   private Configuration settings;
   private DefaultFileSystem fs;
   private EnvironmentVariableProvider environmentVariableProvider;
+  private String bdsPath;
+  private String standardLibraryPath;
 
   @BeforeEach
-  void setup() {
+  void setup() throws IOException {
     settings = mock(Configuration.class);
     fs = new DefaultFileSystem(BASE_DIR);
     environmentVariableProvider = mock(EnvironmentVariableProvider.class);
 
-    when(settings.get(DelphiProperties.BDS_PATH_KEY)).thenReturn(Optional.of(BDS_PATH));
+    bdsPath =
+        Files.createDirectories(Files.createTempDirectory("bds").resolve("foo/bds/bar"))
+            .toAbsolutePath()
+            .toString();
+    standardLibraryPath = Path.of(bdsPath, "source").toAbsolutePath().toString();
+
+    when(settings.get(DelphiProperties.BDS_PATH_KEY)).thenReturn(Optional.of(bdsPath));
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
 
@@ -171,7 +175,7 @@ class DelphiProjectHelperTest {
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
-    assertThat(delphiProjectHelper.standardLibraryPath()).isEqualTo(Path.of(STANDARD_LIBRARY_PATH));
+    assertThat(delphiProjectHelper.standardLibraryPath()).isEqualTo(Path.of(standardLibraryPath));
   }
 
   @Test
@@ -179,7 +183,7 @@ class DelphiProjectHelperTest {
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
-    assertThat(delphiProjectHelper.bdsPath()).isEqualTo(Path.of(BDS_PATH));
+    assertThat(delphiProjectHelper.bdsPath()).isEqualTo(Path.of(bdsPath));
   }
 
   @Test
@@ -200,7 +204,7 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.environmentProjPath())
-        .isEqualTo(Path.of("/z/integradev/BDS/bds/environment.proj"));
+        .isEqualTo(Path.of("/z/foo/BDS/bar/environment.proj"));
   }
 
   @Test

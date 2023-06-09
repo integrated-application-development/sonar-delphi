@@ -28,7 +28,6 @@ import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTableBuilder.SymbolTableConstructionException;
-import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.io.IOException;
 import java.nio.file.FileSystem;
@@ -43,9 +42,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentMatchers;
 
 class SymbolTableBuilderTest {
-  private static final Path STANDARD_LIBRARY =
-      DelphiUtils.getResource("/au/com/integradev/delphi/bds/source").toPath();
-
   @Test
   void testNonexistentStandardLibraryPath(@TempDir Path tempDir) {
     SymbolTableBuilder builder =
@@ -122,8 +118,42 @@ class SymbolTableBuilderTest {
   }
 
   @Test
-  void testStandardLibrarySearchPathShouldExcludeToolsUnits(@TempDir Path tempDir)
-      throws IOException {
+  void testStandardLibrarySearchPathShouldExcludeToolsUnits(
+      @TempDir Path standardLibraryPath, @TempDir Path tempDir) throws IOException {
+    Files.writeString(
+        standardLibraryPath.resolve("SysInit.pas"),
+        "unit SysInit;\n" //
+            + "interface\n"
+            + "implementation\n"
+            + "end.");
+
+    Files.writeString(
+        standardLibraryPath.resolve("System.pas"),
+        "unit System;\n"
+            + "interface\n"
+            + "type\n"
+            + "  TObject = class\n"
+            + "  end;\n"
+            + "  IInterface = interface\n"
+            + "  end;\n"
+            + "  TClassHelperBase = class\n"
+            + "  end;\n"
+            + "  TVarRec = record\n"
+            + "  end;\n"
+            + "implementation\n"
+            + "end.");
+
+    Path toolsPath = standardLibraryPath.resolve("Tools");
+    Files.createDirectories(toolsPath);
+
+    Path excludedPath = toolsPath.resolve("ShouldBeExcludedFromSearchPath.pas");
+    Files.writeString(
+        excludedPath,
+        "unit ShouldBeExcludedFromSearchPath;\n" //
+            + "interface\n"
+            + "implementation\n"
+            + "end.");
+
     Path sourceFilePath = tempDir.resolve("SourceFile.pas");
     Files.writeString(
         sourceFilePath,
@@ -138,13 +168,10 @@ class SymbolTableBuilderTest {
         SymbolTable.builder()
             .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
             .typeFactory(TypeFactoryUtils.defaultFactory())
-            .standardLibraryPath(STANDARD_LIBRARY)
+            .standardLibraryPath(standardLibraryPath)
             .sourceFiles(List.of(sourceFilePath))
             .build();
 
-    assertThat(
-            symbolTable.getUnitByPath(
-                STANDARD_LIBRARY.resolve("Tools/ShouldBeExcludedFromSearchPath.pas").toString()))
-        .isNull();
+    assertThat(symbolTable.getUnitByPath(excludedPath.toString())).isNull();
   }
 }

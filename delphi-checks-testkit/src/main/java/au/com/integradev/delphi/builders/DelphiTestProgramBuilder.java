@@ -18,27 +18,13 @@
  */
 package au.com.integradev.delphi.builders;
 
-public final class DelphiTestProgramBuilder extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
+public final class DelphiTestProgramBuilder
+    extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
   private String programName = "omTestProgram";
 
   @Override
   protected DelphiTestProgramBuilder getThis() {
     return this;
-  }
-
-  @Override
-  public int getOffsetDecl() {
-    return 2;
-  }
-
-  @Override
-  public int getOffset() {
-    int offset = getDeclCount() + getOffsetDecl() + 1;
-    if (!getDeclaration().isEmpty()) {
-      ++offset;
-    }
-
-    return offset;
   }
 
   @Override
@@ -70,12 +56,12 @@ public final class DelphiTestProgramBuilder extends DelphiTestFileBuilder<Delphi
   }
 
   @Override
-  protected String getFilenamePrefix() {
-    return "program";
+  protected String getFilename() {
+    return programName;
   }
 
   @Override
-  protected String getFileExtension() {
+  protected String getExtension() {
     return "dpr";
   }
 

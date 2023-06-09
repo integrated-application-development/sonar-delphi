@@ -43,9 +43,9 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.internal.google.common.io.Files;
 
 class DelphiSensorTest {
-  private static final String STANDARD_LIBRARY = "/au/com/integradev/delphi/bds/source";
   private static final String BASE_PATH = "/au/com/integradev/delphi/projects/";
   private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
   private static final String BAD_SYNTAX = BASE_PATH + "BadSyntaxProject/BadSyntax.pas";
@@ -62,7 +62,8 @@ class DelphiSensorTest {
   void setupSensor() {
     sensor = new DelphiSensor(delphiProjectHelper, executor);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
-    when(delphiProjectHelper.getToolchain()).thenReturn(DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT);
+    when(delphiProjectHelper.getToolchain())
+        .thenReturn(DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT);
     when(delphiProjectHelper.getCompilerVersion())
         .thenReturn(DelphiProperties.COMPILER_VERSION_DEFAULT);
   }
@@ -115,6 +116,7 @@ class DelphiSensorTest {
   }
 
   private void setupProject(String path) {
+    File standardLibrary = Files.createTempDir();
     File sourceFile = DelphiUtils.getResource(path);
 
     InputFile inputFile = mock(InputFile.class);
@@ -122,7 +124,6 @@ class DelphiSensorTest {
 
     when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
-    when(delphiProjectHelper.standardLibraryPath())
-        .thenReturn(DelphiUtils.getResource(STANDARD_LIBRARY).toPath());
+    when(delphiProjectHelper.standardLibraryPath()).thenReturn(standardLibrary.toPath());
   }
 }

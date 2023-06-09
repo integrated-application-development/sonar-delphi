@@ -23,10 +23,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -42,6 +44,7 @@ import java.util.Collections;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -51,12 +54,8 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   private final StringBuilder declaration = new StringBuilder();
   private final StringBuilder implementation = new StringBuilder();
 
-  private File baseDir = FileUtils.getTempDirectory();
-  private int declCount;
-
   public T appendDecl(String value) {
     declaration.append(value).append("\n");
-    declCount++;
     return getThis();
   }
 
@@ -73,10 +72,6 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     return implementation.toString();
   }
 
-  public void setBaseDir(File baseDir) {
-    this.baseDir = baseDir;
-  }
-
   public DelphiAst parse() {
     DelphiFile file = DelphiInputFile.from(inputFile(), mockConfig());
     return file.getAst();
@@ -87,7 +82,10 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
 
     InputFile inputFile;
     try {
-      File file = File.createTempFile(getFilenamePrefix(), "." + getFileExtension(), baseDir);
+      File baseDir = Files.createTempDir();
+      baseDir.deleteOnExit();
+
+      File file = baseDir.toPath().resolve(getFilename() + "." + getExtension()).toFile();
       file.deleteOnExit();
 
       try (FileWriter fileWriter = new FileWriter(file, UTF_8)) {
@@ -135,41 +133,23 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     }
   }
 
-  protected int getDeclCount() {
-    return declCount;
-  }
-
-  public abstract int getOffsetDecl();
-
-  public abstract int getOffset();
-
   protected abstract T getThis();
 
   protected abstract StringBuilder generateSourceCode();
 
-  protected abstract String getFilenamePrefix();
+  protected abstract String getFilename();
 
-  protected abstract String getFileExtension();
+  protected abstract String getExtension();
 
   public static DelphiTestFileBuilder.ResourceBuilder fromResource(String path) {
     return new ResourceBuilder(DelphiUtils.getResource(path));
   }
 
-  public static class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
+  public static final class ResourceBuilder extends DelphiTestFileBuilder<ResourceBuilder> {
     private final File resource;
 
     private ResourceBuilder(File resource) {
       this.resource = resource;
-    }
-
-    @Override
-    public int getOffsetDecl() {
-      return 0;
-    }
-
-    @Override
-    public int getOffset() {
-      return 0;
     }
 
     @Override
@@ -215,12 +195,12 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     }
 
     @Override
-    protected String getFilenamePrefix() {
+    protected String getFilename() {
       throw new UnsupportedOperationException("Not supported for ResourceBuilder");
     }
 
     @Override
-    protected String getFileExtension() {
+    protected String getExtension() {
       throw new UnsupportedOperationException("Not supported for ResourceBuilder");
     }
   }
@@ -234,6 +214,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     when(mock.getTypeFactory()).thenReturn(typeFactory);
     when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(mock.getDefinitions()).thenReturn(Collections.emptySet());
+    when(mock.getPreprocessorFactory()).thenReturn(new DelphiPreprocessorFactory(Platform.WINDOWS));
     return mock;
   }
 }

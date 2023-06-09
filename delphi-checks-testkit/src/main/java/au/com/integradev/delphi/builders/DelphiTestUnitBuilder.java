@@ -32,21 +32,6 @@ public final class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTes
   }
 
   @Override
-  public int getOffsetDecl() {
-    return 4;
-  }
-
-  @Override
-  public int getOffset() {
-    int offset = getDeclCount() + getOffsetDecl() + 2;
-    if (!getDeclaration().isEmpty()) {
-      ++offset;
-    }
-
-    return offset;
-  }
-
-  @Override
   protected StringBuilder generateSourceCode() {
     StringBuilder source = new StringBuilder();
     source.append(String.format("unit %s;\n", this.unitName));
@@ -73,12 +58,12 @@ public final class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTes
   }
 
   @Override
-  protected String getFilenamePrefix() {
-    return "unit";
+  protected String getFilename() {
+    return unitName;
   }
 
   @Override
-  protected String getFileExtension() {
+  protected String getExtension() {
     return "pas";
   }
 
