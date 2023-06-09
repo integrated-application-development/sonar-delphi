@@ -18,147 +18,85 @@
  */
 package au.com.integradev.delphi.executor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.utils.DelphiUtils;
-import java.io.File;
+import au.com.integradev.delphi.check.MasterCheckRegistrar;
+import au.com.integradev.delphi.check.ScopeMetadataLoader;
+import au.com.integradev.delphi.compiler.Toolchain;
+import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.config.Configuration;
-import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.rule.RuleScope;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class DelphiChecksExecutorTest {
-
-  private static final String ROOT_PATH = "/au/com/integradev/delphi";
-  private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_PATH);
-
-  private SensorContext context;
   private DelphiChecksExecutor executor;
-  private DelphiPmdConfiguration pmdConfiguration;
-  private DelphiPmdViolationRecorder violationRecorder;
+  private MasterCheckRegistrar checkRegistrar;
+  private ScopeMetadataLoader scopeMetadataLoader;
 
   @BeforeEach
   void setup() {
-    DefaultFileSystem fileSystem = new DefaultFileSystem(ROOT_DIR).setWorkDir(ROOT_DIR.toPath());
-    Configuration configuration = mock(Configuration.class);
-    DelphiPmdRuleSetDefinitionProvider provider = new DelphiPmdRuleSetDefinitionProvider();
+    DelphiProjectHelper delphiProjectHelper = mock();
+    when(delphiProjectHelper.getToolchain()).thenReturn(Toolchain.DCC32);
 
-    context = spy(SensorContextTester.create(ROOT_DIR));
-    ActiveRules rules = mock(ActiveRules.class);
-    pmdConfiguration = spy(new DelphiPmdConfiguration(fileSystem, configuration, provider));
-    violationRecorder = mock(DelphiPmdViolationRecorder.class);
+    checkRegistrar = mock();
+    scopeMetadataLoader = mock();
 
-    executor =
-        spy(
-            new DelphiChecksExecutor(
-                context, rules, pmdConfiguration, violationRecorder, provider));
+    executor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, scopeMetadataLoader);
     executor.setup();
   }
 
   @Test
-  void testNonexistentRuleSetIllegalState() {
-    File badFile = mock(File.class);
-    when(badFile.getAbsolutePath()).thenReturn("does/not/exist.xml");
-    when(pmdConfiguration.dumpXmlRuleSet(anyString(), anyString())).thenReturn(badFile);
+  void testExecute() {
+    Executor.Context context = mock();
 
-    assertThatThrownBy(executor::setup).isInstanceOf(IllegalStateException.class);
+    DelphiCheck mainCheck = mockDelphiCheck(RuleScope.MAIN);
+    DelphiCheck testCheck = mockDelphiCheck(RuleScope.TEST);
+    DelphiCheck allCheck = mockDelphiCheck(RuleScope.ALL);
+
+    DelphiInputFile mainFile = mockDelphiFile(InputFile.Type.MAIN);
+    DelphiInputFile testFile = mockDelphiFile(InputFile.Type.TEST);
+
+    executor.execute(context, mainFile);
+    executor.execute(context, testFile);
+
+    verify(mainCheck, times(1)).visit(eq(mainFile.getAst()), any());
+    verify(mainCheck, never()).visit(eq(testFile.getAst()), any());
+
+    verify(testCheck, never()).visit(eq(mainFile.getAst()), any());
+    verify(testCheck, times(1)).visit(eq(testFile.getAst()), any());
+
+    verify(allCheck, times(1)).visit(eq(mainFile.getAst()), any());
+    verify(allCheck, times(1)).visit(eq(testFile.getAst()), any());
   }
 
-  @Test
-  void testAddBuiltinProperties() {
-    // The SwallowedExceptionsRule has 3 builtin properties: BASE_EFFORT, SCOPE and TYPE
-    DelphiRule rule = new DelphiRule();
-    rule.setName("SwallowedExceptionsRule");
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.SwallowedExceptionsRule");
-    rule.setPriority(2);
-
-    DelphiRuleSet ruleSet = new DelphiRuleSet();
-    ruleSet.addRule(rule);
-
-    executor.addBuiltinProperties(ruleSet);
-
-    assertThat(rule.getProperties()).hasSize(3);
-    assertThat(rule.getProperty(BASE_EFFORT.name())).isNotNull();
-    assertThat(rule.getProperty(SCOPE.name())).isNotNull();
-    assertThat(rule.getProperty(TYPE.name())).isNotNull();
+  private DelphiCheck mockDelphiCheck(RuleScope scope) {
+    DelphiCheck check = mock();
+    when(checkRegistrar.getChecks(scope)).thenReturn(Set.of(check));
+    when(scopeMetadataLoader.getScope(check.getClass())).thenReturn(RuleScope.ALL);
+    return check;
   }
 
-  @Test
-  void testAddBuiltinPropertiesToCustomRule() {
-    // A custom template rule, created via the SonarQube web interface
-    // The XPathRule template has 2 builtin properties: BASE_EFFORT and TEMPLATE
-    // The TEMPLATE property should not be inherited by the custom rule
-    DelphiRule rule = new DelphiRule();
-    DelphiRuleProperty scopeProperty = new DelphiRuleProperty(SCOPE.name(), "TEST");
+  private static DelphiInputFile mockDelphiFile(InputFile.Type inputFileType) {
+    DelphiAst ast = mock();
 
-    rule.setName("SomeCustomXPathRule");
-    rule.setTemplateName("XPathRule");
-    rule.setClazz(DelphiPmdConstants.TEMPLATE_XPATH_CLASS);
-    rule.setPriority(2);
-    rule.addProperty(scopeProperty);
+    InputFile inputFile = mock();
+    when(inputFile.type()).thenReturn(inputFileType);
 
-    DelphiRuleSet ruleSet = new DelphiRuleSet();
-    ruleSet.addRule(rule);
+    DelphiInputFile file = mock();
+    when(file.getAst()).thenReturn(ast);
+    when(file.getInputFile()).thenReturn(inputFile);
 
-    executor.addBuiltinProperties(ruleSet);
-
-    assertThat(rule.getProperties()).hasSize(2);
-    assertThat(rule.getProperty(BASE_EFFORT.name())).isNotNull();
-    assertThat(rule.getProperty(SCOPE.name())).isEqualTo(scopeProperty);
-  }
-
-  @Test
-  void testAddBuiltinPropertiesToNonexistentRule() {
-    // An undefined rule in ActiveRules should be impossible
-    // Undefined -> The rule is not specified in rules.xml, either concretely or as a template
-    DelphiRule rule = new DelphiRule();
-    rule.setName("NonexistentRule");
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.NonexistentRule");
-    rule.setPriority(2);
-
-    DelphiRuleSet ruleSet = new DelphiRuleSet();
-    ruleSet.addRule(rule);
-
-    assertThatThrownBy(() -> executor.addBuiltinProperties(ruleSet))
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Rule definition not found for NonexistentRule");
-  }
-
-  @Test
-  void testShouldNotReportZeroViolations() {
-    // The report is empty if executor.execute(DelphiFile) is never called
-    executor.complete();
-
-    verify(violationRecorder, never()).saveViolation(any(DelphiRuleViolation.class), eq(context));
-  }
-
-  @Test
-  void testViolationRecorderExceptionShouldThrowFatalError() {
-    doAnswer(
-            invocation -> {
-              ((Report) invocation.getArgument(0))
-                  .addRuleViolation(mock(DelphiRuleViolation.class));
-              return null;
-            })
-        .when(pmdConfiguration)
-        .dumpXmlReport(any(Report.class));
-
-    doThrow(new RuntimeException()).when(violationRecorder).saveViolation(any(), any());
-    assertThatThrownBy(() -> executor.complete()).isInstanceOf(FatalAnalysisError.class);
+    return file;
   }
 }
