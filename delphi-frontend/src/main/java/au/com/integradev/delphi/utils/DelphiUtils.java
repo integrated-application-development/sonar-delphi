@@ -24,7 +24,6 @@ package au.com.integradev.delphi.utils;
 
 import au.com.integradev.delphi.core.DelphiLanguage;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputPath;
 import org.sonarsource.analyzer.commons.ProgressReport;
@@ -107,19 +105,6 @@ public final class DelphiUtils {
     }
 
     return file;
-  }
-
-  /**
-   * Reads file contents to string, transform it to lowercase
-   *
-   * @param file File to be read
-   * @param encoding File content encoding
-   * @return File content read to a string
-   * @throws IllegalArgumentException When file is null
-   * @throws IOException When file does not exist
-   */
-  public static String readFileContent(@NotNull File file, String encoding) throws IOException {
-    return FileUtils.readFileToString(file, encoding);
   }
 
   public static String uriToAbsolutePath(URI uri) {

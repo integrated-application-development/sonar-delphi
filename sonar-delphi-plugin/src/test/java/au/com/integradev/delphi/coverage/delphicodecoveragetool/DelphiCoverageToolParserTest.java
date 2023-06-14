@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -73,7 +74,7 @@ class DelphiCoverageToolParserTest {
     final InputFile inputFile =
         TestInputFileBuilder.create("", baseDir, file)
             .setLanguage(DelphiLanguage.KEY)
-            .setContents(DelphiUtils.readFileContent(file, delphiProjectHelper.encoding()))
+            .setContents(FileUtils.readFileToString(file, delphiProjectHelper.encoding()))
             .build();
     context.fileSystem().add(inputFile);
   }

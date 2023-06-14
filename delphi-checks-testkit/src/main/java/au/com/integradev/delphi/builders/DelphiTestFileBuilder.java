@@ -95,7 +95,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
 
       inputFile =
           TestInputFileBuilder.create("moduleKey", baseDir, file)
-              .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
+              .setContents(FileUtils.readFileToString(file, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
               .setType(InputFile.Type.MAIN)
               .build();
@@ -164,7 +164,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
         File baseDir = resource.getParentFile();
         inputFile =
             TestInputFileBuilder.create("moduleKey", baseDir, resource)
-                .setContents(DelphiUtils.readFileContent(resource, UTF_8.name()))
+                .setContents(FileUtils.readFileToString(resource, UTF_8.name()))
                 .setLanguage(DelphiLanguage.KEY)
                 .setType(InputFile.Type.MAIN)
                 .build();
@@ -178,7 +178,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
     @Override
     protected StringBuilder generateSourceCode() {
       try {
-        return new StringBuilder(DelphiUtils.readFileContent(resource, UTF_8.name()));
+        return new StringBuilder(FileUtils.readFileToString(resource, UTF_8.name()));
       } catch (IOException e) {
         throw new UncheckedIOException(e);
       }

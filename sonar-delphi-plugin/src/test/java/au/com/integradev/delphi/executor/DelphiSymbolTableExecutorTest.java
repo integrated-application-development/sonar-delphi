@@ -32,11 +32,12 @@ import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.collect.Sets;
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -48,6 +49,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -56,6 +58,7 @@ import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/au/com/integradev/delphi/symbol/";
@@ -1212,12 +1215,18 @@ class DelphiSymbolTableExecutorTest {
   private void execute(String filename, String... searchPaths) {
     File baseDir = DelphiUtils.getResource(ROOT_PATH);
     File file = DelphiUtils.getResource(ROOT_PATH + filename);
-    InputFile inputFile =
-        TestInputFileBuilder.create("moduleKey", baseDir, file)
-            .setContents(DelphiUtils.readFileContent(file, UTF_8.name()))
-            .setLanguage(DelphiLanguage.KEY)
-            .setType(InputFile.Type.MAIN)
-            .build();
+
+    InputFile inputFile;
+    try {
+      inputFile =
+          TestInputFileBuilder.create("moduleKey", baseDir, file)
+              .setContents(FileUtils.readFileToString(file, UTF_8.name()))
+              .setLanguage(DelphiLanguage.KEY)
+              .setType(InputFile.Type.MAIN)
+              .build();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
 
     var preprocessorFactory = new DelphiPreprocessorFactory(Platform.WINDOWS);
     var typeFactory =

@@ -48,6 +48,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Objects;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
@@ -217,7 +218,7 @@ class DelphiTokenExecutorTest {
 
       InputFile inputFile =
           TestInputFileBuilder.create("moduleKey", ROOT_DIR, srcFile)
-              .setContents(DelphiUtils.readFileContent(srcFile, UTF_8.name()))
+              .setContents(FileUtils.readFileToString(srcFile, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
               .setType(InputFile.Type.MAIN)
               .build();

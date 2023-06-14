@@ -38,9 +38,12 @@ import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.sonar.api.batch.fs.InputFile;
@@ -51,14 +54,20 @@ class DelphiMasterExecutorTest {
   private static final File BASE_DIR =
       DelphiUtils.getResource("/au/com/integradev/delphi/grammar/");
   private static final File TEST_FILE = DelphiUtils.getResource(BASE_DIR + "GrammarTest.pas");
-  private static final DelphiInputFile TEST_INPUT_FILE =
-      DelphiInputFile.from(
+
+  private static DelphiInputFile createTestInputFile() {
+    try {
+      return DelphiInputFile.from(
           TestInputFileBuilder.create("moduleKey", BASE_DIR, TEST_FILE)
-              .setContents(DelphiUtils.readFileContent(TEST_FILE, UTF_8.name()))
+              .setContents(FileUtils.readFileToString(TEST_FILE, UTF_8.name()))
               .setLanguage(DelphiLanguage.KEY)
               .setType(InputFile.Type.MAIN)
               .build(),
           mockConfig());
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
 
   @Test
   void testRegularExceptionShouldNotAbortExecution() {
@@ -66,11 +75,12 @@ class DelphiMasterExecutorTest {
     Executor brokenExecutor = mock(Executor.class);
     Executor workingExecutor = mock(Executor.class);
     DelphiMasterExecutor executor = new DelphiMasterExecutor(brokenExecutor, workingExecutor);
+    DelphiInputFile testInputFile = createTestInputFile();
 
-    doThrow(new RuntimeException("Test")).when(brokenExecutor).execute(context, TEST_INPUT_FILE);
-    executor.execute(context, TEST_INPUT_FILE);
+    doThrow(new RuntimeException("Test")).when(brokenExecutor).execute(context, testInputFile);
+    executor.execute(context, testInputFile);
 
-    verify(workingExecutor, times(1)).execute(context, TEST_INPUT_FILE);
+    verify(workingExecutor, times(1)).execute(context, testInputFile);
   }
 
   @Test
@@ -79,15 +89,16 @@ class DelphiMasterExecutorTest {
     Executor brokenExecutor = mock(Executor.class);
     Executor workingExecutor = mock(Executor.class);
     DelphiMasterExecutor executor = new DelphiMasterExecutor(brokenExecutor, workingExecutor);
+    DelphiInputFile testInputFile = createTestInputFile();
 
     doThrow(new FatalAnalysisError("Test", new RuntimeException("This was a test.")))
         .when(brokenExecutor)
-        .execute(context, TEST_INPUT_FILE);
+        .execute(context, testInputFile);
 
-    assertThatThrownBy(() -> executor.execute(context, TEST_INPUT_FILE))
+    assertThatThrownBy(() -> executor.execute(context, testInputFile))
         .isInstanceOf(FatalAnalysisError.class);
 
-    verify(workingExecutor, never()).execute(context, TEST_INPUT_FILE);
+    verify(workingExecutor, never()).execute(context, testInputFile);
   }
 
   @Test
@@ -97,7 +108,7 @@ class DelphiMasterExecutorTest {
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
-    masterExecutor.execute(mock(Context.class), TEST_INPUT_FILE);
+    masterExecutor.execute(mock(Context.class), createTestInputFile());
 
     InOrder inOrder = inOrder(dependency, executor);
     inOrder.verify(dependency).execute(any(), any());
@@ -112,7 +123,7 @@ class DelphiMasterExecutorTest {
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor);
-    masterExecutor.execute(mock(Context.class), TEST_INPUT_FILE);
+    masterExecutor.execute(mock(Context.class), createTestInputFile());
 
     verify(executor, never()).execute(any(), any());
   }
@@ -126,7 +137,7 @@ class DelphiMasterExecutorTest {
     when(executor.dependencies()).thenReturn(Set.of(dependency.getClass()));
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
-    masterExecutor.execute(mock(Context.class), TEST_INPUT_FILE);
+    masterExecutor.execute(mock(Context.class), createTestInputFile());
 
     verify(executor, never()).execute(any(), any());
   }
@@ -143,7 +154,7 @@ class DelphiMasterExecutorTest {
 
     DelphiMasterExecutor masterExecutor = new DelphiMasterExecutor(executor, dependency);
 
-    assertThatThrownBy(() -> masterExecutor.execute(mock(Context.class), TEST_INPUT_FILE))
+    assertThatThrownBy(() -> masterExecutor.execute(mock(Context.class), createTestInputFile()))
         .isInstanceOf(FatalAnalysisError.class);
 
     verify(executor, never()).execute(any(), any());
