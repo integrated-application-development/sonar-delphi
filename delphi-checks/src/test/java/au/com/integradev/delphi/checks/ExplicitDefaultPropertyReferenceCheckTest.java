@@ -18,77 +18,69 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ExplicitDefaultPropertyReferenceCheckTest extends CheckTest {
+class ExplicitDefaultPropertyReferenceCheckTest {
   @Test
   void testImplicitDefaultPropertyAccessShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("    function GetBar: TObject;")
-            .appendDecl("    property Bar: TObject read GetBar; default;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test(Foo: TFoo);")
-            .appendImpl("var")
-            .appendImpl("  Bar: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := Foo[0];")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ExplicitDefaultPropertyReferenceRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitDefaultPropertyReferenceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    function GetBar: TObject;")
+                .appendDecl("    property Bar: TObject read GetBar; default;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Bar: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := Foo[0];")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testExplicitDefaultPropertyAccessShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("    function GetBar: TObject;")
-            .appendDecl("    property Bar[Index: Integer]: TObject read GetBar; default;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test(Foo: TFoo);")
-            .appendImpl("var")
-            .appendImpl("  Bar: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := Foo.Bar[0];")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("ExplicitDefaultPropertyReferenceRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitDefaultPropertyReferenceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    function GetBar: TObject;")
+                .appendDecl("    property Bar[Index: Integer]: TObject read GetBar; default;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Bar: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := Foo.Bar[0];")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(17);
   }
 
   @Test
   void testExplicitDefaultPropertyAccessOnSelfShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("    function GetBar: TObject;")
-            .appendDecl("    procedure Test(Foo: TFoo);")
-            .appendDecl("    property Bar[Index: Integer]: TObject read GetBar; default;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Test(Foo: TFoo);")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := Bar[0];")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ExplicitDefaultPropertyReferenceRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitDefaultPropertyReferenceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    function GetBar: TObject;")
+                .appendDecl("    procedure Test(Foo: TFoo);")
+                .appendDecl("    property Bar[Index: Integer]: TObject read GetBar; default;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Test(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := Bar[0];")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

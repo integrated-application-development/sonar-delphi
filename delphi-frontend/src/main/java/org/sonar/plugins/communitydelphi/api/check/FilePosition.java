@@ -27,10 +27,6 @@ public abstract class FilePosition implements Serializable {
   public static final int UNDEFINED_LINE = 0;
   public static final int UNDEFINED_COLUMN = -1;
 
-  public static FilePosition atFileLevel() {
-    return new FileLevelPosition();
-  }
-
   public static FilePosition atLineLevel(int line) {
     return new LineLevelPosition(line, line);
   }
@@ -119,28 +115,6 @@ public abstract class FilePosition implements Serializable {
     @Override
     public int getEndLine() {
       return endLine;
-    }
-
-    @Override
-    public int getBeginColumn() {
-      return UNDEFINED_COLUMN;
-    }
-
-    @Override
-    public int getEndColumn() {
-      return UNDEFINED_COLUMN;
-    }
-  }
-
-  private static class FileLevelPosition extends FilePosition {
-    @Override
-    public int getBeginLine() {
-      return UNDEFINED_LINE;
-    }
-
-    @Override
-    public int getEndLine() {
-      return UNDEFINED_LINE;
     }
 
     @Override

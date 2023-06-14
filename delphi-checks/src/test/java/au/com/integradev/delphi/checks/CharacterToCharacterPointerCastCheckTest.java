@@ -18,85 +18,71 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CharacterToCharacterPointerCastCheckTest extends CheckTest {
+class CharacterToCharacterPointerCastCheckTest {
   @Test
   void testCharacterToCharacterPointerShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  AnsiCharacter: AnsiChar;")
-            .appendImpl("  Character: Char;")
-            .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
-            .appendImpl("  CharacterPointer: PChar;")
-            .appendImpl("begin")
-            .appendImpl("  AnsiCharacterPointer := PAnsiChar(AnsiCharacter);")
-            .appendImpl("  AnsiCharacterPointer := PAnsiChar(Character);")
-            .appendImpl("  CharacterPointer := PChar(AnsiCharacter);")
-            .appendImpl("  CharacterPointer := PChar(Character);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("CharacterToCharacterPointerCastRule", builder.getOffset() + 8))
-        .areExactly(
-            1, ruleKeyAtLine("CharacterToCharacterPointerCastRule", builder.getOffset() + 9))
-        .areExactly(
-            1, ruleKeyAtLine("CharacterToCharacterPointerCastRule", builder.getOffset() + 10))
-        .areExactly(
-            1, ruleKeyAtLine("CharacterToCharacterPointerCastRule", builder.getOffset() + 11));
+    CheckVerifier.newVerifier()
+        .withCheck(new CharacterToCharacterPointerCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  AnsiCharacter: AnsiChar;")
+                .appendImpl("  Character: Char;")
+                .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
+                .appendImpl("  CharacterPointer: PChar;")
+                .appendImpl("begin")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(AnsiCharacter);")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(Character);")
+                .appendImpl("  CharacterPointer := PChar(AnsiCharacter);")
+                .appendImpl("  CharacterPointer := PChar(Character);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14, 15, 16, 17);
   }
 
   @Test
-  void testCharacterOrdinalToCharacterPointerShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  AnsiCharacter: AnsiChar;")
-            .appendImpl("  Character: Char;")
-            .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
-            .appendImpl("  CharacterPointer: PChar;")
-            .appendImpl("begin")
-            .appendImpl("  AnsiCharacterPointer := PAnsiChar(Ord(AnsiCharacter));")
-            .appendImpl("  AnsiCharacterPointer := PAnsiChar(Ord(Character));")
-            .appendImpl("  CharacterPointer := PChar(Ord(AnsiCharacter));")
-            .appendImpl("  CharacterPointer := PChar(Ord(Character));")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CharacterToCharacterPointerCastRule"));
+  void testCharacterOrdinalToCharacterPointerShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CharacterToCharacterPointerCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  AnsiCharacter: AnsiChar;")
+                .appendImpl("  Character: Char;")
+                .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
+                .appendImpl("  CharacterPointer: PChar;")
+                .appendImpl("begin")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(Ord(AnsiCharacter));")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(Ord(Character));")
+                .appendImpl("  CharacterPointer := PChar(Ord(AnsiCharacter));")
+                .appendImpl("  CharacterPointer := PChar(Ord(Character));")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testCharacterStringToCharacterPointerShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  AnsiCharacter: AnsiChar;")
-            .appendImpl("  Character: Char;")
-            .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
-            .appendImpl("  CharacterPointer: PChar;")
-            .appendImpl("begin")
-            .appendImpl("  AnsiCharacterPointer := PAnsiChar(AnsiString(AnsiCharacter));")
-            .appendImpl("  AnsiCharacterPointer := PAnsiChar(String(Character));")
-            .appendImpl("  CharacterPointer := PChar(AnsiString(AnsiCharacter));")
-            .appendImpl("  CharacterPointer := PChar(String(Character));")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CharacterToCharacterPointerCastRule"));
+  void testCharacterStringToCharacterPointerShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CharacterToCharacterPointerCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  AnsiCharacter: AnsiChar;")
+                .appendImpl("  Character: Char;")
+                .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
+                .appendImpl("  CharacterPointer: PChar;")
+                .appendImpl("begin")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(AnsiString(AnsiCharacter));")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(String(Character));")
+                .appendImpl("  CharacterPointer := PChar(AnsiString(AnsiCharacter));")
+                .appendImpl("  CharacterPointer := PChar(String(Character));")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

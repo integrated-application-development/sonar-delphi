@@ -40,10 +40,10 @@ public class ForbiddenFieldCheck extends DelphiCheck {
   @RuleProperty(
       key = "typeName",
       description = "Fully qualified name of the type whose values are forbidden")
-  private String typeName = "";
+  public String typeName = "";
 
   @RuleProperty(key = "fields", description = "Comma-delimited list of forbidden fields")
-  private String fields = "";
+  public String fields = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

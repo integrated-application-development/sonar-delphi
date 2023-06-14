@@ -18,59 +18,53 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class RedundantAssignmentCheckTest extends CheckTest {
+class RedundantAssignmentCheckTest {
   @Test
   void testRedundantAssignmentShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Bar: String;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantAssignmentRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantAssignmentCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Bar: String;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testRedundantAssignmentWithNestingShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Bar: String;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := (Bar);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantAssignmentRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantAssignmentCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Bar: String;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := (Bar);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testRegularAssignmentShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Bar: String;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := 'Baz';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantAssignmentRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantAssignmentCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Bar: String;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := 'Baz';")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

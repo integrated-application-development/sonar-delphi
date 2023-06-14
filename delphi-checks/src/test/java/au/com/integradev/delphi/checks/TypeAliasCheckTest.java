@@ -18,118 +18,112 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TypeAliasCheckTest extends CheckTest {
+class TypeAliasCheckTest {
 
   @Test
-  void testTypeAliasShouldAddViolation() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyChar = Char;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TypeAliasRule", builder.getOffsetDecl() + 2));
+  void testTypeAliasShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("type")
+                .appendDecl("  TMyChar = Char;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
-  void testTypeAliasNewTypeShouldAddViolation() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyChar = type Char;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TypeAliasRule", builder.getOffsetDecl() + 2));
+  void testTypeAliasNewTypeShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("type")
+                .appendDecl("  TMyChar = type Char;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testFalsePositiveMetaClassIsNotTypeAlias() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("  end;")
-            .appendDecl("  TMetaClass = class of TMyClass;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TMetaClass = class of TMyClass;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositiveEmptyRecordIsNotTypeAlias() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyRecord = record")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyRecord = record")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositiveEmptyClassIsNotTypeAlias() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositiveSetsAreNotTypeAlias() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TSetOfChar = set of Char;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TSetOfChar = set of Char;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositiveArraysAreNotTypeAlias() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TArrayOfChar = array of Char;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TArrayOfChar = array of Char;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositiveSubRangesAreNotTypeAlias() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TSubRange = Lower..Upper;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TSubRange = Lower..Upper;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositivePointerTypesAreNotTypeAlias() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  PClass = ^TClass;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TypeAliasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TypeAliasCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("type")
+                .appendDecl("  PClass = ^TClass;"))
+        .verifyNoIssues();
   }
 }

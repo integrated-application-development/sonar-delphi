@@ -18,47 +18,43 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TooManyParametersCheckTest extends CheckTest {
+class TooManyParametersCheckTest {
   @Test
   void testOneVariableShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo(MyVar: Boolean);")
-            .appendImpl("begin")
-            .appendImpl("  MyVar := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooManyArgumentsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo(Param: Boolean);")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testTooManyVariablesShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo(")
-            .appendImpl("  MyVar1: Boolean;")
-            .appendImpl("  MyVar2: Boolean;")
-            .appendImpl("  MyVar3: Boolean;")
-            .appendImpl("  MyVar4: Boolean;")
-            .appendImpl("  MyVar5: Boolean;")
-            .appendImpl("  MyVar6: Boolean;")
-            .appendImpl("  MyVar7: Boolean")
-            .appendImpl(");")
-            .appendImpl("begin")
-            .appendImpl("  MyVar1 := MyVar2;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TooManyArgumentsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo(")
+                .appendImpl("  Param1: Boolean;")
+                .appendImpl("  Param2: Boolean;")
+                .appendImpl("  Param3: Boolean;")
+                .appendImpl("  Param4: Boolean;")
+                .appendImpl("  Param5: Boolean;")
+                .appendImpl("  Param6: Boolean;")
+                .appendImpl("  Param7: Boolean;")
+                .appendImpl("  Param8: Boolean")
+                .appendImpl(");")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 }

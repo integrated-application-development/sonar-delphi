@@ -18,84 +18,74 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ConstructorNameCheckTest extends CheckTest {
+class ConstructorNameCheckTest {
 
   @Test
   void testConstructorWithPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyForm = class(TForm)")
-            .appendDecl("    constructor CreateClass;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstructorCreateRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyForm = class(TForm)")
+                .appendDecl("    constructor CreateClass;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstructorIsPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyForm = class(TForm)")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstructorCreateRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyForm = class(TForm)")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstructorWithoutPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyForm = class(TForm)")
-            .appendDecl("    constructor NotCreate;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ConstructorCreateRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyForm = class(TForm)")
+                .appendDecl("    constructor NotCreate;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testBadPascalCaseAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyForm = class(TForm)")
-            .appendDecl("    constructor Createclass;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ConstructorCreateRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyForm = class(TForm)")
+                .appendDecl("    constructor Createclass;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testClassConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyForm = class(TForm)")
-            .appendDecl("    class constructor NotCreate;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstructorCreateRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyForm = class(TForm)")
+                .appendDecl("    class constructor NotCreate;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

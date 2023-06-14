@@ -18,53 +18,47 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CatchingRawExceptionCheckTest extends CheckTest {
+class CatchingRawExceptionCheckTest {
 
   @Test
   void testCustomExceptionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on MyCustomException do begin")
-            .appendImpl("      raise;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CatchingGeneralExceptionRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new CatchingRawExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on MyCustomException do begin")
+                .appendImpl("      raise;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testGeneralExceptionShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on Exception do begin")
-            .appendImpl("      raise;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("CatchingGeneralExceptionRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new CatchingRawExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on Exception do begin")
+                .appendImpl("      raise;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 }

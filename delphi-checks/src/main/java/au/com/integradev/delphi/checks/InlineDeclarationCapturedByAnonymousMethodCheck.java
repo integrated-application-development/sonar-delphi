@@ -32,7 +32,7 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
     ruleKey = "InlineDeclarationCapturedByAnonymousMethodRule",
     repositoryKey = "delph")
 @Rule(key = "InlineDeclarationCapturedByAnonymousMethod")
-public class InlineDeclarationCapturedByAnonymousMethodRule extends DelphiCheck {
+public class InlineDeclarationCapturedByAnonymousMethodCheck extends DelphiCheck {
   private static final String MESSAGE =
       "Do not capture this inline variable in an anonymous method.";
 

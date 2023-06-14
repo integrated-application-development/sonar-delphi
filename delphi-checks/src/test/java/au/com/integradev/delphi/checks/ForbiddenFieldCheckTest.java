@@ -18,79 +18,60 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ForbiddenFieldCheckTest extends CheckTest {
+class ForbiddenFieldCheckTest {
   private static final String UNIT_NAME = "TestUnit";
-  private static final String DECLARING_TYPE = "TestUnit.TFoo";
+  private static final String DECLARING_TYPE = UNIT_NAME + ".TFoo";
   private static final String FORBIDDEN_FIELD = "Bar";
 
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    DelphiRuleProperty blacklist =
-        new DelphiRuleProperty(ForbiddenFieldCheck.BLACKLISTED_FIELDS.name(), FORBIDDEN_FIELD);
-
-    DelphiRuleProperty declaringType =
-        new DelphiRuleProperty(ForbiddenFieldCheck.DECLARING_TYPE.name(), DECLARING_TYPE);
-
-    rule.setName("ForbiddenFieldRuleTest");
-    rule.setTemplateName("ForbiddenFieldRule");
-    rule.setPriority(5);
-    rule.addProperty(blacklist);
-    rule.addProperty(declaringType);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.ForbiddenFieldRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck() {
+    ForbiddenFieldCheck check = new ForbiddenFieldCheck();
+    check.typeName = DECLARING_TYPE;
+    check.fields = FORBIDDEN_FIELD;
+    return check;
   }
 
   @Test
   void testForbiddenFieldUsageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = record")
-            .appendDecl("    Bar: String;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test(Foo: TFoo);")
-            .appendImpl("var")
-            .appendImpl("  Baz: String;")
-            .appendImpl("begin")
-            .appendImpl("  Baz := Foo.Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ForbiddenFieldRuleTest", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = record")
+                .appendDecl("    Bar: String;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Baz: String;")
+                .appendImpl("begin")
+                .appendImpl("  Baz := Foo.Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(16);
   }
 
   @Test
   void testForbiddenFieldNameDeclaredByDifferentTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TBoop = record")
-            .appendDecl("    Bar: String;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test(Boop: TBoop);")
-            .appendImpl("var")
-            .appendImpl("  Baz: String;")
-            .appendImpl("begin")
-            .appendImpl("  Baz := Boop.Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenFieldRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TBoop = record")
+                .appendDecl("    Bar: String;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test(Boop: TBoop);")
+                .appendImpl("var")
+                .appendImpl("  Baz: String;")
+                .appendImpl("begin")
+                .appendImpl("  Baz := Boop.Bar;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

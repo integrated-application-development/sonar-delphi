@@ -18,35 +18,32 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class NoSonarCheckTest extends CheckTest {
+class NoSonarCheckTest {
   @Test
   void testNoSonarShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("//NOSONAR");
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSonarRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new NoSonarCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("//NOSONAR"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testNoSonarWithMessageShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("//NOSONAR foobar");
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSonarRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new NoSonarCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("//NOSONAR foobar"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testNoSonarWithoutWordBoundaryShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("//NOSONARfoobar");
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSonarRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new NoSonarCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("//NOSONARfoobar"))
+        .verifyNoIssues();
   }
 }

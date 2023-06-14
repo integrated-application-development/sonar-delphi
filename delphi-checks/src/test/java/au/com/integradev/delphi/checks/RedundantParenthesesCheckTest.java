@@ -18,55 +18,47 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class RedundantParenthesesCheckTest extends CheckTest {
-
+class RedundantParenthesesCheckTest {
   @Test
   void testNoParenthesesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function GetInteger: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := 123;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantParenthesesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := 123;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testParenthesesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function GetInteger: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := (123);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantParenthesesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := (123);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRedundantParenthesesShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function GetInteger: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := ((123));")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RedundantParenthesesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := ((123));")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

@@ -18,151 +18,144 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnusedConstantCheckTest extends CheckTest {
+class UnusedConstantCheckTest {
   @Test
   void testUsedInMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("const")
-            .appendImpl("  C_Foo = 0;")
-            .appendImpl("begin")
-            .appendImpl("  var Foo := C_Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedConstantsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("const")
+                .appendImpl("  C_Foo = 0;")
+                .appendImpl("begin")
+                .appendImpl("  var Foo := C_Foo;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedInMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("const")
-            .appendImpl("  C_Foo = 0;")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedConstantsRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("const")
+                .appendImpl("  C_Foo = 0;")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testUsedInlineConstantShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const C_Foo = 0;")
-            .appendImpl("  var Foo := C_Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedConstantsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const C_Foo = 0;")
+                .appendImpl("  var Foo := C_Foo;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedInlineConstantShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const C_Foo = 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedConstantsRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const C_Foo = 0;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testUsedGlobalConstantShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("const")
-            .appendDecl("  C_Foo = 0;")
-            .appendDecl("  C_Bar = C_Foo;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("UnusedConstantsRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  C_Foo = 0;")
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := C_Foo;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedGlobalConstantShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("const").appendDecl("  C_Foo = 0;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedConstantsRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("const")
+                .appendDecl("  C_Foo = 0;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUsedInArrayIndexTypesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("const")
-            .appendDecl("  C_Foo = 0;")
-            .appendDecl("var")
-            .appendDecl("  FooArray: array[0..C_Foo] of Integer;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("UnusedConstantsRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  C_Foo = 0;")
+                .appendDecl("var")
+                .appendDecl("  FooArray: array[0..C_Foo] of Integer;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUsedConstSetsWithSubrangeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("type TAlias = set of AnsiChar;")
-            .appendImpl("procedure Bar(const CharSet: TAlias);")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;")
-            .appendImpl("procedure Foo(const Str: String);")
-            .appendImpl("const")
-            .appendImpl("  C_Foo = ['A'..'Z'];")
-            .appendImpl("begin")
-            .appendImpl("  Bar(C_Foo);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedConstantsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type TAlias = set of AnsiChar;")
+                .appendImpl("procedure Bar(const CharSet: TAlias);")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;")
+                .appendImpl("procedure Foo(const Str: String);")
+                .appendImpl("const")
+                .appendImpl("  C_Foo = ['A'..'Z'];")
+                .appendImpl("begin")
+                .appendImpl("  Bar(C_Foo);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUsedConstSetsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("type TAlias = set of AnsiChar;")
-            .appendImpl("procedure Bar(const CharSet: TAlias);")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;")
-            .appendImpl("procedure Foo(const Str: String);")
-            .appendImpl("const")
-            .appendImpl("  C_Foo = ['A','Z'];")
-            .appendImpl("begin")
-            .appendImpl("  Bar(C_Foo);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedConstantsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedConstantCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type TAlias = set of AnsiChar;")
+                .appendImpl("procedure Bar(const CharSet: TAlias);")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;")
+                .appendImpl("procedure Foo(const Str: String);")
+                .appendImpl("const")
+                .appendImpl("  C_Foo = ['A','Z'];")
+                .appendImpl("begin")
+                .appendImpl("  Bar(C_Foo);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

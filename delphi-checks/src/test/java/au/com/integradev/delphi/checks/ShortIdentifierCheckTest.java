@@ -18,60 +18,53 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ShortIdentifierCheckTest extends CheckTest {
+class ShortIdentifierCheckTest {
   @Test
   void testShortIdentifiersShouldAddIssues() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  A = class")
-            .appendDecl("    procedure B;")
-            .appendDecl("  end;")
-            .appendImpl("procedure A.B;")
-            .appendImpl("var")
-            .appendImpl("  C: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  if C then begin")
-            .appendImpl("    Proc;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ShortIdentifiersRule", builder.getOffsetDecl() + 2))
-        .areExactly(1, ruleKeyAtLine("ShortIdentifiersRule", builder.getOffsetDecl() + 3))
-        .areExactly(1, ruleKeyAtLine("ShortIdentifiersRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new ShortIdentifierCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  A = class")
+                .appendDecl("    procedure B;")
+                .appendDecl("  end;")
+                .appendImpl("procedure A.B;")
+                .appendImpl("var")
+                .appendImpl("  C: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  if C then begin")
+                .appendImpl("    Proc;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(6, 7, 14);
   }
 
   @Test
   void testWhitelistedIdentifiersShouldNotAddIssues() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  X = class")
-            .appendDecl("    procedure Y;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ShortIdentifiersRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ShortIdentifierCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  X = class")
+                .appendDecl("    procedure Y;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnitImportsShouldNotAddIssues() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  DB;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ShortIdentifiersRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ShortIdentifierCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  DB;"))
+        .verifyNoIssues();
   }
 }

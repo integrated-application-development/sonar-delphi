@@ -40,7 +40,7 @@ public class ForbiddenTypeCheck extends DelphiCheck {
       key = "types",
       description =
           "Comma-delimited list of forbidden (fully qualified) type names (case-insensitive)")
-  private String types = "";
+  public String types = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

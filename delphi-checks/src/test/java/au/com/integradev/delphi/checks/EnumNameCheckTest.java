@@ -18,60 +18,52 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class EnumNameCheckTest extends CheckTest {
-
+class EnumNameCheckTest {
   @Test
-  void testAcceptT() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TEnum = (someEnum, someOtherEnum, someThirdEnum);");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EnumNameRule"));
+  void testTShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EnumNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TEnum = (someEnum, someOtherEnum, someThirdEnum);"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testNotAcceptLowercaseT() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum);");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("EnumNameRule", builder.getOffsetDecl() + 2));
+  void testLowercaseTShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EnumNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum);"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
-  void testNotAcceptBadPascalCase() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum);");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("EnumNameRule", builder.getOffsetDecl() + 2));
+  void testBadPascalCaseShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EnumNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum);"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
-  void testNotAcceptPrefixAlone() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("EnumNameRule", builder.getOffsetDecl() + 2));
+  void testBarePrefixShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EnumNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);"))
+        .verifyIssueOnLine(6);
   }
 }

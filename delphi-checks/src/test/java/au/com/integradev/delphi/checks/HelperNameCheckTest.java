@@ -18,147 +18,130 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.CheckTest;
-import java.util.Objects;
+import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.SetTypeNode;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class HelperNameCheckTest extends CheckTest {
-
-  private void setAllowedPrefixes(String prefix) {
-    DelphiRuleProperty property =
-        Objects.requireNonNull(
-            getRule(HelperNameCheck.class).getProperty(HelperNameCheck.HELPER_PREFIXES.name()));
-    property.setValue(prefix);
+class HelperNameCheckTest {
+  private static DelphiCheck createCheck(String prefixes) {
+    HelperNameCheck check = new HelperNameCheck();
+    check.helperPrefixes = prefixes;
+    return check;
   }
 
   @Test
   void testCombinedPrefixesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  end;")
-        .appendDecl("  TTFooHelper = class helper for TFoo")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("HelperNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TTFooHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMismatchedPrefixesShouldNotAddIssue() {
-    setAllowedPrefixes("T|Prefix");
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  end;")
-        .appendDecl("  PrefixFooHelper = class helper for TFoo")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("HelperNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("T,Prefix"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  PrefixFooHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testSinglePrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  end;")
-        .appendDecl("  TFooHelper = class helper for TFoo")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("HelperNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TFooHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testNoPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  end;")
-        .appendDecl("  FooHelper = class helper for TFoo")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("HelperNameRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  FooHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testArbitraryTextShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  end;")
-        .appendDecl("  TabcFooHelper = class helper for TFoo")
-        .appendDecl("  end;")
-        .appendDecl("  TFoodefHelper = class helper for TFoo")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("HelperNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("HelperNameRule", builder.getOffsetDecl() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TabcFooHelper = class helper for TFoo")
+                .appendDecl("  end;")
+                .appendDecl("  TFoodefHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 10);
   }
 
   @Test
   void testNoSuffixShouldAddIssue() {
-    setAllowedPrefixes("T|Prefix");
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  end;")
-        .appendDecl("  PrefixFoo = class helper for TFoo")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("HelperNameRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("T,Prefix"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  PrefixFoo = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testStringHelperShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TStringHelper = record helper for string")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("HelperNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TStringHelper = record helper for string")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFileHelperShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFileHelper = record helper for file")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("HelperNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFileHelper = record helper for file")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test

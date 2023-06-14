@@ -18,209 +18,211 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class VariableNameCheckTest extends CheckTest {
+class VariableNameCheckTest {
+  private static DelphiCheck createCheck() {
+    VariableNameCheck check = new VariableNameCheck();
+    check.globalPrefixes = "G";
+    return check;
+  }
+
   @Test
   void testValidGlobalNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  GMyChar: Char;")
-            .appendDecl("  GAnotherChar: Char;")
-            .appendDecl("  GThirdChar: Char;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VariableNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  GMyChar: Char;")
+                .appendDecl("  GAnotherChar: Char;")
+                .appendDecl("  GThirdChar: Char;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInvalidGlobalNamesShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  G_My_Char: Char;")
-            .appendDecl("  gAnotherChar: Char;")
-            .appendDecl("  GlobalChar: Char;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 2))
-        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 3))
-        .areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  G_My_Char: Char;")
+                .appendDecl("  gAnotherChar: Char;")
+                .appendDecl("  GlobalChar: Char;"))
+        .verifyIssueOnLine(6, 7, 8);
   }
 
   @Test
   void testValidNameInMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  SomeVar: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  SomeVar := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VariableNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  SomeVar: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  SomeVar := 0;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBadPascalCaseInMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  someVar: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  someVar := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  someVar: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  someVar := 0;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testAutoCreateFormVariableShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  Vcl.Forms;")
-            .appendDecl("type")
-            .appendDecl("  TFooForm = class(TForm)")
-            .appendDecl("  end;")
-            .appendDecl("var")
-            .appendDecl("  omForm: TFooForm;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VariableNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createVclForms())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  Vcl.Forms;")
+                .appendDecl("type")
+                .appendDecl("  TFooForm = class(TForm)")
+                .appendDecl("  end;")
+                .appendDecl("var")
+                .appendDecl("  omForm: TFooForm;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testValidArgumentNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure(Arg: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  Arg := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VariableNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure(Arg: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  Arg := 0;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBadPascalCaseInArgumentNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure(arg: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  arg := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure(arg: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  arg := 0;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testValidInlineVariableNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  var SomeVar: Integer;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VariableNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  var SomeVar: Integer;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBadPascalCaseInlineVariableShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  var someVar: Integer;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  var someVar: Integer;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testValidLoopVariableNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  for var SomeVar := 1 to 100 do;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VariableNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  for var SomeVar := 1 to 100 do;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBadPascalCaseInLoopVariableShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  for var someVar := 1 to 100 do;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("VariableNameRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  for var someVar := 1 to 100 do;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testBadPascalCaseInMethodImplementingGoodPascalCaseInterfaceShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IFoo = interface")
-            .appendDecl("    procedure Proc(MyStr: string; MyInt: Integer);")
-            .appendDecl("  end;")
-            .appendDecl("  TBar = class(TObject, IFoo)")
-            .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(2, ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IFoo = interface")
+                .appendDecl("    procedure Proc(MyStr: string; MyInt: Integer);")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class(TObject, IFoo)")
+                .appendDecl("    procedure Proc(")
+                .appendDecl("      myStr: string;")
+                .appendDecl("      myInt: Integer")
+                .appendDecl("    );")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(11, 12);
   }
 
   @Test
   void testBadPascalCaseInMethodImplementingBadPascalCaseInterfaceShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IFoo = interface")
-            .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
-            .appendDecl("  end;")
-            .appendDecl("  TBar = class(TObject, IFoo)")
-            .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
-            .appendDecl("  end;");
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IFoo = interface")
+                .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class(TObject, IFoo)")
+                .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7, 7);
+  }
 
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("VariableNameRule", builder.getOffsetDecl() + 6));
+  private static DelphiTestUnitBuilder createVclForms() {
+    return new DelphiTestUnitBuilder()
+        .unitName("Vcl.Forms")
+        .appendDecl("uses")
+        .appendDecl("  System.Classes;")
+        .appendDecl("type")
+        .appendDecl("TForm = class(TComponent)")
+        .appendDecl("end;");
   }
 }

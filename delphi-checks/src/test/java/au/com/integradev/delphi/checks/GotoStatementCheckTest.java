@@ -18,29 +18,26 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class GotoStatementRuleTest extends CheckTest {
+class GotoStatementCheckTest {
   @Test
   void testGotoStatementShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("  label Here;")
-            .appendImpl("begin")
-            .appendImpl("  goto Here;")
-            .appendImpl("  Here:")
-            .appendImpl("    Exit;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("GotoStatementRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new GotoStatementCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("  label Here;")
+                .appendImpl("begin")
+                .appendImpl("  goto Here;")
+                .appendImpl("  Here:")
+                .appendImpl("    Exit;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 }

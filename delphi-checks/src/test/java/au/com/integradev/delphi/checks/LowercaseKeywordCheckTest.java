@@ -18,71 +18,57 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import java.util.Objects;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class LowercaseKeywordCheckTest extends CheckTest {
-
-  @BeforeEach
-  void setup() {
-    DelphiRuleProperty property =
-        Objects.requireNonNull(
-            getRule(LowercaseKeywordCheck.class)
-                .getProperty(LowercaseKeywordCheck.EXCLUDED_KEYWORDS.name()));
-    property.setValue("string");
+class LowercaseKeywordCheckTest {
+  private static DelphiCheck createCheck() {
+    LowercaseKeywordCheck check = new LowercaseKeywordCheck();
+    check.excluded = "string";
+    return check;
   }
 
   @Test
   void testUppercaseKeywordShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("Begin")
-            .appendImpl("  MyVar := True;")
-            .appendImpl("END;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("LowerCaseReservedWordsRule", builder.getOffset() + 2))
-        .areExactly(1, ruleKeyAtLine("LowerCaseReservedWordsRule", builder.getOffset() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("Begin")
+                .appendImpl("  MyVar := True;")
+                .appendImpl("END;"))
+        .verifyIssueOnLine(8, 10);
   }
 
   @Test
   void testAsmBlockShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Bar;")
-            .appendImpl("asm")
-            .appendImpl("  SHR   eax, 16")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("LowerCaseReservedWordsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Bar;")
+                .appendImpl("asm")
+                .appendImpl("  SHR   eax, 16")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUppercaseExcludedKeywordShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo(")
-            .appendImpl("  VarA: String;")
-            .appendImpl("  VarB: string")
-            .appendImpl("): STRING;")
-            .appendImpl("begin")
-            .appendImpl("  Result := VarA + VarB;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("LowerCaseReservedWordsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo(")
+                .appendImpl("  VarA: String;")
+                .appendImpl("  VarB: string")
+                .appendImpl("): STRING;")
+                .appendImpl("begin")
+                .appendImpl("  Result := VarA + VarB;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

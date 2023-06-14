@@ -18,70 +18,63 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class PublicFieldCheckTest extends CheckTest {
-
+class PublicFieldCheckTest {
   @Test
-  void testValidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("     FPublishedField: Integer;")
-            .appendDecl("    private")
-            .appendDecl("     FPrivateField: Integer;")
-            .appendDecl("    protected")
-            .appendDecl("     FProtectedField: String;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PublicFieldsRule"));
+  void testNonPublicFieldsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PublicFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("     FPublishedField: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     FPrivateField: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     FProtectedField: String;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testInvalidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("     FPublishedField: Integer;")
-            .appendDecl("    private")
-            .appendDecl("     FPrivateField: Integer;")
-            .appendDecl("    protected")
-            .appendDecl("     FProtectedField: String;")
-            .appendDecl("    public")
-            .appendDecl("     FPublicField: String;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("PublicFieldsRule", builder.getOffsetDecl() + 9));
+  void testPublicFieldShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PublicFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("     FPublishedField: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     FPrivateField: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     FProtectedField: String;")
+                .appendDecl("    public")
+                .appendDecl("     FPublicField: String;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(13);
   }
 
   @Test
-  void testRecordsAreExcluded() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyRecord = record")
-            .appendDecl("     FPublishedField: Integer;")
-            .appendDecl("    private")
-            .appendDecl("     FPrivateField: Integer;")
-            .appendDecl("    protected")
-            .appendDecl("     FProtectedField: String;")
-            .appendDecl("    public")
-            .appendDecl("     FPublicField: String;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PublicFieldsRule"));
+  void testPublicFieldsInRecordsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PublicFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyRecord = record")
+                .appendDecl("     FPublishedField: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     FPrivateField: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     FProtectedField: String;")
+                .appendDecl("    public")
+                .appendDecl("     FPublicField: String;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

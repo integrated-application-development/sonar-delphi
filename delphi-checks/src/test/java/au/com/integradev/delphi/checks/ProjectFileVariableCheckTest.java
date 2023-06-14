@@ -18,69 +18,60 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestProgramBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ProjectFileVariableCheckTest extends CheckTest {
+class ProjectFileVariableCheckTest {
   @Test
-  void testValidDprFile() {
-    DelphiTestProgramBuilder builder =
-        new DelphiTestProgramBuilder().programName("ValidProgram").appendImpl("Exit;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ProjectFileNoVariablesRule"));
+  void testNoVariablesShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ProjectFileVariableCheck())
+        .onFile(
+            new DelphiTestProgramBuilder() //
+                .programName("ValidProgram")
+                .appendImpl("Exit;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testVariablesInDprFileShouldAddIssue() {
-    DelphiTestProgramBuilder builder =
-        new DelphiTestProgramBuilder()
-            .appendDecl("var")
-            .appendDecl("  GMyString: String;")
-            .appendDecl("  GMyBool: Boolean;")
-            .appendDecl("  GMyInt: Integer;")
-            .appendImpl("Exit;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2))
-        .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 3))
-        .areExactly(1, ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 4));
+  void testVariablesShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ProjectFileVariableCheck())
+        .onFile(
+            new DelphiTestProgramBuilder()
+                .appendDecl("var")
+                .appendDecl("  GMyString: String;")
+                .appendDecl("  GMyBool: Boolean;")
+                .appendDecl("  GMyInt: Integer;")
+                .appendImpl("Exit;"))
+        .verifyIssueOnLine(4, 5, 6);
   }
 
   @Test
-  void testVarsInsideMethodsShouldNotAddIssue() {
-    DelphiTestProgramBuilder builder =
-        new DelphiTestProgramBuilder()
-            .appendDecl("procedure MyProcedure;")
-            .appendDecl("var")
-            .appendDecl("  MyString: String;")
-            .appendDecl("  MyBool: Boolean;")
-            .appendDecl("  MyInt: Integer;")
-            .appendDecl("begin")
-            .appendDecl("  DoSomething;")
-            .appendDecl("end;")
-            .appendDecl("function MyFunction;")
-            .appendDecl("var")
-            .appendDecl("  MyString: String;")
-            .appendDecl("  MyBool: Boolean;")
-            .appendDecl("  MyInt: Integer;")
-            .appendDecl("begin")
-            .appendDecl("  Result := 5;")
-            .appendDecl("end;")
-            .appendImpl("MyProcedure;")
-            .appendImpl("MyVar := MyFunction;");
-
-    execute(builder);
-
-    assertIssues()
-        .areNot(ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 2))
-        .areNot(ruleKeyAtLine("ProjectFileNoVariablesRule", builder.getOffsetDecl() + 6));
+  void testVariablesWithinMethodsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ProjectFileVariableCheck())
+        .onFile(
+            new DelphiTestProgramBuilder()
+                .appendDecl("procedure MyProcedure;")
+                .appendDecl("var")
+                .appendDecl("  MyString: String;")
+                .appendDecl("  MyBool: Boolean;")
+                .appendDecl("  MyInt: Integer;")
+                .appendDecl("begin")
+                .appendDecl("  DoSomething;")
+                .appendDecl("end;")
+                .appendDecl("function MyFunction;")
+                .appendDecl("var")
+                .appendDecl("  MyString: String;")
+                .appendDecl("  MyBool: Boolean;")
+                .appendDecl("  MyInt: Integer;")
+                .appendDecl("begin")
+                .appendDecl("  Result := 5;")
+                .appendDecl("end;")
+                .appendImpl("MyProcedure;")
+                .appendImpl("MyVar := MyFunction;"))
+        .verifyNoIssues();
   }
 }

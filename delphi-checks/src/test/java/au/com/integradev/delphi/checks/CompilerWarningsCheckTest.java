@@ -18,58 +18,48 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CompilerWarningsCheckTest extends CheckTest {
+class CompilerWarningsCheckTest {
   @Test
   void testWarningsOffShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$WARNINGS OFF}");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("CompilerWarningsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerWarningsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARNINGS OFF}"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testWarningsOnShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$WARNINGS ON}");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CompilerWarningsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerWarningsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARNINGS ON}"))
+        .verifyNoIssues();
   }
 
   @Test
   void testWarnOffShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED OFF}");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("CompilerWarningsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerWarningsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED OFF}"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
-  void testWarnUnknownShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED FOO}");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CompilerWarningsRule"));
+  void testWarnUnknownShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerWarningsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED FOO}"))
+        .verifyNoIssues();
   }
 
   @Test
   void testHintsOffShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF}");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CompilerWarningsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerWarningsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{HINTS OFF}"))
+        .verifyNoIssues();
   }
 }

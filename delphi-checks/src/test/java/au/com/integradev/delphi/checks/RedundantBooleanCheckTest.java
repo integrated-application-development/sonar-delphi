@@ -18,99 +18,90 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class RedundantBooleanCheckTest extends CheckTest {
-
+class RedundantBooleanCheckTest {
   @Test
   void testRedundantBooleanComparisonShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  X: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  if X = True then begin")
-            .appendImpl("    DoSomething;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantBooleanCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  X: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  if X = True then begin")
+                .appendImpl("    DoSomething;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testBooleanComparisonImplicitConversionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  X: Variant;")
-            .appendImpl("begin")
-            .appendImpl("  if X = True then begin")
-            .appendImpl("    DoSomething;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantBooleanRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantBooleanCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  X: Variant;")
+                .appendImpl("begin")
+                .appendImpl("  if X = True then begin")
+                .appendImpl("    DoSomething;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRedundantBooleanNegativeComparisonShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  X: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  if X <> False then begin")
-            .appendImpl("    DoSomething;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantBooleanCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  X: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  if X <> False then begin")
+                .appendImpl("    DoSomething;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testRedundantNestedBooleanComparisonShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  X: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  if ((((X))) = (((True)))) then begin")
-            .appendImpl("    DoSomething;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantBooleanCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  X: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  if ((((X))) = (((True)))) then begin")
+                .appendImpl("    DoSomething;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testNeedlesslyInvertedBooleanShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Foo(Bar: Boolean);")
-            .appendImpl("procedure Baz;")
-            .appendImpl("begin")
-            .appendImpl("  Foo(not True);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("RedundantBooleanRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantBooleanCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Bar: Boolean);")
+                .appendImpl("procedure Baz;")
+                .appendImpl("begin")
+                .appendImpl("  Foo(not True);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 }

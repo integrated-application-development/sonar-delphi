@@ -18,58 +18,48 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TrailingWhitespaceCheckTest extends CheckTest {
+class TrailingWhitespaceCheckTest {
   @Test
   void testTrailingSpaceShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("var Foo: TObject; ");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TrailingWhitespaceRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject; "))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testTrailingTabShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;\t");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TrailingWhitespaceRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;\t"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testTrailingMixedWhitespaceShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;\t   \t\t \t  ");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TrailingWhitespaceRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;\t   \t\t \t  "))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testNoTrailingWhitespaceShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TrailingWhitespaceRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testLeadingWhitespaceShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendImpl("\t   \t \t var Foo: TObject;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TrailingWhitespaceRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("\t   \t \t var Foo: TObject;"))
+        .verifyNoIssues();
   }
 }

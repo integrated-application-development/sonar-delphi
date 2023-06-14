@@ -47,13 +47,13 @@ public class HelperNameCheck extends DelphiCheck {
       key = "helperPrefixes",
       description = "Comma-delimited list of prefixes, helper names must begin with one of these.",
       defaultValue = DEFAULT_HELPER_PREFIXES)
-  private String helperPrefixes = DEFAULT_HELPER_PREFIXES;
+  public String helperPrefixes = DEFAULT_HELPER_PREFIXES;
 
   @RuleProperty(
-      key = "helperPrefixes",
+      key = "extendedTypePrefixes",
       description = "Comma-delimited list of prefixes that the extended type name may begin with.",
       defaultValue = DEFAULT_EXTENDED_TYPE_PREFIXES)
-  private String extendedTypePrefixes = DEFAULT_EXTENDED_TYPE_PREFIXES;
+  public String extendedTypePrefixes = DEFAULT_EXTENDED_TYPE_PREFIXES;
 
   private List<String> helperPrefixesList;
   private List<String> extendedTypePrefixesList;

@@ -38,7 +38,7 @@ public class UnitNameCheck extends DelphiCheck {
   @RuleProperty(
       key = "prefixes",
       description = "Comma-delimited list of prefixes, unit names must begin with one of these.")
-  private String prefixes = "";
+  public String prefixes = "";
 
   private List<String> prefixesList;
 

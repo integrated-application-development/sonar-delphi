@@ -18,123 +18,117 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class InheritedTypeNameCheckTest extends CheckTest {
-
-  private DelphiRuleProperty nameRegex;
-  private DelphiRuleProperty parentRegex;
-
-  @BeforeEach
-  void setup() {
-    nameRegex = new DelphiRuleProperty(InheritedTypeNameCheck.NAME_REGEX.name(), ".*_Child");
-    parentRegex = new DelphiRuleProperty(InheritedTypeNameCheck.PARENT_REGEX.name(), ".*_Parent");
-
-    DelphiRule rule = new DelphiRule();
-    rule.setName("TestInheritedNameRule");
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.InheritedTypeNameRule");
-    rule.setPriority(5);
-    rule.addProperty(nameRegex);
-    rule.addProperty(parentRegex);
-
-    addRule(rule);
+class InheritedTypeNameCheckTest {
+  private static DelphiCheck createCheck() {
+    InheritedTypeNameCheck check = new InheritedTypeNameCheck();
+    check.nameRegularExpression = ".*_Child";
+    check.parentNameRegularExpression = ".*_Parent";
+    return check;
   }
 
   @Test
   void testCompliesWithNamingConventionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType_Child = class(TType_Parent)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TestInheritedNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType_Child = class(TType_Parent)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFailsNamingConventionShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(TType_Parent)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("TestInheritedNameRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TType_Parent)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testFailsNamingConventionWithMultipleParentsShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(IType, TType_Parent)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("TestInheritedNameRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(IType, TType_Parent)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testDoesNotInheritFromExpectedTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(TSomeOtherType)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TestInheritedNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TSomeOtherType)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testDoesNotInheritFromAnyTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(TObject)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TestInheritedNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testBadNameRegexShouldNotAddIssue() {
-    nameRegex.setValue("*");
+  void testBadNameRegexShouldThrow() {
+    InheritedTypeNameCheck check = new InheritedTypeNameCheck();
+    check.parentNameRegularExpression = ".*";
+    check.nameRegularExpression = "*";
 
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(TType_Parent)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TestInheritedNameRule"));
+    assertThatThrownBy(
+            () ->
+                CheckVerifier.newVerifier()
+                    .withCheck(check)
+                    .onFile(
+                        new DelphiTestUnitBuilder()
+                            .appendDecl("type")
+                            .appendDecl("  TType = class(TType_Parent)")
+                            .appendDecl("  end;"))
+                    .verifyNoIssues())
+        .isInstanceOf(FatalAnalysisError.class);
   }
 
   @Test
   void testBadParentRegexShouldNotAddIssue() {
-    parentRegex.setValue("*");
+    InheritedTypeNameCheck check = new InheritedTypeNameCheck();
+    check.parentNameRegularExpression = "*";
+    check.nameRegularExpression = ".*";
 
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(TType_Parent)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TestInheritedNameRule"));
+    assertThatThrownBy(
+            () ->
+                CheckVerifier.newVerifier()
+                    .withCheck(check)
+                    .onFile(
+                        new DelphiTestUnitBuilder()
+                            .appendDecl("type")
+                            .appendDecl("  TType = class(TType_Parent)")
+                            .appendDecl("  end;"))
+                    .verifyNoIssues())
+        .isInstanceOf(FatalAnalysisError.class);
   }
 }

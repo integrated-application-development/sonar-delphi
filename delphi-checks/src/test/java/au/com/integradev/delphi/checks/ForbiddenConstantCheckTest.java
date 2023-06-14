@@ -18,98 +18,75 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ForbiddenConstantCheckTest extends CheckTest {
-  private static final String UNIT_NAME = "TestUnit";
-  private static final String FORBIDDEN_CONSTANT = "C_Foo";
+class ForbiddenConstantCheckTest {
+  private static final String UNIT_NAME = "Foo";
+  private static final String FORBIDDEN_CONSTANT = "CFoo";
 
-  @BeforeEach
-  void setup() {
-    au.com.integradev.delphi.pmd.xml.DelphiRule rule = new DelphiRule();
-    DelphiRuleProperty blacklist =
-        new DelphiRuleProperty(
-            ForbiddenConstantCheck.BLACKLISTED_CONSTANTS.name(), FORBIDDEN_CONSTANT);
-
-    DelphiRuleProperty unitName =
-        new DelphiRuleProperty(ForbiddenConstantCheck.UNIT_NAME.name(), UNIT_NAME);
-
-    rule.setName("ForbiddenConstantRuleTest");
-    rule.setTemplateName("ForbiddenConstantRule");
-    rule.setPriority(5);
-    rule.addProperty(blacklist);
-    rule.addProperty(unitName);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.ForbiddenConstantRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck() {
+    ForbiddenConstantCheck check = new ForbiddenConstantCheck();
+    check.unitName = UNIT_NAME;
+    check.constants = FORBIDDEN_CONSTANT;
+    return check;
   }
 
   @Test
   void testForbiddenConstantUsageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("const")
-            .appendDecl("  C_Foo = 'Foo';")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: String;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := C_Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ForbiddenConstantRuleTest", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("const")
+                .appendDecl("  CFoo = 'Foo';")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: String;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := CFoo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14);
   }
 
   @Test
   void testQualifiedForbiddenConstantUsageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("const")
-            .appendDecl("  C_Foo = 'Foo';")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: String;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := " + UNIT_NAME + ".C_Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ForbiddenConstantRuleTest", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("const")
+                .appendDecl("  CFoo = 'Foo';")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: String;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := " + UNIT_NAME + ".CFoo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14);
   }
 
   @Test
   void testLocalConstantUsageShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("const")
-            .appendDecl("  C_Foo = 'Foo';")
-            .appendImpl("procedure Test;")
-            .appendImpl("const")
-            .appendImpl("  C_Foo = 'Foo';")
-            .appendImpl("var")
-            .appendImpl("  Foo: String;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := C_Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenConstantRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("const")
+                .appendDecl("  CFoo = 'Foo';")
+                .appendImpl("procedure Test;")
+                .appendImpl("const")
+                .appendImpl("  CFoo = 'Foo';")
+                .appendImpl("var")
+                .appendImpl("  Foo: String;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := CFoo;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

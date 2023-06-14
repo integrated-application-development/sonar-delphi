@@ -18,53 +18,46 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnicodeToAnsiCastCheckTest extends CheckTest {
+class UnicodeToAnsiCastCheckTest {
   @Test
   void testWideToNarrowShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  AnsiStr: AnsiString;")
-            .appendImpl("  Str: String;")
-            .appendImpl("  AnsiCharacter: AnsiChar;")
-            .appendImpl("  Character: Char;")
-            .appendImpl("begin")
-            .appendImpl("  AnsiStr := AnsiString(Str);")
-            .appendImpl("  AnsiCharacter := AnsiChar(Character);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnicodeToAnsiCastRule", builder.getOffset() + 8))
-        .areExactly(1, ruleKeyAtLine("UnicodeToAnsiCastRule", builder.getOffset() + 9));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnicodeToAnsiCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  AnsiStr: AnsiString;")
+                .appendImpl("  Str: String;")
+                .appendImpl("  AnsiCharacter: AnsiChar;")
+                .appendImpl("  Character: Char;")
+                .appendImpl("begin")
+                .appendImpl("  AnsiStr := AnsiString(Str);")
+                .appendImpl("  AnsiCharacter := AnsiChar(Character);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14, 15);
   }
 
   @Test
   void testNarrowToWideShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  AnsiStr: AnsiString;")
-            .appendImpl("  Str: String;")
-            .appendImpl("  AnsiCharacter: AnsiChar;")
-            .appendImpl("  Character: Char;")
-            .appendImpl("begin")
-            .appendImpl("  AnsiStr := String(AnsiStr);")
-            .appendImpl("  AnsiCharacter := Char(AnsiCharacter);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnicodeToAnsiCastRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnicodeToAnsiCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  AnsiStr: AnsiString;")
+                .appendImpl("  Str: String;")
+                .appendImpl("  AnsiCharacter: AnsiChar;")
+                .appendImpl("  Character: Char;")
+                .appendImpl("begin")
+                .appendImpl("  AnsiStr := String(AnsiStr);")
+                .appendImpl("  AnsiCharacter := Char(AnsiCharacter);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

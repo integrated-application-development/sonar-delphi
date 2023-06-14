@@ -18,39 +18,34 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnspecifiedReturnTypeCheckTest extends CheckTest {
+class UnspecifiedReturnTypeCheckTest {
   @Test
   void testFunctionWithReturnTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function TClass.MyFunction: String;")
-            .appendImpl("begin")
-            .appendImpl("  Result := 'MyString';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoFunctionReturnTypeRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnspecifiedReturnTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function TClass.MyFunction: String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := 'MyString';")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFunctionWithoutReturnTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function TClass.MyFunction;")
-            .appendImpl("begin")
-            .appendImpl("  Result := 'MyString';")
-            .appendImpl("end;");
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("NoFunctionReturnTypeRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnspecifiedReturnTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function TClass.MyFunction;")
+                .appendImpl("begin")
+                .appendImpl("  Result := 'MyString';")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 }

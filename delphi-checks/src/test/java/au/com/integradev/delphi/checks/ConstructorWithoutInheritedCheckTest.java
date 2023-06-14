@@ -18,107 +18,94 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ConstructorWithoutInheritedCheckTest extends CheckTest {
-
+class ConstructorWithoutInheritedCheckTest {
   @Test
-  void testValidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestConstructor = class(TObject)")
-            .appendDecl("  public")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TTestConstructor.Create;")
-            .appendImpl("begin")
-            .appendImpl("  inherited;")
-            .appendImpl("  WriteLn('do something');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstructorWithoutInheritedStatementRule"));
+  void testConstructorWithInheritedShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorWithoutInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TTestConstructor = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TTestConstructor.Create;")
+                .appendImpl("begin")
+                .appendImpl("  inherited;")
+                .appendImpl("  WriteLn('do something');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstructorMissingInheritedShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestConstructor = class(TObject)")
-            .appendDecl("  public")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TTestConstructor.Create;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('do something');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("ConstructorWithoutInheritedStatementRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorWithoutInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TTestConstructor = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TTestConstructor.Create;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('do something');")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
   }
 
   @Test
   void testClassConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestConstructor = class(TObject)")
-            .appendDecl("  public")
-            .appendDecl("    class constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("class constructor TTestConstructor.Create;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('do something');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstructorWithoutInheritedStatementRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorWithoutInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TTestConstructor = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    class constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("class constructor TTestConstructor.Create;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('do something');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRecordConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TTestRecord = record")
-            .appendDecl("    FData : Integer;")
-            .appendDecl("    constructor Create(Data : Integer);")
-            .appendDecl("  end;")
-            .appendImpl("constructor TTestRecord.Create(Data : Integer);")
-            .appendImpl("begin")
-            .appendImpl("  FData := Data;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstructorWithoutInheritedStatementRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorWithoutInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TTestRecord = record")
+                .appendDecl("    FData : Integer;")
+                .appendDecl("    constructor Create(Data : Integer);")
+                .appendDecl("  end;")
+                .appendImpl("constructor TTestRecord.Create(Data : Integer);")
+                .appendImpl("begin")
+                .appendImpl("  FData := Data;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstructorWithMissingTypeDeclarationShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("constructor TTestConstructor.Create;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('do something');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("ConstructorWithoutInheritedStatementRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new ConstructorWithoutInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("constructor TTestConstructor.Create;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('do something');")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 }

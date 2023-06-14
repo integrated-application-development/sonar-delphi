@@ -18,115 +18,105 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class AddressOfSubroutineCheckTest extends CheckTest {
+class AddressOfSubroutineCheckTest {
   @Test
   void testAddressOfRegularMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  ProcVar: Pointer;")
-            .appendDecl("function ProcMethod(ProcVar: Pointer);")
-            .appendImpl("procedure RegularMethod(Str: String);")
-            .appendImpl("begin")
-            .appendImpl("  Exit;")
-            .appendImpl("end;")
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  ProcVar := @RegularMethod;")
-            .appendImpl("  ProcMethod(@RegularMethod);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AddressOfNestedMethodRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new AddressOfSubroutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  ProcVar: Pointer;")
+                .appendDecl("function ProcMethod(ProcVar: Pointer);")
+                .appendImpl("procedure RegularMethod(Str: String);")
+                .appendImpl("begin")
+                .appendImpl("  Exit;")
+                .appendImpl("end;")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  ProcVar := @RegularMethod;")
+                .appendImpl("  ProcMethod(@RegularMethod);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAddressOfVariableShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  ProcVar: Pointer;")
-            .appendDecl("function ProcMethod(Ptr: Pointer);")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Str: String;")
-            .appendImpl("begin")
-            .appendImpl("  ProcVar := @Str;")
-            .appendImpl("  ProcMethod(@Str);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AddressOfNestedMethodRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new AddressOfSubroutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  ProcVar: Pointer;")
+                .appendDecl("function ProcMethod(Ptr: Pointer);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Str: String;")
+                .appendImpl("begin")
+                .appendImpl("  ProcVar := @Str;")
+                .appendImpl("  ProcMethod(@Str);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAddressOfLiteralShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("function ProcMethod(Ptr: Pointer);")
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  ProcVar := @'foo';")
-            .appendImpl("  ProcMethod(@'bar');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AddressOfNestedMethodRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new AddressOfSubroutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("function ProcMethod(Ptr: Pointer);")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  ProcVar := @'foo';")
+                .appendImpl("  ProcMethod(@'bar');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAddressOfNestedMethodResultShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  ProcVar: Pointer;")
-            .appendDecl("function ProcMethod(ProcVar: Pointer);")
-            .appendImpl("procedure Test;")
-            .appendImpl("  function Nested(Str: String): String;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := Str;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  ProcVar := @Nested('');")
-            .appendImpl("  ProcMethod(@Nested(''));")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AddressOfNestedMethodRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new AddressOfSubroutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  ProcVar: Pointer;")
+                .appendDecl("function ProcMethod(ProcVar: Pointer);")
+                .appendImpl("procedure Test;")
+                .appendImpl("  function Nested(Str: String): String;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := Str;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  ProcVar := @Nested('');")
+                .appendImpl("  ProcMethod(@Nested(''));")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAddressOfNestedMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  ProcVar: Pointer;")
-            .appendDecl("function ProcMethod(ProcVar: Pointer);")
-            .appendImpl("procedure Test;")
-            .appendImpl("  procedure Nested(Str: String);")
-            .appendImpl("  begin")
-            .appendImpl("    Exit;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  ProcVar := @Nested;")
-            .appendImpl("  ProcMethod(@Nested);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("AddressOfNestedMethodRule", builder.getOffset() + 7))
-        .areExactly(1, ruleKeyAtLine("AddressOfNestedMethodRule", builder.getOffset() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new AddressOfSubroutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  ProcVar: Pointer;")
+                .appendDecl("function ProcMethod(ProcVar: Pointer);")
+                .appendImpl("procedure Test;")
+                .appendImpl("  procedure Nested(Str: String);")
+                .appendImpl("  begin")
+                .appendImpl("    Exit;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  ProcVar := @Nested;")
+                .appendImpl("  ProcMethod(@Nested);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(17, 18);
   }
 }

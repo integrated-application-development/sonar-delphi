@@ -18,136 +18,124 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ObjectInvokedConstructorCheckTest extends CheckTest {
-
+class ObjectInvokedConstructorCheckTest {
   @Test
   void testConstructorInvokedOnObjectShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ObjectInvokedConstructorRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj.Create;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testConstructorInvokedOnTypeIdentifierShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectInvokedConstructorRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstructorInvokedOnClassReferenceShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("  Clazz: TClass;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := Clazz.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectInvokedConstructorRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("  Clazz: TClass;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := Clazz.Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstructorInvokedOnSelfShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    constructor Create;")
-            .appendDecl("    procedure Test;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Test;")
-            .appendImpl("begin")
-            .appendImpl("  Self.Create;")
-            .appendImpl("  Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectInvokedConstructorRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    constructor Create;")
+                .appendDecl("    procedure Test;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Test;")
+                .appendImpl("begin")
+                .appendImpl("  Self.Create;")
+                .appendImpl("  Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBareInheritedShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TFoo.Create;")
-            .appendImpl("begin")
-            .appendImpl("  inherited;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectInvokedConstructorRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TFoo.Create;")
+                .appendImpl("begin")
+                .appendImpl("  inherited;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testNamedInheritedShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TFoo.Create;")
-            .appendImpl("begin")
-            .appendImpl("  inherited Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectInvokedConstructorRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TFoo.Create;")
+                .appendImpl("begin")
+                .appendImpl("  inherited Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testQualifiedInheritedShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TFoo.Create;")
-            .appendImpl("begin")
-            .appendImpl("  inherited.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectInvokedConstructorRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectInvokedConstructorCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TFoo.Create;")
+                .appendImpl("begin")
+                .appendImpl("  inherited.Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

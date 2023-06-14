@@ -18,60 +18,54 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnusedFieldCheckTest extends CheckTest {
+class UnusedFieldCheckTest {
   @Test
   void testUnusedPublicFieldShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("public")
-            .appendDecl("  Bar: Integer;")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedFieldsRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("  Bar: Integer;")
+                .appendDecl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testUsedInMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("public")
-            .appendDecl("  Bar: Integer;")
-            .appendDecl("end;")
-            .appendImpl("procedure Baz(Foo: TFoo);")
-            .appendImpl("begin")
-            .appendImpl("  Foo.Bar := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedFieldsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("  Bar: Integer;")
+                .appendDecl("end;")
+                .appendImpl("procedure Baz(Foo: TFoo);")
+                .appendImpl("begin")
+                .appendImpl("  Foo.Bar := 0;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedPublishedFieldShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("  Bar: Integer;")
-            .appendDecl("end;")
-            .appendImpl("procedure Baz(Foo: TFoo);")
-            .appendImpl("begin")
-            .appendImpl("  Foo.Bar := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedFieldsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("  Bar: Integer;")
+                .appendDecl("end;")
+                .appendImpl("procedure Baz(Foo: TFoo);")
+                .appendImpl("begin")
+                .appendImpl("  Foo.Bar := 0;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

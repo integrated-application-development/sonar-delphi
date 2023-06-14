@@ -18,40 +18,34 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class InlineVarExplicitTypeCheckTest extends CheckTest {
+class InlineVarExplicitTypeCheckTest {
   @Test
   void testInlineVarWithTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  var Foo: Integer := 123;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("InlineVarExplicitTypeRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new InlineVarExplicitTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  var Foo: Integer := 123;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInlineVarWithoutTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  var Foo := 123;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("InlineVarExplicitTypeRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new InlineVarExplicitTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  var Foo := 123;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

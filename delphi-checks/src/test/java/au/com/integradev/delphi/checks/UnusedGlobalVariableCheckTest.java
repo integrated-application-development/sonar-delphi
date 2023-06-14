@@ -18,54 +18,61 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnusedGlobalVariableCheckTest extends CheckTest {
+class UnusedGlobalVariableCheckTest {
   @Test
   void testUsedGlobalConstantShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  Foo: Integer;")
-            .appendImpl("procedure SetFoo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := 123;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("UnusedGlobalVariablesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedGlobalVariableCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  Foo: Integer;")
+                .appendImpl("procedure SetFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := 123;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedGlobalConstantShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("var").appendDecl("  Foo: Integer;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedGlobalVariablesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedGlobalVariableCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("var")
+                .appendDecl("  Foo: Integer;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUnusedAutoCreateFormVarShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  Vcl.Forms;")
-            .appendDecl("type")
-            .appendDecl("  TFooForm = class(TForm)")
-            .appendDecl("  end;")
-            .appendDecl("var")
-            .appendDecl("  Foo: TFooForm;");
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedGlobalVariableCheck())
+        .withSearchPathUnit(createVclForms())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  Vcl.Forms;")
+                .appendDecl("type")
+                .appendDecl("  TFooForm = class(TForm)")
+                .appendDecl("  end;")
+                .appendDecl("var")
+                .appendDecl("  Foo: TFooForm;"))
+        .verifyNoIssues();
+  }
 
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("UnusedGlobalVariablesRule", builder.getOffsetDecl() + 2));
+  private static DelphiTestUnitBuilder createVclForms() {
+    return new DelphiTestUnitBuilder()
+        .unitName("Vcl.Forms")
+        .appendDecl("uses")
+        .appendDecl("  System.Classes;")
+        .appendDecl("type")
+        .appendDecl("TForm = class(TComponent)")
+        .appendDecl("end;");
   }
 }

@@ -18,197 +18,174 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class RedundantCastCheckTest extends CheckTest {
-
+class RedundantCastCheckTest {
   @Test
   void testNoCastShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendDecl("  TBar = class (TFoo)")
-            .appendDecl("  end;")
-            .appendImpl("procedure Foo(Bar: TBar);")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantCastRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class (TFoo)")
+                .appendDecl("  end;")
+                .appendImpl("procedure Foo(Bar: TBar);")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := Bar;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRequiredCastShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendDecl("  TBar = class (TFoo)")
-            .appendDecl("  end;")
-            .appendImpl("procedure Foo(Foo: TFoo);")
-            .appendImpl("var")
-            .appendImpl("  Bar: TBar;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := TBar(Foo);")
-            .appendImpl("  Bar := Foo as TBar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantCastRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class (TFoo)")
+                .appendDecl("  end;")
+                .appendImpl("procedure Foo(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := TBar(Foo);")
+                .appendImpl("  Bar := Foo as TBar;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRedundantCastShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendImpl("procedure Foo(Foo: TFoo);")
-            .appendImpl("var")
-            .appendImpl("  Foo2: TFoo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo2 := TFoo(Foo);")
-            .appendImpl("  Foo2 := Foo as TFoo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendImpl("procedure Foo(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Foo2: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo2 := TFoo(Foo);")
+                .appendImpl("  Foo2 := Foo as TFoo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15, 16);
   }
 
   @Test
   void testRedundantCastWithConstructorShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := TFoo(TFoo.Create);")
-            .appendImpl("  Foo := TFoo.Create as TFoo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := TFoo(TFoo.Create);")
+                .appendImpl("  Foo := TFoo.Create as TFoo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15, 16);
   }
 
   @Test
   void testRedundantCastWithStringKeywordShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo(Arg: String);")
-            .appendImpl("var")
-            .appendImpl("  Str: String;")
-            .appendImpl("begin")
-            .appendImpl("  Str := String(Arg);")
-            .appendImpl("  Str := Arg as String;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo(Arg: String);")
+                .appendImpl("var")
+                .appendImpl("  Str: String;")
+                .appendImpl("begin")
+                .appendImpl("  Str := String(Arg);")
+                .appendImpl("  Str := Arg as String;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11, 12);
   }
 
   @Test
   void testRedundantCastWithFileKeywordShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo(Arg: file);")
-            .appendImpl("var")
-            .appendImpl("  FileVar: file;")
-            .appendImpl("begin")
-            .appendImpl("  FileVar := file(Arg);")
-            .appendImpl("  FileVar := Arg as file;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo(Arg: file);")
+                .appendImpl("var")
+                .appendImpl("  FileVar: file;")
+                .appendImpl("begin")
+                .appendImpl("  FileVar := file(Arg);")
+                .appendImpl("  FileVar := Arg as file;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11, 12);
   }
 
   @Test
   void testRedundantCastWithAmbiguousMethodCallShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("function GetString: String;")
-            .appendImpl("procedure Foo(Arg: String);")
-            .appendImpl("var")
-            .appendImpl("  Str: String;")
-            .appendImpl("begin")
-            .appendImpl("  Str := String(GetString);")
-            .appendImpl("  Str := GetString as String;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 5))
-        .areExactly(1, ruleKeyAtLine("RedundantCastRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("function GetString: String;")
+                .appendImpl("procedure Foo(Arg: String);")
+                .appendImpl("var")
+                .appendImpl("  Str: String;")
+                .appendImpl("begin")
+                .appendImpl("  Str := String(GetString);")
+                .appendImpl("  Str := GetString as String;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13, 14);
   }
 
   @Test
   void testTClassToTObjectShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Clazz: TClass;")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject(Clazz);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantCastRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Clazz: TClass;")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject(Clazz);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnknownTypesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendImpl("function Foo(Foo: TFoo): TFoo;")
-            .appendImpl("var")
-            .appendImpl("  Unknown: TUnknown;")
-            .appendImpl("begin")
-            .appendImpl("  Result := TBar(Unknown);")
-            .appendImpl("  Result := Foo as TUnknown;")
-            .appendImpl("  Result := TUnknown(Foo);")
-            .appendImpl("  Result := Unknown as TFoo;")
-            .appendImpl("  Result := Unknown as TUnknown;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RedundantCastRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendImpl("function Foo(Foo: TFoo): TFoo;")
+                .appendImpl("var")
+                .appendImpl("  Unknown: TUnknown;")
+                .appendImpl("begin")
+                .appendImpl("  Result := TBar(Unknown);")
+                .appendImpl("  Result := Foo as TUnknown;")
+                .appendImpl("  Result := TUnknown(Foo);")
+                .appendImpl("  Result := Unknown as TFoo;")
+                .appendImpl("  Result := Unknown as TUnknown;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

@@ -18,42 +18,35 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class GroupedFieldDeclarationCheckTest extends CheckTest {
-
+class GroupedFieldDeclarationCheckTest {
   @Test
   void testSingleFieldDeclarationsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TType = class(TObject)")
-            .appendDecl("    FFoo: Integer;")
-            .appendDecl("    FBar: Integer;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("GroupedFieldDeclarationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new GroupedFieldDeclarationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("    FFoo: Integer;")
+                .appendDecl("    FBar: Integer;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMultipleFieldDeclarationShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TType = class(TObject)")
-            .appendDecl("    FFoo, FBar: Integer;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("GroupedFieldDeclarationRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new GroupedFieldDeclarationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("    FFoo, FBar: Integer;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 }

@@ -18,41 +18,35 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class GroupedParameterDeclarationCheckTest extends CheckTest {
+class GroupedParameterDeclarationCheckTest {
 
   @Test
   void testSingleParameterDeclarationsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test(Foo: Integer; Bar: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("GroupedParameterDeclarationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new GroupedParameterDeclarationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test(Foo: Integer; Bar: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMultipleParameterDeclarationShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test(Foo, Bar: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("GroupedParameterDeclarationRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new GroupedParameterDeclarationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test(Foo, Bar: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 }

@@ -18,57 +18,51 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class PascalStyleResultCheckTest extends CheckTest {
+class PascalStyleResultCheckTest {
   @Test
   void testDelphiStyleResultShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Result := nil;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PascalStyleResultRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PascalStyleResultCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Result := nil;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testPascalStyleResultShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := nil;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("PascalStyleResultRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new PascalStyleResultCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := nil;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testNestedPascalStyleResultShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: TObject;")
-            .appendImpl("  procedure Bar;")
-            .appendImpl("  begin")
-            .appendImpl("    Foo := nil;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("PascalStyleResultRule", builder.getOffset() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new PascalStyleResultCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: TObject;")
+                .appendImpl("  procedure Bar;")
+                .appendImpl("  begin")
+                .appendImpl("    Foo := nil;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(10);
   }
 }

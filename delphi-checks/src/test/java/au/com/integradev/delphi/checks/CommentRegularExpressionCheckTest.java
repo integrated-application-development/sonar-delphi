@@ -18,56 +18,45 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class CommentRegularExpressionCheckTest extends CheckTest {
-
-  private DelphiRuleProperty regexProperty;
-
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    regexProperty = new DelphiRuleProperty(CommentRegularExpressionCheck.REGEX.name(), "(?i).*todo.*");
-
-    rule.setName("TodoCommentsRule");
-    rule.setTemplateName("CommentRegexRule");
-    rule.setPriority(5);
-    rule.addProperty(regexProperty);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.CommentRegexRule");
-
-    addRule(rule);
+class CommentRegularExpressionCheckTest {
+  private static DelphiCheck createCheck(String regularExpression) {
+    CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
+    check.regularExpression = regularExpression;
+    return check;
   }
 
   @Test
   void testValidCommentShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// Wow, a comment!");
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TodoCommentsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("(?i).*todo.*"))
+        .onFile(new DelphiTestUnitBuilder().appendImpl("// Wow, a comment!"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMatchingCommentShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment");
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TodoCommentsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("(?i).*todo.*"))
+        .onFile(new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
-  void testInvalidRegexShouldNotAddIssue() {
-    regexProperty.setValue("*");
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment");
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TodoCommentsRule"));
+  void testInvalidRegexShouldThrow() {
+    assertThatThrownBy(
+            () ->
+                CheckVerifier.newVerifier()
+                    .withCheck(createCheck("*"))
+                    .onFile(new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment"))
+                    .verifyNoIssues())
+        .isInstanceOf(FatalAnalysisError.class);
   }
 }

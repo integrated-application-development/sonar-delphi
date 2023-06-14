@@ -18,27 +18,30 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class AvoidWithCheckTest extends CheckTest {
+class LegacyInitializationSectionCheckTest {
+  @Test
+  void testInitializationSectionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new LegacyInitializationSectionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("initialization")
+                .appendImpl("  WriteLn('This is a regular initialization section.');"))
+        .verifyNoIssues();
+  }
 
   @Test
-  void testWithStatementShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  with FMyField do begin")
-            .appendImpl("    Value := True;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("AvoidWithRule", builder.getOffset() + 3));
+  void testLegacyInitializationSectionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new LegacyInitializationSectionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('This is a legacy initialization section.');"))
+        .verifyIssueOnLine(7);
   }
 }

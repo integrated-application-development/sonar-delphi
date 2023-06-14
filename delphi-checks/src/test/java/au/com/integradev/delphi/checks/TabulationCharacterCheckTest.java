@@ -18,43 +18,38 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TabulationCharacterCheckTest extends CheckTest {
+class TabulationCharacterCheckTest {
 
   @Test
-  void testRegularFileShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TabulationCharactersRule"));
+  void testFileWithoutTabsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TabulationCharacterCheck())
+        .onFile(new DelphiTestUnitBuilder())
+        .verifyNoIssues();
   }
 
   @Test
   void testFileWithTabsShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendDecl("\t");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKey("TabulationCharactersRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TabulationCharacterCheck())
+        .onFile(new DelphiTestUnitBuilder().appendDecl("\t"))
+        .verifyIssueOnFile();
   }
 
   @Test
   void testFileWithMultipleTabsShouldAddOnlyOneIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("\t")
-            .appendDecl("var")
-            .appendDecl("\t\tGBoolean:\tBoolean;")
-            .appendDecl("\t");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKey("TabulationCharactersRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TabulationCharacterCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("\t")
+                .appendDecl("var")
+                .appendDecl("\t\tGBoolean:\tBoolean;")
+                .appendDecl("\t"))
+        .verifyIssueOnFile();
   }
 }

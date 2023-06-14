@@ -39,7 +39,7 @@ public class ForbiddenPropertyCheck extends DelphiCheck {
       key = "properties",
       description =
           "Comma-delimited list of forbidden (fully qualified) property names (case-insensitive)")
-  private String properties = "";
+  public String properties = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

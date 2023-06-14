@@ -24,7 +24,6 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -41,7 +40,6 @@ public class TabulationCharacterCheck extends DelphiCheck {
     if (tabCount > 0) {
       context
           .newIssue()
-          .onFilePosition(FilePosition.atFileLevel())
           .withMessage(
               String.format(
                   "Tabulation characters should not be used (%d found in file)", tabCount))

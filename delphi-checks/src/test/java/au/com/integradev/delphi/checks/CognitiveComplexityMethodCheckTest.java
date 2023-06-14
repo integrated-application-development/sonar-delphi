@@ -18,32 +18,31 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CognitiveComplexityMethodCheckTest extends CheckTest {
+class CognitiveComplexityMethodCheckTest {
 
   @Test
   void testSimpleMethod() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  if Foo then Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("MethodCognitiveComplexityRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CognitiveComplexityMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  if Foo then Bar;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testTooComplexMethod() {
     DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendImpl("function Foo: Integer;").appendImpl("begin");
+        new DelphiTestUnitBuilder() //
+            .appendImpl("function Foo: Integer;")
+            .appendImpl("begin");
 
     for (int i = 1; i <= 16; ++i) {
       builder.appendImpl("  if Foo then Bar;"); // 16
@@ -51,10 +50,10 @@ class CognitiveComplexityMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodCognitiveComplexityRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CognitiveComplexityMethodCheck())
+        .onFile(builder)
+        .verifyIssueOnLine(7);
   }
 
   @Test
@@ -75,10 +74,9 @@ class CognitiveComplexityMethodCheckTest extends CheckTest {
         .appendImpl("Result := Bar;")
         .appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues()
-        .areNot(ruleKeyAtLine("MethodCognitiveComplexityRule", builder.getOffset() + 1))
-        .areExactly(1, ruleKeyAtLine("MethodCognitiveComplexityRule", builder.getOffset() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new CognitiveComplexityMethodCheck())
+        .onFile(builder)
+        .verifyIssueOnLine(8);
   }
 }

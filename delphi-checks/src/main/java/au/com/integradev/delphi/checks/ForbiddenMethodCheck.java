@@ -40,7 +40,7 @@ public class ForbiddenMethodCheck extends DelphiCheck {
       key = "methods",
       description =
           "Comma-delimited list of forbidden (fully qualified) method names (case-insensitive)")
-  private String methods = "";
+  public String methods = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

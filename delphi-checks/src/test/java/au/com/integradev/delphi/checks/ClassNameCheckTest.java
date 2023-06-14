@@ -18,79 +18,76 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ClassNameCheckTest extends CheckTest {
+class ClassNameCheckTest {
 
   @Test
   void testClassNameWithPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TType = class(TObject)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testClassNameWithWrongCasePrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  tType = class(TObject)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ClassNameRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  tType = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testNestedClassesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TOuterClass = class(TObject)");
-    builder.appendDecl("  strict private");
-    builder.appendDecl("    type");
-    builder.appendDecl("      TInnerClass1 = class(TObject)");
-    builder.appendDecl("      end;");
-    builder.appendDecl("      TInnerClass2 = class(TObject)");
-    builder.appendDecl("      end;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TOuterClass = class(TObject)")
+                .appendDecl("  strict private")
+                .appendDecl("    type")
+                .appendDecl("      TInnerClass1 = class(TObject)")
+                .appendDecl("      end;")
+                .appendDecl("      TInnerClass2 = class(TObject)")
+                .appendDecl("      end;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAttributeClassNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("uses System;");
-    builder.appendDecl("type");
-    builder.appendDecl("  my_attribute = class(TCustomAttribute)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System;")
+                .appendDecl("type")
+                .appendDecl("  my_attribute = class(TCustomAttribute)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testClassHelperNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  my_helper = class helper for TObject");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  my_helper = class helper for TObject")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

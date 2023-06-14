@@ -18,282 +18,259 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnusedMethodCheckTest extends CheckTest {
+class UnusedMethodCheckTest {
   @Test
   void testUnusedMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testUnusedRecursiveMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testUsedMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;")
-            .appendImpl("initialization")
-            .appendImpl("  Foo;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;")
+                .appendImpl("initialization")
+                .appendImpl("  Foo;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedDeclaredMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Foo;")
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffsetDecl() + 1))
-        .areNot(ruleKeyAtLine("UnusedMethodsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo;")
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(5);
   }
 
   @Test
   void testUnusedRecursiveDeclaredMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Foo;")
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffsetDecl() + 1))
-        .areNot(ruleKeyAtLine("UnusedMethodsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo;")
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(5);
   }
 
   @Test
   void testUnusedMemberMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Foo;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testUnusedRecursiveMemberMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Foo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Foo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testUnusedConstructorShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TFoo.Create;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TFoo.Create;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testUnusedConstructorWithMissingImplementationShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedMethodsRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testUnusedForbiddenConstructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    constructor Create;")
-            .appendDecl("  end;")
-            .appendImpl("constructor TFoo.Create;")
-            .appendImpl("begin")
-            .appendImpl("  raise Exception.Create('Do not use this constructor.');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TFoo.Create;")
+                .appendImpl("begin")
+                .appendImpl("  raise Exception.Create('Do not use this constructor.');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUsedMemberMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Foo;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;")
-            .appendImpl("var")
-            .appendImpl("  F: TFoo;")
-            .appendImpl("initialization")
-            .appendImpl("  F.Foo;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;")
+                .appendImpl("var")
+                .appendImpl("  F: TFoo;")
+                .appendImpl("initialization")
+                .appendImpl("  F.Foo;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedOverrideMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    procedure Foo; override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo; override;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMessageMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    procedure Foo(var Message: TMessage); message 123;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo(var Message: TMessage); message 123;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testNonCallableMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  public")
-            .appendDecl("    class constructor Create;")
-            .appendDecl("    class destructor Destroy;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    class constructor Create;")
+                .appendDecl("    class destructor Destroy;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRegisterMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Register;")
-            .appendImpl("procedure Register;")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Register;")
+                .appendImpl("procedure Register;")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedInterfaceImplementationMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IFoo = interface")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendDecl("  TFoo = class(TInterfacedObject, IFoo)")
-            .appendDecl("  public")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedMethodsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IFoo = interface")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendDecl("  TFoo = class(TInterfacedObject, IFoo)")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

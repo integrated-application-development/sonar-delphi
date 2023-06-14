@@ -18,36 +18,32 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class LegacyInitializationRuleTest extends CheckTest {
+class ObjectTypeCheckTest {
   @Test
-  void testInitializationSectionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("initialization")
-            .appendImpl("  WriteLn('This is a regular initialization section.');");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("LegacyInitializationSectionRule"));
+  void testClassShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TClassType = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testLegacyInitializationSectionShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('This is a legacy initialization section.');");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("LegacyInitializationSectionRule", builder.getOffset() + 1));
+  void testObjectShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObjectType = object")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 }

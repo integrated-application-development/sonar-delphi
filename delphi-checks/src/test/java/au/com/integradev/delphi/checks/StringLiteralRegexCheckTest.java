@@ -18,107 +18,56 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
+import static org.assertj.core.api.Assertions.*;
 
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class StringLiteralRegexCheckTest extends CheckTest {
-  private static final String IDREF_PATTERN = ".*ID(\\d|[A-Z]){8}.*";
-  private DelphiRuleProperty regexProperty;
+class StringLiteralRegexCheckTest {
+  private static final String PATTERN = ".*FOO(\\d|[A-Z]){8}BAR.*";
 
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    regexProperty = new DelphiRuleProperty(StringLiteralRegexCheck.REGEX.name(), IDREF_PATTERN);
-
-    rule.setName("IDRefStringLiteralRule");
-    rule.setTemplateName("StringLiteralRegexRule");
-    rule.setPriority(5);
-    rule.addProperty(regexProperty);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.StringLiteralRegexRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck(String pattern) {
+    StringLiteralRegexCheck check = new StringLiteralRegexCheck();
+    check.regularExpression = pattern;
+    return check;
   }
 
   @Test
-  void testValidStringShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("const")
-            .appendDecl("  C_MyConstant = 'Wow, a constant!';");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
+  void tesNonMatchingStringShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck(PATTERN))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  C_MyConstant = 'Wow, a constant!';"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMatchingStringShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("const")
-            .appendDecl("  C_HardcodedIDRef = 'ID1234X6U8';");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("IDRefStringLiteralRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck(PATTERN))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR';"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
-  void testInvalidRegexShouldNotAddIssue() {
-    regexProperty.setValue("*");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("const")
-            .appendDecl("  C_HardcodedIDRef = 'ID12345678';");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
-  }
-
-  @Test
-  void testMatchingStringInTestMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(TEST_UNIT)
-            .appendDecl("type")
-            .appendDecl("  TTestSuite = class(TObject)")
-            .appendDecl("    procedure TestWithHardcodedIDRef;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TTestSuite.TestWithHardcodedIDRef;")
-            .appendImpl("const")
-            .appendImpl("  C_HardcodedIDRef = 'ID1234X6U8';")
-            .appendImpl("begin")
-            .appendImpl("  Assert(Assigned(C_HardcodedIDRef), 'The sky is falling!');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
-  }
-
-  @Test
-  void testMatchingStringInTestClassDeclarationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(TEST_UNIT)
-            .appendImpl("type")
-            .appendImpl("  TTestSuite = class(TObject)")
-            .appendImpl("  private const")
-            .appendImpl("    C_HardcodedIDRef = 'ID1234X6U8';")
-            .appendImpl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IDRefStringLiteralRule"));
+  void testInvalidRegexShouldThrow() {
+    assertThatThrownBy(
+            () ->
+                CheckVerifier.newVerifier()
+                    .withCheck(createCheck("*"))
+                    .onFile(
+                        new DelphiTestUnitBuilder()
+                            .appendDecl("const")
+                            .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR';"))
+                    .verifyIssueOnLine(6))
+        .isInstanceOf(FatalAnalysisError.class);
   }
 }

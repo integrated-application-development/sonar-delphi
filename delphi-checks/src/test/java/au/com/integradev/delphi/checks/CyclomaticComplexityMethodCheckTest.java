@@ -18,30 +18,26 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CyclomaticComplexityMethodCheckTest extends CheckTest {
-
+class CyclomaticComplexityMethodCheckTest {
   @Test
-  void testSimpleMethod() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;") // 1
-            .appendImpl("begin")
-            .appendImpl("  if Foo then Bar;") // 2
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1));
+  void testSimpleMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CyclomaticComplexityMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;") // 1
+                .appendImpl("begin")
+                .appendImpl("  if Foo then Bar;") // 2
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testAlmostTooComplexMethod() {
+  void testAlmostTooComplexMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1
@@ -53,13 +49,14 @@ class CyclomaticComplexityMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CyclomaticComplexityMethodCheck())
+        .onFile(builder)
+        .verifyNoIssues();
   }
 
   @Test
-  void testTooComplexMethod() {
+  void testTooComplexMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1
@@ -71,10 +68,10 @@ class CyclomaticComplexityMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CyclomaticComplexityMethodCheck())
+        .onFile(builder)
+        .verifyIssueOnLine(7);
   }
 
   @Test
@@ -95,10 +92,9 @@ class CyclomaticComplexityMethodCheckTest extends CheckTest {
         .appendImpl("Result := Bar;")
         .appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues()
-        .areNot(ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 1))
-        .areExactly(1, ruleKeyAtLine("MethodCyclomaticComplexityRule", builder.getOffset() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new CyclomaticComplexityMethodCheck())
+        .onFile(builder)
+        .verifyIssueOnLine(8);
   }
 }

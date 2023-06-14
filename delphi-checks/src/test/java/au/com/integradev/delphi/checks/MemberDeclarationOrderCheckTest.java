@@ -18,34 +18,30 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class MemberDeclarationOrderCheckTest extends CheckTest {
+class MemberDeclarationOrderCheckTest {
   @Test
   void testOrderedClassBodyShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    FMyField: Integer;")
-        .appendDecl("    FMyOtherField: Integer;")
-        .appendDecl("    procedure MyProc;")
-        .appendDecl("    procedure MyOtherProc;")
-        .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MemberDeclarationOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    FMyField: Integer;")
+                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("    procedure MyProc;")
+                .appendDecl("    procedure MyOtherProc;")
+                .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @ParameterizedTest(name = "[{index}] {0} before {1}")
@@ -54,101 +50,91 @@ class MemberDeclarationOrderCheckTest extends CheckTest {
     firstItem = firstItem.replace("field", "");
     secondItem = secondItem.replace("field", "");
 
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    " + firstItem + " Bar: Integer;")
-        .appendDecl("    " + secondItem + " Baz: Integer;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    " + firstItem + " Bar: Integer;")
+                .appendDecl("    " + secondItem + " Baz: Integer;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testPropertiesBeforeMultipleFieldsShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-        .appendDecl("    FMyField: Integer;")
-        .appendDecl("    FMyOtherField: Integer;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 5))
-        .areNot(ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
+                .appendDecl("    FMyField: Integer;")
+                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testMultipleOrderedVisibilitySectionsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    FMyField: Integer;")
-        .appendDecl("    procedure MyProc;")
-        .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-        .appendDecl("  protected")
-        .appendDecl("    FMyOtherField: Integer;")
-        .appendDecl("    procedure MyOtherProc;")
-        .appendDecl("    property MySecondProp: Integer read FMyField write FMyField;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MemberDeclarationOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    FMyField: Integer;")
+                .appendDecl("    procedure MyProc;")
+                .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
+                .appendDecl("  protected")
+                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("    procedure MyOtherProc;")
+                .appendDecl("    property MySecondProp: Integer read FMyField write FMyField;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMultipleBlocksShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    FMyField: Integer;")
-        .appendDecl("    procedure MyProc;")
-        .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-        .appendDecl("    FMyOtherField: Integer;")
-        .appendDecl("    procedure MyOtherProc;")
-        .appendDecl("    property MyOtherProp: Integer read FMyField write FMyField;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 7))
-        .areNot(ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    FMyField: Integer;")
+                .appendDecl("    procedure MyProc;")
+                .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
+                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("    procedure MyOtherProc;")
+                .appendDecl("    property MyOtherProp: Integer read FMyField write FMyField;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
-  void testMultiplePropertySectionsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    FMyField: Integer;")
-        .appendDecl("    procedure MyProc;")
-        .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-        .appendDecl("    FMyOtherField: Integer;")
-        .appendDecl("    procedure MyOtherProc;")
-        .appendDecl("    property MyOtherProp: Integer read FMyField write FMyField;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 9));
+  void testMultiplePropertySectionsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    FMyField: Integer;")
+                .appendDecl("    procedure MyProc;")
+                .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
+                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("    procedure MyOtherProc;")
+                .appendDecl("    property MyOtherProp: Integer read FMyField write FMyField;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(11);
   }
 
   @ParameterizedTest
@@ -156,49 +142,44 @@ class MemberDeclarationOrderCheckTest extends CheckTest {
   void testSingleItemShouldNotAddIssue(String item) {
     item = item.replace("field", "");
 
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  private")
-        .appendDecl("    " + item + " Bar: Integer;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MemberDeclarationOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    " + item + " Bar: Integer;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testImplicitVisibilitySectionShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("    property MyProp: Integer;")
-        .appendDecl("    procedure MyProc;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    property MyProp: Integer;")
+                .appendDecl("    procedure MyProc;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"class", "record", "interface", "object"})
   void testAnyOutOfOrderStructureShouldAddIssue(String structType) {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = " + structType)
-        .appendDecl("    property MyProp: Integer;")
-        .appendDecl("    procedure MyProc;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MemberDeclarationOrderRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new MemberDeclarationOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = " + structType)
+                .appendDecl("    property MyProp: Integer;")
+                .appendDecl("    procedure MyProc;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 }

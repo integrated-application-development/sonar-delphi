@@ -18,40 +18,34 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class InlineLoopVarExplicitTypeCheckTest extends CheckTest {
+class InlineLoopVarExplicitTypeCheckTest {
   @Test
   void testInlineVarWithTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  for var I: Integer := 1 to 100 do Continue;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("InlineLoopVarExplicitTypeRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new InlineLoopVarExplicitTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  for var I: Integer := 1 to 100 do Continue;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInlineVarWithoutTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  for var I := 1 to 100 do Continue;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("InlineLoopVarExplicitTypeRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new InlineLoopVarExplicitTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  for var I := 1 to 100 do Continue;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

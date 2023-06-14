@@ -18,333 +18,328 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class MixedNamesCheckTest extends CheckTest {
-
+class MixedNamesCheckTest {
   @Test
   void testMatchingVarNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  MyVar: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  MyVar := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  MyVar: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  MyVar := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMismatchedVarNamesShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  MyVar: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  myvar := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  MyVar: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  myvar := True;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testQualifiedVarNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  MyVar: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  FMyField.myvar := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  MyVar: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  FMyField.myvar := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMatchingFunctionNamesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class(TObject)")
-            .appendDecl("  procedure DoThing(SomeArg: ArgType);")
-            .appendDecl("end;")
-            .appendImpl("procedure TFoo.DoThing(SomeArg: ArgType);")
-            .appendImpl("begin")
-            .appendImpl("  DoAnotherThing(SomeArg);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class(TObject)")
+                .appendDecl("  procedure DoThing(SomeArg: ArgType);")
+                .appendDecl("end;")
+                .appendImpl("procedure TFoo.DoThing(SomeArg: ArgType);")
+                .appendImpl("begin")
+                .appendImpl("  DoAnotherThing(SomeArg);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMismatchedTypeNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class(TObject)")
-            .appendDecl("  procedure DoThing(SomeArg: ArgType);")
-            .appendDecl("end;")
-            .appendImpl("procedure Tfoo.DoThing(SomeArg: ArgType);")
-            .appendImpl("begin")
-            .appendImpl("  DoAnotherThing(SomeArg);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class(TObject)")
+                .appendDecl("  procedure DoThing(SomeArg: ArgType);")
+                .appendDecl("end;")
+                .appendImpl("procedure Tfoo.DoThing(SomeArg: ArgType);")
+                .appendImpl("begin")
+                .appendImpl("  DoAnotherThing(SomeArg);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testMismatchedFunctionNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class(TObject)")
-            .appendDecl("  procedure DoThing(SomeArg: ArgType);")
-            .appendDecl("end;")
-            .appendImpl("procedure TFoo.doThing(SomeArg: ArgType);")
-            .appendImpl("begin")
-            .appendImpl("  DoAnotherThing(SomeArg);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class(TObject)")
+                .appendDecl("  procedure DoThing(SomeArg: ArgType);")
+                .appendDecl("end;")
+                .appendImpl("procedure TFoo.doThing(SomeArg: ArgType);")
+                .appendImpl("begin")
+                .appendImpl("  DoAnotherThing(SomeArg);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
   }
 
   @Test
   void testMismatchedExceptionNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    raise Exception.Create('Everything is on fire!');")
-            .appendImpl("  except")
-            .appendImpl("    on E: Exception do begin")
-            .appendImpl("      e.Bar;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 7));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    raise Exception.Create('Everything is on fire!');")
+                .appendImpl("  except")
+                .appendImpl("    on E: Exception do begin")
+                .appendImpl("      e.Bar;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
   }
 
   @Test
   void testMismatchedVarNameInAsmBlockShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure; forward;")
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  MyArg: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  asm")
-            .appendImpl("    MOV EAX, Myarg")
-            .appendImpl("    ADD EAX, 2")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure; forward;")
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  MyArg: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  asm")
+                .appendImpl("    MOV EAX, Myarg")
+                .appendImpl("    ADD EAX, 2")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMismatchedVarNameInAsmProcShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure; forward;")
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("var")
-            .appendImpl("  MyArg: Integer;")
-            .appendImpl("asm")
-            .appendImpl("  MOV EAX, Myarg")
-            .appendImpl("  ADD EAX, 2")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure; forward;")
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  MyArg: Integer;")
+                .appendImpl("asm")
+                .appendImpl("  MOV EAX, Myarg")
+                .appendImpl("  ADD EAX, 2")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testSelfShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    procedure Bar;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Bar;")
-            .appendImpl("begin")
-            .appendImpl("  Self.Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Bar;")
+                .appendImpl("begin")
+                .appendImpl("  Self.Bar;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testPrimaryExpressionNameResolverBugShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    class procedure Finalise;")
-            .appendDecl("  end;")
-            .appendImpl("class procedure TFoo.Finalise;")
-            .appendImpl("begin")
-            .appendImpl("  TFoo(UnknownObject).Finalise;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    class procedure Finalise;")
+                .appendDecl("  end;")
+                .appendImpl("class procedure TFoo.Finalise;")
+                .appendImpl("begin")
+                .appendImpl("  TFoo(UnknownObject).Finalise;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMismatchedUnitNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  System.sysutils;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  System.sysutils;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testMismatchedNamespaceNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  system.SysUtils;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  system.SysUtils;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testMatchingUnitNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  System.SysUtils;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  System.SysUtils;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMatchingUnitNameWithoutUnitScopeShouldNotAddIssue() {
-    addUnitScopeName("System");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  SysUtils;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withUnitScopeName("System")
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  SysUtils;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMismatchedUnitNameWithoutUnitScopeShouldAddIssue() {
-    addUnitScopeName("System");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  sysutils;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withUnitScopeName("System")
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  sysutils;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUnitAliasShouldNotAddIssue() {
-    addUnitAlias("Foo", "System.SysUtils");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  Foo;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withUnitAlias("Foo", "System.SysUtils")
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("uses")
+                .appendDecl("  Foo;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMatchingUnitReferenceShouldNotAddIssue() {
-    addUnitScopeName("System");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses SysUtils;")
-            .appendImpl("procedure Proc;")
-            .appendImpl("var")
-            .appendImpl("  MyObject: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  MyObject := TObject.Create;")
-            .appendImpl("  SysUtils.FreeAndNil(MyObject);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MixedNamesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withUnitScopeName("System")
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses SysUtils;")
+                .appendImpl("procedure Proc;")
+                .appendImpl("var")
+                .appendImpl("  MyObject: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  MyObject := TObject.Create;")
+                .appendImpl("  SysUtils.FreeAndNil(MyObject);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnitReferenceMatchingDeclarationAndNotMatchingImportShouldNotAddIssue() {
-    addUnitScopeName("System");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses sysutils;")
-            .appendImpl("procedure Proc;")
-            .appendImpl("var")
-            .appendImpl("  MyObject: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  MyObject := TObject.Create;")
-            .appendImpl("  SysUtils.FreeAndNil(MyObject);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withUnitScopeName("System")
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses sysutils;")
+                .appendImpl("procedure Proc;")
+                .appendImpl("var")
+                .appendImpl("  MyObject: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  MyObject := TObject.Create;")
+                .appendImpl("  SysUtils.FreeAndNil(MyObject);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(5);
   }
 
   @Test
   void testMismatchedUnitReferenceShouldAddIssue() {
-    addUnitScopeName("System");
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .withUnitScopeName("System")
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses sysutils;")
+                .appendImpl("procedure Proc;")
+                .appendImpl("var")
+                .appendImpl("  MyObject: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  MyObject := TObject.Create;")
+                .appendImpl("  sysutils.FreeAndNil(MyObject);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(5, 14);
+  }
 
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses sysutils;")
-            .appendImpl("procedure Proc;")
-            .appendImpl("var")
-            .appendImpl("  MyObject: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  MyObject := TObject.Create;")
-            .appendImpl("  sysutils.FreeAndNil(MyObject);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffsetDecl() + 1))
-        .areExactly(1, ruleKeyAtLine("MixedNamesRule", builder.getOffset() + 6));
+  private static DelphiTestUnitBuilder createSysUtils() {
+    return new DelphiTestUnitBuilder()
+        .unitName("System.SysUtils")
+        .appendDecl("procedure FreeAndNil(var Obj); inline;");
   }
 }

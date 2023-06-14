@@ -18,57 +18,52 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TooLongLineCheckTest extends CheckTest {
+class TooLongLineCheckTest {
   @Test
   void testShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure TClass.Test;")
-            .appendImpl("begin")
-            .appendImpl("  FMessage := 'This line is not too long.';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooLongLineRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLongLineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure TClass.Test;")
+                .appendImpl("begin")
+                .appendImpl("  FMessage := 'This line is not too long.';")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testTooLongLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure TClass.Test;")
-            .appendImpl("begin")
-            .appendImpl(
-                "  FMessage := 'This line is too long. Look, it''s running right off the screen!"
-                    + " Who would do such a thing? I am horrified by the audacity of this line!';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TooLongLineRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLongLineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure TClass.Test;")
+                .appendImpl("begin")
+                .appendImpl(
+                    "  FMessage := 'This line is too long. Look, it''s running right off the"
+                        + " screen! Who would do such a thing? I am horrified by the audacity of"
+                        + " this line!';")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testTrailingWhitespaceLineShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure TClass.Test;")
-            .appendImpl("begin")
-            .appendImpl(
-                "  FMessage := 'This line is not too long, but there is trailing whitespace...';  "
-                    + "                           ")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooLongLineRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLongLineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure TClass.Test;")
+                .appendImpl("begin")
+                .appendImpl(
+                    "  FMessage := 'This line is not too long, but there is trailing whitespace.';"
+                        + "                               ")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

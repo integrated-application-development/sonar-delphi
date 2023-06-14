@@ -18,84 +18,73 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class DestructorNameCheckTest extends CheckTest {
+class DestructorNameCheckTest {
   @Test
   void testDestructorDestroyShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TObject = class(TObject)")
-            .appendDecl("    destructor Destroy; override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DestructorDestroyRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new DestructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObject = class(TObject)")
+                .appendDecl("    destructor Destroy; override;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testDestructorNotDestroyShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TObject = class(TObject)")
-            .appendDecl("    destructor NotDestroy; override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("DestructorDestroyRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new DestructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObject = class(TObject)")
+                .appendDecl("    destructor NotDestroy; override;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testDestructorNotOverrideShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TObject = class(TObject)")
-            .appendDecl("    destructor Destroy;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("DestructorDestroyRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new DestructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObject = class(TObject)")
+                .appendDecl("    destructor Destroy;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testDestructorWithArgumentsShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TObject = class(TObject)")
-            .appendDecl("    destructor Destroy(Arg: Boolean); override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("DestructorDestroyRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new DestructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObject = class(TObject)")
+                .appendDecl("    destructor Destroy(Arg: Boolean); override;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testClassDestructorShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TObject = class(TObject)")
-            .appendDecl("    class destructor NotDestroy;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DestructorDestroyRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new DestructorNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObject = class(TObject)")
+                .appendDecl("    class destructor NotDestroy;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

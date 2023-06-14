@@ -38,7 +38,7 @@ public class EnumNameCheck extends DelphiCheck {
       key = "prefixes",
       description = "Comma-delimited list of prefixes, enum names must begin with one of these.",
       defaultValue = DEFAULT_PREFIXES)
-  private String prefixes = DEFAULT_PREFIXES;
+  public String prefixes = DEFAULT_PREFIXES;
 
   private List<String> prefixesList;
 

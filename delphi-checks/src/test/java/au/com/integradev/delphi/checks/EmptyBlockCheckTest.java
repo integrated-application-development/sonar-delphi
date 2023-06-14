@@ -18,153 +18,141 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class EmptyBlockCheckTest extends CheckTest {
+class EmptyBlockCheckTest {
   @Test
-  void testValidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TEmptyProcs = class(TObject)")
-            .appendDecl("  public")
-            .appendDecl("    procedure One;")
-            .appendDecl("    procedure Two;")
-            .appendDecl("    procedure Three;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TEmptyProcs.One;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;")
-            .appendImpl("procedure TEmptyProcs.Two;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;")
-            .appendImpl("procedure TEmptyProcs.Three;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;")
-            .appendImpl("procedure GlobalProcedureFour;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;")
-            .appendImpl("procedure GlobalProcedureFive;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyBeginStatementRule"));
+  void testNonEmptyBlocksShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TEmptyProcs = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    procedure One;")
+                .appendDecl("    procedure Two;")
+                .appendDecl("    procedure Three;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TEmptyProcs.One;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;")
+                .appendImpl("procedure TEmptyProcs.Two;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;")
+                .appendImpl("procedure TEmptyProcs.Three;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;")
+                .appendImpl("procedure GlobalProcedureFour;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;")
+                .appendImpl("procedure GlobalProcedureFive;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testEmptyBeginStatements() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TEmptyProcs = class(TObject)")
-            .appendDecl("  public")
-            .appendDecl("    procedure One;")
-            .appendDecl("    procedure Two;")
-            .appendDecl("    procedure Three;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TEmptyProcs.One;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;")
-            .appendImpl("procedure TEmptyProcs.Two;")
-            .appendImpl("begin")
-            .appendImpl("  if Foo then begin")
-            .appendImpl("    Bar;")
-            .appendImpl("  end;")
-            .appendImpl("end;")
-            .appendImpl("procedure TEmptyProcs.Three;")
-            .appendImpl("begin")
-            .appendImpl("  if Foo then begin")
-            .appendImpl("    // Do nothing")
-            .appendImpl("  end;")
-            .appendImpl("end;")
-            .appendImpl("procedure GlobalProcedureFour;")
-            .appendImpl("begin")
-            .appendImpl("  WriteLn('OK');")
-            .appendImpl("end;")
-            .appendImpl("procedure GlobalProcedureFive;")
-            .appendImpl("begin")
-            .appendImpl("  if Foo then begin")
-            .appendImpl("    // Do nothing")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 13))
-        .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 23));
+  void testEmptyBeginStatementsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TEmptyProcs = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    procedure One;")
+                .appendDecl("    procedure Two;")
+                .appendDecl("    procedure Three;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TEmptyProcs.One;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;")
+                .appendImpl("procedure TEmptyProcs.Two;")
+                .appendImpl("begin")
+                .appendImpl("  if Foo then begin")
+                .appendImpl("    Bar;")
+                .appendImpl("  end;")
+                .appendImpl("end;")
+                .appendImpl("procedure TEmptyProcs.Three;")
+                .appendImpl("begin")
+                .appendImpl("  if Foo then begin")
+                .appendImpl("    // Do nothing")
+                .appendImpl("  end;")
+                .appendImpl("end;")
+                .appendImpl("procedure GlobalProcedureFour;")
+                .appendImpl("begin")
+                .appendImpl("  WriteLn('OK');")
+                .appendImpl("end;")
+                .appendImpl("procedure GlobalProcedureFive;")
+                .appendImpl("begin")
+                .appendImpl("  if Foo then begin")
+                .appendImpl("    // Do nothing")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(27, 37);
   }
 
   @Test
   void testEmptyBlocksInCaseStatementShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test(Arg: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  case Arg of")
-            .appendImpl("    0: begin")
-            .appendImpl("    end;")
-            .appendImpl("  else begin")
-            .appendImpl("  end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 4))
-        .areExactly(1, ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test(Arg: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  case Arg of")
+                .appendImpl("    0: begin")
+                .appendImpl("    end;")
+                .appendImpl("  else begin")
+                .appendImpl("  end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(10, 12);
   }
 
   @Test
   void testEmptyBlocksInCaseStatementShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test(Arg: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  case Arg of")
-            .appendImpl("    0: begin")
-            .appendImpl("      // Do nothing")
-            .appendImpl("    end;")
-            .appendImpl("  else begin")
-            .appendImpl("    // Do nothing")
-            .appendImpl("  end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyBeginStatementRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test(Arg: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  case Arg of")
+                .appendImpl("    0: begin")
+                .appendImpl("      // Do nothing")
+                .appendImpl("    end;")
+                .appendImpl("  else begin")
+                .appendImpl("    // Do nothing")
+                .appendImpl("  end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testEmptyMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TEmptyProcs = class")
-            .appendDecl("  public")
-            .appendDecl("    procedure One;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TEmptyProcs.One;")
-            .appendImpl("begin")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("EmptyBeginStatementRule", builder.getOffset() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TEmptyProcs = class")
+                .appendDecl("  public")
+                .appendDecl("    procedure One;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TEmptyProcs.One;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

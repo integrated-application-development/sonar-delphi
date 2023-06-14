@@ -29,7 +29,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "ProjectFileNoVariablesRule", repositoryKey = "delph")
-@Rule(key = "ProjectFileMethod")
+@Rule(key = "ProjectFileVariable")
 public class ProjectFileVariableCheck extends AbstractDprCheck {
   private static final String MESSAGE = "Remove this variable from the project file.";
 

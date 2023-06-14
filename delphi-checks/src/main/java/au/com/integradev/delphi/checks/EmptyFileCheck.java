@@ -28,7 +28,6 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "EmptyUnitRule", repositoryKey = "delph")
@@ -39,7 +38,7 @@ public class EmptyFileCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(DelphiAst ast, DelphiCheckContext context) {
     if (!ast.isPackage() && !hasExecutableCode(ast) && !hasDeclarations(ast)) {
-      context.newIssue().onFilePosition(FilePosition.atFileLevel()).withMessage(MESSAGE).report();
+      context.newIssue().withMessage(MESSAGE).report();
     }
     return context;
   }

@@ -18,15 +18,12 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class IfThenShortCircuitCheckTest extends CheckTest {
+class IfThenShortCircuitCheckTest {
   private DelphiTestUnitBuilder builder;
 
   @BeforeEach
@@ -42,92 +39,92 @@ class IfThenShortCircuitCheckTest extends CheckTest {
 
   @Test
   void testNilNotEqualComparisonWithAccessShouldAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(Bar <> nil, Bar.ToString, 'Baz');")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("IfThenShortCircuitRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(Bar <> nil, Bar.ToString, 'Baz');")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15);
   }
 
   @Test
   void testNilEqualComparisonWithAccessShouldAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(nil = Bar, 'Baz', Bar.ToString);")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("IfThenShortCircuitRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(nil = Bar, 'Baz', Bar.ToString);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15);
   }
 
   @Test
   void testAssignedCheckWithAccessShouldAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(Assigned(Bar), Bar.ToString, 'Baz');")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("IfThenShortCircuitRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(Assigned(Bar), Bar.ToString, 'Baz');")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15);
   }
 
   @Test
   void testNilNotEqualComparisonWithoutAccessShouldNotAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(Bar <> nil, 'Flarp', 'Baz');")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IfThenShortCircuitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(Bar <> nil, 'Flarp', 'Baz');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testNilEqualComparisonWithoutAccessShouldNotAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(nil = Bar, 'Baz', 'Flarp');")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IfThenShortCircuitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(nil = Bar, 'Baz', 'Flarp');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAssignedCheckWithoutAccessShouldNotAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(Assigned(Bar), 'Flarp', 'Baz');")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IfThenShortCircuitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(Assigned(Bar), 'Flarp', 'Baz');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testIfThenWithWrongNumberOfArgumentsShouldNotAddIssue() {
-    builder
-        .appendImpl("function Foo(Bar: TObject): String;")
-        .appendImpl("begin")
-        .appendImpl("  Result := IfThen(Assigned(Bar), Bar.ToString);")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("IfThenShortCircuitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new IfThenShortCircuitCheck())
+        .onFile(
+            builder
+                .appendImpl("function Foo(Bar: TObject): String;")
+                .appendImpl("begin")
+                .appendImpl("  Result := IfThen(Assigned(Bar), Bar.ToString);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

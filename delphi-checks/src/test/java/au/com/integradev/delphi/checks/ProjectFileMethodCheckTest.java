@@ -18,44 +18,39 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestProgramBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ProjectFileMethodCheckTest extends CheckTest {
+class ProjectFileMethodCheckTest {
 
   @Test
-  void testValidDprFile() {
-    DelphiTestProgramBuilder builder =
-        new DelphiTestProgramBuilder().programName("ValidProgram").appendImpl("Exit;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ProjectFileNoFunctionsRule"));
+  void testNoMethodsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ProjectFileMethodCheck())
+        .onFile(
+            new DelphiTestProgramBuilder() //
+                .programName("ValidProgram")
+                .appendImpl("Exit;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testMethodInDprFileShouldAddIssue() {
-    DelphiTestProgramBuilder builder =
-        new DelphiTestProgramBuilder()
-            .appendDecl("procedure MyProcedure;")
-            .appendDecl("begin")
-            .appendDecl("  DoSomething;")
-            .appendDecl("end;")
-            .appendDecl("function MyFunction: Integer;")
-            .appendDecl("begin")
-            .appendDecl("  Result := 5;")
-            .appendDecl("end;")
-            .appendImpl("MyProcedure;")
-            .appendImpl("MyVar := MyFunction;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ProjectFileNoFunctionsRule", builder.getOffsetDecl() + 1))
-        .areExactly(1, ruleKeyAtLine("ProjectFileNoFunctionsRule", builder.getOffsetDecl() + 5));
+  void testMethodShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ProjectFileMethodCheck())
+        .onFile(
+            new DelphiTestProgramBuilder()
+                .appendDecl("procedure MyProcedure;")
+                .appendDecl("begin")
+                .appendDecl("  DoSomething;")
+                .appendDecl("end;")
+                .appendDecl("function MyFunction: Integer;")
+                .appendDecl("begin")
+                .appendDecl("  Result := 5;")
+                .appendDecl("end;")
+                .appendImpl("MyProcedure;")
+                .appendImpl("MyVar := MyFunction;"))
+        .verifyIssueOnLine(3, 7);
   }
 }

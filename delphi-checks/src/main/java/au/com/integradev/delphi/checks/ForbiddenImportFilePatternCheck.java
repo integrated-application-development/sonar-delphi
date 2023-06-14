@@ -39,7 +39,7 @@ public class ForbiddenImportFilePatternCheck extends DelphiCheck {
   @RuleProperty(
       key = "forbiddenImportPattern",
       description = "The path pattern for files which should not be imported")
-  public String forbiddenImportPattern;
+  public String forbiddenImportPattern = "";
 
   @RuleProperty(
       key = "forbiddenImportSyntax",
@@ -51,7 +51,7 @@ public class ForbiddenImportFilePatternCheck extends DelphiCheck {
       key = "whitelistPattern",
       description =
           "The path pattern for whitelisted files which may import these forbidden imports")
-  public String whitelistPattern;
+  public String whitelistPattern = "";
 
   @RuleProperty(
       key = "whitelistSyntax",

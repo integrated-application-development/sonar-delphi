@@ -38,10 +38,10 @@ public class ForbiddenConstantCheck extends DelphiCheck {
   private static final String DEFAULT_MESSAGE = "Remove usage of this forbidden constant.";
 
   @RuleProperty(key = "unitName", description = "Name of the unit whose constants are forbidden")
-  private String unitName = "";
+  public String unitName = "";
 
   @RuleProperty(key = "constants", description = "Comma-delimited list of forbidden constants")
-  private String constants = "";
+  public String constants = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

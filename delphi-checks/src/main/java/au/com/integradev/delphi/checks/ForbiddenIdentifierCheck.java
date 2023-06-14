@@ -36,7 +36,7 @@ public class ForbiddenIdentifierCheck extends DelphiCheck {
   @RuleProperty(
       key = "identifiers",
       description = "Comma-delimited list of forbidden identifiers (case-insensitive)")
-  private String identifiers = "";
+  public String identifiers = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

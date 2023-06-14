@@ -18,108 +18,99 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder.ResourceBuilder;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
-import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 
-class EmptyFileCheckTest extends CheckTest {
+class EmptyFileCheckTest {
+  private static final String PACKAGE_FILE =
+      "/au/com/integradev/delphi/checks/EmptyFileCheck/PackageFile.dpk";
+
   @Test
   void testEmptyUnitShouldAddIssue() {
-    execute(new DelphiTestUnitBuilder());
-    assertIssues().areExactly(1, ruleKeyAtLine("EmptyUnitRule", FilePosition.UNDEFINED_LINE));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(new DelphiTestUnitBuilder())
+        .verifyIssueOnFile();
   }
 
   @Test
   void testEmptyUnitWithImportsShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    Foo")
-            .appendDecl("   , Bar")
-            .appendDecl("   , Baz")
-            .appendDecl("   ;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("EmptyUnitRule", FilePosition.UNDEFINED_LINE));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("    Foo")
+                .appendDecl("   , Bar")
+                .appendDecl("   , Baz")
+                .appendDecl("   ;"))
+        .verifyIssueOnFile();
   }
 
   @Test
   void testMethodDeclarationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendDecl("procedure Foo;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure Foo;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMethodImplementationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  // do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testVariableDeclarationsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("var")
-            .appendDecl("  GFoo: TObject;")
-            .appendDecl("  GBar: TObject;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  GFoo: TObject;")
+                .appendDecl("  GBar: TObject;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testConstantDeclarationsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("const")
-            .appendDecl("  C_Foo = 123;")
-            .appendDecl("  C_Bar = 456;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  C_Foo = 123;")
+                .appendDecl("  C_Bar = 456;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testTypeDeclarationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testIgnorePackage() {
-    String dpkResourcePath = "/au/com/integradev/delphi/projects/SimpleProject/dpk/TestLib.dpk";
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(dpkResourcePath);
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("EmptyUnitRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyFileCheck())
+        .onFile(DelphiTestFileBuilder.fromResource(PACKAGE_FILE))
+        .verifyNoIssues();
   }
 }

@@ -18,55 +18,49 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class AssertMessageCheckTest extends CheckTest {
+class AssertMessageCheckTest {
   @Test
   void testAssertWithoutErrorMessageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  Assert(False);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("AssertMessageRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new AssertMessageCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  Assert(False);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testAssertWithErrorMessageShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  Assert(False, 'This always fails.');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AssertMessageRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new AssertMessageCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  Assert(False, 'This always fails.');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testAssertMethodReferenceShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Proc: reference to procedure(Expr: Boolean; Message: String);")
-            .appendImpl("begin")
-            .appendImpl("  Proc := System.Assert;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AssertMessageRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new AssertMessageCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Proc: reference to procedure(Expr: Boolean; Message: String);")
+                .appendImpl("begin")
+                .appendImpl("  Proc := System.Assert;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

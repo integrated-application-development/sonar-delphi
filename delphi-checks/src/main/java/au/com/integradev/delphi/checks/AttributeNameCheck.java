@@ -27,7 +27,7 @@ public class AttributeNameCheck extends DelphiCheck {
       description =
           "Whether to require, allow, or forbid the use of the 'Attribute' suffix for attribute"
               + " classes. Options are: 'required', 'allowed', and 'forbidden'.")
-  private String attributeSuffix = "";
+  public String attributeSuffix = "";
 
   private AttributeSuffixSetting attributeSuffixSetting;
 

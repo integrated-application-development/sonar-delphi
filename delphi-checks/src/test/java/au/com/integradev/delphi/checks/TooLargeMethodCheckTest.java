@@ -18,34 +18,30 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TooLargeMethodCheckTest extends CheckTest {
-
+class TooLargeMethodCheckTest {
   @Test
-  void testSmallMethod() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl(" Result := 1;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooLargeMethodRule"));
+  void testSmallMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLargeMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("begin")
+                .appendImpl(" Result := 1;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testAlmostTooLargeMethod() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("function Foo: Integer;");
-    builder.appendImpl("begin");
+  void testAlmostTooLargeMethodShouldNotAddIssue() {
+    DelphiTestUnitBuilder builder =
+        new DelphiTestUnitBuilder() //
+            .appendImpl("function Foo: Integer;")
+            .appendImpl("begin");
 
     for (int i = 1; i <= 100; i++) {
       builder.appendImpl(" Result := Result + 1;");
@@ -53,13 +49,14 @@ class TooLargeMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooLargeMethodRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLargeMethodCheck())
+        .onFile(builder)
+        .verifyNoIssues();
   }
 
   @Test
-  void testWhitespaceMethod() {
+  void testWhitespaceMethodShouldNotAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -72,29 +69,30 @@ class TooLargeMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooLargeMethodRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLargeMethodCheck())
+        .onFile(builder)
+        .verifyNoIssues();
   }
 
   @Test
-  void testEmptyMethod() {
+  void testEmptyMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLargeMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testTooLargeMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
+        new DelphiTestUnitBuilder() //
             .appendImpl("function Foo: Integer;")
-            .appendImpl("begin")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("TooLargeMethodRule", builder.getOffset() + 1));
-  }
-
-  @Test
-  void testTooLargeMethod() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("function Foo: Integer;");
-    builder.appendImpl("begin");
+            .appendImpl("begin");
 
     for (int i = 1; i <= 101; i++) {
       builder.appendImpl(" Result := Result + 1;");
@@ -102,13 +100,14 @@ class TooLargeMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("TooLargeMethodRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLargeMethodCheck())
+        .onFile(builder)
+        .verifyIssueOnLine(7);
   }
 
   @Test
-  void testComplexTooLargeMethod() {
+  void testComplexTooLargeMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
@@ -163,7 +162,9 @@ class TooLargeMethodCheckTest extends CheckTest {
 
     builder.appendImpl("end;");
 
-    execute(builder);
-    assertIssues().areExactly(1, ruleKeyAtLine("TooLargeMethodRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLargeMethodCheck())
+        .onFile(builder)
+        .verifyIssueOnLine(7);
   }
 }

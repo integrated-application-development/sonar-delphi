@@ -33,6 +33,10 @@ public class ScopeMetadataLoader {
   private RuleScope readScope(RuleKey ruleKey) {
     URL url = getMetadataURL(ruleKey);
 
+    if (url == null) {
+      throw new IllegalArgumentException("Metadata is missing for check \"" + ruleKey + "\"");
+    }
+
     try {
       String data = Resources.toString(url, StandardCharsets.UTF_8);
       JSONParser parser = new JSONParser();

@@ -18,43 +18,46 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class FreeAndNilTObjectCheckTest extends CheckTest {
+class FreeAndNilTObjectCheckTest {
   @Test
   void testTObjectShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  System.SysUtils;")
-            .appendImpl("procedure Foo(Bar: TObject);")
-            .appendImpl("begin")
-            .appendImpl("  FreeAndNil(Bar);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("FreeAndNilTObjectRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new FreeAndNilTObjectCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.SysUtils;")
+                .appendImpl("procedure Foo(Bar: TObject);")
+                .appendImpl("begin")
+                .appendImpl("  FreeAndNil(Bar);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testDoubleShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  System.SysUtils;")
-            .appendImpl("procedure Foo(Bar: Double);")
-            .appendImpl("begin")
-            .appendImpl("  FreeAndNil(Bar);")
-            .appendImpl("end;");
+    CheckVerifier.newVerifier()
+        .withCheck(new FreeAndNilTObjectCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.SysUtils;")
+                .appendImpl("procedure Foo(Bar: Double);")
+                .appendImpl("begin")
+                .appendImpl("  FreeAndNil(Bar);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
+  }
 
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("FreeAndNilTObjectRule", builder.getOffset() + 3));
+  private static DelphiTestUnitBuilder createSysUtils() {
+    return new DelphiTestUnitBuilder()
+        .unitName("System.SysUtils")
+        .appendDecl("procedure FreeAndNil(var Obj); inline;");
   }
 }

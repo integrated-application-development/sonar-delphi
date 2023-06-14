@@ -18,99 +18,76 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ForbiddenEnumValueCheckTest extends CheckTest {
+class ForbiddenEnumValueCheckTest {
   private static final String UNIT_NAME = "Foo";
-  private static final String ENUM_NAME = "Foo.TBar";
+  private static final String ENUM_NAME = UNIT_NAME + ".TBar";
   private static final String FORBIDDEN_VALUE = "Baz";
 
-  @BeforeEach
-  void setup() {
-    au.com.integradev.delphi.pmd.xml.DelphiRule rule = new DelphiRule();
-    DelphiRuleProperty blacklist =
-        new DelphiRuleProperty(
-            ForbiddenEnumValueCheck.BLACKLISTED_ENUM_VALUES.name(), FORBIDDEN_VALUE);
-
-    DelphiRuleProperty enumName =
-        new DelphiRuleProperty(ForbiddenEnumValueCheck.ENUM_NAME.name(), ENUM_NAME);
-
-    rule.setName("ForbiddenEnumValueRuleTest");
-    rule.setTemplateName("ForbiddenEnumValueRule");
-    rule.setPriority(5);
-    rule.addProperty(blacklist);
-    rule.addProperty(enumName);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.ForbiddenEnumValueRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck() {
+    ForbiddenEnumValueCheck check = new ForbiddenEnumValueCheck();
+    check.enumName = ENUM_NAME;
+    check.values = FORBIDDEN_VALUE;
+    return check;
   }
 
   @Test
   void testForbiddenEnumValueShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TBar = (Baz, Beep, Boop, Blop);")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Bar: TBar;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := Baz;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ForbiddenEnumValueRuleTest", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TBar = (Baz, Beep, Boop, Blop);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := Baz;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14);
   }
 
   @Test
   void testQualifiedForbiddenEnumValueShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TBar = (Baz, Beep, Boop, Blop);")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Bar: TBar;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := TBar.Baz;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ForbiddenEnumValueRuleTest", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TBar = (Baz, Beep, Boop, Blop);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := TBar.Baz;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14);
   }
 
   @Test
   void testAllowedEnumValueShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TBar = (Baz, Beep, Boop, Blop);")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Bar: TBar;")
-            .appendImpl("begin")
-            .appendImpl("  Bar := Beep;")
-            .appendImpl("  Bar := Boop;")
-            .appendImpl("  Bar := Blop;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenEnumValueRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TBar = (Baz, Beep, Boop, Blop);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := Beep;")
+                .appendImpl("  Bar := Boop;")
+                .appendImpl("  Bar := Blop;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

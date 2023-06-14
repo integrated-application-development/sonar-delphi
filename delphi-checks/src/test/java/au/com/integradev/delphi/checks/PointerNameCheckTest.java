@@ -18,66 +18,59 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class PointerNameCheckTest extends CheckTest {
+class PointerNameCheckTest {
 
   @Test
-  void testValidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  PInteger = ^Integer;")
-            .appendDecl("  PFooInteger = ^TFooInteger;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PointerNameRule"));
+  void testCompliantNameShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PointerNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  PInteger = ^Integer;")
+                .appendDecl("  PFooInteger = ^TFooInteger;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testInvalidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  pMyPointer = ^Integer;")
-            .appendDecl("  PInteger = ^TFooInteger;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2))
-        .areExactly(1, ruleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 3));
+  void testNoncompliantNameShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PointerNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  pMyPointer = ^Integer;")
+                .appendDecl("  PInteger = ^TFooInteger;"))
+        .verifyIssueOnLine(6, 7);
   }
 
   @Test
-  void testBadCase() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  Pinteger = ^Integer;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("PointerNameRule", builder.getOffsetDecl() + 2));
+  void testBadCaseShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PointerNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("type")
+                .appendDecl("  Pinteger = ^Integer;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
-  void testShouldIgnorePointerAssignment() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendImpl("procedure Foo;");
-    builder.appendImpl("var");
-    builder.appendImpl("  MyInteger: Integer;");
-    builder.appendImpl("begin");
-    builder.appendImpl("  MyInteger := PInteger(1)^;");
-    builder.appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PointerNameRule"));
+  void testPointerAssignmentShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PointerNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  MyInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  MyInteger := PInteger(1)^;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

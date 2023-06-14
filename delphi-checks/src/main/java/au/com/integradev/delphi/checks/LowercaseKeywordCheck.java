@@ -40,7 +40,7 @@ public class LowercaseKeywordCheck extends DelphiCheck {
   @RuleProperty(
       key = "prefixes",
       description = "Comma-delimited list of keywords that this rule ignores (case-insensitive).")
-  private String excluded = "";
+  public String excluded = "";
 
   private Set<String> excludedSet;
 

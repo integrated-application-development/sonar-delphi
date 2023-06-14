@@ -22,307 +22,358 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class MissingSemicolonCheckTest extends CheckTest {
-
+class MissingSemicolonCheckTest {
   @Test
-  void testRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("begin")
-            .appendImpl("  SomeVar := 5")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 3));
+  void testMissingSemicolonShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("begin")
+                .appendImpl("  SomeVar := 5")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
-  void testInsideWhile() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeNumber: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  while SomeNumber <> 0 do")
-            .appendImpl("    WriteLn('test')")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
+  void testMissingSemicolonWithinWhileShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("var")
+                .appendImpl("  SomeNumber: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  while SomeNumber <> 0 do")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
-  void testInsideFor() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeNumber: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  for SomeNumber := 0 to 3 do")
-            .appendImpl("    WriteLn('test')")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
+  void testMissingSemicolonWithinForShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("var")
+                .appendImpl("  SomeNumber: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  for SomeNumber := 0 to 3 do")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
-  void testInsideRepeat() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest(Int: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  repeat")
-            .appendImpl("    WriteLn('test')")
-            .appendImpl("  until Int <> 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 4));
+  void testMissingSemicolonWithinRepeatShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest(Int: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  repeat")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("  until Int <> 0;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(10);
   }
 
   @Test
-  void testInsideTryExcept() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendImpl("procedure SemicolonTest;")
-        .appendImpl("var")
-        .appendImpl("  SomeNumber: Integer;")
-        .appendImpl("begin")
-        .appendImpl("  try")
-        .appendImpl("    WriteLn('test')")
-        .appendImpl("  except")
-        .appendImpl("    WriteLn('test')")
-        .appendImpl("  end;")
-        .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6))
-        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 8));
+  void testMissingSemicolonWithinTryExceptShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("var")
+                .appendImpl("  SomeNumber: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("  except")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12, 14);
   }
 
   @Test
-  void testInsideExceptionHandler() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeNumber: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    WriteLn('test');")
-            .appendImpl("  except")
-            .appendImpl("    on E: Exception do")
-            .appendImpl("      WriteLn('test')")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 9));
+  void testMissingSemicolonWithinExceptionHandlerShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("var")
+                .appendImpl("  SomeNumber: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    WriteLn('test');")
+                .appendImpl("  except")
+                .appendImpl("    on E: Exception do")
+                .appendImpl("      WriteLn('test')")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15);
   }
 
   @Test
-  void testInsideTryFinally() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeNumber: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    WriteLn('test')")
-            .appendImpl("  finally")
-            .appendImpl("    WriteLn('test')")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6))
-        .areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 8));
+  void testMissingSemicolonWithinTryFinallyShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("var")
+                .appendImpl("  SomeNumber: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("  finally")
+                .appendImpl("    WriteLn('test')")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12, 14);
   }
 
   @Test
-  void testOnEndOfWhile() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest(Int: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  while Int <> 0 do")
-            .appendImpl("  begin")
-            .appendImpl("    WriteLn('test');")
-            .appendImpl("  end")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
+  void testMissingSemicolonAfterWhileCompoundStatementShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest(Int: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  while Int <> 0 do")
+                .appendImpl("  begin")
+                .appendImpl("    WriteLn('test');")
+                .appendImpl("  end")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
-  void testOnCaseItem() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("var")
-            .appendImpl("  SomeVar: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  case SomeVar of")
-            .appendImpl("    1: WriteLn('test')")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 6));
+  void testMissingSemicolonOnCaseItemShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("var")
+                .appendImpl("  SomeVar: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  case SomeVar of")
+                .appendImpl("    1: WriteLn('test')")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
-  void testShouldSkipEndFollowedByElse() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest(Val: Boolean);")
-            .appendImpl("begin")
-            .appendImpl("  if Val then")
-            .appendImpl("  begin")
-            .appendImpl("    WriteLn('test');")
-            .appendImpl("  end")
-            .appendImpl("  else")
-            .appendImpl("  begin")
-            .appendImpl("    WriteLn('test');")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSemicolonRule"));
+  void testEndFollowedByElseShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest(Val: Boolean);")
+                .appendImpl("begin")
+                .appendImpl("  if Val then")
+                .appendImpl("  begin")
+                .appendImpl("    WriteLn('test');")
+                .appendImpl("  end")
+                .appendImpl("  else")
+                .appendImpl("  begin")
+                .appendImpl("    WriteLn('test');")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testShouldSkipRecordDeclarationOnImplementationSection() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("type")
-            .appendImpl("  TDummyRec = record")
-            .appendImpl("    FData : Integer;")
-            .appendImpl("    constructor Create(Data: Integer);")
-            .appendImpl("  end;")
-            .appendImpl("constructor TDummyRec.Create(Data: Integer);")
-            .appendImpl("begin")
-            .appendImpl("  inherited;")
-            .appendImpl("  FData := Data;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSemicolonRule"));
+  void testShouldRecordDeclarationInImplementationSectionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type")
+                .appendImpl("  TDummyRec = record")
+                .appendImpl("    FData : Integer;")
+                .appendImpl("    constructor Create(Data: Integer);")
+                .appendImpl("  end;")
+                .appendImpl("constructor TDummyRec.Create(Data: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  inherited;")
+                .appendImpl("  FData := Data;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testShouldSkipClassDeclarationOnImplementationSection() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("type")
-            .appendImpl("  TDummyClass = class(TObject)")
-            .appendImpl("    FData : Integer;")
-            .appendImpl("    constructor Create(Data : Integer);")
-            .appendImpl("  end;")
-            .appendImpl("constructor TDummyClass.Create(Data : Integer);")
-            .appendImpl("begin")
-            .appendImpl("  inherited;")
-            .appendImpl("  FData := Data;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSemicolonRule"));
+  void testClassDeclarationInImplementationSectionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type")
+                .appendImpl("  TDummyClass = class(TObject)")
+                .appendImpl("    FData : Integer;")
+                .appendImpl("    constructor Create(Data : Integer);")
+                .appendImpl("  end;")
+                .appendImpl("constructor TDummyClass.Create(Data : Integer);")
+                .appendImpl("begin")
+                .appendImpl("  inherited;")
+                .appendImpl("  FData := Data;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testShouldSkipInterfaceDeclarationOnImplementationSection() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("type")
-            .appendImpl("  IDummyInterface = interface")
-            .appendImpl("  ['{FBDFC204-9986-48D5-BBBC-ED5A99834A9F}']")
-            .appendImpl("    procedure Dummy;")
-            .appendImpl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSemicolonRule"));
+  void testInterfaceDeclarationInImplementationSectionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type")
+                .appendImpl("  IDummyInterface = interface")
+                .appendImpl("  ['{FBDFC204-9986-48D5-BBBC-ED5A99834A9F}']")
+                .appendImpl("    procedure Dummy;")
+                .appendImpl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testShouldSkipAsmProcedure() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test; assembler; register;")
-            .appendImpl("asm")
-            .appendImpl("   MOV EAX, 1")
-            .appendImpl("   ADD EAX, 2")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSemicolonRule"));
+  void testSAsmProcedureShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test; assembler; register;")
+                .appendImpl("asm")
+                .appendImpl("   MOV EAX, 1")
+                .appendImpl("   ADD EAX, 2")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testShouldSkipInlineAsm() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test; assembler; register;")
-            .appendImpl("var")
-            .appendImpl("  MyVar: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  MyVar := True;")
-            .appendImpl("  asm")
-            .appendImpl("    MOV EAX, 1")
-            .appendImpl("    ADD EAX, 2")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("NoSemicolonRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test; assembler; register;")
+                .appendImpl("var")
+                .appendImpl("  MyVar: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  MyVar := True;")
+                .appendImpl("  asm")
+                .appendImpl("    MOV EAX, 1")
+                .appendImpl("    ADD EAX, 2")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInlineAsmWithoutSemicolonAfterEndShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test; assembler; register;")
-            .appendImpl("var")
-            .appendImpl("  MyVar: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  MyVar := True;")
-            .appendImpl("  asm")
-            .appendImpl("    MOV EAX, 1")
-            .appendImpl("    ADD EAX, 2")
-            .appendImpl("  end")
-            .appendImpl("end;");
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test; assembler; register;")
+                .appendImpl("var")
+                .appendImpl("  MyVar: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  MyVar := True;")
+                .appendImpl("  asm")
+                .appendImpl("    MOV EAX, 1")
+                .appendImpl("    ADD EAX, 2")
+                .appendImpl("  end")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(15);
+  }
 
-    execute(builder);
+  @Test
+  void testFieldDeclarationsWithSemicolonsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("    Foo: TObject;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
 
-    assertIssues().areExactly(1, ruleKeyAtLine("NoSemicolonRule", builder.getOffset() + 9));
+  @Test
+  void testFieldDeclarationsWithoutSemicolonsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("    Foo: TObject")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
+  }
+
+  @Test
+  void testFieldDeclarationsWithoutSemicolonsInRecordVariantSectionsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = record")
+                .appendDecl("    case Tag: Integer of")
+                .appendDecl("      0: (ByteField: Byte);")
+                .appendDecl("      1: (ShortIntField: ShortInt);")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testMethodDeclarationsWithSemicolonsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create; override;")
+                .appendDecl("    destructor Destroy; override;")
+                .appendDecl("    procedure MyProcedure; overload;")
+                .appendDecl("    function MyFunction: String; overload;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testMethodDeclarationsWithoutSemicolonsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TType = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create; override")
+                .appendDecl("    destructor Destroy; override")
+                .appendDecl("    procedure MyProcedure; overload")
+                .appendDecl("    function MyFunction: String; overload")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 9, 10, 11);
   }
 }

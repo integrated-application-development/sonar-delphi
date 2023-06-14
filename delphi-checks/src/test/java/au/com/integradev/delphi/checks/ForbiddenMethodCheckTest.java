@@ -18,96 +18,79 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ForbiddenMethodCheckTest extends CheckTest {
+class ForbiddenMethodCheckTest {
   private static final String UNIT_NAME = "TestUnit";
-  private static final String FORBIDDEN_METHOD = "TestUnit.TFoo.Bar";
+  private static final String FORBIDDEN_METHOD = UNIT_NAME + ".TFoo.Bar";
 
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    DelphiRuleProperty blacklist =
-        new DelphiRuleProperty(ForbiddenMethodCheck.BLACKLISTED_METHODS.name(), FORBIDDEN_METHOD);
-
-    rule.setName("ForbiddenMethodRuleTest");
-    rule.setTemplateName("ForbiddenMethodRule");
-    rule.setPriority(5);
-    rule.addProperty(blacklist);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.ForbiddenMethodRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck() {
+    ForbiddenMethodCheck check = new ForbiddenMethodCheck();
+    check.methods = FORBIDDEN_METHOD;
+    return check;
   }
 
   @Test
   void testForbiddenMethodUsageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    procedure Bar;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := TFoo.Create;")
-            .appendImpl("  Foo.Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ForbiddenMethodRuleTest", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := TFoo.Create;")
+                .appendImpl("  Foo.Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(17);
   }
 
   @Test
   void testNotUsingForbiddenMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    procedure Bar;")
-            .appendDecl("    procedure Baz;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("begin")
-            .appendImpl("  Foo := TFoo.Create;")
-            .appendImpl("  Foo.Baz;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenMethodRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("    procedure Baz;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := TFoo.Create;")
+                .appendImpl("  Foo.Baz;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMethodImplementationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    procedure Bar; virtual;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Bar;")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenMethodRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar; virtual;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Bar;")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

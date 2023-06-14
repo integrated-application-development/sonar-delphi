@@ -18,52 +18,45 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ExplicitTObjectInheritanceCheckTest extends CheckTest {
-
+class ExplicitTObjectInheritanceCheckTest {
   @Test
   void testExplicitTObjectShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TClass = class(TObject)")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ExplicitTObjectRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitTObjectInheritanceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TClass = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testImplicitTObjectShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TClass = class")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ExplicitTObjectRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitTObjectInheritanceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TClass = class")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testForwardDeclarationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TClass = class;")
-            .appendDecl("  TClass = class(TObject)")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ExplicitTObjectRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitTObjectInheritanceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TClass = class;")
+                .appendDecl("  TClass = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

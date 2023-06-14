@@ -18,185 +18,168 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class PlatformDependentTruncationCheckTest extends CheckTest {
+class PlatformDependentTruncationCheckTest {
   @Test
   void testIntegerToNativeIntAssignmentShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Int: Integer;")
-            .appendImpl("  Nat: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  Nat := Int;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Int: Integer;")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Nat := Int;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInt64ToNativeIntAssignmentShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  I64: Int64;")
-            .appendImpl("  Nat: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  Nat := I64;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("PlatformDependentTruncationRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  I64: Int64;")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Nat := I64;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
   void testNativeIntToIntegerAssignmentShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Int: Integer;")
-            .appendImpl("  Nat: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  Int := Nat;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("PlatformDependentTruncationRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Int: Integer;")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Int := Nat;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
   void testNativeIntToI64AssignmentShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  I64: Int64;")
-            .appendImpl("  Nat: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  I64 := Nat;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  I64: Int64;")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  I64 := Nat;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testNativeIntToNativeIntAssignmentShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Nat1: NativeInt;")
-            .appendImpl("  Nat2: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  Nat1 := Nat2;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat1: NativeInt;")
+                .appendImpl("  Nat2: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Nat1 := Nat2;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testIntegerArgumentToNativeIntParameterShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Bar(Nat: NativeInt);")
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Int: Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Bar(Int);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Bar(Nat: NativeInt);")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Int: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Bar(Int);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInt64ArgumentToNativeIntParameterShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Bar(Nat: NativeInt);")
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  I64: Int64;")
-            .appendImpl("begin")
-            .appendImpl("  Bar(I64);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("PlatformDependentTruncationRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Bar(Nat: NativeInt);")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  I64: Int64;")
+                .appendImpl("begin")
+                .appendImpl("  Bar(I64);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
   }
 
   @Test
   void testNativeIntArgumentToIntegerParameterShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Bar(Nat: NativeInt);")
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  I64: Int64;")
-            .appendImpl("begin")
-            .appendImpl("  Bar(I64);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("PlatformDependentTruncationRule", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Bar(Nat: NativeInt);")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  I64: Int64;")
+                .appendImpl("begin")
+                .appendImpl("  Bar(I64);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
   }
 
   @Test
   void testNativeIntArgumentToI64ParameterShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Bar(I64: Int64);")
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Nat: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  Bar(Nat);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Bar(I64: Int64);")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Bar(Nat);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testNativeIntArgumentToNativeIntParameterShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure Bar(Nat: NativeInt);")
-            .appendImpl("procedure Foo;")
-            .appendImpl("var")
-            .appendImpl("  Nat: NativeInt;")
-            .appendImpl("begin")
-            .appendImpl("  Bar(Nat);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("PlatformDependentTruncationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Bar(Nat: NativeInt);")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Bar(Nat);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

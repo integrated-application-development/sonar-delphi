@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.TextPointer;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
@@ -65,7 +67,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 public final class DelphiIssueBuilder {
   private static final Logger LOG = Loggers.get(DelphiIssueBuilder.class);
 
-  private static final String POSITION_NAME = "position";
   private static final String MESSAGE_NAME = "message";
   private static final String FLOWS_NAME = "flows";
   private static final String SECONDARIES_NAME = "secondaries";
@@ -169,7 +170,6 @@ public final class DelphiIssueBuilder {
 
   public void report() {
     Preconditions.checkState(!reported, "Can only be reported once.");
-    requiresValueToBeSet(position, POSITION_NAME);
     requiresValueToBeSet(message, MESSAGE_NAME);
 
     Optional<RuleKey> ruleKey = checkRegistrar.getRuleKey(check);
@@ -186,18 +186,25 @@ public final class DelphiIssueBuilder {
         context.newIssue().forRule(ruleKey.get()).gap(cost == null ? 0 : cost.doubleValue());
 
     InputFile inputFile = delphiFile.getInputFile();
+    NewIssueLocation primaryLocation = newIssue.newLocation().on(inputFile).message(message);
+    if (position != null) {
+      TextRange location;
+      if (position.getBeginColumn() == FilePosition.UNDEFINED_COLUMN) {
+        TextPointer start = inputFile.selectLine(position.getBeginLine()).start();
+        TextPointer end = inputFile.selectLine(position.getEndLine()).end();
+        location = inputFile.newRange(start, end);
+      } else {
+        location =
+            inputFile.newRange(
+                position.getBeginLine(),
+                position.getBeginColumn(),
+                position.getEndLine(),
+                position.getEndColumn());
+      }
+      primaryLocation.at(location);
+    }
 
-    newIssue.at(
-        newIssue
-            .newLocation()
-            .on(inputFile)
-            .at(
-                inputFile.newRange(
-                    position.getBeginLine(),
-                    position.getBeginColumn(),
-                    position.getEndLine(),
-                    position.getEndColumn()))
-            .message(message));
+    newIssue.at(primaryLocation);
 
     if (secondaries != null) {
       // Transform secondaries into flows
@@ -289,19 +296,22 @@ public final class DelphiIssueBuilder {
 
   private <T extends DelphiNode> Optional<T> findNodeEnclosingFilePosition(
       Class<T> nodeClass, FilePosition filePosition) {
-    DelphiAst ast = delphiFile.getAst();
-    return ast.findDescendantsOfType(nodeClass).stream()
-        .filter(
-            node ->
-                node.getBeginLine() >= filePosition.getBeginLine()
-                    && node.getBeginColumn() >= filePosition.getBeginColumn()
-                    && node.getEndLine() <= filePosition.getEndLine()
-                    && node.getEndColumn() <= filePosition.getEndColumn())
-        .max(
-            (a, b) ->
-                new CompareToBuilder()
-                    .append(a.getBeginLine(), b.getBeginLine())
-                    .append(a.getBeginColumn(), b.getBeginColumn())
-                    .toComparison());
+    if (filePosition != null) {
+      DelphiAst ast = delphiFile.getAst();
+      return ast.findDescendantsOfType(nodeClass).stream()
+          .filter(
+              node ->
+                  node.getBeginLine() >= filePosition.getBeginLine()
+                      && node.getBeginColumn() >= filePosition.getBeginColumn()
+                      && node.getEndLine() <= filePosition.getEndLine()
+                      && node.getEndColumn() <= filePosition.getEndColumn())
+          .max(
+              (a, b) ->
+                  new CompareToBuilder()
+                      .append(a.getBeginLine(), b.getBeginLine())
+                      .append(a.getBeginColumn(), b.getBeginColumn())
+                      .toComparison());
+    }
+    return Optional.empty();
   }
 }

@@ -18,41 +18,34 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ExtraneousArgumentListCommasRuleTest extends CheckTest {
-
+class TrailingCommaArgumentListCheckTest {
   @Test
   void testArgumentListWithoutTrailingCommaShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  Foo(1, 2, 3);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ExtraneousArgumentListCommasRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingCommaArgumentListCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  Foo(1, 2, 3);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testArgumentListWithTrailingCommaShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  Foo(1, 2, 3,);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ExtraneousArgumentListCommasRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingCommaArgumentListCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  Foo(1, 2, 3,);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

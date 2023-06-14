@@ -18,172 +18,147 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class MethodNameCheckTest extends CheckTest {
-
+class MethodNameCheckTest {
   @Test
-  void testInterfaceMethodValidRule() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IMyInterface = interface")
-            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MethodNameRule"));
+  void testInterfaceMethodWithCompliantNameShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IMyInterface = interface")
+                .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInterfaceMethodNameStartWithLowerCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IMyInterface = interface")
-            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-            .appendDecl("    procedure foo;")
-            .appendDecl("    function bar: Integer;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IMyInterface = interface")
+                .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+                .appendDecl("    procedure foo;")
+                .appendDecl("    function bar: Integer;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 9);
   }
 
   @Test
   void testStandaloneMethodNameStartWithLowerCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("procedure foo;")
-            .appendDecl("function bar: Integer;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 1))
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure foo;")
+                .appendDecl("function bar: Integer;"))
+        .verifyIssueOnLine(5, 6);
   }
 
   @Test
   void testPublishedMethodsShouldBeSkipped() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyForm = class(TForm)")
-            .appendDecl("    procedure buttonOnClick(Sender: TNotifyEvent);")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MethodNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyForm = class(TForm)")
+                .appendDecl("    procedure buttonOnClick(Sender: TNotifyEvent);")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMethodsImplementingInterfacesWithMatchingNameShouldBeSkipped() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IFoo = interface")
-            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-            .appendDecl("    procedure invalidName;")
-            .appendDecl("  end;")
-            .appendDecl("  TFoo = class(TObject, IFoo)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidName;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4))
-        .areNot(ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IFoo = interface")
+                .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+                .appendDecl("    procedure invalidName;")
+                .appendDecl("  end;")
+                .appendDecl("  TFoo = class(TObject, IFoo)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidName;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testMethodOverridesWithMatchingNameShouldBeSkipped() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidName;")
-            .appendDecl("  end;")
-            .appendDecl("  TBar = class(TFoo)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidName; override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4))
-        .areNot(ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidName;")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class(TFoo)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidName; override;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testMethodsImplementingInterfacesWithoutMatchingNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IFoo = interface")
-            .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-            .appendDecl("    procedure invalidname;")
-            .appendDecl("  end;")
-            .appendDecl("  TFoo = class(TObject, IFoo)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidName;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IFoo = interface")
+                .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
+                .appendDecl("    procedure invalidname;")
+                .appendDecl("  end;")
+                .appendDecl("  TFoo = class(TObject, IFoo)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidName;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 12);
   }
 
   @Test
   void testMethodOverridesWithoutMatchingNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidname;")
-            .appendDecl("  end;")
-            .appendDecl("  TBar = class(TFoo)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidName; override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidname;")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class(TFoo)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidName; override;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 12);
   }
 
   @Test
   void testMethodOverridesWithUnknownTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(UNKNOWN_TYPE)")
-            .appendDecl("    public")
-            .appendDecl("      procedure invalidname; override;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MethodNameRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(UNKNOWN_TYPE)")
+                .appendDecl("    public")
+                .appendDecl("      procedure invalidname; override;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
   }
 }

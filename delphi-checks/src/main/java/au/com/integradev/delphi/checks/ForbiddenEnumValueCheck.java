@@ -38,10 +38,10 @@ public class ForbiddenEnumValueCheck extends DelphiCheck {
   @RuleProperty(
       key = "enumName",
       description = "Fully qualified name of the enum whose values are forbidden")
-  private String enumName = "";
+  public String enumName = "";
 
   @RuleProperty(key = "values", description = "Comma-delimited list of forbidden enum values")
-  private String values = "";
+  public String values = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;

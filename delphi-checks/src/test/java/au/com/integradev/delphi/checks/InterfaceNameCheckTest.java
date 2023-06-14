@@ -18,46 +18,40 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class InterfaceNameCheckTest extends CheckTest {
-
+class InterfaceNameCheckTest {
   @Test
   void testValidNameShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  IPublisher = interface")
-            .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
-            .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
-            .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
-            .appendDecl("      procedure Notify(Event: TObject);")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("InterfaceNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new InterfaceNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IPublisher = interface")
+                .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
+                .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
+                .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
+                .appendDecl("      procedure Notify(Event: TObject);")
+                .appendDecl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInvalidNameShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  Publisher = interface")
-            .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
-            .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
-            .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
-            .appendDecl("      procedure Notify(Event: TObject);")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("InterfaceNameRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new InterfaceNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Publisher = interface")
+                .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
+                .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
+                .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
+                .appendDecl("      procedure Notify(Event: TObject);")
+                .appendDecl("end;"))
+        .verifyIssueOnLine(6);
   }
 }

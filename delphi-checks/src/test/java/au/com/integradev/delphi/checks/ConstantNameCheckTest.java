@@ -18,124 +18,111 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import java.util.Objects;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ConstantNameCheckTest extends CheckTest {
-  @BeforeEach
-  void setup() {
-    DelphiRuleProperty property =
-        Objects.requireNonNull(
-            getRule(ConstantNameCheck.class).getProperty(ConstantNameCheck.PREFIXES.name()));
-    property.setValue("C_");
+class ConstantNameCheckTest {
+  private static DelphiCheck createCheck() {
+    ConstantNameCheck check = new ConstantNameCheck();
+    check.prefixes = "C";
+    return check;
   }
 
   @Test
   void testConstantWithPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("const");
-    builder.appendDecl("  C_MyConstant = 'Value';");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstantNotationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("const")
+                .appendDecl("  CMyConstant = 'Value';"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFirstCharacterIsNumberShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("const");
-    builder.appendDecl("  C_85Constant = 'Value';");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstantNotationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("const")
+                .appendDecl("  C85Constant = 'Value';"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBadPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("const");
-    builder.appendDecl("  CMyConstant = 'Value';");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("const")
+                .appendDecl("  C_MyConstant = 'Value';"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testBadPascalCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("const");
-    builder.appendDecl("  C_myConstant = 'Value';");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("const")
+                .appendDecl("  CmyConstant = 'Value';"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testInlineConstantWithPrefixShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const C_MyConstant = 'Value';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstantNotationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const CMyConstant = 'Value';")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInlineFirstCharacterIsNumberShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const C_85Constant = 'Value';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ConstantNotationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const C85Constant = 'Value';")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInlineBadPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const CConstant = 'Value';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const C_Constant = 'Value';")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testInlineBadPascalCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const C_myConstant = 'Value';")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ConstantNotationRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const CmyConstant = 'Value';")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

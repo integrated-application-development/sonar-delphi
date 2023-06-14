@@ -18,185 +18,170 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ReRaiseExceptionCheckTest extends CheckTest {
-
+class ReRaiseExceptionCheckTest {
   @Test
   void testRaiseInExceptShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    raise;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ReRaiseExceptionRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    raise;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRaiseInExceptionHandlerShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on E: MyException do begin")
-            .appendImpl("      raise;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ReRaiseExceptionRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on E: MyException do begin")
+                .appendImpl("      raise;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRaisingNormalExceptionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure ThrowException;")
-            .appendImpl("begin")
-            .appendImpl("  raise Exception.Create('Spooky scary skeletons!');")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure ThrowException;")
+                .appendImpl("begin")
+                .appendImpl("  raise Exception.Create('Spooky scary skeletons!');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRaiseInExceptionHandlerWithNoSemicolonOrBeginEndShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on E: Exception do raise")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on E: Exception do raise")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testBadRaiseShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on E: MyException do begin")
-            .appendImpl("      raise E;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 7));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on E: MyException do begin")
+                .appendImpl("      raise E;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
   }
 
   @Test
   void testBadRaiseWithNoSemicolonOrBeginEndShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on E: Exception do raise E")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 6));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on E: Exception do raise E")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 
   @Test
   void testMultipleBadRaisesShouldAddIssues() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on E: MyException do begin")
-            .appendImpl("      if SomeCondition then begin")
-            .appendImpl("        raise E;")
-            .appendImpl("      end;")
-            .appendImpl("      raise E;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 8))
-        .areExactly(1, ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 10));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on E: MyException do begin")
+                .appendImpl("      if SomeCondition then begin")
+                .appendImpl("        raise E;")
+                .appendImpl("      end;")
+                .appendImpl("      raise E;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14, 16);
   }
 
   @Test
   void testRaiseDifferentExceptionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on E: MyException do begin")
-            .appendImpl("      raise SomeOtherException.Create;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ReRaiseExceptionRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on E: MyException do begin")
+                .appendImpl("      raise SomeOtherException.Create;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRaiseDifferentExceptionWithoutIdentifierShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  try")
-            .appendImpl("    ThrowException;")
-            .appendImpl("  except")
-            .appendImpl("    on Exception do begin")
-            .appendImpl("      raise Exception.Create;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("ReRaiseExceptionRule", builder.getOffset() + 7));
+    CheckVerifier.newVerifier()
+        .withCheck(new ReRaiseExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    ThrowException;")
+                .appendImpl("  except")
+                .appendImpl("    on Exception do begin")
+                .appendImpl("      raise Exception.Create;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

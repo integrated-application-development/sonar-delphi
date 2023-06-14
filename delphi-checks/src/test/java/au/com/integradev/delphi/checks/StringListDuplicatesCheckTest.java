@@ -18,293 +18,270 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class StringListDuplicatesCheckTest extends CheckTest {
-
+class StringListDuplicatesCheckTest {
   @Test
   void testSortedOnNextLineShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.Sorted := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Sorted := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testSortedOnPreviousLineShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Sorted := True;")
-            .appendImpl("  List.Duplicates := dupError;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Sorted := True;")
+                .appendImpl("  List.Duplicates := dupError;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testSortedEarlierInBlockLineShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function MyFunc: Boolean;")
-            .appendImpl("begin")
-            .appendImpl("  List.Sorted := True;")
-            .appendImpl("  Result := True;")
-            .appendImpl("  List.Duplicates := dupError;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function MyFunc: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  List.Sorted := True;")
+                .appendImpl("  Result := True;")
+                .appendImpl("  List.Duplicates := dupError;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnsortedShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testUnsortedWithoutSemicolonShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testSortedFalseOnPreviousLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Sorted := False;")
-            .appendImpl("  List.Duplicates := dupError;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Sorted := False;")
+                .appendImpl("  List.Duplicates := dupError;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(10);
   }
 
   @Test
   void testSortedFalseOnNextLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.Sorted := False;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Sorted := False;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testSortedDifferentListOnPreviousLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  OtherList.Sorted := False;")
-            .appendImpl("  List.Duplicates := dupError;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  OtherList.Sorted := False;")
+                .appendImpl("  List.Duplicates := dupError;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(10);
   }
 
   @Test
   void testSortedDifferentListOnNextLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  OtherList.Duplicates := dupIgnore;")
-            .appendImpl("  List.Sorted := False;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  OtherList.Duplicates := dupIgnore;")
+                .appendImpl("  List.Sorted := False;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testDupAcceptShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupAccept;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupAccept;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnassignedDuplicatesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnassignedSortedShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.Sorted")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Sorted")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testStandaloneSortedShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  Sorted;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  Sorted;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testProcedureOnNextLineShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.SomeProcedure")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.SomeProcedure")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testQualifiedSortedShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
-            .appendImpl("  SomeClass.List.Sorted := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
+                .appendImpl("  SomeClass.List.Sorted := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testQualifiedNotSortedShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testQualifiedTrueShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.Sorted := System.True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("DuplicatesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Sorted := System.True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testQualifiedFalseShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.Sorted := System.False;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Sorted := System.False;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testSettingWrongPropertyShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure MyProcedure;")
-            .appendImpl("begin")
-            .appendImpl("  List.Duplicates := dupIgnore;")
-            .appendImpl("  List.X := True;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("DuplicatesRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new StringListDuplicatesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.X := True;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

@@ -18,55 +18,47 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class RaisingRawExceptionCheckTest extends CheckTest {
-
+class RaisingRawExceptionCheckTest {
   @Test
   void testCustomExceptionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  raise MyCustomException.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RaisingGeneralExceptionRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RaisingRawExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  raise MyCustomException.Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testGeneralExceptionShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  raise Exception.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("RaisingGeneralExceptionRule", builder.getOffset() + 3));
+  void testRawExceptionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RaisingRawExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  raise Exception.Create;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testRaisingInvalidExpressionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("begin")
-            .appendImpl("  raise (1 + 2);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("RaisingGeneralExceptionRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new RaisingRawExceptionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  raise (1 + 2);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

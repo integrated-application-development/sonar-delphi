@@ -18,37 +18,34 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ObjectTypeRuleTest extends CheckTest {
+class EmptyTypeSectionCheckTest {
   @Test
-  void testClassShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TClassType = class(TObject)")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ObjectTypeRule"));
+  void testNonEmptyTypeSectionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyTypeSectionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testObjectShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TObjectType = object")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ObjectTypeRule", builder.getOffsetDecl() + 2));
+  void testEmptyTypeSectionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyTypeSectionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  type")
+                .appendDecl("    // Empty nested type section")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 }

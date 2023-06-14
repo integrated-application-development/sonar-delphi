@@ -18,51 +18,46 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class MethodNestingDepthCheckTest extends CheckTest {
+class MethodNestingDepthCheckTest {
   @Test
   void testShallowNestedMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Outer;")
-            .appendImpl("  procedure Inner;")
-            .appendImpl("  begin")
-            .appendImpl("    // Nesting level: 1")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  // Nesting level: 0")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MethodNestingDepthRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNestingDepthCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Outer;")
+                .appendImpl("  procedure Inner;")
+                .appendImpl("  begin")
+                .appendImpl("    // Nesting level: 1")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  // Nesting level: 0")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testDeeplyNestedMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Outer;")
-            .appendImpl("  procedure Inner;")
-            .appendImpl("    procedure Innerest;")
-            .appendImpl("    begin")
-            .appendImpl("      // Nesting level: 2")
-            .appendImpl("    end;")
-            .appendImpl("  begin")
-            .appendImpl("    // Nesting level: 1")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  // Nesting level: 0")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("MethodNestingDepthRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new MethodNestingDepthCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Outer;")
+                .appendImpl("  procedure Inner;")
+                .appendImpl("    procedure Innerest;")
+                .appendImpl("    begin")
+                .appendImpl("      // Nesting level: 2")
+                .appendImpl("    end;")
+                .appendImpl("  begin")
+                .appendImpl("    // Nesting level: 1")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  // Nesting level: 0")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

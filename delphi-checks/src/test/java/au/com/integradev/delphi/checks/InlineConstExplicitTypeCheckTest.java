@@ -18,40 +18,34 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class InlineConstExplicitTypeCheckTest extends CheckTest {
+class InlineConstExplicitTypeCheckTest {
   @Test
   void testInlineVarWithTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const CFoo: Integer = 123;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("InlineConstExplicitTypeRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new InlineConstExplicitTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const CFoo: Integer = 123;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testInlineVarWithoutTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  const CFoo = 123;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("InlineConstExplicitTypeRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new InlineConstExplicitTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  const CFoo = 123;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

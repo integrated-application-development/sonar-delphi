@@ -18,53 +18,42 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class SuperfluousSemicolonCheckTest extends CheckTest {
-
+class SuperfluousSemicolonCheckTest {
   @Test
   void testRegularSemicolonsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("begin")
-            .appendImpl("  SomeVar := 5;")
-            .appendImpl("  if SomeVar = 5 then begin")
-            .appendImpl("    SomeVar := 6;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("SuperfluousSemicolonsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new SuperfluousSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("begin")
+                .appendImpl("  SomeVar := 5;")
+                .appendImpl("  if SomeVar = 5 then begin")
+                .appendImpl("    SomeVar := 6;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testStraySemicolonsShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure SemicolonTest;")
-            .appendImpl("begin")
-            .appendImpl(";")
-            .appendImpl("  ;SomeVar := 5;; ;")
-            .appendImpl("  if SomeVar = 5 then begin")
-            .appendImpl("    ;SomeVar := 6;;")
-            .appendImpl("    ;")
-            .appendImpl("  end;;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 3))
-        .areExactly(3, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 4))
-        .areExactly(2, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 6))
-        .areExactly(1, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 7))
-        .areExactly(1, ruleKeyAtLine("SuperfluousSemicolonsRule", builder.getOffset() + 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new SuperfluousSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("begin")
+                .appendImpl(";")
+                .appendImpl("  ;SomeVar := 5;; ;")
+                .appendImpl("  if SomeVar = 5 then begin")
+                .appendImpl("    ;SomeVar := 6;;")
+                .appendImpl("    ;")
+                .appendImpl("  end;;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9, 10, 10, 10, 12, 12, 13, 14);
   }
 }

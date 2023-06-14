@@ -18,44 +18,39 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import java.util.Objects;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class UnitNameCheckTest extends CheckTest {
-
-  @BeforeEach
-  void setup() {
-    DelphiRuleProperty property =
-        Objects.requireNonNull(
-            getRule(UnitNameCheck.class).getProperty(UnitNameCheck.PREFIXES.name()));
-    property.setValue("Prefix");
+class UnitNameCheckTest {
+  private static DelphiCheck createCheck() {
+    UnitNameCheck check = new UnitNameCheck();
+    check.prefixes = "Prefix";
+    return check;
   }
 
   @Test
-  void testValidRule() {
-    execute(new DelphiTestUnitBuilder().unitName("PrefixTestUnits"));
-
-    assertIssues().areNot(ruleKey("UnitNameRule"));
+  void testCompliantNameShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(new DelphiTestUnitBuilder().unitName("PrefixTestUnits"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testValidUnitUsingNameSpace() {
-    execute(new DelphiTestUnitBuilder().unitName("Namespace.PrefixTestUnits"));
-
-    assertIssues().areNot(ruleKey("UnitNameRule"));
+  void testCompliantNameWithNamespaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(new DelphiTestUnitBuilder().unitName("Namespace.PrefixTestUnits"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testInvalidUnit() {
-    execute(new DelphiTestUnitBuilder().unitName("myUnit"));
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnitNameRule", 1));
+  void testInvalidPrefixShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(new DelphiTestUnitBuilder().unitName("myUnit"))
+        .verifyIssueOnLine(1);
   }
 }

@@ -18,50 +18,57 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ImportSpecificityCheckTest extends CheckTest {
-
+class ImportSpecificityCheckTest {
   @Test
   void testImportUsedInImplementationShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  System.UITypes;")
-            .appendImpl("type")
-            .appendImpl("  Alias = System.UITypes.TMsgDlgType;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ImportSpecificityRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.UITypes;")
+                .appendImpl("type")
+                .appendImpl("  Alias = System.UITypes.TMsgDlgType;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testImportUsedInInterfaceShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  System.UITypes;")
-            .appendDecl("type")
-            .appendDecl("  Alias = System.UITypes.TMsgDlgType;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ImportSpecificityRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.UITypes;")
+                .appendDecl("type")
+                .appendDecl("  Alias = System.UITypes.TMsgDlgType;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedImportShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("uses System.UITypes;");
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("uses System.UITypes;"))
+        .verifyNoIssues();
+  }
 
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ImportSpecificityRule"));
+  private static DelphiTestUnitBuilder createSystemUITypes() {
+    return new DelphiTestUnitBuilder()
+        .unitName("System.UITypes")
+        .appendDecl("{$SCOPEDENUMS ON}")
+        .appendDecl("type")
+        .appendDecl(
+            "  TMsgDlgType = (mtWarning, mtError, mtInformation, mtConfirmation, mtCustom);")
+        .appendDecl("  TMsgDlgBtn = (mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore,")
+        .appendDecl("    mbAll, mbNoToAll, mbYesToAll, mbHelp, mbClose);")
+        .appendDecl("  TMsgDlgButtons = set of TMsgDlgBtn;");
   }
 }

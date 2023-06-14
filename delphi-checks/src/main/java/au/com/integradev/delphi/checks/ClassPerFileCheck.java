@@ -28,7 +28,6 @@ import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "ClassPerFileRule", repositoryKey = "delph")
@@ -54,7 +53,6 @@ public class ClassPerFileCheck extends DelphiCheck {
     if (count > limit) {
       context
           .newIssue()
-          .onFilePosition(FilePosition.atFileLevel())
           .withMessage(
               String.format("File has %d classes, maximum number of classes is %d.", count, limit))
           .report();

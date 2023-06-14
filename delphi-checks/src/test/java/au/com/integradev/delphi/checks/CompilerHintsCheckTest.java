@@ -18,29 +18,24 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CompilerHintsCheckTest extends CheckTest {
+class CompilerHintsCheckTest {
   @Test
   void testHintsOffShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF}");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("CompilerHintsRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerHintsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF}"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testHintsOnShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder().appendImpl("{$HINTS ON}");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CompilerHintsRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new CompilerHintsCheck())
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$HINTS ON}"))
+        .verifyNoIssues();
   }
 }

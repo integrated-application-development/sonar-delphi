@@ -18,173 +18,158 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnusedPropertyCheckTest extends CheckTest {
+class UnusedPropertyCheckTest {
   @Test
   void testUnusedPropertyShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("public")
-            .appendDecl("  property Bar: Integer read FBar;")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("public")
+                .appendDecl("  property Bar: Integer read FBar;")
+                .appendDecl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testUsedInMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("public")
-            .appendDecl("  property Bar: Integer read FBar;")
-            .appendDecl("end;")
-            .appendImpl("procedure Baz(Foo: TFoo);")
-            .appendImpl("begin")
-            .appendImpl("  Foo.Bar := 0;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("public")
+                .appendDecl("  property Bar: Integer read FBar;")
+                .appendDecl("end;")
+                .appendImpl("procedure Baz(Foo: TFoo);")
+                .appendImpl("begin")
+                .appendImpl("  Foo.Bar := 0;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUsedDefaultPropertyShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("public")
-            .appendDecl("   property Items[Index: Integer]: TObject; default;")
-            .appendDecl("end;")
-            .appendImpl("function Baz(Foo: TFoo): TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Foo[0];")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("   property Items[Index: Integer]: TObject; default;")
+                .appendDecl("end;")
+                .appendImpl("function Baz(Foo: TFoo): TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Foo[0];")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedPublishedPropertyShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("published")
-            .appendDecl("  property Bar: Integer read FBar;")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("published")
+                .appendDecl("  property Bar: Integer read FBar;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedRedeclaredPropertyShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("private")
-            .appendDecl("  property Baz: Integer read FBar;")
-            .appendDecl("end;")
-            .appendDecl("type TBar = class(TFoo)")
-            .appendDecl("public")
-            .appendDecl("  property Baz;")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 5))
-        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 9));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("private")
+                .appendDecl("  property Baz: Integer read FBar;")
+                .appendDecl("end;")
+                .appendDecl("type TBar = class(TFoo)")
+                .appendDecl("public")
+                .appendDecl("  property Baz;")
+                .appendDecl("end;"))
+        .verifyIssueOnLine(9, 13);
   }
 
   @Test
   void testUnusedRedeclaredPublishedPropertyShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("private")
-            .appendDecl("  property Baz: Integer read FBar;")
-            .appendDecl("end;")
-            .appendDecl("type TBar = class(TFoo)")
-            .appendDecl("published")
-            .appendDecl("  property Baz;")
-            .appendDecl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("private")
+                .appendDecl("  property Baz: Integer read FBar;")
+                .appendDecl("end;")
+                .appendDecl("type TBar = class(TFoo)")
+                .appendDecl("published")
+                .appendDecl("  property Baz;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUsedRedeclaredPropertyShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("private")
-            .appendDecl("  property Baz: Integer read FBar;")
-            .appendDecl("end;")
-            .appendDecl("type TBar = class(TFoo)")
-            .appendDecl("public")
-            .appendDecl("  property Baz;")
-            .appendDecl("end;")
-            .appendImpl("function Flarp(Bar: TBar): Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Bar.Baz;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedPropertiesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("private")
+                .appendDecl("  property Baz: Integer read FBar;")
+                .appendDecl("end;")
+                .appendDecl("type TBar = class(TFoo)")
+                .appendDecl("public")
+                .appendDecl("  property Baz;")
+                .appendDecl("end;")
+                .appendImpl("function Flarp(Bar: TBar): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Bar.Baz;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnusedRedeclaredPropertyWithUsedConcretePropertyShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type TFoo = class")
-            .appendDecl("private")
-            .appendDecl("  FBar: Integer;")
-            .appendDecl("private")
-            .appendDecl("  property Baz: Integer read FBar;")
-            .appendDecl("end;")
-            .appendDecl("type TBar = class(TFoo)")
-            .appendDecl("public")
-            .appendDecl("  property Baz;")
-            .appendDecl("end;")
-            .appendImpl("function Flarp(Foo: TFoo): Integer;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Bar.Baz;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnusedPropertiesRule", builder.getOffsetDecl() + 9));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("private")
+                .appendDecl("  property Baz: Integer read FBar;")
+                .appendDecl("end;")
+                .appendDecl("type TBar = class(TFoo)")
+                .appendDecl("public")
+                .appendDecl("  property Baz;")
+                .appendDecl("end;")
+                .appendImpl("function Flarp(Foo: TFoo): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Foo.Baz;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
   }
 }

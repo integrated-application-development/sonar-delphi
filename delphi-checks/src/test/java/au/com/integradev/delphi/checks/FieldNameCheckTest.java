@@ -18,160 +18,136 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class FieldNameCheckTest extends CheckTest {
-
+class FieldNameCheckTest {
   @Test
-  void testValidRule() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("  private");
-    builder.appendDecl("   FFoo: Integer;");
-    builder.appendDecl("  protected");
-    builder.appendDecl("   FBar: String;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("FieldNameRule"));
+  void testFieldWithValidNameShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("   FFoo: Integer;")
+                .appendDecl("  protected")
+                .appendDecl("   FBar: String;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFieldNameWithoutPrefixShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class (TObject)");
-    builder.appendDecl("    private");
-    builder.appendDecl("     Id: Integer;");
-    builder.appendDecl("     Code: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     Name: String;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7));
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class (TObject)")
+                .appendDecl("    private")
+                .appendDecl("     Id: Integer;")
+                .appendDecl("     Code: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     Name: String;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 9, 11);
   }
 
   @Test
-  void testPublishedFieldsShouldBeSkipped() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
-    builder.appendDecl("     DefaultId: Integer;");
-    builder.appendDecl("    private");
-    builder.appendDecl("     Id: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     Name: String;");
-    builder.appendDecl("    public");
-    builder.appendDecl("     PublicName: String;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7))
-        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9));
+  void testPublicAndPublishedFieldsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class")
+                .appendDecl("     DefaultId: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     Id: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     Name: String;")
+                .appendDecl("    public")
+                .appendDecl("     PublicName: String;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(9, 11);
   }
 
   @Test
-  void testPublishedFieldsInMultipleClassesShouldBeSkipped() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
-    builder.appendDecl("     DefaultId: Integer;");
-    builder.appendDecl("    private");
-    builder.appendDecl("     Id: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     Name: String;");
-    builder.appendDecl("    public");
-    builder.appendDecl("     PublicName: String;");
-    builder.appendDecl("  end;");
-
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyOtherClass = class");
-    builder.appendDecl("     DefaultId: Integer;");
-    builder.appendDecl("    private");
-    builder.appendDecl("     Id: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     Name: String;");
-    builder.appendDecl("    public");
-    builder.appendDecl("     PublicName: String;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 3))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7))
-        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 9))
-        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 13))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 15))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 17))
-        .areNot(ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 19));
+  void testPublicAndPublishedFieldsInMultipleClassesShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class")
+                .appendDecl("     DefaultId: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     Id: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     Name: String;")
+                .appendDecl("    public")
+                .appendDecl("     PublicName: String;")
+                .appendDecl("  end;")
+                .appendDecl("type")
+                .appendDecl("  TMyOtherClass = class")
+                .appendDecl("     DefaultId: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     Id: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     Name: String;")
+                .appendDecl("    public")
+                .appendDecl("     PublicName: String;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(9, 11, 19, 21);
   }
 
   @Test
   void testBadPascalCaseShouldAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("    private");
-    builder.appendDecl("     Ffoo: Integer;");
-    builder.appendDecl("     Foo: Integer;");
-    builder.appendDecl("    protected");
-    builder.appendDecl("     Fbar: String;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 7));
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    private")
+                .appendDecl("     Ffoo: Integer;")
+                .appendDecl("     Foo: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     Fbar: String;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 9, 11);
   }
 
   @Test
-  void testOneLetterNameFields() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class");
-    builder.appendDecl("    private");
-    builder.appendDecl("     X: Integer;");
-    builder.appendDecl("     F: Integer;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4))
-        .areExactly(1, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 5));
+  void testOneLetterNameFieldsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class")
+                .appendDecl("    private")
+                .appendDecl("     X: Integer;")
+                .appendDecl("     F: Integer;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 9);
   }
 
   @Test
-  void testIdentListField() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  TMyClass = class(TObject)");
-    builder.appendDecl("    private");
-    builder.appendDecl("     X, Y: Integer;");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(2, ruleKeyAtLine("FieldNameRule", builder.getOffsetDecl() + 4));
+  void testMultipleFieldDeclarationWithBadNameShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FieldNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    private")
+                .appendDecl("     X,")
+                .appendDecl("     Y: Integer;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8, 9);
   }
 }

@@ -18,17 +18,14 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class VisibilitySectionOrderCheckTest extends CheckTest {
+class VisibilitySectionOrderCheckTest {
   @ParameterizedTest(name = "[{index}] {0} before {1}")
   @CsvSource({
     "private,strict private",
@@ -38,23 +35,20 @@ class VisibilitySectionOrderCheckTest extends CheckTest {
     "published,private",
   })
   void testOutOfOrderSectionsShouldAddIssue(String firstVisibility, String secondVisibility) {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  " + firstVisibility)
-        .appendDecl("    procedure Bar;")
-        .appendDecl("    property Baz: Integer;")
-        .appendDecl("  " + secondVisibility)
-        .appendDecl("    procedure Bar2;")
-        .appendDecl("    property Baz2: Integer;")
-        .appendDecl(" end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("VisibilitySectionOrderRule", builder.getOffsetDecl() + 6))
-        .areExactly(1, ruleKey("VisibilitySectionOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  " + firstVisibility)
+                .appendDecl("    procedure Bar;")
+                .appendDecl("    property Baz: Integer;")
+                .appendDecl("  " + secondVisibility)
+                .appendDecl("    procedure Bar2;")
+                .appendDecl("    property Baz2: Integer;")
+                .appendDecl(" end;"))
+        .verifyIssueOnLine(10);
   }
 
   @ParameterizedTest(name = "[{index}] {0} before {1}")
@@ -66,80 +60,73 @@ class VisibilitySectionOrderCheckTest extends CheckTest {
     "private,published",
   })
   void testOrderedSectionsShouldNotAddIssue(String firstVisibility, String secondVisibility) {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  " + firstVisibility)
-        .appendDecl("    procedure Bar;")
-        .appendDecl("    property Baz: Integer;")
-        .appendDecl("  " + secondVisibility)
-        .appendDecl("    procedure Bar2;")
-        .appendDecl("    property Baz2: Integer;")
-        .appendDecl(" end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VisibilitySectionOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  " + firstVisibility)
+                .appendDecl("    procedure Bar;")
+                .appendDecl("    property Baz: Integer;")
+                .appendDecl("  " + secondVisibility)
+                .appendDecl("    procedure Bar2;")
+                .appendDecl("    property Baz2: Integer;")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMultipleOfTheSameSectionShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  public")
-        .appendDecl("    procedure Bar;")
-        .appendDecl("    property Baz: Integer;")
-        .appendDecl("  public")
-        .appendDecl("    procedure Bar2;")
-        .appendDecl("    property Baz2: Integer;")
-        .appendDecl(" end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VisibilitySectionOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("    property Baz: Integer;")
+                .appendDecl("  public")
+                .appendDecl("    procedure Bar2;")
+                .appendDecl("    property Baz2: Integer;")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testMultipleOutOfOrderSectionsShouldAddMultipleIssues() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("  public")
-        .appendDecl("    procedure Baz;")
-        .appendDecl("  private")
-        .appendDecl("    procedure Bee;")
-        .appendDecl("  protected")
-        .appendDecl("    procedure Bee;")
-        .appendDecl("  published")
-        .appendDecl("    procedure Bee;")
-        .appendDecl(" end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("VisibilitySectionOrderRule", builder.getOffsetDecl() + 5))
-        .areExactly(1, ruleKeyAtLine("VisibilitySectionOrderRule", builder.getOffsetDecl() + 7))
-        .areExactly(2, ruleKey("VisibilitySectionOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    procedure Baz;")
+                .appendDecl("  private")
+                .appendDecl("    procedure Bee;")
+                .appendDecl("  protected")
+                .appendDecl("    procedure Bee;")
+                .appendDecl("  published")
+                .appendDecl("    procedure Bee;")
+                .appendDecl(" end;"))
+        .verifyIssueOnLine(9, 11);
   }
 
   @Test
   void testImplicitPublishedFollowedByPrivateShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("    procedure Bar;")
-        .appendDecl("  private")
-        .appendDecl("    procedure Baz;")
-        .appendDecl(" end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VisibilitySectionOrderRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  private")
+                .appendDecl("    procedure Baz;")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
   }
 
   @ParameterizedTest
@@ -152,19 +139,17 @@ class VisibilitySectionOrderCheckTest extends CheckTest {
         "record helper for string"
       })
   void testAllStructTypesWithOrderedVisibilitySectionsShouldAddIssue(String structType) {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = " + structType)
-        .appendDecl("  public")
-        .appendDecl("    procedure Bar;")
-        .appendDecl("  protected")
-        .appendDecl("    procedure Baz;")
-        .appendDecl(" end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("VisibilitySectionOrderRule", builder.getOffsetDecl() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo  = " + structType)
+                .appendDecl("  public")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  protected")
+                .appendDecl("    procedure Baz;")
+                .appendDecl(" end;"))
+        .verifyIssueOnLine(9);
   }
 }

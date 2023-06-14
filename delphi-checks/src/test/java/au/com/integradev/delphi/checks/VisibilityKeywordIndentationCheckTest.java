@@ -18,16 +18,13 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class VisibilityKeywordIndentationCheckTest extends CheckTest {
+class VisibilityKeywordIndentationCheckTest {
   @ParameterizedTest
   @ValueSource(
       strings = {
@@ -38,19 +35,16 @@ class VisibilityKeywordIndentationCheckTest extends CheckTest {
         "record helper for string"
       })
   void testTooIndentedVisibilitySpecifierShouldRaiseIssue(String structType) {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = " + structType)
-        .appendDecl("    public")
-        .appendDecl("    procedure Proc;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("VisibilityKeywordIndentationRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = " + structType)
+                .appendDecl("    public")
+                .appendDecl("    procedure Proc;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 
   @ParameterizedTest
@@ -63,48 +57,43 @@ class VisibilityKeywordIndentationCheckTest extends CheckTest {
         "record helper for string"
       })
   void testCorrectlyIndentedVisibilitySpecifierShouldNotRaiseIssue(String structType) {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = " + structType)
-        .appendDecl("  protected")
-        .appendDecl("    procedure Proc;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VisibilityKeywordIndentationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = " + structType)
+                .appendDecl("  protected")
+                .appendDecl("    procedure Proc;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testImplicitPublishedVisibilitySectionShouldNotRaiseIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("    procedure Bar;")
-        .appendDecl("    procedure Baz;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("VisibilityKeywordIndentationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("    procedure Baz;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUnindentedVisibilitySpecifierShouldRaiseIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TFoo = class(TObject)")
-        .appendDecl("strict private")
-        .appendDecl("    procedure Proc;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("VisibilityKeywordIndentationRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("strict private")
+                .appendDecl("    procedure Proc;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(7);
   }
 }

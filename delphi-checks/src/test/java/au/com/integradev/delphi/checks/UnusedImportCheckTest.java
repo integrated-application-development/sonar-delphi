@@ -18,122 +18,115 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class UnusedImportCheckTest extends CheckTest {
-  private final DelphiRuleProperty property = new DelphiRuleProperty("exclusions");
+class UnusedImportCheckTest {
+  private static DelphiCheck createCheck() {
+    return createCheck("");
+  }
 
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.UnusedImportsRule");
-    rule.setPriority(4);
-    rule.setName("UnusedImportsRule_TEST");
-    rule.setProperties(List.of(property));
-    addRule(rule);
+  private static DelphiCheck createCheck(String exclusions) {
+    UnusedImportCheck check = new UnusedImportCheck();
+    check.exclusions = exclusions;
+    return check;
   }
 
   @Test
   void testUnusedImportShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.SysUtils;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedImportsRule_TEST", builder.getOffset() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.SysUtils;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(8);
   }
 
   @Test
   void testUnresolvedImportShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  NONEXISTENT_UNIT;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  NONEXISTENT_UNIT;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testImplicitlyUsedImportShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.SysUtils;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("  FreeAndNil(Obj);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.SysUtils;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("  FreeAndNil(Obj);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testExcludedUnusedImportInInterfaceSectionShouldNotAddIssue() {
-    property.setValue("System.SysUtils");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("  System.SysUtils;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedImportsRule_TEST"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("System.SysUtils"))
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.SysUtils;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testExcludedUnusedImportInImplementationSectionShouldAddIssue() {
-    property.setValue("System.SysUtils");
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("System.SysUtils"))
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.SysUtils;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(8);
+  }
 
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.SysUtils;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Obj: TObject;")
-            .appendImpl("begin")
-            .appendImpl("  Obj := TObject.Create;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedImportsRule_TEST", builder.getOffset() + 2));
+  private static DelphiTestUnitBuilder createSysUtils() {
+    return new DelphiTestUnitBuilder()
+        .unitName("System.SysUtils")
+        .appendDecl("procedure FreeAndNil(var Obj); inline;");
   }
 }

@@ -18,99 +18,69 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.checks.ForbiddenImportFilePatternCheck.FORBIDDEN_IMPORT_PATTERN;
-import static au.com.integradev.delphi.checks.ForbiddenImportFilePatternCheck.FORBIDDEN_IMPORT_SYNTAX;
-import static au.com.integradev.delphi.checks.ForbiddenImportFilePatternCheck.WHITELIST_PATTERN;
-import static au.com.integradev.delphi.checks.ForbiddenImportFilePatternCheck.WHITELIST_SYNTAX;
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
-import org.sonar.api.utils.PathUtils;
+import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ForbiddenImportFilePatternCheckTest extends CheckTest {
-  private DelphiRuleProperty forbiddenPattern;
-  private DelphiRuleProperty forbiddenSyntax;
-  private DelphiRuleProperty whitelistPattern;
-  private DelphiRuleProperty whitelistSyntax;
+class ForbiddenImportFilePatternCheckTest {
+  private static final String FORBIDDEN_PATTERN = "**/Foo.pas";
+  private static final String FORBIDDEN_SYNTAX = "GLOB";
 
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    forbiddenPattern = new DelphiRuleProperty(FORBIDDEN_IMPORT_PATTERN.name());
-    forbiddenSyntax = new DelphiRuleProperty(FORBIDDEN_IMPORT_SYNTAX.name());
-    whitelistPattern = new DelphiRuleProperty(WHITELIST_PATTERN.name());
-    whitelistSyntax = new DelphiRuleProperty(WHITELIST_SYNTAX.name());
-
-    rule.setName("ForbiddenImportFilePatternRuleTest");
-    rule.setTemplateName("ForbiddenImportFilePatternRule");
-    rule.setPriority(5);
-    rule.addProperty(forbiddenPattern);
-    rule.addProperty(forbiddenSyntax);
-    rule.addProperty(whitelistPattern);
-    rule.addProperty(whitelistSyntax);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.ForbiddenImportFilePatternRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck(String whitelistPattern, String whitelistSyntax) {
+    ForbiddenImportFilePatternCheck check = new ForbiddenImportFilePatternCheck();
+    check.forbiddenImportPattern = FORBIDDEN_PATTERN;
+    check.forbiddenImportSyntax = FORBIDDEN_SYNTAX;
+    check.whitelistPattern = whitelistPattern;
+    check.whitelistSyntax = whitelistSyntax;
+    return check;
   }
 
   @Test
   void testForbiddenImportShouldAddIssue() {
-    forbiddenPattern.setValue("**" + STANDARD_LIBRARY + "/System.SysUtils.pas");
-    forbiddenSyntax.setValue("GLOB");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    Vcl.Controls")
-            .appendDecl("  , System.SysUtils")
-            .appendDecl("  ;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(
-            1, ruleKeyAtLine("ForbiddenImportFilePatternRuleTest", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("", ""))
+        .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Foo"))
+        .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Bar"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("    Foo")
+                .appendDecl("  , Bar")
+                .appendDecl("  ;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testForbiddenImportInWhitelistedFileShouldNotAddIssue() {
-    forbiddenPattern.setValue("**" + STANDARD_LIBRARY + "/System.SysUtils.pas");
-    forbiddenSyntax.setValue("GLOB");
-    whitelistPattern.setValue(PathUtils.sanitize(ROOT_DIR.getAbsolutePath()) + "/**");
-    whitelistSyntax.setValue("GLOB");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    System.SysUtils")
-            .appendDecl("  ;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenImportFilePatternRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("**/Baz.pas", "GLOB"))
+        .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Foo"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName("Baz")
+                .appendDecl("uses")
+                .appendDecl("    Foo")
+                .appendDecl("  ;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testInvalidPatternShouldNotAddIssue() {
-    forbiddenPattern.setValue("**" + STANDARD_LIBRARY + "/System.SysUtils.pas");
-    forbiddenSyntax.setValue("GLOB");
-    whitelistPattern.setValue("[");
-    whitelistSyntax.setValue("REGEX");
-
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("uses")
-            .appendDecl("    System.SysUtils")
-            .appendDecl("  ;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenImportFilePatternRuleTest"));
+  void testInvalidPatternShouldThrow() {
+    assertThatThrownBy(
+            () ->
+                CheckVerifier.newVerifier()
+                    .withCheck(createCheck("[", "REGEX"))
+                    .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Foo"))
+                    .onFile(
+                        new DelphiTestUnitBuilder()
+                            .appendDecl("uses")
+                            .appendDecl("    Foo")
+                            .appendDecl("  ;"))
+                    .verifyNoIssues())
+        .isInstanceOf(FatalAnalysisError.class);
   }
 }

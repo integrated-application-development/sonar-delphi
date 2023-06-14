@@ -18,122 +18,111 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-import static org.sonar.plugins.communitydelphi.api.check.FilePosition.UNDEFINED_LINE;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ClassPerFileCheckTest extends CheckTest {
+class ClassPerFileCheckTest {
 
   @Test
   void testOneClassShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassPerFileRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testForwardTypesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class;")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassPerFileRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class;")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testStubTypesShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject);")
-            .appendDecl("  TBar = class(TFoo);");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassPerFileRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject);")
+                .appendDecl("  TBar = class(TFoo);"))
+        .verifyNoIssues();
   }
 
   @Test
   void testTwoClassesShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendDecl("  TMyClass2 = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ClassPerFileRule", UNDEFINED_LINE));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendDecl("  TMyClass2 = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;"))
+        .verifyIssueOnFile();
   }
 
   @Test
   void testMultipleViolationsShouldAddOneIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendDecl("  TMyClass2 = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendDecl("  TMyClass3 = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("ClassPerFileRule", UNDEFINED_LINE));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendDecl("  TMyClass2 = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendDecl("  TMyClass3 = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;"))
+        .verifyIssueOnFile();
   }
 
   @Test
   void testFalsePositiveMetaClass() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("    procedure Foo;")
-            .appendDecl("  end;")
-            .appendDecl("  TMetaClassClass = class of TMyClass;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassPerFileRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendDecl("  TMetaClassClass = class of TMyClass;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testFalsePositiveClassMethods() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TMyClass = class(TObject)")
-            .appendDecl("    class procedure TestProcedure;")
-            .appendDecl("    class function TestFunction: Boolean;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ClassPerFileRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new ClassPerFileCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class(TObject)")
+                .appendDecl("    class procedure TestProcedure;")
+                .appendDecl("    class function TestFunction: Boolean;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

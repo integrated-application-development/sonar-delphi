@@ -18,20 +18,16 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder.ResourceBuilder;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class UnitLevelKeywordIndentationCheckTest extends CheckTest {
+class UnitLevelKeywordIndentationCheckTest {
   private static final String RESOURCE_PATH =
-      "/au/com/integradev/delphi/pmd/rules/UnitLevelKeywordIndentationRule";
+      "/au/com/integradev/delphi/checks/UnitLevelKeywordIndentationCheck";
   private static final String CORRECT_PAS = RESOURCE_PATH + "/Correct.pas";
   private static final String INDENTED_PAS = RESOURCE_PATH + "/Indented.pas";
   private static final String CORRECT_DPR = RESOURCE_PATH + "/Correct.dpr";
@@ -39,90 +35,40 @@ class UnitLevelKeywordIndentationCheckTest extends CheckTest {
 
   @Test
   void testIndentedProgramShouldAddIssue() {
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(INDENTED_DPR);
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 1))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 3))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 8));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnitLevelKeywordIndentationCheck())
+        .onFile(DelphiTestFileBuilder.fromResource(INDENTED_DPR))
+        .verifyIssueOnLine(1, 3, 8, 10);
   }
 
   @Test
-  void testIndentedHeadingsShouldAddIssue() {
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(INDENTED_PAS);
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 1))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 3))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 13))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 23))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 25));
-  }
-
-  @Test
-  void testIndentedFinalEndShouldAddIssue() {
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(INDENTED_PAS);
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 27));
-  }
-
-  @Test
-  void testIndentedUsesShouldAddIssue() {
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(INDENTED_PAS);
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 5))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 15));
-  }
-
-  @Test
-  void testIndentedTypeShouldAddIssue() {
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(INDENTED_PAS);
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 9))
-        .areExactly(1, ruleKeyAtLine("UnitLevelKeywordIndentationRule", 19));
+  void testIndentedUnitShouldAddIssues() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnitLevelKeywordIndentationCheck())
+        .onFile(DelphiTestFileBuilder.fromResource(INDENTED_PAS))
+        .verifyIssueOnLine(1, 3, 5, 9, 13, 15, 19, 23, 25, 27);
   }
 
   @Test
   void testIndentedInnerTypeShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder
-        .appendDecl("type")
-        .appendDecl("  TObject = class(TObject)")
-        .appendDecl("    type TInnerObject = class(TObject)")
-        .appendDecl("    end;")
-        .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areNot(ruleKeyAtLine("UnitLevelKeywordIndentationRule", builder.getOffsetDecl() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnitLevelKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TObject = class(TObject)")
+                .appendDecl("    type TInnerObject = class(TObject)")
+                .appendDecl("    end;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @ParameterizedTest
   @ValueSource(strings = {CORRECT_PAS, CORRECT_DPR})
   void testUnindentedKeywordsShouldNotAddIssue(String correctFile) {
-    DelphiTestFileBuilder<ResourceBuilder> builder =
-        DelphiTestFileBuilder.fromResource(correctFile);
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnitLevelKeywordIndentationRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnitLevelKeywordIndentationCheck())
+        .onFile(DelphiTestFileBuilder.fromResource(correctFile))
+        .verifyNoIssues();
   }
 }

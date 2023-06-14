@@ -38,7 +38,7 @@ public abstract class AbstractImportCheck extends DelphiCheck {
       description =
           "Comma-delimited fully-qualified names of unit imports to exclude"
               + "(only in the interface section)")
-  private String exclusions = "";
+  public String exclusions = "";
 
   private Set<String> exclusionSet;
   private UnitNameDeclaration unitDeclaration;

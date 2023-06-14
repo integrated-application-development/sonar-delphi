@@ -18,105 +18,82 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRule;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import org.junit.jupiter.api.BeforeEach;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class ForbiddenTypeCheckTest extends CheckTest {
+class ForbiddenTypeCheckTest {
   private static final String UNIT_NAME = "TestUnit";
-  private static final String FORBIDDEN_TYPES = "TestUnit.TFoo|TestUnit.TFoo.TBar";
+  private static final String FORBIDDEN_TYPES = "TestUnit.TFoo,TestUnit.TFoo.TBar";
 
-  @BeforeEach
-  void setup() {
-    DelphiRule rule = new DelphiRule();
-    DelphiRuleProperty blacklist =
-        new DelphiRuleProperty(ForbiddenTypeCheck.BLACKLISTED_TYPES.name(), FORBIDDEN_TYPES);
-
-    rule.setName("ForbiddenTypeRuleTest");
-    rule.setTemplateName("ForbiddenTypeRule");
-    rule.setPriority(5);
-    rule.addProperty(blacklist);
-    rule.setClazz("au.com.integradev.delphi.pmd.rules.ForbiddenTypeRule");
-
-    addRule(rule);
+  private static DelphiCheck createCheck() {
+    ForbiddenTypeCheck check = new ForbiddenTypeCheck();
+    check.types = FORBIDDEN_TYPES;
+    return check;
   }
 
   @Test
   void testForbiddenTypeUsageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    class procedure Bar;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("begin")
-            .appendImpl("  TFoo.Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 3))
-        .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 5));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    class procedure Bar;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  TFoo.Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(14, 16);
   }
 
   @Test
   void testForbiddenNestedTypeUsageShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("  type")
-            .appendDecl("    TNested = class(TObject)")
-            .appendDecl("      class procedure Bar;")
-            .appendDecl("    end;")
-            .appendDecl("    class procedure Bar;")
-            .appendDecl("  end;")
-            .appendImpl("procedure Test;")
-            .appendImpl("var")
-            .appendImpl("  Foo: TFoo;")
-            .appendImpl("  Nested: TFoo.TNested;")
-            .appendImpl("begin")
-            .appendImpl("  TFoo.Bar;")
-            .appendImpl("  TFoo.TNested.Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 3))
-        .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 4))
-        .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 6))
-        .areExactly(1, ruleKeyAtLine("ForbiddenTypeRuleTest", builder.getOffset() + 7));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  type")
+                .appendDecl("    TNested = class(TObject)")
+                .appendDecl("      class procedure Bar;")
+                .appendDecl("    end;")
+                .appendDecl("    class procedure Bar;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("  Nested: TFoo.TNested;")
+                .appendImpl("begin")
+                .appendImpl("  TFoo.Bar;")
+                .appendImpl("  TFoo.TNested.Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(18, 19, 21, 22);
   }
 
   @Test
   void testMethodImplementationShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .unitName(UNIT_NAME)
-            .appendDecl("type")
-            .appendDecl("  TFoo = class(TObject)")
-            .appendDecl("    procedure Bar; virtual;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Bar;")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("ForbiddenTypeRuleTest"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Bar; virtual;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Bar;")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

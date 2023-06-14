@@ -18,65 +18,73 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class MathFunctionSingleOverloadCheckTest extends CheckTest {
-
+class MathFunctionSingleOverloadCheckTest {
   @Test
   void testExtendedOverloadShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.Math;")
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  Power(1.0, Integer(1));")
-            .appendImpl("  IntPower(1.0, 1);")
-            .appendImpl("  IntPower(Extended(1.0), 1);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MathFunctionSingleOverloadRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MathFunctionSingleOverloadCheck())
+        .withSearchPathUnit(createSystemMath())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.Math;")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  Power(1.0, Integer(1));")
+                .appendImpl("  IntPower(1.0, 1);")
+                .appendImpl("  IntPower(Extended(1.0), 1);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testDoubleOverloadShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.Math;")
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  IntPower(Double(1.0), 1);")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("MathFunctionSingleOverloadRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new MathFunctionSingleOverloadCheck())
+        .withSearchPathUnit(createSystemMath())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.Math;")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  IntPower(Double(1.0), 1);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testSingleOverloadShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("uses")
-            .appendImpl("  System.Math;")
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  IntPower(Single(1.0), 1);")
-            .appendImpl("  IntPower(1, 1);")
-            .appendImpl("end;");
+    CheckVerifier.newVerifier()
+        .withCheck(new MathFunctionSingleOverloadCheck())
+        .withSearchPathUnit(createSystemMath())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.Math;")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  IntPower(Single(1.0), 1);")
+                .appendImpl("  IntPower(1, 1);")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11, 12);
+  }
 
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("MathFunctionSingleOverloadRule", builder.getOffset() + 5))
-        .areExactly(1, ruleKeyAtLine("MathFunctionSingleOverloadRule", builder.getOffset() + 6));
+  private static DelphiTestUnitBuilder createSystemMath() {
+    return new DelphiTestUnitBuilder()
+        .unitName("System.Math")
+        .appendDecl(
+            "function IntPower(const Base: Single; const Exponent: Integer): Single; overload;")
+        .appendDecl(
+            "function IntPower(const Base: Double; const Exponent: Integer): Double; overload;")
+        .appendDecl(
+            "function IntPower(const Base: Extended; const Exponent: Integer): Extended; overload;")
+        .appendDecl("function Power(const Base, Exponent: Extended): Extended; overload;")
+        .appendDecl("function Power(const Base, Exponent: Double): Double; overload;")
+        .appendDecl("function Power(const Base, Exponent: Single): Single; overload;");
   }
 }

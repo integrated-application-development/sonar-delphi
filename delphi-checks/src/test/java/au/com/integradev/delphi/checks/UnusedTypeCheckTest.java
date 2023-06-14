@@ -18,123 +18,113 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class UnusedTypeCheckTest extends CheckTest {
+class UnusedTypeCheckTest {
   @Test
   void testUnusedTypeShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedTypesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUsedByFieldShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("    Bar: TFoo;")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedTypesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    Bar: TFoo;")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUsedInMemberMethodShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("    procedure Baz;")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Baz;")
-            .appendImpl("begin")
-            .appendImpl("  var Foo: TFoo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedTypesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    procedure Baz;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Baz;")
+                .appendImpl("begin")
+                .appendImpl("  var Foo: TFoo;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUsedInMemberMethodParametersShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("    procedure Baz(Foo: TFoo);")
-            .appendDecl("  end;")
-            .appendImpl("procedure TFoo.Baz(Foo: TFoo);")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("UnusedTypesRule", builder.getOffsetDecl() + 2));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    procedure Baz(Foo: TFoo);")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Baz(Foo: TFoo);")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testUsedInMethodParametersShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendImpl("procedure Baz(Foo: TFoo);")
-            .appendImpl("begin")
-            .appendImpl("  // Do nothing")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedTypesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendImpl("procedure Baz(Foo: TFoo);")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testUsedInMethodShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendImpl("procedure Baz;")
-            .appendImpl("begin")
-            .appendImpl("  var Foo: TFoo;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("UnusedTypesRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendImpl("procedure Baz;")
+                .appendImpl("begin")
+                .appendImpl("  var Foo: TFoo;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testHelperShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendDecl("type")
-            .appendDecl("  TFoo = class")
-            .appendDecl("  end;")
-            .appendDecl("  TFooHelper = class helper for TFoo")
-            .appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKeyAtLine("UnusedTypesRule", builder.getOffsetDecl() + 4));
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;")
+                .appendDecl("  TFooHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 }

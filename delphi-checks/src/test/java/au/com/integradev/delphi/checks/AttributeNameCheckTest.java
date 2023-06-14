@@ -1,94 +1,79 @@
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.pmd.xml.DelphiRuleProperty;
-import java.util.Objects;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class AttributeNameCheckTest extends CheckTest {
-  private void setAttributeSuffixSetting(String setting) {
-    DelphiRuleProperty property =
-        Objects.requireNonNull(
-            getRule(AttributeNameCheck.class)
-                .getProperty(AttributeNameCheck.ATTRIBUTE_SUFFIX.name()));
-    property.setValue(setting);
+class AttributeNameCheckTest {
+  private static DelphiCheck createCheck(String setting) {
+    AttributeNameCheck check = new AttributeNameCheck();
+    check.attributeSuffix = setting;
+    return check;
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"allowed", "required"})
   void testAllowedOrRequiredAttributeTypeWithSuffixShouldNotAddIssue(String setting) {
-    setAttributeSuffixSetting(setting);
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  FooAttribute = class(TCustomAttribute)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AttributeNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck(setting))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"allowed", "forbidden"})
   void testAllowedOrForbiddenAttributeTypeWithoutSuffixShouldNotAddIssue(String setting) {
-    setAttributeSuffixSetting(setting);
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  Foo = class(TCustomAttribute)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("AttributeNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck(setting))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Foo = class(TCustomAttribute)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testRequiredAttributeTypeWithoutSuffixShouldAddIssue() {
-    setAttributeSuffixSetting("required");
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  Foo = class(TCustomAttribute)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKey("AttributeNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("required"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Foo = class(TCustomAttribute)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @Test
   void testForbiddenAttributeTypeWithSuffixShouldAddIssue() {
-    setAttributeSuffixSetting("forbidden");
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  FooAttribute = class(TCustomAttribute)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKey("AttributeNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("forbidden"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"allowed", "required", "forbidden"})
   void testNonPascalCaseAttributeTypeShouldAddIssue(String setting) {
-    setAttributeSuffixSetting(setting);
-
-    DelphiTestUnitBuilder builder = new DelphiTestUnitBuilder();
-    builder.appendDecl("type");
-    builder.appendDecl("  fooAttribute = class(TCustomAttribute)");
-    builder.appendDecl("  end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKey("AttributeNameRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck(setting))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  fooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(6);
   }
 }

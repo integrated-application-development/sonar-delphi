@@ -18,84 +18,77 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class CaseStatementSizeCheckTest extends CheckTest {
+class CaseStatementSizeCheckTest {
 
   @Test
   void testTwoCaseItemsShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  case MyNumber of")
-            .appendImpl("    1: Break;")
-            .appendImpl("    2: Break;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CaseStatementSizeRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new CaseStatementSizeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  case MyNumber of")
+                .appendImpl("    1: Break;")
+                .appendImpl("    2: Break;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testTwoCaseItemsWithElseShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  case MyNumber of")
-            .appendImpl("    1: Break;")
-            .appendImpl("    2: Break;")
-            .appendImpl("    else begin")
-            .appendImpl("      Break;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("CaseStatementSizeRule"));
+    CheckVerifier.newVerifier()
+        .withCheck(new CaseStatementSizeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  case MyNumber of")
+                .appendImpl("    1: Break;")
+                .appendImpl("    2: Break;")
+                .appendImpl("    else begin")
+                .appendImpl("      Break;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
   void testOneCaseItemsShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  case MyNumber of")
-            .appendImpl("    1: Break;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("CaseStatementSizeRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new CaseStatementSizeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  case MyNumber of")
+                .appendImpl("    1: Break;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 
   @Test
   void testOneCaseItemWithElseShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  case MyNumber of")
-            .appendImpl("    1: Break;")
-            .appendImpl("    else begin")
-            .appendImpl("      Break;")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areExactly(1, ruleKeyAtLine("CaseStatementSizeRule", builder.getOffset() + 3));
+    CheckVerifier.newVerifier()
+        .withCheck(new CaseStatementSizeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  case MyNumber of")
+                .appendImpl("    1: Break;")
+                .appendImpl("    else begin")
+                .appendImpl("      Break;")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(9);
   }
 }

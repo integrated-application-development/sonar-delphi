@@ -18,164 +18,151 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static au.com.integradev.delphi.conditions.RuleKey.ruleKey;
-import static au.com.integradev.delphi.conditions.RuleKeyAtLine.ruleKeyAtLine;
-
-import au.com.integradev.delphi.CheckTest;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class TooManySubroutinesCheckTest extends CheckTest {
-
+class TooManySubroutinesCheckTest {
   @Test
-  void testValidCaseShouldNotAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("  function Bar: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 1;")
-            .appendImpl("  end;")
-            .appendImpl("  function Baz: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 2;")
-            .appendImpl("  end;")
-            .appendImpl("  function Qux: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 3;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Bar + Baz + Qux;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues().areNot(ruleKey("TooManySubProceduresRule"));
+  void testNotTooManySubroutinesShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManySubroutinesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("  function Bar: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 1;")
+                .appendImpl("  end;")
+                .appendImpl("  function Baz: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 2;")
+                .appendImpl("  end;")
+                .appendImpl("  function Qux: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 3;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Bar + Baz + Qux;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
-  void testTooManySubProceduresShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
-            .appendImpl("  function Bar: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 1;")
-            .appendImpl("  end;")
-            .appendImpl("  function Baz: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 2;")
-            .appendImpl("  end;")
-            .appendImpl("  function Qux: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 3;")
-            .appendImpl("  end;")
-            .appendImpl("  function Xyzzy: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 4;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  Result := Bar + Baz + Qux + Xyzzy;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("TooManySubProceduresRule", builder.getOffset() + 1));
+  void testTooManySubroutinesShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManySubroutinesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("  function Bar: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 1;")
+                .appendImpl("  end;")
+                .appendImpl("  function Baz: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 2;")
+                .appendImpl("  end;")
+                .appendImpl("  function Qux: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 3;")
+                .appendImpl("  end;")
+                .appendImpl("  function Xyzzy: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 4;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Bar + Baz + Qux + Xyzzy;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testTooManyConstructorSubProceduresShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("constructor TMyObject.Create;")
-            .appendImpl("  function Bar: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 1;")
-            .appendImpl("  end;")
-            .appendImpl("  function Baz: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 2;")
-            .appendImpl("  end;")
-            .appendImpl("  function Qux: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 3;")
-            .appendImpl("  end;")
-            .appendImpl("  function Xyzzy: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 4;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  inherited;")
-            .appendImpl("  FMyField := Bar + Baz + Qux + Xyzzy;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("TooManySubProceduresRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManySubroutinesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("constructor TMyObject.Create;")
+                .appendImpl("  function Bar: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 1;")
+                .appendImpl("  end;")
+                .appendImpl("  function Baz: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 2;")
+                .appendImpl("  end;")
+                .appendImpl("  function Qux: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 3;")
+                .appendImpl("  end;")
+                .appendImpl("  function Xyzzy: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 4;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  inherited;")
+                .appendImpl("  FMyField := Bar + Baz + Qux + Xyzzy;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testTooManyDestructorSubProceduresShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("destructor TMyObject.Destroy;")
-            .appendImpl("  function Bar: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 1;")
-            .appendImpl("  end;")
-            .appendImpl("  function Baz: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 2;")
-            .appendImpl("  end;")
-            .appendImpl("  function Qux: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 3;")
-            .appendImpl("  end;")
-            .appendImpl("  function Xyzzy: Integer;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := 4;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  FMyField := Bar + Baz + Qux + Xyzzy;")
-            .appendImpl("  inherited;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("TooManySubProceduresRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManySubroutinesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("destructor TMyObject.Destroy;")
+                .appendImpl("  function Bar: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 1;")
+                .appendImpl("  end;")
+                .appendImpl("  function Baz: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 2;")
+                .appendImpl("  end;")
+                .appendImpl("  function Qux: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 3;")
+                .appendImpl("  end;")
+                .appendImpl("  function Xyzzy: Integer;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := 4;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  FMyField := Bar + Baz + Qux + Xyzzy;")
+                .appendImpl("  inherited;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 
   @Test
   void testTooManyNestedProceduresShouldAddIssue() {
-    DelphiTestUnitBuilder builder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Foo;")
-            .appendImpl("  function Bar: Integer;")
-            .appendImpl("    function Baz: Integer;")
-            .appendImpl("      function Qux: Integer;")
-            .appendImpl("        function Xyzzy: Integer;")
-            .appendImpl("        begin")
-            .appendImpl("          Result := 4;")
-            .appendImpl("        end;")
-            .appendImpl("      begin")
-            .appendImpl("        Result := Xyzzy;")
-            .appendImpl("      end;")
-            .appendImpl("    begin")
-            .appendImpl("      Result := Qux;")
-            .appendImpl("    end;")
-            .appendImpl("  begin")
-            .appendImpl("    Result := Baz;")
-            .appendImpl("  end;")
-            .appendImpl("begin")
-            .appendImpl("  FMyField := Bar;")
-            .appendImpl("end;");
-
-    execute(builder);
-
-    assertIssues()
-        .areExactly(1, ruleKeyAtLine("TooManySubProceduresRule", builder.getOffset() + 1));
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManySubroutinesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("  function Bar: Integer;")
+                .appendImpl("    function Baz: Integer;")
+                .appendImpl("      function Qux: Integer;")
+                .appendImpl("        function Xyzzy: Integer;")
+                .appendImpl("        begin")
+                .appendImpl("          Result := 4;")
+                .appendImpl("        end;")
+                .appendImpl("      begin")
+                .appendImpl("        Result := Xyzzy;")
+                .appendImpl("      end;")
+                .appendImpl("    begin")
+                .appendImpl("      Result := Qux;")
+                .appendImpl("    end;")
+                .appendImpl("  begin")
+                .appendImpl("    Result := Baz;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  FMyField := Bar;")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(7);
   }
 }
