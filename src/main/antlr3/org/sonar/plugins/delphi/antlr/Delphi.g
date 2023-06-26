@@ -630,9 +630,14 @@ expressionOrRange            : expression ('..'<RangeExpressionNode>^ expression
 expressionOrAnonymousMethod  : anonymousMethod
                              | expression
                              ;
+exprOrRangeOrAnonMethod      : anonymousMethod
+                             | expression ('..'<RangeExpressionNode>^ expression)?
+                             ;
 expressionList               : (expression (','!)?)+
                              ;
 expressionOrRangeList        : (expressionOrRange (','!)?)+
+                             ;
+exprOrRangeOrAnonMethodList  : (exprOrRangeOrAnonMethod (','!)?)+
                              ;
 textLiteral                  : textLiteral_ -> ^(TkTextLiteral<TextLiteralNode> textLiteral_)
                              ;
@@ -644,8 +649,8 @@ escapedCharacter             : TkCharacterEscapeCode
                              ;
 nilLiteral                   : 'nil'<NilLiteralNode>
                              ;
-arrayConstructor             : lbrack expressionOrRangeList? rbrack
-                             -> ^(TkArrayConstructor<ArrayConstructorNode> lbrack expressionOrRangeList? rbrack)
+arrayConstructor             : lbrack exprOrRangeOrAnonMethodList? rbrack
+                             -> ^(TkArrayConstructor<ArrayConstructorNode> lbrack exprOrRangeOrAnonMethodList? rbrack)
                              ;
 addOperator                  : '+'<BinaryExpressionNode>
                              | '-'<BinaryExpressionNode>
