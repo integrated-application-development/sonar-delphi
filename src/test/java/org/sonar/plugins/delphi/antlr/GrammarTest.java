@@ -176,6 +176,11 @@ class GrammarTest {
   }
 
   @Test
+  void testArrayWithAnonymousMethods() {
+    parseFile("ArrayWithAnonymousMethods.pas");
+  }
+
+  @Test
   void testRecordHelperConstants() {
     parseFile("RecordHelperConstants.pas");
   }
