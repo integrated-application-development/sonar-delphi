@@ -116,7 +116,7 @@
     <mockito.version>5.2.0</mockito.version>
     <archunit.version>0.23.1</archunit.version>
     <slf4j.version>1.7.30</slf4j.version>
-    <errorprone.version>2.15.0</errorprone.version>
+    <errorprone.version>2.20.0</errorprone.version>
     <!-- Plugin versions -->
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
@@ -368,7 +368,7 @@
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Werror</arg>
             <arg>-Xlint:all,-serial,-processing,-classfile,-path</arg>
-            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF -Xep:CanIgnoreReturnValueSuggester:OFF</arg>
+            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:StringCaseLocaleUsage:OFF</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
