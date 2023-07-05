@@ -35,7 +35,8 @@ in the SonarQube server (see [SonarQube - Install a Plugin](https://docs.sonarqu
 Building locally
 ----------------
 
-SonarDelphi targets Java 11 and can be built with JDK 11+.
+It is recommended that you build and run SonarDelphi using Java 17. While it can be built with Java 11, the integration
+tests will fail as SonarQube no longer supports Java versions below 17.
 
 * The plugin can be compiled to a .jar using `mvn package`.
 * Documentation can be generated to the system temp directory using `mvn site-deploy`.
