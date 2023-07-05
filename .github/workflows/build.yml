@@ -16,7 +16,7 @@ jobs:
       - name: Setup JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'adopt'
           cache: maven
       - name: Run Maven Verify
