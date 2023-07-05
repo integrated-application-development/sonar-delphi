@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,6 +53,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
@@ -62,7 +64,6 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 
 class DelphiSymbolTableExecutorTest {
   private static final String ROOT_PATH = "/au/com/integradev/delphi/symbol/";
-  private static final String STANDARD_LIBRARY = "/au/com/integradev/delphi/bds/source";
 
   private DelphiInputFile mainFile;
   private SymbolTable symbolTable;
@@ -70,14 +71,16 @@ class DelphiSymbolTableExecutorTest {
   private SensorContextTester context;
   private Set<String> unitScopeNames;
   private Map<String, String> unitAliases;
+  private Path standardLibraryPath;
   private String componentKey;
 
   @BeforeEach
-  void setup() {
+  void setup(@TempDir Path tempDir) {
     executor = new DelphiSymbolTableExecutor();
     context = SensorContextTester.create(DelphiUtils.getResource(ROOT_PATH));
     unitScopeNames = new HashSet<>();
     unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    standardLibraryPath = createStandardLibrary(tempDir);
   }
 
   @Test
@@ -1256,7 +1259,7 @@ class DelphiSymbolTableExecutorTest {
             .typeFactory(typeFactory)
             .sourceFiles(sourceFiles)
             .searchPath(searchPath)
-            .standardLibraryPath(DelphiUtils.getResource(STANDARD_LIBRARY).toPath())
+            .standardLibraryPath(standardLibraryPath)
             .unitScopeNames(unitScopeNames)
             .unitAliases(unitAliases)
             .build();
@@ -1296,5 +1299,144 @@ class DelphiSymbolTableExecutorTest {
             .collect(Collectors.toUnmodifiableSet());
 
     assertThat(dependencies).containsExactlyInAnyOrder(dependency);
+  }
+
+  private static Path createStandardLibrary(Path baseDir) {
+    try {
+      Path standardLibraryPath = baseDir.resolve("bds/source");
+
+      Files.createDirectories(standardLibraryPath);
+
+      Files.writeString(
+          standardLibraryPath.resolve("SysInit.pas"),
+          "unit SysInit;\n" //
+              + "interface\n"
+              + "implementation\n"
+              + "end.");
+
+      Files.writeString(
+          standardLibraryPath.resolve("System.pas"),
+          "unit System;\n"
+              + "interface\n"
+              + "type\n"
+              + "  TObject = class\n"
+              + "    constructor Create;"
+              + "  end;\n"
+              + "  IInterface = interface\n"
+              + "  end;\n"
+              + "  TClassHelperBase = class\n"
+              + "  end;\n"
+              + "  TVarRec = record\n"
+              + "  end;\n"
+              + "implementation\n"
+              + "end.");
+
+      Files.writeString(
+          standardLibraryPath.resolve("System.SysUtils.pas"),
+          "unit System.SysUtils;\n"
+              + "interface\n"
+              + "procedure FreeAndNil(var Obj); inline;\n"
+              + "\n"
+              + "type\n"
+              + "  TStringHelper = record helper for String\n"
+              + "    function IsEmpty: Boolean;"
+              + "  end;"
+              + "implementation\n"
+              + "end.");
+
+      Files.writeString(
+          standardLibraryPath.resolve("System.Classes.pas"),
+          "unit System.Classes;\n"
+              + "\n"
+              + "interface\n"
+              + "\n"
+              + "type\n"
+              + "  TPersistent = class(TObject)\n"
+              + "\n"
+              + "  end;\n"
+              + "\n"
+              + "  TComponentClass = class of TComponent;\n"
+              + "\n"
+              + "  TComponent = class(TPersistent, IInterface)\n"
+              + " \n"
+              + "  end;\n"
+              + "\n"
+              + "implementation\n"
+              + "\n"
+              + "end.");
+
+      Files.writeString(
+          standardLibraryPath.resolve("System.UITypes.pas"),
+          "unit System.UITypes;\n"
+              + "\n"
+              + "interface\n"
+              + "\n"
+              + "{$SCOPEDENUMS ON}\n"
+              + "type\n"
+              + "  TMsgDlgType = (mtWarning, mtError, mtInformation, mtConfirmation, mtCustom);\n"
+              + "  TMsgDlgBtn = (mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore,\n"
+              + "    mbAll, mbNoToAll, mbYesToAll, mbHelp, mbClose);\n"
+              + "  TMsgDlgButtons = set of TMsgDlgBtn;\n"
+              + "\n"
+              + "implementation\n"
+              + "\n"
+              + "end.");
+
+      Files.writeString(
+          standardLibraryPath.resolve("Vcl.Controls.pas"),
+          "unit Vcl.Controls;\n"
+              + "\n"
+              + "interface\n"
+              + "\n"
+              + "uses\n"
+              + "  System.Classes;\n"
+              + "\n"
+              + "type\n"
+              + "  TControl = class(TComponent)\n"
+              + "  \n"
+              + "  end;\n"
+              + "  \n"
+              + "  TWinControl = class(TControl)\n"
+              + "  \n"
+              + "  end;\n"
+              + "\n"
+              + "  TCustomControl = class(TWinControl)\n"
+              + "\n"
+              + "  end;\n"
+              + "\n"
+              + "implementation\n"
+              + "\n"
+              + "end.");
+
+      Files.writeString(
+          standardLibraryPath.resolve("Vcl.Dialogs.pas"),
+          "unit Vcl.Dialogs;\n"
+              + "\n"
+              + "interface\n"
+              + "\n"
+              + "uses\n"
+              + "  System.UITypes;\n"
+              + "\n"
+              + "const\n"
+              + "  mtError\t= System.UITypes.TMsgDlgType.mtError;\n"
+              + "  mbOK\t= System.UITypes.TMsgDlgBtn.mbOK;\n"
+              + "\n"
+              + "function MessageDlg(const Msg: string; DlgType: TMsgDlgType;\n"
+              + "  Buttons: TMsgDlgButtons; HelpCtx: Longint): Integer; overload; inline;\n"
+              + "\n"
+              + "implementation\n"
+              + "\n"
+              + "function MessageDlg(const Msg: string; DlgType: TMsgDlgType;\n"
+              + "  Buttons: TMsgDlgButtons; HelpCtx: Longint): Integer;\n"
+              + "begin\n"
+              + "  Result := MessageDlgPosHelp(Msg, DlgType, Buttons, HelpCtx, -1, -1, '');\n"
+              + "end;\n"
+              + "\n"
+              + "end.");
+
+      return standardLibraryPath;
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 }

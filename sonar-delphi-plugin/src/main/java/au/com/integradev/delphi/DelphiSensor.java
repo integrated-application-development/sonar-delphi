@@ -53,13 +53,11 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
-/** PMD sensor */
 public class DelphiSensor implements Sensor {
   private static final Logger LOG = Loggers.get(DelphiSensor.class);
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final DelphiMasterExecutor executor;
-  private final List<String> errors;
 
   /**
    * Dependency-injection constructor
@@ -70,10 +68,8 @@ public class DelphiSensor implements Sensor {
   public DelphiSensor(DelphiProjectHelper delphiProjectHelper, DelphiMasterExecutor executor) {
     this.executor = executor;
     this.delphiProjectHelper = delphiProjectHelper;
-    this.errors = new ArrayList<>();
   }
 
-  /** Populate {@link SensorDescriptor} of this sensor. */
   @Override
   public void describe(SensorDescriptor descriptor) {
     descriptor.onlyOnLanguage(DelphiLanguage.KEY).name("DelphiSensor");
@@ -147,9 +143,7 @@ public class DelphiSensor implements Sensor {
           executor.execute(executorContext, delphiFile);
           progressReport.nextFile();
         } catch (DelphiFileConstructionException e) {
-          String error = String.format("Error while analyzing %s", absolutePath);
-          LOG.error(error, e);
-          errors.add(error);
+          LOG.error("Error while analyzing {}", absolutePath, e);
         }
       }
       success = true;
@@ -165,9 +159,5 @@ public class DelphiSensor implements Sensor {
   @Override
   public String toString() {
     return getClass().getSimpleName();
-  }
-
-  public List<String> getErrors() {
-    return errors;
   }
 }

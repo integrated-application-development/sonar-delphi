@@ -26,7 +26,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 class DelphiNUnitParserTest {
-
   private ResultsAggregator getResults(String path) {
     return DelphiNUnitParser.collect(DelphiUtils.getResource(path));
   }

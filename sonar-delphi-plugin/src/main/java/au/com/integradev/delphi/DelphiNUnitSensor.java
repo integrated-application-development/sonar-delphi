@@ -16,11 +16,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.nunit;
+package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.DelphiPlugin;
-import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.nunit.DelphiNUnitParser;
+import au.com.integradev.delphi.nunit.ResultsAggregator;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.util.Arrays;

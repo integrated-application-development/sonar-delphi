@@ -18,9 +18,9 @@
  */
 package au.com.integradev.delphi.executor;
 
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public abstract class DelphiTokenExecutor implements Executor {
 

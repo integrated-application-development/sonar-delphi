@@ -26,46 +26,78 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
-import au.com.integradev.delphi.executor.ExecutorContext;
-import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
-import au.com.integradev.delphi.utils.DelphiUtils;
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.internal.google.common.io.Files;
 
 class DelphiSensorTest {
-  private static final String BASE_PATH = "/au/com/integradev/delphi/projects/";
-  private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
-  private static final String BAD_SYNTAX = BASE_PATH + "BadSyntaxProject/BadSyntax.pas";
-  private static final String GLOBALS = BASE_PATH + "SimpleProject/Globals.pas";
-
   private final DelphiMasterExecutor executor = mock(DelphiMasterExecutor.class);
-  private final DefaultFileSystem fileSystem = new DefaultFileSystem(BASE_DIR);
-  private final SensorContextTester context = SensorContextTester.create(fileSystem.baseDir());
   private final DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
+  private Path baseDir;
 
   private DelphiSensor sensor;
 
   @BeforeEach
-  void setupSensor() {
+  void setup() throws IOException {
+    baseDir = Files.createTempDirectory("baseDir");
+
     sensor = new DelphiSensor(delphiProjectHelper, executor);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
     when(delphiProjectHelper.getToolchain())
         .thenReturn(DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT);
     when(delphiProjectHelper.getCompilerVersion())
         .thenReturn(DelphiProperties.COMPILER_VERSION_DEFAULT);
+
+    Path standardLibraryPath = Files.createDirectories(baseDir.resolve("bds/source"));
+
+    Files.writeString(
+        standardLibraryPath.resolve("SysInit.pas"),
+        "unit SysInit;\ninterface\nimplementation\nend.");
+
+    Files.writeString(
+        standardLibraryPath.resolve("System.pas"),
+        "unit System;\n"
+            + "interface\n"
+            + "type\n"
+            + "  TObject = class\n"
+            + "  end;\n"
+            + "  IInterface = interface\n"
+            + "  end;\n"
+            + "  TClassHelperBase = class\n"
+            + "  end;\n"
+            + "  TVarRec = record\n"
+            + "  end;\n"
+            + "implementation\n"
+            + "end.");
+
+    Path sourceFilePath = baseDir.resolve("SourceFile.pas");
+    Files.writeString(sourceFilePath, "unit SourceFile;\ninterface\nimplementation\nend.");
+
+    InputFile inputFile = mock(InputFile.class);
+    when(inputFile.uri()).thenReturn(sourceFilePath.toUri());
+
+    when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
+    when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
+    when(delphiProjectHelper.standardLibraryPath()).thenReturn(standardLibraryPath);
+  }
+
+  @AfterEach
+  void teardown() {
+    FileUtils.deleteQuietly(baseDir.toFile());
   }
 
   @Test
@@ -86,44 +118,29 @@ class DelphiSensorTest {
   }
 
   @Test
-  void testSensorShouldNotRethrowOtherExceptions() {
-    setupProject(GLOBALS);
-
+  void testSensorShouldAllowExceptionsToPropagate() {
     final RuntimeException expectedException = new RuntimeException();
-    willThrow(expectedException)
-        .given(executor)
-        .execute(any(ExecutorContext.class), any(DelphiInputFile.class));
 
-    assertThatThrownBy(() -> sensor.execute(context)).isEqualTo(expectedException);
-  }
+    willThrow(expectedException).given(executor).setup();
 
-  @Test
-  void testParsingExceptionShouldAddError() {
-    setupProject(BAD_SYNTAX);
-
-    sensor.execute(context);
-
-    assertThat(sensor.getErrors()).hasSize(1);
+    assertThatThrownBy(() -> sensor.execute(mock())).isEqualTo(expectedException);
   }
 
   @Test
   void testWhenShouldExecuteOnProjectReturnsFalseThenExecutorIsNotCalled() {
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(false);
 
-    sensor.execute(context);
+    sensor.execute(mock());
 
     verify(executor, never()).execute(any(), any());
   }
 
-  private void setupProject(String path) {
-    File standardLibrary = Files.createTempDir();
-    File sourceFile = DelphiUtils.getResource(path);
+  @Test
+  void testWhenShouldExecuteOnProjectReturnsTrueThenExecutorIsCalled() {
+    when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
 
-    InputFile inputFile = mock(InputFile.class);
-    when(inputFile.uri()).thenReturn(sourceFile.toURI());
+    sensor.execute(mock());
 
-    when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
-    when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
-    when(delphiProjectHelper.standardLibraryPath()).thenReturn(standardLibrary.toPath());
+    verify(executor, times(1)).execute(any(), any());
   }
 }

@@ -34,9 +34,11 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -59,13 +61,13 @@ import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 
 class DelphiTokenExecutorTest {
-  private static final String ROOT_DIR_NAME = "/au/com/integradev/delphi/token";
-  private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_NAME);
+  private static final String ROOT_DIR_PATH = "/au/com/integradev/delphi/token/";
+  private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_DIR_PATH);
 
-  private static final String SIMPLE_FILE = "/au/com/integradev/delphi/token/Simple.pas";
-  private static final String LITERALS_FILE = "/au/com/integradev/delphi/token/Literals.pas";
-  private static final String MIXED_CASE_FILE = "/au/com/integradev/delphi/token/MixedCase.pas";
-  private static final String ASM_FILE = "/au/com/integradev/delphi/token/AsmHighlighting.pas";
+  private static final String SIMPLE_FILE = ROOT_DIR_PATH + "Simple.pas";
+  private static final String LITERALS_FILE = ROOT_DIR_PATH + "Literals.pas";
+  private static final String MIXED_CASE_FILE = ROOT_DIR_PATH + "MixedCase.pas";
+  private static final String ASM_FILE = ROOT_DIR_PATH + "AsmHighlighting.pas";
 
   private DelphiMasterExecutor executor;
   private DelphiHighlightExecutor highlightExecutor;
@@ -230,6 +232,8 @@ class DelphiTokenExecutorTest {
 
       DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);
       when(fileConfig.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+      when(fileConfig.getPreprocessorFactory())
+          .thenReturn(new DelphiPreprocessorFactory(Platform.WINDOWS));
       when(fileConfig.getTypeFactory()).thenReturn(typeFactory);
       when(fileConfig.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
       when(fileConfig.getDefinitions()).thenReturn(Collections.emptySet());

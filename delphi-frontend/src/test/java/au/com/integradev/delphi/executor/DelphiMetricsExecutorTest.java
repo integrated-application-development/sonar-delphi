@@ -26,9 +26,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -53,10 +55,10 @@ import org.sonar.api.measures.Metric;
 
 class DelphiMetricsExecutorTest {
   private static final String ROOT_PATH = "/au/com/integradev/delphi/projects/SimpleProject/tools/";
-  private static final String ACCESSORS_TEST = "AccessorsTest.pas";
-  private static final String COMMENTS_TEST = "CommentsTest.pas";
-  private static final String FUNCTION_TEST = "FunctionTest.pas";
-  private static final String GLOBALS_TEST = "GlobalsTest.pas";
+  private static final String ACCESSORS_TEST = ROOT_PATH + "AccessorsTest.pas";
+  private static final String COMMENTS_TEST = ROOT_PATH + "CommentsTest.pas";
+  private static final String FUNCTION_TEST = ROOT_PATH + "FunctionTest.pas";
+  private static final String GLOBALS_TEST = ROOT_PATH + "GlobalsTest.pas";
 
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_PATH);
 
@@ -175,6 +177,7 @@ class DelphiMetricsExecutorTest {
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(mock.getPreprocessorFactory()).thenReturn(new DelphiPreprocessorFactory(Platform.WINDOWS));
     when(mock.getTypeFactory()).thenReturn(typeFactory);
     when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(mock.getDefinitions()).thenReturn(Collections.emptySet());

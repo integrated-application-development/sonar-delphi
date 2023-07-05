@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.coverage;
+package au.com.integradev.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,8 +28,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.coverage.DelphiCoverageParser;
+import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
 import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -43,10 +44,9 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 class DelphiCoverageSensorTest {
-  private static final String BASE_PATH = "/au/com/integradev/delphi/projects/";
+  private static final String BASE_PATH = "/au/com/integradev/delphi/";
   private static final File BASE_DIR = DelphiUtils.getResource(BASE_PATH);
-  private static final String COVERAGE_REPORTS =
-      BASE_PATH + "SimpleProject/delphicodecoveragereports";
+  private static final String COVERAGE_REPORT_PATH = BASE_PATH + "coverage";
 
   private final DefaultFileSystem fileSystem = new DefaultFileSystem(BASE_DIR);
   private final SensorContextTester context = SensorContextTester.create(fileSystem.baseDir());
@@ -119,20 +119,11 @@ class DelphiCoverageSensorTest {
         .settings()
         .setProperty(
             DelphiProperties.COVERAGE_REPORT_KEY,
-            DelphiUtils.getResource(COVERAGE_REPORTS).toString());
+            DelphiUtils.getResource(COVERAGE_REPORT_PATH).toString());
 
     sensor.execute(context);
 
-    verify(coverageParser, times(5)).parse(any(), any());
     verify(coverageParser, times(1))
-        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/InvalidLineHits.xml")));
-    verify(coverageParser, times(1))
-        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/InvalidStructure.xml")));
-    verify(coverageParser, times(1))
-        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/NoLineHits.xml")));
-    verify(coverageParser, times(1))
-        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/NormalCoverage.xml")));
-    verify(coverageParser, times(1))
-        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORTS + "/NormalCoverage2.xml")));
+        .parse(any(), eq(DelphiUtils.getResource(COVERAGE_REPORT_PATH + "/Report.xml")));
   }
 }

@@ -105,9 +105,11 @@ class DateFormatSettingsCheckTest {
         .appendDecl("")
         .appendDecl("      class function Create: TFormatSettings; overload; static; inline;")
         .appendDecl(
-            "      class function Create(Locale: TLocaleID): TFormatSettings; overload; platform; static;")
+            "      class function Create(Locale: TLocaleID): TFormatSettings; overload; platform;"
+                + " static;")
         .appendDecl(
-            "      class function Create(const LocaleName: string): TFormatSettings; overload; static;")
+            "      class function Create(const LocaleName: string): TFormatSettings; overload;"
+                + " static;")
         .appendDecl("      class function Invariant: TFormatSettings; static;")
         .appendDecl("  end;")
         .appendDecl("")

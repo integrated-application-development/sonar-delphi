@@ -16,10 +16,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.coverage;
+package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.coverage.DelphiCoverageParser;
+import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -88,7 +89,8 @@ public class DelphiCoverageSensor implements Sensor {
     String[] paths = context.config().getStringArray(DelphiProperties.COVERAGE_REPORT_KEY);
     if (paths == null || paths.length == 0) {
       LOG.info(
-          "No coverage reports specified (see '{}' property)", DelphiProperties.COVERAGE_REPORT_KEY);
+          "No coverage reports specified (see '{}' property)",
+          DelphiProperties.COVERAGE_REPORT_KEY);
     } else {
       Arrays.stream(paths).forEach(path -> addCoverage(context, path, parser));
     }

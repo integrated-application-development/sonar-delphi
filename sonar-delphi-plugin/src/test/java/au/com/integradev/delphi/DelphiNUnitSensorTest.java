@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.nunit;
+package au.com.integradev.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -24,7 +24,6 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.sonar.api.measures.CoreMetrics.*;
 
-import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.util.UUID;
@@ -35,7 +34,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.internal.MapSettings;
 
 class DelphiNUnitSensorTest {
-
   private static final String PROJECT_DIR = "/au/com/integradev/delphi/nunit";
 
   private MapSettings settings;
@@ -72,7 +70,7 @@ class DelphiNUnitSensorTest {
   @Test
   void testExecute() {
     assertAllMeasuresEmpty();
-    settings.setProperty(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY, "./reports/normal");
+    settings.setProperty(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY, "./");
     sensor.execute(context);
 
     assertThat(context.measure(context.project().key(), TESTS).value()).isEqualTo(8);

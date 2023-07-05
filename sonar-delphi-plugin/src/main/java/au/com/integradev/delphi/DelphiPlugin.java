@@ -24,17 +24,14 @@ package au.com.integradev.delphi;
 
 import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
-import au.com.integradev.delphi.coverage.DelphiCoverageSensor;
 import au.com.integradev.delphi.enviroment.DefaultEnvironmentVariableProvider;
+import au.com.integradev.delphi.executor.DelphiChecksExecutor;
 import au.com.integradev.delphi.executor.DelphiCpdExecutor;
 import au.com.integradev.delphi.executor.DelphiHighlightExecutor;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.executor.DelphiMetricsExecutor;
-import au.com.integradev.delphi.executor.DelphiChecksExecutor;
 import au.com.integradev.delphi.executor.DelphiSymbolTableExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
-import au.com.integradev.delphi.nunit.DelphiNUnitSensor;
-import au.com.integradev.delphi.profile.DefaultDelphiProfile;
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarProduct;
