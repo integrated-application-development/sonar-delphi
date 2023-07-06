@@ -23,7 +23,6 @@ import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.type.factory.TypeFactory;
-import au.com.integradev.delphi.utils.TextRangeUtils;
 import com.google.common.base.Preconditions;
 import com.google.errorprone.annotations.FormatMethod;
 import com.google.errorprone.annotations.FormatString;
@@ -188,20 +187,7 @@ public final class DelphiIssueBuilder {
     InputFile inputFile = delphiFile.getInputFile();
     NewIssueLocation primaryLocation = newIssue.newLocation().on(inputFile).message(message);
     if (position != null) {
-      TextRange location;
-      if (position.getBeginColumn() == FilePosition.UNDEFINED_COLUMN) {
-        TextPointer start = inputFile.selectLine(position.getBeginLine()).start();
-        TextPointer end = inputFile.selectLine(position.getEndLine()).end();
-        location = inputFile.newRange(start, end);
-      } else {
-        location =
-            inputFile.newRange(
-                position.getBeginLine(),
-                position.getBeginColumn(),
-                position.getEndLine(),
-                position.getEndColumn());
-      }
-      primaryLocation.at(location);
+      primaryLocation.at(createTextRange(inputFile, position));
     }
 
     newIssue.at(primaryLocation);
@@ -231,7 +217,7 @@ public final class DelphiIssueBuilder {
     return newIssue
         .newLocation()
         .on(inputFile)
-        .at(TextRangeUtils.fromFilePosition(location.getFilePosition(), inputFile))
+        .at(createTextRange(inputFile, location.getFilePosition()))
         .message(location.getMessage());
   }
 
@@ -313,5 +299,19 @@ public final class DelphiIssueBuilder {
                       .toComparison());
     }
     return Optional.empty();
+  }
+
+  private static TextRange createTextRange(InputFile inputFile, FilePosition position) {
+    if (position.getBeginColumn() == FilePosition.UNDEFINED_COLUMN) {
+      TextPointer start = inputFile.selectLine(position.getBeginLine()).start();
+      TextPointer end = inputFile.selectLine(position.getEndLine()).end();
+      return inputFile.newRange(start, end);
+    } else {
+      return inputFile.newRange(
+          position.getBeginLine(),
+          position.getBeginColumn(),
+          position.getEndLine(),
+          position.getEndColumn());
+    }
   }
 }
