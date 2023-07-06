@@ -87,7 +87,7 @@
     <module>delphi-checks</module>
     <module>delphi-frontend</module>
     <module>sonar-delphi-plugin</module>
-    <!--<module>its</module>-->
+    <module>its</module>
   </modules>
 
   <properties>
@@ -100,7 +100,7 @@
     <!-- Dependency versions -->
     <sonar.version>7.9</sonar.version>
     <sonar-analyzers-commons.version>2.1.0.1111</sonar-analyzers-commons.version>
-    <sonar-orchestrator.version>3.40.0.183</sonar-orchestrator.version>
+    <sonar-orchestrator.version>4.0.0.404</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <commons-text.version>1.10.0</commons-text.version>
     <jdom.version>2.0.6.1</jdom.version>
@@ -246,6 +246,12 @@
       <dependency>
         <groupId>org.sonarsource.orchestrator</groupId>
         <artifactId>sonar-orchestrator</artifactId>
+        <version>${sonar-orchestrator.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.orchestrator</groupId>
+        <artifactId>sonar-orchestrator-junit5</artifactId>
         <version>${sonar-orchestrator.version}</version>
         <scope>test</scope>
       </dependency>

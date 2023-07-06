@@ -18,15 +18,13 @@
  */
 package au.com.integradev.delphi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static au.com.integradev.delphi.IntegrationTestSuite.createScanner;
-import static au.com.integradev.delphi.IntegrationTestSuite.getProjectMeasureAsDouble;
+import static org.assertj.core.api.Assertions.*;
 
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import au.com.integradev.delphi.extension.OrchestratorExtension;
 
-class DelphiCpdExecutorIT {
+class DelphiCpdExecutorTest {
   private static final String SIMPLE_PROJECT_KEY = "delphi-cpd-simple-test";
   private static final String LITERALS_PROJECT_KEY = "delphi-cpd-literals-test";
   private static final String WHITESPACE_PROJECT_KEY = "delphi-cpd-whitespace-test";
@@ -36,28 +34,40 @@ class DelphiCpdExecutorIT {
 
   @Test
   void testShouldDetectDuplicates() {
-    ORCHESTRATOR.getOrchestrator().executeBuild(createScanner("cpd-simple", SIMPLE_PROJECT_KEY));
-    assertThat(getProjectMeasureAsDouble("duplicated_lines", SIMPLE_PROJECT_KEY)).isEqualTo(26.0);
-    assertThat(getProjectMeasureAsDouble("duplicated_blocks", SIMPLE_PROJECT_KEY)).isEqualTo(2.0);
+    ORCHESTRATOR.executeBuild(IntegrationTestSuite.createScanner("cpd-simple", SIMPLE_PROJECT_KEY));
+    assertThat(
+            IntegrationTestSuite.getProjectMeasureAsDouble("duplicated_lines", SIMPLE_PROJECT_KEY))
+        .isEqualTo(26.0);
+    assertThat(
+            IntegrationTestSuite.getProjectMeasureAsDouble("duplicated_blocks", SIMPLE_PROJECT_KEY))
+        .isEqualTo(2.0);
   }
 
   @Test
   void testShouldDetectDuplicatesByNormalizingLiterals() {
-    ORCHESTRATOR
-        .getOrchestrator()
-        .executeBuild(createScanner("cpd-literals", LITERALS_PROJECT_KEY));
-    assertThat(getProjectMeasureAsDouble("duplicated_lines", LITERALS_PROJECT_KEY)).isEqualTo(26.0);
-    assertThat(getProjectMeasureAsDouble("duplicated_blocks", LITERALS_PROJECT_KEY)).isEqualTo(2.0);
+    ORCHESTRATOR.executeBuild(
+        IntegrationTestSuite.createScanner("cpd-literals", LITERALS_PROJECT_KEY));
+    assertThat(
+            IntegrationTestSuite.getProjectMeasureAsDouble(
+                "duplicated_lines", LITERALS_PROJECT_KEY))
+        .isEqualTo(26.0);
+    assertThat(
+            IntegrationTestSuite.getProjectMeasureAsDouble(
+                "duplicated_blocks", LITERALS_PROJECT_KEY))
+        .isEqualTo(2.0);
   }
 
   @Test
   void testShouldDetectDuplicatesByIgnoringWhitespace() {
-    ORCHESTRATOR
-        .getOrchestrator()
-        .executeBuild(createScanner("cpd-whitespace", WHITESPACE_PROJECT_KEY));
-    assertThat(getProjectMeasureAsDouble("duplicated_lines", WHITESPACE_PROJECT_KEY))
+    ORCHESTRATOR.executeBuild(
+        IntegrationTestSuite.createScanner("cpd-whitespace", WHITESPACE_PROJECT_KEY));
+    assertThat(
+            IntegrationTestSuite.getProjectMeasureAsDouble(
+                "duplicated_lines", WHITESPACE_PROJECT_KEY))
         .isEqualTo(33.0);
-    assertThat(getProjectMeasureAsDouble("duplicated_blocks", WHITESPACE_PROJECT_KEY))
+    assertThat(
+            IntegrationTestSuite.getProjectMeasureAsDouble(
+                "duplicated_blocks", WHITESPACE_PROJECT_KEY))
         .isEqualTo(2.0);
   }
 }

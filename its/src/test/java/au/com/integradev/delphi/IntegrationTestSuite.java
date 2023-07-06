@@ -18,17 +18,20 @@
  */
 package au.com.integradev.delphi;
 
-import static java.util.Collections.singletonList;
-
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
-import au.com.integradev.delphi.extension.OrchestratorExtension;
-import au.com.integradev.delphi.utils.DelphiUtils;
 import org.sonarqube.ws.Measures.ComponentWsResponse;
 import org.sonarqube.ws.Measures.Measure;
 import org.sonarqube.ws.client.HttpConnector;
@@ -37,24 +40,63 @@ import org.sonarqube.ws.client.WsClientFactories;
 import org.sonarqube.ws.client.measures.ComponentRequest;
 
 @Suite
-@SelectClasses({DelphiCpdExecutorIT.class})
+@SelectClasses({DelphiCpdExecutorTest.class})
 class IntegrationTestSuite {
-  private static final String PROJECTS_PATH = "src/it/projects/";
-  private static final String BDS_PATH =
-      DelphiUtils.getResource("/au/com/integradev/delphi/bds").getAbsolutePath();
+  private static final String PROJECTS_PATH = "src/projects/";
+  private static final FileLocation PLUGIN_LOCATION =
+      FileLocation.byWildcardMavenFilename(
+          new File("../sonar-delphi-plugin/target"), "sonar-delphi-plugin-*.jar");
 
-  @RegisterExtension static final OrchestratorExtension ORCHESTRATOR = new OrchestratorExtension();
+  @RegisterExtension
+  static OrchestratorExtension ORCHESTRATOR =
+      OrchestratorExtension.builderEnv()
+          .useDefaultAdminCredentialsForBuilds(true)
+          .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
+          .addPlugin(PLUGIN_LOCATION)
+          .build();
+
+  private static final Path BDS = createStandardLibrary();
 
   private IntegrationTestSuite() {
     // Hide public constructor
   }
 
+  private static Path createStandardLibrary() {
+    try {
+      Path bds = Files.createTempDirectory("bds");
+
+      var hook = new Thread(() -> FileUtils.deleteQuietly(bds.toFile()));
+      Runtime.getRuntime().addShutdownHook(hook);
+
+      Path standardLibraryPath = Files.createDirectories(bds.resolve("source"));
+      Files.writeString(
+          standardLibraryPath.resolve("SysInit.pas"),
+          "unit SysInit;\ninterface\nimplementation\nend.");
+      Files.writeString(
+          standardLibraryPath.resolve("System.pas"),
+          "unit System;\n"
+              + "interface\n"
+              + "type\n"
+              + "  TObject = class\n"
+              + "  end;\n"
+              + "  IInterface = interface\n"
+              + "  end;\n"
+              + "  TClassHelperBase = class\n"
+              + "  end;\n"
+              + "  TVarRec = record\n"
+              + "  end;\n"
+              + "implementation\n"
+              + "end.");
+
+      return bds;
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
   private static WsClient newWsClient() {
     return WsClientFactories.getDefault()
-        .newClient(
-            HttpConnector.newBuilder()
-                .url(ORCHESTRATOR.getOrchestrator().getServer().getUrl())
-                .build());
+        .newClient(HttpConnector.newBuilder().url(ORCHESTRATOR.getServer().getUrl()).build());
   }
 
   public static Double getProjectMeasureAsDouble(String metricKey, String projectKey) {
@@ -69,7 +111,7 @@ class IntegrationTestSuite {
             .component(
                 new ComponentRequest()
                     .setComponent(projectKey)
-                    .setMetricKeys(singletonList(metricKey)));
+                    .setMetricKeys(Collections.singletonList(metricKey)));
     List<Measure> measures = response.getComponent().getMeasuresList();
     return measures.size() == 1 ? measures.get(0) : null;
   }
@@ -82,7 +124,7 @@ class IntegrationTestSuite {
         .setProjectDir(projectDir)
         .setProjectKey(projectKey)
         .setProjectName(projectKey)
-        .setProperty(DelphiProperties.BDS_PATH_KEY, BDS_PATH)
+        .setProperty(DelphiProperties.BDS_PATH_KEY, BDS.toString())
         .setProjectVersion("1.0")
         .setSourceDirs("src");
   }
