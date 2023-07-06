@@ -1,5 +1,4 @@
-SonarDelphi
-===========
+# ![SonarDelphi](docs/images/sonar-delphi-title-gh.png)
 
 [![Format](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format.yml) [![Build](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/build.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/build.yml)
 
