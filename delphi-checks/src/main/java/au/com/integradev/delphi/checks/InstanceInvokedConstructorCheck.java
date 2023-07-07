@@ -31,10 +31,10 @@ import org.sonar.plugins.communitydelphi.api.type.Typed;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "ObjectInvokedConstructorRule", repositoryKey = "delph")
-@Rule(key = "ObjectInvokedConstructor")
-public class ObjectInvokedConstructorCheck extends DelphiCheck {
+@Rule(key = "InstanceInvokedConstructor")
+public class InstanceInvokedConstructorCheck extends DelphiCheck {
   private static final String MESSAGE =
-      "Invoke this constructor on the type name instead of an object instance.";
+      "Invoke this constructor on the type name instead of an instance.";
 
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {

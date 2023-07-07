@@ -22,11 +22,11 @@ import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
-class ObjectInvokedConstructorCheckTest {
+class InstanceInvokedConstructorCheckTest {
   @Test
   void testConstructorInvokedOnObjectShouldAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
@@ -41,7 +41,7 @@ class ObjectInvokedConstructorCheckTest {
   @Test
   void testConstructorInvokedOnTypeIdentifierShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
@@ -56,7 +56,7 @@ class ObjectInvokedConstructorCheckTest {
   @Test
   void testConstructorInvokedOnClassReferenceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
@@ -72,7 +72,7 @@ class ObjectInvokedConstructorCheckTest {
   @Test
   void testConstructorInvokedOnSelfShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
@@ -91,7 +91,7 @@ class ObjectInvokedConstructorCheckTest {
   @Test
   void testBareInheritedShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
@@ -108,7 +108,7 @@ class ObjectInvokedConstructorCheckTest {
   @Test
   void testNamedInheritedShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
@@ -125,7 +125,7 @@ class ObjectInvokedConstructorCheckTest {
   @Test
   void testQualifiedInheritedShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(new ObjectInvokedConstructorCheck())
+        .withCheck(new InstanceInvokedConstructorCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
