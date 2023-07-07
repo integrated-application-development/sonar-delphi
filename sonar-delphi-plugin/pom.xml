@@ -86,6 +86,7 @@
         <artifactId>sonar-packaging-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
+          <pluginKey>communitydelphi</pluginKey>
           <pluginName>Delphi</pluginName>
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
           <pluginClass>au.com.integradev.delphi.DelphiPlugin</pluginClass>

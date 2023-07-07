@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Rename all rule keys. (For example, `ClassNameRule` is now `ClassName`)
+- Rename plugin key from `delphi` to `communitydelphi`.
 
 ### Removed
 
