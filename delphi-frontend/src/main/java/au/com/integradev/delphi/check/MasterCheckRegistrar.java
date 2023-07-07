@@ -39,7 +39,7 @@ public class MasterCheckRegistrar {
     this.checksByScope = MultimapBuilder.enumKeys(RuleScope.class).hashSetValues().build();
     for (Checks<DelphiCheck> checks : allChecks) {
       for (DelphiCheck check : checks.all()) {
-        RuleScope scope = scopeMetadataLoader.getScope(check.getClass());
+        RuleScope scope = scopeMetadataLoader.getScope(checks.ruleKey(check));
         checksByScope.put(scope, check);
       }
     }

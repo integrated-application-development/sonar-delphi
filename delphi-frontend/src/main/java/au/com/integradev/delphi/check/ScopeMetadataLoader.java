@@ -10,30 +10,27 @@ import java.util.Map;
 import java.util.Optional;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.utils.AnnotationUtils;
-import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
 @SonarLintSide
 public class ScopeMetadataLoader {
   private final MetadataResourcePathSupplier metadataResourcePathSupplier;
-  private final Map<Class<? extends DelphiCheck>, RuleScope> checkClassToScope;
+  private final Map<RuleKey, RuleScope> ruleKeyToScope;
 
   public ScopeMetadataLoader(MetadataResourcePathSupplier metadataResourcePathSupplier) {
     this.metadataResourcePathSupplier = metadataResourcePathSupplier;
-    checkClassToScope = new HashMap<>();
+    ruleKeyToScope = new HashMap<>();
   }
 
-  public RuleScope getScope(Class<? extends DelphiCheck> checkClass) {
-    return checkClassToScope.computeIfAbsent(checkClass, this::readScope);
+  public RuleScope getScope(RuleKey ruleKey) {
+    return ruleKeyToScope.computeIfAbsent(ruleKey, this::readScope);
   }
 
-  private RuleScope readScope(Class<? extends DelphiCheck> checkClass) {
-    String ruleKey = getRuleKey(checkClass);
+  private RuleScope readScope(RuleKey ruleKey) {
     URL url = getMetadataURL(ruleKey);
 
     try {
@@ -56,17 +53,13 @@ public class ScopeMetadataLoader {
     }
   }
 
-  private static String getRuleKey(Class<? extends DelphiCheck> checkClass) {
-    Rule ruleAnnotation = AnnotationUtils.getAnnotation(checkClass, Rule.class);
-    if (ruleAnnotation == null) {
-      throw new IllegalStateException("No Rule annotation was found on " + checkClass.getName());
-    }
-    return ruleAnnotation.key();
-  }
-
-  private URL getMetadataURL(String ruleKey) {
+  private URL getMetadataURL(RuleKey ruleKey) {
     return Thread.currentThread()
         .getContextClassLoader()
-        .getResource(metadataResourcePathSupplier.get() + "/" + ruleKey + ".json");
+        .getResource(
+            metadataResourcePathSupplier.forRepository(ruleKey.repository())
+                + "/"
+                + ruleKey.rule()
+                + ".json");
   }
 }

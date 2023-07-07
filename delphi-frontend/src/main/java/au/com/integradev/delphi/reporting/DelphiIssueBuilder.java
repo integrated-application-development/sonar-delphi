@@ -172,13 +172,13 @@ public final class DelphiIssueBuilder {
     requiresValueToBeSet(position, POSITION_NAME);
     requiresValueToBeSet(message, MESSAGE_NAME);
 
-    if (isOutOfScope()) {
-      return;
-    }
-
     Optional<RuleKey> ruleKey = checkRegistrar.getRuleKey(check);
     if (ruleKey.isEmpty()) {
       LOG.trace("Rule not enabled - discarding issue");
+      return;
+    }
+
+    if (isOutOfScope(ruleKey.get())) {
       return;
     }
 
@@ -228,8 +228,8 @@ public final class DelphiIssueBuilder {
         .message(location.getMessage());
   }
 
-  private boolean isOutOfScope() {
-    switch (scopeMetadataLoader.getScope(check.getClass())) {
+  private boolean isOutOfScope(RuleKey ruleKey) {
+    switch (scopeMetadataLoader.getScope(ruleKey)) {
       case MAIN:
         return isWithinTestCode();
       case TEST:
