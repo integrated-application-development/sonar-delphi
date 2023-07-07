@@ -29,7 +29,7 @@ import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.PredefinedConditionals;
 import au.com.integradev.delphi.compiler.Toolchain;
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.annotations.VisibleForTesting;
@@ -343,11 +343,11 @@ public class DelphiProjectHelper {
 
   public Iterable<InputFile> mainFiles() {
     FilePredicates p = fs.predicates();
-    return fs.inputFiles(p.and(p.hasLanguage(DelphiLanguage.KEY), p.hasType(InputFile.Type.MAIN)));
+    return fs.inputFiles(p.and(p.hasLanguage(Delphi.KEY), p.hasType(InputFile.Type.MAIN)));
   }
 
   public boolean shouldExecuteOnProject() {
-    return fs.hasFiles(fs.predicates().hasLanguage(DelphiLanguage.KEY));
+    return fs.hasFiles(fs.predicates().hasLanguage(Delphi.KEY));
   }
 
   public InputFile getFile(String path) {

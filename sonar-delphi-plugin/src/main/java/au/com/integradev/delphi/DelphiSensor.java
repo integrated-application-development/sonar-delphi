@@ -27,7 +27,7 @@ import static au.com.integradev.delphi.utils.DelphiUtils.stopProgressReport;
 
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Toolchain;
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.executor.ExecutorContext;
 import au.com.integradev.delphi.file.DelphiFile;
@@ -72,7 +72,7 @@ public class DelphiSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguage(DelphiLanguage.KEY).name("DelphiSensor");
+    descriptor.onlyOnLanguage(Delphi.KEY).name("DelphiSensor");
   }
 
   /** The actual sensor code. */

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.nunit.DelphiNUnitParser;
 import au.com.integradev.delphi.nunit.ResultsAggregator;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -45,7 +45,7 @@ public class DelphiNUnitSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguage(DelphiLanguage.KEY).name("Delphi NUnit Sensor");
+    descriptor.onlyOnLanguage(Delphi.KEY).name("Delphi NUnit Sensor");
   }
 
   @Override

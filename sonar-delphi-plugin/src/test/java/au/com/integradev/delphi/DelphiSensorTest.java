@@ -30,7 +30,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
@@ -113,7 +113,7 @@ class DelphiSensorTest {
 
     sensor.describe(mockDescriptor);
 
-    verify(mockDescriptor).onlyOnLanguage(DelphiLanguage.KEY);
+    verify(mockDescriptor).onlyOnLanguage(Delphi.KEY);
     verify(mockDescriptor).name("DelphiSensor");
   }
 

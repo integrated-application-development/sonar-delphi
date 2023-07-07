@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.executor.Executor.Context;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
@@ -70,7 +70,7 @@ class DelphiMasterExecutorTest {
           DelphiInputFile.from(
               TestInputFileBuilder.create("moduleKey", baseDir, file)
                   .setContents(content)
-                  .setLanguage(DelphiLanguage.KEY)
+                  .setLanguage(Delphi.KEY)
                   .setType(InputFile.Type.MAIN)
                   .build(),
               mockConfig());

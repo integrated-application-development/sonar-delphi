@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Toolchain;
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
@@ -97,7 +97,7 @@ class DelphiProjectHelperTest {
   void testDprojProject() {
     InputFile inputFile =
         TestInputFileBuilder.create(
-                DelphiLanguage.KEY,
+                Delphi.KEY,
                 BASE_DIR,
                 DelphiUtils.getResource(
                     PROJECTS_PATH + "SimpleProject/dproj/SimpleDelphiProject.dproj"))
@@ -137,7 +137,7 @@ class DelphiProjectHelperTest {
   void testWorkgroupProject() {
     InputFile inputFile =
         TestInputFileBuilder.create(
-                DelphiLanguage.KEY,
+                Delphi.KEY,
                 BASE_DIR,
                 DelphiUtils.getResource(PROJECTS_PATH + "SimpleProject/workgroup/All.groupproj"))
             .build();

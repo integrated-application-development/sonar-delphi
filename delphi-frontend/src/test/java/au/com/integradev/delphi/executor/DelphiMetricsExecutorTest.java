@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -147,7 +147,7 @@ class DelphiMetricsExecutorTest {
           DelphiInputFile.from(
               TestInputFileBuilder.create("moduleKey", ROOT_DIR, resource)
                   .setContents(FileUtils.readFileToString(resource, UTF_8.name()))
-                  .setLanguage(DelphiLanguage.KEY)
+                  .setLanguage(Delphi.KEY)
                   .setType(InputFile.Type.MAIN)
                   .build(),
               mockConfig());

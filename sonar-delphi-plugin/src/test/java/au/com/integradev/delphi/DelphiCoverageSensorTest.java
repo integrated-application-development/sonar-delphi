@@ -28,7 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.coverage.DelphiCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
 import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
@@ -84,7 +84,7 @@ class DelphiCoverageSensorTest {
 
     sensor.describe(mockDescriptor);
 
-    verify(mockDescriptor).onlyOnLanguage(DelphiLanguage.KEY);
+    verify(mockDescriptor).onlyOnLanguage(Delphi.KEY);
     verify(mockDescriptor).name("DelphiCoverageSensor");
   }
 

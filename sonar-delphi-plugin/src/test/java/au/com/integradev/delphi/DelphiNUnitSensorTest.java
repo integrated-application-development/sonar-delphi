@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.sonar.api.measures.CoreMetrics.*;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +63,7 @@ class DelphiNUnitSensorTest {
 
     sensor.describe(mockDescriptor);
 
-    verify(mockDescriptor).onlyOnLanguage(DelphiLanguage.KEY);
+    verify(mockDescriptor).onlyOnLanguage(Delphi.KEY);
     verify(mockDescriptor).name("Delphi NUnit Sensor");
   }
 

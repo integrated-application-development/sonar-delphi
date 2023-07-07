@@ -30,7 +30,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -73,7 +73,7 @@ class DelphiCoverageToolParserTest {
     File file = DelphiUtils.getResource(fileName);
     final InputFile inputFile =
         TestInputFileBuilder.create("", baseDir, file)
-            .setLanguage(DelphiLanguage.KEY)
+            .setLanguage(Delphi.KEY)
             .setContents(FileUtils.readFileToString(file, delphiProjectHelper.encoding()))
             .build();
     context.fileSystem().add(inputFile);

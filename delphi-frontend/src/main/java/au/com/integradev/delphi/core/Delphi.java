@@ -22,34 +22,21 @@
  */
 package au.com.integradev.delphi.core;
 
+import java.util.List;
 import org.sonar.api.resources.AbstractLanguage;
 
-/** Class representing Delphi language */
-public class DelphiLanguage extends AbstractLanguage {
-
+/** Delphi language implementation */
+public class Delphi extends AbstractLanguage {
   public static final String KEY = "delph";
-  public static final DelphiLanguage instance = new DelphiLanguage();
+  public static final String LANGUAGE_NAME = "Delphi";
+  public static final List<String> FILE_SUFFIXES = List.of("pas", "dpr", "dpk");
 
-  public static final String FILE_SOURCE_CODE_SUFFIX = "pas";
-  private static final String FILE_PROJECT_SUFFIX = "dpr";
-  private static final String FILE_PACKAGE_SUFFIX = "dpk";
-
-  private static final String LANGUAGE_NAME = "Delphi";
-
-  private static final String[] FILE_SUFFIXES = {
-    FILE_SOURCE_CODE_SUFFIX, FILE_PROJECT_SUFFIX, FILE_PACKAGE_SUFFIX
-  };
-
-  /** Default ctor */
-  public DelphiLanguage() {
+  public Delphi() {
     super(KEY, LANGUAGE_NAME);
   }
 
-  /**
-   * @return Delphi source code file suffixes
-   */
   @Override
   public String[] getFileSuffixes() {
-    return FILE_SUFFIXES;
+    return FILE_SUFFIXES.toArray(new String[0]);
   }
 }

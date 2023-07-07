@@ -50,7 +50,7 @@ public class DelphiPlugin implements Plugin {
 
     builder.add(
         // Core
-        DelphiLanguage.class,
+        Delphi.class,
         DefaultDelphiProfile.class,
         // Sensors
         DelphiSensor.class,

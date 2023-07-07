@@ -22,14 +22,13 @@
  */
 package au.com.integradev.delphi.utils;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import org.apache.commons.io.FileUtils;
@@ -82,8 +81,7 @@ public final class DelphiUtils {
    */
   public static boolean acceptFile(String fileName) {
     String extension = FilenameUtils.getExtension(fileName);
-    String[] acceptableExtensions = DelphiLanguage.instance.getFileSuffixes();
-    return Arrays.stream(acceptableExtensions)
+    return Delphi.FILE_SUFFIXES.stream()
         .anyMatch(acceptable -> acceptable.equalsIgnoreCase(extension));
   }
 

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.coverage.DelphiCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
@@ -56,7 +56,7 @@ public class DelphiCoverageSensor implements Sensor {
   /** Populate {@link SensorDescriptor} of this sensor. */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguage(DelphiLanguage.KEY).name("DelphiCoverageSensor");
+    descriptor.onlyOnLanguage(Delphi.KEY).name("DelphiCoverageSensor");
   }
 
   /** The actual sensor code. */

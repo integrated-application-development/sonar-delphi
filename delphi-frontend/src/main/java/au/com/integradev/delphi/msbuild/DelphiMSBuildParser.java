@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.msbuild;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.msbuild.condition.ConditionEvaluator;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -126,7 +125,7 @@ public class DelphiMSBuildParser {
     }
 
     String extension = FilenameUtils.getExtension(importPath.toString());
-    if (!DelphiLanguage.FILE_SOURCE_CODE_SUFFIX.equalsIgnoreCase(extension)) {
+    if (!"pas".equalsIgnoreCase(extension)) {
       return;
     }
 
