@@ -22,7 +22,7 @@
  */
 package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.core.DelphiLanguage;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
 import au.com.integradev.delphi.enviroment.DefaultEnvironmentVariableProvider;
 import au.com.integradev.delphi.executor.DelphiChecksExecutor;
@@ -51,7 +51,7 @@ public class DelphiPlugin implements Plugin {
     builder.add(
         // Core
         Delphi.class,
-        DefaultDelphiProfile.class,
+        DelphiSonarWayProfile.class,
         // Sensors
         DelphiSensor.class,
         // Executors
