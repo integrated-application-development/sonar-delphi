@@ -27,13 +27,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
-import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.SonarProduct;
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -42,7 +43,6 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 class DelphiChecksExecutorTest {
   private DelphiChecksExecutor executor;
   private MasterCheckRegistrar checkRegistrar;
-  private ScopeMetadataLoader scopeMetadataLoader;
 
   @BeforeEach
   void setup() {
@@ -50,9 +50,11 @@ class DelphiChecksExecutorTest {
     when(delphiProjectHelper.getToolchain()).thenReturn(Toolchain.DCC32);
 
     checkRegistrar = mock();
-    scopeMetadataLoader = mock();
 
-    executor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, scopeMetadataLoader);
+    SonarRuntime sonarRuntime = mock();
+    when(sonarRuntime.getProduct()).thenReturn(SonarProduct.SONARQUBE);
+
+    executor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, mock(), sonarRuntime);
     executor.setup();
   }
 
@@ -83,7 +85,6 @@ class DelphiChecksExecutorTest {
   private DelphiCheck mockDelphiCheck(RuleScope scope) {
     DelphiCheck check = mock();
     when(checkRegistrar.getChecks(scope)).thenReturn(Set.of(check));
-    when(scopeMetadataLoader.getScope(check.getClass())).thenReturn(RuleScope.ALL);
     return check;
   }
 

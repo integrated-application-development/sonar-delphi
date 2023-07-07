@@ -27,24 +27,31 @@ import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
 import java.util.Set;
 import java.util.function.Function;
+import org.sonar.api.SonarProduct;
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.rule.RuleScope;
+import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 
 public class DelphiChecksExecutor implements Executor {
   private final DelphiProjectHelper delphiProjectHelper;
   private final MasterCheckRegistrar checkRegistrar;
   private final ScopeMetadataLoader scopeMetadataLoader;
+  private final SonarRuntime sonarRuntime;
 
   public DelphiChecksExecutor(
       DelphiProjectHelper delphiProjectHelper,
       MasterCheckRegistrar checkRegistrar,
-      ScopeMetadataLoader scopeMetadataLoader) {
+      ScopeMetadataLoader scopeMetadataLoader,
+      SonarRuntime sonarRuntime) {
     this.delphiProjectHelper = delphiProjectHelper;
     this.checkRegistrar = checkRegistrar;
     this.scopeMetadataLoader = scopeMetadataLoader;
+    this.sonarRuntime = sonarRuntime;
   }
 
   @Override
@@ -69,8 +76,8 @@ public class DelphiChecksExecutor implements Executor {
 
   private void runChecks(
       RuleScope scope, Function<DelphiCheck, DelphiCheckContext> createCheckContext) {
-    checkRegistrar
-        .getChecks(scope)
+    checkRegistrar.getChecks(scope).stream()
+        .filter(this::isCheckSupportedOnPlatform)
         .forEach(
             check -> {
               DelphiCheckContext context = createCheckContext.apply(check);
@@ -78,6 +85,11 @@ public class DelphiChecksExecutor implements Executor {
               check.visit(context.getAst(), context);
               check.end(context);
             });
+  }
+
+  private boolean isCheckSupportedOnPlatform(DelphiCheck check) {
+    return sonarRuntime.getProduct() == SonarProduct.SONARQUBE
+        || AnnotationUtils.getAnnotation(check, SonarLintUnsupported.class) == null;
   }
 
   @Override
