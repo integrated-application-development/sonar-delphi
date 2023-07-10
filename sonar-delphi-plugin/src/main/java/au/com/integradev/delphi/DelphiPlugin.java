@@ -23,6 +23,8 @@
 package au.com.integradev.delphi;
 
 import au.com.integradev.delphi.check.DefaultMetadataResourcePath;
+import au.com.integradev.delphi.check.MasterCheckRegistrar;
+import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
 import au.com.integradev.delphi.enviroment.DefaultEnvironmentVariableProvider;
@@ -52,7 +54,11 @@ public class DelphiPlugin implements Plugin {
     builder.add(
         // Core
         Delphi.class,
+        // Checks
         DelphiRulesDefinition.class,
+        MasterCheckRegistrar.class,
+        DelphiCheckRegistrar.class,
+        ScopeMetadataLoader.class,
         // Sensors
         DelphiSensor.class,
         // Executors
@@ -69,7 +75,7 @@ public class DelphiPlugin implements Plugin {
 
     if (context.getRuntime().getProduct() == SonarProduct.SONARQUBE) {
       builder.add(
-          // Core
+          // Checks
           DelphiSonarWayProfile.class,
           // Sensors
           DelphiCoverageSensor.class,
