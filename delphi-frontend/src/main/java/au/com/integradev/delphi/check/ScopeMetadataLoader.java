@@ -18,11 +18,11 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
 @ScannerSide
 @SonarLintSide
 public class ScopeMetadataLoader {
-  private final MetadataResourcePathSupplier metadataResourcePathSupplier;
+  private final MetadataResourcePath metadataResourcePath;
   private final Map<RuleKey, RuleScope> ruleKeyToScope;
 
-  public ScopeMetadataLoader(MetadataResourcePathSupplier metadataResourcePathSupplier) {
-    this.metadataResourcePathSupplier = metadataResourcePathSupplier;
+  public ScopeMetadataLoader(MetadataResourcePath metadataResourcePath) {
+    this.metadataResourcePath = metadataResourcePath;
     ruleKeyToScope = new HashMap<>();
   }
 
@@ -61,7 +61,7 @@ public class ScopeMetadataLoader {
     return Thread.currentThread()
         .getContextClassLoader()
         .getResource(
-            metadataResourcePathSupplier.forRepository(ruleKey.repository())
+            metadataResourcePath.forRepository(ruleKey.repository())
                 + "/"
                 + ruleKey.rule()
                 + ".json");

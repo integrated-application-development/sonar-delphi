@@ -5,6 +5,6 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
 @SonarLintSide
-public interface MetadataResourcePathSupplier {
+public interface MetadataResourcePath {
   String forRepository(String repositoryKey);
 }
