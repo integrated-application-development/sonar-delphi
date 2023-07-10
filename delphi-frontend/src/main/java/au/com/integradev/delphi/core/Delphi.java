@@ -27,7 +27,7 @@ import org.sonar.api.resources.AbstractLanguage;
 
 /** Delphi language implementation */
 public class Delphi extends AbstractLanguage {
-  public static final String KEY = "delph";
+  public static final String KEY = "delphi";
   public static final String LANGUAGE_NAME = "Delphi";
   public static final List<String> FILE_SUFFIXES = List.of("pas", "dpr", "dpk");
 
