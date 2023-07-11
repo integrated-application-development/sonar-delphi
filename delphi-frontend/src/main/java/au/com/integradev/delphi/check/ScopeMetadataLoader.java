@@ -58,8 +58,7 @@ public class ScopeMetadataLoader {
   }
 
   private URL getMetadataURL(RuleKey ruleKey) {
-    return Thread.currentThread()
-        .getContextClassLoader()
+    return getClass()
         .getResource(
             metadataResourcePath.forRepository(ruleKey.repository())
                 + "/"
