@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
@@ -40,6 +41,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.rule.RuleScope;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -177,7 +179,13 @@ public final class DelphiIssueBuilder {
       return;
     }
 
-    if (isOutOfScope(ruleKey.get())) {
+    RuleScope scope =
+        EnumUtils.getEnum(
+            RuleScope.class,
+            check.customRuleScopeOverride,
+            scopeMetadataLoader.getScope(ruleKey.get()));
+
+    if (isOutOfScope(scope)) {
       return;
     }
 
@@ -221,8 +229,8 @@ public final class DelphiIssueBuilder {
         .message(location.getMessage());
   }
 
-  private boolean isOutOfScope(RuleKey ruleKey) {
-    switch (scopeMetadataLoader.getScope(ruleKey)) {
+  private boolean isOutOfScope(RuleScope scope) {
+    switch (scope) {
       case MAIN:
         return isWithinTestCode();
       case TEST:
