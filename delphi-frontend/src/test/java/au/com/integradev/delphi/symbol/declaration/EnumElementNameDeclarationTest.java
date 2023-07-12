@@ -73,7 +73,7 @@ class EnumElementNameDeclarationTest {
     EnumElementNode element = new EnumElementNodeImpl(DelphiLexer.TkEnumElement);
     element.jjtAddChild(nameNode);
 
-    EnumTypeNode enumType = new EnumTypeNodeImpl(new CommonToken(DelphiLexer.LPAREN));
+    EnumTypeNode enumType = new EnumTypeNodeImpl(new CommonToken(DelphiLexer.PAREN_LEFT));
     enumType.jjtAddChild(element);
 
     DelphiFile delphiFile = mock(DelphiFile.class);

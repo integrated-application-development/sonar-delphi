@@ -37,7 +37,7 @@ public class SuperfluousSemicolonCheck extends DelphiCheck {
     DelphiNode previous = null;
     for (int i = 0; i < statementList.jjtGetNumChildren(); ++i) {
       DelphiNode current = statementList.jjtGetChild(i);
-      if (current.jjtGetId() == DelphiLexer.SEMI && !(previous instanceof StatementNode)) {
+      if (current.jjtGetId() == DelphiLexer.SEMICOLON && !(previous instanceof StatementNode)) {
         reportIssue(context, current, MESSAGE);
       }
       previous = current;

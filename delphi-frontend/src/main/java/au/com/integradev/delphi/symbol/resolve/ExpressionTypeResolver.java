@@ -304,7 +304,7 @@ public final class ExpressionTypeResolver {
 
   private Type handleSyntaxToken(Type type, int id) {
     switch (id) {
-      case DelphiLexer.POINTER:
+      case DelphiLexer.DEREFERENCE:
       case DelphiLexer.DOT:
         // Delphi Extended syntax is assumed.
         // See: http://docwiki.embarcadero.com/RADStudio/en/Extended_syntax_(Delphi)

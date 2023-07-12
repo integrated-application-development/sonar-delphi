@@ -1012,33 +1012,31 @@ XOR               : 'xor'                      ;
 //----------------------------------------------------------------------------
 // Operators
 //----------------------------------------------------------------------------
-PLUS              : '+'   ;
-MINUS             : '-'   ;
-STAR              : '*'   ;
-SLASH             : '/'   ;
-ASSIGN            : ':='  ;
-COMMA             : ','   ;
-SEMI              : ';'   ;
-COLON             : ':'   ;
-EQUAL             : '='   ;
-NOT_EQUAL         : '<>'  ;
-LT                : '<'   ;
-LE                : '<='  ;
-GE                : '>='  ;
-GT                : '>'   ;
-LBRACK            : '['   ;
-LBRACK2           : '(.'  ;
-RBRACK            : ']'   ;
-RBRACK2           : '.)'  ;
-LPAREN            : '('   ;
-RPAREN            : ')'   ;
-POINTER           : '^'   ;
-AT2               : '@'   ;
-DOT               : '.'   ;
-DOTDOT            : '..'  ;
-LCURLY            : '{'   ;
-RCURLY            : '}'   ;
-AMPERSAND         : '&'   ;
+PLUS                 : '+'  ;
+MINUS                : '-'  ;
+MULTIPLY             : '*'  ;
+DIVIDE               : '/'  ;
+ASSIGN               : ':=' ;
+COMMA                : ','  ;
+SEMICOLON            : ';'  ;
+COLON                : ':'  ;
+EQUAL                : '='  ;
+NOT_EQUAL            : '<>' ;
+LESS_THAN            : '<'  ;
+LESS_THAN_EQUAL      : '<=' ;
+GREATER_THAN_EQUAL   : '>=' ;
+GREATER_THAN         : '>'  ;
+SQUARE_BRACKET_LEFT  : '['  ;
+SQUARE_BRACKET_RIGHT : ']'  ;
+PAREN_BRACKET_LEFT   : '(.' ;
+PAREN_BRACKET_RIGHT  : '.)' ;
+PAREN_LEFT           : '('  ;
+PAREN_RIGHT          : ')'  ;
+DEREFERENCE          : '^'  ;
+ADDRESS              : '@'  ;
+DOT                  : '.'  ;
+DOT_DOT              : '..' ;
+AMPERSAND            : '&'  ;
 
 //****************************
 // Imaginary tokens

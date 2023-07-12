@@ -31,7 +31,7 @@ public enum UnaryOperator implements Operator {
   NOT(DelphiLexer.NOT, "BitwiseNot", "LogicalNot"),
   PLUS(DelphiLexer.PLUS, "Positive"),
   NEGATE(DelphiLexer.MINUS, "Negative"),
-  ADDRESS(DelphiLexer.AT2);
+  ADDRESS(DelphiLexer.ADDRESS);
 
   private static final Map<Integer, UnaryOperator> TOKEN_TYPE_MAP =
       Arrays.stream(UnaryOperator.values())

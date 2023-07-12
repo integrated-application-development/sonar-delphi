@@ -295,7 +295,7 @@ public class NameResolver {
 
   private void handlePrimaryExpressionToken(Node node) {
     switch (node.jjtGetId()) {
-      case DelphiLexer.POINTER:
+      case DelphiLexer.DEREFERENCE:
         Type dereferenced = TypeUtils.dereference(getApproximateType());
         addResolvedDeclaration();
         updateType(dereferenced);
