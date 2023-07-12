@@ -100,18 +100,31 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>au.com.integradev.delphi</groupId>
+        <artifactId>delphi-tokens-generator-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>add-antlr3-source</id>
+            <id>add-generated-source</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>add-source</goal>
             </goals>
             <configuration>
               <sources>
-                <source>target/generated-sources/</source>
+                <source>target/generated-sources/antlr3</source>
+                <source>target/generated-sources/delphi-tokens</source>
               </sources>
             </configuration>
           </execution>

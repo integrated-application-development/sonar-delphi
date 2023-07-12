@@ -83,6 +83,7 @@
   </developers>
 
   <modules>
+    <module>delphi-tokens-generator-maven-plugin</module>
     <module>delphi-checks-testkit</module>
     <module>delphi-checks</module>
     <module>delphi-frontend</module>
