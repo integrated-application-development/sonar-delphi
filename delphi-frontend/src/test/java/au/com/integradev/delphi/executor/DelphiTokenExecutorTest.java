@@ -33,7 +33,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
@@ -125,8 +124,8 @@ class DelphiTokenExecutorTest {
 
     cpdTokenCount(62);
     cpdTokenCount(0, DelphiTokenExecutorTest::isWhitespaceOrComment);
-    cpdTokenCount(3, DelphiTokenImpl.STRING_LITERAL);
-    cpdTokenCount(5, DelphiTokenImpl.NUMERIC_LITERAL);
+    cpdTokenCount(3, DelphiCpdExecutor.STRING_LITERAL);
+    cpdTokenCount(5, DelphiCpdExecutor.NUMERIC_LITERAL);
     highlightCount(21);
   }
 

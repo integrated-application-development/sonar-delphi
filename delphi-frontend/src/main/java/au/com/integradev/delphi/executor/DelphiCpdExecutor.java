@@ -22,8 +22,12 @@ import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public class DelphiCpdExecutor extends DelphiTokenExecutor {
+  static final String STRING_LITERAL = "STRING_LITERAL";
+  static final String NUMERIC_LITERAL = "NUMERIC_LITERAL";
+
   private NewCpdTokens cpdTokens;
 
   @Override
@@ -42,11 +46,35 @@ public class DelphiCpdExecutor extends DelphiTokenExecutor {
         token.getBeginColumn(),
         token.getEndLine(),
         token.getEndColumn(),
-        token.getNormalizedImage());
+        getNormalizedImage(token));
   }
 
   @Override
   public void save() {
     cpdTokens.save();
+  }
+
+  private static String getNormalizedImage(DelphiToken token) {
+    if (token.getType() == DelphiTokenType.TK_QUOTED_STRING) {
+      return STRING_LITERAL;
+    }
+
+    if (isNumericLiteral(token)) {
+      return NUMERIC_LITERAL;
+    }
+
+    return token.getImage().toLowerCase();
+  }
+
+  private static boolean isNumericLiteral(DelphiToken token) {
+    switch (token.getType()) {
+      case TK_INT_NUM:
+      case TK_REAL_NUM:
+      case TK_HEX_NUM:
+      case TK_BINARY_NUM:
+        return true;
+      default:
+        return false;
+    }
   }
 }

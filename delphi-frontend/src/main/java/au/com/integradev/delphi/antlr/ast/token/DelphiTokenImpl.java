@@ -26,9 +26,6 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.TokenLocation;
 
 public class DelphiTokenImpl implements DelphiToken {
-  public static final String STRING_LITERAL = "STRING_LITERAL";
-  public static final String NUMERIC_LITERAL = "NUMERIC_LITERAL";
-
   private final Token token;
   private final DelphiTokenType tokenType;
   private String image;
@@ -117,16 +114,6 @@ public class DelphiTokenImpl implements DelphiToken {
     return isNil() || token.getLine() == FilePosition.UNDEFINED_LINE;
   }
 
-  private boolean isStringLiteral() {
-    return tokenType == DelphiTokenType.TK_QUOTED_STRING;
-  }
-
-  private boolean isNumericLiteral() {
-    return tokenType == DelphiTokenType.TK_INT_NUM
-        || tokenType == DelphiTokenType.TK_REAL_NUM
-        || tokenType == DelphiTokenType.TK_HEX_NUM;
-  }
-
   @Override
   public boolean isWhitespace() {
     return tokenType == DelphiTokenType.WS;
@@ -164,19 +151,6 @@ public class DelphiTokenImpl implements DelphiToken {
   @Override
   public DelphiTokenType getType() {
     return tokenType;
-  }
-
-  @Override
-  public String getNormalizedImage() {
-    if (isStringLiteral()) {
-      return STRING_LITERAL;
-    }
-
-    if (isNumericLiteral()) {
-      return NUMERIC_LITERAL;
-    }
-
-    return token.getText().toLowerCase();
   }
 
   public Token getAntlrToken() {

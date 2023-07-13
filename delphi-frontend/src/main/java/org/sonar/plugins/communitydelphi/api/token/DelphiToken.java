@@ -28,6 +28,4 @@ public interface DelphiToken {
   int getIndex();
 
   DelphiTokenType getType();
-
-  String getNormalizedImage();
 }
