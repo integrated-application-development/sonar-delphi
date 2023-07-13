@@ -11,5 +11,7 @@ public interface MutableDelphiNode extends DelphiNode {
 
   void setParent(DelphiNode parent);
 
+  void setChildIndex(int index);
+
   void setScope(DelphiScope scope);
 }

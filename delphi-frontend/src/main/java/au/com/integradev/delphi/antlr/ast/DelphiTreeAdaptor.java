@@ -196,7 +196,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public void setChildIndex(Object node, int index) {
-    ((DelphiNode) node).setChildIndex(index);
+    ((MutableDelphiNode) node).setChildIndex(index);
   }
 
   @Override

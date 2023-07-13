@@ -133,7 +133,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
     }
 
     this.children[index] = child;
-    child.setChildIndex(index);
+    ((DelphiNodeImpl) child).setChildIndex(index);
   }
 
   @Override
