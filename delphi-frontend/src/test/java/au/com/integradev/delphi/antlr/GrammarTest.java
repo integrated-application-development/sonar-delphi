@@ -197,6 +197,11 @@ class GrammarTest {
   }
 
   @Test
+  void testDoubleAmpersands() {
+    parseFile("DoubleAmpersands.pas");
+  }
+
+  @Test
   void testUndefinedInaccessibleNestedIfDef() {
     fileConfig =
         DelphiFile.createConfig(
