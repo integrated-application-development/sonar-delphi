@@ -214,6 +214,11 @@ class GrammarTest {
   }
 
   @Test
+  void testClassOperators() {
+    parseFile("ClassOperators.pas");
+  }
+
+  @Test
   void testEmptyFileShouldThrow() {
     assertThatThrownBy(
             () ->

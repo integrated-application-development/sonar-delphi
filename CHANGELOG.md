@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Name collisions between generic and non-generic forward declarations.
 - Incorrect type conversions from pointers to arrays.
 - Fixed arrays were overly-eager to convert to dynamic arrays.
+- Parsing errors around `In` operator overloads.
 
 ## [0.40.0] - 2023-01-10
 
