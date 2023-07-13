@@ -24,6 +24,8 @@ public interface DelphiToken {
 
   boolean isCompilerDirective();
 
+  boolean isKeyword();
+
   boolean isNil();
 
   int getIndex();

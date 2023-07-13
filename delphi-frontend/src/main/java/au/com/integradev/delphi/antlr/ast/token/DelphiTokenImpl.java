@@ -144,7 +144,8 @@ public class DelphiTokenImpl implements DelphiToken {
     return tokenType == DelphiTokenType.TK_COMPILER_DIRECTIVE;
   }
 
-  private boolean isKeyword() {
+  @Override
+  public boolean isKeyword() {
     return DelphiKeywords.KEYWORDS.contains(tokenType);
   }
 

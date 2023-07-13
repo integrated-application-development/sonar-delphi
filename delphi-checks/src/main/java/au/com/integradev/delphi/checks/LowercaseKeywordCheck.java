@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.core.DelphiKeywords;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Set;
@@ -53,7 +52,7 @@ public class LowercaseKeywordCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(DelphiNode node, DelphiCheckContext context) {
-    if (isViolationNode(node)) {
+    if (isIssueNode(node)) {
       context
           .newIssue()
           .onFilePosition(FilePosition.from(node.getToken()))
@@ -69,8 +68,8 @@ public class LowercaseKeywordCheck extends DelphiCheck {
     return context;
   }
 
-  private boolean isViolationNode(DelphiNode node) {
-    if (!DelphiKeywords.KEYWORDS.contains(node.getTokenType())) {
+  private boolean isIssueNode(DelphiNode node) {
+    if (!node.getToken().isKeyword()) {
       return false;
     }
 
