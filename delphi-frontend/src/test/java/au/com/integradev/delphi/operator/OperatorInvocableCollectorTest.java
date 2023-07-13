@@ -28,6 +28,9 @@ import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.operator.Operator;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 
 class OperatorInvocableCollectorTest {
   @Test

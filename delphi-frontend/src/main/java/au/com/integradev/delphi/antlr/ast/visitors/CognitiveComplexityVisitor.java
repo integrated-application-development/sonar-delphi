@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.antlr.ast.visitors;
 
 import au.com.integradev.delphi.antlr.ast.visitors.CognitiveComplexityVisitor.Data;
-import au.com.integradev.delphi.operator.BinaryOperator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 
 public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
   public static class Data {

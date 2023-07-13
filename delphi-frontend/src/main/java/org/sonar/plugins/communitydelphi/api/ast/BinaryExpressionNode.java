@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 
 public interface BinaryExpressionNode extends ExpressionNode {
   ExpressionNode getLeft();

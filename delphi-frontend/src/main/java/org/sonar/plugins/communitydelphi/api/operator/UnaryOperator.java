@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.operator;
+package org.sonar.plugins.communitydelphi.api.operator;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
@@ -24,7 +24,6 @@ import com.google.common.collect.Maps;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public enum UnaryOperator implements Operator {
@@ -50,8 +49,11 @@ public enum UnaryOperator implements Operator {
     return names;
   }
 
-  @NotNull
-  public static UnaryOperator from(DelphiTokenType tokenType) {
-    return TOKEN_TYPE_MAP.get(tokenType);
+  public static UnaryOperator fromTokenType(DelphiTokenType tokenType) {
+    UnaryOperator operator = TOKEN_TYPE_MAP.get(tokenType);
+    if (operator != null) {
+      return operator;
+    }
+    throw new AssertionError("Unhandled UnaryOperator token type: " + tokenType.name());
   }
 }

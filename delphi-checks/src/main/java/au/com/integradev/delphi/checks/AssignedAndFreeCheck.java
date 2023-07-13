@@ -22,7 +22,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.operator.BinaryOperator;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
@@ -37,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "AssignedAndFreeRule", repositoryKey = "delph")

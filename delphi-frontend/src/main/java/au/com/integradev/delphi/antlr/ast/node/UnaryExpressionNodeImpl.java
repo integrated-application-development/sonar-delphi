@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl
@@ -44,7 +44,7 @@ public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   public UnaryOperator getOperator() {
     if (operator == null) {
-      operator = UnaryOperator.from(getTokenType());
+      operator = UnaryOperator.fromTokenType(getTokenType());
     }
     return operator;
   }

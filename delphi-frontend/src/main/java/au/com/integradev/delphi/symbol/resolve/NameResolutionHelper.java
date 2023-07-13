@@ -21,7 +21,6 @@ package au.com.integradev.delphi.symbol.resolve;
 import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
-import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -60,6 +59,7 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;

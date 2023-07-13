@@ -21,7 +21,6 @@ package au.com.integradev.delphi.checks;
 import static au.com.integradev.delphi.utils.MethodUtils.isMethodStubWithStackUnwinding;
 import static au.com.integradev.delphi.utils.StatementUtils.isMethodInvocation;
 
-import au.com.integradev.delphi.operator.UnaryOperator;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -44,6 +43,7 @@ import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;

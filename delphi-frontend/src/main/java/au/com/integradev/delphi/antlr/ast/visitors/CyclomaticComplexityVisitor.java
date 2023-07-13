@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.antlr.ast.visitors;
 
 import au.com.integradev.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.Data;
-import au.com.integradev.delphi.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
@@ -28,6 +27,7 @@ import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 
 public class CyclomaticComplexityVisitor implements DelphiParserVisitor<Data> {
   public static class Data {

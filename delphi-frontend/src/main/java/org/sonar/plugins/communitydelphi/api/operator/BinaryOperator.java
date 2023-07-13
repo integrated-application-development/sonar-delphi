@@ -16,9 +16,8 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.operator;
+package org.sonar.plugins.communitydelphi.api.operator;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Maps;
@@ -66,7 +65,11 @@ public enum BinaryOperator implements Operator {
     return names;
   }
 
-  public static BinaryOperator from(DelphiTokenType tokenType) {
-    return Preconditions.checkNotNull(TOKEN_TYPE_MAP.get(tokenType));
+  public static BinaryOperator fromTokenType(DelphiTokenType tokenType) {
+    BinaryOperator operator = TOKEN_TYPE_MAP.get(tokenType);
+    if (operator != null) {
+      return operator;
+    }
+    throw new AssertionError("Unhandled BinaryOperator token type: " + tokenType.name());
   }
 }

@@ -20,10 +20,7 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
-import au.com.integradev.delphi.operator.BinaryOperator;
-import au.com.integradev.delphi.operator.Operator;
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
-import au.com.integradev.delphi.operator.UnaryOperator;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
@@ -43,6 +40,9 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.operator.Operator;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;

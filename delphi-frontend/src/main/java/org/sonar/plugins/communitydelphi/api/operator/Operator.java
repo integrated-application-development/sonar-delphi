@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.operator;
+package org.sonar.plugins.communitydelphi.api.operator;
 
 import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;

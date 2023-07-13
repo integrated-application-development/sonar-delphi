@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.operator.UnaryOperator;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 
 public interface UnaryExpressionNode extends ExpressionNode {
   UnaryOperator getOperator();

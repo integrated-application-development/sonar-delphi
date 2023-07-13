@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl
@@ -54,7 +54,7 @@ public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   public BinaryOperator getOperator() {
     if (operator == null) {
-      operator = BinaryOperator.from(getTokenType());
+      operator = BinaryOperator.fromTokenType(getTokenType());
     }
     return operator;
   }
