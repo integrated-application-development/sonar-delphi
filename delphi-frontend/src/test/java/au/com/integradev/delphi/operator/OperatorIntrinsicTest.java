@@ -20,11 +20,11 @@ package au.com.integradev.delphi.operator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class OperatorIntrinsicTest {
   private static final OperatorIntrinsic INTRINSIC =

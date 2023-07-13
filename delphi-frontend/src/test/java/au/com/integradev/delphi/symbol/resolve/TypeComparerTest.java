@@ -29,9 +29,6 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EQUAL;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
-import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
-import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
@@ -45,9 +42,12 @@ import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.OBJECT;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.voidType;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
@@ -69,6 +69,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class TypeComparerTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
@@ -651,19 +652,20 @@ class TypeComparerTest {
   }
 
   private static CollectionType openArray(String image, Type type) {
-    return FACTORY.array(image, type, Set.of(ArrayOption.OPEN));
+    return ((TypeFactoryImpl) FACTORY).array(image, type, Set.of(ArrayOption.OPEN));
   }
 
   private static CollectionType fixedArray(String image, Type type) {
-    return FACTORY.array(image, type, Set.of(ArrayOption.FIXED));
+    return ((TypeFactoryImpl) FACTORY).array(image, type, Set.of(ArrayOption.FIXED));
   }
 
   private static CollectionType dynamicArray(String image, Type type) {
-    return FACTORY.array(image, type, Set.of(ArrayOption.DYNAMIC));
+    return ((TypeFactoryImpl) FACTORY).array(image, type, Set.of(ArrayOption.DYNAMIC));
   }
 
   private static CollectionType arrayOfConst() {
-    return FACTORY.array(null, voidType(), Set.of(ArrayOption.OPEN, ArrayOption.ARRAY_OF_CONST));
+    return ((TypeFactoryImpl) FACTORY)
+        .array(null, voidType(), Set.of(ArrayOption.OPEN, ArrayOption.ARRAY_OF_CONST));
   }
 
   private static CollectionType openArray(String image, IntrinsicType intrinsic) {
@@ -704,7 +706,7 @@ class TypeComparerTest {
   }
 
   private static EnumType enumeration(String image) {
-    return FACTORY.enumeration(image, unknownScope());
+    return ((TypeFactoryImpl) FACTORY).enumeration(image, unknownScope());
   }
 
   private static SubrangeType subRange(String image, Type type) {
@@ -756,15 +758,21 @@ class TypeComparerTest {
   }
 
   private static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
-    return FACTORY.procedure(
-        parameterTypes.stream().map(TypeMocker::parameter).collect(Collectors.toUnmodifiableList()),
-        returnType);
+    return ((TypeFactoryImpl) FACTORY)
+        .procedure(
+            parameterTypes.stream()
+                .map(TypeMocker::parameter)
+                .collect(Collectors.toUnmodifiableList()),
+            returnType);
   }
 
   private static ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
-    return FACTORY.anonymous(
-        parameterTypes.stream().map(TypeMocker::parameter).collect(Collectors.toUnmodifiableList()),
-        returnType);
+    return ((TypeFactoryImpl) FACTORY)
+        .anonymous(
+            parameterTypes.stream()
+                .map(TypeMocker::parameter)
+                .collect(Collectors.toUnmodifiableList()),
+            returnType);
   }
 
   private static AnsiStringType ansiString(int codePage) {

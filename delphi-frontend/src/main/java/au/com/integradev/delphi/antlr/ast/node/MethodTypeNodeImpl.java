@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -39,7 +40,7 @@ public final class MethodTypeNodeImpl extends ProceduralTypeNodeImpl implements 
   @Override
   @Nonnull
   protected Type createType() {
-    return getTypeFactory()
+    return ((TypeFactoryImpl) getTypeFactory())
         .ofObject(
             getParameters().stream()
                 .map(FormalParameter::create)

@@ -44,7 +44,7 @@ public final class VoidTypeImpl extends TypeImpl {
     return true;
   }
 
-  static Type instance() {
+  public static Type instance() {
     return INSTANCE;
   }
 }

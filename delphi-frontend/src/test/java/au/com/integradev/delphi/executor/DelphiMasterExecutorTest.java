@@ -36,7 +36,7 @@ import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -52,6 +52,7 @@ import org.mockito.InOrder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class DelphiMasterExecutorTest {
   private File baseDir;
@@ -175,7 +176,7 @@ class DelphiMasterExecutorTest {
 
   private static DelphiFileConfig mockConfig() {
     TypeFactory typeFactory =
-        new TypeFactory(
+        new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());

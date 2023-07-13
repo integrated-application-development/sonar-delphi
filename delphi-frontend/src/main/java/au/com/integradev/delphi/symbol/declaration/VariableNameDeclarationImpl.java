@@ -21,7 +21,6 @@ package au.com.integradev.delphi.symbol.declaration;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +43,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDecl
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 

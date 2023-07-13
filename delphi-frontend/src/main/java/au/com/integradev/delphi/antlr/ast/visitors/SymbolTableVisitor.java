@@ -48,7 +48,6 @@ import au.com.integradev.delphi.symbol.scope.UnitScopeImpl;
 import au.com.integradev.delphi.symbol.scope.WithScopeImpl;
 import au.com.integradev.delphi.type.factory.ClassReferenceTypeImpl;
 import au.com.integradev.delphi.type.factory.PointerTypeImpl;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import java.util.ArrayDeque;
@@ -127,6 +126,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
 /**

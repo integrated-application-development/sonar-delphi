@@ -21,12 +21,12 @@ package au.com.integradev.delphi.symbol;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class NameOccurrenceImplTest {
   @Test

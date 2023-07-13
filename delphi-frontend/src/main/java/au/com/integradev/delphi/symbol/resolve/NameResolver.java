@@ -19,10 +19,10 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
-import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.voidType;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
@@ -33,7 +33,6 @@ import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationI
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
@@ -95,6 +94,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 

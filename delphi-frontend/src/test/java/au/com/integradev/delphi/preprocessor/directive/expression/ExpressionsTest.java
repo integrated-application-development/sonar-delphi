@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.List;
@@ -43,6 +42,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class ExpressionsTest {
 

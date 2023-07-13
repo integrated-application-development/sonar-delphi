@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Comparator;
 import java.util.Set;
@@ -28,6 +28,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class TypeInferrer {
@@ -68,6 +69,6 @@ public final class TypeInferrer {
             .max(Comparator.comparingInt(Type::size))
             .orElse(TypeFactory.voidType());
 
-    return typeFactory.array(null, element, Set.of(ArrayOption.DYNAMIC));
+    return ((TypeFactoryImpl) typeFactory).array(null, element, Set.of(ArrayOption.DYNAMIC));
   }
 }

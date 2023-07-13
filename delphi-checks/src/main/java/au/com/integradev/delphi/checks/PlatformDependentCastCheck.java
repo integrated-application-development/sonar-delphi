@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import org.sonar.check.Rule;
@@ -34,6 +33,7 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 

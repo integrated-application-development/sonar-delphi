@@ -18,12 +18,11 @@
  */
 package au.com.integradev.delphi.operator;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.collect.Sets;
 import java.util.Collection;
@@ -42,6 +41,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class OperatorInvocableCollector {
   private final TypeFactory typeFactory;

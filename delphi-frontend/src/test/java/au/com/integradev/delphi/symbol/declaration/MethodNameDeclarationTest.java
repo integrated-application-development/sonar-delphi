@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +38,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class MethodNameDeclarationTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
@@ -50,7 +51,7 @@ class MethodNameDeclarationTest {
   private static final boolean IS_CALLABLE = true;
   private static final MethodKind KIND = MethodKind.PROCEDURE;
   private static final ProceduralType METHOD_TYPE =
-      FACTORY.method(List.of(mock(Parameter.class)), RETURN_TYPE);
+      ((TypeFactoryImpl) FACTORY).method(List.of(mock(Parameter.class)), RETURN_TYPE);
   private static final TypeNameDeclaration TYPE_NAME_DECLARATION =
       new TypeNameDeclarationImpl(
           SymbolicNode.imaginary("Baz", DelphiScope.unknownScope()),
@@ -213,7 +214,7 @@ class MethodNameDeclarationTest {
             IS_CLASS_INVOCABLE,
             IS_CALLABLE,
             KIND,
-            FACTORY.method(Collections.emptyList(), TypeFactory.untypedType()),
+            ((TypeFactoryImpl) FACTORY).method(Collections.emptyList(), TypeFactory.untypedType()),
             TYPE_NAME_DECLARATION,
             VISIBILITY,
             TYPE_PARAMETERS);

@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 

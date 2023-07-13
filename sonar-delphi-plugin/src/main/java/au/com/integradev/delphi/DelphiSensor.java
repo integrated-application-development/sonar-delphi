@@ -38,7 +38,7 @@ import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +95,7 @@ public class DelphiSensor implements Sensor {
     LOG.info("Conditional defines: {}", delphiProjectHelper.getConditionalDefines());
 
     var preprocessorFactory = new DelphiPreprocessorFactory(toolchain.platform);
-    var typeFactory = new TypeFactory(toolchain, compilerVersion);
+    var typeFactory = new TypeFactoryImpl(toolchain, compilerVersion);
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
 

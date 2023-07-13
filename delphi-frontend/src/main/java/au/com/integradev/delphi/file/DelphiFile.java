@@ -34,7 +34,6 @@ import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +49,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public interface DelphiFile {
   File getSourceCodeFile();

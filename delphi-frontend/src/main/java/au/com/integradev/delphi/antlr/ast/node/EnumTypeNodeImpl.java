@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -56,7 +57,7 @@ public final class EnumTypeNodeImpl extends TypeNodeImpl implements EnumTypeNode
       image = makeAnonymousImage(this);
     }
 
-    return getTypeFactory().enumeration(image, getScope());
+    return ((TypeFactoryImpl) getTypeFactory()).enumeration(image, getScope());
   }
 
   private static String makeAnonymousImage(EnumTypeNode typeNode) {

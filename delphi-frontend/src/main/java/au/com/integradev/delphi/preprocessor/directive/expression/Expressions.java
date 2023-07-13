@@ -29,7 +29,6 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue.BinaryEvaluator;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue.UnaryEvaluator;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.base.Preconditions;
 import java.math.BigInteger;
@@ -43,6 +42,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class Expressions {
   private Expressions() {

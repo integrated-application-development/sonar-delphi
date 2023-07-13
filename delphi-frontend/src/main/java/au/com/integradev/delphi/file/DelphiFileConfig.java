@@ -20,9 +20,9 @@ package au.com.integradev.delphi.file;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.Set;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public interface DelphiFileConfig {
   /**

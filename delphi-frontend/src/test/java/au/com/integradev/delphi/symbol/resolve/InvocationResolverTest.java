@@ -18,8 +18,6 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
-import static au.com.integradev.delphi.type.factory.TypeFactory.untypedType;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.ANSISTRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.BOOLEAN;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicType.BYTE;
@@ -50,9 +48,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
@@ -69,6 +69,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class InvocationResolverTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
@@ -249,8 +250,10 @@ class InvocationResolverTest {
 
   @Test
   void testVarParameters() {
-    Type openArray = FACTORY.array(null, type(INTEGER), Set.of(ArrayOption.OPEN));
-    Type dynamicArray = FACTORY.array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
+    Type openArray =
+        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.OPEN));
+    Type dynamicArray =
+        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
 
     assertResolvedVar(type(INTEGER), untypedType());
     assertResolvedVar(dynamicArray, openArray);
@@ -263,7 +266,8 @@ class InvocationResolverTest {
 
   @Test
   void testSingleVariantArgument() {
-    Type arrayOfInteger = FACTORY.array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
+    Type arrayOfInteger =
+        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
 
     assertResolved(type(VARIANT), type(VARIANT), type(INTEGER));
     assertResolved(type(VARIANT), type(INTEGER), unknownType());
@@ -289,7 +293,9 @@ class InvocationResolverTest {
     assertResolved(type(VARIANT), type(ANSISTRING), type(SHORTSTRING));
     assertResolved(type(VARIANT), arrayOfInteger, type(SHORTSTRING));
     assertResolved(
-        type(VARIANT), FACTORY.enumeration("MyEnum", DelphiScope.unknownScope()), arrayOfInteger);
+        type(VARIANT),
+        ((TypeFactoryImpl) FACTORY).enumeration("MyEnum", DelphiScope.unknownScope()),
+        arrayOfInteger);
 
     assertAmbiguous(type(VARIANT), type(SMALLINT), type(WORD));
     assertIncompatible(type(VARIANT), unknownType());

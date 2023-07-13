@@ -18,8 +18,8 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
 import java.util.Set;

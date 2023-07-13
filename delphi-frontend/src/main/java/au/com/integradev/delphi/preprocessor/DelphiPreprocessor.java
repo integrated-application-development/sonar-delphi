@@ -31,7 +31,6 @@ import au.com.integradev.delphi.preprocessor.directive.BranchDirective;
 import au.com.integradev.delphi.preprocessor.directive.BranchingDirective;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveImpl;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
@@ -56,6 +55,7 @@ import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class DelphiPreprocessor {
   private static final Logger LOG = Loggers.get(DelphiPreprocessor.class);

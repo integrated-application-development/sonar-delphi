@@ -30,7 +30,6 @@ import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
@@ -40,6 +39,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 import org.antlr.runtime.BufferedTokenStream;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class DelphiPreprocessorTest {
   private static final String BASE_DIR = "/au/com/integradev/delphi/preprocessor/";

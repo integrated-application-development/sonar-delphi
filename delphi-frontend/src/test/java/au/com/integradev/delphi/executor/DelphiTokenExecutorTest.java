@@ -40,7 +40,7 @@ import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.collect.Range;
 import java.io.File;
@@ -58,6 +58,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class DelphiTokenExecutorTest {
   private static final String ROOT_DIR_PATH = "/au/com/integradev/delphi/token/";
@@ -225,7 +226,7 @@ class DelphiTokenExecutorTest {
               .build();
 
       TypeFactory typeFactory =
-          new TypeFactory(
+          new TypeFactoryImpl(
               DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT,
               DelphiProperties.COMPILER_VERSION_DEFAULT);
 

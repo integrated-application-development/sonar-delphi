@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.utils.types;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;

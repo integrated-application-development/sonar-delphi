@@ -17,7 +17,7 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -186,7 +186,7 @@ public class CheckVerifierImpl implements CheckVerifier {
         SymbolTable.builder()
             .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
             .typeFactory(
-                new TypeFactory(
+                new TypeFactoryImpl(
                     DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT,
                     DelphiProperties.COMPILER_VERSION_DEFAULT))
             .standardLibraryPath(standardLibraryPath)

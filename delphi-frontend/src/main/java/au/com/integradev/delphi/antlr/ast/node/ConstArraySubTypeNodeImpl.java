@@ -19,13 +19,13 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ConstArraySubTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class ConstArraySubTypeNodeImpl extends TypeNodeImpl implements ConstArraySubTypeNode {
   public ConstArraySubTypeNodeImpl(Token token) {

@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
 import java.util.List;
@@ -32,6 +31,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDecl
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 class ParameterTest {

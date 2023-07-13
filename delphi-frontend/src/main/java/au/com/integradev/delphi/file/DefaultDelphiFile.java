@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.file;
 
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.io.File;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class DefaultDelphiFile implements DelphiFile {
   private File sourceCodeFile;

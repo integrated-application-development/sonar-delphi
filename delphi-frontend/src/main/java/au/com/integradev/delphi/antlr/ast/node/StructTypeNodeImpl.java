@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
@@ -38,6 +39,6 @@ public abstract class StructTypeNodeImpl extends TypeNodeImpl implements StructT
   @Nonnull
   @Override
   protected Type createType() {
-    return getTypeFactory().struct(this);
+    return ((TypeFactoryImpl) getTypeFactory()).struct(this);
   }
 }

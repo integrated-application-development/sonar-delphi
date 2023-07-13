@@ -51,7 +51,6 @@ import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +58,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclar
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class IntrinsicsInjector {
   private final TypeFactory typeFactory;

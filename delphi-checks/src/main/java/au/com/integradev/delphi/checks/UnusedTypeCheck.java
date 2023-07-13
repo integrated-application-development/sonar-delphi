@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
@@ -31,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @SonarLintUnsupported

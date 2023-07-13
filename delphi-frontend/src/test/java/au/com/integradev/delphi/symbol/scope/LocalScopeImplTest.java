@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.LocalScope;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class LocalScopeImplTest {
   @Test

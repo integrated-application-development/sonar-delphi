@@ -33,7 +33,7 @@ import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +52,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.Metric;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class DelphiMetricsExecutorTest {
   private static final String ROOT_PATH = "/au/com/integradev/delphi/projects/SimpleProject/tools/";
@@ -173,7 +174,7 @@ class DelphiMetricsExecutorTest {
 
   private static DelphiFileConfig mockConfig() {
     TypeFactory typeFactory =
-        new TypeFactory(
+        new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());

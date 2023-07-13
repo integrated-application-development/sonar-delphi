@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.ArrayOption;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.EnumSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -85,9 +86,10 @@ public final class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNo
     }
 
     if (indicesSize > 1) {
-      return getTypeFactory().multiDimensionalArray(image, elementType, indicesSize, options);
+      return ((TypeFactoryImpl) getTypeFactory())
+          .multiDimensionalArray(image, elementType, indicesSize, options);
     }
 
-    return getTypeFactory().array(image, elementType, options);
+    return ((TypeFactoryImpl) getTypeFactory()).array(image, elementType, options);
   }
 }

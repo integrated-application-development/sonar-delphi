@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
@@ -38,6 +39,6 @@ public abstract class HelperTypeNodeImpl extends StructTypeNodeImpl implements H
   @Nonnull
   @Override
   protected final Type createType() {
-    return getTypeFactory().helper(this);
+    return ((TypeFactoryImpl) getTypeFactory()).helper(this);
   }
 }

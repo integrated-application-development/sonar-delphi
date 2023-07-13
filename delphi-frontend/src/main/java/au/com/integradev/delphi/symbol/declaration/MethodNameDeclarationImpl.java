@@ -21,7 +21,7 @@ package au.com.integradev.delphi.symbol.declaration;
 import static java.util.Collections.emptySet;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicMethod;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
@@ -51,6 +51,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class MethodNameDeclarationImpl extends NameDeclarationImpl
@@ -106,7 +107,8 @@ public final class MethodNameDeclarationImpl extends NameDeclarationImpl
         false,
         true,
         data.getMethodKind(),
-        typeFactory.method(createParameters(data), data.getReturnType(), data.isVariadic()),
+        ((TypeFactoryImpl) typeFactory)
+            .method(createParameters(data), data.getReturnType(), data.isVariadic()),
         null,
         VisibilityType.PUBLIC,
         Collections.emptyList());
@@ -131,7 +133,7 @@ public final class MethodNameDeclarationImpl extends NameDeclarationImpl
         method.isClassMethod(),
         isCallable,
         method.getMethodKind(),
-        typeFactory.method(createParameters(method), method.getReturnType()),
+        ((TypeFactoryImpl) typeFactory).method(createParameters(method), method.getReturnType()),
         method.getTypeDeclaration(),
         method.getVisibility(),
         extractGenericTypeParameters(method));

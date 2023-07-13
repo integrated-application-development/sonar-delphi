@@ -66,8 +66,9 @@ import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
-public class TypeFactory {
+public class TypeFactoryImpl implements TypeFactory {
   private static final CompilerVersion VERSION_4 = CompilerVersion.fromVersionSymbol("VER120");
   private static final CompilerVersion VERSION_2009 = CompilerVersion.fromVersionNumber("20.0");
   private static final CompilerVersion VERSION_XE8 = CompilerVersion.fromVersionNumber("29.0");
@@ -81,13 +82,13 @@ public class TypeFactory {
   private final FileType untypedFile;
   private final CollectionType emptySet;
 
-  public TypeFactory(Toolchain toolchain, CompilerVersion compilerVersion) {
+  public TypeFactoryImpl(Toolchain toolchain, CompilerVersion compilerVersion) {
     this.toolchain = toolchain;
     this.compilerVersion = compilerVersion;
     this.intrinsicTypes = new EnumMap<>(IntrinsicType.class);
-    this.nilPointer = pointerTo("nil", voidType());
-    this.untypedFile = fileOf(untypedType());
-    this.emptySet = new SetTypeImpl(voidType());
+    this.nilPointer = pointerTo("nil", TypeFactory.voidType());
+    this.untypedFile = fileOf(TypeFactory.untypedType());
+    this.emptySet = new SetTypeImpl(TypeFactory.voidType());
     createIntrinsicTypes();
   }
 
@@ -248,7 +249,7 @@ public class TypeFactory {
       addAlias(IntrinsicType.CHAR, IntrinsicType.ANSICHAR);
     }
 
-    addPointer(IntrinsicType.POINTER, untypedType(), pointerSize(), false);
+    addPointer(IntrinsicType.POINTER, TypeFactory.untypedType(), pointerSize(), false);
     addPointer(IntrinsicType.PWIDECHAR, getIntrinsic(IntrinsicType.WIDECHAR), pointerSize(), true);
     addPointer(IntrinsicType.PANSICHAR, getIntrinsic(IntrinsicType.ANSICHAR), pointerSize(), true);
 
@@ -264,7 +265,7 @@ public class TypeFactory {
 
     intrinsicTypes.put(
         IntrinsicType.TEXT,
-        new FileTypeImpl(untypedType(), sizeByArchitecture(730, 754)) {
+        new FileTypeImpl(TypeFactory.untypedType(), sizeByArchitecture(730, 754)) {
           @Override
           public String getImage() {
             return IntrinsicType.TEXT.fullyQualifiedName();
@@ -353,10 +354,12 @@ public class TypeFactory {
     return new ProceduralTypeImpl(proceduralSize(kind), kind, parameters, returnType, variadic);
   }
 
+  @Override
   public Type getIntrinsic(IntrinsicType intrinsic) {
     return intrinsicTypes.get(intrinsic);
   }
 
+  @Override
   public AnsiStringType ansiString(int codePage) {
     if (codePage == 0) {
       return (AnsiStringType) getIntrinsic(IntrinsicType.ANSISTRING);
@@ -379,14 +382,17 @@ public class TypeFactory {
     return type;
   }
 
+  @Override
   public ArrayConstructorType arrayConstructor(List<Type> types) {
     return new ArrayConstructorTypeImpl(types);
   }
 
+  @Override
   public CollectionType set(Type type) {
     return new SetTypeImpl(type);
   }
 
+  @Override
   public CollectionType emptySet() {
     return emptySet;
   }
@@ -395,30 +401,37 @@ public class TypeFactory {
     return new EnumerationTypeImpl(image, scope);
   }
 
+  @Override
   public SubrangeType subRange(String image, Type type) {
     return new SubrangeTypeImpl(image, type);
   }
 
+  @Override
   public PointerType pointerTo(@Nullable String image, Type type) {
     return new PointerTypeImpl(image, type, pointerSize(), false);
   }
 
+  @Override
   public PointerType untypedPointer() {
     return (PointerType) getIntrinsic(IntrinsicType.POINTER);
   }
 
+  @Override
   public PointerType nilPointer() {
     return nilPointer;
   }
 
+  @Override
   public FileType fileOf(Type type) {
     return new FileTypeImpl(type, sizeByArchitecture(592, 616));
   }
 
+  @Override
   public FileType untypedFile() {
     return untypedFile;
   }
 
+  @Override
   public ClassReferenceType classOf(@Nullable String image, Type type) {
     return new ClassReferenceTypeImpl(image, type, pointerSize());
   }
@@ -447,6 +460,7 @@ public class TypeFactory {
     return createProcedural(ProceduralKind.METHOD, parameters, returnType, variadic);
   }
 
+  @Override
   public TypeType typeType(String image, Type type) {
     return new TypeTypeImpl(image, type);
   }
@@ -485,6 +499,7 @@ public class TypeFactory {
         kind);
   }
 
+  @Override
   public IntegerType integerFromLiteralValue(BigInteger value) {
     return intrinsicTypes.values().stream()
         .filter(IntegerType.class::isInstance)
@@ -492,17 +507,5 @@ public class TypeFactory {
         .filter(type -> type.min().compareTo(value) <= 0 && type.max().compareTo(value) >= 0)
         .findFirst()
         .orElseThrow(IllegalStateException::new);
-  }
-
-  public static Type unknownType() {
-    return UnknownTypeImpl.instance();
-  }
-
-  public static Type untypedType() {
-    return UntypedTypeImpl.instance();
-  }
-
-  public static Type voidType() {
-    return VoidTypeImpl.instance();
   }
 }

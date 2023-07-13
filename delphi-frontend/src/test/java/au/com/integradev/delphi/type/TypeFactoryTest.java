@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Toolchain;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -31,6 +31,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class TypeFactoryTest {
   private static final String VERSION_3 = "VER100";
@@ -118,14 +119,15 @@ class TypeFactoryTest {
   @ArgumentsSource(RealSizeArgumentsProvider.class)
   void testSizeOfReal(String versionSymbol, int size) {
     TypeFactory typeFactory =
-        new TypeFactory(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
+        new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
     assertThat(typeFactory.getIntrinsic(IntrinsicType.REAL).size()).isEqualTo(size);
   }
 
   @ParameterizedTest(name = "Extended should be {1} bytes on {0}")
   @ArgumentsSource(ExtendedSizeArgumentsProvider.class)
   void testSizeOfExtended(Toolchain toolchain, int size) {
-    TypeFactory typeFactory = new TypeFactory(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
+    TypeFactory typeFactory =
+        new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.EXTENDED).size()).isEqualTo(size);
   }
 
@@ -133,7 +135,7 @@ class TypeFactoryTest {
   @ArgumentsSource(LongSizeArgumentsProvider.class)
   void testSizeOfLongIntegers(Toolchain toolchain, String versionSymbol, int size) {
     TypeFactory typeFactory =
-        new TypeFactory(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
+        new TypeFactoryImpl(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
     assertThat(typeFactory.getIntrinsic(IntrinsicType.LONGINT).size()).isEqualTo(size);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.LONGWORD).size()).isEqualTo(size);
   }
@@ -142,7 +144,7 @@ class TypeFactoryTest {
   @ArgumentsSource(NativeSizeArgumentsProvider.class)
   void testSizeOfNativeIntegers(Toolchain toolchain, String versionSymbol, int size) {
     TypeFactory typeFactory =
-        new TypeFactory(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
+        new TypeFactoryImpl(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
     assertThat(typeFactory.getIntrinsic(IntrinsicType.NATIVEINT).size()).isEqualTo(size);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT).size()).isEqualTo(size);
   }
@@ -150,7 +152,8 @@ class TypeFactoryTest {
   @ParameterizedTest(name = "Pointers should be {1} bytes on {0}")
   @ArgumentsSource(PointerSizeArgumentsProvider.class)
   void testSizeOfPointers(Toolchain toolchain, int size) {
-    TypeFactory typeFactory = new TypeFactory(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
+    TypeFactory typeFactory =
+        new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.POINTER).size()).isEqualTo(size);
   }
 
@@ -158,7 +161,7 @@ class TypeFactoryTest {
   @ArgumentsSource(StringTypeArgumentsProvider.class)
   void testTypeOfString(String versionSymbol, String signature) {
     TypeFactory typeFactory =
-        new TypeFactory(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
+        new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
     assertThat(typeFactory.getIntrinsic(IntrinsicType.STRING).getImage()).isEqualTo(signature);
   }
 
@@ -166,7 +169,7 @@ class TypeFactoryTest {
   @ArgumentsSource(CharTypeArgumentsProvider.class)
   void testTypeOfChar(String versionSymbol, String signature) {
     TypeFactory typeFactory =
-        new TypeFactory(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
+        new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
     assertThat(typeFactory.getIntrinsic(IntrinsicType.CHAR).getImage()).isEqualTo(signature);
   }
 }

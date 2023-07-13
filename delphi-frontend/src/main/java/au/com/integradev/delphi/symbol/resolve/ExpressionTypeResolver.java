@@ -18,10 +18,9 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.collect.Iterables;
@@ -58,6 +57,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 

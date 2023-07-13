@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -30,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {
@@ -97,7 +98,7 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     MethodParametersNode parameters = getMethodParametersNode();
     MethodReturnTypeNode returnTypeNode = getReturnTypeNode();
 
-    return getTypeFactory()
+    return ((TypeFactoryImpl) getTypeFactory())
         .anonymous(
             parameters == null
                 ? Collections.emptyList()

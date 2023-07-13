@@ -30,7 +30,7 @@ import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,6 +48,7 @@ import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
   private static final Logger LOG = Loggers.get(DelphiTestFileBuilder.class);
@@ -207,7 +208,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
 
   private static DelphiFileConfig mockConfig() {
     TypeFactory typeFactory =
-        new TypeFactory(
+        new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());

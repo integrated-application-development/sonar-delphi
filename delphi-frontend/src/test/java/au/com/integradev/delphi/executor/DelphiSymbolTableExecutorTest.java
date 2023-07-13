@@ -32,7 +32,7 @@ import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.collect.Sets;
 import java.io.File;
@@ -1233,7 +1233,7 @@ class DelphiSymbolTableExecutorTest {
 
     var preprocessorFactory = new DelphiPreprocessorFactory(Platform.WINDOWS);
     var typeFactory =
-        new TypeFactory(
+        new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
 
     DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);

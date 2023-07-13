@@ -22,7 +22,6 @@ import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import com.google.common.base.Preconditions;
 import com.google.errorprone.annotations.FormatMethod;
 import com.google.errorprone.annotations.FormatString;
@@ -57,6 +56,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 /**
  * Based directly on {@code InternalJavaIssueBuilder} from the sonar-java project.

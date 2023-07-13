@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;

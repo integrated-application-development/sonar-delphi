@@ -19,7 +19,8 @@
 package au.com.integradev.delphi.utils.types;
 
 import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.type.factory.TypeFactory;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class TypeFactoryUtils {
   private TypeFactoryUtils() {
@@ -27,7 +28,7 @@ public final class TypeFactoryUtils {
   }
 
   public static TypeFactory defaultFactory() {
-    return new TypeFactory(
+    return new TypeFactoryImpl(
         DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
   }
 }

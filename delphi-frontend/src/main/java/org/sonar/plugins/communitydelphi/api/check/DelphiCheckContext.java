@@ -2,13 +2,13 @@ package org.sonar.plugins.communitydelphi.api.check;
 
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.reporting.DelphiIssueBuilder;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 /** Context injected in check classes and used to report issues. */
 public interface DelphiCheckContext {

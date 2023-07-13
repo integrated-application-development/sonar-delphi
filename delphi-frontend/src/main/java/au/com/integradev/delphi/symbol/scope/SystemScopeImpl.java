@@ -18,11 +18,11 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicsInjector;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class SystemScopeImpl extends FileScopeImpl implements SystemScope {
   private TypeNameDeclaration objectDeclaration;

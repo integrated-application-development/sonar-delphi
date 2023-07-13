@@ -18,12 +18,11 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
-import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
+import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +73,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;
