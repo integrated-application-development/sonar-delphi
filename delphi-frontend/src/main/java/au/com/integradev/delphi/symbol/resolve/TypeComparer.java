@@ -630,7 +630,7 @@ class TypeComparer {
 
   private static EqualityType compareDynamicArray(CollectionType from, CollectionType to) {
     if (equals(from.elementType(), to.elementType())) {
-      return from.isDynamicArray() ? EQUAL : CONVERT_LEVEL_2;
+      return from.isDynamicArray() ? EQUAL : CONVERT_LEVEL_5;
     }
     return INCOMPATIBLE_TYPES;
   }

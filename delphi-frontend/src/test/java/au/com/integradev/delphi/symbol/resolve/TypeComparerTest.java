@@ -344,7 +344,7 @@ class TypeComparerTest {
 
     compare(IntrinsicType.INTEGER, toOpenArray, CONVERT_LEVEL_3);
     compare(fromDynamicArray, toDynamicArray, EQUAL);
-    compare(fromFixedArray, toDynamicArray, CONVERT_LEVEL_2);
+    compare(fromFixedArray, toDynamicArray, CONVERT_LEVEL_5);
     compare(dynamicArray(null, IntrinsicType.UNICODESTRING), toDynamicArray, INCOMPATIBLE_TYPES);
 
     compare(fromDynamicArray, toOpenArray, CONVERT_LEVEL_1);
