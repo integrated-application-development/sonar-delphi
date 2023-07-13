@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -26,6 +25,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "MathFunctionSingleOverloadRule", repositoryKey = "delph")

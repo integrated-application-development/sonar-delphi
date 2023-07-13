@@ -20,9 +20,9 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import static java.util.Objects.requireNonNullElse;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.HashMap;
 import java.util.Map;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 enum VariantConversionType {

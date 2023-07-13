@@ -32,11 +32,11 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_
 import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
 
 import au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Comparator;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;

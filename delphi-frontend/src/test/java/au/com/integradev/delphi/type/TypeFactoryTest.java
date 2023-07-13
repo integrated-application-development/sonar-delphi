@@ -24,13 +24,13 @@ import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class TypeFactoryTest {

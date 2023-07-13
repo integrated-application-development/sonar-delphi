@@ -23,7 +23,6 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Comparator;
@@ -36,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.operator.Operator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;

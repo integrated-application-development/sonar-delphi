@@ -26,7 +26,6 @@ import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.type.factory.StructTypeImpl.ImagePart;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +46,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;

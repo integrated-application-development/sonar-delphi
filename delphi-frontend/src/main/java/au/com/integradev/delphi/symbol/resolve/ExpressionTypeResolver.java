@@ -22,7 +22,6 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType
 
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +50,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDecl
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;

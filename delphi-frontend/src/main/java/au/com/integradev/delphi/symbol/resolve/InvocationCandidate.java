@@ -20,7 +20,6 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.operator.OperatorIntrinsic;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 

@@ -3,7 +3,6 @@ package org.sonar.plugins.communitydelphi.api.type;
 import au.com.integradev.delphi.type.factory.UnknownTypeImpl;
 import au.com.integradev.delphi.type.factory.UntypedTypeImpl;
 import au.com.integradev.delphi.type.factory.VoidTypeImpl;
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.math.BigInteger;
 import java.util.List;
 import org.jetbrains.annotations.Nullable;

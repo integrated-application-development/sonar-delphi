@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 
 public final class AnsiStringTypeImpl extends StringTypeImpl implements AnsiStringType {

@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type.intrinsic;
+package org.sonar.plugins.communitydelphi.api.type;
 
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;

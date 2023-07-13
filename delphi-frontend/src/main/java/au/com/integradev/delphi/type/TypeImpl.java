@@ -18,10 +18,10 @@
  */
 package au.com.integradev.delphi.type;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.Collections;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;

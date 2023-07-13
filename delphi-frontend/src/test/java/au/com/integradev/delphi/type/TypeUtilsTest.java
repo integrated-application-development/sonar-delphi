@@ -20,9 +20,9 @@ package au.com.integradev.delphi.type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeUtils;

@@ -33,6 +33,7 @@ import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;

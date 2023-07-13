@@ -18,7 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.type;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
