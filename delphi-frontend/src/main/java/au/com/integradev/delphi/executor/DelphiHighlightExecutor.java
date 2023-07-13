@@ -41,7 +41,7 @@ public class DelphiHighlightExecutor extends DelphiTokenExecutor {
       return;
     }
 
-    TypeOfText highlightType = token.getHighlightingType();
+    TypeOfText highlightType = getHighlightingType(token);
     if (highlightType == null) {
       return;
     }
@@ -52,6 +52,36 @@ public class DelphiHighlightExecutor extends DelphiTokenExecutor {
         token.getEndLine(),
         token.getEndColumn(),
         highlightType);
+  }
+
+  private static TypeOfText getHighlightingType(DelphiToken token) {
+    TypeOfText type = null;
+
+    if (token.getType() == DelphiTokenType.TK_QUOTED_STRING) {
+      type = TypeOfText.STRING;
+    } else if (isNumericLiteral(token)) {
+      type = TypeOfText.CONSTANT;
+    } else if (token.isComment()) {
+      type = TypeOfText.COMMENT;
+    } else if (token.isCompilerDirective()) {
+      type = TypeOfText.PREPROCESS_DIRECTIVE;
+    } else if (token.isKeyword()) {
+      type = TypeOfText.KEYWORD;
+    }
+
+    return type;
+  }
+
+  private static boolean isNumericLiteral(DelphiToken token) {
+    switch (token.getType()) {
+      case TK_INT_NUM:
+      case TK_REAL_NUM:
+      case TK_HEX_NUM:
+      case TK_BINARY_NUM:
+        return true;
+      default:
+        return false;
+    }
   }
 
   private boolean shouldSkip(DelphiToken token) {

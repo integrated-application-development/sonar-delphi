@@ -19,9 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.token;
 
 import au.com.integradev.delphi.core.DelphiKeywords;
-import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
-import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -179,26 +177,6 @@ public class DelphiTokenImpl implements DelphiToken {
     }
 
     return token.getText().toLowerCase();
-  }
-
-  @Override
-  @Nullable
-  public TypeOfText getHighlightingType() {
-    TypeOfText type = null;
-
-    if (isStringLiteral()) {
-      type = TypeOfText.STRING;
-    } else if (isNumericLiteral()) {
-      type = TypeOfText.CONSTANT;
-    } else if (isComment()) {
-      type = TypeOfText.COMMENT;
-    } else if (isCompilerDirective()) {
-      type = TypeOfText.PREPROCESS_DIRECTIVE;
-    } else if (isKeyword()) {
-      type = TypeOfText.KEYWORD;
-    }
-
-    return type;
   }
 
   public Token getAntlrToken() {
