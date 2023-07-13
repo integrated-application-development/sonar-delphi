@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import com.google.common.base.Preconditions;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -40,7 +41,7 @@ public class InvocationArgument implements Typed {
 
     if (expression instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
-      this.resolver = new NameResolver(primary.getTypeFactory());
+      this.resolver = new NameResolver(((DelphiNodeImpl) primary).getTypeFactory());
       resolver.readPrimaryExpression(primary);
       this.type = resolver.getApproximateType();
     }

@@ -1,7 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -47,8 +46,6 @@ public interface DelphiNode extends Node {
    * @return the AST root node
    */
   DelphiAst getAst();
-
-  TypeFactory getTypeFactory();
 
   /**
    * Returns comments nested inside this node

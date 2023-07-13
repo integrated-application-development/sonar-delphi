@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
 import au.com.integradev.delphi.type.factory.TypeFactory;
@@ -126,7 +127,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     if (type.isArrayConstructor()) {
       List<Type> elementTypes = ((ArrayConstructorType) type).elementTypes();
       Type elementType = elementTypes.stream().findFirst().orElse(TypeFactory.voidType());
-      TypeFactory typeFactory = node.getTypeFactory();
+      TypeFactory typeFactory = ((DelphiNodeImpl) node).getTypeFactory();
       if (elementType.isInteger()) {
         elementType = typeFactory.getIntrinsic(IntrinsicType.BYTE);
       } else if (elementType.isChar()) {
@@ -140,13 +141,17 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
   private static Type inlineConstType(NameDeclarationNode node) {
     var constStatement = (ConstStatementNode) node.getParent();
     return getDeclaredTypeWithTypeInferenceFallback(
-        node.getTypeFactory(), constStatement.getTypeNode(), constStatement.getExpression());
+        ((DelphiNodeImpl) node).getTypeFactory(),
+        constStatement.getTypeNode(),
+        constStatement.getExpression());
   }
 
   private static Type inlineVarType(NameDeclarationNode node) {
     var varStatement = (VarStatementNode) node.getNthParent(2);
     return getDeclaredTypeWithTypeInferenceFallback(
-        node.getTypeFactory(), varStatement.getTypeNode(), varStatement.getExpression());
+        ((DelphiNodeImpl) node).getTypeFactory(),
+        varStatement.getTypeNode(),
+        varStatement.getExpression());
   }
 
   private static Type loopVarType(NameDeclarationNode node) {
@@ -161,7 +166,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     }
 
     return getDeclaredTypeWithTypeInferenceFallback(
-        node.getTypeFactory(), loopVarDeclaration.getTypeNode(), typed);
+        ((DelphiNodeImpl) node).getTypeFactory(), loopVarDeclaration.getTypeNode(), typed);
   }
 
   private static Type getDeclaredTypeWithTypeInferenceFallback(

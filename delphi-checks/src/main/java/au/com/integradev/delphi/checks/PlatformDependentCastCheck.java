@@ -50,7 +50,7 @@ public class PlatformDependentCastCheck extends DelphiCheck {
       ExpressionNode expression = arguments.get(0);
       if (!expression.isLiteral()) {
         Type originalType = TypeUtils.findBaseType(getOriginalType(expression));
-        Type castedType = TypeUtils.findBaseType(getHardCastedType(argumentList));
+        Type castedType = TypeUtils.findBaseType(getHardCastedType(argumentList, context));
 
         if (isPlatformDependentCast(originalType, castedType)) {
           reportIssue(context, argumentList, MESSAGE);
@@ -68,7 +68,7 @@ public class PlatformDependentCastCheck extends DelphiCheck {
     return result;
   }
 
-  private static Type getHardCastedType(ArgumentListNode argumentList) {
+  private static Type getHardCastedType(ArgumentListNode argumentList, DelphiCheckContext context) {
     Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (previous instanceof NameReferenceNode) {
       NameReferenceNode nameReference = ((NameReferenceNode) previous);
@@ -77,7 +77,7 @@ public class PlatformDependentCastCheck extends DelphiCheck {
         return ((TypeNameDeclaration) declaration).getType();
       }
     } else if (previous.getTokenType() == DelphiTokenType.STRING) {
-      return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.UNICODESTRING);
+      return context.getTypeFactory().getIntrinsic(IntrinsicType.UNICODESTRING);
     }
     return TypeFactory.unknownType();
   }

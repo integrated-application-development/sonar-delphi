@@ -217,11 +217,6 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   }
 
   @Override
-  public final TypeFactory getTypeFactory() {
-    return getAst().getDelphiFile().getTypeFactory();
-  }
-
-  @Override
   public List<DelphiToken> getComments() {
     return getAst().getCommentsInsideNode(this);
   }
@@ -375,5 +370,9 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   @Override
   public void setLastToken(DelphiToken token) {
     this.lastToken = token;
+  }
+
+  public final TypeFactory getTypeFactory() {
+    return getAst().getDelphiFile().getTypeFactory();
   }
 }

@@ -60,7 +60,7 @@ public abstract class AbstractCastCheck extends DelphiCheck {
     List<ExpressionNode> arguments = argumentList.getArguments();
     if (arguments.size() == 1) {
       Type originalType = getOriginalType(arguments.get(0));
-      Type castedType = getHardCastedType(argumentList);
+      Type castedType = getHardCastedType(argumentList, context);
       if (castedType != null && isViolation(originalType, castedType)) {
         reportIssue(context, argumentList, getIssueMessage());
       }
@@ -84,7 +84,7 @@ public abstract class AbstractCastCheck extends DelphiCheck {
     return result;
   }
 
-  private static Type getHardCastedType(ArgumentListNode argumentList) {
+  private static Type getHardCastedType(ArgumentListNode argumentList, DelphiCheckContext context) {
     Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (previous instanceof NameReferenceNode) {
       NameReferenceNode nameReference = ((NameReferenceNode) previous);
@@ -96,9 +96,9 @@ public abstract class AbstractCastCheck extends DelphiCheck {
 
     switch (previous.getTokenType()) {
       case STRING:
-        return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.STRING);
+        return context.getTypeFactory().getIntrinsic(IntrinsicType.STRING);
       case FILE:
-        return argumentList.getTypeFactory().untypedFile();
+        return context.getTypeFactory().untypedFile();
       default:
         return null;
     }

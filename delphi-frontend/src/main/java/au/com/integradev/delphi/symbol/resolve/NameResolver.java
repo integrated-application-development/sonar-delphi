@@ -24,6 +24,7 @@ import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.Search;
@@ -493,7 +494,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver(typeReference.getTypeFactory());
+      NameResolver resolver = new NameResolver(((DelphiNodeImpl) typeReference).getTypeFactory());
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -512,7 +513,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver(typeNode.getTypeFactory());
+      NameResolver resolver = new NameResolver(((DelphiNodeImpl) typeNode).getTypeFactory());
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -597,7 +598,7 @@ public class NameResolver {
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node) {
-    NameResolver unitNameResolver = new NameResolver(node.getTypeFactory());
+    NameResolver unitNameResolver = new NameResolver(((DelphiNodeImpl) node).getTypeFactory());
     if (unitNameResolver.readUnitNameReference(node)) {
       this.currentType = unknownType();
       this.names.clear();
