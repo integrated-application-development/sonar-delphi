@@ -129,15 +129,13 @@ class DelphiScopeImplTest {
   }
 
   @Test
-  void testGenericTypesWithDifferentNumbersOfTypeParameterAreDuplicates() {
+  void testGenericTypesWithSameNumberofTypeParametersAreNotDuplicates() {
     scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
-    assertThatThrownBy(
-            () -> scope.addDeclaration(createClassType("Foo", List.of(createType("Bar")))))
-        .isInstanceOf(RuntimeException.class);
+    scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
   }
 
   @Test
-  void testGenericTypesWithSameNumberOfTypeParameterDuplicates() {
+  void testGenericTypesWithDifferentNumberOfTypeParametersAreNotDuplicates() {
     scope.addDeclaration(createClassType("Foo"));
     scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
     scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"), createType("Baz"))));

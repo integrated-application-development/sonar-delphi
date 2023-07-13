@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `XPathTemplateRule` analysis rule template.
 
+### Fixed
+
+- Name collisions between generic and non-generic forward declarations.
+
 ## [0.40.0] - 2023-01-10
 
 ### Added
