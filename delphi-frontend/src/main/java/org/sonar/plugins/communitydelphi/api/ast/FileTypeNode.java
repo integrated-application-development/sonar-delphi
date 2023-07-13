@@ -5,6 +5,6 @@ import javax.annotation.Nonnull;
 public interface FileTypeNode extends TypeNode {
   @Nonnull
   default TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 }

@@ -47,7 +47,7 @@ public class BeginEndRequiredCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ElseBlockNode elseBlock, DelphiCheckContext context) {
-    if (!(elseBlock.jjtGetParent() instanceof CaseStatementNode)) {
+    if (!(elseBlock.getParent() instanceof CaseStatementNode)) {
       StatementListNode statementList = elseBlock.getStatementList();
       if (statementList.isEmpty()
           || statementList.getStatements().size() > 1
@@ -59,7 +59,7 @@ public class BeginEndRequiredCheck extends DelphiCheck {
   }
 
   private static boolean isMissingBeginEnd(StatementNode statement) {
-    if (statement.jjtGetParent() instanceof MethodBodyNode) {
+    if (statement.getParent() instanceof MethodBodyNode) {
       return false;
     }
 
@@ -67,7 +67,7 @@ public class BeginEndRequiredCheck extends DelphiCheck {
       return false;
     }
 
-    Node parent = statement.jjtGetParent();
+    Node parent = statement.getParent();
 
     if (parent instanceof CaseItemStatementNode) {
       return false;

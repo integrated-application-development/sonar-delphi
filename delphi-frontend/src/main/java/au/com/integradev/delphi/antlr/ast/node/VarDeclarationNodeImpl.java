@@ -44,17 +44,17 @@ public final class VarDeclarationNodeImpl extends DelphiNodeImpl implements VarD
 
   @Override
   public NameDeclarationListNode getNameDeclarationList() {
-    return (NameDeclarationListNode) jjtGetChild(0);
+    return (NameDeclarationListNode) getChild(0);
   }
 
   @Override
   public VarSectionNode getVarSection() {
-    return (VarSectionNode) jjtGetParent();
+    return (VarSectionNode) getParent();
   }
 
   @Override
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 
   @Override

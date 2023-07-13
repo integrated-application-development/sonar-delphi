@@ -50,14 +50,14 @@ public final class ProcedureTypeHeadingNodeImpl extends DelphiNodeImpl
   @Override
   @Nullable
   public MethodParametersNode getMethodParametersNode() {
-    DelphiNode node = jjtGetChild(0);
+    DelphiNode node = getChild(0);
     return (node instanceof MethodParametersNode) ? (MethodParametersNode) node : null;
   }
 
   @Override
   @Nullable
   public MethodReturnTypeNode getMethodReturnTypeNode() {
-    DelphiNode node = jjtGetChild(hasMethodParametersNode() ? 1 : 0);
+    DelphiNode node = getChild(hasMethodParametersNode() ? 1 : 0);
     return (node instanceof MethodReturnTypeNode) ? (MethodReturnTypeNode) node : null;
   }
 

@@ -55,8 +55,8 @@ public final class ArgumentListNodeImpl extends DelphiNodeImpl implements Argume
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder();
       imageBuilder.append("(");
-      for (int i = 0; i < jjtGetNumChildren(); ++i) {
-        imageBuilder.append(jjtGetChild(i).getImage());
+      for (int i = 0; i < getChildrenCount(); ++i) {
+        imageBuilder.append(getChild(i).getImage());
       }
       image = imageBuilder.toString();
     }

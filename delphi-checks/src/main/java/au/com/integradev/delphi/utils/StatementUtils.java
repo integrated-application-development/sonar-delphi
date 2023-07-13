@@ -45,17 +45,17 @@ public class StatementUtils {
     }
 
     var expression = ((ExpressionStatementNode) statement).getExpression().skipParentheses();
-    if (!(expression instanceof PrimaryExpressionNode) || expression.jjtGetNumChildren() > 2) {
+    if (!(expression instanceof PrimaryExpressionNode) || expression.getChildrenCount() > 2) {
       return false;
     }
 
-    Node name = expression.jjtGetChild(0);
+    Node name = expression.getChild(0);
     if (!(name instanceof NameReferenceNode)) {
       return false;
     }
 
     NameDeclaration declaration = ((NameReferenceNode) name).getLastName().getNameDeclaration();
-    List<ExpressionNode> arguments = extractArguments(expression.jjtGetChild(1));
+    List<ExpressionNode> arguments = extractArguments(expression.getChild(1));
     return declaration instanceof MethodNameDeclaration
         && ((MethodNameDeclaration) declaration).fullyQualifiedName().equals(fullyQualifiedName)
         && argumentListPredicate.test(arguments);

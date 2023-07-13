@@ -68,19 +68,19 @@ class EnumElementNameDeclarationTest {
     var identifierNode = new IdentifierNodeImpl(identifierToken);
 
     var nameNode = new SimpleNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
-    nameNode.jjtAddChild(identifierNode);
+    nameNode.addChild(identifierNode);
 
     EnumElementNode element = new EnumElementNodeImpl(DelphiLexer.TkEnumElement);
-    element.jjtAddChild(nameNode);
+    element.addChild(nameNode);
 
     EnumTypeNode enumType = new EnumTypeNodeImpl(new CommonToken(DelphiLexer.PAREN_LEFT));
-    enumType.jjtAddChild(element);
+    enumType.addChild(element);
 
     DelphiFile delphiFile = mock(DelphiFile.class);
     when(delphiFile.getTypeFactory()).thenReturn(TypeFactoryUtils.defaultFactory());
 
     DelphiAst ast = spy(new DelphiAstImpl(delphiFile, null));
-    ast.jjtAddChild(enumType);
+    ast.addChild(enumType);
 
     return new EnumElementNameDeclarationImpl(element);
   }

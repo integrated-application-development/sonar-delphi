@@ -136,8 +136,8 @@ public class VariableInitializationCheck extends DelphiCheck {
       visitStatement(node, context);
     }
 
-    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-      visitStatements(node.jjtGetChild(i), context);
+    for (int i = 0; i < node.getChildrenCount(); i++) {
+      visitStatements(node.getChild(i), context);
     }
 
     if (visitChildrenFirst) {
@@ -283,7 +283,7 @@ public class VariableInitializationCheck extends DelphiCheck {
       return false;
     }
 
-    ArgumentListNode argumentList = (ArgumentListNode) argument.jjtGetParent();
+    ArgumentListNode argumentList = (ArgumentListNode) argument.getParent();
     ProceduralType procedural = getInvokedProcedural(argumentList);
     if (procedural == null) {
       return false;
@@ -301,7 +301,7 @@ public class VariableInitializationCheck extends DelphiCheck {
       return false;
     }
 
-    ArgumentListNode argumentList = (ArgumentListNode) argument.jjtGetParent();
+    ArgumentListNode argumentList = (ArgumentListNode) argument.getParent();
     MethodNameDeclaration method = getMethodDeclaration(argumentList);
     if (method == null) {
       return false;
@@ -311,25 +311,25 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private static ExpressionNode getArgumentExpression(NameReferenceNode name) {
-    if (name.jjtGetChildIndex() != name.jjtGetParent().jjtGetNumChildren() - 1) {
+    if (name.getChildIndex() != name.getParent().getChildrenCount() - 1) {
       return null;
     }
 
-    if (!(name.jjtGetParent() instanceof PrimaryExpressionNode)) {
+    if (!(name.getParent() instanceof PrimaryExpressionNode)) {
       return null;
     }
 
     ExpressionNode expression = null;
     ArgumentListNode argumentList;
-    Node current = name.jjtGetParent();
+    Node current = name.getParent();
 
     while (current instanceof PrimaryExpressionNode) {
       expression = ((ExpressionNode) current).skipParentheses();
-      if (!(expression.jjtGetParent() instanceof ArgumentListNode)) {
+      if (!(expression.getParent() instanceof ArgumentListNode)) {
         return null;
       }
 
-      argumentList = (ArgumentListNode) expression.jjtGetParent();
+      argumentList = (ArgumentListNode) expression.getParent();
       current = findHardCast(argumentList);
     }
 
@@ -338,7 +338,7 @@ public class VariableInitializationCheck extends DelphiCheck {
 
   private static Node findHardCast(ArgumentListNode argumentList) {
     if (isHardCast(argumentList)) {
-      return argumentList.jjtGetParent();
+      return argumentList.getParent();
     }
     return null;
   }
@@ -349,12 +349,12 @@ public class VariableInitializationCheck extends DelphiCheck {
       if (argumentList == null || !isHardCast(argumentList)) {
         return expression;
       }
-      expression = (ExpressionNode) argumentList.jjtGetChild(0);
+      expression = (ExpressionNode) argumentList.getChild(0);
     }
   }
 
   private static boolean isHardCast(ArgumentListNode argumentList) {
-    Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (previous instanceof NameReferenceNode) {
       NameReferenceNode nameReference = ((NameReferenceNode) previous);
       NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
@@ -367,7 +367,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private static ProceduralType getInvokedProcedural(ArgumentListNode argumentList) {
-    Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (!(previous instanceof Typed)) {
       return null;
     }
@@ -381,7 +381,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private static MethodNameDeclaration getMethodDeclaration(ArgumentListNode argumentList) {
-    Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (!(previous instanceof NameReferenceNode)) {
       return null;
     }
@@ -474,11 +474,11 @@ public class VariableInitializationCheck extends DelphiCheck {
 
     DelphiNode node = name;
     do {
-      node = node.jjtGetParent();
+      node = node.getParent();
     } while (node instanceof NameReferenceNode);
 
     if (node instanceof PrimaryExpressionNode) {
-      node = ((PrimaryExpressionNode) node).findParentheses().jjtGetParent();
+      node = ((PrimaryExpressionNode) node).findParentheses().getParent();
       if (node instanceof UnaryExpressionNode) {
         UnaryExpressionNode unary = (UnaryExpressionNode) node;
         return unary.getOperator() == UnaryOperator.ADDRESS;
@@ -492,7 +492,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     expression = expression.skipParentheses();
     if (expression instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
-      Node lastChild = primary.jjtGetChild(primary.jjtGetNumChildren() - 1);
+      Node lastChild = primary.getChild(primary.getChildrenCount() - 1);
       if (lastChild instanceof NameReferenceNode) {
         return ((NameReferenceNode) lastChild);
       }
@@ -544,8 +544,8 @@ public class VariableInitializationCheck extends DelphiCheck {
     if (node instanceof NameReferenceNode) {
       references.add((NameReferenceNode) node);
     } else {
-      for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
-        DelphiNode child = node.jjtGetChild(i);
+      for (int i = 0; i < node.getChildrenCount(); ++i) {
+        DelphiNode child = node.getChild(i);
         if (!(child instanceof StatementNode)) {
           findNameReferences(child, references);
         }
@@ -625,7 +625,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     expression = expression.skipParentheses();
     if (expression instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
-      Node lastChild = primary.jjtGetChild(primary.jjtGetNumChildren() - 1);
+      Node lastChild = primary.getChild(primary.getChildrenCount() - 1);
       if (lastChild instanceof NameReferenceNode) {
         return this.getReferredInitializationState((NameReferenceNode) lastChild);
       }

@@ -52,7 +52,7 @@ public final class TypeReferenceNodeImpl extends TypeNodeImpl implements TypeRef
 
   @Override
   public NameReferenceNode getNameNode() {
-    return ((NameReferenceNode) jjtGetChild(0));
+    return ((NameReferenceNode) getChild(0));
   }
 
   @Override

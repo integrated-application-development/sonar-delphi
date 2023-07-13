@@ -65,7 +65,7 @@ public class ReRaiseExceptionCheck extends DelphiCheck {
           .filter(Objects::nonNull)
           .map(ExpressionNode::skipParentheses)
           .filter(PrimaryExpressionNode.class::isInstance)
-          .map(expr -> expr.jjtGetChild(0))
+          .map(expr -> expr.getChild(0))
           .filter(NameReferenceNode.class::isInstance)
           .map(NameReferenceNode.class::cast)
           .filter(raised -> raised.getImage().equalsIgnoreCase(exceptionName.getImage()))

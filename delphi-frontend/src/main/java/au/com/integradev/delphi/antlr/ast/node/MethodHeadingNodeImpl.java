@@ -74,7 +74,7 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
 
   @Override
   public MethodNameNode getMethodNameNode() {
-    return (MethodNameNode) jjtGetChild(1);
+    return (MethodNameNode) getChild(1);
   }
 
   @Override
@@ -173,18 +173,18 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
 
   @Override
   public boolean isMethodImplementation() {
-    return jjtGetParent() instanceof MethodImplementationNode;
+    return getParent() instanceof MethodImplementationNode;
   }
 
   @Override
   public boolean isMethodDeclaration() {
-    return jjtGetParent() instanceof MethodDeclarationNode;
+    return getParent() instanceof MethodDeclarationNode;
   }
 
   @Override
   public MethodKind getMethodKind() {
     if (methodKind == null) {
-      methodKind = MethodKind.fromTokenType(jjtGetChild(0).getToken().getType());
+      methodKind = MethodKind.fromTokenType(getChild(0).getToken().getType());
     }
     return methodKind;
   }
@@ -193,8 +193,8 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
   public Set<MethodDirective> getDirectives() {
     if (directives == null) {
       var builder = new ImmutableSet.Builder<MethodDirective>();
-      for (int i = 0; i < jjtGetNumChildren(); ++i) {
-        DelphiToken token = jjtGetChild(i).getToken();
+      for (int i = 0; i < getChildrenCount(); ++i) {
+        DelphiToken token = getChild(i).getToken();
         MethodDirective directive = MethodDirective.fromToken(token);
         if (directive != null) {
           builder.add(directive);
@@ -207,7 +207,7 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
 
   private static MethodHeadingNode findParentMethodHeading(MethodHeadingNode headingNode) {
     MethodImplementationNode parentMethod =
-        headingNode.jjtGetParent().getFirstParentOfType(MethodImplementationNode.class);
+        headingNode.getParent().getFirstParentOfType(MethodImplementationNode.class);
     return parentMethod == null ? null : parentMethod.getMethodHeading();
   }
 }

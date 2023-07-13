@@ -42,7 +42,7 @@ public final class TypeInferrer {
 
     if (typed instanceof ExpressionNode) {
       ExpressionNode expression = (ExpressionNode) typed;
-      Node arrayConstructor = expression.skipParentheses().jjtGetChild(0);
+      Node arrayConstructor = expression.skipParentheses().getChild(0);
 
       if (arrayConstructor instanceof ArrayConstructorNode) {
         type = inferArrayConstructor((ArrayConstructorNode) arrayConstructor);

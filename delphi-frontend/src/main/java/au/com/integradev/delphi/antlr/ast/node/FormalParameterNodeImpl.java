@@ -52,7 +52,7 @@ public final class FormalParameterNodeImpl extends DelphiNodeImpl implements For
   @Override
   public List<FormalParameterData> getParameters() {
     if (parameters == null) {
-      NameDeclarationListNode identifierList = (NameDeclarationListNode) jjtGetChild(0);
+      NameDeclarationListNode identifierList = (NameDeclarationListNode) getChild(0);
       Type type = getType();
       ExpressionNode defaultValue = getDefaultValue();
 
@@ -70,7 +70,7 @@ public final class FormalParameterNodeImpl extends DelphiNodeImpl implements For
   @Override
   @Nullable
   public TypeNode getTypeNode() {
-    DelphiNode typeNode = jjtGetChild(1);
+    DelphiNode typeNode = getChild(1);
     return (typeNode instanceof TypeNode) ? (TypeNode) typeNode : null;
   }
 

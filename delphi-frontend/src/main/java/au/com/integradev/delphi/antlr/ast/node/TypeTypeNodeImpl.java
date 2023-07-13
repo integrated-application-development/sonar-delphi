@@ -38,13 +38,13 @@ public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode
 
   @Override
   public TypeNode getOriginalTypeNode() {
-    return (TypeNode) jjtGetChild(0);
+    return (TypeNode) getChild(0);
   }
 
   @Override
   @Nonnull
   protected Type createType() {
-    TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) jjtGetParent();
+    TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) getParent();
     String typeName = typeDeclaration.fullyQualifiedName();
     return getTypeFactory().typeType(typeName, getOriginalTypeNode().getType());
   }

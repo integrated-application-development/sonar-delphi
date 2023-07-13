@@ -38,7 +38,7 @@ public final class PointerTypeNodeImpl extends TypeNodeImpl implements PointerTy
 
   @Override
   public TypeNode getDereferencedTypeNode() {
-    return (TypeNode) jjtGetChild(0);
+    return (TypeNode) getChild(0);
   }
 
   @Nonnull

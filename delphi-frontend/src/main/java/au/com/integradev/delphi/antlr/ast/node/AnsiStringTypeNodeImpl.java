@@ -40,7 +40,7 @@ public final class AnsiStringTypeNodeImpl extends TypeNodeImpl implements AnsiSt
 
   @Override
   public int getCodePage() {
-    DelphiNode node = jjtGetChild(0);
+    DelphiNode node = getChild(0);
     if (node instanceof ExpressionNode) {
       LiteralNode codePage = ((ExpressionNode) node).extractLiteral();
       if (codePage != null) {

@@ -40,11 +40,11 @@ public final class MethodResolutionClauseNodeImpl extends DelphiNodeImpl
 
   @Override
   public NameReferenceNode getInterfaceMethodNameNode() {
-    return (NameReferenceNode) jjtGetChild(1);
+    return (NameReferenceNode) getChild(1);
   }
 
   @Override
   public NameReferenceNode getImplementationMethodNameNode() {
-    return (NameReferenceNode) jjtGetChild(2);
+    return (NameReferenceNode) getChild(2);
   }
 }

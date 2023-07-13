@@ -58,7 +58,7 @@ public class AssertMessageCheck extends DelphiCheck {
 
   @Nullable
   private static ArgumentListNode getArgumentList(NameReferenceNode nameNode) {
-    Node nextNode = nameNode.jjtGetParent().jjtGetChild(nameNode.jjtGetChildIndex() + 1);
+    Node nextNode = nameNode.getParent().getChild(nameNode.getChildIndex() + 1);
     if (nextNode instanceof ArgumentListNode) {
       return (ArgumentListNode) nextNode;
     }

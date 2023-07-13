@@ -32,17 +32,17 @@ public final class ForToStatementNodeImpl extends ForStatementNodeImpl
 
   @Override
   public ExpressionNode getInitializerExpression() {
-    return (ExpressionNode) jjtGetChild(2);
+    return (ExpressionNode) getChild(2);
   }
 
   @Override
   public ExpressionNode getTargetExpression() {
-    return (ExpressionNode) jjtGetChild(4);
+    return (ExpressionNode) getChild(4);
   }
 
   @Override
   public StatementNode getStatement() {
-    return (StatementNode) jjtGetChild(6);
+    return (StatementNode) getChild(6);
   }
 
   @Override

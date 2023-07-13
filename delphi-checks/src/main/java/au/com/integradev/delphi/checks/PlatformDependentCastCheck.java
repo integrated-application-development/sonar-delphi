@@ -69,7 +69,7 @@ public class PlatformDependentCastCheck extends DelphiCheck {
   }
 
   private static Type getHardCastedType(ArgumentListNode argumentList) {
-    Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (previous instanceof NameReferenceNode) {
       NameReferenceNode nameReference = ((NameReferenceNode) previous);
       NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();

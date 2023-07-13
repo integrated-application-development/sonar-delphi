@@ -45,17 +45,17 @@ public final class ConstDeclarationNodeImpl extends DelphiNodeImpl implements Co
 
   @Override
   public NameDeclarationNode getNameDeclarationNode() {
-    return (NameDeclarationNode) jjtGetChild(0);
+    return (NameDeclarationNode) getChild(0);
   }
 
   @Override
   public ExpressionNode getExpression() {
-    return (ExpressionNode) jjtGetChild(1);
+    return (ExpressionNode) getChild(1);
   }
 
   @Override
   public TypeNode getTypeNode() {
-    DelphiNode typeNode = jjtGetChild(2);
+    DelphiNode typeNode = getChild(2);
     return (typeNode instanceof TypeNode) ? (TypeNode) typeNode : null;
   }
 
@@ -71,7 +71,7 @@ public final class ConstDeclarationNodeImpl extends DelphiNodeImpl implements Co
 
   @Override
   public VisibilityType getVisibility() {
-    DelphiNode parent = jjtGetParent();
+    DelphiNode parent = getParent();
     if (parent instanceof ConstSectionNode) {
       return ((ConstSectionNode) parent).getVisibility();
     }

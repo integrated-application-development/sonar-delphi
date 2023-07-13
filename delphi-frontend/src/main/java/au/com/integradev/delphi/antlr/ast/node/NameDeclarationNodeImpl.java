@@ -42,7 +42,7 @@ public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
 
   @Override
   public GenericDefinitionNode getGenericDefinition() {
-    DelphiNode result = jjtGetChild(jjtGetNumChildren() - 1);
+    DelphiNode result = getChild(getChildrenCount() - 1);
     return (result instanceof GenericDefinitionNode) ? (GenericDefinitionNode) result : null;
   }
 

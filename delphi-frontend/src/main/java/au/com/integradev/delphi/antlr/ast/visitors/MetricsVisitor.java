@@ -111,7 +111,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(StatementNode statement, Data data) {
-    if (!(statement.jjtGetParent() instanceof MethodBodyNode)) {
+    if (!(statement.getParent() instanceof MethodBodyNode)) {
       ++data.statements;
     }
     return DelphiParserVisitor.super.visit(statement, data);

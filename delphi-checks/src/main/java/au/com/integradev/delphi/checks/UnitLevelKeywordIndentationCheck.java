@@ -119,8 +119,8 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(TypeSectionNode typeSectionNode, DelphiCheckContext context) {
-    if (typeSectionNode.jjtGetParent() instanceof InterfaceSectionNode
-        || typeSectionNode.jjtGetParent() instanceof ImplementationSectionNode) {
+    if (typeSectionNode.getParent() instanceof InterfaceSectionNode
+        || typeSectionNode.getParent() instanceof ImplementationSectionNode) {
       checkNodeIndentation(typeSectionNode, context);
     }
     return super.visit(typeSectionNode, context);
@@ -128,8 +128,8 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(VarSectionNode varSectionNode, DelphiCheckContext context) {
-    if (varSectionNode.jjtGetParent() instanceof InterfaceSectionNode
-        || varSectionNode.jjtGetParent() instanceof ImplementationSectionNode) {
+    if (varSectionNode.getParent() instanceof InterfaceSectionNode
+        || varSectionNode.getParent() instanceof ImplementationSectionNode) {
       checkNodeIndentation(varSectionNode, context);
     }
     return super.visit(varSectionNode, context);
@@ -137,8 +137,8 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ConstSectionNode constSectionNode, DelphiCheckContext context) {
-    if (constSectionNode.jjtGetParent() instanceof InterfaceSectionNode
-        || constSectionNode.jjtGetParent() instanceof ImplementationSectionNode) {
+    if (constSectionNode.getParent() instanceof InterfaceSectionNode
+        || constSectionNode.getParent() instanceof ImplementationSectionNode) {
       checkNodeIndentation(constSectionNode, context);
     }
     return super.visit(constSectionNode, context);
@@ -147,7 +147,7 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(
       CompoundStatementNode compoundStatementNode, DelphiCheckContext context) {
-    if (compoundStatementNode.jjtGetParent() instanceof DelphiAst) {
+    if (compoundStatementNode.getParent() instanceof DelphiAst) {
       checkNodeIndentation(compoundStatementNode, context);
       checkNodeIndentation(getEnd(compoundStatementNode), context);
     }

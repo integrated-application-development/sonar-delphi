@@ -75,21 +75,21 @@ public final class StatementListNodeImpl extends DelphiNodeImpl implements State
 
   @Override
   public int getBeginLine() {
-    return jjtGetParent().getBeginLine();
+    return getParent().getBeginLine();
   }
 
   @Override
   public int getBeginColumn() {
-    return jjtGetParent().getBeginColumn();
+    return getParent().getBeginColumn();
   }
 
   @Override
   public int getEndLine() {
-    return jjtGetParent().getEndLine();
+    return getParent().getEndLine();
   }
 
   @Override
   public int getEndColumn() {
-    return jjtGetParent().getEndColumn();
+    return getParent().getEndColumn();
   }
 }

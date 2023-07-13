@@ -64,7 +64,7 @@ class UnitNameDeclarationTest {
     var identifierNode = new IdentifierNodeImpl(identifierToken);
 
     var nameNode = new QualifiedNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
-    nameNode.jjtAddChild(identifierNode);
+    nameNode.addChild(identifierNode);
 
     DelphiAst ast = mock(DelphiAst.class);
     when(ast.getFileName()).thenReturn(path);

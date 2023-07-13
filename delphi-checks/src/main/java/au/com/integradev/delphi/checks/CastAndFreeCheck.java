@@ -61,9 +61,9 @@ public class CastAndFreeCheck extends DelphiCheck {
 
   private static boolean isHardCast(ExpressionNode expr) {
     return expr instanceof PrimaryExpressionNode
-        && expr.jjtGetChild(0) instanceof NameReferenceNode
-        && expr.jjtGetChild(1) instanceof ArgumentListNode
-        && expr.jjtGetNumChildren() < 6;
+        && expr.getChild(0) instanceof NameReferenceNode
+        && expr.getChild(1) instanceof ArgumentListNode
+        && expr.getChildrenCount() < 6;
   }
 
   private static boolean isAcceptableCast(ExpressionNode expr) {
@@ -71,7 +71,7 @@ public class CastAndFreeCheck extends DelphiCheck {
       return false;
     }
 
-    Type type = ((ArgumentListNode) expr.jjtGetChild(1)).getArguments().get(0).getType();
+    Type type = ((ArgumentListNode) expr.getChild(1)).getArguments().get(0).getType();
     if (type.isPointer()) {
       type = ((PointerType) type).dereferencedType();
     }
@@ -86,13 +86,13 @@ public class CastAndFreeCheck extends DelphiCheck {
   private static boolean isFree(ExpressionNode node) {
     boolean result =
         (node instanceof PrimaryExpressionNode
-            && node.jjtGetChild(node.jjtGetNumChildren() - 1).getImage().equalsIgnoreCase("Free"));
+            && node.getChild(node.getChildrenCount() - 1).getImage().equalsIgnoreCase("Free"));
 
     if (!result) {
       ExpressionNode parenthesized = node.findParentheses();
 
       if (node != parenthesized) {
-        Node parent = parenthesized.jjtGetParent();
+        Node parent = parenthesized.getParent();
         result = parent instanceof ExpressionNode && isFree((ExpressionNode) parent);
       }
     }
@@ -101,8 +101,8 @@ public class CastAndFreeCheck extends DelphiCheck {
   }
 
   private static boolean isFreeAndNil(ExpressionNode expr) {
-    DelphiNode argList = expr.findParentheses().jjtGetParent();
-    DelphiNode freeAndNil = argList.jjtGetParent().jjtGetChild(argList.jjtGetChildIndex() - 1);
+    DelphiNode argList = expr.findParentheses().getParent();
+    DelphiNode freeAndNil = argList.getParent().getChild(argList.getChildIndex() - 1);
 
     return argList instanceof ArgumentListNode
         && freeAndNil instanceof NameReferenceNode

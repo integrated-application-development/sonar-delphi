@@ -46,15 +46,15 @@ public class FreeAndNilTObjectCheck extends DelphiCheck {
   }
 
   private static boolean isViolation(PrimaryExpressionNode expression) {
-    if (!(expression.jjtGetChild(0) instanceof NameReferenceNode)) {
+    if (!(expression.getChild(0) instanceof NameReferenceNode)) {
       return false;
     }
 
-    if (!(expression.jjtGetChild(1) instanceof ArgumentListNode)) {
+    if (!(expression.getChild(1) instanceof ArgumentListNode)) {
       return false;
     }
 
-    NameReferenceNode reference = (NameReferenceNode) expression.jjtGetChild(0);
+    NameReferenceNode reference = (NameReferenceNode) expression.getChild(0);
     if (reference.nextName() != null) {
       return false;
     }
@@ -63,7 +63,7 @@ public class FreeAndNilTObjectCheck extends DelphiCheck {
     if (declaration instanceof MethodNameDeclaration) {
       MethodNameDeclaration method = (MethodNameDeclaration) declaration;
       if (method.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")) {
-        ArgumentListNode argumentList = (ArgumentListNode) expression.jjtGetChild(1);
+        ArgumentListNode argumentList = (ArgumentListNode) expression.getChild(1);
         ExpressionNode argument = argumentList.getArguments().get(0);
         return !argument.getType().isUnresolved()
             && !argument.getType().isUnknown()

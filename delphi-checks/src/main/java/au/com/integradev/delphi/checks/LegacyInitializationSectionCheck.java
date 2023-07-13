@@ -39,7 +39,7 @@ public class LegacyInitializationSectionCheck extends DelphiCheck {
       if (compoundStatement != null) {
         context
             .newIssue()
-            .onFilePosition(FilePosition.from(compoundStatement.jjtGetFirstToken()))
+            .onFilePosition(FilePosition.from(compoundStatement.getFirstToken()))
             .withMessage(MESSAGE)
             .report();
       }

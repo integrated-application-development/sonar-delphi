@@ -71,7 +71,7 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
 
   @Override
   public IdentifierNode getIdentifier() {
-    return (IdentifierNode) jjtGetChild(0);
+    return (IdentifierNode) getChild(0);
   }
 
   @Override
@@ -99,19 +99,19 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
 
   @Override
   public GenericArgumentsNode getGenericArguments() {
-    DelphiNode generic = jjtGetChild(1);
+    DelphiNode generic = getChild(1);
     return (generic instanceof GenericArgumentsNode) ? (GenericArgumentsNode) generic : null;
   }
 
   @Override
   public NameReferenceNode prevName() {
-    DelphiNode parent = jjtGetParent();
+    DelphiNode parent = getParent();
     return (parent instanceof NameReferenceNode) ? (NameReferenceNode) parent : null;
   }
 
   @Override
   public NameReferenceNode nextName() {
-    DelphiNode child = jjtGetChild(jjtGetNumChildren() - 1);
+    DelphiNode child = getChild(getChildrenCount() - 1);
     return (child instanceof NameReferenceNode) ? (NameReferenceNode) child : null;
   }
 

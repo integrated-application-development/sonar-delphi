@@ -65,7 +65,7 @@ public class StringListDuplicatesCheck extends DelphiCheck {
   }
 
   private static boolean isSortedInSameBlock(AssignmentStatementNode duplicates) {
-    Node parent = duplicates.jjtGetParent();
+    Node parent = duplicates.getParent();
     return parent instanceof StatementListNode
         && ((StatementListNode) parent)
             .statementStream()

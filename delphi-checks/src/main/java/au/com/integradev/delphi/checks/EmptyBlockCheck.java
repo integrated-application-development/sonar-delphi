@@ -47,7 +47,7 @@ public class EmptyBlockCheck extends DelphiCheck {
   }
 
   private boolean shouldAddViolation(CompoundStatementNode block) {
-    DelphiNode parent = block.jjtGetParent();
+    DelphiNode parent = block.getParent();
 
     if (parent instanceof MethodBodyNode) {
       // Handled by EmptyMethodRule
@@ -67,11 +67,11 @@ public class EmptyBlockCheck extends DelphiCheck {
 
     if (parent instanceof StatementListNode) {
       StatementListNode statementList = (StatementListNode) parent;
-      DelphiNode grandparent = parent.jjtGetParent();
+      DelphiNode grandparent = parent.getParent();
 
       if (statementList.getStatements().size() == 1) {
         if (grandparent instanceof ElseBlockNode
-            && grandparent.jjtGetParent() instanceof CaseStatementNode) {
+            && grandparent.getParent() instanceof CaseStatementNode) {
           // Handling all cases in a case statement is a reasonable thing to do.
           // With that being said, a comment is required.
           return block.getComments().isEmpty();
@@ -79,7 +79,7 @@ public class EmptyBlockCheck extends DelphiCheck {
 
         // Handled by SwallowedExceptionsRule
         return !(grandparent instanceof ElseBlockNode)
-            || !(grandparent.jjtGetParent() instanceof ExceptBlockNode);
+            || !(grandparent.getParent() instanceof ExceptBlockNode);
       }
     }
 

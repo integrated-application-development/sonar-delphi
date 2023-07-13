@@ -51,7 +51,7 @@ public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public ExpressionNode getOperand() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 
   @Override

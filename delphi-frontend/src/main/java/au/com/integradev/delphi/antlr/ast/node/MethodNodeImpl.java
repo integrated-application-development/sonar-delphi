@@ -49,7 +49,7 @@ public abstract class MethodNodeImpl extends DelphiNodeImpl implements MethodNod
 
   @Override
   public MethodHeadingNode getMethodHeading() {
-    return (MethodHeadingNode) jjtGetChild(0);
+    return (MethodHeadingNode) getChild(0);
   }
 
   @Override

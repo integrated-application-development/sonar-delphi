@@ -48,20 +48,20 @@ public final class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNo
   @Override
   @NotNull
   public TypeNode getElementTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 
   @Override
   @Nullable
   public ArrayIndicesNode getArrayIndices() {
-    DelphiNode indices = jjtGetChild(2);
+    DelphiNode indices = getChild(2);
     return (indices instanceof ArrayIndicesNode) ? (ArrayIndicesNode) indices : null;
   }
 
   @Override
   @Nonnull
   protected Type createType() {
-    DelphiNode parent = jjtGetParent();
+    DelphiNode parent = getParent();
     String image = null;
     if (parent instanceof TypeDeclarationNode) {
       image = ((TypeDeclarationNode) parent).fullyQualifiedName();

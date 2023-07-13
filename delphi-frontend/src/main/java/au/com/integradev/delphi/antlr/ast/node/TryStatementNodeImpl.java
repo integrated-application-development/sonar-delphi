@@ -40,23 +40,23 @@ public final class TryStatementNodeImpl extends DelphiNodeImpl implements TrySta
 
   @Override
   public StatementListNode getStatementList() {
-    return (StatementListNode) jjtGetChild(0);
+    return (StatementListNode) getChild(0);
   }
 
   @Override
   public boolean hasExceptBlock() {
-    return jjtGetChild(1) instanceof ExceptBlockNode;
+    return getChild(1) instanceof ExceptBlockNode;
   }
 
   @Override
   public boolean hasFinallyBlock() {
-    return jjtGetChild(1) instanceof FinallyBlockNode;
+    return getChild(1) instanceof FinallyBlockNode;
   }
 
   @Override
   public ExceptBlockNode getExpectBlock() {
     if (exceptBlock == null && hasExceptBlock()) {
-      exceptBlock = (ExceptBlockNode) jjtGetChild(1);
+      exceptBlock = (ExceptBlockNode) getChild(1);
     }
     return exceptBlock;
   }
@@ -64,7 +64,7 @@ public final class TryStatementNodeImpl extends DelphiNodeImpl implements TrySta
   @Override
   public FinallyBlockNode getFinallyBlock() {
     if (finallyBlock == null && hasFinallyBlock()) {
-      finallyBlock = (FinallyBlockNode) jjtGetChild(1);
+      finallyBlock = (FinallyBlockNode) getChild(1);
     }
     return finallyBlock;
   }

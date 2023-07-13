@@ -43,7 +43,7 @@ public final class ExceptBlockNodeImpl extends DelphiNodeImpl implements ExceptB
   @Nullable
   public StatementListNode getStatementList() {
     if (isBareExcept()) {
-      return (StatementListNode) jjtGetChild(0);
+      return (StatementListNode) getChild(0);
     }
     return null;
   }
@@ -64,7 +64,7 @@ public final class ExceptBlockNodeImpl extends DelphiNodeImpl implements ExceptB
 
   @Override
   public boolean isBareExcept() {
-    return jjtGetChild(0) instanceof StatementListNode;
+    return getChild(0) instanceof StatementListNode;
   }
 
   @Override

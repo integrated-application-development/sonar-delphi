@@ -14,7 +14,7 @@ public class EmptyVisibilitySectionCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(
       VisibilitySectionNode visibilitySection, DelphiCheckContext context) {
-    if (!visibilitySection.isImplicitPublished() && visibilitySection.jjtGetNumChildren() == 1) {
+    if (!visibilitySection.isImplicitPublished() && visibilitySection.getChildrenCount() == 1) {
       reportIssue(context, visibilitySection, MESSAGE);
     }
     return super.visit(visibilitySection, context);

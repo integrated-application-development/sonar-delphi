@@ -105,7 +105,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
         return constType(node);
       case EXCEPT_ITEM:
       case RECORD_VARIANT_TAG:
-        return ((Typed) node.jjtGetParent()).getType();
+        return ((Typed) node.getParent()).getType();
       case PARAMETER:
       case FIELD:
       case VAR:
@@ -122,7 +122,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
   }
 
   private static Type constType(NameDeclarationNode node) {
-    Type type = ((Typed) node.jjtGetParent()).getType();
+    Type type = ((Typed) node.getParent()).getType();
     if (type.isArrayConstructor()) {
       List<Type> elementTypes = ((ArrayConstructorType) type).elementTypes();
       Type elementType = elementTypes.stream().findFirst().orElse(TypeFactory.voidType());
@@ -138,7 +138,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
   }
 
   private static Type inlineConstType(NameDeclarationNode node) {
-    var constStatement = (ConstStatementNode) node.jjtGetParent();
+    var constStatement = (ConstStatementNode) node.getParent();
     return getDeclaredTypeWithTypeInferenceFallback(
         node.getTypeFactory(), constStatement.getTypeNode(), constStatement.getExpression());
   }
@@ -150,8 +150,8 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
   }
 
   private static Type loopVarType(NameDeclarationNode node) {
-    ForLoopVarDeclarationNode loopVarDeclaration = (ForLoopVarDeclarationNode) node.jjtGetParent();
-    Node loop = loopVarDeclaration.jjtGetParent();
+    ForLoopVarDeclarationNode loopVarDeclaration = (ForLoopVarDeclarationNode) node.getParent();
+    Node loop = loopVarDeclaration.getParent();
 
     Typed typed;
     if (loop instanceof ForToStatementNode) {
@@ -179,7 +179,7 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
 
     switch (node.getKind()) {
       case CONST:
-        visibility = (Visibility) node.jjtGetParent();
+        visibility = (Visibility) node.getParent();
         break;
       case FIELD:
         visibility = (Visibility) node.getNthParent(2);

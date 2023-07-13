@@ -114,8 +114,8 @@ public abstract class ExpressionNodeImpl extends DelphiNodeImpl implements Expre
   @Override
   public boolean isReferenceTo(String image) {
     ExpressionNode expression = skipParentheses();
-    if (expression.jjtGetNumChildren() == 1 && expression instanceof PrimaryExpressionNode) {
-      DelphiNode child = expression.jjtGetChild(0);
+    if (expression.getChildrenCount() == 1 && expression instanceof PrimaryExpressionNode) {
+      DelphiNode child = expression.getChild(0);
       if (child instanceof NameReferenceNode) {
         NameReferenceNode reference = (NameReferenceNode) child;
         NameDeclaration declaration = reference.getLastName().getNameDeclaration();
@@ -131,8 +131,8 @@ public abstract class ExpressionNodeImpl extends DelphiNodeImpl implements Expre
     ExpressionNode expression = skipParentheses();
     if (expression instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
-      if (primary.jjtGetNumChildren() == 1 && primary.jjtGetChild(0) instanceof LiteralNode) {
-        return (LiteralNode) primary.jjtGetChild(0);
+      if (primary.getChildrenCount() == 1 && primary.getChild(0) instanceof LiteralNode) {
+        return (LiteralNode) primary.getChild(0);
       }
     }
     return null;
@@ -142,8 +142,8 @@ public abstract class ExpressionNodeImpl extends DelphiNodeImpl implements Expre
   @Nullable
   public NameReferenceNode extractSimpleNameReference() {
     ExpressionNode expression = skipParentheses();
-    if (expression instanceof PrimaryExpressionNode && expression.jjtGetNumChildren() == 1) {
-      DelphiNode child = expression.jjtGetChild(0);
+    if (expression instanceof PrimaryExpressionNode && expression.getChildrenCount() == 1) {
+      DelphiNode child = expression.getChild(0);
       if (child instanceof NameReferenceNode) {
         NameReferenceNode nameReference = (NameReferenceNode) child;
         if (nameReference.nextName() == null) {
@@ -168,8 +168,8 @@ public abstract class ExpressionNodeImpl extends DelphiNodeImpl implements Expre
   @Nonnull
   public ExpressionNode findParentheses() {
     ExpressionNode result = this;
-    while (result.jjtGetParent() instanceof ParenthesizedExpressionNode) {
-      result = (ExpressionNode) result.jjtGetParent();
+    while (result.getParent() instanceof ParenthesizedExpressionNode) {
+      result = (ExpressionNode) result.getParent();
     }
     return result;
   }

@@ -44,7 +44,7 @@ public final class VisibilitySectionNodeImpl extends DelphiNodeImpl
   @Override
   public VisibilityType getVisibility() {
     if (visibilityType == null) {
-      DelphiNode child = jjtGetChild(0);
+      DelphiNode child = getChild(0);
       if (child instanceof VisibilityNode) {
         visibilityType = ((VisibilityNode) child).getVisibility();
       } else {

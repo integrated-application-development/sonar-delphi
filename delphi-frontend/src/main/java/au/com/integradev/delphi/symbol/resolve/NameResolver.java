@@ -261,8 +261,8 @@ public class NameResolver {
       return;
     }
 
-    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-      if (!readPrimaryExpressionPart(node.jjtGetChild(i))) {
+    for (int i = 0; i < node.getChildrenCount(); i++) {
+      if (!readPrimaryExpressionPart(node.getChild(i))) {
         break;
       }
     }
@@ -323,7 +323,7 @@ public class NameResolver {
 
     if (node.isBareInherited()) {
       MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
-      DelphiNode inheritedNode = node.jjtGetChild(0);
+      DelphiNode inheritedNode = node.getChild(0);
 
       NameOccurrenceImpl occurrence = new NameOccurrenceImpl(inheritedNode, method.simpleName());
       occurrence.setIsExplicitInvocation(true);
@@ -334,7 +334,7 @@ public class NameResolver {
       disambiguateParameters(method.getParameterTypes());
       addResolvedDeclaration();
     } else {
-      NameReferenceNode methodName = (NameReferenceNode) node.jjtGetChild(1);
+      NameReferenceNode methodName = (NameReferenceNode) node.getChild(1);
       NameOccurrenceImpl occurrence = new NameOccurrenceImpl(methodName.getIdentifier());
       addName(occurrence);
 
@@ -361,8 +361,8 @@ public class NameResolver {
 
     int nextChild = (node.isBareInherited() ? 1 : 2);
 
-    for (int i = nextChild; i < node.jjtGetNumChildren(); ++i) {
-      if (!readPrimaryExpressionPart(node.jjtGetChild(i))) {
+    for (int i = nextChild; i < node.getChildrenCount(); ++i) {
+      if (!readPrimaryExpressionPart(node.getChild(i))) {
         break;
       }
     }
@@ -777,7 +777,7 @@ public class NameResolver {
   }
 
   private boolean handleExplicitArrayConstructorInvocation(ArgumentListNode node) {
-    Node previous = node.jjtGetParent().jjtGetChild(node.jjtGetChildIndex() - 1);
+    Node previous = node.getParent().getChild(node.getChildIndex() - 1);
     if (previous instanceof NameReferenceNode
         && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous))) {
       updateType(((ClassReferenceType) currentType).classType());

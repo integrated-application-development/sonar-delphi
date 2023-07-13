@@ -97,11 +97,11 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
 
   @Override
   public ExpressionNode getEnumerable() {
-    return (ExpressionNode) jjtGetChild(2);
+    return (ExpressionNode) getChild(2);
   }
 
   @Override
   public StatementNode getStatement() {
-    return (StatementNode) jjtGetChild(4);
+    return (StatementNode) getChild(4);
   }
 }

@@ -65,13 +65,13 @@ public final class MethodParametersNodeImpl extends DelphiNodeImpl implements Me
   @Override
   public FormalParameterListNode getFormalParametersList() {
     if (parameterList == null && !isEmpty()) {
-      parameterList = (FormalParameterListNode) jjtGetChild(1);
+      parameterList = (FormalParameterListNode) getChild(1);
     }
     return parameterList;
   }
 
   @Override
   public boolean isEmpty() {
-    return jjtGetNumChildren() < 3;
+    return getChildrenCount() < 3;
   }
 }

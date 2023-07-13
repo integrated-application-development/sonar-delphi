@@ -41,7 +41,7 @@ public final class TypeAliasNodeImpl extends TypeNodeImpl implements TypeAliasNo
 
   @Override
   public TypeReferenceNode getAliasedTypeNode() {
-    return (TypeReferenceNode) jjtGetChild(0);
+    return (TypeReferenceNode) getChild(0);
   }
 
   @Nonnull

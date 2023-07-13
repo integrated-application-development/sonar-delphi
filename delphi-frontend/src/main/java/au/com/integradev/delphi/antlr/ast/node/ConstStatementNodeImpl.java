@@ -34,7 +34,7 @@ public final class ConstStatementNodeImpl extends DelphiNodeImpl implements Cons
 
   @Override
   public NameDeclarationNode getNameDeclarationNode() {
-    return (NameDeclarationNode) jjtGetChild(0);
+    return (NameDeclarationNode) getChild(0);
   }
 
   @Override

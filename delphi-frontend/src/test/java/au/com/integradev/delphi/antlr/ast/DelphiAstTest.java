@@ -53,8 +53,8 @@ class DelphiAstTest {
 
   private static void checkTypes(DelphiNode node) {
     assertThat(node).isInstanceOf(DelphiNode.class);
-    for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
-      DelphiNode child = node.jjtGetChild(i);
+    for (int i = 0; i < node.getChildrenCount(); ++i) {
+      DelphiNode child = node.getChild(i);
       checkTypes(child);
     }
   }

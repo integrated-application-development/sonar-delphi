@@ -33,7 +33,7 @@ public final class VarStatementNodeImpl extends DelphiNodeImpl implements VarSta
 
   @Override
   public NameDeclarationListNode getNameDeclarationList() {
-    return (NameDeclarationListNode) jjtGetChild(0);
+    return (NameDeclarationListNode) getChild(0);
   }
 
   @Override

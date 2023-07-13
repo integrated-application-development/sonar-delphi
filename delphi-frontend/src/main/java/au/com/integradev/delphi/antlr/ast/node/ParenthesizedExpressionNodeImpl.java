@@ -44,7 +44,7 @@ public final class ParenthesizedExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public ExpressionNode getExpression() {
-    return (ExpressionNode) jjtGetChild(1);
+    return (ExpressionNode) getChild(1);
   }
 
   @Override

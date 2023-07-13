@@ -52,7 +52,7 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ArgumentListNode argumentList, DelphiCheckContext context) {
-    Node previous = argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (!(previous instanceof NameReferenceNode)) {
       return super.visit(argumentList, context);
     }

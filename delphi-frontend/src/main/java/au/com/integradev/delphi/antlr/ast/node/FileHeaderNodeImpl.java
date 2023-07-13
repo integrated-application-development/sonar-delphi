@@ -31,7 +31,7 @@ public abstract class FileHeaderNodeImpl extends DelphiNodeImpl implements FileH
 
   @Override
   public QualifiedNameDeclarationNode getNameNode() {
-    return (QualifiedNameDeclarationNode) jjtGetChild(0);
+    return (QualifiedNameDeclarationNode) getChild(0);
   }
 
   @Override

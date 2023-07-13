@@ -80,7 +80,7 @@ public final class SimpleNameDeclarationNodeImpl extends NameDeclarationNodeImpl
 
   @Override
   public IdentifierNode getIdentifier() {
-    return (IdentifierNode) jjtGetChild(0);
+    return (IdentifierNode) getChild(0);
   }
 
   @NotNull

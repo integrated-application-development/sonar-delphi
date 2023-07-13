@@ -45,10 +45,10 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(NameReferenceNode nameReference, DelphiCheckContext context) {
-    DelphiNode parent = nameReference.jjtGetParent();
+    DelphiNode parent = nameReference.getParent();
     if (parent instanceof PrimaryExpressionNode
         && nameReference.getLastName().getIdentifier().getImage().equalsIgnoreCase("IfThen")) {
-      DelphiNode argumentList = parent.jjtGetChild(nameReference.jjtGetChildIndex() + 1);
+      DelphiNode argumentList = parent.getChild(nameReference.getChildIndex() + 1);
       if (argumentList instanceof ArgumentListNode) {
         List<ExpressionNode> arguments = ((ArgumentListNode) argumentList).getArguments();
         if (isViolation(arguments)) {
@@ -97,8 +97,8 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
   private static Set<String> findImagesInBinaryExpressions(ExpressionNode expression) {
     Set<String> images = new HashSet<>();
     for (var primaryExpression : findDescendentsOrSelf(expression, PrimaryExpressionNode.class)) {
-      Node nameReference = primaryExpression.jjtGetChild(0);
-      Node argumentList = primaryExpression.jjtGetChild(1);
+      Node nameReference = primaryExpression.getChild(0);
+      Node argumentList = primaryExpression.getChild(1);
       if (nameReference instanceof NameReferenceNode && argumentList instanceof ArgumentListNode) {
         NameDeclaration declaration =
             ((NameReferenceNode) nameReference).getLastName().getNameDeclaration();

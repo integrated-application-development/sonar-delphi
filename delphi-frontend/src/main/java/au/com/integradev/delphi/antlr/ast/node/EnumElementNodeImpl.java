@@ -42,7 +42,7 @@ public final class EnumElementNodeImpl extends DelphiNodeImpl implements EnumEle
 
   @Override
   public SimpleNameDeclarationNode getNameDeclarationNode() {
-    return (SimpleNameDeclarationNode) jjtGetChild(0);
+    return (SimpleNameDeclarationNode) getChild(0);
   }
 
   @Override

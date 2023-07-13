@@ -43,12 +43,12 @@ public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public ExpressionNode getLeft() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 
   @Override
   public ExpressionNode getRight() {
-    return (ExpressionNode) jjtGetChild(1);
+    return (ExpressionNode) getChild(1);
   }
 
   @Override

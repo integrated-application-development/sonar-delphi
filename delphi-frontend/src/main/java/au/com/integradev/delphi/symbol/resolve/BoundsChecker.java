@@ -76,7 +76,7 @@ interface BoundsChecker {
     @Override
     public boolean violatesBounds(ExpressionNode expression) {
       if (expression.getType().isArrayConstructor()) {
-        Node arrayConstructor = expression.skipParentheses().jjtGetChild(0);
+        Node arrayConstructor = expression.skipParentheses().getChild(0);
         return arrayConstructor instanceof ArrayConstructorNode
             && ((ArrayConstructorNode) arrayConstructor)
                 .getElements().stream().anyMatch(this::elementViolatesBounds);

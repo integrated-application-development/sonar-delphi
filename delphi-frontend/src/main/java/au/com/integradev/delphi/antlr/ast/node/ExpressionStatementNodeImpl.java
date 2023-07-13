@@ -40,6 +40,6 @@ public final class ExpressionStatementNodeImpl extends DelphiNodeImpl
 
   @Override
   public ExpressionNode getExpression() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 }

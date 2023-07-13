@@ -45,7 +45,7 @@ public class RedundantBooleanCheck extends DelphiCheck {
   }
 
   private static boolean isRedundantComparison(PrimaryExpressionNode bool) {
-    Node parent = bool.findParentheses().jjtGetParent();
+    Node parent = bool.findParentheses().getParent();
 
     if (parent instanceof BinaryExpressionNode) {
       BinaryExpressionNode expression = (BinaryExpressionNode) parent;
@@ -63,7 +63,7 @@ public class RedundantBooleanCheck extends DelphiCheck {
   }
 
   private static boolean isNeedlesslyInverted(PrimaryExpressionNode bool) {
-    Node parent = bool.findParentheses().jjtGetParent();
+    Node parent = bool.findParentheses().getParent();
     return parent instanceof UnaryExpressionNode
         && ((UnaryExpressionNode) parent).getOperator() == UnaryOperator.NOT;
   }

@@ -52,7 +52,7 @@ public final class VisibilityNodeImpl extends DelphiNodeImpl implements Visibili
   }
 
   private boolean strict() {
-    DelphiNode child = jjtGetChild(0);
+    DelphiNode child = getChild(0);
     return child != null && child.getTokenType() == DelphiTokenType.STRICT;
   }
 }

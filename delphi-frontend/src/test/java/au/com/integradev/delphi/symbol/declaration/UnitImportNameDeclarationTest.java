@@ -68,7 +68,7 @@ class UnitImportNameDeclarationTest {
   private static UnitImportNameDeclaration createImport(
       String name, UnitNameDeclaration originalDeclaration) {
     UnitImportNode location = new UnitImportNodeImpl(DelphiLexer.TkUnitImport);
-    location.jjtAddChild(createNameNode(name));
+    location.addChild(createNameNode(name));
     return new UnitImportNameDeclarationImpl(location, originalDeclaration);
   }
 
@@ -89,7 +89,7 @@ class UnitImportNameDeclarationTest {
     var identifierNode = new IdentifierNodeImpl(identifierToken);
 
     var nameNode = new QualifiedNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
-    nameNode.jjtAddChild(identifierNode);
+    nameNode.addChild(identifierNode);
 
     return nameNode;
   }

@@ -75,16 +75,16 @@ public class AssignedAndFreeCheck extends DelphiCheck {
   }
 
   private static String findVariableNameForAssigned(ExpressionNode guard) {
-    Node method = guard.jjtGetChild(0);
-    if (guard.jjtGetNumChildren() < 2 || !method.getImage().equalsIgnoreCase("Assigned")) {
+    Node method = guard.getChild(0);
+    if (guard.getChildrenCount() < 2 || !method.getImage().equalsIgnoreCase("Assigned")) {
       return null;
     }
 
-    Node sibling = guard.jjtGetChild(1);
+    Node sibling = guard.getChild(1);
     if (sibling instanceof ArgumentListNode) {
       ArgumentListNode argumentList = (ArgumentListNode) sibling;
       if (!argumentList.getArguments().isEmpty()) {
-        return argumentList.jjtGetChild(0).getImage();
+        return argumentList.getChild(0).getImage();
       }
     }
 

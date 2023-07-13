@@ -35,7 +35,7 @@ public final class InterfaceTypeNodeImpl extends StructTypeNodeImpl implements I
 
   @Override
   public boolean isForwardDeclaration() {
-    return jjtGetNumChildren() == 0;
+    return getChildrenCount() == 0;
   }
 
   @Override

@@ -144,8 +144,8 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
 
   private static NameDeclaration extractSpecifierDeclaration(PrimaryExpressionNode node) {
     NameDeclaration result = null;
-    for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
-      Node child = node.jjtGetChild(i);
+    for (int i = 0; i < node.getChildrenCount(); ++i) {
+      Node child = node.getChild(i);
       if (child instanceof NameReferenceNode) {
         result = ((NameReferenceNode) child).getLastName().getNameDeclaration();
       }

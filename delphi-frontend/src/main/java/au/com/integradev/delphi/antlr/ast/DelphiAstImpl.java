@@ -51,8 +51,8 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
     this.delphiFile = delphiFile;
 
     if (root != null) {
-      for (int i = 0; i < root.jjtGetNumChildren(); ++i) {
-        jjtAddChild(root.jjtGetChild(i));
+      for (int i = 0; i < root.getChildrenCount(); ++i) {
+        addChild(root.getChild(i));
       }
     }
   }
@@ -89,7 +89,7 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
 
   @Override
   public List<DelphiToken> getCommentsInsideNode(DelphiNode node) {
-    return getCommentsBetweenTokens(node.jjtGetFirstToken(), node.jjtGetLastToken());
+    return getCommentsBetweenTokens(node.getFirstToken(), node.getLastToken());
   }
 
   @Override
@@ -109,21 +109,21 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
 
   @Override
   public FileHeaderNode getFileHeader() {
-    return (FileHeaderNode) jjtGetChild(0);
+    return (FileHeaderNode) getChild(0);
   }
 
   @Override
   public boolean isProgram() {
-    return jjtGetNumChildren() > 0 && getFileHeader() instanceof ProgramDeclarationNode;
+    return getChildrenCount() > 0 && getFileHeader() instanceof ProgramDeclarationNode;
   }
 
   @Override
   public boolean isUnit() {
-    return jjtGetNumChildren() > 0 && getFileHeader() instanceof UnitDeclarationNode;
+    return getChildrenCount() > 0 && getFileHeader() instanceof UnitDeclarationNode;
   }
 
   @Override
   public boolean isPackage() {
-    return jjtGetNumChildren() > 0 && getFileHeader() instanceof PackageDeclarationNode;
+    return getChildrenCount() > 0 && getFileHeader() instanceof PackageDeclarationNode;
   }
 }

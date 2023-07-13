@@ -458,7 +458,7 @@ public class TypeFactory {
 
     Set<Type> ancestors = Collections.emptySet();
     StructKind kind = StructKind.fromNode(node);
-    Node parent = node.jjtGetParent();
+    Node parent = node.getParent();
 
     if (parent instanceof TypeDeclarationNode) {
       TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) parent;
@@ -473,7 +473,7 @@ public class TypeFactory {
   }
 
   public HelperType helper(HelperTypeNode node) {
-    TypeDeclarationNode declaration = (TypeDeclarationNode) node.jjtGetParent();
+    TypeDeclarationNode declaration = (TypeDeclarationNode) node.getParent();
     StructKind kind = (node instanceof ClassHelperTypeNode) ? CLASS_HELPER : RECORD_HELPER;
 
     return new HelperTypeImpl(

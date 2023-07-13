@@ -42,7 +42,7 @@ public class VariableUtils {
       return false;
     }
 
-    if (varSection.jjtGetChildIndex() != varSection.jjtGetParent().jjtGetNumChildren() - 1) {
+    if (varSection.getChildIndex() != varSection.getParent().getChildrenCount() - 1) {
       return false;
     }
 

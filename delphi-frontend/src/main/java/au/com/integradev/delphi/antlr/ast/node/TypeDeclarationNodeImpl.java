@@ -69,12 +69,12 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements Typ
 
   @Override
   public SimpleNameDeclarationNode getTypeNameNode() {
-    return (SimpleNameDeclarationNode) jjtGetChild(0);
+    return (SimpleNameDeclarationNode) getChild(0);
   }
 
   @Override
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 
   @Override

@@ -35,6 +35,6 @@ public final class ElseBlockNodeImpl extends DelphiNodeImpl implements ElseBlock
 
   @Override
   public StatementListNode getStatementList() {
-    return (StatementListNode) jjtGetChild(0);
+    return (StatementListNode) getChild(0);
   }
 }

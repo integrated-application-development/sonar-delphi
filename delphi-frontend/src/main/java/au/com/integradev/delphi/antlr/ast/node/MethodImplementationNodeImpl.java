@@ -52,7 +52,7 @@ public final class MethodImplementationNodeImpl extends MethodNodeImpl
 
   @Override
   public MethodBodyNode getMethodBody() {
-    return (MethodBodyNode) jjtGetChild(1);
+    return (MethodBodyNode) getChild(1);
   }
 
   @Override

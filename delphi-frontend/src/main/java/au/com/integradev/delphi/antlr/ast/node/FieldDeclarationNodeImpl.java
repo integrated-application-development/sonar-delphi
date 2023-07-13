@@ -44,7 +44,7 @@ public final class FieldDeclarationNodeImpl extends DelphiNodeImpl implements Fi
 
   @Override
   public VisibilityType getVisibility() {
-    DelphiNode parent = jjtGetParent();
+    DelphiNode parent = getParent();
     if (parent instanceof FieldSectionNode) {
       return ((FieldSectionNode) parent).getVisibility();
     }
@@ -53,12 +53,12 @@ public final class FieldDeclarationNodeImpl extends DelphiNodeImpl implements Fi
 
   @Override
   public NameDeclarationListNode getDeclarationList() {
-    return (NameDeclarationListNode) jjtGetChild(0);
+    return (NameDeclarationListNode) getChild(0);
   }
 
   @Override
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 
   @Override

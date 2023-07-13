@@ -157,14 +157,14 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
       return false;
     }
 
-    Node reference = expression.jjtGetChild(1);
+    Node reference = expression.getChild(1);
     String methodName = method.simpleName();
     if (!(reference instanceof NameReferenceNode
         && reference.getImage().equalsIgnoreCase(methodName))) {
       return false;
     }
 
-    Node argumentList = expression.jjtGetChild(2);
+    Node argumentList = expression.getChild(2);
     if (argumentList != null && !(argumentList instanceof ArgumentListNode)) {
       return false;
     }

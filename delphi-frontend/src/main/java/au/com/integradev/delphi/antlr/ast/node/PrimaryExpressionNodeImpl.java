@@ -46,12 +46,12 @@ public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public boolean isInheritedCall() {
-    return jjtGetChild(0).getTokenType() == DelphiTokenType.INHERITED;
+    return getChild(0).getTokenType() == DelphiTokenType.INHERITED;
   }
 
   @Override
   public boolean isBareInherited() {
-    return (jjtGetNumChildren() == 1 || !(jjtGetChild(1) instanceof NameReferenceNode))
+    return (getChildrenCount() == 1 || !(getChild(1) instanceof NameReferenceNode))
         && isInheritedCall();
   }
 
@@ -59,8 +59,8 @@ public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
   public String getImage() {
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder();
-      for (int i = 0; i < jjtGetNumChildren(); ++i) {
-        imageBuilder.append(jjtGetChild(i).getImage());
+      for (int i = 0; i < getChildrenCount(); ++i) {
+        imageBuilder.append(getChild(i).getImage());
       }
       image = imageBuilder.toString();
     }

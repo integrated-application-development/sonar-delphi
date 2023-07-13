@@ -35,7 +35,7 @@ public final class ForLoopVarReferenceNodeImpl extends ForLoopVarNodeImpl
 
   @Override
   public NameReferenceNode getNameReference() {
-    return (NameReferenceNode) jjtGetChild(0);
+    return (NameReferenceNode) getChild(0);
   }
 
   @Override

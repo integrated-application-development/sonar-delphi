@@ -5,11 +5,11 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface MutableDelphiNode extends DelphiNode {
-  void jjtSetFirstToken(DelphiToken token);
+  void setFirstToken(DelphiToken token);
 
-  void jjtSetLastToken(DelphiToken token);
+  void setLastToken(DelphiToken token);
 
-  void jjtSetParent(DelphiNode parent);
+  void setParent(DelphiNode parent);
 
   void setScope(DelphiScope scope);
 }

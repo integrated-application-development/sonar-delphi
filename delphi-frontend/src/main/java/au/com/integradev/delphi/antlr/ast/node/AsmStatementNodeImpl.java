@@ -34,6 +34,6 @@ public final class AsmStatementNodeImpl extends DelphiNodeImpl implements AsmSta
 
   @Override
   public boolean isEmpty() {
-    return jjtGetNumChildren() == 0;
+    return getChildrenCount() == 0;
   }
 }

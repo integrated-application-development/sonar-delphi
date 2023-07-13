@@ -35,6 +35,6 @@ public final class FinallyBlockNodeImpl extends DelphiNodeImpl implements Finall
 
   @Override
   public StatementListNode getStatementList() {
-    return (StatementListNode) jjtGetChild(0);
+    return (StatementListNode) getChild(0);
   }
 }

@@ -37,6 +37,6 @@ public final class RaiseStatementNodeImpl extends DelphiNodeImpl implements Rais
   @Override
   @Nullable
   public ExpressionNode getRaiseExpression() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 }

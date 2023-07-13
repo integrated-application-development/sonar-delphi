@@ -47,8 +47,8 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKeys;
 public class MissingSemicolonCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(FieldDeclarationNode field, DelphiCheckContext context) {
-    if (!(field.jjtGetParent() instanceof RecordVariantItemNode)) {
-      DelphiNode lastChild = field.jjtGetChild(field.jjtGetNumChildren() - 1);
+    if (!(field.getParent() instanceof RecordVariantItemNode)) {
+      DelphiNode lastChild = field.getChild(field.getChildrenCount() - 1);
       if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
         reportIssue(context, field, "Terminate this field declaration with a semicolon.");
       }
@@ -58,7 +58,7 @@ public class MissingSemicolonCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(MethodHeadingNode heading, DelphiCheckContext context) {
-    DelphiNode lastChild = heading.jjtGetChild(heading.jjtGetNumChildren() - 1);
+    DelphiNode lastChild = heading.getChild(heading.getChildrenCount() - 1);
     if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
       reportIssue(context, heading, "Terminate this method heading with a semicolon.");
     }
@@ -79,14 +79,14 @@ public class MissingSemicolonCheck extends DelphiCheck {
   }
 
   private static boolean shouldVisitStatement(DelphiNode node) {
-    DelphiNode parent = node.jjtGetParent();
+    DelphiNode parent = node.getParent();
     return parent instanceof CaseItemStatementNode
         || parent instanceof ExceptItemNode
         || parent instanceof StatementListNode;
   }
 
   private static DelphiNode findStatementIssueNode(DelphiNode node) {
-    Node nextNode = node.jjtGetParent().jjtGetChild(node.jjtGetChildIndex() + 1);
+    Node nextNode = node.getParent().getChild(node.getChildIndex() + 1);
     if (nextNode == null || nextNode.getTokenType() != DelphiTokenType.SEMICOLON) {
       return findNodePrecedingMissingSemicolon(node);
     }
@@ -95,11 +95,11 @@ public class MissingSemicolonCheck extends DelphiCheck {
 
   private static DelphiNode findNodePrecedingMissingSemicolon(DelphiNode node) {
     DelphiNode lastNode = node;
-    int childCount = lastNode.jjtGetNumChildren();
+    int childCount = lastNode.getChildrenCount();
 
     while (childCount > 0) {
-      lastNode = lastNode.jjtGetChild(childCount - 1);
-      childCount = lastNode.jjtGetNumChildren();
+      lastNode = lastNode.getChild(childCount - 1);
+      childCount = lastNode.getChildrenCount();
     }
 
     return lastNode;

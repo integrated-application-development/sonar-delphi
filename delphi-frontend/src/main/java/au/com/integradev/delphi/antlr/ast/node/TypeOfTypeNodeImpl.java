@@ -38,6 +38,6 @@ public final class TypeOfTypeNodeImpl extends TypeNodeImpl implements TypeOfType
   @Override
   @Nonnull
   protected Type createType() {
-    return ((TypeNode) jjtGetChild(0)).getType();
+    return ((TypeNode) getChild(0)).getType();
   }
 }

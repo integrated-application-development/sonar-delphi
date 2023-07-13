@@ -45,7 +45,7 @@ public abstract class TypeNodeImpl extends DelphiNodeImpl implements TypeNode {
 
   @Override
   public AncestorListNode getAncestorListNode() {
-    DelphiNode child = jjtGetChild(0);
+    DelphiNode child = getChild(0);
     return child instanceof AncestorListNode ? (AncestorListNode) child : null;
   }
 

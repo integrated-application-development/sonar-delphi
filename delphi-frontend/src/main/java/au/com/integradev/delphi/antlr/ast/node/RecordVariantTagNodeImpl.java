@@ -40,14 +40,14 @@ public final class RecordVariantTagNodeImpl extends DelphiNodeImpl implements Re
   @Override
   public NameDeclarationNode getTagName() {
     if (hasTagName()) {
-      return (NameDeclarationNode) jjtGetChild(0);
+      return (NameDeclarationNode) getChild(0);
     }
     return null;
   }
 
   @Override
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(hasTagName() ? 1 : 0);
+    return (TypeNode) getChild(hasTagName() ? 1 : 0);
   }
 
   @Nonnull
@@ -62,6 +62,6 @@ public final class RecordVariantTagNodeImpl extends DelphiNodeImpl implements Re
   }
 
   private boolean hasTagName() {
-    return jjtGetChild(0) instanceof NameDeclarationNode;
+    return getChild(0) instanceof NameDeclarationNode;
   }
 }

@@ -36,6 +36,6 @@ public final class PropertyReadSpecifierNodeImpl extends DelphiNodeImpl
 
   @Override
   public PrimaryExpressionNode getExpression() {
-    return (PrimaryExpressionNode) jjtGetChild(0);
+    return (PrimaryExpressionNode) getChild(0);
   }
 }

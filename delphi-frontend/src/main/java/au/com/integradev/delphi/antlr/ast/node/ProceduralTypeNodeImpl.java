@@ -39,7 +39,7 @@ public abstract class ProceduralTypeNodeImpl extends TypeNodeImpl implements Pro
   }
 
   private ProcedureTypeHeadingNode getHeading() {
-    return (ProcedureTypeHeadingNode) jjtGetChild(0);
+    return (ProcedureTypeHeadingNode) getChild(0);
   }
 
   @Override

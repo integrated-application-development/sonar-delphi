@@ -35,7 +35,7 @@ public class VisibilityKeywordIndentationCheck extends DelphiCheck {
   private static String getExpectedIndentation(DelphiNode node) {
     var visibilityNode = (VisibilityNode) node;
     // Class/Record/etc. -> VisibilitySection -> Visibility
-    var parent = visibilityNode.jjtGetParent().jjtGetParent();
+    var parent = visibilityNode.getParent().getParent();
     return IndentationUtils.getLineIndentation(parent);
   }
 

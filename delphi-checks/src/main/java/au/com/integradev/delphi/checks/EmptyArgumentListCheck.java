@@ -57,7 +57,7 @@ public class EmptyArgumentListCheck extends DelphiCheck {
   }
 
   private static boolean isExplicitArrayConstructorInvocation(ArgumentListNode arguments) {
-    Node previous = arguments.jjtGetParent().jjtGetChild(arguments.jjtGetChildIndex() - 1);
+    Node previous = arguments.getParent().getChild(arguments.getChildIndex() - 1);
     return previous instanceof NameReferenceNode
         && ((NameReferenceNode) previous).isExplicitArrayConstructorInvocation();
   }
@@ -67,7 +67,7 @@ public class EmptyArgumentListCheck extends DelphiCheck {
   }
 
   private static boolean isProcVarInvocation(ArgumentListNode arguments) {
-    Node previous = arguments.jjtGetParent().jjtGetChild(arguments.jjtGetChildIndex() - 1);
+    Node previous = arguments.getParent().getChild(arguments.getChildIndex() - 1);
     if (previous instanceof Typed) {
       Type type = ((Typed) previous).getType();
       return type.isProcedural() && !type.isMethod();
@@ -76,12 +76,11 @@ public class EmptyArgumentListCheck extends DelphiCheck {
   }
 
   private static boolean isPartOfSystemAssignedArgumentExpression(ArgumentListNode arguments) {
-    DelphiNode parent = arguments.jjtGetParent();
+    DelphiNode parent = arguments.getParent();
     if (parent instanceof PrimaryExpressionNode) {
-      DelphiNode grandparent = parent.jjtGetParent();
+      DelphiNode grandparent = parent.getParent();
       if (grandparent instanceof ArgumentListNode) {
-        DelphiNode prev =
-            grandparent.jjtGetParent().jjtGetChild(grandparent.jjtGetChildIndex() - 1);
+        DelphiNode prev = grandparent.getParent().getChild(grandparent.getChildIndex() - 1);
         if (prev instanceof NameReferenceNode) {
           var declaration = ((NameReferenceNode) prev).getLastName().getNameDeclaration();
           return declaration instanceof MethodNameDeclaration

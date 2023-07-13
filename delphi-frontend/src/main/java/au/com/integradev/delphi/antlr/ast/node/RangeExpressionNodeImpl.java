@@ -40,12 +40,12 @@ public final class RangeExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public ExpressionNode getLowExpression() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 
   @Override
   public ExpressionNode getHighExpression() {
-    return (ExpressionNode) jjtGetChild(1);
+    return (ExpressionNode) getChild(1);
   }
 
   @Override

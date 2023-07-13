@@ -39,6 +39,6 @@ public final class MethodReturnTypeNodeImpl extends DelphiNodeImpl implements Me
 
   @Override
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(0);
+    return (TypeNode) getChild(0);
   }
 }

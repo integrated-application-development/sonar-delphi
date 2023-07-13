@@ -31,8 +31,8 @@ public class RedundantParenthesesCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ParenthesizedExpressionNode expression, DelphiCheckContext data) {
-    if (expression.jjtGetParent() instanceof ParenthesizedExpressionNode) {
-      reportIssue(data, expression.jjtGetChild(0), MESSAGE);
+    if (expression.getParent() instanceof ParenthesizedExpressionNode) {
+      reportIssue(data, expression.getChild(0), MESSAGE);
     }
     return super.visit(expression, data);
   }

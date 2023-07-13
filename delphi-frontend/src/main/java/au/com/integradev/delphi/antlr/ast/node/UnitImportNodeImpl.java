@@ -40,7 +40,7 @@ public final class UnitImportNodeImpl extends DelphiNodeImpl implements UnitImpo
 
   @Override
   public QualifiedNameDeclarationNode getNameNode() {
-    return (QualifiedNameDeclarationNode) jjtGetChild(0);
+    return (QualifiedNameDeclarationNode) getChild(0);
   }
 
   @Override

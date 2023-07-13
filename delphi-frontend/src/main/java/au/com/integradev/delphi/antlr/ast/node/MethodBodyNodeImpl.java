@@ -47,13 +47,13 @@ public final class MethodBodyNodeImpl extends DelphiNodeImpl implements MethodBo
 
   @Override
   public boolean hasDeclarationSection() {
-    return jjtGetChild(0) instanceof BlockDeclarationSectionNode;
+    return getChild(0) instanceof BlockDeclarationSectionNode;
   }
 
   @Override
   public BlockDeclarationSectionNode getDeclarationSection() {
     if (declarationSection == null && hasDeclarationSection()) {
-      declarationSection = (BlockDeclarationSectionNode) jjtGetChild(0);
+      declarationSection = (BlockDeclarationSectionNode) getChild(0);
     }
     return declarationSection;
   }
@@ -87,7 +87,7 @@ public final class MethodBodyNodeImpl extends DelphiNodeImpl implements MethodBo
   @Override
   public DelphiNode getBlock() {
     if (block == null) {
-      block = jjtGetChild(hasDeclarationSection() ? 1 : 0);
+      block = getChild(hasDeclarationSection() ? 1 : 0);
     }
     return block;
   }

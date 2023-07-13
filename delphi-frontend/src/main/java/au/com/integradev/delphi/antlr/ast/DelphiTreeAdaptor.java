@@ -66,8 +66,8 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   @Override
   public void setTokenBoundaries(Object node, Token startToken, Token stopToken) {
     if (node != null) {
-      ((MutableDelphiNode) node).jjtSetFirstToken(new DelphiTokenImpl(startToken));
-      ((MutableDelphiNode) node).jjtSetLastToken(new DelphiTokenImpl(stopToken));
+      ((MutableDelphiNode) node).setFirstToken(new DelphiTokenImpl(startToken));
+      ((MutableDelphiNode) node).setLastToken(new DelphiTokenImpl(stopToken));
     }
   }
 
@@ -112,8 +112,8 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
     try {
       Constructor<?> constructor = node.getClass().getConstructor(Token.class);
       MutableDelphiNode dupNode = (MutableDelphiNode) constructor.newInstance(getToken(node));
-      dupNode.jjtSetFirstToken(getFirstToken(node));
-      dupNode.jjtSetLastToken(getLastToken(node));
+      dupNode.setFirstToken(getFirstToken(node));
+      dupNode.setLastToken(getLastToken(node));
       return dupNode;
     } catch (Exception e) {
       throw new AssertionError(
@@ -126,7 +126,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   @Override
   public void addChild(Object node, Object child) {
     if (node != null && child != null) {
-      ((DelphiNode) node).jjtAddChild((DelphiNode) child);
+      ((DelphiNode) node).addChild((DelphiNode) child);
     }
   }
 
@@ -181,32 +181,32 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public Object getChild(Object node, int index) {
-    return ((DelphiNode) node).jjtGetChild(index);
+    return ((DelphiNode) node).getChild(index);
   }
 
   @Override
   public int getChildCount(Object node) {
-    return ((DelphiNode) node).jjtGetNumChildren();
+    return ((DelphiNode) node).getChildrenCount();
   }
 
   @Override
   public int getChildIndex(Object node) {
-    return ((DelphiNode) node).jjtGetChildIndex();
+    return ((DelphiNode) node).getChildIndex();
   }
 
   @Override
   public void setChildIndex(Object node, int index) {
-    ((DelphiNode) node).jjtSetChildIndex(index);
+    ((DelphiNode) node).setChildIndex(index);
   }
 
   @Override
   public Object getParent(Object node) {
-    return ((DelphiNode) node).jjtGetParent();
+    return ((DelphiNode) node).getParent();
   }
 
   @Override
   public void setParent(Object node, Object parent) {
-    ((MutableDelphiNode) node).jjtSetParent((DelphiNode) parent);
+    ((MutableDelphiNode) node).setParent((DelphiNode) parent);
   }
 
   @Override
@@ -230,10 +230,10 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   }
 
   private static DelphiToken getFirstToken(Object node) {
-    return ((DelphiNode) node).jjtGetFirstToken();
+    return ((DelphiNode) node).getFirstToken();
   }
 
   private static DelphiToken getLastToken(Object node) {
-    return ((DelphiNode) node).jjtGetLastToken();
+    return ((DelphiNode) node).getLastToken();
   }
 }

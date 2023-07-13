@@ -29,6 +29,6 @@ public abstract class ForStatementNodeImpl extends DelphiNodeImpl implements For
 
   @Override
   public ForLoopVarNode getVariable() {
-    return (ForLoopVarNode) jjtGetChild(0);
+    return (ForLoopVarNode) getChild(0);
   }
 }

@@ -127,7 +127,7 @@ public class MemoryManagementCheck extends DelphiCheck {
       return false;
     }
 
-    DelphiNode previous = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
+    DelphiNode previous = parent.getParent().getChild(parent.getChildIndex() - 1);
     if (!(previous instanceof Typed)) {
       return false;
     }
@@ -138,8 +138,8 @@ public class MemoryManagementCheck extends DelphiCheck {
     }
 
     DelphiNode argument = expression;
-    while (argument.jjtGetParent() != parent) {
-      argument = argument.jjtGetParent();
+    while (argument.getParent() != parent) {
+      argument = argument.getParent();
     }
 
     List<ExpressionNode> arguments = ((ArgumentListNode) parent).getArguments();
@@ -160,7 +160,7 @@ public class MemoryManagementCheck extends DelphiCheck {
       return false;
     }
 
-    DelphiNode node = parent.jjtGetParent().jjtGetChild(parent.jjtGetChildIndex() - 1);
+    DelphiNode node = parent.getParent().getChild(parent.getChildIndex() - 1);
     if (!(node instanceof NameReferenceNode)) {
       return false;
     }
@@ -197,7 +197,7 @@ public class MemoryManagementCheck extends DelphiCheck {
       if (node instanceof ExpressionNode) {
         node = ((ExpressionNode) node).findParentheses();
       }
-      node = node.jjtGetParent();
+      node = node.getParent();
     }
     return node;
   }
@@ -210,8 +210,7 @@ public class MemoryManagementCheck extends DelphiCheck {
   private static boolean isHardCast(DelphiNode node) {
     if (node instanceof ArgumentListNode) {
       ArgumentListNode argumentList = (ArgumentListNode) node;
-      DelphiNode previous =
-          argumentList.jjtGetParent().jjtGetChild(argumentList.jjtGetChildIndex() - 1);
+      DelphiNode previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
       if (previous instanceof NameReferenceNode && isLastChild(argumentList)) {
         NameReferenceNode nameReference = ((NameReferenceNode) previous);
         NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
@@ -222,7 +221,7 @@ public class MemoryManagementCheck extends DelphiCheck {
   }
 
   private static boolean isLastChild(DelphiNode node) {
-    return node.jjtGetChildIndex() == node.jjtGetParent().jjtGetNumChildren() - 1;
+    return node.getChildIndex() == node.getParent().getChildrenCount() - 1;
   }
 
   private static boolean requiresMemoryManagement(NameReferenceNode reference) {

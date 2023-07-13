@@ -362,7 +362,7 @@ public class NameResolutionHelper {
   }
 
   private boolean handleAddressOf(PrimaryExpressionNode expression, NameResolver resolver) {
-    Node parent = expression.jjtGetParent();
+    Node parent = expression.getParent();
 
     if (parent instanceof UnaryExpressionNode) {
       UnaryExpressionNode unary = (UnaryExpressionNode) parent;
@@ -382,12 +382,12 @@ public class NameResolutionHelper {
   }
 
   private boolean handleMethodReference(PrimaryExpressionNode expression, NameResolver resolver) {
-    DelphiNode parent = expression.jjtGetParent();
+    DelphiNode parent = expression.getParent();
 
     if (parent instanceof UnaryExpressionNode) {
       UnaryExpressionNode unary = (UnaryExpressionNode) parent;
       if (unary.getOperator() == UnaryOperator.ADDRESS) {
-        parent = parent.jjtGetParent();
+        parent = parent.getParent();
       }
     }
 
@@ -414,7 +414,7 @@ public class NameResolutionHelper {
   }
 
   private boolean handlePascalReturn(PrimaryExpressionNode expression, NameResolver resolver) {
-    if (expression.jjtGetNumChildren() != 1) {
+    if (expression.getChildrenCount() != 1) {
       return false;
     }
 
@@ -422,7 +422,7 @@ public class NameResolutionHelper {
       return false;
     }
 
-    Node parent = expression.jjtGetParent();
+    Node parent = expression.getParent();
     if (!(parent instanceof AssignmentStatementNode)) {
       return false;
     }
@@ -432,7 +432,7 @@ public class NameResolutionHelper {
       return false;
     }
 
-    Node child = expression.jjtGetChild(0);
+    Node child = expression.getChild(0);
     if (!(child instanceof NameReferenceNode)) {
       return false;
     }

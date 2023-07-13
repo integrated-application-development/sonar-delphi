@@ -47,7 +47,7 @@ public final class EnumTypeNodeImpl extends TypeNodeImpl implements EnumTypeNode
   @Override
   @Nonnull
   protected Type createType() {
-    DelphiNode parent = jjtGetParent();
+    DelphiNode parent = getParent();
     String image;
 
     if (parent instanceof TypeDeclarationNode) {

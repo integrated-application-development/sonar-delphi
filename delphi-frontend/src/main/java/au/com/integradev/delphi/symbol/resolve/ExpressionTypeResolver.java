@@ -97,8 +97,8 @@ public final class ExpressionTypeResolver {
     boolean regularArrayProperty = false;
     boolean classReference = false;
 
-    for (int i = 0; i < expression.jjtGetNumChildren(); ++i) {
-      Node child = expression.jjtGetChild(i);
+    for (int i = 0; i < expression.getChildrenCount(); ++i) {
+      Node child = expression.getChild(i);
       if (child instanceof Typed) {
         type = handleTyped((Typed) child);
       } else if (child instanceof ArgumentListNode) {

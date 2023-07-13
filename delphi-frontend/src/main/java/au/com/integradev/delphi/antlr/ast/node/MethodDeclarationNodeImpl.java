@@ -75,8 +75,8 @@ public final class MethodDeclarationNodeImpl extends MethodNodeImpl
   @Override
   protected VisibilityType createVisibility() {
     if (visibility == null) {
-      if (jjtGetParent() instanceof VisibilitySectionNode) {
-        visibility = ((VisibilitySectionNode) jjtGetParent()).getVisibility();
+      if (getParent() instanceof VisibilitySectionNode) {
+        visibility = ((VisibilitySectionNode) getParent()).getVisibility();
       } else {
         visibility = VisibilityType.PUBLIC;
       }

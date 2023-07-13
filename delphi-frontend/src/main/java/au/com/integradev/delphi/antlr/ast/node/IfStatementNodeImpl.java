@@ -40,7 +40,7 @@ public final class IfStatementNodeImpl extends DelphiNodeImpl implements IfState
 
   @Override
   public ExpressionNode getGuardExpression() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 
   private CommonDelphiNode getElseToken() {
@@ -55,7 +55,7 @@ public final class IfStatementNodeImpl extends DelphiNodeImpl implements IfState
   @Override
   @Nullable
   public StatementNode getThenStatement() {
-    DelphiNode node = jjtGetChild(2);
+    DelphiNode node = getChild(2);
     if (node instanceof StatementNode) {
       return (StatementNode) node;
     }
@@ -66,7 +66,7 @@ public final class IfStatementNodeImpl extends DelphiNodeImpl implements IfState
   @Nullable
   public StatementNode getElseStatement() {
     if (hasElseBranch()) {
-      return (StatementNode) jjtGetChild(getElseToken().jjtGetChildIndex() + 1);
+      return (StatementNode) getChild(getElseToken().getChildIndex() + 1);
     }
     return null;
   }

@@ -39,7 +39,7 @@ public final class ClassReferenceTypeNodeImpl extends TypeNodeImpl
 
   @Override
   public TypeReferenceNode getClassOfTypeNode() {
-    return (TypeReferenceNode) jjtGetChild(1);
+    return (TypeReferenceNode) getChild(1);
   }
 
   @Override

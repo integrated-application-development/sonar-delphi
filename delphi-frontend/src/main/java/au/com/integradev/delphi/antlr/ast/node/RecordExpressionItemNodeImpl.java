@@ -41,12 +41,12 @@ public final class RecordExpressionItemNodeImpl extends DelphiNodeImpl
 
   @Override
   public IdentifierNode getIdentifier() {
-    return (IdentifierNode) jjtGetChild(0);
+    return (IdentifierNode) getChild(0);
   }
 
   @Override
   public ExpressionNode getExpression() {
-    return (ExpressionNode) jjtGetChild(1);
+    return (ExpressionNode) getChild(1);
   }
 
   @Override

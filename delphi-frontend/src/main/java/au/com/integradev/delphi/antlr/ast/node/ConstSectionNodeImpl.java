@@ -36,7 +36,7 @@ public final class ConstSectionNodeImpl extends DelphiNodeImpl implements ConstS
 
   @Override
   public VisibilityType getVisibility() {
-    DelphiNode parent = jjtGetParent();
+    DelphiNode parent = getParent();
     if (parent instanceof VisibilitySectionNode) {
       return ((VisibilitySectionNode) parent).getVisibility();
     }

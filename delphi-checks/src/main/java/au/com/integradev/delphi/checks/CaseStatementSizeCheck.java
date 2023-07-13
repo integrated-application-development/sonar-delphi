@@ -32,7 +32,7 @@ public class CaseStatementSizeCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(CaseStatementNode caseStatement, DelphiCheckContext context) {
     if (caseStatement.getCaseItems().size() < 2) {
-      reportIssue(context, caseStatement.jjtGetChild(0), MESSAGE);
+      reportIssue(context, caseStatement.getChild(0), MESSAGE);
     }
 
     return super.visit(caseStatement, context);

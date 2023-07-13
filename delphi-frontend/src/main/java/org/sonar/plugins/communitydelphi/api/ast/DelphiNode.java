@@ -9,21 +9,21 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 public interface DelphiNode extends Node {
   DelphiToken getToken();
 
-  DelphiToken jjtGetFirstToken();
+  DelphiToken getFirstToken();
 
-  DelphiToken jjtGetLastToken();
+  DelphiToken getLastToken();
 
-  DelphiNode jjtGetParent();
+  DelphiNode getParent();
 
-  void jjtAddChild(DelphiNode child);
+  void addChild(DelphiNode child);
 
-  void jjtSetChildIndex(int index);
+  void setChildIndex(int index);
 
-  int jjtGetChildIndex();
+  int getChildIndex();
 
-  DelphiNode jjtGetChild(int index);
+  DelphiNode getChild(int index);
 
-  int jjtGetNumChildren();
+  int getChildrenCount();
 
   DelphiNode getNthParent(int n);
 
@@ -78,8 +78,8 @@ public interface DelphiNode extends Node {
    * @return Data related to this visit
    */
   default <T> T childrenAccept(DelphiParserVisitor<T> visitor, T data) {
-    for (int i = 0; i < jjtGetNumChildren(); ++i) {
-      jjtGetChild(i).accept(visitor, data);
+    for (int i = 0; i < getChildrenCount(); ++i) {
+      getChild(i).accept(visitor, data);
     }
     return data;
   }

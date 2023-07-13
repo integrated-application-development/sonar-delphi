@@ -250,7 +250,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   }
 
   private static boolean isNameStart(NameReferenceNode nameNode) {
-    Node parent = nameNode.jjtGetParent();
+    Node parent = nameNode.getParent();
     if (parent instanceof NameReferenceNode) {
       return false;
     }
@@ -258,7 +258,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     if (parent instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primaryExpression = (PrimaryExpressionNode) parent;
       int nameStartIndex = primaryExpression.isInheritedCall() ? 1 : 0;
-      return nameNode.jjtGetChildIndex() == nameStartIndex;
+      return nameNode.getChildIndex() == nameStartIndex;
     }
 
     return true;

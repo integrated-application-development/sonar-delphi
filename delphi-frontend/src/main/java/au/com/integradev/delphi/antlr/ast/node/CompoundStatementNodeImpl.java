@@ -39,7 +39,7 @@ public final class CompoundStatementNodeImpl extends DelphiNodeImpl
 
   @Override
   public StatementListNode getStatementList() {
-    return ((StatementListNode) jjtGetChild(0));
+    return ((StatementListNode) getChild(0));
   }
 
   @Override

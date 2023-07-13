@@ -37,7 +37,7 @@ public final class SetTypeNodeImpl extends TypeNodeImpl implements SetTypeNode {
 
   @Override
   public TypeNode getElementTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 
   @Nonnull

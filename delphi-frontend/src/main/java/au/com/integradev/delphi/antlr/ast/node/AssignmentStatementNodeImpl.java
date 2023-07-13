@@ -36,11 +36,11 @@ public final class AssignmentStatementNodeImpl extends DelphiNodeImpl
 
   @Override
   public ExpressionNode getAssignee() {
-    return (ExpressionNode) jjtGetChild(0);
+    return (ExpressionNode) getChild(0);
   }
 
   @Override
   public ExpressionNode getValue() {
-    return (ExpressionNode) jjtGetChild(1);
+    return (ExpressionNode) getChild(1);
   }
 }

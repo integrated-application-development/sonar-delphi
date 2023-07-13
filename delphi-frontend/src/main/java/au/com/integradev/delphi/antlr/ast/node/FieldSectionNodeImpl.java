@@ -42,7 +42,7 @@ public final class FieldSectionNodeImpl extends DelphiNodeImpl implements FieldS
 
   @Override
   public VisibilityType getVisibility() {
-    return ((VisibilitySectionNode) jjtGetParent()).getVisibility();
+    return ((VisibilitySectionNode) getParent()).getVisibility();
   }
 
   @Override

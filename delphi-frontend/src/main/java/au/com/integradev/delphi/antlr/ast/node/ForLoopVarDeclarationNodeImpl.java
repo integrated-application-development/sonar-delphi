@@ -37,13 +37,13 @@ public final class ForLoopVarDeclarationNodeImpl extends ForLoopVarNodeImpl
 
   @Override
   public NameDeclarationNode getNameDeclarationNode() {
-    return (NameDeclarationNode) jjtGetChild(0);
+    return (NameDeclarationNode) getChild(0);
   }
 
   @Override
   @Nullable
   public TypeNode getTypeNode() {
-    return (TypeNode) jjtGetChild(1);
+    return (TypeNode) getChild(1);
   }
 
   @Override

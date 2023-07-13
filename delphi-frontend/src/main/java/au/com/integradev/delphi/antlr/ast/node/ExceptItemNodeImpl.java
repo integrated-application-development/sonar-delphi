@@ -48,23 +48,23 @@ public final class ExceptItemNodeImpl extends DelphiNodeImpl implements ExceptIt
   @Nullable
   @Override
   public NameDeclarationNode getExceptionName() {
-    return hasExceptionName() ? (NameDeclarationNode) jjtGetChild(0) : null;
+    return hasExceptionName() ? (NameDeclarationNode) getChild(0) : null;
   }
 
   @Nonnull
   @Override
   public TypeReferenceNode getExceptionType() {
-    return (TypeReferenceNode) jjtGetChild(hasExceptionName() ? 1 : 0);
+    return (TypeReferenceNode) getChild(hasExceptionName() ? 1 : 0);
   }
 
   @Nullable
   @Override
   public StatementNode getStatement() {
-    DelphiNode statement = jjtGetChild(hasExceptionName() ? 3 : 2);
+    DelphiNode statement = getChild(hasExceptionName() ? 3 : 2);
     return statement instanceof StatementNode ? (StatementNode) statement : null;
   }
 
   private boolean hasExceptionName() {
-    return jjtGetChild(0) instanceof NameDeclarationNode;
+    return getChild(0) instanceof NameDeclarationNode;
   }
 }

@@ -53,7 +53,7 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
   @Override
   public VisibilityType getVisibility() {
     if (visibility == null) {
-      visibility = ((VisibilitySectionNode) jjtGetParent()).getVisibility();
+      visibility = ((VisibilitySectionNode) getParent()).getVisibility();
     }
     return visibility;
   }
@@ -70,7 +70,7 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
 
   @Override
   public NameDeclarationNode getPropertyName() {
-    return (NameDeclarationNode) jjtGetChild(0);
+    return (NameDeclarationNode) getChild(0);
   }
 
   @Override
@@ -81,7 +81,7 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
   @Override
   @Nullable
   public FormalParameterListNode getParameterListNode() {
-    DelphiNode node = jjtGetChild(1);
+    DelphiNode node = getChild(1);
     return (node instanceof FormalParameterListNode) ? (FormalParameterListNode) node : null;
   }
 

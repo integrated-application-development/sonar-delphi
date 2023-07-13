@@ -325,9 +325,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(CompoundStatementNode node, Data data) {
     // top-level blocks for methods should have the same scope as parameters, just skip them
     // same applies to catch statements defining exceptions + the catch block, and for-blocks
-    if (node.jjtGetParent() instanceof MethodBodyNode
-        || node.jjtGetParent() instanceof ExceptItemNode
-        || node.jjtGetParent() instanceof ForStatementNode) {
+    if (node.getParent() instanceof MethodBodyNode
+        || node.getParent() instanceof ExceptItemNode
+        || node.getParent() instanceof ForStatementNode) {
       return DelphiParserVisitor.super.visit(node, data);
     }
     return createLocalScope(node, data);
@@ -635,8 +635,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.nameResolutionHelper.resolve(typeNode);
     }
 
-    for (int i = declarationNode.jjtGetNumChildren() - 1; i >= 0; --i) {
-      DelphiNode child = declarationNode.jjtGetChild(i);
+    for (int i = declarationNode.getChildrenCount() - 1; i >= 0; --i) {
+      DelphiNode child = declarationNode.getChild(i);
       if (!(child instanceof TypeNode)) {
         child.accept(this, data);
       }
@@ -687,8 +687,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(TypeSectionNode node, Data data) {
     DelphiParserVisitor.super.visit(node, data);
 
-    for (int i = 0; i < node.jjtGetNumChildren(); ++i) {
-      TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) node.jjtGetChild(i);
+    for (int i = 0; i < node.getChildrenCount(); ++i) {
+      TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) node.getChild(i);
       if (typeDeclaration.isClassReference()) {
         var classReference = (ClassReferenceTypeNode) typeDeclaration.getTypeNode();
         TypeNode classOf = classReference.getClassOfTypeNode();
