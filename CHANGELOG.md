@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Name collisions between generic and non-generic forward declarations.
+- Incorrect type conversions from pointers to arrays.
 
 ## [0.40.0] - 2023-01-10
 

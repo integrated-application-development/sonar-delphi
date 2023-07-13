@@ -368,7 +368,7 @@ class TypeComparerTest {
     compare(fromIncompatibleOpenArray, toFixedArray, INCOMPATIBLE_TYPES);
     compare(fromDynamicArray, toFixedArray, INCOMPATIBLE_TYPES);
 
-    compare(pointerTo(IntrinsicType.INTEGER), toOpenArray, CONVERT_LEVEL_3);
+    compare(pointerTo(IntrinsicType.INTEGER), toOpenArray, INCOMPATIBLE_TYPES);
     compare(nilPointer(), toDynamicArray, CONVERT_LEVEL_5);
     compare(untypedPointer(), toDynamicArray, CONVERT_LEVEL_5);
     compare(pointerTo(IntrinsicType.UNICODESTRING), toOpenArray, INCOMPATIBLE_TYPES);
