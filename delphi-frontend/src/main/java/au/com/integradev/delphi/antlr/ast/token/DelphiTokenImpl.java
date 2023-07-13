@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.antlr.ast.token;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.core.DelphiKeywords;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.TokenLocation;
 
 public class DelphiTokenImpl implements DelphiToken {
@@ -32,14 +32,19 @@ public class DelphiTokenImpl implements DelphiToken {
   public static final String NUMERIC_LITERAL = "NUMERIC_LITERAL";
 
   private final Token token;
+  private final DelphiTokenType tokenType;
   private String image;
   private Integer beginLine;
   private Integer beginColumn;
   private Integer endLine;
   private Integer endColumn;
 
-  public DelphiTokenImpl(final Token token) {
+  public DelphiTokenImpl(Token token) {
     this.token = token;
+    this.tokenType =
+        token == null
+            ? DelphiTokenType.INVALID
+            : DelphiTokenTypeFactory.createTokenType(token.getType());
   }
 
   @Override
@@ -115,32 +120,32 @@ public class DelphiTokenImpl implements DelphiToken {
   }
 
   private boolean isStringLiteral() {
-    return token.getType() == DelphiLexer.TkQuotedString;
+    return tokenType == DelphiTokenType.TK_QUOTED_STRING;
   }
 
   private boolean isNumericLiteral() {
-    return token.getType() == DelphiLexer.TkIntNum
-        || token.getType() == DelphiLexer.TkRealNum
-        || token.getType() == DelphiLexer.TkHexNum;
+    return tokenType == DelphiTokenType.TK_INT_NUM
+        || tokenType == DelphiTokenType.TK_REAL_NUM
+        || tokenType == DelphiTokenType.TK_HEX_NUM;
   }
 
   @Override
   public boolean isWhitespace() {
-    return token.getType() == DelphiLexer.WS;
+    return tokenType == DelphiTokenType.WS;
   }
 
   @Override
   public boolean isComment() {
-    return token.getType() == DelphiLexer.COMMENT;
+    return tokenType == DelphiTokenType.COMMENT;
   }
 
   @Override
   public boolean isCompilerDirective() {
-    return token.getType() == DelphiLexer.TkCompilerDirective;
+    return tokenType == DelphiTokenType.TK_COMPILER_DIRECTIVE;
   }
 
   private boolean isKeyword() {
-    return DelphiKeywords.KEYWORDS.contains(token.getType());
+    return DelphiKeywords.KEYWORDS.contains(tokenType);
   }
 
   private boolean isIncludeToken() {
@@ -158,8 +163,8 @@ public class DelphiTokenImpl implements DelphiToken {
   }
 
   @Override
-  public int getType() {
-    return isNil() ? Token.INVALID_TOKEN_TYPE : token.getType();
+  public DelphiTokenType getType() {
+    return tokenType;
   }
 
   @Override

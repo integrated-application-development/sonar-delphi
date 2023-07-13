@@ -54,7 +54,7 @@ public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   public BinaryOperator getOperator() {
     if (operator == null) {
-      operator = BinaryOperator.from(jjtGetId());
+      operator = BinaryOperator.from(getTokenType());
     }
     return operator;
   }

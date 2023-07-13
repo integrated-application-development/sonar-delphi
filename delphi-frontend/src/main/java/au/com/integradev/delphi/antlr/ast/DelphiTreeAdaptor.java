@@ -27,6 +27,7 @@ import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenTypeFactory;
 import com.google.common.base.Preconditions;
 import java.lang.reflect.Constructor;
 import org.antlr.runtime.CommonToken;
@@ -175,7 +176,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public int getType(Object node) {
-    return ((DelphiNode) node).jjtGetId();
+    return DelphiTokenTypeFactory.getValueFromTokenType(((DelphiNode) node).getTokenType());
   }
 
   @Override

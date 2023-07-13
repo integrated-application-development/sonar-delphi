@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "SuperfluousSemicolonsRule", repositoryKey = "delph")
@@ -37,7 +37,8 @@ public class SuperfluousSemicolonCheck extends DelphiCheck {
     DelphiNode previous = null;
     for (int i = 0; i < statementList.jjtGetNumChildren(); ++i) {
       DelphiNode current = statementList.jjtGetChild(i);
-      if (current.jjtGetId() == DelphiLexer.SEMICOLON && !(previous instanceof StatementNode)) {
+      if (current.getTokenType() == DelphiTokenType.SEMICOLON
+          && !(previous instanceof StatementNode)) {
         reportIssue(context, current, MESSAGE);
       }
       previous = current;

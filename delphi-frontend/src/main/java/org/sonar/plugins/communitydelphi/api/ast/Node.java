@@ -1,9 +1,10 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public interface Node {
-  int jjtGetId();
+  DelphiTokenType getTokenType();
 
   /**
    * Returns the node's unique token index

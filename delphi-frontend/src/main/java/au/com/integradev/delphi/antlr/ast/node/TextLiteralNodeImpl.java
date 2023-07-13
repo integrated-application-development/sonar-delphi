@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import org.antlr.runtime.Token;
@@ -58,21 +57,21 @@ public final class TextLiteralNodeImpl extends LiteralNodeImpl implements TextLi
       StringBuilder imageBuilder = new StringBuilder("'");
       for (int i = 0; i < jjtGetNumChildren(); ++i) {
         DelphiNode child = jjtGetChild(i);
-        switch (child.jjtGetId()) {
-          case DelphiLexer.TkQuotedString:
+        switch (child.getTokenType()) {
+          case TK_QUOTED_STRING:
             String withoutQuotes = getStringWithoutQuotes(child.getImage()).toString();
             String stringImage = withoutQuotes.replace("''", "'");
             imageBuilder.append(stringImage);
             break;
 
-          case DelphiLexer.TkCharacterEscapeCode:
+          case TK_CHARACTER_ESCAPE_CODE:
             String escapedChar = child.getImage();
             boolean isHex = escapedChar.startsWith("#$");
             escapedChar = escapedChar.substring(isHex ? 2 : 1);
             imageBuilder.append((char) Integer.parseInt(escapedChar, isHex ? 16 : 10));
             break;
 
-          case DelphiLexer.TkEscapedCharacter:
+          case TK_ESCAPED_CHARACTER:
             imageBuilder.append(child.getImage());
             break;
 

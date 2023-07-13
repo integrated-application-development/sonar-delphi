@@ -20,7 +20,6 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import static au.com.integradev.delphi.type.factory.TypeFactory.unknownType;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.operator.Operator;
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
@@ -52,6 +51,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
@@ -111,7 +111,7 @@ public final class ExpressionTypeResolver {
       } else if (child instanceof ArrayAccessorNode && !regularArrayProperty) {
         type = handleArrayAccessor(type, (ArrayAccessorNode) child);
       } else if (child instanceof CommonDelphiNode) {
-        type = handleSyntaxToken(type, child.jjtGetId());
+        type = handleSyntaxToken(type, child.getTokenType());
       }
 
       regularArrayProperty = isRegularArrayProperty(child);
@@ -147,7 +147,8 @@ public final class ExpressionTypeResolver {
     if (declaration instanceof TypeNameDeclaration) {
       return true;
     }
-    return node.jjtGetId() == DelphiLexer.STRING || node.jjtGetId() == DelphiLexer.FILE;
+    return node.getTokenType() == DelphiTokenType.STRING
+        || node.getTokenType() == DelphiTokenType.FILE;
   }
 
   private Type resolveOperatorType(List<ExpressionNode> argumentNodes, Operator operator) {
@@ -302,18 +303,18 @@ public final class ExpressionTypeResolver {
     return unknownType();
   }
 
-  private Type handleSyntaxToken(Type type, int id) {
-    switch (id) {
-      case DelphiLexer.DEREFERENCE:
-      case DelphiLexer.DOT:
+  private Type handleSyntaxToken(Type type, DelphiTokenType tokenType) {
+    switch (tokenType) {
+      case DEREFERENCE:
+      case DOT:
         // Delphi Extended syntax is assumed.
         // See: http://docwiki.embarcadero.com/RADStudio/en/Extended_syntax_(Delphi)
         return TypeUtils.dereference(type);
 
-      case DelphiLexer.STRING:
+      case STRING:
         return typeFactory.classOf(null, typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING));
 
-      case DelphiLexer.FILE:
+      case FILE:
         return typeFactory.classOf(null, typeFactory.untypedFile());
 
       default:

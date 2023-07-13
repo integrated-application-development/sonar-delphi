@@ -70,7 +70,7 @@ public class LowercaseKeywordCheck extends DelphiCheck {
   }
 
   private boolean isViolationNode(DelphiNode node) {
-    if (!DelphiKeywords.KEYWORDS.contains(node.jjtGetId())) {
+    if (!DelphiKeywords.KEYWORDS.contains(node.getTokenType())) {
       return false;
     }
 

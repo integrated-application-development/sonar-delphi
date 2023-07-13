@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.Collections;
@@ -35,6 +34,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNode {
@@ -111,11 +111,11 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
 
   @Override
   public boolean isClassProperty() {
-    return getFirstChildWithId(DelphiLexer.CLASS) != null;
+    return getFirstChildWithTokenType(DelphiTokenType.CLASS) != null;
   }
 
   @Override
   public boolean isDefaultProperty() {
-    return getFirstChildWithId(DelphiLexer.DEFAULT) != null;
+    return getFirstChildWithTokenType(DelphiTokenType.DEFAULT) != null;
   }
 }

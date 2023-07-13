@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
@@ -26,6 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class MethodDeclarationNodeImpl extends MethodNodeImpl
     implements MethodDeclarationNode {
@@ -51,7 +51,7 @@ public final class MethodDeclarationNodeImpl extends MethodNodeImpl
   @Override
   public boolean isOverride() {
     if (isOverride == null) {
-      isOverride = getMethodHeading().getFirstChildWithId(DelphiLexer.OVERRIDE) != null;
+      isOverride = getMethodHeading().getFirstChildWithTokenType(DelphiTokenType.OVERRIDE) != null;
     }
     return isOverride;
   }
@@ -59,7 +59,7 @@ public final class MethodDeclarationNodeImpl extends MethodNodeImpl
   @Override
   public boolean isVirtual() {
     if (isVirtual == null) {
-      isVirtual = getMethodHeading().getFirstChildWithId(DelphiLexer.VIRTUAL) != null;
+      isVirtual = getMethodHeading().getFirstChildWithTokenType(DelphiTokenType.VIRTUAL) != null;
     }
     return isVirtual;
   }
@@ -67,7 +67,7 @@ public final class MethodDeclarationNodeImpl extends MethodNodeImpl
   @Override
   public boolean isMessage() {
     if (isMessage == null) {
-      isMessage = getMethodHeading().getFirstChildWithId(DelphiLexer.MESSAGE) != null;
+      isMessage = getMethodHeading().getFirstChildWithTokenType(DelphiTokenType.MESSAGE) != null;
     }
     return isMessage;
   }

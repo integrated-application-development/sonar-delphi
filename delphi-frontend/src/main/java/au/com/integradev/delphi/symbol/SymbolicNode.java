@@ -24,10 +24,11 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class SymbolicNode implements Node {
   private static final AtomicInteger IMAGINARY_TOKEN_INDEX = new AtomicInteger(Integer.MIN_VALUE);
-  private final int id;
+  private final DelphiTokenType tokenType;
   private final int tokenIndex;
   private final String image;
   private final int beginLine;
@@ -42,7 +43,7 @@ public final class SymbolicNode implements Node {
 
   public SymbolicNode(DelphiNode node, DelphiScope scope) {
     this(
-        node.jjtGetId(),
+        node.getTokenType(),
         node.getTokenIndex(),
         node.getImage(),
         node.getBeginLine(),
@@ -53,7 +54,7 @@ public final class SymbolicNode implements Node {
   }
 
   private SymbolicNode(
-      int id,
+      DelphiTokenType tokenType,
       int tokenIndex,
       String image,
       int beginLine,
@@ -61,7 +62,7 @@ public final class SymbolicNode implements Node {
       int beginColumn,
       int endColumn,
       DelphiScope scope) {
-    this.id = id;
+    this.tokenType = tokenType;
     this.tokenIndex = tokenIndex;
     this.image = image;
     this.beginLine = beginLine;
@@ -72,12 +73,13 @@ public final class SymbolicNode implements Node {
   }
 
   public static SymbolicNode imaginary(String image, DelphiScope scope) {
-    return new SymbolicNode(0, IMAGINARY_TOKEN_INDEX.incrementAndGet(), image, 0, 0, 0, 0, scope);
+    return new SymbolicNode(
+        DelphiTokenType.INVALID, IMAGINARY_TOKEN_INDEX.incrementAndGet(), image, 0, 0, 0, 0, scope);
   }
 
   public static SymbolicNode fromRange(String image, DelphiNode begin, Node end) {
     return new SymbolicNode(
-        begin.jjtGetId(),
+        begin.getTokenType(),
         begin.getTokenIndex(),
         image,
         begin.getBeginLine(),
@@ -88,8 +90,8 @@ public final class SymbolicNode implements Node {
   }
 
   @Override
-  public int jjtGetId() {
-    return id;
+  public DelphiTokenType getTokenType() {
+    return tokenType;
   }
 
   @Override

@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
@@ -36,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements MethodHeadingNode {
@@ -102,7 +102,7 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
   @Override
   public boolean isClassMethod() {
     if (isClassMethod == null) {
-      isClassMethod = getFirstChildWithId(DelphiLexer.CLASS) != null;
+      isClassMethod = getFirstChildWithTokenType(DelphiTokenType.CLASS) != null;
     }
     return isClassMethod;
   }
@@ -184,7 +184,7 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
   @Override
   public MethodKind getMethodKind() {
     if (methodKind == null) {
-      methodKind = MethodKind.fromTokenType(jjtGetChildId(0));
+      methodKind = MethodKind.fromTokenType(jjtGetChild(0).getToken().getType());
     }
     return methodKind;
   }

@@ -70,6 +70,7 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
   private List<TokenTypeRecord> readTokenTypes() throws IOException {
     ImmutableList.Builder<TokenTypeRecord> result = ImmutableList.builder();
 
+    result.add(new TokenTypeRecord("EOF", -1));
     result.add(new TokenTypeRecord("INVALID", 0));
 
     Files.readAllLines(tokensFile.toPath()).stream()
@@ -121,8 +122,21 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
     }
 
     builder
-        .append("      default:")
-        .append("        throw new IllegalArgumentException(\"Unknown token type: \" + value);")
+        .append("      default:\n")
+        .append("        throw new IllegalArgumentException(\"Unknown value: \" + value);\n")
+        .append("    }\n")
+        .append("  }\n\n")
+        .append("  public static int getValueFromTokenType(DelphiTokenType tokenType) {\n")
+        .append("    switch(tokenType) {\n");
+
+    for (TokenTypeRecord tokenType : tokenTypes) {
+      builder.append("      case ").append(tokenType.getName()).append(":\n");
+      builder.append("        return ").append(tokenType.getValue()).append(";\n");
+    }
+
+    builder
+        .append("      default:\n")
+        .append("        throw new IllegalArgumentException(\"Unknown type: \" + tokenType);\n")
         .append("    }\n")
         .append("  }\n")
         .append("}\n");

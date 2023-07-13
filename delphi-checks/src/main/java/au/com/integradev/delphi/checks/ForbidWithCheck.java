@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "AvoidWithRule", repositoryKey = "delph")
@@ -33,7 +33,7 @@ public class ForbidWithCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(DelphiNode node, DelphiCheckContext context) {
-    if (node.jjtGetId() == DelphiLexer.WITH) {
+    if (node.getTokenType() == DelphiTokenType.WITH) {
       context
           .newIssue()
           .withMessage(MESSAGE)

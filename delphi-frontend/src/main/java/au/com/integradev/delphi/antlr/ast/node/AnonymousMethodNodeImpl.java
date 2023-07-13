@@ -63,7 +63,7 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   @Override
   public MethodKind getMethodKind() {
     if (methodKind == null) {
-      methodKind = MethodKind.fromTokenType(jjtGetId());
+      methodKind = MethodKind.fromTokenType(getTokenType());
     }
     return methodKind;
   }

@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class FieldSectionNodeImpl extends DelphiNodeImpl implements FieldSectionNode {
   public FieldSectionNodeImpl(Token token) {
@@ -47,7 +47,7 @@ public final class FieldSectionNodeImpl extends DelphiNodeImpl implements FieldS
 
   @Override
   public boolean isClassFieldSection() {
-    return getFirstChildWithId(DelphiLexer.CLASS) != null;
+    return getFirstChildWithTokenType(DelphiTokenType.CLASS) != null;
   }
 
   @Override

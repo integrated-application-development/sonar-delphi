@@ -18,45 +18,45 @@
  */
 package au.com.integradev.delphi.operator;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Maps;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public enum BinaryOperator implements Operator {
-  AND(DelphiLexer.AND, "LogicalAnd", "BitwiseAnd"),
-  OR(DelphiLexer.OR, "LogicalOr", "BitwiseOr"),
-  XOR(DelphiLexer.XOR, "LogicalXor", "BitwiseXor"),
-  EQUAL(DelphiLexer.EQUAL, "Equal"),
-  GREATER_THAN(DelphiLexer.GREATER_THAN, "GreaterThan"),
-  LESS_THAN(DelphiLexer.LESS_THAN, "LessThan"),
-  GREATER_THAN_EQUAL(DelphiLexer.GREATER_THAN_EQUAL, "GreaterThanOrEqual"),
-  LESS_THAN_EQUAL(DelphiLexer.LESS_THAN_EQUAL, "LessThanOrEqual"),
-  NOT_EQUAL(DelphiLexer.NOT_EQUAL, "NotEqual"),
-  IN(DelphiLexer.IN),
-  ADD(DelphiLexer.PLUS, "Add"),
-  SUBTRACT(DelphiLexer.MINUS, "Subtract"),
-  MULTIPLY(DelphiLexer.MULTIPLY, "Multiply"),
-  DIVIDE(DelphiLexer.DIVIDE, "Divide"),
-  DIV(DelphiLexer.DIV, "IntDivide"),
-  MOD(DelphiLexer.MOD, "Modulus"),
-  SHL(DelphiLexer.SHL, "LeftShift"),
-  SHR(DelphiLexer.SHR, "RightShift"),
-  IS(DelphiLexer.IS),
-  AS(DelphiLexer.AS);
+  AND(DelphiTokenType.AND, "LogicalAnd", "BitwiseAnd"),
+  OR(DelphiTokenType.OR, "LogicalOr", "BitwiseOr"),
+  XOR(DelphiTokenType.XOR, "LogicalXor", "BitwiseXor"),
+  EQUAL(DelphiTokenType.EQUAL, "Equal"),
+  GREATER_THAN(DelphiTokenType.GREATER_THAN, "GreaterThan"),
+  LESS_THAN(DelphiTokenType.LESS_THAN, "LessThan"),
+  GREATER_THAN_EQUAL(DelphiTokenType.GREATER_THAN_EQUAL, "GreaterThanOrEqual"),
+  LESS_THAN_EQUAL(DelphiTokenType.LESS_THAN_EQUAL, "LessThanOrEqual"),
+  NOT_EQUAL(DelphiTokenType.NOT_EQUAL, "NotEqual"),
+  IN(DelphiTokenType.IN),
+  ADD(DelphiTokenType.PLUS, "Add"),
+  SUBTRACT(DelphiTokenType.MINUS, "Subtract"),
+  MULTIPLY(DelphiTokenType.MULTIPLY, "Multiply"),
+  DIVIDE(DelphiTokenType.DIVIDE, "Divide"),
+  DIV(DelphiTokenType.DIV, "IntDivide"),
+  MOD(DelphiTokenType.MOD, "Modulus"),
+  SHL(DelphiTokenType.SHL, "LeftShift"),
+  SHR(DelphiTokenType.SHR, "RightShift"),
+  IS(DelphiTokenType.IS),
+  AS(DelphiTokenType.AS);
 
-  private static final Map<Integer, BinaryOperator> TOKEN_TYPE_MAP =
+  private static final Map<DelphiTokenType, BinaryOperator> TOKEN_TYPE_MAP =
       Arrays.stream(BinaryOperator.values())
-          .collect(Collectors.toUnmodifiableMap(op -> op.tokenType, op -> op));
+          .collect(Maps.toImmutableEnumMap(op -> op.tokenType, op -> op));
 
-  private final int tokenType;
+  private final DelphiTokenType tokenType;
   private final ImmutableSet<String> names;
 
-  BinaryOperator(int tokenType, String... names) {
+  BinaryOperator(DelphiTokenType tokenType, String... names) {
     this.tokenType = tokenType;
     this.names = ImmutableSortedSet.orderedBy(String.CASE_INSENSITIVE_ORDER).add(names).build();
   }
@@ -66,7 +66,7 @@ public enum BinaryOperator implements Operator {
     return names;
   }
 
-  public static BinaryOperator from(int tokenType) {
+  public static BinaryOperator from(DelphiTokenType tokenType) {
     return Preconditions.checkNotNull(TOKEN_TYPE_MAP.get(tokenType));
   }
 }

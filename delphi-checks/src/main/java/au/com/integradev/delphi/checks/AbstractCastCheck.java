@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.operator.BinaryOperator;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
@@ -95,10 +94,10 @@ public abstract class AbstractCastCheck extends DelphiCheck {
       }
     }
 
-    switch (previous.jjtGetId()) {
-      case DelphiLexer.STRING:
+    switch (previous.getTokenType()) {
+      case STRING:
         return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.STRING);
-      case DelphiLexer.FILE:
+      case FILE:
         return argumentList.getTypeFactory().untypedFile();
       default:
         return null;

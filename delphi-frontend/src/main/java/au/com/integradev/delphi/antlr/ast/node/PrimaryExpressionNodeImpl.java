@@ -18,13 +18,13 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
@@ -46,7 +46,7 @@ public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public boolean isInheritedCall() {
-    return jjtGetChildId(0) == DelphiLexer.INHERITED;
+    return jjtGetChild(0).getTokenType() == DelphiTokenType.INHERITED;
   }
 
   @Override

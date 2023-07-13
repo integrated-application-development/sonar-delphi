@@ -20,14 +20,14 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 class MethodKindTest {
   @Test
   void testInvalidTokenTypeShouldThrow() {
-    assertThatThrownBy(() -> MethodKind.fromTokenType(DelphiLexer.ABSTRACT))
+    assertThatThrownBy(() -> MethodKind.fromTokenType(DelphiTokenType.ABSTRACT))
         .isInstanceOf(AssertionError.class);
   }
 }

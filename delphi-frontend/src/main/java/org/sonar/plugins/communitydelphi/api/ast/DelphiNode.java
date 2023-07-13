@@ -4,6 +4,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public interface DelphiNode extends Node {
   DelphiToken getToken();
@@ -21,14 +22,6 @@ public interface DelphiNode extends Node {
   int jjtGetChildIndex();
 
   DelphiNode jjtGetChild(int index);
-
-  /**
-   * Gets child type, or -1 if child does not exist
-   *
-   * @param index Child index
-   * @return Child type, or -1 if child is non-existent
-   */
-  int jjtGetChildId(int index);
 
   int jjtGetNumChildren();
 
@@ -48,7 +41,7 @@ public interface DelphiNode extends Node {
 
   <T> boolean hasDescendantOfType(Class<T> type);
 
-  DelphiNode getFirstChildWithId(int nodeId);
+  DelphiNode getFirstChildWithTokenType(DelphiTokenType tokenType);
 
   /**
    * Returns the AST root node

@@ -18,13 +18,11 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.type.factory.TypeFactory;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicType;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
@@ -32,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
@@ -77,11 +76,8 @@ public class PlatformDependentCastCheck extends DelphiCheck {
       if (declaration instanceof TypeNameDeclaration) {
         return ((TypeNameDeclaration) declaration).getType();
       }
-    } else if (previous instanceof CommonDelphiNode) {
-      int tokenType = ((CommonDelphiNode) previous).getToken().getType();
-      if (tokenType == DelphiLexer.STRING) {
-        return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.UNICODESTRING);
-      }
+    } else if (previous.getTokenType() == DelphiTokenType.STRING) {
+      return argumentList.getTypeFactory().getIntrinsic(IntrinsicType.UNICODESTRING);
     }
     return TypeFactory.unknownType();
   }

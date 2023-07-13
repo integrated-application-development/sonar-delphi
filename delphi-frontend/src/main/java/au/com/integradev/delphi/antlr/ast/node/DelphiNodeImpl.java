@@ -18,6 +18,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   private final DelphiToken token;
@@ -48,7 +49,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   }
 
   @Override
-  public int jjtGetId() {
+  public DelphiTokenType getTokenType() {
     return this.token.getType();
   }
 
@@ -192,26 +193,14 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   }
 
   @Override
-  public DelphiNode getFirstChildWithId(int nodeId) {
+  public DelphiNode getFirstChildWithTokenType(DelphiTokenType tokenType) {
     for (int i = 0; i < jjtGetNumChildren(); ++i) {
       DelphiNode child = jjtGetChild(i);
-      if (child.jjtGetId() == nodeId) {
+      if (child.getToken().getType() == tokenType) {
         return child;
       }
     }
     return null;
-  }
-
-  /**
-   * Gets child type, or -1 if child does not exist
-   *
-   * @param index Child index
-   * @return Child type, or -1 if child is non-existent
-   */
-  @Override
-  public int jjtGetChildId(int index) {
-    DelphiNode child = jjtGetChild(index);
-    return (child == null) ? -1 : child.jjtGetId();
   }
 
   @Override

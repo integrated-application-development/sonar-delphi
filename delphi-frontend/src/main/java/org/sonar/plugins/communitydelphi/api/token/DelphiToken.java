@@ -28,7 +28,7 @@ public interface DelphiToken {
 
   int getIndex();
 
-  int getType();
+  DelphiTokenType getType();
 
   String getNormalizedImage();
 

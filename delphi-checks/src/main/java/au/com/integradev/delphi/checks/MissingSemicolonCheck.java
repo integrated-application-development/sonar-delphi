@@ -22,7 +22,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -35,6 +34,7 @@ import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKeys;
 
@@ -49,7 +49,7 @@ public class MissingSemicolonCheck extends DelphiCheck {
   public DelphiCheckContext visit(FieldDeclarationNode field, DelphiCheckContext context) {
     if (!(field.jjtGetParent() instanceof RecordVariantItemNode)) {
       DelphiNode lastChild = field.jjtGetChild(field.jjtGetNumChildren() - 1);
-      if (lastChild.getToken().getType() != DelphiLexer.SEMICOLON) {
+      if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
         reportIssue(context, field, "Terminate this field declaration with a semicolon.");
       }
     }
@@ -59,7 +59,7 @@ public class MissingSemicolonCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(MethodHeadingNode heading, DelphiCheckContext context) {
     DelphiNode lastChild = heading.jjtGetChild(heading.jjtGetNumChildren() - 1);
-    if (lastChild.getToken().getType() != DelphiLexer.SEMICOLON) {
+    if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
       reportIssue(context, heading, "Terminate this method heading with a semicolon.");
     }
     return super.visit(heading, context);
@@ -87,7 +87,7 @@ public class MissingSemicolonCheck extends DelphiCheck {
 
   private static DelphiNode findStatementIssueNode(DelphiNode node) {
     Node nextNode = node.jjtGetParent().jjtGetChild(node.jjtGetChildIndex() + 1);
-    if (nextNode == null || nextNode.jjtGetId() != DelphiLexer.SEMICOLON) {
+    if (nextNode == null || nextNode.getTokenType() != DelphiTokenType.SEMICOLON) {
       return findNodePrecedingMissingSemicolon(node);
     }
     return null;

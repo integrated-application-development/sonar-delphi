@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.executor;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public class DelphiHighlightExecutor extends DelphiTokenExecutor {
   private NewHighlighting highlighter;
@@ -55,16 +55,16 @@ public class DelphiHighlightExecutor extends DelphiTokenExecutor {
   }
 
   private boolean shouldSkip(DelphiToken token) {
-    int type = token.getType();
+    DelphiTokenType type = token.getType();
 
-    if (type == DelphiLexer.ASM) {
+    if (type == DelphiTokenType.ASM) {
       // We still want to highlight the asm keyword
       insideAsmBlock = true;
       return false;
     }
 
     if (insideAsmBlock) {
-      insideAsmBlock = (type != DelphiLexer.END);
+      insideAsmBlock = (type != DelphiTokenType.END);
     }
 
     return insideAsmBlock && !token.isComment();

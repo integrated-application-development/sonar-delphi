@@ -18,29 +18,29 @@
  */
 package au.com.integradev.delphi.operator;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Maps;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public enum UnaryOperator implements Operator {
-  NOT(DelphiLexer.NOT, "BitwiseNot", "LogicalNot"),
-  PLUS(DelphiLexer.PLUS, "Positive"),
-  NEGATE(DelphiLexer.MINUS, "Negative"),
-  ADDRESS(DelphiLexer.ADDRESS);
+  NOT(DelphiTokenType.NOT, "BitwiseNot", "LogicalNot"),
+  PLUS(DelphiTokenType.PLUS, "Positive"),
+  NEGATE(DelphiTokenType.MINUS, "Negative"),
+  ADDRESS(DelphiTokenType.ADDRESS);
 
-  private static final Map<Integer, UnaryOperator> TOKEN_TYPE_MAP =
+  private static final Map<DelphiTokenType, UnaryOperator> TOKEN_TYPE_MAP =
       Arrays.stream(UnaryOperator.values())
-          .collect(Collectors.toUnmodifiableMap(op -> op.tokenType, op -> op));
+          .collect(Maps.toImmutableEnumMap(op -> op.tokenType, op -> op));
 
-  private final int tokenType;
+  private final DelphiTokenType tokenType;
   private final ImmutableSet<String> names;
 
-  UnaryOperator(int tokenType, String... names) {
+  UnaryOperator(DelphiTokenType tokenType, String... names) {
     this.tokenType = tokenType;
     this.names = ImmutableSortedSet.orderedBy(String.CASE_INSENSITIVE_ORDER).add(names).build();
   }
@@ -51,7 +51,7 @@ public enum UnaryOperator implements Operator {
   }
 
   @NotNull
-  public static UnaryOperator from(int tokenType) {
+  public static UnaryOperator from(DelphiTokenType tokenType) {
     return TOKEN_TYPE_MAP.get(tokenType);
   }
 }

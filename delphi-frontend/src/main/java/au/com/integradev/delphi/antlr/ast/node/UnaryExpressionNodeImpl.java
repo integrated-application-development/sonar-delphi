@@ -44,7 +44,7 @@ public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   public UnaryOperator getOperator() {
     if (operator == null) {
-      operator = UnaryOperator.from(jjtGetId());
+      operator = UnaryOperator.from(getTokenType());
     }
     return operator;
   }

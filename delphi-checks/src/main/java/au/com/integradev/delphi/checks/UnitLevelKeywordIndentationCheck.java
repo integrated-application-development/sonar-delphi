@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.utils.IndentationUtils;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
@@ -39,6 +38,7 @@ import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "UnitLevelKeywordIndentationRule", repositoryKey = "delph")
@@ -57,7 +57,7 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
   }
 
   private static DelphiNode getEnd(DelphiNode node) {
-    return node.getFirstChildWithId(DelphiLexer.END);
+    return node.getFirstChildWithTokenType(DelphiTokenType.END);
   }
 
   @Override

@@ -24,7 +24,6 @@ import static au.com.integradev.delphi.type.factory.TypeFactory.voidType;
 import static java.util.function.Predicate.not;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.Search;
@@ -294,19 +293,19 @@ public class NameResolver {
   }
 
   private void handlePrimaryExpressionToken(Node node) {
-    switch (node.jjtGetId()) {
-      case DelphiLexer.DEREFERENCE:
+    switch (node.getTokenType()) {
+      case DEREFERENCE:
         Type dereferenced = TypeUtils.dereference(getApproximateType());
         addResolvedDeclaration();
         updateType(dereferenced);
         break;
 
-      case DelphiLexer.STRING:
+      case STRING:
         updateType(
             typeFactory.classOf(null, typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING)));
         break;
 
-      case DelphiLexer.FILE:
+      case FILE:
         updateType(typeFactory.classOf(null, typeFactory.untypedFile()));
         break;
 

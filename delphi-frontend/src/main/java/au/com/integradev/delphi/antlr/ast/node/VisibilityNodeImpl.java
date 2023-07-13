@@ -18,18 +18,11 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PRIVATE;
-import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PROTECTED;
-import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PUBLIC;
-import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.PUBLISHED;
-import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.STRICT_PRIVATE;
-import static org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType.STRICT_PROTECTED;
-
-import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class VisibilityNodeImpl extends DelphiNodeImpl implements VisibilityNode {
   public VisibilityNodeImpl(Token token) {
@@ -43,18 +36,23 @@ public final class VisibilityNodeImpl extends DelphiNodeImpl implements Visibili
 
   @Override
   public VisibilityType getVisibility() {
-    switch (jjtGetId()) {
-      case DelphiLexer.PUBLISHED:
-        return PUBLISHED;
-      case DelphiLexer.PUBLIC:
-        return PUBLIC;
-      case DelphiLexer.PROTECTED:
-        return jjtGetChildId(0) == DelphiLexer.STRICT ? STRICT_PROTECTED : PROTECTED;
-      case DelphiLexer.PRIVATE:
-        return jjtGetChildId(0) == DelphiLexer.STRICT ? STRICT_PRIVATE : PRIVATE;
+    DelphiTokenType tokenType = getTokenType();
+    switch (tokenType) {
+      case PUBLISHED:
+        return VisibilityType.PUBLISHED;
+      case PUBLIC:
+        return VisibilityType.PUBLIC;
+      case PROTECTED:
+        return strict() ? VisibilityType.STRICT_PROTECTED : VisibilityType.PROTECTED;
+      case PRIVATE:
+        return strict() ? VisibilityType.STRICT_PRIVATE : VisibilityType.PRIVATE;
       default:
-        throw new AssertionError(
-            "Visibility node has unexpected token type: " + DelphiParser.tokenNames[jjtGetId()]);
+        throw new AssertionError("Visibility node has unexpected token type: " + tokenType.name());
     }
+  }
+
+  private boolean strict() {
+    DelphiNode child = jjtGetChild(0);
+    return child != null && child.getTokenType() == DelphiTokenType.STRICT;
   }
 }

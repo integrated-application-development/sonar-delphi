@@ -18,56 +18,56 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
-import java.util.HashMap;
+import com.google.common.collect.Maps;
+import java.util.Arrays;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public enum MethodDirective {
-  OVERLOAD(DelphiLexer.OVERLOAD),
-  REINTRODUCE(DelphiLexer.REINTRODUCE),
-  MESSAGE(DelphiLexer.MESSAGE),
-  STATIC(DelphiLexer.STATIC),
-  DYNAMIC(DelphiLexer.DYNAMIC),
-  OVERRIDE(DelphiLexer.OVERRIDE),
-  VIRTUAL(DelphiLexer.VIRTUAL),
-  ABSTRACT(DelphiLexer.ABSTRACT),
-  FINAL(DelphiLexer.FINAL),
-  INLINE(DelphiLexer.INLINE),
-  ASSEMBLER(DelphiLexer.ASSEMBLER),
-  CDECL(DelphiLexer.CDECL),
-  PASCAL(DelphiLexer.PASCAL),
-  REGISTER(DelphiLexer.REGISTER),
-  SAFECALL(DelphiLexer.SAFECALL),
-  STDCALL(DelphiLexer.STDCALL),
-  EXPORT(DelphiLexer.EXPORT),
-  FAR(DelphiLexer.FAR),
-  LOCAL(DelphiLexer.LOCAL),
-  NEAR(DelphiLexer.NEAR),
-  DEPRECATED(DelphiLexer.DEPRECATED),
-  EXPERIMENTAL(DelphiLexer.EXPERIMENTAL),
-  PLATFORM(DelphiLexer.PLATFORM),
-  LIBRARY(DelphiLexer.LIBRARY),
-  VARARGS(DelphiLexer.VARARGS),
-  EXTERNAL(DelphiLexer.EXTERNAL),
-  NAME(DelphiLexer.NAME),
-  INDEX(DelphiLexer.INDEX),
-  DISPID(DelphiLexer.DISPID);
+  OVERLOAD(DelphiTokenType.OVERLOAD),
+  REINTRODUCE(DelphiTokenType.REINTRODUCE),
+  MESSAGE(DelphiTokenType.MESSAGE),
+  STATIC(DelphiTokenType.STATIC),
+  DYNAMIC(DelphiTokenType.DYNAMIC),
+  OVERRIDE(DelphiTokenType.OVERRIDE),
+  VIRTUAL(DelphiTokenType.VIRTUAL),
+  ABSTRACT(DelphiTokenType.ABSTRACT),
+  FINAL(DelphiTokenType.FINAL),
+  INLINE(DelphiTokenType.INLINE),
+  ASSEMBLER(DelphiTokenType.ASSEMBLER),
+  CDECL(DelphiTokenType.CDECL),
+  PASCAL(DelphiTokenType.PASCAL),
+  REGISTER(DelphiTokenType.REGISTER),
+  SAFECALL(DelphiTokenType.SAFECALL),
+  STDCALL(DelphiTokenType.STDCALL),
+  EXPORT(DelphiTokenType.EXPORT),
+  FAR(DelphiTokenType.FAR),
+  LOCAL(DelphiTokenType.LOCAL),
+  NEAR(DelphiTokenType.NEAR),
+  DEPRECATED(DelphiTokenType.DEPRECATED),
+  EXPERIMENTAL(DelphiTokenType.EXPERIMENTAL),
+  PLATFORM(DelphiTokenType.PLATFORM),
+  LIBRARY(DelphiTokenType.LIBRARY),
+  VARARGS(DelphiTokenType.VARARGS),
+  EXTERNAL(DelphiTokenType.EXTERNAL),
+  NAME(DelphiTokenType.NAME),
+  INDEX(DelphiTokenType.INDEX),
+  DISPID(DelphiTokenType.DISPID);
 
-  private static final Map<Integer, MethodDirective> TOKEN_TYPE_MAP = new HashMap<>();
+  private static final Map<DelphiTokenType, MethodDirective> TOKEN_TYPE_MAP =
+      Arrays.stream(MethodDirective.values())
+          .collect(
+              Maps.toImmutableEnumMap(directive -> directive.tokenType, directive -> directive));
 
-  static {
-    for (MethodDirective directive : MethodDirective.values()) {
-      TOKEN_TYPE_MAP.put(directive.tokenType, directive);
-    }
-  }
+  private final DelphiTokenType tokenType;
 
-  private final int tokenType;
-
-  MethodDirective(int tokenType) {
+  MethodDirective(DelphiTokenType tokenType) {
     this.tokenType = tokenType;
   }
 
+  @Nullable
   public static MethodDirective fromToken(DelphiToken token) {
     return TOKEN_TYPE_MAP.get(token.getType());
   }

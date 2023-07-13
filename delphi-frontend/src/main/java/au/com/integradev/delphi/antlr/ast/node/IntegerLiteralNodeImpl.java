@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.math.BigInteger;
 import org.antlr.runtime.Token;
@@ -50,11 +49,11 @@ public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements Int
     if (image == null) {
       image = getToken().getImage();
       image = StringUtils.remove(image, '_');
-      switch (getToken().getType()) {
-        case DelphiLexer.TkHexNum:
+      switch (getTokenType()) {
+        case TK_HEX_NUM:
           image = StringUtils.removeStart(image, "$");
           break;
-        case DelphiLexer.TkBinaryNum:
+        case TK_BINARY_NUM:
           image = StringUtils.removeStart(image, "%");
           break;
         default:
@@ -66,10 +65,10 @@ public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements Int
 
   @Override
   public int getRadix() {
-    switch (getToken().getType()) {
-      case DelphiLexer.TkHexNum:
+    switch (getTokenType()) {
+      case TK_HEX_NUM:
         return 16;
-      case DelphiLexer.TkBinaryNum:
+      case TK_BINARY_NUM:
         return 2;
       default:
         return 10;

@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.operator.UnaryOperator;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -58,6 +57,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDecl
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -360,8 +360,8 @@ public class VariableInitializationCheck extends DelphiCheck {
       NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
       return declaration instanceof TypeNameDeclaration;
     } else if (previous instanceof CommonDelphiNode) {
-      int tokenType = ((CommonDelphiNode) previous).getToken().getType();
-      return tokenType == DelphiLexer.STRING || tokenType == DelphiLexer.FILE;
+      DelphiTokenType tokenType = previous.getTokenType();
+      return tokenType == DelphiTokenType.STRING || tokenType == DelphiTokenType.FILE;
     }
     return false;
   }

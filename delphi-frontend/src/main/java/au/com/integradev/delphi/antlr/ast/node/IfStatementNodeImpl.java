@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class IfStatementNodeImpl extends DelphiNodeImpl implements IfStatementNode {
   public IfStatementNodeImpl(Token token) {
@@ -44,7 +44,7 @@ public final class IfStatementNodeImpl extends DelphiNodeImpl implements IfState
   }
 
   private CommonDelphiNode getElseToken() {
-    return (CommonDelphiNode) getFirstChildWithId(DelphiLexer.ELSE);
+    return (CommonDelphiNode) getFirstChildWithTokenType(DelphiTokenType.ELSE);
   }
 
   @Override

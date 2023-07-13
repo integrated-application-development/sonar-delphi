@@ -18,30 +18,32 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 
-import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.DelphiParser;
+import com.google.common.collect.Maps;
+import java.util.Arrays;
+import java.util.Map;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public enum MethodKind {
-  CONSTRUCTOR(DelphiLexer.CONSTRUCTOR),
-  DESTRUCTOR(DelphiLexer.DESTRUCTOR),
-  FUNCTION(DelphiLexer.FUNCTION),
-  OPERATOR(DelphiLexer.OPERATOR),
-  PROCEDURE(DelphiLexer.PROCEDURE);
+  CONSTRUCTOR(DelphiTokenType.CONSTRUCTOR),
+  DESTRUCTOR(DelphiTokenType.DESTRUCTOR),
+  FUNCTION(DelphiTokenType.FUNCTION),
+  OPERATOR(DelphiTokenType.OPERATOR),
+  PROCEDURE(DelphiTokenType.PROCEDURE);
 
-  private final int tokenType;
+  private static final Map<DelphiTokenType, MethodKind> TOKEN_TYPE_MAP =
+      Arrays.stream(MethodKind.values())
+          .collect(Maps.toImmutableEnumMap(kind -> kind.tokenType, kind -> kind));
+  private final DelphiTokenType tokenType;
 
-  MethodKind(int tokenType) {
+  MethodKind(DelphiTokenType tokenType) {
     this.tokenType = tokenType;
   }
 
-  public static MethodKind fromTokenType(int tokenType) {
-    for (MethodKind kind : MethodKind.values()) {
-      if (kind.tokenType == tokenType) {
-        return kind;
-      }
+  public static MethodKind fromTokenType(DelphiTokenType tokenType) {
+    MethodKind kind = TOKEN_TYPE_MAP.get(tokenType);
+    if (kind != null) {
+      return kind;
     }
-
-    throw new AssertionError(
-        "Unhandled MethodKind token type: " + DelphiParser.tokenNames[tokenType]);
+    throw new AssertionError("Unhandled MethodKind token type: " + tokenType.name());
   }
 }
