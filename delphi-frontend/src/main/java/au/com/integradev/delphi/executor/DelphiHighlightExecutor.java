@@ -74,10 +74,10 @@ public class DelphiHighlightExecutor extends DelphiTokenExecutor {
 
   private static boolean isNumericLiteral(DelphiToken token) {
     switch (token.getType()) {
-      case TK_INT_NUM:
-      case TK_REAL_NUM:
-      case TK_HEX_NUM:
-      case TK_BINARY_NUM:
+      case TK_INT_NUMBER:
+      case TK_REAL_NUMBER:
+      case TK_HEX_NUMBER:
+      case TK_BINARY_NUMBER:
         return true;
       default:
         return false;

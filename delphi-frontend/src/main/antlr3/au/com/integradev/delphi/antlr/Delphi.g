@@ -229,7 +229,7 @@ typeSection                  : 'type'<TypeSectionNodeImpl>^ typeDeclaration+
 innerTypeSection             : 'type'<TypeSectionNodeImpl>^ typeDeclaration*
                              ;
 typeDeclaration              : customAttribute? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
-                             -> ^(TkNewType<TypeDeclarationNodeImpl> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
+                             -> ^(TkTypeDeclaration<TypeDeclarationNodeImpl> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
                              ;
 varSection                   : ('var'<VarSectionNodeImpl>^ | 'threadvar'<VarSectionNodeImpl>^) varDeclaration varDeclaration*
                              ;
@@ -645,7 +645,7 @@ textLiteral_                 : TkQuotedString (escapedCharacter+ TkQuotedString)
                              | escapedCharacter+ (TkQuotedString escapedCharacter+)* TkQuotedString?
                              ;
 escapedCharacter             : TkCharacterEscapeCode
-                             | '^' (TkIdentifier | TkIntNum | TkAnyChar) -> ^({changeTokenType(TkEscapedCharacter)})
+                             | '^' (TkIdentifier | TkIntNumber | TkAnyChar) -> ^({changeTokenType(TkEscapedCharacter)})
                              ;
 nilLiteral                   : 'nil'<NilLiteralNodeImpl>
                              ;
@@ -907,11 +907,11 @@ extendedIdent                : ident
 //----------------------------------------------------------------------------
 // Literals
 //----------------------------------------------------------------------------
-intNum                       : TkIntNum<IntegerLiteralNodeImpl>
-                             | TkHexNum<IntegerLiteralNodeImpl>
-                             | TkBinaryNum<IntegerLiteralNodeImpl>
+intNum                       : TkIntNumber<IntegerLiteralNodeImpl>
+                             | TkHexNumber<IntegerLiteralNodeImpl>
+                             | TkBinaryNumber<IntegerLiteralNodeImpl>
                              ;
-realNum                      : TkRealNum<DecimalLiteralNodeImpl>
+realNum                      : TkRealNumber<DecimalLiteralNodeImpl>
                              ;
 
 //----------------------------------------------------------------------------
@@ -1092,15 +1092,7 @@ TkCustomAttributeList   : 'CUSTOM_ATTRIBUTE_LIST'
                         ;
 TkCustomAttribute       : 'CUSTOM_ATTRIBUTE'
                         ;
-TkCustomAttributeArgs   : 'CUSTOM_ATTRIBUTE_ARGS'
-                        ;
-TkNewType               : 'NEW_TYPE'
-                        ;
-TkNewTypeDecl           : 'NEW_TYPE_DECL'
-                        ;
-TkClass                 : 'CLASS'
-                        ;
-TkRecord                : 'RECORD_TYPE'
+TkTypeDeclaration       : 'TYPE_DECLARATION'
                         ;
 TkRecordVariantItem     : 'RECORD_VARIANT_ITEM'
                         ;
@@ -1108,27 +1100,9 @@ TkRecordVariantTag      : 'RECORD_VARIANT_TAG'
                         ;
 TkRecordExpressionItem  : 'RECORD_EXPRESSION_ITEM'
                         ;
-TkRecordHelper          : 'RECORD_HELPER'
-                        ;
-TkInterface             : 'INTERFACE_TYPE'
-                        ;
-TkObject                : 'OBJECT_TYPE'
-                        ;
-TkClassOfType           : 'CLASS_OF_TYPE'
-                        ;
-TkVariableType          : 'VARIABLE_TYPE'
-                        ;
-TkVariableIdents        : 'VARIABLE_IDENTS'
-                        ;
-TkVariableParam         : 'VARIABLE_PARAM'
-                        ;
 TkGuid                  : 'INTERFACE_GUID'
                         ;
 TkClassParents          : 'CLASS_PARENTS'
-                        ;
-TkClassField            : 'CLASS_FIELD'
-                        ;
-TkAnonymousExpression   : 'ANONYMOUS_EXPRESSION'
                         ;
 TkBlockDeclSection      : 'BLOCK_DECL_SECTION'
                         ;
@@ -1174,8 +1148,6 @@ TkFormalParameterList   : 'FORMAL_PARAMETER_LIST'
                         ;
 TkFormalParameter       : 'FORMAL_PARAMETER'
                         ;
-TkIdentifierList        : 'IDENTIFIER_LIST'
-                        ;
 TkVarDeclaration        : 'VAR_DECLARATION'
                         ;
 TkNameDeclarationList   : 'NAME_DECLARATION_LIST'
@@ -1200,7 +1172,7 @@ TkEscapedCharacter      : 'ESCAPED_CHARACTER'
                         ;
 TkCompilerDirective     : 'COMPILER_DIRECTIVE'
                         ;
-TkRealNum               : 'REAL_NUMBER'
+TkRealNumber            : 'REAL_NUMBER'
                         ;
 TkTypeParameter         : 'TYPE_PARAMETER'
                         ;
@@ -1220,21 +1192,21 @@ TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
                         ;
                         // We use a lookahead here to avoid lexer failures on range operations like '1..2'
                         // or record helper invocations on Integer literals
-TkIntNum                : DigitSeq (
+TkIntNumber             : DigitSeq (
                             {input.LA(1) != '.' || Character.isDigit(input.LA(2))}? =>
                               (
                                 '.' DigitSeq
-                                {$type = TkRealNum;}
+                                {$type = TkRealNumber;}
                               )?
                               (
                                 ScaleFactor
-                                {$type = TkRealNum;}
+                                {$type = TkRealNumber;}
                               )?
                           )?
                         ;
-TkHexNum                : '$' HexDigitSeq
+TkHexNumber             : '$' HexDigitSeq
                         ;
-TkBinaryNum             : '%' BinaryDigitSeq
+TkBinaryNumber          : '%' BinaryDigitSeq
                         ;
 TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
                         ;
@@ -1307,7 +1279,7 @@ COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel
                           }
                         }
                         ;
-WS                      : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
+WHITESPACE              : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
                         ;
 UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;}
                         ;

@@ -116,7 +116,7 @@ public class DelphiTokenImpl implements DelphiToken {
 
   @Override
   public boolean isWhitespace() {
-    return tokenType == DelphiTokenType.WS;
+    return tokenType == DelphiTokenType.WHITESPACE;
   }
 
   @Override
