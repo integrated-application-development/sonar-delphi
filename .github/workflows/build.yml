@@ -13,11 +13,11 @@ jobs:
       HTTP_PROXY_PORT: ''
     steps:
       - uses: actions/checkout@v3
-      - name: Setup JDK 11
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: '17'
+          distribution: 'temurin'
           cache: maven
       - name: Run Maven Verify
         run: mvn --batch-mode --update-snapshots verify
