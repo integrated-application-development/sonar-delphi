@@ -50,10 +50,10 @@ public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements Int
       image = getToken().getImage();
       image = StringUtils.remove(image, '_');
       switch (getTokenType()) {
-        case TK_HEX_NUMBER:
+        case HEX_NUMBER:
           image = StringUtils.removeStart(image, "$");
           break;
-        case TK_BINARY_NUMBER:
+        case BINARY_NUMBER:
           image = StringUtils.removeStart(image, "%");
           break;
         default:
@@ -66,9 +66,9 @@ public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements Int
   @Override
   public int getRadix() {
     switch (getTokenType()) {
-      case TK_HEX_NUMBER:
+      case HEX_NUMBER:
         return 16;
-      case TK_BINARY_NUMBER:
+      case BINARY_NUMBER:
         return 2;
       default:
         return 10;

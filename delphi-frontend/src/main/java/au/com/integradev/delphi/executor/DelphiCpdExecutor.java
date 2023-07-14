@@ -55,7 +55,7 @@ public class DelphiCpdExecutor extends DelphiTokenExecutor {
   }
 
   private static String getNormalizedImage(DelphiToken token) {
-    if (token.getType() == DelphiTokenType.TK_QUOTED_STRING) {
+    if (token.getType() == DelphiTokenType.QUOTED_STRING) {
       return STRING_LITERAL;
     }
 
@@ -68,10 +68,10 @@ public class DelphiCpdExecutor extends DelphiTokenExecutor {
 
   private static boolean isNumericLiteral(DelphiToken token) {
     switch (token.getType()) {
-      case TK_INT_NUMBER:
-      case TK_REAL_NUMBER:
-      case TK_HEX_NUMBER:
-      case TK_BINARY_NUMBER:
+      case INT_NUMBER:
+      case REAL_NUMBER:
+      case HEX_NUMBER:
+      case BINARY_NUMBER:
         return true;
       default:
         return false;

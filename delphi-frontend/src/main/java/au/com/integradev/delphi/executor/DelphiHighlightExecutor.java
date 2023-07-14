@@ -57,7 +57,7 @@ public class DelphiHighlightExecutor extends DelphiTokenExecutor {
   private static TypeOfText getHighlightingType(DelphiToken token) {
     TypeOfText type = null;
 
-    if (token.getType() == DelphiTokenType.TK_QUOTED_STRING) {
+    if (token.getType() == DelphiTokenType.QUOTED_STRING) {
       type = TypeOfText.STRING;
     } else if (isNumericLiteral(token)) {
       type = TypeOfText.CONSTANT;
@@ -74,10 +74,10 @@ public class DelphiHighlightExecutor extends DelphiTokenExecutor {
 
   private static boolean isNumericLiteral(DelphiToken token) {
     switch (token.getType()) {
-      case TK_INT_NUMBER:
-      case TK_REAL_NUMBER:
-      case TK_HEX_NUMBER:
-      case TK_BINARY_NUMBER:
+      case INT_NUMBER:
+      case REAL_NUMBER:
+      case HEX_NUMBER:
+      case BINARY_NUMBER:
         return true;
       default:
         return false;

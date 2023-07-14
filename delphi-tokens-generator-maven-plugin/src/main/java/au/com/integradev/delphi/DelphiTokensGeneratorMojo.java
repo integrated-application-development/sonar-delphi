@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -154,6 +155,8 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
   }
 
   private static String antlrNameToEnumName(String antlrName) {
+    antlrName = StringUtils.removeStart(antlrName, "Tk");
+
     StringBuilder result = new StringBuilder();
     boolean nextCapitalIsNewWord = true;
 

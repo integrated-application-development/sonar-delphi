@@ -58,20 +58,20 @@ public final class TextLiteralNodeImpl extends LiteralNodeImpl implements TextLi
       for (int i = 0; i < getChildrenCount(); ++i) {
         DelphiNode child = getChild(i);
         switch (child.getTokenType()) {
-          case TK_QUOTED_STRING:
+          case QUOTED_STRING:
             String withoutQuotes = getStringWithoutQuotes(child.getImage()).toString();
             String stringImage = withoutQuotes.replace("''", "'");
             imageBuilder.append(stringImage);
             break;
 
-          case TK_CHARACTER_ESCAPE_CODE:
+          case CHARACTER_ESCAPE_CODE:
             String escapedChar = child.getImage();
             boolean isHex = escapedChar.startsWith("#$");
             escapedChar = escapedChar.substring(isHex ? 2 : 1);
             imageBuilder.append((char) Integer.parseInt(escapedChar, isHex ? 16 : 10));
             break;
 
-          case TK_ESCAPED_CHARACTER:
+          case ESCAPED_CHARACTER:
             imageBuilder.append(child.getImage());
             break;
 

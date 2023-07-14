@@ -126,7 +126,7 @@ public class DelphiTokenImpl implements DelphiToken {
 
   @Override
   public boolean isCompilerDirective() {
-    return tokenType == DelphiTokenType.TK_COMPILER_DIRECTIVE;
+    return tokenType == DelphiTokenType.COMPILER_DIRECTIVE;
   }
 
   @Override
