@@ -98,7 +98,7 @@ public class DelphiSensor implements Sensor {
     var typeFactory = new TypeFactoryImpl(toolchain, compilerVersion);
     Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
-
+    List<Path> referencedFiles = delphiProjectHelper.getReferencedFiles();
     List<Path> searchPathDirectories = new ArrayList<>();
     searchPathDirectories.addAll(delphiProjectHelper.getSearchDirectories());
     searchPathDirectories.addAll(delphiProjectHelper.getDebugSourceDirectories());
@@ -109,6 +109,7 @@ public class DelphiSensor implements Sensor {
             .preprocessorFactory(preprocessorFactory)
             .typeFactory(typeFactory)
             .sourceFiles(sourceFiles)
+            .referencedFiles(referencedFiles)
             .encoding(delphiProjectHelper.encoding())
             .searchPath(searchPath)
             .conditionalDefines(delphiProjectHelper.getConditionalDefines())

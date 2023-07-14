@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parsing errors around `In` operator overloads.
 - `Self` was not consistently shadowed by method parameters.
 - Incorrect token range calculation for binary expression nodes.
+- Units referenced via `DCCReference` tags were not indexed in the symbol table.
 
 ## [0.40.0] - 2023-01-10
 
