@@ -314,6 +314,30 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testMethodDeclarationTypes() {
+    execute("MethodDeclarationTypes.pas");
+    verifyUsages( // TypeAndFunc type
+        6,
+        2,
+        reference(16, 31),
+        reference(16, 45),
+        reference(19, 39),
+        reference(19, 53),
+        reference(24, 23),
+        reference(24, 37),
+        reference(55, 30),
+        reference(55, 44),
+        reference(60, 48),
+        reference(60, 62),
+        reference(65, 72),
+        reference(65, 86),
+        reference(62, 7));
+    verifyUsages(31, 10, reference(57, 2));
+    verifyUsages(37, 10, reference(62, 2));
+    verifyUsages(42, 10, reference(67, 2));
+  }
+
+  @Test
   void testRecordExpressionItems() {
     execute("RecordExpressionItems.pas");
     verifyUsages(14, 10, reference(21, 11));

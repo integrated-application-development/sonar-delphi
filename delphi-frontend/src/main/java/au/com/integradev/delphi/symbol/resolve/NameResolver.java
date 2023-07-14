@@ -28,6 +28,7 @@ import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.Search;
+import au.com.integradev.delphi.symbol.SearchMode;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
@@ -102,20 +103,25 @@ public class NameResolver {
   private final TypeFactory typeFactory;
   private final List<NameOccurrenceImpl> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
-
+  private final SearchMode searchMode;
+  private final Supplier<NameResolutionHelper> nameResolutionHelper;
   private Set<NameDeclaration> declarations = new HashSet<>();
   private DelphiScope currentScope;
   private Type currentType = unknownType();
 
-  private final Supplier<NameResolutionHelper> nameResolutionHelper =
-      Suppliers.memoize(() -> new NameResolutionHelper(getTypeFactory()));
-
   NameResolver(TypeFactory typeFactory) {
+    this(typeFactory, SearchMode.DEFAULT);
+  }
+
+  NameResolver(TypeFactory typeFactory, SearchMode searchMode) {
     this.typeFactory = typeFactory;
+    this.searchMode = searchMode;
+    this.nameResolutionHelper =
+        Suppliers.memoize(() -> new NameResolutionHelper(getTypeFactory(), searchMode));
   }
 
   NameResolver(NameResolver resolver) {
-    typeFactory = resolver.typeFactory;
+    this(resolver.typeFactory, resolver.searchMode);
     declarations.addAll(resolver.declarations);
     currentScope = resolver.currentScope;
     currentType = resolver.currentType;
@@ -494,7 +500,8 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver(((DelphiNodeImpl) typeReference).getTypeFactory());
+      NameResolver resolver =
+          new NameResolver(((DelphiNodeImpl) typeReference).getTypeFactory(), searchMode);
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -513,7 +520,8 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
-      NameResolver resolver = new NameResolver(((DelphiNodeImpl) typeNode).getTypeFactory());
+      NameResolver resolver =
+          new NameResolver(((DelphiNodeImpl) typeNode).getTypeFactory(), searchMode);
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -1265,7 +1273,7 @@ public class NameResolver {
 
     checkForRecordHelperScope(occurrenceScope);
 
-    Search search = new Search(occurrence);
+    Search search = new Search(occurrence, searchMode);
     search.execute(currentScope);
     declarations = search.getResult();
   }

@@ -20,13 +20,19 @@ package au.com.integradev.delphi.symbol;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.WithScope;
@@ -40,20 +46,45 @@ public class Search {
 
   private final NameOccurrence occurrence;
   private final Set<NameDeclaration> declarations = new HashSet<>();
+  private final SearchMode mode;
+  private final Set<NameDeclaration> enclosingTypeResults;
 
-  public Search(NameOccurrence occurrence) {
+  public Search(NameOccurrence occurrence, SearchMode mode) {
     if (TRACE) {
-      LOG.info("new search for reference " + occurrence);
+      LOG.info("new search for reference " + occurrence + " in mode " + mode);
     }
     this.occurrence = occurrence;
+    this.mode = mode;
+    this.enclosingTypeResults = new HashSet<>();
   }
 
   public void execute(DelphiScope startingScope) {
     Set<NameDeclaration> found = searchUpward(startingScope);
-    if (TRACE) {
-      LOG.info("found " + found);
+
+    if (!enclosingTypeResults.isEmpty()) {
+      FileScope occurrenceFileScope =
+          Objects.requireNonNull(
+              occurrence.getLocation().getScope().getEnclosingScope(FileScope.class));
+
+      boolean resultsWithinThisFile =
+          found.stream()
+              .anyMatch(
+                  declaration ->
+                      occurrenceFileScope.equals(
+                          declaration.getScope().getEnclosingScope(FileScope.class)));
+
+      if (!resultsWithinThisFile) {
+        // Results from enclosing type scopes take precedence over results from other file scopes.
+        found = enclosingTypeResults;
+      }
     }
+
+    if (TRACE) {
+      LOG.info("search finished, found " + found);
+    }
+
     declarations.addAll(found);
+    enclosingTypeResults.clear();
   }
 
   public Set<NameDeclaration> getResult() {
@@ -72,8 +103,6 @@ public class Search {
         LOG.info(" moving up from " + scope + " to " + scope.getParent());
       }
       return searchUpward(scope.getParent());
-    } else if (TRACE) {
-      LOG.info(" found it!");
     }
 
     return result;
@@ -84,20 +113,38 @@ public class Search {
       scope = ((WithScope) scope).getTargetScope();
     }
 
-    if (scope instanceof TypeScope) {
+    if (mode != SearchMode.METHOD_HEADING && scope instanceof TypeScope) {
       return searchTypeScope((TypeScope) scope);
     }
 
     Set<NameDeclaration> result = scope.findDeclaration(occurrence);
+
+    if (scope instanceof TypeScope) {
+      result = filterTypeScopeResults(result);
+    }
 
     if (result.isEmpty() && scope instanceof MethodScope) {
       DelphiScope typeScope = ((MethodScope) scope).getTypeScope();
       if (typeScope instanceof TypeScope) {
         result = searchTypeScope((TypeScope) typeScope);
         if (result.isEmpty()) {
-          result = searchTopLevelTypeScopes(typeScope.getParent());
+          enclosingTypeResults.addAll(searchEnclosingTypes(typeScope.getParent()));
         }
       }
+    }
+    return result;
+  }
+
+  private Set<NameDeclaration> filterTypeScopeResults(Set<NameDeclaration> result) {
+    if (mode == SearchMode.METHOD_HEADING) {
+      result =
+          result.stream()
+              .filter(
+                  declaration ->
+                      declaration instanceof TypeNameDeclaration
+                          || declaration instanceof TypeParameterNameDeclaration
+                          || declaration instanceof VariableNameDeclaration)
+              .collect(Collectors.toSet());
     }
     return result;
   }
@@ -117,10 +164,10 @@ public class Search {
     }
 
     Type type = scope.getType();
-    Set<NameDeclaration> result = searchHelperScope(type);
+    Set<NameDeclaration> result = filterTypeScopeResults(searchHelperScope(type));
 
     if (result.isEmpty()) {
-      result = scope.findDeclaration(occurrence);
+      result = filterTypeScopeResults(scope.findDeclaration(occurrence));
     }
 
     if (result.isEmpty()) {
@@ -135,20 +182,23 @@ public class Search {
     }
 
     if (result.isEmpty() && type.isHelper()) {
-      result = searchExtendedType((HelperType) type);
+      result = filterTypeScopeResults(searchExtendedType((HelperType) type));
     }
 
     return result;
   }
 
-  private Set<NameDeclaration> searchTopLevelTypeScopes(@Nullable DelphiScope scope) {
+  private Set<NameDeclaration> searchEnclosingTypes(@Nullable DelphiScope scope) {
     Set<NameDeclaration> result = Collections.emptySet();
     if (scope != null) {
       TypeScope nextTypeScope = scope.getEnclosingScope(TypeScope.class);
       if (nextTypeScope != null) {
-        result = nextTypeScope.findDeclaration(occurrence);
+        if (TRACE) {
+          LOG.info("  checking enclosing type scope " + nextTypeScope);
+        }
+        result = filterTypeScopeResults(nextTypeScope.findDeclaration(occurrence));
         if (result.isEmpty()) {
-          result = searchTopLevelTypeScopes(nextTypeScope.getParent());
+          return searchEnclosingTypes(nextTypeScope.getParent());
         }
       }
     }
@@ -163,7 +213,6 @@ public class Search {
         if (TRACE) {
           LOG.info(" moving into extended type scope " + extendedTypeScope);
         }
-
         return searchTypeScope((TypeScope) extendedTypeScope);
       }
     }

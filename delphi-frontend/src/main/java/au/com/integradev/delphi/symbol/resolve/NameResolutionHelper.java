@@ -22,6 +22,7 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType
 
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
+import au.com.integradev.delphi.symbol.SearchMode;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
@@ -77,13 +78,19 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class NameResolutionHelper {
   private final TypeFactory typeFactory;
+  private SearchMode searchMode;
 
   public NameResolutionHelper(TypeFactory typeFactory) {
+    this(typeFactory, SearchMode.DEFAULT);
+  }
+
+  public NameResolutionHelper(TypeFactory typeFactory, SearchMode searchMode) {
     this.typeFactory = typeFactory;
+    this.searchMode = searchMode;
   }
 
   private NameResolver createNameResolver() {
-    return new NameResolver(typeFactory);
+    return new NameResolver(typeFactory, searchMode);
   }
 
   public void resolve(TypeDeclarationNode typeDeclaration) {
@@ -269,8 +276,14 @@ public class NameResolutionHelper {
   }
 
   private void resolveMethod(MethodNode method) {
-    resolve(method.getMethodHeading().getMethodParametersNode());
-    resolve(method.getMethodHeading().getMethodReturnType());
+    SearchMode previousSearchMode = searchMode;
+    try {
+      searchMode = SearchMode.METHOD_HEADING;
+      resolve(method.getMethodHeading().getMethodParametersNode());
+      resolve(method.getMethodHeading().getMethodReturnType());
+    } finally {
+      searchMode = previousSearchMode;
+    }
   }
 
   public void resolve(@Nullable MethodParametersNode parameters) {
