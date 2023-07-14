@@ -24,8 +24,10 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@SonarLintUnsupported
 @DeprecatedRuleKey(ruleKey = "UnusedConstantsRule", repositoryKey = "delph")
 @Rule(key = "UnusedConstant")
 public class UnusedConstantCheck extends DelphiCheck {

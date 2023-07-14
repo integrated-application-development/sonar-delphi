@@ -30,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
@@ -38,6 +39,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.UnitScope;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@SonarLintUnsupported
 @DeprecatedRuleKey(ruleKey = "UnusedMethodsRule", repositoryKey = "delph")
 @Rule(key = "UnusedMethod")
 public class UnusedMethodCheck extends DelphiCheck {

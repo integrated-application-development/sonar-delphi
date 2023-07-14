@@ -24,9 +24,11 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@SonarLintUnsupported
 @DeprecatedRuleKey(ruleKey = "UnusedGlobalVariablesRule", repositoryKey = "delph")
 @Rule(key = "UnusedGlobalVariable")
 public class UnusedGlobalVariableCheck extends DelphiCheck {

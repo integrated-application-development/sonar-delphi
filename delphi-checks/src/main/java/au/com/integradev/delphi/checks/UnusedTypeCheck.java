@@ -24,6 +24,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
@@ -32,6 +33,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@SonarLintUnsupported
 @DeprecatedRuleKey(ruleKey = "UnusedTypesRule", repositoryKey = "delph")
 @Rule(key = "UnusedType")
 public class UnusedTypeCheck extends DelphiCheck {

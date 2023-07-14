@@ -22,8 +22,10 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@SonarLintUnsupported
 @DeprecatedRuleKey(ruleKey = "UnusedFieldsRule", repositoryKey = "delph")
 @Rule(key = "UnusedField")
 public class UnusedFieldCheck extends DelphiCheck {
