@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect type conversions from pointers to arrays.
 - Fixed arrays were overly-eager to convert to dynamic arrays.
 - Parsing errors around `In` operator overloads.
+- Parsing errors around anonymous methods in array constructor expressions.
 - `Self` was not consistently shadowed by method parameters.
 - Incorrect token range calculation for binary expression nodes.
 - Units referenced via `DCCReference` tags were not indexed in the symbol table.
