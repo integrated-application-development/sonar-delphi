@@ -26,8 +26,10 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.IllegalRuleParameterError;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "InheritedTypeNameRule", repositoryKey = "delph")
 @Rule(key = "InheritedTypeName")
 public class InheritedTypeNameCheck extends DelphiCheck {

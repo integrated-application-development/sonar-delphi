@@ -27,10 +27,12 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "ForbiddenMethodRule", repositoryKey = "delph")
 @Rule(key = "ForbiddenMethod")
 public class ForbiddenMethodCheck extends DelphiCheck {

@@ -26,8 +26,10 @@ import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "ForbiddenIdentifierRule", repositoryKey = "delph")
 @Rule(key = "ForbiddenIdentifier")
 public class ForbiddenIdentifierCheck extends DelphiCheck {

@@ -26,12 +26,14 @@ import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "ForbiddenConstantRule", repositoryKey = "delph")
 @Rule(key = "ForbiddenConstant")
 public class ForbiddenConstantCheck extends DelphiCheck {

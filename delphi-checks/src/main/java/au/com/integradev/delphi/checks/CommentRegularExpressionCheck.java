@@ -25,9 +25,11 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.check.IllegalRuleParameterError;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "CommentRegexRule", repositoryKey = "delph")
 @Rule(key = "CommentRegularExpression")
 public class CommentRegularExpressionCheck extends DelphiCheck {

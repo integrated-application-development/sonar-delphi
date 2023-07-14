@@ -27,9 +27,11 @@ import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.IllegalRuleParameterError;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "ForbiddenImportFilePatternRule", repositoryKey = "delph")
 @Rule(key = "ForbiddenImportFilePattern")
 public class ForbiddenImportFilePatternCheck extends DelphiCheck {

@@ -25,8 +25,10 @@ import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.IllegalRuleParameterError;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
+@RuleTemplate
 @DeprecatedRuleKey(ruleKey = "StringLiteralRegexRule", repositoryKey = "delph")
 @Rule(key = "StringLiteralRegularExpression")
 public class StringLiteralRegularExpressionCheck extends DelphiCheck {
