@@ -37,6 +37,8 @@ Building locally
 
 SonarDelphi targets Java 11 and can be built with JDK 11+.
 
+JDK 17+ is recommended for development. The integration tests will fail with earlier versions, as SonarQube no longer supports Java versions below 17.
+
 * The plugin can be compiled to a .jar using `mvn package`.
 * Documentation can be generated to the system temp directory using `mvn site-deploy`.
 * Tests can be run using `mvn test`.
