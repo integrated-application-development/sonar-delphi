@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect type conversions from pointers to arrays.
 - Fixed arrays were overly-eager to convert to dynamic arrays.
 - Parsing errors around `In` operator overloads.
+- `Self` was not consistently shadowed by method parameters.
 
 ## [0.40.0] - 2023-01-10
 

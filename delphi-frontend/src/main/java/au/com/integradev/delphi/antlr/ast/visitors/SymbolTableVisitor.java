@@ -75,6 +75,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
@@ -85,6 +86,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -417,10 +419,22 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.addDeclarationToCurrentScope(result);
     }
 
-    Type selfType = findSelfType(node, methodDeclaration, data);
-    if (selfType != null) {
-      NameDeclaration self = compilerVariable("Self", selfType, scope);
-      data.addDeclarationToCurrentScope(self);
+    boolean hasSelfParameter = false;
+
+    MethodParametersNode parametersNode = node.getMethodHeading().getMethodParametersNode();
+    if (parametersNode != null) {
+      hasSelfParameter =
+          parametersNode.getParameters().stream()
+              .map(FormalParameterData::getImage)
+              .anyMatch(image -> image.equalsIgnoreCase("Self"));
+    }
+
+    if (!hasSelfParameter) {
+      Type selfType = findSelfType(node, methodDeclaration, data);
+      if (selfType != null) {
+        NameDeclaration self = compilerVariable("Self", selfType, scope);
+        data.addDeclarationToCurrentScope(self);
+      }
     }
 
     return visitScope(node, data);
