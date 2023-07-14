@@ -26,11 +26,11 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
-class StringLiteralRegexCheckTest {
+class StringLiteralRegularExpressionCheckTest {
   private static final String PATTERN = ".*FOO(\\d|[A-Z]){8}BAR.*";
 
   private static DelphiCheck createCheck(String pattern) {
-    StringLiteralRegexCheck check = new StringLiteralRegexCheck();
+    StringLiteralRegularExpressionCheck check = new StringLiteralRegularExpressionCheck();
     check.regularExpression = pattern;
     return check;
   }

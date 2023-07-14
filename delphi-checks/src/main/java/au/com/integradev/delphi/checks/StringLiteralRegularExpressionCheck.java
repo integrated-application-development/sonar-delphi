@@ -28,8 +28,8 @@ import org.sonar.plugins.communitydelphi.api.check.IllegalRuleParameterError;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "StringLiteralRegexRule", repositoryKey = "delph")
-@Rule(key = "StringLiteralRegex")
-public class StringLiteralRegexCheck extends DelphiCheck {
+@Rule(key = "StringLiteralRegularExpression")
+public class StringLiteralRegularExpressionCheck extends DelphiCheck {
   private static final String DEFAULT_REGULAR_EXPRESSION = "(?!)";
   private static final String DEFAULT_MESSAGE = "The regular expression matches this string.";
 

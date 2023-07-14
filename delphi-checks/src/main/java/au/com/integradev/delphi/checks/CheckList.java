@@ -99,7 +99,7 @@ public final class CheckList {
           RedundantParenthesesCheck.class,
           ShortIdentifierCheck.class,
           StringListDuplicatesCheck.class,
-          StringLiteralRegexCheck.class,
+          StringLiteralRegularExpressionCheck.class,
           SuperfluousSemicolonCheck.class,
           SwallowedExceptionCheck.class,
           TabulationCharacterCheck.class,
