@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Self` was not consistently shadowed by method parameters.
 - Incorrect token range calculation for binary expression nodes.
 - Units referenced via `DCCReference` tags were not indexed in the symbol table.
+- NPE on empty argument lists in `TrailingCommaArgumentList`.
 
 ## [0.40.0] - 2023-01-10
 

@@ -37,6 +37,32 @@ class TrailingCommaArgumentListCheckTest {
   }
 
   @Test
+  void testEmptyBracketedArgumentListShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingCommaArgumentListCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  Foo();")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNoArgumentListShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingCommaArgumentListCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  Foo;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testArgumentListWithTrailingCommaShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TrailingCommaArgumentListCheck())

@@ -16,7 +16,7 @@ public class TrailingCommaArgumentListCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(ArgumentListNode argumentList, DelphiCheckContext context) {
     DelphiNode node = argumentList.getChild(argumentList.getChildrenCount() - 2);
-    if (node.getTokenType() == DelphiTokenType.COMMA) {
+    if (node != null && node.getTokenType() == DelphiTokenType.COMMA) {
       reportIssue(context, node, MESSAGE);
     }
     return super.visit(argumentList, context);
