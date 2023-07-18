@@ -28,7 +28,7 @@ class ForbiddenIdentifierCheckTest {
 
   private static DelphiCheck createCheck() {
     ForbiddenIdentifierCheck check = new ForbiddenIdentifierCheck();
-    check.identifiers = FORBIDDEN_IDENTIFIER;
+    check.blacklist = FORBIDDEN_IDENTIFIER;
     return check;
   }
 

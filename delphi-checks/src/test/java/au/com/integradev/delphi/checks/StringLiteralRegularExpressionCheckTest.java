@@ -31,7 +31,7 @@ class StringLiteralRegularExpressionCheckTest {
 
   private static DelphiCheck createCheck(String pattern) {
     StringLiteralRegularExpressionCheck check = new StringLiteralRegularExpressionCheck();
-    check.regularExpression = pattern;
+    check.regex = pattern;
     return check;
   }
 

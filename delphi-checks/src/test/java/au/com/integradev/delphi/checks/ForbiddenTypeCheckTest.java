@@ -29,7 +29,7 @@ class ForbiddenTypeCheckTest {
 
   private static DelphiCheck createCheck() {
     ForbiddenTypeCheck check = new ForbiddenTypeCheck();
-    check.types = FORBIDDEN_TYPES;
+    check.blacklist = FORBIDDEN_TYPES;
     return check;
   }
 

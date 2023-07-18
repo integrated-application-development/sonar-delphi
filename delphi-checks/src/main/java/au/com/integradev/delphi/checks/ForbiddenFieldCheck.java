@@ -40,12 +40,12 @@ public class ForbiddenFieldCheck extends DelphiCheck {
   private static final String DEFAULT_MESSAGE = "Remove usage of this forbidden field.";
 
   @RuleProperty(
-      key = "typeName",
+      key = "declaringType",
       description = "Fully qualified name of the type whose values are forbidden")
-  public String typeName = "";
+  public String declaringType = "";
 
-  @RuleProperty(key = "fields", description = "Comma-delimited list of forbidden fields")
-  public String fields = "";
+  @RuleProperty(key = "blacklist", description = "Comma-delimited list of forbidden fields")
+  public String blacklist = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -56,7 +56,7 @@ public class ForbiddenFieldCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     fieldsSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(fields));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(blacklist));
   }
 
   @Override
@@ -67,7 +67,7 @@ public class ForbiddenFieldCheck extends DelphiCheck {
       if (scope != null) {
         Type type = scope.getType();
         String fieldName = declaration.getName();
-        if (type.is(typeName) && fieldsSet.contains(fieldName)) {
+        if (type.is(declaringType) && fieldsSet.contains(fieldName)) {
           reportIssue(context, reference.getIdentifier(), message);
         }
       }

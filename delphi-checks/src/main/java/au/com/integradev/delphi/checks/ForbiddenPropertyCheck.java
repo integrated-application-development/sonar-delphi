@@ -38,10 +38,10 @@ public class ForbiddenPropertyCheck extends DelphiCheck {
   private static final String DEFAULT_MESSAGE = "Remove usage of this forbidden property.";
 
   @RuleProperty(
-      key = "properties",
+      key = "blacklist",
       description =
           "Comma-delimited list of forbidden (fully qualified) property names (case-insensitive)")
-  public String properties = "";
+  public String blacklist = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -52,7 +52,7 @@ public class ForbiddenPropertyCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     propertiesSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(properties));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(blacklist));
   }
 
   @Override

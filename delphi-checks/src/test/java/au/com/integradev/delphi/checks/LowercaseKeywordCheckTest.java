@@ -26,7 +26,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 class LowercaseKeywordCheckTest {
   private static DelphiCheck createCheck() {
     LowercaseKeywordCheck check = new LowercaseKeywordCheck();
-    check.excluded = "string";
+    check.excludedKeywords = "string";
     return check;
   }
 

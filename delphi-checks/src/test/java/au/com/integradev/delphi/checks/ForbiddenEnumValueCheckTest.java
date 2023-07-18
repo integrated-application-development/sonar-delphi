@@ -31,7 +31,7 @@ class ForbiddenEnumValueCheckTest {
   private static DelphiCheck createCheck() {
     ForbiddenEnumValueCheck check = new ForbiddenEnumValueCheck();
     check.enumName = ENUM_NAME;
-    check.values = FORBIDDEN_VALUE;
+    check.blacklist = FORBIDDEN_VALUE;
     return check;
   }
 

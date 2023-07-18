@@ -30,7 +30,7 @@ class ForbiddenConstantCheckTest {
   private static DelphiCheck createCheck() {
     ForbiddenConstantCheck check = new ForbiddenConstantCheck();
     check.unitName = UNIT_NAME;
-    check.constants = FORBIDDEN_CONSTANT;
+    check.blacklist = FORBIDDEN_CONSTANT;
     return check;
   }
 

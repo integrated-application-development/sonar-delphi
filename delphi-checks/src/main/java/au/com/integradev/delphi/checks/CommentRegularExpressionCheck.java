@@ -39,10 +39,10 @@ public class CommentRegularExpressionCheck extends DelphiCheck {
   private Pattern pattern;
 
   @RuleProperty(
-      key = "regularExpression",
+      key = "regex",
       description = "The regular expression",
       defaultValue = DEFAULT_REGULAR_EXPRESSION)
-  public String regularExpression = DEFAULT_REGULAR_EXPRESSION;
+  public String regex = DEFAULT_REGULAR_EXPRESSION;
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -51,10 +51,9 @@ public class CommentRegularExpressionCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     if (pattern == null) {
       try {
-        pattern = Pattern.compile(regularExpression, Pattern.DOTALL);
+        pattern = Pattern.compile(regex, Pattern.DOTALL);
       } catch (IllegalArgumentException e) {
-        throw new IllegalRuleParameterError(
-            "Unable to compile regular expression: " + regularExpression, e);
+        throw new IllegalRuleParameterError("Unable to compile regular expression: " + regex, e);
       }
     }
   }

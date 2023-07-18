@@ -36,9 +36,9 @@ public class ForbiddenIdentifierCheck extends DelphiCheck {
   private static final String DEFAULT_MESSAGE = "Remove usage of this forbidden identifier.";
 
   @RuleProperty(
-      key = "identifiers",
+      key = "blacklist",
       description = "Comma-delimited list of forbidden identifiers (case-insensitive)")
-  public String identifiers = "";
+  public String blacklist = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -49,7 +49,7 @@ public class ForbiddenIdentifierCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     identifiersSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(identifiers));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(blacklist));
   }
 
   @Override

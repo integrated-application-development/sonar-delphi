@@ -30,8 +30,8 @@ class ForbiddenFieldCheckTest {
 
   private static DelphiCheck createCheck() {
     ForbiddenFieldCheck check = new ForbiddenFieldCheck();
-    check.typeName = DECLARING_TYPE;
-    check.fields = FORBIDDEN_FIELD;
+    check.declaringType = DECLARING_TYPE;
+    check.blacklist = FORBIDDEN_FIELD;
     return check;
   }
 

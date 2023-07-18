@@ -39,10 +39,10 @@ public class ForbiddenMethodCheck extends DelphiCheck {
   private static final String DEFAULT_MESSAGE = "Remove usage of this forbidden method.";
 
   @RuleProperty(
-      key = "methods",
+      key = "blacklist",
       description =
           "Comma-delimited list of forbidden (fully qualified) method names (case-insensitive)")
-  public String methods = "";
+  public String blacklist = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -53,7 +53,7 @@ public class ForbiddenMethodCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     methodsSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(methods));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(blacklist));
   }
 
   @Override

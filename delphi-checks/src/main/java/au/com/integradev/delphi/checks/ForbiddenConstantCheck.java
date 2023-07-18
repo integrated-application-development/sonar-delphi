@@ -42,8 +42,8 @@ public class ForbiddenConstantCheck extends DelphiCheck {
   @RuleProperty(key = "unitName", description = "Name of the unit whose constants are forbidden")
   public String unitName = "";
 
-  @RuleProperty(key = "constants", description = "Comma-delimited list of forbidden constants")
-  public String constants = "";
+  @RuleProperty(key = "blacklist", description = "Comma-delimited list of forbidden constants")
+  public String blacklist = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -54,7 +54,7 @@ public class ForbiddenConstantCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     constantsSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().splitToList(constants));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().splitToList(blacklist));
   }
 
   @Override

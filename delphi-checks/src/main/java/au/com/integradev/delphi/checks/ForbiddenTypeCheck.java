@@ -39,10 +39,10 @@ public class ForbiddenTypeCheck extends DelphiCheck {
   private static final String DEFAULT_MESSAGE = "Remove usage of this forbidden type.";
 
   @RuleProperty(
-      key = "types",
+      key = "blacklist",
       description =
           "Comma-delimited list of forbidden (fully qualified) type names (case-insensitive)")
-  public String types = "";
+  public String blacklist = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -53,7 +53,7 @@ public class ForbiddenTypeCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     typesSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(types));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(blacklist));
   }
 
   @Override

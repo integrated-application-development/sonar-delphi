@@ -29,7 +29,7 @@ class ForbiddenPropertyCheckTest {
 
   private static DelphiCheck createCheck() {
     ForbiddenPropertyCheck check = new ForbiddenPropertyCheck();
-    check.properties = FORBIDDEN_PROPERTY;
+    check.blacklist = FORBIDDEN_PROPERTY;
     return check;
   }
 

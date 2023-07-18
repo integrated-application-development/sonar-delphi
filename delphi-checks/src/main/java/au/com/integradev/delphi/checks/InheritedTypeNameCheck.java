@@ -39,16 +39,16 @@ public class InheritedTypeNameCheck extends DelphiCheck {
       "Rename this type to match the expected naming convention.";
 
   @RuleProperty(
-      key = "nameRegularExpression",
+      key = "nameRegex",
       description = "The regular expression used to define the type naming convention.",
       defaultValue = DEFAULT_NAME_REGULAR_EXPRESSION)
-  public String nameRegularExpression = DEFAULT_NAME_REGULAR_EXPRESSION;
+  public String nameRegex = DEFAULT_NAME_REGULAR_EXPRESSION;
 
   @RuleProperty(
-      key = "regularExpression",
+      key = "parentNameRegex",
       description = "The regular expression used to match parent type names.",
       defaultValue = DEFAULT_PARENT_NAME_REGULAR_EXPRESSION)
-  public String parentNameRegularExpression = DEFAULT_PARENT_NAME_REGULAR_EXPRESSION;
+  public String parentNameRegex = DEFAULT_PARENT_NAME_REGULAR_EXPRESSION;
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
@@ -60,19 +60,19 @@ public class InheritedTypeNameCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     if (namePattern == null) {
       try {
-        namePattern = Pattern.compile(nameRegularExpression, Pattern.DOTALL);
+        namePattern = Pattern.compile(nameRegex, Pattern.DOTALL);
       } catch (IllegalArgumentException e) {
         throw new IllegalRuleParameterError(
-            "Unable to compile regular expression: " + nameRegularExpression, e);
+            "Unable to compile regular expression: " + nameRegex, e);
       }
     }
 
     if (parentPattern == null) {
       try {
-        parentPattern = Pattern.compile(parentNameRegularExpression, Pattern.DOTALL);
+        parentPattern = Pattern.compile(parentNameRegex, Pattern.DOTALL);
       } catch (IllegalArgumentException e) {
         throw new IllegalRuleParameterError(
-            "Unable to compile regular expression: " + parentNameRegularExpression, e);
+            "Unable to compile regular expression: " + parentNameRegex, e);
       }
     }
   }

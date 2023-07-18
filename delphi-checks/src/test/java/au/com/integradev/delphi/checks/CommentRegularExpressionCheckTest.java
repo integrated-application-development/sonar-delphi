@@ -29,7 +29,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 class CommentRegularExpressionCheckTest {
   private static DelphiCheck createCheck(String regularExpression) {
     CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
-    check.regularExpression = regularExpression;
+    check.regex = regularExpression;
     return check;
   }
 

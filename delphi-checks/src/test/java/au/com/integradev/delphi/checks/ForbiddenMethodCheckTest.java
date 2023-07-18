@@ -29,7 +29,7 @@ class ForbiddenMethodCheckTest {
 
   private static DelphiCheck createCheck() {
     ForbiddenMethodCheck check = new ForbiddenMethodCheck();
-    check.methods = FORBIDDEN_METHOD;
+    check.blacklist = FORBIDDEN_METHOD;
     return check;
   }
 

@@ -29,8 +29,8 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 class InheritedTypeNameCheckTest {
   private static DelphiCheck createCheck() {
     InheritedTypeNameCheck check = new InheritedTypeNameCheck();
-    check.nameRegularExpression = ".*_Child";
-    check.parentNameRegularExpression = ".*_Parent";
+    check.nameRegex = ".*_Child";
+    check.parentNameRegex = ".*_Parent";
     return check;
   }
 
@@ -97,8 +97,8 @@ class InheritedTypeNameCheckTest {
   @Test
   void testBadNameRegexShouldThrow() {
     InheritedTypeNameCheck check = new InheritedTypeNameCheck();
-    check.parentNameRegularExpression = ".*";
-    check.nameRegularExpression = "*";
+    check.parentNameRegex = ".*";
+    check.nameRegex = "*";
 
     assertThatThrownBy(
             () ->
@@ -116,8 +116,8 @@ class InheritedTypeNameCheckTest {
   @Test
   void testBadParentRegexShouldNotAddIssue() {
     InheritedTypeNameCheck check = new InheritedTypeNameCheck();
-    check.parentNameRegularExpression = "*";
-    check.nameRegularExpression = ".*";
+    check.parentNameRegex = "*";
+    check.nameRegex = ".*";
 
     assertThatThrownBy(
             () ->

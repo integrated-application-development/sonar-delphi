@@ -37,9 +37,9 @@ public class LowercaseKeywordCheck extends DelphiCheck {
   private static final String MESSAGE = "Lowercase this keyword.";
 
   @RuleProperty(
-      key = "prefixes",
+      key = "excludedKeywords",
       description = "Comma-delimited list of keywords that this rule ignores (case-insensitive).")
-  public String excluded = "";
+  public String excludedKeywords = "";
 
   private Set<String> excludedSet;
 
@@ -47,7 +47,7 @@ public class LowercaseKeywordCheck extends DelphiCheck {
   public void start(DelphiCheckContext context) {
     excludedSet =
         ImmutableSortedSet.copyOf(
-            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(excluded));
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(excludedKeywords));
   }
 
   @Override
