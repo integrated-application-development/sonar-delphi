@@ -19,22 +19,22 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
 @SonarLintSide
 public class ScopeMetadataLoader {
   private final MetadataResourcePath metadataResourcePath;
-  private final Map<RuleKey, RuleScope> ruleKeyToScope;
+  private final Map<RuleKey, RuleScope> engineKeyToScope;
 
   public ScopeMetadataLoader(MetadataResourcePath metadataResourcePath) {
     this.metadataResourcePath = metadataResourcePath;
-    ruleKeyToScope = new HashMap<>();
+    engineKeyToScope = new HashMap<>();
   }
 
-  public RuleScope getScope(RuleKey ruleKey) {
-    return ruleKeyToScope.computeIfAbsent(ruleKey, this::readScope);
+  public RuleScope getScope(RuleKey engineKey) {
+    return engineKeyToScope.computeIfAbsent(engineKey, this::readScope);
   }
 
-  private RuleScope readScope(RuleKey ruleKey) {
-    URL url = getMetadataURL(ruleKey);
+  private RuleScope readScope(RuleKey engineKey) {
+    URL url = getMetadataURL(engineKey);
 
     if (url == null) {
-      throw new IllegalArgumentException("Metadata is missing for check \"" + ruleKey + "\"");
+      throw new IllegalArgumentException("Metadata is missing for check \"" + engineKey + "\"");
     }
 
     try {
@@ -57,12 +57,12 @@ public class ScopeMetadataLoader {
     }
   }
 
-  private URL getMetadataURL(RuleKey ruleKey) {
+  private URL getMetadataURL(RuleKey engineKey) {
     return getClass()
         .getResource(
-            metadataResourcePath.forRepository(ruleKey.repository())
+            metadataResourcePath.forRepository(engineKey.repository())
                 + "/"
-                + ruleKey.rule()
+                + engineKey.rule()
                 + ".json");
   }
 }

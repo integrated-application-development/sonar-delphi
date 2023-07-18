@@ -179,11 +179,12 @@ public final class DelphiIssueBuilder {
       return;
     }
 
+    RuleKey engineKey = checkRegistrar.getEngineKey(check).orElseThrow();
     RuleScope scope =
         EnumUtils.getEnum(
             RuleScope.class,
             check.customRuleScopeOverride,
-            scopeMetadataLoader.getScope(ruleKey.get()));
+            scopeMetadataLoader.getScope(engineKey));
 
     if (isOutOfScope(scope)) {
       return;
