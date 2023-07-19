@@ -211,6 +211,8 @@ public class CheckVerifierImpl implements CheckVerifier {
     var checkRegistrar = mock(MasterCheckRegistrar.class);
     when(checkRegistrar.getRuleKey(check))
         .thenReturn(Optional.of(RuleKey.of("test", check.getClass().getSimpleName())));
+    when(checkRegistrar.getEngineKey(check))
+        .thenReturn(Optional.of(RuleKey.of("test", check.getClass().getSimpleName())));
 
     DelphiCheckContext context =
         new DelphiCheckContextImpl(
