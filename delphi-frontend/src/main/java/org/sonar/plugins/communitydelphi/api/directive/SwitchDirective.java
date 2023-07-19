@@ -22,6 +22,7 @@ public interface SwitchDirective extends CompilerDirective {
     LOCALSYMBOLS("localsymbols", 'l'),
     LONGSTRINGS("longstrings", 'h'),
     METHODINFO("methodinfo"),
+    MINENUMSIZE("minenumsize", 'z'),
     OLDTYPELAYOUT("oldtypelayout"),
     OPENSTRINGS("openstrings", 'p'),
     OPTIMIZATION("optimization", 'o'),

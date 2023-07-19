@@ -37,6 +37,7 @@ import org.sonar.plugins.communitydelphi.api.directive.DefineDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IfDefDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IfnDefDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IncludeDirective;
+import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.directive.UndefineDirective;
@@ -142,6 +143,27 @@ class CompilerDirectiveParserTest {
     CompilerDirective directive = parse("{$define _DEBUG}");
 
     assertThat(directive).isInstanceOf(DefineDirective.class);
+  }
+
+  @Test
+  void testExplicitSwitchDirectiveBeatsParameterDirective() {
+    CompilerDirective directive = parse("{$Z+}");
+
+    assertThat(directive).isInstanceOf(SwitchDirective.class);
+  }
+
+  @Test
+  void testImplicitParameterDirectiveBeatsSwitchDirective() {
+    CompilerDirective directive = parse("{$Z}");
+
+    assertThat(directive).isInstanceOf(ParameterDirective.class);
+  }
+
+  @Test
+  void testExplicitParameterDirectiveBeatsSwitchDirective() {
+    CompilerDirective directive = parse("{$Z 4}");
+
+    assertThat(directive).isInstanceOf(ParameterDirective.class);
   }
 
   @Test
