@@ -1,0 +1,40 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Implicitly using <code>TEncoding.Default</code> causes a platform-dependent default encoding to be
+  used. The defaults are <code>TEncoding.ANSI</code> on Windows and <code>TEncoding.UTF8</code> on
+  all other platforms.
+</p>
+
+<p>The methods that can implicitly use <code>TEncoding.Default</code> are:</p>
+<ul>
+  <li><code>Vcl.Outline.TOutlineNode.WriteNode</code></li>
+  <li><code>Vcl.Outline.TOutlineNode.LoadFromFile</code></li>
+  <li><code>Vcl.Outline.TOutlineNode.LoadFromStream</code></li>
+  <li><code>Vcl.Outline.TOutlineNode.SaveToFile</code></li>
+  <li><code>Vcl.Outline.TOutlineNode.SaveToStream</code></li>
+  <li><code>System.Classes.TStrings.LoadFromFile</code></li>
+  <li><code>System.Classes.TStrings.LoadFromStream</code></li>
+  <li><code>System.Classes.TStrings.SaveToFile</code></li>
+  <li><code>System.Classes.TStrings.SaveToStream</code></li>
+  <li><code>System.Classes.TStringStream.Create</code></li>
+  <li><code>System.Classes.TStreamReader.Create</code></li>
+  <li><code>System.Classes.TStreamWriter.Create</code></li>
+</ul>
+
+<h2>How to fix it</h2>
+<p>Explicitly specify the encoding:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+MyStringList.LoadFromFile(FileName);
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+MyStringList.LoadFromFile(FileName, TEncoding.UTF8);
+</pre>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TEncoding.Default">
+      Rad Studio API documentation: System.SysUtils.TEncoding.Default
+    </a>
+  </li>
+</ul>
