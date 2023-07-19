@@ -33,6 +33,7 @@ import au.com.integradev.delphi.executor.DelphiCpdExecutor;
 import au.com.integradev.delphi.executor.DelphiHighlightExecutor;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.executor.DelphiMetricsExecutor;
+import au.com.integradev.delphi.executor.DelphiNoSonarExecutor;
 import au.com.integradev.delphi.executor.DelphiSymbolTableExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import com.google.common.collect.ImmutableList;
@@ -65,6 +66,7 @@ public class DelphiPlugin implements Plugin {
         DelphiMasterExecutor.class,
         DelphiSymbolTableExecutor.class,
         DelphiChecksExecutor.class,
+        DelphiNoSonarExecutor.class,
         // Core helpers
         DelphiProjectHelper.class,
         // Environment

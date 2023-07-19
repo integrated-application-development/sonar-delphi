@@ -94,6 +94,6 @@ public class DelphiChecksExecutor implements Executor {
 
   @Override
   public Set<Class<? extends Executor>> dependencies() {
-    return Set.of(DelphiSymbolTableExecutor.class);
+    return Set.of(DelphiSymbolTableExecutor.class, DelphiNoSonarExecutor.class);
   }
 }
