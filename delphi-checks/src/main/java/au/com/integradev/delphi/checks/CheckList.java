@@ -80,6 +80,7 @@ public final class CheckList {
           GroupedVariableDeclarationCheck.class,
           HelperNameCheck.class,
           IfThenShortCircuitCheck.class,
+          ImplicitDefaultEncodingCheck.class,
           ImportSpecificityCheck.class,
           IndexLastListElementCheck.class,
           InheritedMethodWithNoCodeCheck.class,
