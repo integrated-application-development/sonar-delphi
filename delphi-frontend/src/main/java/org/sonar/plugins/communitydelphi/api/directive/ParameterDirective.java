@@ -22,7 +22,7 @@ public interface ParameterDirective extends CompilerDirective {
     MINSTACKSIZE("minstacksize"),
     MAXSTACKSIZE("maxstacksize"),
     MESSAGE("message"),
-    MINENUMSIZE("minenumsize", 'z'),
+    MINENUMSIZE("minenumsize"),
     NODEFINE("nodefine"),
     NOINCLUDE("noinclude"),
     OBJTYPENAME("objtypename"),

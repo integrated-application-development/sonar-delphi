@@ -33,11 +33,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
+import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
 import org.sonar.plugins.communitydelphi.api.directive.DefineDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IfDefDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IfnDefDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IncludeDirective;
 import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective;
+import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective.ParameterKind;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.directive.UndefineDirective;
@@ -146,24 +148,34 @@ class CompilerDirectiveParserTest {
   }
 
   @Test
-  void testExplicitSwitchDirectiveBeatsParameterDirective() {
+  void testZDirectiveSwitchSyntax() {
     CompilerDirective directive = parse("{$Z+}");
 
     assertThat(directive).isInstanceOf(SwitchDirective.class);
+    assertThat(((SwitchDirective) directive).kind()).isEqualTo(SwitchKind.MINENUMSIZE);
   }
 
   @Test
-  void testImplicitParameterDirectiveBeatsSwitchDirective() {
-    CompilerDirective directive = parse("{$Z}");
+  void testZDirectiveLongSyntax() {
+    CompilerDirective directive = parse("{$MINENUMSIZE 4}");
 
     assertThat(directive).isInstanceOf(ParameterDirective.class);
+    assertThat(((ParameterDirective) directive).kind()).isEqualTo(ParameterKind.MINENUMSIZE);
   }
 
   @Test
-  void testExplicitParameterDirectiveBeatsSwitchDirective() {
-    CompilerDirective directive = parse("{$Z 4}");
+  void testZDirectiveDigitSyntax() {
+    CompilerDirective directive = parse("{$Z4}");
 
-    assertThat(directive).isInstanceOf(ParameterDirective.class);
+    assertThat(directive).isInstanceOf(SwitchDirective.class);
+    assertThat(((SwitchDirective) directive).kind()).isEqualTo(SwitchKind.MINENUMSIZE4);
+  }
+
+  @Test
+  void testZDirectiveSwitchSyntaxInConditional() {
+    CompilerDirective directive = parse("{$IFOPT Z+}");
+
+    assertThat(directive).isInstanceOf(ConditionalDirective.class);
   }
 
   @Test

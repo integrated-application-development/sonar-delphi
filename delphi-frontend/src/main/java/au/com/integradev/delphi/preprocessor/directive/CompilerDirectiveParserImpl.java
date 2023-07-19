@@ -99,6 +99,10 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
       Optional<Boolean> switchValue = shortSwitchValue.or(this::readLongSwitchValue);
       if (switchValue.isPresent()) {
         return new SwitchDirectiveImpl(token, switchKind.get(), switchValue.get());
+      } else if (switchKind.get() == SwitchKind.MINENUMSIZE1
+          || switchKind.get() == SwitchKind.MINENUMSIZE2
+          || switchKind.get() == SwitchKind.MINENUMSIZE4) {
+        return new SwitchDirectiveImpl(token, switchKind.get(), true);
       }
     }
 

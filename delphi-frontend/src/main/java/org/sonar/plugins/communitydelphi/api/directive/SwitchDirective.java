@@ -22,7 +22,6 @@ public interface SwitchDirective extends CompilerDirective {
     LOCALSYMBOLS("localsymbols", 'l'),
     LONGSTRINGS("longstrings", 'h'),
     METHODINFO("methodinfo"),
-    MINENUMSIZE("minenumsize", 'z'),
     OLDTYPELAYOUT("oldtypelayout"),
     OPENSTRINGS("openstrings", 'p'),
     OPTIMIZATION("optimization", 'o'),
@@ -44,7 +43,11 @@ public interface SwitchDirective extends CompilerDirective {
     WEAKPACKAGEUNIT("weakpackageunit"),
     WEAKLINKRTTI("weaklinkrtti"),
     WRITEABLECONST("writeableconst", 'j'),
-    ZEROBASEDSTRINGS("zerobasedstrings");
+    ZEROBASEDSTRINGS("zerobasedstrings"),
+    MINENUMSIZE("z"),
+    MINENUMSIZE1("z1"),
+    MINENUMSIZE2("z2"),
+    MINENUMSIZE4("z4");
 
     private final String name;
     private final String shortName;
