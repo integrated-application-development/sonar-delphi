@@ -294,12 +294,7 @@ public final class DelphiIssueBuilder {
     if (filePosition != null) {
       DelphiAst ast = delphiFile.getAst();
       return ast.findDescendantsOfType(nodeClass).stream()
-          .filter(
-              node ->
-                  node.getBeginLine() >= filePosition.getBeginLine()
-                      && node.getBeginColumn() >= filePosition.getBeginColumn()
-                      && node.getEndLine() <= filePosition.getEndLine()
-                      && node.getEndColumn() <= filePosition.getEndColumn())
+          .filter(node -> nodeEnclosesFilePosition(node, filePosition))
           .max(
               (a, b) ->
                   new CompareToBuilder()
@@ -308,6 +303,20 @@ public final class DelphiIssueBuilder {
                       .toComparison());
     }
     return Optional.empty();
+  }
+
+  private boolean nodeEnclosesFilePosition(DelphiNode node, FilePosition position) {
+    if (node.getBeginLine() > position.getBeginLine()
+        || (node.getBeginLine() == position.getBeginLine()
+            && node.getBeginColumn() < position.getBeginColumn())) {
+      return false;
+    } else if (node.getEndLine() < position.getEndLine()
+        || (node.getEndLine() == position.getEndLine()
+            && node.getEndColumn() > position.getEndColumn())) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   private static TextRange createTextRange(InputFile inputFile, FilePosition position) {
