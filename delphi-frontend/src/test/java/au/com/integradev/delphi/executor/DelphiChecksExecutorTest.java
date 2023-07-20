@@ -75,7 +75,8 @@ class DelphiChecksExecutorTest {
     verify(mainCheck, times(1)).visit(eq(mainFile.getAst()), any());
     verify(mainCheck, never()).visit(eq(testFile.getAst()), any());
 
-    verify(testCheck, never()).visit(eq(mainFile.getAst()), any());
+    // Main files may contain test code.
+    verify(testCheck, times(1)).visit(eq(mainFile.getAst()), any());
     verify(testCheck, times(1)).visit(eq(testFile.getAst()), any());
 
     verify(allCheck, times(1)).visit(eq(mainFile.getAst()), any());

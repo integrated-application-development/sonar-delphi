@@ -69,9 +69,12 @@ public class DelphiChecksExecutor implements Executor {
                 scopeMetadataLoader);
 
     runChecks(RuleScope.ALL, createCheckContext);
-    runChecks(
-        delphiFile.getInputFile().type() == InputFile.Type.MAIN ? RuleScope.MAIN : RuleScope.TEST,
-        createCheckContext);
+    // Main files may contain test code.
+    runChecks(RuleScope.TEST, createCheckContext);
+    // Test files do not contain main code.
+    if (delphiFile.getInputFile().type() != InputFile.Type.TEST) {
+      runChecks(RuleScope.MAIN, createCheckContext);
+    }
   }
 
   private void runChecks(
