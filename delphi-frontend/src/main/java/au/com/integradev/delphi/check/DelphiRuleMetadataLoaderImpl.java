@@ -30,9 +30,18 @@ public class DelphiRuleMetadataLoaderImpl implements DelphiRuleMetadataLoader {
   @Override
   public void addRulesByAnnotatedClass(
       RulesDefinition.NewRepository repository, List<Class<?>> ruleClasses) {
-    RuleMetadataLoader ruleMetadataLoader =
-        new RuleMetadataLoader(
-            metadataResourcePath.forRepository(repository.key()), defaultProfilePath, sonarRuntime);
+    RuleMetadataLoader ruleMetadataLoader;
+    if (defaultProfilePath != null) {
+      ruleMetadataLoader =
+          new RuleMetadataLoader(
+              metadataResourcePath.forRepository(repository.key()),
+              defaultProfilePath,
+              sonarRuntime);
+    } else {
+      ruleMetadataLoader =
+          new RuleMetadataLoader(
+              metadataResourcePath.forRepository(repository.key()), sonarRuntime);
+    }
     ruleMetadataLoader.addRulesByAnnotatedClass(repository, ruleClasses);
 
     ruleClasses.forEach(ruleClass -> handleTemplateRule(repository, ruleClass));
