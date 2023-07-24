@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +58,12 @@ final class DelphiProjectParser {
     var parser = new DelphiMSBuildParser(dproj, environmentVariableProvider, environmentProj);
     DelphiMSBuildParser.Result result = parser.parse();
 
+    Path dprojDirectory = dproj.getParent();
+
     DelphiProjectImpl project = new DelphiProjectImpl();
     project.setDefinitions(createDefinitions(result.getProperties()));
     project.setUnitScopeNames(createUnitScopeNames(result.getProperties()));
-    project.setSearchDirectories(createSearchDirectories(result.getProperties()));
+    project.setSearchDirectories(createSearchDirectories(dprojDirectory, result.getProperties()));
     project.setDebugSourceDirectories(createDebugSourceDirectories(result.getProperties()));
     project.setUnitAliases(createUnitAliases(result.getProperties()));
     project.setSourceFiles(result.getSourceFiles());
@@ -76,8 +79,13 @@ final class DelphiProjectParser {
     return Set.copyOf(propertyList(properties.get("DCC_Namespace")));
   }
 
-  private List<Path> createSearchDirectories(ProjectProperties properties) {
-    return createPathList(properties, "DCC_UnitSearchPath");
+  private List<Path> createSearchDirectories(Path dprojDirectory, ProjectProperties properties) {
+    List<Path> explicitPaths = createPathList(properties, "DCC_UnitSearchPath");
+
+    List<Path> allPaths = new ArrayList<>(explicitPaths.size() + 1);
+    allPaths.add(dprojDirectory);
+    allPaths.addAll(explicitPaths);
+    return Collections.unmodifiableList(allPaths);
   }
 
   private List<Path> createDebugSourceDirectories(ProjectProperties properties) {
