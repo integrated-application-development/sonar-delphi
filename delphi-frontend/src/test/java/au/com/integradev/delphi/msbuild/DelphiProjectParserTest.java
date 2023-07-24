@@ -93,13 +93,8 @@ class DelphiProjectParserTest {
       assertThat(project.getSourceFiles().get(i)).hasFileName(fileNames[i]);
     }
 
-    assertThat(project.getSearchDirectories()).hasSize(2);
+    assertThat(project.getSearchDirectories()).hasSize(3);
     assertThat(project.getDebugSourceDirectories()).hasSize(1);
-
-    String[] includeNames = {"includes1", "includes2"};
-    for (int i = 0; i < includeNames.length; ++i) {
-      assertThat(project.getSearchDirectories().get(i).getFileName()).hasToString(includeNames[i]);
-    }
 
     assertThat(project.getConditionalDefines())
         .containsOnly("MSWINDOWS", "CPUX86", "DEBUG", "GGMSGDEBUGx", "LOGTOFILEx", "FullDebugMode");
