@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
@@ -67,7 +66,7 @@ class UnitImportNameDeclarationTest {
 
   private static UnitImportNameDeclaration createImport(
       String name, UnitNameDeclaration originalDeclaration) {
-    UnitImportNode location = new UnitImportNodeImpl(DelphiLexer.TkUnitImport);
+    var location = new UnitImportNodeImpl(DelphiLexer.TkUnitImport);
     location.addChild(createNameNode(name));
     return new UnitImportNameDeclarationImpl(location, originalDeclaration);
   }

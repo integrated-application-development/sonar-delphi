@@ -14,8 +14,6 @@ public interface DelphiNode extends Node {
 
   DelphiNode getParent();
 
-  void addChild(DelphiNode child);
-
   int getChildIndex();
 
   DelphiNode getChild(int index);

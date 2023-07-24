@@ -126,7 +126,7 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
   @Override
   public void addChild(Object node, Object child) {
     if (node != null && child != null) {
-      ((DelphiNode) node).addChild((DelphiNode) child);
+      ((MutableDelphiNode) node).addChild((DelphiNode) child);
     }
   }
 

@@ -33,9 +33,6 @@ import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
-import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
 
 class EnumElementNameDeclarationTest {
@@ -70,16 +67,16 @@ class EnumElementNameDeclarationTest {
     var nameNode = new SimpleNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
     nameNode.addChild(identifierNode);
 
-    EnumElementNode element = new EnumElementNodeImpl(DelphiLexer.TkEnumElement);
+    var element = new EnumElementNodeImpl(DelphiLexer.TkEnumElement);
     element.addChild(nameNode);
 
-    EnumTypeNode enumType = new EnumTypeNodeImpl(new CommonToken(DelphiLexer.PAREN_LEFT));
+    var enumType = new EnumTypeNodeImpl(new CommonToken(DelphiLexer.PAREN_LEFT));
     enumType.addChild(element);
 
     DelphiFile delphiFile = mock(DelphiFile.class);
     when(delphiFile.getTypeFactory()).thenReturn(TypeFactoryUtils.defaultFactory());
 
-    DelphiAst ast = spy(new DelphiAstImpl(delphiFile, null));
+    var ast = spy(new DelphiAstImpl(delphiFile, null));
     ast.addChild(enumType);
 
     return new EnumElementNameDeclarationImpl(element);
