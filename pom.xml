@@ -106,7 +106,6 @@
     <commons-text.version>1.10.0</commons-text.version>
     <jdom.version>2.0.6.1</jdom.version>
     <json-simple.version>1.1.1</json-simple.version>
-    <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
     <jsr305.version>3.0.2</jsr305.version>
     <guava.version>31.1-jre</guava.version>
     <commons-lang.version>3.12.0</commons-lang.version>
@@ -116,13 +115,11 @@
     <assertj.version>3.23.1</assertj.version>
     <mockito.version>5.2.0</mockito.version>
     <archunit.version>0.23.1</archunit.version>
-    <slf4j.version>1.7.30</slf4j.version>
     <errorprone.version>2.20.0</errorprone.version>
     <!-- Plugin versions -->
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
     <surefire-plugin.version>3.0.0-M6</surefire-plugin.version>
-    <failsafe-plugin.version>3.0.0-M6</failsafe-plugin.version>
     <enforcer-plugin.version>3.1.0</enforcer-plugin.version>
     <sonar-packaging-plugin.version>1.21.0.505</sonar-packaging-plugin.version>
     <spotless-plugin.version>2.27.2</spotless-plugin.version>
@@ -155,11 +152,6 @@
         <groupId>com.google.errorprone</groupId>
         <artifactId>error_prone_annotations</artifactId>
         <version>${errorprone.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jetbrains</groupId>
-        <artifactId>annotations</artifactId>
-        <version>${jetbrains-annotations.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -233,12 +225,6 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-nop</artifactId>
-        <version>${slf4j.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.sonarsource.sonarqube</groupId>
         <artifactId>sonar-ws</artifactId>
         <version>${sonar.version}</version>
@@ -265,10 +251,6 @@
       <artifactId>jsr305</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.errorprone</groupId>
       <artifactId>error_prone_annotations</artifactId>
     </dependency>
@@ -286,11 +268,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefire-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>${failsafe-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
