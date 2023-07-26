@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
+import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
@@ -42,7 +43,7 @@ public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
 
   @Override
   public GenericDefinitionNode getGenericDefinition() {
-    DelphiNode result = getChild(getChildrenCount() - 1);
+    DelphiNode result = Iterables.getLast(getChildren(), null);
     return (result instanceof GenericDefinitionNode) ? (GenericDefinitionNode) result : null;
   }
 

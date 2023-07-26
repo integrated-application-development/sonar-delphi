@@ -48,7 +48,7 @@ public class UnusedLocalVariableCheck extends DelphiCheck {
     for (var assignment : method.findDescendantsOfType(AssignmentStatementNode.class)) {
       ExpressionNode assigneee = assignment.getAssignee();
       if (assigneee instanceof PrimaryExpressionNode
-          && assigneee.getChildrenCount() == 1
+          && assigneee.getChildren().size() == 1
           && assigneee.getChild(0) instanceof NameReferenceNode) {
         NameReferenceNode nameReference = (NameReferenceNode) assigneee.getChild(0);
         NameOccurrence occurrence = nameReference.getNameOccurrence();

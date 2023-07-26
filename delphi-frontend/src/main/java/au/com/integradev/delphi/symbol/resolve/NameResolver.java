@@ -268,8 +268,8 @@ public class NameResolver {
       return;
     }
 
-    for (int i = 0; i < node.getChildrenCount(); i++) {
-      if (!readPrimaryExpressionPart(node.getChild(i))) {
+    for (DelphiNode child : node.getChildren()) {
+      if (!readPrimaryExpressionPart(child)) {
         break;
       }
     }
@@ -368,7 +368,7 @@ public class NameResolver {
 
     int nextChild = (node.isBareInherited() ? 1 : 2);
 
-    for (int i = nextChild; i < node.getChildrenCount(); ++i) {
+    for (int i = nextChild; i < node.getChildren().size(); ++i) {
       if (!readPrimaryExpressionPart(node.getChild(i))) {
         break;
       }

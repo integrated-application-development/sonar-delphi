@@ -7,12 +7,11 @@ import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
-import org.apache.commons.lang3.ArrayUtils;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -23,7 +22,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   private final DelphiToken token;
   protected DelphiNode parent;
-  private DelphiNode[] children;
+  private List<DelphiNode> children;
   private int childIndex;
   private DelphiToken firstToken;
   private DelphiToken lastToken;
@@ -96,44 +95,26 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   }
 
   @Override
-  public DelphiNode getChild(int index) {
-    if (ArrayUtils.isArrayIndexValid(this.children, index)) {
-      return this.children[index];
-    }
-    return null;
-  }
-
-  @Override
   public void addChild(@Nonnull DelphiNode node) {
+    if (this.children == null) {
+      this.children = new ArrayList<>();
+    }
+
     DelphiNodeImpl child = (DelphiNodeImpl) node;
     if (child.getToken().isNil()) {
-      boolean sameChildren = this.children != null && Arrays.equals(this.children, child.children);
+      boolean sameChildren = this.children.equals(child.children);
       Preconditions.checkArgument(!sameChildren, "Cannot add child list to itself!");
-
-      int count = node.getChildrenCount();
-      for (int i = 0; i < count; ++i) {
-        DelphiNodeImpl grandchild = (DelphiNodeImpl) node.getChild(i);
-        addChild(grandchild, getChildrenCount());
-        grandchild.setParent(this);
+      for (DelphiNode grandchild : child.getChildren()) {
+        ((DelphiNodeImpl) grandchild).setParent(this);
+        ((DelphiNodeImpl) grandchild).setChildIndex(this.children.size());
+        this.children.add(grandchild);
       }
     } else {
-      addChild(node, getChildrenCount());
+      child.setChildIndex(this.children.size());
+      this.children.add(child);
     }
 
     ((DelphiNodeImpl) node).setParent(this);
-  }
-
-  private void addChild(DelphiNode child, int index) {
-    if (this.children == null) {
-      this.children = new DelphiNode[index + 1];
-    } else if (index >= this.children.length) {
-      DelphiNode[] newChildren = new DelphiNode[index + 1];
-      System.arraycopy(this.children, 0, newChildren, 0, this.children.length);
-      this.children = newChildren;
-    }
-
-    this.children[index] = child;
-    ((DelphiNodeImpl) child).setChildIndex(index);
   }
 
   @Override
@@ -166,10 +147,9 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
     DelphiToken result = this.token;
     int index = result.getIndex();
 
-    for (int i = 0; i < getChildrenCount(); ++i) {
+    for (int i = 0; i < getChildren().size(); ++i) {
       DelphiToken childToken = getChild(i).getFirstToken();
-      int childIndex = childToken.getIndex();
-      if (!childToken.isImaginary() && childIndex < index) {
+      if (!childToken.isImaginary() && childToken.getIndex() < index) {
         result = childToken;
       }
     }
@@ -181,10 +161,9 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
     DelphiToken result = this.getFirstToken();
     int index = result.getIndex();
 
-    for (int i = 0; i < getChildrenCount(); ++i) {
-      DelphiToken childToken = getChild(i).getLastToken();
-      int childIndex = childToken.getIndex();
-      if (!childToken.isImaginary() && childIndex > index) {
+    for (DelphiNode child : getChildren()) {
+      DelphiToken childToken = child.getLastToken();
+      if (!childToken.isImaginary() && childToken.getIndex() > index) {
         result = childToken;
       }
     }
@@ -193,8 +172,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
 
   @Override
   public DelphiNode getFirstChildWithTokenType(DelphiTokenType tokenType) {
-    for (int i = 0; i < getChildrenCount(); ++i) {
-      DelphiNode child = getChild(i);
+    for (DelphiNode child : getChildren()) {
       if (child.getToken().getType() == tokenType) {
         return child;
       }
@@ -241,8 +219,16 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   }
 
   @Override
-  public int getChildrenCount() {
-    return this.children == null ? 0 : this.children.length;
+  public List<DelphiNode> getChildren() {
+    return children == null ? Collections.emptyList() : Collections.unmodifiableList(children);
+  }
+
+  @Override
+  public DelphiNode getChild(int index) {
+    if (index >= 0 && index < getChildren().size()) {
+      return this.children.get(index);
+    }
+    return null;
   }
 
   @Override
@@ -299,8 +285,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
 
   private static <T> void findDescendantsOfType(
       DelphiNode node, Class<T> targetType, List<T> results) {
-    for (int i = 0; i < node.getChildrenCount(); ++i) {
-      DelphiNode child = node.getChild(i);
+    for (DelphiNode child : node.getChildren()) {
       if (targetType.isAssignableFrom(child.getClass())) {
         results.add(targetType.cast(child));
       }
@@ -313,8 +298,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   public <T> List<T> findChildrenOfType(Class<T> targetType) {
     List<T> list = new ArrayList<>();
 
-    for (int i = 0; i < this.getChildrenCount(); ++i) {
-      DelphiNode child = this.getChild(i);
+    for (DelphiNode child : getChildren()) {
       if (targetType.isInstance(child)) {
         list.add(targetType.cast(child));
       }
@@ -330,8 +314,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
 
   @Override
   public <T> T getFirstChildOfType(Class<T> childType) {
-    for (int i = 0; i < this.getChildrenCount(); ++i) {
-      DelphiNode child = this.getChild(i);
+    for (DelphiNode child : getChildren()) {
       if (childType.isInstance(child)) {
         return childType.cast(child);
       }
@@ -341,8 +324,7 @@ public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
   }
 
   private static <T> T getFirstDescendantOfType(Class<T> descendantType, DelphiNode node) {
-    for (int i = 0; i < node.getChildrenCount(); ++i) {
-      DelphiNode child = node.getChild(i);
+    for (DelphiNode child : node.getChildren()) {
       if (descendantType.isAssignableFrom(child.getClass())) {
         return descendantType.cast(child);
       }

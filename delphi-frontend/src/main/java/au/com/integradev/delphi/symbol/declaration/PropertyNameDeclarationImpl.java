@@ -27,8 +27,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
@@ -144,8 +144,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
 
   private static NameDeclaration extractSpecifierDeclaration(PrimaryExpressionNode node) {
     NameDeclaration result = null;
-    for (int i = 0; i < node.getChildrenCount(); ++i) {
-      Node child = node.getChild(i);
+    for (DelphiNode child : node.getChildren()) {
       if (child instanceof NameReferenceNode) {
         result = ((NameReferenceNode) child).getLastName().getNameDeclaration();
       }

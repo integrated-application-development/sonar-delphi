@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -136,8 +137,8 @@ public class VariableInitializationCheck extends DelphiCheck {
       visitStatement(node, context);
     }
 
-    for (int i = 0; i < node.getChildrenCount(); i++) {
-      visitStatements(node.getChild(i), context);
+    for (DelphiNode child : node.getChildren()) {
+      visitStatements(child, context);
     }
 
     if (visitChildrenFirst) {
@@ -311,11 +312,11 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private static ExpressionNode getArgumentExpression(NameReferenceNode name) {
-    if (name.getChildIndex() != name.getParent().getChildrenCount() - 1) {
+    if (!(name.getParent() instanceof PrimaryExpressionNode)) {
       return null;
     }
 
-    if (!(name.getParent() instanceof PrimaryExpressionNode)) {
+    if (!Iterables.getLast(name.getParent().getChildren()).equals(name)) {
       return null;
     }
 
@@ -349,7 +350,7 @@ public class VariableInitializationCheck extends DelphiCheck {
       if (argumentList == null || !isHardCast(argumentList)) {
         return expression;
       }
-      expression = (ExpressionNode) argumentList.getChild(0);
+      expression = (ExpressionNode) argumentList.getChildren().get(0);
     }
   }
 
@@ -491,8 +492,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   private static NameReferenceNode getLastNameReference(ExpressionNode expression) {
     expression = expression.skipParentheses();
     if (expression instanceof PrimaryExpressionNode) {
-      PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
-      Node lastChild = primary.getChild(primary.getChildrenCount() - 1);
+      Node lastChild = Iterables.getLast(expression.getChildren());
       if (lastChild instanceof NameReferenceNode) {
         return ((NameReferenceNode) lastChild);
       }
@@ -544,8 +544,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     if (node instanceof NameReferenceNode) {
       references.add((NameReferenceNode) node);
     } else {
-      for (int i = 0; i < node.getChildrenCount(); ++i) {
-        DelphiNode child = node.getChild(i);
+      for (DelphiNode child : node.getChildren()) {
         if (!(child instanceof StatementNode)) {
           findNameReferences(child, references);
         }
@@ -624,8 +623,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   private InitializationState getReferredInitializationState(ExpressionNode expression) {
     expression = expression.skipParentheses();
     if (expression instanceof PrimaryExpressionNode) {
-      PrimaryExpressionNode primary = (PrimaryExpressionNode) expression;
-      Node lastChild = primary.getChild(primary.getChildrenCount() - 1);
+      Node lastChild = Iterables.getLast(expression.getChildren());
       if (lastChild instanceof NameReferenceNode) {
         return this.getReferredInitializationState((NameReferenceNode) lastChild);
       }

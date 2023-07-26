@@ -72,13 +72,10 @@ public class VisibilitySectionOrderCheck extends DelphiCheck {
   }
 
   private static VisibilityNode getVisibilityNode(VisibilitySectionNode visibilitySectionNode) {
-    if (visibilitySectionNode.getChildrenCount() > 0) {
-      Node firstChild = visibilitySectionNode.getChild(0);
-      if (firstChild instanceof VisibilityNode) {
-        return (VisibilityNode) firstChild;
-      }
+    Node firstChild = visibilitySectionNode.getChild(0);
+    if (firstChild instanceof VisibilityNode) {
+      return (VisibilityNode) firstChild;
     }
-
     return null;
   }
 }

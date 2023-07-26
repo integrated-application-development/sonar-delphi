@@ -76,7 +76,7 @@ public class AssignedAndFreeCheck extends DelphiCheck {
 
   private static String findVariableNameForAssigned(ExpressionNode guard) {
     Node method = guard.getChild(0);
-    if (guard.getChildrenCount() < 2 || !method.getImage().equalsIgnoreCase("Assigned")) {
+    if (guard.getChildren().size() < 2 || !method.getImage().equalsIgnoreCase("Assigned")) {
       return null;
     }
 

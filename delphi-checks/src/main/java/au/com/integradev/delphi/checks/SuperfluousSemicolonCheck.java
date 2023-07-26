@@ -35,8 +35,7 @@ public class SuperfluousSemicolonCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(StatementListNode statementList, DelphiCheckContext context) {
     DelphiNode previous = null;
-    for (int i = 0; i < statementList.getChildrenCount(); ++i) {
-      DelphiNode current = statementList.getChild(i);
+    for (DelphiNode current : statementList.getChildren()) {
       if (current.getTokenType() == DelphiTokenType.SEMICOLON
           && !(previous instanceof StatementNode)) {
         reportIssue(context, current, MESSAGE);

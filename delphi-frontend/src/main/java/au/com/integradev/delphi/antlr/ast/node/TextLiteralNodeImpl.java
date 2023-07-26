@@ -55,8 +55,7 @@ public final class TextLiteralNodeImpl extends LiteralNodeImpl implements TextLi
   public String getImage() {
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder("'");
-      for (int i = 0; i < getChildrenCount(); ++i) {
-        DelphiNode child = getChild(i);
+      for (DelphiNode child : getChildren()) {
         switch (child.getTokenType()) {
           case QUOTED_STRING:
             String withoutQuotes = getStringWithoutQuotes(child.getImage()).toString();

@@ -51,9 +51,7 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
     this.delphiFile = delphiFile;
 
     if (root != null) {
-      for (int i = 0; i < root.getChildrenCount(); ++i) {
-        addChild(root.getChild(i));
-      }
+      root.getChildren().forEach(this::addChild);
     }
   }
 
@@ -114,16 +112,16 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
 
   @Override
   public boolean isProgram() {
-    return getChildrenCount() > 0 && getFileHeader() instanceof ProgramDeclarationNode;
+    return getChildren().size() > 0 && getFileHeader() instanceof ProgramDeclarationNode;
   }
 
   @Override
   public boolean isUnit() {
-    return getChildrenCount() > 0 && getFileHeader() instanceof UnitDeclarationNode;
+    return getChildren().size() > 0 && getFileHeader() instanceof UnitDeclarationNode;
   }
 
   @Override
   public boolean isPackage() {
-    return getChildrenCount() > 0 && getFileHeader() instanceof PackageDeclarationNode;
+    return getChildren().size() > 0 && getFileHeader() instanceof PackageDeclarationNode;
   }
 }

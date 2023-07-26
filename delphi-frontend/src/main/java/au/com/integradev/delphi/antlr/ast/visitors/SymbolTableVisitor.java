@@ -649,7 +649,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       data.nameResolutionHelper.resolve(typeNode);
     }
 
-    for (int i = declarationNode.getChildrenCount() - 1; i >= 0; --i) {
+    for (int i = declarationNode.getChildren().size() - 1; i >= 0; --i) {
       DelphiNode child = declarationNode.getChild(i);
       if (!(child instanceof TypeNode)) {
         child.accept(this, data);
@@ -701,8 +701,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(TypeSectionNode node, Data data) {
     DelphiParserVisitor.super.visit(node, data);
 
-    for (int i = 0; i < node.getChildrenCount(); ++i) {
-      TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) node.getChild(i);
+    for (DelphiNode child : node.getChildren()) {
+      TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) child;
       if (typeDeclaration.isClassReference()) {
         var classReference = (ClassReferenceTypeNode) typeDeclaration.getTypeNode();
         TypeNode classOf = classReference.getClassOfTypeNode();

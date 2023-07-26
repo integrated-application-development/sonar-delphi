@@ -221,7 +221,7 @@ public class MemoryManagementCheck extends DelphiCheck {
   }
 
   private static boolean isLastChild(DelphiNode node) {
-    return node.getChildIndex() == node.getParent().getChildrenCount() - 1;
+    return node.getChildIndex() == node.getParent().getChildren().size() - 1;
   }
 
   private static boolean requiresMemoryManagement(NameReferenceNode reference) {

@@ -72,6 +72,6 @@ public final class MethodParametersNodeImpl extends DelphiNodeImpl implements Me
 
   @Override
   public boolean isEmpty() {
-    return getChildrenCount() < 3;
+    return getChildren().size() < 3;
   }
 }

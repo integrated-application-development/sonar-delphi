@@ -56,7 +56,7 @@ public class AddressOfSubroutineCheck extends DelphiCheck {
     }
 
     PrimaryExpressionNode primary = (PrimaryExpressionNode) expression.getOperand();
-    if (primary.getChildrenCount() != 1) {
+    if (primary.getChildren().size() != 1) {
       return false;
     }
 

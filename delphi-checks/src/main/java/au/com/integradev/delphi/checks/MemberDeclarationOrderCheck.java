@@ -60,9 +60,7 @@ public class MemberDeclarationOrderCheck extends DelphiCheck {
     var currentSegment = BodySegment.FIELDS;
     List<DelphiNode> outOfOrderDeclarations = new ArrayList<>();
 
-    for (int i = 0; i < sectionNode.getChildrenCount(); i++) {
-      DelphiNode itemNode = sectionNode.getChild(i);
-
+    for (DelphiNode itemNode : sectionNode.getChildren()) {
       if (itemNode instanceof FieldSectionNode && currentSegment != BodySegment.FIELDS) {
         outOfOrderDeclarations.addAll(itemNode.findChildrenOfType(FieldDeclarationNode.class));
       } else if (itemNode instanceof MethodDeclarationNode

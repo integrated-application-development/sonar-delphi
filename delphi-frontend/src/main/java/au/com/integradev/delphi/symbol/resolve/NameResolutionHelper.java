@@ -427,7 +427,7 @@ public class NameResolutionHelper {
   }
 
   private boolean handlePascalReturn(PrimaryExpressionNode expression, NameResolver resolver) {
-    if (expression.getChildrenCount() != 1) {
+    if (expression.getChildren().size() != 1) {
       return false;
     }
 

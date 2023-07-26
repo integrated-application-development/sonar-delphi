@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
 public final class ArgumentListNodeImpl extends DelphiNodeImpl implements ArgumentListNode {
@@ -55,8 +56,8 @@ public final class ArgumentListNodeImpl extends DelphiNodeImpl implements Argume
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder();
       imageBuilder.append("(");
-      for (int i = 0; i < getChildrenCount(); ++i) {
-        imageBuilder.append(getChild(i).getImage());
+      for (DelphiNode child : getChildren()) {
+        imageBuilder.append(child.getImage());
       }
       image = imageBuilder.toString();
     }

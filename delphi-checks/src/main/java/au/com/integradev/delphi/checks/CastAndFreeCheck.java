@@ -22,6 +22,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import com.google.common.collect.Iterables;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
@@ -63,7 +64,7 @@ public class CastAndFreeCheck extends DelphiCheck {
     return expr instanceof PrimaryExpressionNode
         && expr.getChild(0) instanceof NameReferenceNode
         && expr.getChild(1) instanceof ArgumentListNode
-        && expr.getChildrenCount() < 6;
+        && expr.getChildren().size() < 6;
   }
 
   private static boolean isAcceptableCast(ExpressionNode expr) {
@@ -86,7 +87,7 @@ public class CastAndFreeCheck extends DelphiCheck {
   private static boolean isFree(ExpressionNode node) {
     boolean result =
         (node instanceof PrimaryExpressionNode
-            && node.getChild(node.getChildrenCount() - 1).getImage().equalsIgnoreCase("Free"));
+            && Iterables.getLast(node.getChildren()).getImage().equalsIgnoreCase("Free"));
 
     if (!result) {
       ExpressionNode parenthesized = node.findParentheses();

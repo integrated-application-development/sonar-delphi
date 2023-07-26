@@ -56,7 +56,7 @@ public final class QualifiedNameDeclarationNodeImpl extends NameDeclarationNodeI
       StringBuilder namePart = new StringBuilder();
       List<String> names = new ArrayList<>();
 
-      for (int i = this.getChildrenCount() - 1; i >= 0; --i) {
+      for (int i = this.getChildren().size() - 1; i >= 0; --i) {
         DelphiNode child = this.getChild(i);
         namePart.insert(0, child.getImage());
         if (child instanceof IdentifierNode) {

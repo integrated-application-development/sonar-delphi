@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
@@ -111,7 +112,7 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
 
   @Override
   public NameReferenceNode nextName() {
-    DelphiNode child = getChild(getChildrenCount() - 1);
+    DelphiNode child = Iterables.getLast(getChildren(), null);
     return (child instanceof NameReferenceNode) ? (NameReferenceNode) child : null;
   }
 

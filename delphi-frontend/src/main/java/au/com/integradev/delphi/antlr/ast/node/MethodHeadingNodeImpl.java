@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodHeadingNode;
@@ -193,8 +194,8 @@ public final class MethodHeadingNodeImpl extends DelphiNodeImpl implements Metho
   public Set<MethodDirective> getDirectives() {
     if (directives == null) {
       var builder = new ImmutableSet.Builder<MethodDirective>();
-      for (int i = 0; i < getChildrenCount(); ++i) {
-        DelphiToken token = getChild(i).getToken();
+      for (DelphiNode child : getChildren()) {
+        DelphiToken token = child.getToken();
         MethodDirective directive = MethodDirective.fromToken(token);
         if (directive != null) {
           builder.add(directive);

@@ -181,12 +181,12 @@ public class DelphiTreeAdaptor extends BaseTreeAdaptor {
 
   @Override
   public Object getChild(Object node, int index) {
-    return ((DelphiNode) node).getChild(index);
+    return ((DelphiNode) node).getChildren().get(index);
   }
 
   @Override
   public int getChildCount(Object node) {
-    return ((DelphiNode) node).getChildrenCount();
+    return ((DelphiNode) node).getChildren().size();
   }
 
   @Override

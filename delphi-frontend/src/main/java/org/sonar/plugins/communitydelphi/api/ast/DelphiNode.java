@@ -16,9 +16,9 @@ public interface DelphiNode extends Node {
 
   int getChildIndex();
 
-  DelphiNode getChild(int index);
+  List<DelphiNode> getChildren();
 
-  int getChildrenCount();
+  DelphiNode getChild(int index);
 
   DelphiNode getNthParent(int n);
 
@@ -71,8 +71,8 @@ public interface DelphiNode extends Node {
    * @return Data related to this visit
    */
   default <T> T childrenAccept(DelphiParserVisitor<T> visitor, T data) {
-    for (int i = 0; i < getChildrenCount(); ++i) {
-      getChild(i).accept(visitor, data);
+    for (DelphiNode child : getChildren()) {
+      child.accept(visitor, data);
     }
     return data;
   }

@@ -45,7 +45,7 @@ public class StatementUtils {
     }
 
     var expression = ((ExpressionStatementNode) statement).getExpression().skipParentheses();
-    if (!(expression instanceof PrimaryExpressionNode) || expression.getChildrenCount() > 2) {
+    if (!(expression instanceof PrimaryExpressionNode) || expression.getChildren().size() > 2) {
       return false;
     }
 

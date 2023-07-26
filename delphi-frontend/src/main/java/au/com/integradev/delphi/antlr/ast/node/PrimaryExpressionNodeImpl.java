@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -51,7 +52,7 @@ public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
 
   @Override
   public boolean isBareInherited() {
-    return (getChildrenCount() == 1 || !(getChild(1) instanceof NameReferenceNode))
+    return (getChildren().size() == 1 || !(getChild(1) instanceof NameReferenceNode))
         && isInheritedCall();
   }
 
@@ -59,8 +60,8 @@ public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
   public String getImage() {
     if (image == null) {
       StringBuilder imageBuilder = new StringBuilder();
-      for (int i = 0; i < getChildrenCount(); ++i) {
-        imageBuilder.append(getChild(i).getImage());
+      for (DelphiNode child : getChildren()) {
+        imageBuilder.append(child.getImage());
       }
       image = imageBuilder.toString();
     }

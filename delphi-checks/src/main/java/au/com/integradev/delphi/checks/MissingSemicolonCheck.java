@@ -22,6 +22,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import com.google.common.collect.Iterables;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -48,7 +49,7 @@ public class MissingSemicolonCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(FieldDeclarationNode field, DelphiCheckContext context) {
     if (!(field.getParent() instanceof RecordVariantItemNode)) {
-      DelphiNode lastChild = field.getChild(field.getChildrenCount() - 1);
+      DelphiNode lastChild = Iterables.getLast(field.getChildren());
       if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
         reportIssue(context, field, "Terminate this field declaration with a semicolon.");
       }
@@ -58,7 +59,7 @@ public class MissingSemicolonCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(MethodHeadingNode heading, DelphiCheckContext context) {
-    DelphiNode lastChild = heading.getChild(heading.getChildrenCount() - 1);
+    DelphiNode lastChild = Iterables.getLast(heading.getChildren());
     if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
       reportIssue(context, heading, "Terminate this method heading with a semicolon.");
     }
@@ -95,11 +96,11 @@ public class MissingSemicolonCheck extends DelphiCheck {
 
   private static DelphiNode findNodePrecedingMissingSemicolon(DelphiNode node) {
     DelphiNode lastNode = node;
-    int childCount = lastNode.getChildrenCount();
+    int childCount = lastNode.getChildren().size();
 
     while (childCount > 0) {
-      lastNode = lastNode.getChild(childCount - 1);
-      childCount = lastNode.getChildrenCount();
+      lastNode = Iterables.getLast(lastNode.getChildren());
+      childCount = lastNode.getChildren().size();
     }
 
     return lastNode;

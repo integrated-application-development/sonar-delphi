@@ -55,7 +55,7 @@ public final class ArrayConstructorNodeImpl extends ExpressionNodeImpl
     if (image == null) {
       StringBuilder builder = new StringBuilder();
       builder.append("[");
-      for (int i = 0; i < getChildrenCount() - 1; ++i) {
+      for (int i = 0; i < getChildren().size() - 1; ++i) {
         if (i > 0) {
           builder.append(", ");
         }

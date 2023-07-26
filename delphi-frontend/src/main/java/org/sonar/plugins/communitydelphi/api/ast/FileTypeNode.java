@@ -1,10 +1,8 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface FileTypeNode extends TypeNode {
-  @Nonnull
-  default TypeNode getTypeNode() {
-    return (TypeNode) getChild(1);
-  }
+  @Nullable
+  TypeNode getTypeNode();
 }
