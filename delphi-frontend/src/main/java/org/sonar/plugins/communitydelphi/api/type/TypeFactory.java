@@ -5,7 +5,7 @@ import au.com.integradev.delphi.type.factory.UntypedTypeImpl;
 import au.com.integradev.delphi.type.factory.VoidTypeImpl;
 import java.math.BigInteger;
 import java.util.List;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;

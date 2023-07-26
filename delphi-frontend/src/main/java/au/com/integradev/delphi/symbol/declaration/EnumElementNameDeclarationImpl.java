@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -35,7 +34,6 @@ public class EnumElementNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return type;
   }
@@ -51,7 +49,7 @@ public class EnumElementNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  public int compareTo(@NotNull NameDeclaration other) {
+  public int compareTo(NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       EnumElementNameDeclarationImpl that = (EnumElementNameDeclarationImpl) other;

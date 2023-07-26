@@ -44,10 +44,9 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
@@ -91,17 +90,17 @@ public class SymbolTableBuilder {
     // package-private constructor
   }
 
-  public SymbolTableBuilder unitScopeNames(@NotNull Set<String> unitScopeNames) {
+  public SymbolTableBuilder unitScopeNames(Set<String> unitScopeNames) {
     this.unitScopeNames = unitScopeNames;
     return this;
   }
 
-  public SymbolTableBuilder sourceFiles(@NotNull List<Path> sourceFiles) {
+  public SymbolTableBuilder sourceFiles(List<Path> sourceFiles) {
     this.sourceFiles = sourceFiles;
     return this;
   }
 
-  public SymbolTableBuilder referencedFiles(@NotNull List<Path> referencedFiles) {
+  public SymbolTableBuilder referencedFiles(List<Path> referencedFiles) {
     this.referencedFiles = referencedFiles;
     return this;
   }
@@ -121,23 +120,23 @@ public class SymbolTableBuilder {
     return this;
   }
 
-  public SymbolTableBuilder searchPath(@NotNull SearchPath searchPath) {
+  public SymbolTableBuilder searchPath(SearchPath searchPath) {
     this.searchPath = searchPath;
     return this;
   }
 
-  public SymbolTableBuilder conditionalDefines(@NotNull Set<String> conditionalDefines) {
+  public SymbolTableBuilder conditionalDefines(Set<String> conditionalDefines) {
     this.conditionalDefines = conditionalDefines;
     return this;
   }
 
-  public SymbolTableBuilder unitAliases(@NotNull Map<String, String> unitAliases) {
+  public SymbolTableBuilder unitAliases(Map<String, String> unitAliases) {
     this.unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     this.unitAliases.putAll(unitAliases);
     return this;
   }
 
-  public SymbolTableBuilder standardLibraryPath(@NotNull Path standardLibraryPath) {
+  public SymbolTableBuilder standardLibraryPath(Path standardLibraryPath) {
     this.standardLibraryPath = standardLibraryPath;
     return this;
   }
@@ -196,7 +195,6 @@ public class SymbolTableBuilder {
     }
   }
 
-  @NotNull
   private UnitImportNameDeclaration createImportDeclaration(
       UnitNameDeclaration unit, UnitImportNode node) {
     UnitData data = searchForImport(unit, node.getNameNode());
@@ -389,7 +387,6 @@ public class SymbolTableBuilder {
     process(unit, resolutionLevel);
   }
 
-  @NotNull
   private UnitData getRequiredUnit(String unit) {
     UnitData data = allUnitsByName.get(unit.toLowerCase());
     if (data != null) {
@@ -403,12 +400,10 @@ public class SymbolTableBuilder {
             unit));
   }
 
-  @NotNull
   private UnitData getSystemUnit() {
     return getRequiredUnit("System");
   }
 
-  @NotNull
   private UnitData getSysInitUnit() {
     return getRequiredUnit("SysInit");
   }

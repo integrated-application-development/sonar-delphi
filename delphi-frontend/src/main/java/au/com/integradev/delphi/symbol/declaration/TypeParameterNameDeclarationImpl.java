@@ -20,7 +20,6 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
@@ -41,7 +40,6 @@ public class TypeParameterNameDeclarationImpl extends NameDeclarationImpl
     this.type = type;
   }
 
-  @NotNull
   @Override
   public Type getType() {
     return type;

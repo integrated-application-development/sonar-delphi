@@ -18,9 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.type;
 
-import org.jetbrains.annotations.NotNull;
-
 public interface Typed {
-  @NotNull
   Type getType();
 }

@@ -22,8 +22,7 @@ import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unk
 
 import au.com.integradev.delphi.type.TypeImpl;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
@@ -57,7 +56,6 @@ public final class ClassReferenceTypeImpl extends TypeImpl
   }
 
   @Override
-  @NotNull
   public DelphiScope typeScope() {
     return classType instanceof ScopedType ? ((ScopedType) classType).typeScope() : unknownScope();
   }

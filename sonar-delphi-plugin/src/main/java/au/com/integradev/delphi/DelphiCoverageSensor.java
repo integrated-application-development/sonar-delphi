@@ -28,7 +28,7 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Stream;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -61,7 +61,7 @@ public class DelphiCoverageSensor implements Sensor {
 
   /** The actual sensor code. */
   @Override
-  public void execute(@NotNull SensorContext context) {
+  public void execute(@Nonnull SensorContext context) {
     if (shouldExecuteOnProject()) {
       addCoverage(context);
     }

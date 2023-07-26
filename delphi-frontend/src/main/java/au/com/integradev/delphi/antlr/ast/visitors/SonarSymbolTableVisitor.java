@@ -21,7 +21,6 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
@@ -35,8 +34,8 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
 
   private static void createSymbol(
       @Nullable NameDeclaration declaration,
-      @NotNull List<NameOccurrence> occurrences,
-      @NotNull NewSymbolTable table) {
+      List<NameOccurrence> occurrences,
+      NewSymbolTable table) {
     if (declaration == null) {
       return;
     }

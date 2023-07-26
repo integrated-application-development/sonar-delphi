@@ -1,6 +1,6 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public interface IfStatementNode extends StatementNode {
   ExpressionNode getGuardExpression();

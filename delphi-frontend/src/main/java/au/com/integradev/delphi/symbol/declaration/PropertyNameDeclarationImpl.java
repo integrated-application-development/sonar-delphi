@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -153,7 +152,6 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return type;
   }
@@ -263,7 +261,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  public int compareTo(@NotNull NameDeclaration other) {
+  public int compareTo(NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       PropertyNameDeclarationImpl that = (PropertyNameDeclarationImpl) other;

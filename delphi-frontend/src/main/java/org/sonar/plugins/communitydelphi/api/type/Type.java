@@ -21,7 +21,6 @@ package org.sonar.plugins.communitydelphi.api.type;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 public interface Type {
@@ -42,7 +41,6 @@ public interface Type {
    *
    * @return The type this inherits from. UnknownType if there is no such type.
    */
-  @NotNull
   Type superType();
 
   /**
@@ -355,7 +353,6 @@ public interface Type {
      *
      * @return Element type
      */
-    @NotNull
     Type elementType();
   }
 
@@ -383,7 +380,6 @@ public interface Type {
      *
      * @return Type scope
      */
-    @NotNull
     DelphiScope typeScope();
   }
 
@@ -423,7 +419,6 @@ public interface Type {
      *
      * @return the type that this is a helper for
      */
-    @NotNull
     Type extendedType();
   }
 
@@ -433,7 +428,6 @@ public interface Type {
      *
      * @return Dereferenced type
      */
-    @NotNull
     Type dereferencedType();
 
     /**
@@ -527,7 +521,6 @@ public interface Type {
      *
      * @return Base type
      */
-    @NotNull
     Type hostType();
   }
 

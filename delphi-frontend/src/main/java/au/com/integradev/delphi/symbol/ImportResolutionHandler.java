@@ -18,13 +18,11 @@
  */
 package au.com.integradev.delphi.symbol;
 
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 @FunctionalInterface
 public interface ImportResolutionHandler {
-  @NotNull
   UnitImportNameDeclaration resolveImport(UnitNameDeclaration unit, UnitImportNode importNode);
 }

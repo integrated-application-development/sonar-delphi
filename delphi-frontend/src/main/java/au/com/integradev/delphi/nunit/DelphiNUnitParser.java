@@ -31,7 +31,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -53,12 +52,12 @@ public class DelphiNUnitParser {
 
   private DelphiNUnitParser() {}
 
-  public static ResultsAggregator collect(@NotNull File reportsDir) {
+  public static ResultsAggregator collect(File reportsDir) {
     LOG.info("Processing reports in {}", reportsDir);
     return parseFiles(getReports(reportsDir));
   }
 
-  private static Collection<File> getReports(@NotNull File path) {
+  private static Collection<File> getReports(File path) {
     if (!path.isDirectory()) {
       LOG.warn("Reports directory not found: {}", path.getAbsolutePath());
       return Collections.emptyList();

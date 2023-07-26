@@ -21,7 +21,7 @@ package au.com.integradev.delphi.file;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import java.util.Set;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class DefaultDelphiFileConfig implements DelphiFileConfig {

@@ -1,7 +1,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.Deque;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Typed;

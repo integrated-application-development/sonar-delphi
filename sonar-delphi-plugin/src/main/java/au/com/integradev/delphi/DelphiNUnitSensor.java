@@ -24,7 +24,7 @@ import au.com.integradev.delphi.nunit.ResultsAggregator;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.util.Arrays;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -55,7 +55,7 @@ public class DelphiNUnitSensor implements Sensor {
 
   /** The actual sensor code. */
   @Override
-  public void execute(@NotNull SensorContext context) {
+  public void execute(@Nonnull SensorContext context) {
     LOG.info("NUnit sensor execute...");
     String[] paths = configuration.getStringArray(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY);
 

@@ -22,7 +22,6 @@ import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import com.google.common.base.Preconditions;
 import java.util.Objects;
 import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -101,7 +100,6 @@ public class InvocationArgument implements Typed {
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return type;
   }

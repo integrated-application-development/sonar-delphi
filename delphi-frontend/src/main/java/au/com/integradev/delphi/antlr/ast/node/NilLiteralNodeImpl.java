@@ -20,7 +20,6 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
@@ -35,7 +34,6 @@ public final class NilLiteralNodeImpl extends LiteralNodeImpl implements NilLite
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return getTypeFactory().nilPointer();
   }

@@ -23,7 +23,6 @@ import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
 import java.util.List;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
@@ -232,7 +231,6 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return type;
   }

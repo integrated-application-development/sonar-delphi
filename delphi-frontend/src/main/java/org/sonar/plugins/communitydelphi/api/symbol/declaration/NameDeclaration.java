@@ -18,7 +18,7 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;

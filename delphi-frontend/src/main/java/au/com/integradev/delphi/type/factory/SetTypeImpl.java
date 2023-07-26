@@ -19,7 +19,6 @@
 package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 
@@ -44,7 +43,6 @@ public final class SetTypeImpl extends TypeImpl implements CollectionType {
   }
 
   @Override
-  @NotNull
   public Type elementType() {
     return elementType;
   }

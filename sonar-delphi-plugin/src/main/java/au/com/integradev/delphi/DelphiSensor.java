@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -77,7 +77,7 @@ public class DelphiSensor implements Sensor {
 
   /** The actual sensor code. */
   @Override
-  public void execute(@NotNull SensorContext context) {
+  public void execute(@Nonnull SensorContext context) {
     if (shouldExecuteOnProject()) {
       executor.setup();
       executeOnFiles(context);

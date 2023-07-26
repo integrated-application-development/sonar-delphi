@@ -22,10 +22,9 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
@@ -204,7 +203,6 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements Typ
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return getTypeNode().getType();
   }

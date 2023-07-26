@@ -24,7 +24,6 @@ import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
@@ -139,7 +138,6 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
   }
 
   @Override
-  @NotNull
   public Type getType() {
     NameDeclaration typedDeclaration;
 

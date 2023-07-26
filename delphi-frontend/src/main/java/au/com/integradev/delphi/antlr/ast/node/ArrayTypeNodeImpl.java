@@ -24,9 +24,8 @@ import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.EnumSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstArraySubTypeNode;
@@ -47,7 +46,6 @@ public final class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNo
   }
 
   @Override
-  @NotNull
   public TypeNode getElementTypeNode() {
     return (TypeNode) getChild(1);
   }

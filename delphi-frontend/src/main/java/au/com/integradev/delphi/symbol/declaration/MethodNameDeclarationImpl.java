@@ -33,8 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
@@ -190,7 +189,6 @@ public final class MethodNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return methodType;
   }
@@ -296,7 +294,7 @@ public final class MethodNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  public int compareTo(@NotNull NameDeclaration other) {
+  public int compareTo(NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       MethodNameDeclarationImpl that = (MethodNameDeclarationImpl) other;

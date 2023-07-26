@@ -20,7 +20,6 @@ package au.com.integradev.delphi.type.factory;
 
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -41,7 +40,6 @@ public final class HelperTypeImpl extends StructTypeImpl implements HelperType {
   }
 
   @Override
-  @NotNull
   public Type extendedType() {
     return extendedType;
   }

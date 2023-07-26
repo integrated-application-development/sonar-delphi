@@ -20,7 +20,6 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
@@ -50,7 +49,6 @@ public final class EnumElementNodeImpl extends DelphiNodeImpl implements EnumEle
     return getNameDeclarationNode().getImage();
   }
 
-  @NotNull
   @Override
   public Type getType() {
     return ((EnumTypeNode) parent).getType();

@@ -20,7 +20,6 @@ package au.com.integradev.delphi.compiler;
 
 import java.math.BigDecimal;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 public final class CompilerVersion implements Comparable<CompilerVersion> {
   private static final String VERSION_SYMBOL_REGEX = "VER\\d{2,3}";
@@ -61,7 +60,7 @@ public final class CompilerVersion implements Comparable<CompilerVersion> {
   }
 
   @Override
-  public int compareTo(@NotNull CompilerVersion compilerVersion) {
+  public int compareTo(CompilerVersion compilerVersion) {
     return number.compareTo(compilerVersion.number);
   }
 

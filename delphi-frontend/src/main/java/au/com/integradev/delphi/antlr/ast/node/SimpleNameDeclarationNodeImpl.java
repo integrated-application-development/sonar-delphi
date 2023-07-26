@@ -22,7 +22,6 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.Map;
 import java.util.Objects;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
@@ -83,7 +82,6 @@ public final class SimpleNameDeclarationNodeImpl extends NameDeclarationNodeImpl
     return (IdentifierNode) getChild(0);
   }
 
-  @NotNull
   @Override
   public DeclarationKind getKind() {
     DeclarationKind kind = PARENT_NODE_KIND_MAP.get(parent.getClass());

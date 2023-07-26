@@ -20,7 +20,6 @@ package au.com.integradev.delphi.type.parameter;
 
 import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
@@ -42,7 +41,6 @@ public abstract class AbstractParameter implements Parameter {
   }
 
   @Override
-  @NotNull
   public Type getType() {
     return type;
   }
@@ -90,7 +88,7 @@ public abstract class AbstractParameter implements Parameter {
   }
 
   @Override
-  public final int compareTo(@NotNull Parameter other) {
+  public final int compareTo(Parameter other) {
     return ComparisonChain.start()
         .compare(getImage(), other.getImage(), String.CASE_INSENSITIVE_ORDER)
         .compare(getType().getImage(), other.getType().getImage(), String.CASE_INSENSITIVE_ORDER)

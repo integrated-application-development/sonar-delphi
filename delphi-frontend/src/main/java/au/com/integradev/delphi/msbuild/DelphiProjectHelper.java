@@ -48,7 +48,6 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -83,9 +82,9 @@ public class DelphiProjectHelper {
    * @param fs Sonar FileSystem
    */
   public DelphiProjectHelper(
-      @NotNull Configuration settings,
-      @NotNull FileSystem fs,
-      @NotNull EnvironmentVariableProvider environmentVariableProvider) {
+      Configuration settings,
+      FileSystem fs,
+      EnvironmentVariableProvider environmentVariableProvider) {
     this.settings = settings;
     this.fs = fs;
     this.environmentVariableProvider = environmentVariableProvider;

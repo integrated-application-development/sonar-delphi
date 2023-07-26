@@ -20,7 +20,6 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
@@ -62,7 +61,6 @@ public final class VarDeclarationNodeImpl extends DelphiNodeImpl implements VarD
     return getFirstChildWithTokenType(DelphiTokenType.ABSOLUTE) != null;
   }
 
-  @NotNull
   @Override
   public Type getType() {
     return getTypeNode().getType();

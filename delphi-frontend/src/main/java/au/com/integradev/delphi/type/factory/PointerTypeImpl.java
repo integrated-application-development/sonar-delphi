@@ -20,7 +20,6 @@ package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
@@ -49,7 +48,6 @@ public final class PointerTypeImpl extends TypeImpl implements PointerType {
   }
 
   @Override
-  @NotNull
   public Type dereferencedType() {
     return dereferencedType;
   }

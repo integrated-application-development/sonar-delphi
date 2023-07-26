@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -95,7 +94,6 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
     return false;
   }
 
-  @NotNull
   @Override
   public Type superType() {
     return superType;
@@ -127,7 +125,6 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   }
 
   @Override
-  @NotNull
   public DelphiScope typeScope() {
     return scope;
   }
