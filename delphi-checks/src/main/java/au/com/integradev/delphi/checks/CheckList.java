@@ -73,7 +73,6 @@ public final class CheckList {
           LowercaseKeywordCheck.class,
           MathFunctionSingleOverloadCheck.class,
           MemberDeclarationOrderCheck.class,
-          MemoryManagementCheck.class,
           MethodNameCheck.class,
           MethodNestingDepthCheck.class,
           MethodResultAssignedCheck.class,
