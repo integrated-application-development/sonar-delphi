@@ -54,7 +54,7 @@ class DelphiChecksExecutorTest {
     SonarRuntime sonarRuntime = mock();
     when(sonarRuntime.getProduct()).thenReturn(SonarProduct.SONARQUBE);
 
-    executor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, mock(), sonarRuntime);
+    executor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, sonarRuntime);
     executor.setup();
   }
 

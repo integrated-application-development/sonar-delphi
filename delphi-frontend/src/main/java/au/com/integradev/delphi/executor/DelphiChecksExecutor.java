@@ -20,7 +20,6 @@ package au.com.integradev.delphi.executor;
 
 import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
-import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
@@ -40,17 +39,14 @@ import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 public class DelphiChecksExecutor implements Executor {
   private final DelphiProjectHelper delphiProjectHelper;
   private final MasterCheckRegistrar checkRegistrar;
-  private final ScopeMetadataLoader scopeMetadataLoader;
   private final SonarRuntime sonarRuntime;
 
   public DelphiChecksExecutor(
       DelphiProjectHelper delphiProjectHelper,
       MasterCheckRegistrar checkRegistrar,
-      ScopeMetadataLoader scopeMetadataLoader,
       SonarRuntime sonarRuntime) {
     this.delphiProjectHelper = delphiProjectHelper;
     this.checkRegistrar = checkRegistrar;
-    this.scopeMetadataLoader = scopeMetadataLoader;
     this.sonarRuntime = sonarRuntime;
   }
 
@@ -65,8 +61,7 @@ public class DelphiChecksExecutor implements Executor {
                 context.sensorContext(),
                 delphiFile,
                 compilerDirectiveParser,
-                checkRegistrar,
-                scopeMetadataLoader);
+                checkRegistrar);
 
     runChecks(RuleScope.ALL, createCheckContext);
     // Main files may contain test code.

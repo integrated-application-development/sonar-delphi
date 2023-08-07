@@ -1,6 +1,5 @@
 package au.com.integradev.delphi.checks.verifier;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -10,7 +9,6 @@ import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
-import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -205,23 +203,15 @@ public class CheckVerifierImpl implements CheckVerifier {
     sensorContext.settings().setProperty(DelphiProperties.TEST_SUITE_TYPE_KEY, "Test.TTestSuite");
 
     var compilerDirectiveParser = new CompilerDirectiveParserImpl(Platform.WINDOWS);
-    ScopeMetadataLoader scopeMetadataLoader = mock();
-    when(scopeMetadataLoader.getScope(any())).thenReturn(RuleScope.ALL);
 
     var checkRegistrar = mock(MasterCheckRegistrar.class);
     when(checkRegistrar.getRuleKey(check))
         .thenReturn(Optional.of(RuleKey.of("test", check.getClass().getSimpleName())));
-    when(checkRegistrar.getEngineKey(check))
-        .thenReturn(Optional.of(RuleKey.of("test", check.getClass().getSimpleName())));
+    when(checkRegistrar.getScope(check)).thenReturn(RuleScope.ALL);
 
     DelphiCheckContext context =
         new DelphiCheckContextImpl(
-            check,
-            sensorContext,
-            file,
-            compilerDirectiveParser,
-            checkRegistrar,
-            scopeMetadataLoader);
+            check, sensorContext, file, compilerDirectiveParser, checkRegistrar);
 
     check.start(context);
     check.visit(file.getAst(), context);

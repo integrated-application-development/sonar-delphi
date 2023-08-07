@@ -1,10 +1,9 @@
-package au.com.integradev.delphi.check;
+package org.sonar.plugins.communitydelphi.api.check;
 
 import com.google.common.io.Resources;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -12,25 +11,17 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
-import org.sonar.api.scanner.ScannerSide;
-import org.sonarsource.api.sonarlint.SonarLintSide;
 
-@ScannerSide
-@SonarLintSide
-public class ScopeMetadataLoader {
+public final class ScopeMetadataLoader {
   private final MetadataResourcePath metadataResourcePath;
-  private final Map<RuleKey, RuleScope> engineKeyToScope;
+  private final ClassLoader classLoader;
 
-  public ScopeMetadataLoader(MetadataResourcePath metadataResourcePath) {
+  public ScopeMetadataLoader(MetadataResourcePath metadataResourcePath, ClassLoader classLoader) {
     this.metadataResourcePath = metadataResourcePath;
-    engineKeyToScope = new HashMap<>();
+    this.classLoader = classLoader;
   }
 
   public RuleScope getScope(RuleKey engineKey) {
-    return engineKeyToScope.computeIfAbsent(engineKey, this::readScope);
-  }
-
-  private RuleScope readScope(RuleKey engineKey) {
     URL url = getMetadataURL(engineKey);
 
     if (url == null) {
@@ -58,11 +49,10 @@ public class ScopeMetadataLoader {
   }
 
   private URL getMetadataURL(RuleKey engineKey) {
-    return getClass()
-        .getResource(
-            metadataResourcePath.forRepository(engineKey.repository())
-                + "/"
-                + engineKey.rule()
-                + ".json");
+    return classLoader.getResource(
+        metadataResourcePath.forRepository(engineKey.repository())
+            + "/"
+            + engineKey.rule()
+            + ".json");
   }
 }

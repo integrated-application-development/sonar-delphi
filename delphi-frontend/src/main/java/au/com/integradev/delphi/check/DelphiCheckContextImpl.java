@@ -18,21 +18,18 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
   private final DelphiInputFile delphiFile;
   private final CompilerDirectiveParser compilerDirectiveParser;
   private final MasterCheckRegistrar checkRegistrar;
-  private final ScopeMetadataLoader scopeMetadataLoader;
 
   public DelphiCheckContextImpl(
       DelphiCheck check,
       SensorContext sensorContext,
       DelphiInputFile delphiFile,
       CompilerDirectiveParser compilerDirectiveParser,
-      MasterCheckRegistrar checkRegistrar,
-      ScopeMetadataLoader scopeMetadataLoader) {
+      MasterCheckRegistrar checkRegistrar) {
     this.check = check;
     this.sensorContext = sensorContext;
     this.delphiFile = delphiFile;
     this.compilerDirectiveParser = compilerDirectiveParser;
     this.checkRegistrar = checkRegistrar;
-    this.scopeMetadataLoader = scopeMetadataLoader;
   }
 
   @Override
@@ -67,7 +64,6 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
 
   @Override
   public DelphiIssueBuilder newIssue() {
-    return new DelphiIssueBuilder(
-        check, sensorContext, delphiFile, checkRegistrar, scopeMetadataLoader);
+    return new DelphiIssueBuilder(check, sensorContext, delphiFile, checkRegistrar);
   }
 }

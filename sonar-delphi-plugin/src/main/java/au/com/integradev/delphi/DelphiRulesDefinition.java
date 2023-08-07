@@ -1,22 +1,24 @@
 package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.check.DelphiRuleMetadataLoaderImpl;
-import au.com.integradev.delphi.check.MetadataResourcePath;
 import au.com.integradev.delphi.checks.CheckList;
 import au.com.integradev.delphi.core.Delphi;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.communitydelphi.api.check.DelphiRuleMetadataLoader;
+import org.sonar.plugins.communitydelphi.api.check.MetadataResourcePath;
+import org.sonar.plugins.communitydelphi.api.check.RuleTemplateAnnotationReader;
+import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 
 public class DelphiRulesDefinition implements RulesDefinition {
-  private final DelphiRuleMetadataLoader ruleMetadataLoader;
+  private final SonarRuntime runtime;
+  private final MetadataResourcePath metadataResourcePath;
   private final DelphiSonarWayResourcePath sonarWayResourcePath;
 
   public DelphiRulesDefinition(
-      SonarRuntime sonarRuntime,
+      SonarRuntime runtime,
       MetadataResourcePath metadataResourcePath,
       DelphiSonarWayResourcePath sonarWayResourcePath) {
-    this.ruleMetadataLoader = DelphiRuleMetadataLoader.create(sonarRuntime, metadataResourcePath);
+    this.runtime = runtime;
+    this.metadataResourcePath = metadataResourcePath;
     this.sonarWayResourcePath = sonarWayResourcePath;
   }
 
@@ -25,10 +27,16 @@ public class DelphiRulesDefinition implements RulesDefinition {
     NewRepository repository =
         context.createRepository(CheckList.REPOSITORY_KEY, Delphi.KEY).setName("Community Delphi");
 
-    ((DelphiRuleMetadataLoaderImpl) ruleMetadataLoader)
-        .setDefaultProfilePath(sonarWayResourcePath.get());
+    RuleMetadataLoader ruleMetadataLoader =
+        new RuleMetadataLoader(
+            metadataResourcePath.forRepository(repository.key()),
+            sonarWayResourcePath.get(),
+            runtime);
+
+    RuleTemplateAnnotationReader ruleTemplateAnnotationReader = new RuleTemplateAnnotationReader();
 
     ruleMetadataLoader.addRulesByAnnotatedClass(repository, CheckList.getChecks());
+    ruleTemplateAnnotationReader.updateRulesByAnnotatedClass(repository, CheckList.getChecks());
 
     repository.done();
   }

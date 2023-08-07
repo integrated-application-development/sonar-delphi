@@ -1,8 +1,8 @@
 package au.com.integradev.delphi;
 
-import au.com.integradev.delphi.check.MetadataResourcePath;
 import au.com.integradev.delphi.checks.CheckList;
 import org.sonar.api.server.ServerSide;
+import org.sonar.plugins.communitydelphi.api.check.MetadataResourcePath;
 import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ServerSide

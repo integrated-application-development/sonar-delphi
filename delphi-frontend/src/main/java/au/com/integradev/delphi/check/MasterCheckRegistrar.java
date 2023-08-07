@@ -3,6 +3,7 @@ package au.com.integradev.delphi.check;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,35 +25,34 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
 public class MasterCheckRegistrar {
   private final Map<String, Checks<DelphiCheck>> allChecks;
   private final SetMultimap<RuleScope, DelphiCheck> checksByScope;
+  private final IdentityHashMap<DelphiCheck, RuleScope> scopesByCheck;
 
-  public MasterCheckRegistrar(
-      CheckFactory checkFactory,
-      ScopeMetadataLoader scopeMetadataLoader,
-      CheckRegistrar[] checkRegistrars) {
+  public MasterCheckRegistrar(CheckFactory checkFactory, CheckRegistrar[] checkRegistrars) {
     allChecks = new HashMap<>();
+    checksByScope = MultimapBuilder.enumKeys(RuleScope.class).hashSetValues().build();
+    scopesByCheck = new IdentityHashMap<>();
+
     CheckRegistrar.RegistrarContext registrarContext = new CheckRegistrar.RegistrarContext();
     for (CheckRegistrar checkClassesRegister : checkRegistrars) {
       checkClassesRegister.register(registrarContext);
-      allChecks.put(
-          registrarContext.repositoryKey(),
+
+      Checks<DelphiCheck> checks =
           checkFactory
               .<DelphiCheck>create(registrarContext.repositoryKey())
-              .addAnnotatedChecks(registrarContext.getCheckClasses().toArray()));
-    }
+              .addAnnotatedChecks(registrarContext.checkClasses().toArray());
 
-    this.checksByScope = MultimapBuilder.enumKeys(RuleScope.class).hashSetValues().build();
-    for (var entry : allChecks.entrySet()) {
-      String repositoryKey = entry.getKey();
-      Checks<DelphiCheck> checks = entry.getValue();
+      allChecks.put(registrarContext.repositoryKey(), checks);
+
       for (DelphiCheck check : checks.all()) {
-        RuleKey engineKey = RuleKey.of(repositoryKey, annotatedEngineKey(check));
+        RuleKey engineKey = RuleKey.of(registrarContext.repositoryKey(), annotatedEngineKey(check));
         RuleScope scope =
             EnumUtils.getEnum(
                 RuleScope.class,
                 check.customRuleScopeOverride,
-                scopeMetadataLoader.getScope(engineKey));
+                registrarContext.getScopeFunction().apply(engineKey));
 
         checksByScope.put(scope, check);
+        scopesByCheck.put(check, scope);
       }
     }
   }
@@ -61,17 +61,14 @@ public class MasterCheckRegistrar {
     return checksByScope.get(scope);
   }
 
+  public RuleScope getScope(DelphiCheck check) {
+    return scopesByCheck.get(check);
+  }
+
   public Optional<RuleKey> getRuleKey(DelphiCheck check) {
     return allChecks.values().stream()
         .map(checks -> checks.ruleKey(check))
         .filter(Objects::nonNull)
-        .findFirst();
-  }
-
-  public Optional<RuleKey> getEngineKey(DelphiCheck check) {
-    return allChecks.entrySet().stream()
-        .filter(entry -> entry.getValue().ruleKey(check) != null)
-        .map(entry -> RuleKey.of(entry.getKey(), annotatedEngineKey(check)))
         .findFirst();
   }
 

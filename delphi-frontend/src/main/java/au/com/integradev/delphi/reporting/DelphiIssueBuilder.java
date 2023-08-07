@@ -20,7 +20,6 @@ package au.com.integradev.delphi.reporting;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
-import au.com.integradev.delphi.check.ScopeMetadataLoader;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import com.google.common.base.Preconditions;
 import com.google.errorprone.annotations.FormatMethod;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
@@ -76,7 +74,6 @@ public final class DelphiIssueBuilder {
   private final SensorContext context;
   private final DelphiInputFile delphiFile;
   private final MasterCheckRegistrar checkRegistrar;
-  private final ScopeMetadataLoader scopeMetadataLoader;
   private FilePosition position;
   private String message;
   @Nullable private List<DelphiCheckContext.Location> secondaries;
@@ -88,13 +85,11 @@ public final class DelphiIssueBuilder {
       DelphiCheck check,
       SensorContext context,
       DelphiInputFile delphiFile,
-      MasterCheckRegistrar checkRegistrar,
-      ScopeMetadataLoader scopeMetadataLoader) {
+      MasterCheckRegistrar checkRegistrar) {
     this.check = check;
     this.context = context;
     this.delphiFile = delphiFile;
     this.checkRegistrar = checkRegistrar;
-    this.scopeMetadataLoader = scopeMetadataLoader;
   }
 
   private static void requiresValueToBeSet(Object target, String targetName) {
@@ -179,13 +174,7 @@ public final class DelphiIssueBuilder {
       return;
     }
 
-    RuleKey engineKey = checkRegistrar.getEngineKey(check).orElseThrow();
-    RuleScope scope =
-        EnumUtils.getEnum(
-            RuleScope.class,
-            check.customRuleScopeOverride,
-            scopeMetadataLoader.getScope(engineKey));
-
+    RuleScope scope = checkRegistrar.getScope(check);
     if (isOutOfScope(scope)) {
       return;
     }
