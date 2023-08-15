@@ -1,0 +1,14 @@
+{
+  "title": "TFoo should not be extended",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "example"
+  ],
+  "defaultSeverity": "Minor",
+  "scope": "MAIN"
+}

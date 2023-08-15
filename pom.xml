@@ -89,6 +89,7 @@
     <module>delphi-frontend</module>
     <module>sonar-delphi-plugin</module>
     <module>its</module>
+    <module>docs</module>
   </modules>
 
   <properties>

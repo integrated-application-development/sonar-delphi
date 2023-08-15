@@ -1,0 +1,12 @@
+{
+  "title": "Track uses of disallowed strings in Method Names",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "scope": "ALL"
+}

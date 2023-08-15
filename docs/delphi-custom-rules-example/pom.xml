@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>au.com.integradev.delphi</groupId>
+    <artifactId>docs</artifactId>
+    <version>0.40.0</version>
+  </parent>
+
+  <groupId>au.com.integradev.samples</groupId>
+  <artifactId>delphi-custom-rules-example</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <packaging>sonar-plugin</packaging>
+
+  <name>SonarDelphi :: Documentation :: Custom Rules Example</name>
+  <description>Delphi Custom Rules Example for SonarQube</description>
+  <url>https://github.com/integrated-application-development/sonar-delphi</url>
+  <inceptionYear>2023</inceptionYear>
+
+  <organization>
+    <name>My Organization</name>
+    <url>https://www.example.com</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>MIT No Attribution</name>
+      <url>https://raw.githubusercontent.com/aws/mit-0/master/MIT-0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>dev</id>
+      <name>John Doe</name>
+      <email>john.doe@example.com</email>
+      <organization>My Organization</organization>
+      <organizationUrl>https://www.example.com</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sonarqube.version>7.9</sonarqube.version>
+    <sonar.delphi.version>0.40.0</sonar.delphi.version>
+    <sonar.analyzers.commons.version>2.5.0.1358</sonar.analyzers.commons.version>
+    <junit.version>5.9.0</junit.version>
+    <assertj.version>3.23.1</assertj.version>
+    <mockito.version>5.4.0</mockito.version>
+    <compiler.plugin.version>3.11.0</compiler.plugin.version>
+    <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
+    <fmt.plugin.version>2.19</fmt.plugin.version>
+    <license.plugin.version>4.2</license.plugin.version>
+    <sonar.packaging.plugin.version>1.21.0.505</sonar.packaging.plugin.version>
+    <shade.plugin.version>3.2.1</shade.plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonarqube.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>au.com.integradev.delphi</groupId>
+      <artifactId>sonar-delphi-plugin</artifactId>
+      <type>sonar-plugin</type>
+      <version>${sonar.delphi.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
+      <version>${sonar.analyzers.commons.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>au.com.integradev.delphi</groupId>
+      <artifactId>delphi-checks-testkit</artifactId>
+      <version>${sonar.delphi.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>${sonar.packaging.plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <pluginKey>customdelphi</pluginKey>
+          <pluginName>Delphi Custom Rules</pluginName>
+          <pluginClass>au.com.integradev.samples.delphi.MyDelphiRulesPlugin</pluginClass>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
+          <sonarQubeMinVersion>${sonarqube.version}</sonarQubeMinVersion>
+          <requirePlugins>communitydelphi:${sonar.delphi.version}</requirePlugins>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${shade.plugin.version}</version>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <shadedArtifactAttached>false</shadedArtifactAttached>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <minimizeJar>true</minimizeJar>
+          <filters>
+            <filter>
+              <artifact>com.google.code.findbugs:jsr305</artifact>
+              <excludes>
+                <exclude>**/javax/annotation/**</exclude>
+              </excludes>
+            </filter>
+          </filters>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler.plugin.version}</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>${license.plugin.version}</version>
+        <configuration>
+          <licenseSets>
+            <licenseSet>
+              <header>${project.basedir}/src/main/resources/license-header.txt</header>
+              <includes>
+                <include>src/*/java/**/*.java</include>
+              </includes>
+            </licenseSet>
+          </licenseSets>
+          <properties>
+            <license.owner>${project.organization.name}</license.owner>
+            <license.title>${project.name}</license.title>
+            <license.years>${project.inceptionYear}</license.years>
+          </properties>
+        </configuration>
+        <executions>
+          <execution>
+            <id>update-license-headers</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.spotify.fmt</groupId>
+        <artifactId>fmt-maven-plugin</artifactId>
+        <version>${fmt.plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

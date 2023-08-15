@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Custom rules plugin API:
+  - See: [Writing Custom Delphi Rules 101](docs/CUSTOM_RULES_101.md)
 - Support for identifiers prefixed with 2 ampersands (`&&`).
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
 - `InlineAssembly` analysis rule, which flags inline assembly usage.
