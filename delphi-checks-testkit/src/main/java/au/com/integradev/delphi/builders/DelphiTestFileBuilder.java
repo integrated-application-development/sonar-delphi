@@ -40,11 +40,11 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collections;
 import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -83,7 +83,7 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
 
     InputFile inputFile;
     try {
-      File baseDir = Files.createTempDir();
+      File baseDir = Files.createTempDirectory("baseDir").toFile();
       baseDir.deleteOnExit();
 
       File file = baseDir.toPath().resolve(getFilename() + "." + getExtension()).toFile();
