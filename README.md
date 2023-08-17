@@ -31,6 +31,14 @@ in the SonarQube server (see [SonarQube - Install a Plugin](https://docs.sonarqu
 5. Run the SonarScanner.
 6. Follow the link provided at the end of the scan to view the results.
 
+>
+> :warning: **Note**
+>
+> The SonarDelphi analyzer requires source code for all dependencies, including the standard library.
+>
+> As a result, Delphi CE is not supported.
+>
+
 Building locally
 ----------------
 
