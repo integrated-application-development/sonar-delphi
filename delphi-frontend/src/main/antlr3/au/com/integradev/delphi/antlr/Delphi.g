@@ -852,15 +852,15 @@ ident                        : TkIdentifier
 identifierOrKeyword          : TkIdentifier
                              | keywords -> ^({changeTokenType(TkIdentifier)})
                              ;
-keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ADD | ALIGN | ANSISTRING | ASSEMBLER | AT | AUTOMATED | CDECL)
+keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ANSISTRING | ASSEMBLER | AT | AUTOMATED | CDECL)
                              | (CONTAINS | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
                              | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
                              | (PRIVATE | PROTECTED | PUBLIC | PUBLISHED | READ | READONLY | REFERENCE | REGISTER | REINTRODUCE)
-                             | (REMOVE | REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
-                             | (VARARGS | VARIANT | VIRTUAL | WRITE | WRITEONLY)
+                             | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
+                             | (VARARGS | VIRTUAL | WRITE | WRITEONLY)
                              ;
-keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ALIGN |ANSISTRING | ARRAY | AS | ASM | ASSEMBLER)
+keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN |ANSISTRING | ARRAY | AS | ASM | ASSEMBLER)
                              | (AT | AUTOMATED | BEGIN | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS| DEFAULT)
                              | (DELAYED | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DYNAMIC)
                              | (ELSE | END | EXCEPT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL)
@@ -869,10 +869,10 @@ keywords                     : (ABSOLUTE | ABSTRACT | ADD | AND | ALIGN |ANSISTR
                              | (LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON)
                              | (OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | PRIVATE)
                              | (PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY)
-                             | (RECORD | REFERENCE | REGISTER | REINTRODUCE | REMOVE | REPEAT | REQUIRES | RESIDENT)
+                             | (RECORD | REFERENCE | REGISTER | REINTRODUCE | REPEAT | REQUIRES | RESIDENT)
                              | (RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT)
                              | (STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS)
-                             | (VARIANT | VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR)
+                             | (VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR)
                              ;
 nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration nameDeclaration*)
                              ;
@@ -919,7 +919,6 @@ realNum                      : TkRealNumber<DecimalLiteralNodeImpl>
 //----------------------------------------------------------------------------
 ABSOLUTE          : 'absolute'       	         ;
 ABSTRACT          : 'abstract'       	         ;
-ADD               : 'add'            	         ;
 ALIGN             : 'align'                    ;
 AND               : 'and'           	         ;
 ANSISTRING        : 'ansistring'     	         ;
@@ -1016,7 +1015,6 @@ RECORD            : 'record'                   ;
 REFERENCE         : 'reference'                ;
 REGISTER          : 'register'                 ;
 REINTRODUCE       : 'reintroduce'              ;
-REMOVE            : 'remove'                   ;
 REPEAT            : 'repeat'                   ;
 REQUIRES          : 'requires'                 ;
 RESIDENT          : 'resident'                 ;
@@ -1042,7 +1040,6 @@ UNTIL             : 'until'                    ;
 USES              : 'uses'                     ;
 VAR               : 'var'                      ;
 VARARGS           : 'varargs'                  ;
-VARIANT           : 'variant'                  ;
 VIRTUAL           : 'virtual'                  ;
 WHILE             : 'while'                    ;
 WITH              : 'with'                     ;

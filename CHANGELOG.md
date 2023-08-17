@@ -41,6 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect token range calculation for binary expression nodes.
 - Units referenced via `DCCReference` tags were not indexed in the symbol table.
 - NPE on empty argument lists in `TrailingCommaArgumentList`.
+- `add` is no longer colorized as a keyword in the SonarQube web interface.
+- `remove` is no longer colorized as a keyword in the SonarQube web interface.
+- `variant` is no longer colorized as a keyword in the SonarQube web interface.
 
 ## [0.40.0] - 2023-01-10
 

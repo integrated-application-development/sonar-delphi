@@ -31,7 +31,6 @@ public final class DelphiKeywords {
   public static final Set<DelphiTokenType> KEYWORDS =
       Sets.immutableEnumSet(
           DelphiTokenType.ABSTRACT,
-          DelphiTokenType.ADD,
           DelphiTokenType.ALIGN,
           DelphiTokenType.AND,
           DelphiTokenType.ARRAY,
@@ -120,7 +119,6 @@ public final class DelphiKeywords {
           DelphiTokenType.REFERENCE,
           DelphiTokenType.REGISTER,
           DelphiTokenType.REINTRODUCE,
-          DelphiTokenType.REMOVE,
           DelphiTokenType.REPEAT,
           DelphiTokenType.REQUIRES,
           DelphiTokenType.RESOURCESTRING,
