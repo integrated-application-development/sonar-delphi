@@ -165,6 +165,18 @@
           </excludes>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>add</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

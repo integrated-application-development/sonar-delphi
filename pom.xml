@@ -83,6 +83,7 @@
   </developers>
 
   <modules>
+    <module>license-maven-plugin</module>
     <module>delphi-tokens-generator-maven-plugin</module>
     <module>delphi-checks-testkit</module>
     <module>delphi-checks</module>
@@ -452,4 +453,13 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>ci</id>
+      <properties>
+        <license.failIfMissing>true</license.failIfMissing>
+      </properties>
+    </profile>
+  </profiles>
 </project>

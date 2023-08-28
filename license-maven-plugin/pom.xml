@@ -10,10 +10,10 @@
     <version>0.40.0</version>
   </parent>
 
-  <artifactId>delphi-tokens-generator-maven-plugin</artifactId>
+  <artifactId>license-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
 
-  <name>SonarDelphi :: Delphi Tokens Generator Maven Plugin</name>
+  <name>SonarDelphi :: License Maven Plugin</name>
 
   <properties>
     <maven.version>3.8.6</maven.version>
@@ -44,14 +44,6 @@
       <version>3.7.0</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
@@ -71,18 +63,6 @@
             <id>help-goal</id>
             <goals>
               <goal>helpmojo</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>add</goal>
             </goals>
           </execution>
         </executions>
