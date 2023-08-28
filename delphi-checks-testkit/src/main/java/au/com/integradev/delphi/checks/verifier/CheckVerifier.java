@@ -35,6 +35,8 @@ public interface CheckVerifier {
 
   CheckVerifier withSearchPathUnit(DelphiTestUnitBuilder builder);
 
+  CheckVerifier withStandardLibraryUnit(DelphiTestUnitBuilder builder);
+
   CheckVerifier onFile(DelphiTestFileBuilder<?> builder);
 
   void verifyIssueOnLine(int... lines);

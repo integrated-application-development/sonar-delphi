@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +75,7 @@ public class CheckVerifierImpl implements CheckVerifier {
   private final Set<String> unitScopeNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
   private final Map<String, String> unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   private final List<DelphiTestUnitBuilder> searchPathUnits = new ArrayList<>();
+  private final List<DelphiTestUnitBuilder> standardLibraryUnits = new ArrayList<>();
 
   @Override
   public CheckVerifier withCheck(DelphiCheck check) {
@@ -97,6 +99,12 @@ public class CheckVerifierImpl implements CheckVerifier {
   @Override
   public CheckVerifier withSearchPathUnit(DelphiTestUnitBuilder builder) {
     searchPathUnits.add(builder);
+    return this;
+  }
+
+  @Override
+  public CheckVerifier withStandardLibraryUnit(DelphiTestUnitBuilder builder) {
+    standardLibraryUnits.add(builder);
     return this;
   }
 
@@ -310,7 +318,7 @@ public class CheckVerifierImpl implements CheckVerifier {
         (textRange == null ? "" : (":" + textRange.start().line())));
   }
 
-  private static Path createStandardLibrary() {
+  private Path createStandardLibrary() {
     try {
       Path path = Files.createTempDirectory("bds_source");
       Files.writeString(
@@ -495,6 +503,13 @@ public class CheckVerifierImpl implements CheckVerifier {
               + "implementation\n"
               + "\n"
               + "end.");
+
+      for (DelphiTestUnitBuilder unit : standardLibraryUnits) {
+        Path source = unit.delphiFile().getSourceCodeFile().toPath();
+        Path target = path.resolve(source.getFileName().toString());
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+      }
+
       return path;
     } catch (IOException e) {
       throw new UncheckedIOException(e);
