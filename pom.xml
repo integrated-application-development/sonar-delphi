@@ -102,7 +102,7 @@
     <sonar.issue.ignore.allfile.r1.fileRegexp>@(javax\\.annotation\\.)?Generated</sonar.issue.ignore.allfile.r1.fileRegexp>
     <!-- Dependency versions -->
     <sonar.version>7.9</sonar.version>
-    <sonar-analyzer-commons.version>2.1.0.1111</sonar-analyzer-commons.version>
+    <sonar-analyzer-commons.version>2.7.0.1482</sonar-analyzer-commons.version>
     <sonar-orchestrator.version>4.0.0.404</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <commons-text.version>1.10.0</commons-text.version>

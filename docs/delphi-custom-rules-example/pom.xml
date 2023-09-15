@@ -51,7 +51,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonarqube.version>7.9</sonarqube.version>
     <sonar.delphi.version>0.40.0</sonar.delphi.version>
-    <sonar.analyzers.commons.version>2.5.0.1358</sonar.analyzers.commons.version>
+    <sonar.analyzer.commons.version>2.7.0.1482</sonar.analyzer.commons.version>
     <junit.version>5.9.0</junit.version>
     <assertj.version>3.23.1</assertj.version>
     <mockito.version>5.4.0</mockito.version>
@@ -89,7 +89,7 @@
     <dependency>
       <groupId>org.sonarsource.analyzer-commons</groupId>
       <artifactId>sonar-analyzer-commons</artifactId>
-      <version>${sonar.analyzers.commons.version}</version>
+      <version>${sonar.analyzer.commons.version}</version>
     </dependency>
 
     <dependency>
