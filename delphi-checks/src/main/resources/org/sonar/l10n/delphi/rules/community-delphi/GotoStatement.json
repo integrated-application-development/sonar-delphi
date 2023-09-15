@@ -6,6 +6,12 @@
     "func": "Constant/Issue",
     "constantCost": "30min"
   },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Critical",
   "scope": "ALL",

@@ -6,6 +6,13 @@
     "func": "Constant/Issue",
     "constantCost": "15min"
   },
+  "code": {
+    "attribute": "FOCUSED",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM",
+      "RELIABILITY": "MEDIUM"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Critical",
   "scope": "ALL",

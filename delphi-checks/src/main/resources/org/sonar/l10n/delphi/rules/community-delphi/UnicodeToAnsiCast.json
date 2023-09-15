@@ -6,6 +6,12 @@
     "func": "Constant/Issue",
     "constantCost": "20min"
   },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Critical",
   "scope": "ALL",

@@ -6,6 +6,13 @@
     "func": "Constant/Issue",
     "constantCost": "5min"
   },
+  "code": {
+    "attribute": "COMPLETE",
+    "impacts": {
+      "MAINTAINABILITY": "LOW",
+      "RELIABILITY": "MEDIUM"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Major",
   "scope": "ALL",

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Custom rules plugin API:
   - See: [Writing Custom Delphi Rules 101](docs/CUSTOM_RULES_101.md)
+- Rule metadata for the new [Clean Code Taxonomy](https://docs.sonarsource.com/sonarqube/10.2/user-guide/clean-code/).
 - Support for identifiers prefixed with 2 ampersands (`&&`).
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
 - `InlineAssembly` analysis rule, which flags inline assembly usage.

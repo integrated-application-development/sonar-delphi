@@ -6,6 +6,12 @@
     "func": "Constant/Issue",
     "constantCost": "1min"
   },
+  "code": {
+    "attribute": "CONVENTIONAL",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Minor",
   "scope": "ALL",

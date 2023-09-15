@@ -6,6 +6,12 @@
     "func": "Constant/Issue",
     "constantCost": "1min"
   },
+  "code": {
+    "attribute": "FORMATTED",
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Major",
   "scope": "ALL",

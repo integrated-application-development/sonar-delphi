@@ -6,6 +6,12 @@
     "func": "Constant/Issue",
     "constantCost": "5min"
   },
+  "code": {
+    "attribute": "IDENTIFIABLE",
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Minor",
   "scope": "ALL",

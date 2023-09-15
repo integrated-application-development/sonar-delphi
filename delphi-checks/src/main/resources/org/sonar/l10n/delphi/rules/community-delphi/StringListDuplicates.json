@@ -6,6 +6,12 @@
     "func": "Constant/Issue",
     "constantCost": "2min"
   },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
   "tags": [],
   "defaultSeverity": "Blocker",
   "scope": "ALL",
