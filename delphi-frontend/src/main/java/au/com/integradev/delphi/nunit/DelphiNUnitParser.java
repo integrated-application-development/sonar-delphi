@@ -31,9 +31,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.utils.ParsingUtils;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -48,7 +48,7 @@ public class DelphiNUnitParser {
     }
   }
 
-  private static final Logger LOG = Loggers.get(DelphiNUnitParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiNUnitParser.class);
 
   private DelphiNUnitParser() {}
 

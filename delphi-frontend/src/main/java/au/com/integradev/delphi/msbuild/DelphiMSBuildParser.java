@@ -33,11 +33,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DelphiMSBuildParser {
-  private static final Logger LOG = Loggers.get(DelphiMSBuildParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiMSBuildParser.class);
 
   private final Path path;
   private final EnvironmentVariableProvider environmentVariableProvider;

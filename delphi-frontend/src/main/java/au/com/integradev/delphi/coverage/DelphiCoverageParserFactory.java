@@ -22,13 +22,13 @@ import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 @ScannerSide
 public class DelphiCoverageParserFactory {
-  private static final Logger LOG = Loggers.get(DelphiCoverageParserFactory.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiCoverageParserFactory.class);
 
   public Optional<DelphiCoverageParser> getParser(String key, DelphiProjectHelper helper) {
     if (DelphiProperties.COVERAGE_TOOL_DELPHI_CODE_COVERAGE.equals(key)) {

@@ -48,8 +48,8 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.apache.commons.io.FilenameUtils;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
@@ -58,7 +58,7 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class DelphiPreprocessor {
-  private static final Logger LOG = Loggers.get(DelphiPreprocessor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiPreprocessor.class);
   private final DelphiLexer lexer;
   private final DelphiFileConfig config;
   private final Platform platform;

@@ -31,6 +31,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
@@ -39,8 +41,6 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
@@ -64,7 +64,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
  *     InternalJavaIssueBuilder </a>
  */
 public final class DelphiIssueBuilder {
-  private static final Logger LOG = Loggers.get(DelphiIssueBuilder.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiIssueBuilder.class);
 
   private static final String MESSAGE_NAME = "message";
   private static final String FLOWS_NAME = "flows";

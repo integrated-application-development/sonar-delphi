@@ -24,8 +24,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
@@ -41,7 +41,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
 public class Search {
-  private static final Logger LOG = Loggers.get(Search.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Search.class);
   private static final boolean TRACE = false;
 
   private final NameOccurrence occurrence;

@@ -32,11 +32,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultSearchPath implements SearchPath {
-  private static final Logger LOG = Loggers.get(DefaultSearchPath.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultSearchPath.class);
   private final Set<Path> rootDirectories;
   private final SetMultimap<Path, Path> filesByDirectory;
   private final Set<Path> indexedPaths;

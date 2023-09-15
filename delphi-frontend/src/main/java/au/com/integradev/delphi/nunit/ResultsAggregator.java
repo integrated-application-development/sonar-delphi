@@ -18,11 +18,11 @@
  */
 package au.com.integradev.delphi.nunit;
 
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ResultsAggregator {
-  private static final Logger LOG = Loggers.get(ResultsAggregator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ResultsAggregator.class);
 
   private int failures;
   private int skipped;

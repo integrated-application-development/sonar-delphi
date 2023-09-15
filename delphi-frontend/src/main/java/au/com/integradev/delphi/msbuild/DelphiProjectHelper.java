@@ -48,19 +48,19 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
 @SonarLintSide
 public class DelphiProjectHelper {
-  private static final Logger LOG = Loggers.get(DelphiProjectHelper.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiProjectHelper.class);
   private final Configuration settings;
   private final FileSystem fs;
   private final EnvironmentVariableProvider environmentVariableProvider;

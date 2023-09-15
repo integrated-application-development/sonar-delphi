@@ -43,15 +43,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
-  private static final Logger LOG = Loggers.get(DelphiTestFileBuilder.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiTestFileBuilder.class);
   private final StringBuilder declaration = new StringBuilder();
   private final StringBuilder implementation = new StringBuilder();
 

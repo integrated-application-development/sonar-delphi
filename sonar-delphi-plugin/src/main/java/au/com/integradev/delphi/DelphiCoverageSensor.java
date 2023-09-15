@@ -29,14 +29,14 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 public class DelphiCoverageSensor implements Sensor {
-  private static final Logger LOG = Loggers.get(DelphiCoverageSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiCoverageSensor.class);
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final DelphiCoverageParserFactory coverageParserFactory;

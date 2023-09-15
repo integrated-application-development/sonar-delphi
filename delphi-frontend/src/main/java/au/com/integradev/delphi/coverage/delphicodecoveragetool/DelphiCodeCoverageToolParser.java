@@ -29,11 +29,11 @@ import java.util.Arrays;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,7 +41,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class DelphiCodeCoverageToolParser implements DelphiCoverageParser {
-  private static final Logger LOG = Loggers.get(DelphiCodeCoverageToolParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiCodeCoverageToolParser.class);
   private final DelphiProjectHelper delphiProjectHelper;
 
   public DelphiCodeCoverageToolParser(DelphiProjectHelper delphiProjectHelper) {

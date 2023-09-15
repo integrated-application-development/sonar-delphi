@@ -25,17 +25,17 @@ import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 /** Detects and parses Delphi NUnit test reports. */
 public class DelphiNUnitSensor implements Sensor {
-  private static final Logger LOG = Loggers.get(DelphiNUnitSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiNUnitSensor.class);
 
   private final Configuration configuration;
 

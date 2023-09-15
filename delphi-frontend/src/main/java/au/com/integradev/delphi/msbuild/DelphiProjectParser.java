@@ -37,11 +37,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class DelphiProjectParser {
-  private static final Logger LOG = Loggers.get(DelphiProjectParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiProjectParser.class);
 
   private final Path dproj;
   private final EnvironmentVariableProvider environmentVariableProvider;

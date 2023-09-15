@@ -47,8 +47,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
@@ -65,7 +65,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 public class SymbolTableBuilder {
-  private static final Logger LOG = Loggers.get(SymbolTableBuilder.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SymbolTableBuilder.class);
 
   private final SymbolTable symbolTable = new SymbolTable();
   private final Set<UnitData> sourceFileUnits = new HashSet<>();

@@ -38,11 +38,11 @@ import java.util.Collections;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class GrammarTest {
-  private static final Logger LOG = Loggers.get(GrammarTest.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GrammarTest.class);
   private static final String BASE_DIR = "/au/com/integradev/delphi/grammar/";
   private DelphiFileConfig fileConfig;
 

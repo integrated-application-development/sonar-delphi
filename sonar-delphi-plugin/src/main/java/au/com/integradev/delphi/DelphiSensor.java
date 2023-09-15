@@ -45,16 +45,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 public class DelphiSensor implements Sensor {
-  private static final Logger LOG = Loggers.get(DelphiSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiSensor.class);
 
   private final DelphiProjectHelper delphiProjectHelper;
   private final DelphiMasterExecutor executor;
