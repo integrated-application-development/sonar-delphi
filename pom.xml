@@ -118,6 +118,7 @@
     <mockito.version>5.2.0</mockito.version>
     <archunit.version>0.23.1</archunit.version>
     <errorprone.version>2.20.0</errorprone.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <!-- Plugin versions -->
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
