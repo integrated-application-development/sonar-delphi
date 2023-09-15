@@ -102,7 +102,7 @@
     <sonar.issue.ignore.allfile.r1.fileRegexp>@(javax\\.annotation\\.)?Generated</sonar.issue.ignore.allfile.r1.fileRegexp>
     <!-- Dependency versions -->
     <sonar.version>7.9</sonar.version>
-    <sonar-analyzers-commons.version>2.1.0.1111</sonar-analyzers-commons.version>
+    <sonar-analyzer-commons.version>2.1.0.1111</sonar-analyzer-commons.version>
     <sonar-orchestrator.version>4.0.0.404</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <commons-text.version>1.10.0</commons-text.version>
@@ -144,7 +144,7 @@
       <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>
         <artifactId>sonar-analyzer-commons</artifactId>
-        <version>${sonar-analyzers-commons.version}</version>
+        <version>${sonar-analyzer-commons.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.code.findbugs</groupId>
@@ -194,7 +194,7 @@
       <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>
         <artifactId>sonar-analyzer-test-commons</artifactId>
-        <version>${sonar-analyzers-commons.version}</version>
+        <version>${sonar-analyzer-commons.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
