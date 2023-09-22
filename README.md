@@ -39,16 +39,15 @@ in the SonarQube server (see [SonarQube - Install a Plugin](https://docs.sonarqu
 > As a result, Delphi CE is not supported.
 >
 
-Building locally
+Build & Test
 ----------------
 
-SonarDelphi targets Java 11 and can be built with JDK 11+.
+SonarDelphi targets Java 11 and can be built with JDK 17+.
 
-JDK 17+ is recommended for development. The integration tests will fail with earlier versions, as SonarQube no longer supports Java versions below 17.
-
-* The plugin can be compiled to a .jar using `mvn package`.
-* Documentation can be generated to the system temp directory using `mvn site-deploy`.
-* Tests can be run using `mvn test`.
+Execute the following command from the project's root directory:
+```
+mvn clean install
+```
 
 License
 -------
