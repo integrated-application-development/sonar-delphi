@@ -1,6 +1,26 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Helper names should follow Pascal case, begin with an acceptable prefix, contain the name of the
-  extended class, and end with a <code>Helper</code> suffix.
-  <br />
-  <br />
+  Code that follows a consistent naming convention is self-documenting. In Delphi, all class or
+  record helper names should:
 </p>
+<ul>
+  <li>Be in PascalCase</li>
+  <li>Start with a consistent prefix</li>
+  <li>Contain the name of the extended type</li>
+  <li>End with <code>Helper</code></li>
+</ul>
+<p>
+  The default prefix is <code>T</code>, but some projects may use another prefix to separate their
+  helpers from those of other projects. This can make code spanning several projects more easily
+  understandable.
+</p>
+<h2>How to fix it</h2>
+<p>Rename the class or record helper to follow the convention.</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations">
+      Delphi's Object Pascal Style Guide: Type Declarations
+    </a>
+  </li>
+</ul>

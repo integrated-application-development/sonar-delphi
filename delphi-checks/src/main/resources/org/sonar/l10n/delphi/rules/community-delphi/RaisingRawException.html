@@ -1,8 +1,43 @@
-<p>General exceptions should not be raised. Instead, raise a specific exception type.</p>
-<pre>
-    
-<b>raise</b> Exception.create(<i>'blah'</i>); // Noncompliant
+<h2>Why is this an issue?</h2>
+<p>
+  The purpose of exceptions is twofold - to provide clear reporting about what exceptional case
+  the program has encountered, and to give the program enough information to recover if desired.
+  If it's not known which error occurred, then it is difficult to know how to recover.
+</p>
+<p>
+  This can lead to overly general error handling scenarios, like blindly displaying a
+  "something went wrong" message.
+</p>
+<p>
+  Raising a generic exception may also lead to overly general try/catch statements, as there is
+  no other way to handle such an exceptional case.
+  Code that catches specific exceptions is clearer and more resilient.
+</p>
+<h2>How to fix it</h2>
+<p>Use a specialized exception type (or define your own):</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure EatIceCream(IceCream: TIceCream);
+begin
+  if IceCream.Melted then begin
+    raise Exception.Create('The ice cream is melted');
+  end
+  else if IceCream.Flavour = 'mint' then begin
+    raise Exception.Create('I hate mint');
+  end;
 
-<b>raise</b> MyException.create(<i>'blah'</i>); // Compliant
-        
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure EatIceCream(IceCream: TIceCream);
+begin
+  if IceCream.Melted then begin
+    raise EMeltedIceCream.Create('The ice cream is melted');
+  end
+  else if IceCream.Flavour = 'mint' then begin
+    raise EFlavourError.Create('I hate mint');
+  end;
+
+  // ...
+end;
 </pre>

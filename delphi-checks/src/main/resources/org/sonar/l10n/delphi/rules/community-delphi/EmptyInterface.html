@@ -1,1 +1,36 @@
-<p>Empty interface declarations are useless.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  An empty interface declaration is superfluous as it defines no methods to implement.
+</p>
+<h2>How to fix it</h2>
+<p>Remove or populate the interface declaration.</p>
+<p>
+  If desired, it can be replaced with <code>IInterface</code> for the same effect:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  IRefCounted = interface
+  end;
+
+  TMyClass = class(TObject, IRefCounted)
+    // ...
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TMyClass = class(TObject, IInterface)
+    // ...
+  end;
+</pre>
+<p>
+  Note that this is not a recommended approach, as nothing on the object will be accessible through
+  the interface.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Object_Interfaces_(Delphi)">
+      RAD Studio documentation: Object Interfaces (Delphi)
+    </a>
+  </li>
+</ul>

@@ -1,13 +1,17 @@
+<h2>Why is this an issue?</h2>
 <p>
   This rule allows banning certain imports. It will flag any import of a unit with a file path
-  matching the forbiddenImportPattern.
-  <br />
-  Units with a file path matching the optional whitelistPattern are permitted to import banned
-  units.
-  <br />
-  <br />
-  Patterns can use glob or regex syntax, as specified by forbiddenImportPatternSyntax and
-  whitelistPatternSyntax.
-  <br />
-  Patterns are compared against absolute paths.
+  matching the <code>forbiddenImportPattern</code>.
 </p>
+<p>Please note:</p>
+<ul>
+  <li>Patterns are compared against the unit's absolute path.</li>
+  <li>
+    Patterns can use glob or regex syntax, depending on the value of
+    <code>forbiddenImportPatternSyntax</code> and <code>whitelistPatternSyntax</code>.
+  </li>
+  <li>
+    Units with a file path matching the optional <code>whitelistPattern</code> are permitted to
+    import banned units.
+  </li>
+</ul>

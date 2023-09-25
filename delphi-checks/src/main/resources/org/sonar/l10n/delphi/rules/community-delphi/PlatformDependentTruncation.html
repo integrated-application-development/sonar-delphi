@@ -1,18 +1,24 @@
+<h2>Why is this an issue?</h2>
 <p>
-  <b>Platform-dependent types</b> have different sizes on different target platforms.
-  <br />
-  <b>Platform-independent types</b> have the same size on all target platforms.
-  <br />
-  This rule identifies places where an integer type may or may not be truncated depending on the
-  platform.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows"
-  >
-    Converting 32-bit Delphi Applications to 64-bit Windows
-  </a>
+  Platform-dependent types have different sizes on different target platforms, while
+  platform-independent types have the same size on all target platforms. Assignment between
+  platform-dependent and platform-independent integers may cause truncation on some platforms,
+  and should be removed.
 </p>
+<p>Platform-dependent integer types include:</p>
+<ul>
+  <li><code>NativeInt</code> and <code>NativeUint</code></li>
+</ul>
+<h2>How to fix it</h2>
+<p>
+  Refactor the code so that platform-dependent and platform-independent types are not assigned
+  to each other.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows">
+      RAD Studio documentation: Converting 32-bit Delphi Applications to 64-bit Windows
+    </a>
+  </li>
+</ul>

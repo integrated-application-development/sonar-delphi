@@ -1,20 +1,32 @@
+<h2>Why is this an issue?</h2>
 <p>
-  A common error for new Delphi programmers is to call a constructor using an instance variable.
-  Rather than creating the instance, such a call invariably results in access violations because the
-  instance reference is most likely invalid.
-  <br />
-  <br />
-  Even if this is intentional and the instance reference is valid, the constructor is treated like a
-  regular method invocation.
-  <br />
-  The constructor is called, but misleadingly a new instance isn't created.
+  Delphi constructors should only be called on the class. A common error for new Delphi programmers
+  is to call a constructor on an instance variable instead. This does not create a new instance of
+  the object, instead being treated as a regular method invocation.
 </p>
-<pre>
-
-<b>var</b>
+<p>
+  If the instance has already been initialized, it will unexpectedly modify it by re-running the
+  constructor.
+</p>
+<p>
+  If the instance is uninitialized, an access violation may occur (the constructor will attempt
+  to set fields on uninitialized memory).
+</p>
+<h2>How to fix it</h2>
+<p>Call the constructor on the class instead:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example;
+var
   Foo: TFoo;
-<b>begin</b>
-  Foo.Create; // Noncompliant
-  Foo := TFoo.Create; // Compliant
-
+begin
+  Foo.Create;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example;
+var
+  Foo: TFoo;
+begin
+  Foo := TFoo.Create;
+end;
 </pre>

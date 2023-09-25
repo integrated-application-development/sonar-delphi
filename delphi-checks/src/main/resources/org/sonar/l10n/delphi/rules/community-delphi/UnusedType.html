@@ -1,12 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Unused types should be removed.
-  <br />
-  Leaving them in reduces the code's readability, since their presence can be confusing.
-  <br />
-  <br />
-  <b>Exclusions:</b>
-  <br />
-  - Class helpers
-  <br />
-  - Record helpers
+  Having unused types adversely affects code readability, as their presence is confusing. Code
+  that is never used should be removed to keep codebases clean and maintainable.
 </p>
+<p>
+  Note that this rule excludes class and record helpers, as they augment another type and do not
+  need to be directly referenced.
+</p>
+<h2>How to fix it</h2>
+<p>Remove the unused type.</p>

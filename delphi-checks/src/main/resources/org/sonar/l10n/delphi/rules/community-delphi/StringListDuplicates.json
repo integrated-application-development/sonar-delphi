@@ -12,7 +12,7 @@
       "RELIABILITY": "HIGH"
     }
   },
-  "tags": [],
+  "tags": ["pitfall"],
   "defaultSeverity": "Blocker",
   "scope": "ALL",
   "quickfix": "unknown"

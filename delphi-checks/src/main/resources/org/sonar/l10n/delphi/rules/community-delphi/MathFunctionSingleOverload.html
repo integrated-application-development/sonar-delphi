@@ -1,51 +1,104 @@
+<h2>Why is this an issue?</h2>
 <p>
-  The <code>Single</code> overloads of the standard math functions are less accurate in 64-bit due
-  to the reduced precision of the <code>Extended</code> type.
-  <br />
-  In 32-bit: Floating-point calculations use the x87 FPU, which gives 80 bits of precision.
-  <br />
-  In 64-bit: Floating-point calculations use SSE2 instructions. This only gives 64 bits of
-  precision, but is faster.
-  <br />
-  <br />
-  These accuracy issues can produce incorrect results on 64-bit.
-  <br />
-  In 32-bit: <code>Power(10, 12)</code> produces 1,000,000,000,000
-  <br />
-  In 64-bit: <code>Power(10, 12)</code> produces 999,999,995,904
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  - <a href="https://en.wikipedia.org/wiki/X87">x87</a>
-  <br />
-  -
-  <a
-    href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms"
-  >
-    The Extended Data Type is different on different platforms
-  </a>
-  <br />
-  -
-  <a href="https://docwiki.embarcadero.com/RADStudio/en/About_Floating-Point_Arithmetic">
-    About Floating-Point Arithmetic
-  </a>
+  High-precision overloads (<code>Double</code> and <code>Extended</code>) of the standard math
+  functions are preferred over the single-precision (<code>Single</code>) overloads, for stability
+  and platform independent behaviour.
+</p>
+<p>
+  Firstly, single-precision numbers are only fully accurate for a relatively small range of numbers.
+  Methods that produce very small or very large numbers may be very inaccurate when using
+  <code>Single</code> - for example, integers larger than 16777216 cannot be
+  stored accurately.
+</p>
+<p>
+  Secondly, the single-precision overloads can return extended-precision values on 32-bit Windows
+  in some cases.
+</p>
+<p>
+  Delphi carries out single-precision floating point calculations using extended-precision values.
+  In 64-bit, the standard math functions invariably truncate their result to single-precision as
+  expected.
+  In 32-bit, however, the standard math functions do not truncate their result to single-precision.
+  This means that on 32-bit Windows, these functions unexpectedly return an <code>Extended</code>
+  instead of a <code>Single</code>.
+</p>
+<p>
+  For example, the following code will print 1,000,000,000,000 on 32-bit and 999,999,995,904 on
+  64-bit:
 </p>
 <pre>
-    
-<b>procedure</b> Example(I: Integer; S: Single; D: Double; E: Extended);
-<b>begin</b>
-  Power(I, 2); // Noncompliant (Integer arguments cause the Single overload to be selected)
-  Power(S, 2); // Noncompliant
-
-  Power(D, 2); // Compliant
-  Power(E, 2); // Compliant
-
-  Power(Double(I), 2); // Compliant
-  Power(Double(S), 2); // Compliant
-
-  Power(10, 2); // Noncompliant (Integer literals cause the Single overload to be selected)
-  Power(10.0, 2); // Compliant (Floating-point literals cause the Extended overload to be selected)
-<b>end</b>;
-        
+procedure Example;
+var
+  MyNum: Double;
+begin
+  MyNum := Power(10, 12); // Uses Single overload, which claims to return Single
+  Writeln(MyNum);
+end;
 </pre>
+<p>
+  The following code will print 1,000,000,000,000 on both 32-bit and 64-bit:
+</p>
+<pre>
+procedure Example;
+var
+  MyNum: Double;
+begin
+  MyNum := Power(Double(10), 12); // Uses Double overload, which claims to return Double
+  Writeln(MyNum);
+end;
+</pre>
+<p>
+  Note that in Delphi, the type of a number literal is the smallest possible type that can hold that
+  value. This means that integer and floating point literals are usually interpreted as a
+  <code>Single</code>.
+</p>
+<h2>How to fix it</h2>
+<p>
+  If possible, refactor your code to use the <code>Double</code> or <code>Extended</code> overloads:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example(MyNum: Single);
+begin
+  Power(MyNum, 2);
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example(MyNum: Double);
+begin
+  Power(MyNum, 2);
+end;
+</pre>
+<p>Otherwise, cast the number to <code>Double</code> or <code>Extended</code> before invocation:</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+procedure Example(MyNum: Integer);
+begin
+  Power(MyNum, 2);
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+procedure Example(MyNum: Integer);
+begin
+  Power(Double(MyNum), 2);
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://en.wikipedia.org/wiki/X87">Wikipedia: x87</a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Considerations_for_Multi-Device_Applications#The_Extended_Data_Type_is_different_on_different_platforms">
+      RAD Studio documentation: Delphi Considerations for Multi-Device Applications
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/About_Floating-Point_Arithmetic">
+      RAD Studio documentation: About Floating-Point Arithmetic
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Floating_point_precision_control_(Delphi_for_x64)">
+      RAD Studio documentation: Floating point precision control (Delphi for x64)
+    </a>
+  </li>
+</ul>

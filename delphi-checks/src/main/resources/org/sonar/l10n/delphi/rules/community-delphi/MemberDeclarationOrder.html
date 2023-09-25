@@ -1,13 +1,46 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Visibility sections within the body of a class, interface, or record declaration should be
-  organized in the following order:
-  <br />
-  1. Field declarations 2. Method declarations 3. Property declarations
-  <br />
-  <br />
-  For more information, see the Class Body Organization section of the Embarcadero style guide page
-  on
-  <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_Body_Organization">
-    Type Declarations
-  </a>
+  For clarity and consistency, visibility sections within the body of a class, interface, or
+  record declaration should be organized in the following order:
 </p>
+<ol>
+  <li>Field declarations</li>
+  <li>Method declarations</li>
+  <li>Property declarations</li>
+</ol>
+<p>
+  The Delphi compiler also forbids field declarations from appearing after method or property
+  declarations in the same visibility section.
+</p>
+<h2>How to fix it</h2>
+<p>Reorder the offending visibility section into fields, then methods, then properties:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TMyType = class(TObject)
+  private
+    FMyVar: Integer;
+    property MyVar: Integer read FMyVar;
+    procedure DoThing;
+    procedure DoAnotherThing;
+    property MyOtherVar: Integer read FMyVar;
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TMyType = class(TObject)
+  private
+    FMyVar: Integer;
+    procedure DoThing;
+    procedure DoAnotherThing;
+    property MyVar: Integer read FMyVar;
+    property MyOtherVar: Integer read FMyVar;
+  end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_Body_Organization">
+      Delphi's Object Pascal Style Guide: Type Declarations
+    </a>
+  </li>
+</ul>

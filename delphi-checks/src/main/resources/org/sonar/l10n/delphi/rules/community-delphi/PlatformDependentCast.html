@@ -1,18 +1,25 @@
+<h2>Why is this an issue?</h2>
 <p>
-  <b>Platform-dependent types</b> have different sizes on different target platforms.
-  <br />
-  <b>Platform-independent types</b> have the same size on all target platforms.
-  <br />
-  This rule identifies casts between platform-dependent and platform-independent types. These casts
-  will have different behaviors on different target platforms, and should be removed.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows"
-  >
-    Converting 32-bit Delphi Applications to 64-bit Windows
-  </a>
+  Platform-dependent types have different sizes on different target platforms, while
+  platform-independent types have the same size on all target platforms. Casts between
+  platform-dependent and platform-independent types will have different behaviours on different
+  target platforms, and should be removed.
 </p>
+<p>Platform-dependent types include:</p>
+<ul>
+  <li>All pointer-based types, including strings, arrays, classes, and interfaces</li>
+  <li><code>NativeInt</code> and <code>NativeUint</code></li>
+</ul>
+<h2>How to fix it</h2>
+<p>
+  Refactor the code so that platform-dependent and platform-independent types are not cast
+  to each other.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Converting_32-bit_Delphi_Applications_to_64-bit_Windows">
+      RAD Studio documentation: Converting 32-bit Delphi Applications to 64-bit Windows
+    </a>
+  </li>
+</ul>

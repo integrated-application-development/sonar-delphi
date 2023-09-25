@@ -13,7 +13,7 @@
       "RELIABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["bad-practice", "confusing", "pitfall"],
   "defaultSeverity": "Critical",
   "scope": "ALL",
   "quickfix": "unknown"

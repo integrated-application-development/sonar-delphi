@@ -12,7 +12,7 @@
       "RELIABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["lock-in", "pitfall"],
   "defaultSeverity": "Major",
   "scope": "ALL",
   "quickfix": "unknown"

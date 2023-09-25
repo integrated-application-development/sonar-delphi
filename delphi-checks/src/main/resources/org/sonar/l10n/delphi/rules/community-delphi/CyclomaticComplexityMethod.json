@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "HIGH"
     }
   },
-  "tags": [],
+  "tags": ["design", "brain-overload"],
   "defaultSeverity": "Critical",
   "scope": "ALL",
   "quickfix": "unknown"

@@ -1,49 +1,53 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Inline const declarations can omit the type and allow the compiler to infer it.
-  <br />
-  <br />
-  The downside is that untyped inline const declarations use different type inference rules from
-  traditional untyped const declarations. They use the same rules as inline var declarations, with
-  the same caveats and pitfalls.
-  <br />
-  As a consequence, it's possible for a traditional and inline const declaration to have identical
-  values, but different inferred types.
-  <br />
-  <br />
+  Inline const declarations should not omit the type, as the compiler's inline type inference is
+  inconsistent with traditional const declaration type inference.
+</p>
+<p>
+  It uses the same rules as inline var declarations, making it possible for a traditional and
+  inline const declaration to have identical values, but different inferred types.
   This can cause confusion and negatively impact code readability.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables"
-  >
-    Type Inference for Inlined Variables
-  </a>
 </p>
 <pre>
-    
-<b>procedure</b> Example;
-<b>const</b>
-  <i>{
-    Foo: ShortInt
-    Bar: set of Byte
-  }</i>
-  Foo = 123;
-  Bar = [1, 2, 3];
-<b>type</b>
-  TByteSet = <b>set</b> of Byte;
-<b>begin</b>
-  <i>{
-    Glomp: Integer
-    Flarp: array of Integer
-  }</i>
-  <b>const</b> Glomp = 123; // Noncompliant
-  <b>const</b> Flarp = [1, 2, 3]; // Noncompliant
-
-  <b>const</b> Beep: ShortInt = 123; // Compliant
-  <b>const</b> Boop: TByteSet = [1, 2, 3]; // Compliant
-<b>end</b>;
-        
+procedure Example;
+const
+  Foo = 123; // ShortInt
+  Bar = [1, 2, 3]; // set of Byte
+begin
+  const Beep = 123; // Integer
+  const Boop = [1, 2, 3]; // Array of Integer
+end;
 </pre>
+<h2>How to fix it</h2>
+<p>Declare the type of the inline const declaration explicitly:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example;
+const
+  Foo = 123; // ShortInt
+  Bar = [1, 2, 3]; // set of Byte
+begin
+  const Beep = 123; // Integer
+  const Boop = [1, 2, 3]; // Array of Integer
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example;
+const
+  Foo = 123; // ShortInt
+  Bar = [1, 2, 3]; // set of Byte
+type
+  TByteSet = set of Byte;
+begin
+  const Beep: ShortInt = 123;
+  const Boop: TByteSet = [1, 2, 3];
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables">
+      RAD Studio documentation: Type Inference for Inlined Variables
+    </a>
+  </li>
+</ul>
+

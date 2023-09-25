@@ -13,7 +13,7 @@
       "RELIABILITY": "HIGH"
     }
   },
-  "tags": [],
+  "tags": ["lock-in", "unpredictable"],
   "defaultSeverity": "Critical",
   "scope": "ALL",
   "quickfix": "unknown"

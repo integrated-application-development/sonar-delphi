@@ -1,12 +1,38 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Delphi allows function return types to be omitted in the implementation section.
-  <br />
-  For the sake of code readability, function return types should always be specified.
+  Functions may omit the return type in their implementation if the return type has been defined
+  in their declaration. This is confusing and unintuitive. For the sake of code readability,
+  function return types should always be specified.
 </p>
-<pre>
-    
-<b>function</b> TClass.Foo(Bar: Byte); // Noncompliant
+<h2>How to fix it</h2>
+<p>
+  Ensure that the function's implementation signature matches its declaration:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+interface
 
-<b>function</b> TClass.Foo(Bar: Byte): Integer;	// Compliant
-        
+type TFoo = class(TObject)
+  function Bar(Baz: Byte): Integer;
+end;
+
+implementation
+
+function TFoo.Bar(Baz: Byte);
+begin
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+interface
+
+type TFoo = class(TObject)
+  function Bar(Baz: Byte): Integer;
+end;
+
+implementation
+
+function TFoo.Bar(Baz: Byte): Integer;
+begin
+  // ...
+end;
 </pre>

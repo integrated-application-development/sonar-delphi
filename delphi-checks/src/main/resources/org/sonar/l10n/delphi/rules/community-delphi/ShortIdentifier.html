@@ -1,6 +1,29 @@
+<h2>Why is this an issue?</h2>
 <p>
-  When an identifier is too short, it isn't immediately obvious what it's for. Identifiers should be
-  given meaningful names.
-  <br />
-  <br />
+  When an identifier is too short, it negatively impacts readability. To figure out the meaning of
+  this meaningless variable name, all of the relevant code needs to be read and understood.
 </p>
+<p>
+  This can be particularly frustrating in Delphi, as variable declarations may be fairly distant
+  from its usage.
+</p>
+<h2>How to fix it</h2>
+<p>Use a longer and more explicit identifier name:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+var
+  M: string;
+begin
+  M := LoadMessage;
+  // ...
+  Log(M);
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+var
+  Message: string;
+begin
+  Message := LoadMessage;
+  // ...
+  Log(Message);
+end;
+</pre>

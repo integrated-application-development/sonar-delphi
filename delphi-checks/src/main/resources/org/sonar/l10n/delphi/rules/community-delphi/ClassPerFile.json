@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["design", "brain-overload"],
   "defaultSeverity": "Major",
   "scope": "ALL",
   "quickfix": "unknown"

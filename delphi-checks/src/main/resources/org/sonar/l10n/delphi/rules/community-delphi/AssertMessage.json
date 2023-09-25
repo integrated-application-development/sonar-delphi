@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["confusing"],
   "defaultSeverity": "Major",
   "scope": "MAIN",
   "quickfix": "unknown"

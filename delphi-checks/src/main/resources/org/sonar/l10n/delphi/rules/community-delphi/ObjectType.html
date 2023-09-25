@@ -1,9 +1,34 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Object types are supported for backward compatibility only. Their use is not recommended.
-  <br />
-  <br />
-  For more information on Object types, see the Embarcadero wiki page for
-  <a href="http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#Object_Types">
-    Classes and Objects
-  </a>
+  Object types are a deprecated predecessor to class types that do not support constructors and
+  destructors and do not descend from <code>TObject</code>.
 </p>
+<p>They are supported for backward compatibility only, and usage is not recommended.</p>
+<h2>How to fix it</h2>
+<p>
+  Change the <code>object</code> keyword to <code>class</code>:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+  type
+    TFoo = object
+      // ...
+    end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+  type
+    TFoo = class
+      // ...
+    end;
+</pre>
+<p>
+  Code that uses the class may need to be changed to use modern <code>class</code> features like
+  constructors and destructors.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#Object_Types">
+      RAD Studio documentation: Classes and Objects
+    </a>
+  </li>
+</ul>

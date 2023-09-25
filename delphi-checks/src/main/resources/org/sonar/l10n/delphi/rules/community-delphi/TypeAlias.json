@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["design"],
   "defaultSeverity": "Info",
   "scope": "ALL",
   "quickfix": "unknown"

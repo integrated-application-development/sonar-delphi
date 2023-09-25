@@ -1,20 +1,37 @@
-<p>
-  Visibility specifier directives (<code>private</code>,
-  <code>public</code>, etc.) should use the same indentation as the type name that they are declared
-  under. They should not be indented in the same way as a field, method, or property.
-  <br />
-  <br />
-  Please note:
-  <br />
-  - This rule checks for an exact match on trailing whitespace - mixed indentation may yield
-  unexpected results.
-  <br />
-  <br />
-  For more information, see the Class and Record Declarations section of the Embarcadero style guide
-  page on
-  <a
-    href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations"
-  >
-    Type Declarations
-  </a>
+<h2>Why is this an issue?</h2>
+<p>Visibility specifier directives (<code>private</code>, <code>public</code>, etc.) should use the
+  same indentation as the type name that they are declared under. This allows developers to easily
+  differentiate between fields, methods, and properties of different visibilities.
 </p>
+<p>
+  Please note that this rule checks for an exact match on trailing whitespace - mixed indentation
+  may yield unexpected results.
+</p>
+<h2>How to fix it</h2>
+<p>Indent the visibility specifier at the same level as the enclosing type declaration:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+  type
+    TFoo = class(TObject)
+      private
+      procedure Bar;
+      public
+      public constructor Create;
+    end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+  type
+    TFoo = class(TObject)
+    private
+      procedure Bar;
+    public
+      constructor Create;
+    end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations#Class_.28and_Record.29_Declarations">
+      Delphi's Object Pascal Style Guide: Type Declarations
+    </a>
+  </li>
+</ul>

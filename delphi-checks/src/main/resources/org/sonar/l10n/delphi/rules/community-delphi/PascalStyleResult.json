@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["confusing"],
   "defaultSeverity": "Minor",
   "scope": "ALL",
   "quickfix": "unknown"

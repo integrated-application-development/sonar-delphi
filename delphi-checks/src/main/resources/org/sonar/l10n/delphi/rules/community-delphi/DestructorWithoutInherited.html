@@ -1,3 +1,39 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Destructors should contain an 'inherited' statement.
+  When objects are freed, the <code>Destroy</code> destructor method is called.
+  <code>Destroy</code> must be an <code>override</code> (or <code>virtual</code>) method.
 </p>
+<p>
+  All classes inherit from <code>TObject</code>, which declares a virtual <code>Destroy</code>
+  method, and should override this method to provide their own implementation.
+</p>
+<p>
+  To ensure that ancestor class destructors are also called, <code>inherited</code> should be called
+  at the end of the destructor. Not doing so may cause the object to be only partially
+  deinitialized.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Add an <code>inherited</code> call to the end of the destructor:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+destructor TMyObj.Destroy;
+begin
+  FreeAndNil(FObj);
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+destructor TMyObj.Destroy;
+begin
+  FreeAndNil(FObj);
+  inherited;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Methods_(Delphi)#Destructors">
+      RAD Studio documentation: Methods (Delphi)
+    </a>
+  </li>
+</ul>

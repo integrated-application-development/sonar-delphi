@@ -1,38 +1,77 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Casting a Character type to a Character Pointer type is non-portable between different versions of
+  Casting a Character type (e.g. <code>Char</code>, <code>AnsiChar</code>) to a Character Pointer
+  type (<code>PChar</code>, <code>PAnsiChar</code>) is non-portable between different versions of
   Delphi.
-  <br />
-  <br />
-  In Delphi 10.4, there's a significant breaking change in the code generation around Char/AnsiChar
-  -> PChar/PAnsiChar casts.
-  <br />
-  Rather than taking the ordinal value of the character and converting it to a pointer, a new
-  single-character string is constructed and the pointer to that string is returned instead.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a href="https://quality.embarcadero.com/browse/RSP-29639">
-    Wrong results in cast from PWideChar to Char
-  </a>
-  <br />
-  - <a href="https://quality.embarcadero.com/browse/RSP-29772">Bug in PWideChar</a>
-  <br />
-  -
-  <a href="https://quality.embarcadero.com/browse/RSP-31498">
-    Bad codegen breaks Winapi.Windows.CharUpperW()
-  </a>
 </p>
-<pre>
-    
-<b>procedure</b> Example(C: Char);
-<b>var</b>
-  P: PChar;
-<b>begin</b>
-  P := PChar(C); // Noncompliant
-  P := PChar(Ord(C)); // Compliant (Pointer containing the ordinal value of the character)
-  P := PChar(String(C)); // Compliant (Pointer to a string containing the character)
-<b>end</b>;
-        
+<p>
+  Before Delphi 10.4, casting a character type to a character pointer type would take the ordinal
+  value of the character and convert it to a pointer.
+</p>
+<p>
+  In Delphi 10.4 and above, a new single-character string is constructed and the pointer to that
+  string is returned instead.
+</p>
+<p>
+  Because its behaviour is not consistent between Delphi versions, to maintain compatibility
+  it should not be used.
+</p>
+<h2>How to fix it</h2>
+<p>
+  To consistently use the pre-Delphi 10.4 behaviour, convert the character to its ordinal value
+  before casting.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example(MyChar: Char);
+var
+  MyPointer: PChar;
+begin
+  MyPointer := PChar(MyChar);
+end;
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example(MyChar: Char);
+var
+  MyPointer: PChar;
+begin
+  MyPointer := PChar(Ord(MyChar)); // Pointer containing the ordinal value of the character
+end;
+</pre>
+<p>
+  To consistently use the post-Delphi 10.4 behaviour, cast the character to a string type before
+  casting to the character pointer type:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+procedure Example(MyChar: Char);
+var
+  MyPointer: PChar;
+begin
+  MyPointer := PChar(MyChar);
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+procedure Example(MyChar: Char);
+var
+  MyPointer: PChar;
+begin
+  MyPointer := PChar(String(MyChar)); // Pointer to a string containing the character
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://quality.embarcadero.com/browse/RSP-29639">
+      Embarcadero Quality Portal: Wrong results in cast from PWideChar to Char
+    </a>
+  </li>
+  <li>
+    <a href="https://quality.embarcadero.com/browse/RSP-29772">
+      Embarcadero Quality Portal: Bug in PWideChar
+    </a>
+  </li>
+  <li>
+    <a href="https://quality.embarcadero.com/browse/RSP-31498">
+      Embarcadero Quality Portal: Bad codegen breaks Winapi.Windows.CharUpperW()
+    </a>
+  </li>
+</ul>

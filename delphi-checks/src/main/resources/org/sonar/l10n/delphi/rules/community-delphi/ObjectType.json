@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["bad-practice"],
   "defaultSeverity": "Minor",
   "scope": "ALL",
   "quickfix": "unknown"

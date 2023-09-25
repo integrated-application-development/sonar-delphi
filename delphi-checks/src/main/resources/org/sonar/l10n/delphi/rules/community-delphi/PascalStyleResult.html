@@ -1,16 +1,30 @@
+<h2>Why is this an issue?</h2>
+<p>In Delphi, function results should be assigned to the special <code>Result</code> variable.</p>
 <p>
-  In earlier versions of Pascal, function results were assigned to the function identifier.
-  <br />
-  In Delphi, function results are assigned to the special <code>Result</code>
-  variable.
-  <br />
-  The Delphi style should be used instead.
-  <br />
-  <br />
-  For more information, see the Embarcadero wiki page for
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Procedures_and_Functions_(Delphi)#Function_Declarations"
-  >
-    Function Declarations
-  </a>
+  While function results can be assigned to the function identifier, as in earlier versions of
+  Pascal, this approach is no longer recommended as it can be confusing.
 </p>
+<h2>How to fix it</h2>
+<p>
+  Assign the function result to the <code>Result</code> variable instead of the function identifier:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+function GetFoo: TFoo;
+begin
+  GetFoo := TFoo.Create;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+function GetFoo: TFoo;
+begin
+  Result := TFoo.Create;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Procedures_and_Functions_(Delphi)#Function_Declarations">
+      RAD Studio documentation: Procedures and Functions (Delphi)
+    </a>
+  </li>
+</ul>

@@ -1,11 +1,10 @@
+<h2>Why is this an issue?</h2>
 <p>
   This rule allows banning certain methods. It will flag any direct reference to a method from the
   blacklist.
-  <br />
-  <br />
-  Please note:
-  <br />
-  - A fully qualified method name is required. (E.g. "Unit.Type.Method")
-  <br />
-  - All overloads will be tracked. Parameter signatures cannot be specified.
 </p>
+<p>Please note:</p>
+<ul>
+  <li>Blacklisted method names should be fully qualified (e.g. <code>Unit.Type.Method</code>).</li>
+  <li>Parameter signatures cannot be specified, so all overloads will be tracked.</li>
+</ul>

@@ -1,9 +1,62 @@
+<h2>Why is this an issue?</h2>
 <p>
   The interface uses clause should only contain imports that are required for the interface section.
-  <br />
-  Anything else should be moved to the implementation section.
-  <br />
-  <br />
-  This encapsulates implementation details where they belong. It also reduces the chance of circular
-  dependencies and compilation slowdowns.
+  Imports that are only used in the implementation section should be moved there.
 </p>
+<p>
+  Importing a unit in the interface section declares a compilation dependency on that unit.
+  Units cannot have mutual (circular) dependencies in their interface sections, and a unit must be
+  recompiled whenever a unit imported in its interface section is changed. Because of this,
+  interface imports increase the time the compiler takes to resolve and validate dependencies.
+</p>
+<p>
+  Implementation section imports do not have these limitations. If an import in the interface
+  section doesn't need to be there, these costs are being incurred for no benefit.
+</p>
+<p>
+  It also encapsulates implementation details where they belong - in the implementation section.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Move the import into the implementation uses clause:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+unit Unit1;
+
+interface
+
+uses System.IOUtils;
+
+procedure Run;
+
+implementation
+
+procedure Run;
+begin
+  TFile.WriteAllText('myfile.txt', 'Hello world');
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+unit Unit1;
+
+interface
+
+procedure Run;
+
+implementation
+
+uses System.IOUtils;
+
+procedure Run;
+begin
+  TFile.WriteAllText('myfile.txt', 'Hello world');
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#Circular_Unit_References">
+      RAD Studio documentation: Circular Unit References
+    </a>
+  </li>
+</ul>

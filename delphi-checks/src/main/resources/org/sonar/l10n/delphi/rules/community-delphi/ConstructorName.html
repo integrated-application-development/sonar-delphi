@@ -1,5 +1,21 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Constructor names should begin with 'Create' and follow Pascal case.
-  <br />
-  <br />
+  Code that follows a consistent naming convention is self-documenting. In Delphi, all constructor
+  names should be in PascalCase and start with the word "Create".
 </p>
+<p>
+  Using a consistent naming convention makes constructor calls visually distinct, making it
+  clear when an object is allocated.
+  This helps in easy diagnosis of memory bugs by reducing the chance of misreading
+  a constructor as a non-allocating operation (e.g. a class procedure).
+</p>
+<h2>How to fix it</h2>
+<p>Rename the constructor name to follow the convention.</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Methods_(Delphi)#Constructors">
+      RAD Studio documentation: Methods (Delphi)
+    </a>
+  </li>
+</ul>

@@ -1,14 +1,18 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Stray semicolons are usually introduced by mistake, for example because:
-  <br />
-  - It was meant to be replaced by an actual statement, but this was forgotten.
-  <br />
-  - There was a typo which lead the semicolon to be doubled, i.e ;;.
+  Delphi allows empty statements, which means that stray semicolons can be added in most places.
+  These are unnecessary, confusing, and should be removed.
 </p>
-<pre>
-    
-Result := 123; // Compliant
-
-Result := 123;; // Noncompliant
-        
+<p>They are almost always introduced by mistake, such as:</p>
+<ul>
+  <li>Forgetting to add an actual statement</li>
+  <li>Making a typo by doubling an existing semicolon</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Remove the stray semicolon:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Result := 123;;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Result := 123;
 </pre>

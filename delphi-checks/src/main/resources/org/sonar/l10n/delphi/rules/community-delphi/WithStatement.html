@@ -1,8 +1,66 @@
+<h2>Why is this an issue?</h2>
 <p>
-  'with' statements should not be used.
-  <br />
-  They are difficult to debug, and make it easy to write ambiguous statements which may unexpectedly
-  change meaning.
-  <br />
-  <br />
+  The <code>with</code> statement in Delphi, though seemingly clean and convenient, can introduce a
+  host of issues that hinder code clarity and maintainability.
 </p>
+<p>
+  It can lead to ambiguity and confusion. Identifiers within a <code>with</code> block may refer to
+  local variables, members of the <code>Self</code> object, or members of the objects targeted by
+  the <code>with</code> statement. This lack of clarity makes it harder to discern the origin and
+  purpose of variables.
+</p>
+<p>
+  Additionally, <code>with</code> statements can potentially obscure variables declared in an outer
+  scope, creating scope ambiguity and increasing the likelihood of unintended consequences.
+</p>
+<p>
+  Worse still, the use of <code>with</code> can lead to surprising bugs, especially when an object
+  within the <code>with</code> statement shares a member name with the <code>Self</code> object.
+  Removing a class member can cause an overloaded <code>with</code> to select the other name,
+  masking what would have been a compilation error if the field were accessed more explicitly.
+</p>
+<h2>How to fix it</h2>
+<p>Remove the <code>with</code> statement and qualify any accesses within it:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure TMyForm.MyEvent(Sender: TObject);
+begin
+  with TButton.Create(Self) do begin
+    Parent := Self;
+    Left := 50;
+    Top := 20;
+    Caption := ClassName;
+    Color := clRed;
+  end;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure TMyForm.MyEvent(Sender: TObject);
+var
+  MyButton: TButton;
+begin
+  MyButton := TButton.Create(Self);
+  MyButton.Parent := Self;
+  MyButton.Left := 50;
+  MyButton.Top := 20;
+  MyButton.Caption := ClassName;
+  Self.Color := clRed;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://stackoverflow.com/questions/71419/why-should-i-not-use-with-in-delphi">
+      Stack Overflow: Why should I not use "with" in Delphi?
+    </a>
+  </li>
+  <li>
+    <a href="https://blogs.embarcadero.com/delphi-with-statements-and-local-variables/">
+      Embarcadero Blog: Delphi With Statements and Local Variables
+    </a>
+  </li>
+  <li>
+    <a href="https://blog.marcocantu.com/blog/with_harmful.html">
+      Marco Tech Blog: If With is Considered Harmful, What About Double With?
+    </a>
+  </li>
+</ul>
