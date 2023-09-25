@@ -1,9 +1,22 @@
+<h2>Why is this an issue?</h2>
 <p>
   Cognitive Complexity is a measure of how hard the control flow of a method is to understand.
-  Methods with high Cognitive Complexity will be difficult to maintain.
-  <br />
-  <br />
-  <b> See: </b>
-  <br />
-  - <a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf"> Cognitive Complexity </a>
+  This can be caused by excessive use of:
 </p>
+<ul>
+  <li>Loop structures, like <code>for</code> and <code>while</code></li>
+  <li>Conditionals, like <code>if</code>, <code>catch</code> and <code>case</code></li>
+  <li>Recursive sequences</li>
+</ul>
+<p>
+  Methods with high Cognitive Complexity will be difficult to maintain, as a very non-linear control
+  flow is difficult to follow.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Refactor the method to use less loops, conditionals, or recursion.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li><a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf">SonarSource: Cognitive Complexity white paper</a></li>
+</ul>

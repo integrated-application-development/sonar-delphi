@@ -1,27 +1,33 @@
+<h2>Why is this an issue?</h2>
 <p>
-  The TObject.Free method already checks for assignment before freeing. Additional checks are
+  The TObject.Free method already performs a nil check before freeing. Additional checks are
   redundant.
 </p>
-<pre>
-    
-<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
+<h2>How to fix it</h2>
+<p>Remove the nil check:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+if Assigned(Foo) then begin
   Foo.Free;
-<b>end;</b>
+end;
 
-<b>if</b> Foo &lt;&gt; <b>nil</b> <b>then begin</b> // Noncompliant
-  Foo.Free;
-<b>end;</b>
-
-<b>if</b> Assigned(Foo) <b>then begin</b> // Noncompliant
-  FreeAndNil(Foo);
-<b>end;</b>
-
-<b>if</b> Foo &lt;&gt; <b>nil</b> <b>then begin</b> // Noncompliant
-  FreeAndNil(Foo);
-<b>end;</b>
-
-Foo.Free; // Compliant
-
-FreeAndNil(Foo); // Compliant
-        
+if Bar &lt;> nil then begin
+  FreeAndNil(Bar);
+end;
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Foo.Free;
+FreeAndNil(Bar);
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.TObject.Free">
+      RAD Studio API documentation: System.TObject.Free
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.FreeAndNil">
+      RAD Studio API documentation: System.SysUtils.FreeAndNil
+    </a>
+  </li>
+</ul>

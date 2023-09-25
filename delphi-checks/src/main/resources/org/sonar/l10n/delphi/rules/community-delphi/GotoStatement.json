@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["pitfall", "confusing"],
   "defaultSeverity": "Critical",
   "scope": "ALL",
   "quickfix": "unknown"

@@ -1,38 +1,51 @@
+<h2>Why is this an issue?</h2>
 <p>
   A <code>TFormatSettings</code> argument can be provided to the <code>TDate</code> and
   <code>TDateTime</code> string formatting functions in <code>System.SysUtils</code>.
-  <br />
   If a <code>TFormatSettings</code> argument is not provided, then the global
   <code>TFormatSettings</code> will be used by default.
-  <br />
-  <br />
+</p>
+<p>
   Relying on the global <code>TFormatSettings</code> is problematic because it is populated with
   system default values from the OS, leading to different behavior on different machines.
-  <br />
-  <br />
-  <b>Relevant functions:</b>
-  <br />
-  - <code>System.SysUtils.DateToStr</code>
-  <br />
-  - <code>System.SysUtils.DateTimeToStr</code>
-  <br />
-  - <code>System.SysUtils.StrToDate</code>
-  <br />
-  - <code>System.SysUtils.StrToDateDef</code>
-  <br />
-  - <code>System.SysUtils.TryStrToDate</code>
-  <br />
-  - <code>System.SysUtils.StrToDateTime</code>
-  <br />
-  - <code>System.SysUtils.StrToDateTimeDef</code>
-  <br />
-  - <code>System.SysUtils.TryStrToDateTime</code>
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a href="http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings">
-    System.SysUtils.TFormatSettings
-  </a>
 </p>
+<p>Functions that accept a <code>TFormatSettings</code> argument include:</p>
+<ul>
+  <li><code>System.SysUtils.DateToStr</code></li>
+  <li><code>System.SysUtils.DateTimeToStr</code></li>
+  <li><code>System.SysUtils.StrToDate</code></li>
+  <li><code>System.SysUtils.StrToDateDef</code></li>
+  <li><code>System.SysUtils.TryStrToDate</code></li>
+  <li><code>System.SysUtils.StrToDateTime</code></li>
+  <li><code>System.SysUtils.StrToDateTimeDef</code></li>
+  <li><code>System.SysUtils.TryStrToDateTime</code></li>
+</ul>
+<h2>How to fix it</h2>
+<p>
+  Create a local <code>TFormatSettings</code> instance, configure it with the desired date
+  formatting properties, and pass it in as the last parameter of the formatting method.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure PrintCurrentTime;
+begin
+  Writeln(DateToStr(Now));
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure PrintCurrentTime;
+var
+  LocalFormatSettings: TFormatSettings;
+begin
+  LocalFormatSettings := TFormatSettings.Create;
+  LocalFormatSettings.ShortDateFormat := 'dd/mm/yyyy';
+  Writeln(DateToStr(Now), LocalFormatSettings);
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TFormatSettings">
+      RAD Studio API documentation: System.SysUtils.TFormatSettings
+    </a>
+  </li>
+</ul>

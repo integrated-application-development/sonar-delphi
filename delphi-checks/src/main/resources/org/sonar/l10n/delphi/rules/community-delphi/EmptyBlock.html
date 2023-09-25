@@ -1,4 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>
   Most of the time a block of code is empty when a piece of code is really missing. An empty block
-  must be either filled or removed.
+  should be either filled or removed.
 </p>
+<p>This rule excludes:</p>
+<ul>
+  <li>Empty method bodies (covered by the <code>EmptyMethod</code> rule)</li>
+  <li>Empty except blocks (covered by the <code>SwallowedException</code> rule)</li>
+  <li>Case blocks that are empty apart from a comment</li>
+</ul>

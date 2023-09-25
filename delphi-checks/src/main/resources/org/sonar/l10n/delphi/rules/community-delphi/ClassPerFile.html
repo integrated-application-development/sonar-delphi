@@ -1,6 +1,13 @@
+<h2>Why is this an issue?</h2>
 <p>
-  A file should not include too many classes.
-  <br />
-  This rule does not apply to nested classes or one-liner classes such as
-  <code>ECustomException = class(Exception);</code>
+  Units with too many classes can be difficult to understand and maintain. Ideally, each
+  class is self-contained and can be separated into separate units without loss of functionality.
+</p>
+<p>
+  Nested classes or one-liner classes such as
+  <code>ECustomException = class(Exception);</code> are not counted toward the limit.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Group classes with related functionality into new units, and remove or merge unnecessary classes.
 </p>

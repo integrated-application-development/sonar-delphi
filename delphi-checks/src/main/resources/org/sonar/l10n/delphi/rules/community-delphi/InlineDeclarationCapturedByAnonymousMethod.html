@@ -1,20 +1,63 @@
+<h2>Why is this an issue?</h2>
 <p>
   Up until Delphi 10.4.2, there are compiler bugs related to inline variables captured by anonymous
-  methods.
-  <br />
-  <br />
-  - Inline variables will not have their lifetimes extended until the anonymous method goes out of
-  scope. (Fixed in 10.4.1)
-  <br />
-  - Inline variables with managed types will not have their reference count updated when the
-  anonymous method goes out of scope, causing memory leaks. (Fixed in 10.4.2)
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  - <a href="https://quality.embarcadero.com/browse/RSP-26666"> RSP-26666 </a>
-  <br />
-  - <a href="https://quality.embarcadero.com/browse/RSP-29564"> RSP-29564 </a>
-  <br />
-  - <a href="https://quality.embarcadero.com/browse/RSP-31864"> RSP-31864 </a>
+  methods:
 </p>
+<ol>
+  <li>
+    Inline variables will not have their lifetimes extended until the anonymous method goes out of
+    scope. (Fixed in 10.4.1)
+  </li>
+  <li>
+    Inline variables with managed types will not have their reference count updated when the
+    anonymous method goes out of scope, causing memory leaks. (Fixed in 10.4.2)
+  </li>
+</ol>
+<h2>How to fix it</h2>
+<p>Use a traditional variable declaration instead of an an inline declaration:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example;
+begin
+  var MyObj := TFoo.Create as IFoo;
+
+  TTask.Run(
+    procedure begin
+      Sleep(1000);
+      MyObj.Bar;
+    end
+  );
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example;
+var
+  MyObj: IFoo;
+begin
+  MyObj := TFoo.Create;
+
+  TTask.Run(
+    procedure begin
+      Sleep(1000);
+      MyObj.Bar;
+    end
+  );
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://quality.embarcadero.com/browse/RSP-26666">
+      Embarcadero Quality Portal: Inline variables don't work with anonymous methods
+    </a>
+  </li>
+  <li>
+    <a href="https://quality.embarcadero.com/browse/RSP-29564">
+      Embarcadero Quality Portal: Memory leak: inline Interfaces captured by anonymous methods are not released
+    </a>
+  </li>
+  <li>
+    <a href="https://quality.embarcadero.com/browse/RSP-31864">
+      Embarcadero Quality Portal: inline var reference counitng problem when captured in anonymous method
+    </a>
+  </li>
+</ul>

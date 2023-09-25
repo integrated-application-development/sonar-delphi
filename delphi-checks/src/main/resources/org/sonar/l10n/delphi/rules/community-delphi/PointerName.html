@@ -1,12 +1,21 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Pointer names should be the same as the dereferenced type name, but with a 'P' replacing the 'T'
-  <br />
-  <br />
-  For example:
-  <br />
-  - ^TObject should be named PObject
-  <br />
-  - ^TType should be named PType
-  <br />
-  <br />
+  Code that follows a consistent naming convention is self-documenting. In Delphi, all pointer names
+  should be named identically to the dereferenced type, with the type prefix swapped for
+  <code>P</code>.
 </p>
+<p>For example:</p>
+<ul>
+  <li><code>^TObject</code> should be named <code>PObject</code></li>
+  <li><code>^TMyType</code> should be named <code>PMyType</code></li>
+</ul>
+<h2>How to fix it</h2>
+<p>Rename the pointer type to follow the convention.</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations">
+      Delphi's Object Pascal Style Guide: Type Declarations
+    </a>
+  </li>
+</ul>

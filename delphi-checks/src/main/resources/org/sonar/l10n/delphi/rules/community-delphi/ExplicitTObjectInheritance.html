@@ -1,12 +1,28 @@
+<h2>Why is this an issue?</h2>
 <p>
-  A class without a parent will implicitly inherit from TObject. The explicit form is recommended by
-  Embarcadero for readability.
-  <br />
-  <br />
-  For more information, see the Embarcadero wiki page for
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass"
-  >
-    TObject and TClass
-  </a>
+  A class without a parent implicitly inherits from TObject. In these cases, it is recommended to
+  explicitly inherit from TObject for readability.
+</p>
+<h2>How to fix it</h2>
+<p>Specify <code>TObject</code> as the class's ancestor:
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TMyClass = class
+    // ...
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TMyClass = class(TObject)
+    // ...
+  end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Classes_and_Objects_(Delphi)#TObject_and_TClass">
+      RAD Studio documentation: TObject and TClass
+    </a>
+  </li>
+</ul>
 </p>

@@ -1,1 +1,20 @@
-<p>Unnecessary casting expressions make the code harder to read and understand.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  Unnecessarily casting an object to its own type makes code harder to read and understand with
+  no benefit.
+</p>
+<h2>How to fix it</h2>
+<p>Remove the redundant cast:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example(Foo: TFoo);
+begin
+  Foo := TFoo(Foo);
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example(Foo: TFoo);
+begin
+  // ...
+end;
+</pre>

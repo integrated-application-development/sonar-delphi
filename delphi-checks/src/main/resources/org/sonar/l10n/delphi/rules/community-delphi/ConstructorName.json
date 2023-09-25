@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["bad-practice", "pitfall"],
   "defaultSeverity": "Minor",
   "scope": "ALL",
   "quickfix": "unknown"

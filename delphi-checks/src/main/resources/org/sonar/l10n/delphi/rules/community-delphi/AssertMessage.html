@@ -1,9 +1,28 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Assertions in main code should have an error message.
-  <br />
-  An error message will aid in debugging if the assertion fails in production.
-  <br />
-  <br />
-  For more information, see the Embarcadero style guide page on
-  <a href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements"> Delphi Statements </a>
+  When an assertion without a message fails, it raises a generic <code>EAssertionFailed</code>
+  exception, which is of little use when debugging. Providing a message ensures that the assertion
+  is more immediately identifiable and helpful when it fails.
 </p>
+<h2>How to fix it</h2>
+<p>Add a descriptive message string as the second parameter to the <code>System.Assert</code> call:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Foo(Bar: TObject);
+begin
+  Assert(Assigned(Bar));
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Foo(Bar: TObject);
+begin
+  Assert(Assigned(Bar), 'Bar must be initialized');
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.Assert">
+      RAD Studio API documentation: System.Assert
+    </a>
+  </li>
+</ul>

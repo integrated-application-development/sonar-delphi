@@ -1,14 +1,14 @@
+<h2>Why is this an issue?</h2>
 <p>
-  The use of parentheses, even those not required to enforce a desired order of operations, can
-  clarify the intent behind a piece of code. But redundant pairs of parentheses could be misleading,
-  and should be removed.
+  Parentheses should be used to clarify the intent behind a piece of code or enforce a desired
+  order of operations. Redundant pairs of parentheses do neither of these things, making code more
+  confusing and less readable.
 </p>
-<pre>
-    
-Result := X + 1; // Compliant
-
-Result := (X + 1); // Compliant
-
-Result := ((X + 1)); // Noncompliant
-        
+<h2>How to fix it</h2>
+<p>Remove the redundant parentheses:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Result := ((X + 1));
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Result := (X + 1);
 </pre>

@@ -1,16 +1,22 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Unused and useless imports should be removed.
-  <br />
-  Leaving them in reduces the code's readability, since their presence can be confusing.
-  <br />
-  <br />
-  WARNING: Take care when removing imports of units with a Register procedure or
-  initialization/finalization section.
-  <br />
-  A unit must be imported at least once for code in these locations to be executed.
-  <br />
-  <br />
-  Known false-positives:
-  <br />
-  - Imports that are only referenced in the DFM file.
+  Having unused imports adversely affects code readability, as their presence is confusing. Code
+  that is never used should be removed to keep codebases clean and maintainable. Unused imports may
+  also negatively affect compilation time and impact the ability of the compiler to perform accurate
+  incremental compilation.
 </p>
+<p>
+  Note that there are cases where importing "unused" units is necessary:
+</p>
+<ul>
+  <li>
+    Units with an initialization section, finalization section, or a <code>Register</code> procedure
+    need to be imported at least once for code in those locations to be executed.
+  </li>
+  <li>
+    Units that are used in the Delphi form file need to be included in the source file's uses
+    clause.
+  </li>
+</ul>
+<h2>How to fix it</h2>
+<p>Remove the unused import.</p>

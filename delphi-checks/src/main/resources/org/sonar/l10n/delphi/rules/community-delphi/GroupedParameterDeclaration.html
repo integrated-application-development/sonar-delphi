@@ -1,4 +1,45 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Grouped parameters can be confusing to read and error-prone to modify, so individual parameters
-  should have their types explicitly declared.
+  Parameter declarations should not be grouped together. This affects readability, is less
+  convenient to change for version control purposes, and can be error-prone to modify.
 </p>
+<h2>How to fix it</h2>
+<p>Separate the grouped parameters explicitly:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure MyProc(MyName: string; MyId, MyAge: Integer);
+begin
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure MyProc(MyName: string; MyId: Integer; MyAge: Integer);
+begin
+  // ...
+end;
+</pre>
+<p>
+  If the grouped parameters are <code>const</code>, <code>var</code>, or <code>out</code>
+  parameters, make sure that each parameter has the same keywords after separating:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+procedure MyProc(MyName: string; const MyId, MyAge: Integer);
+begin
+  // ...
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+procedure MyProc(MyName: string; const MyId: Integer; const MyAge: Integer);
+begin
+  // ...
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a
+        href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations"
+    >
+      Delphi's Object Pascal Style Guide: Statements
+    </a>
+  </li>
+</ul>

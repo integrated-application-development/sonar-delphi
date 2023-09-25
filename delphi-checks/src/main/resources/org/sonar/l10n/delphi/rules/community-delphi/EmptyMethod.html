@@ -1,10 +1,25 @@
+<h2>Why is this an issue?</h2>
+<p>Empty methods are usually superfluous, and should be removed to prevent unexpected behaviour.</p>
+<p>Some valid empty methods could include:</p>
+<ul>
+  <li>A virtual method that is intended to be overridden</li>
+  <li>An override method of a non-empty virtual method</li>
+  <li>A method that exists only to implement an interface</li>
+</ul>
 <p>
-  Reasons for a method not to have a method body:
-  <br />
-  - It is an unintentional omission, and should be fixed to prevent unexpected behavior.
-  <br />
-  - It is an override or virtual method with a nested comment explaining why the method is blank.
-  <br />
-  - It is an interface implementation method with a nested comment explaining why the method is
-  blank.
+  In these cases, a comment should be added to the method body to explain why the method is blank.
 </p>
+<h2>How to fix it</h2>
+<p>If the empty method is an omission, remove it.</p>
+<p>If the method should be empty, add a nested comment explaining why the method is blank:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure MyEmptyMethod;
+begin
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure MyEmptyMethod;
+begin
+  // Empty because I really want it to be!
+end;
+</pre>

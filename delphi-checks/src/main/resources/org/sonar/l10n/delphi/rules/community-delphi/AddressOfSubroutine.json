@@ -12,7 +12,7 @@
       "RELIABILITY": "HIGH"
     }
   },
-  "tags": [],
+  "tags": ["unpredictable", "suspicious"],
   "defaultSeverity": "Blocker",
   "scope": "ALL",
   "quickfix": "unknown"

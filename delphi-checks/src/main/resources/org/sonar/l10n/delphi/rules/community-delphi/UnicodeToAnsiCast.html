@@ -1,6 +1,66 @@
+<h2>Why is this an issue?</h2>
 <p>
   Casting a Unicode type like <code>String</code> to an ANSI type like <code>AnsiString</code> can
-  lead to data loss.
-  <br />
-  Only a small subset of Unicode characters can be represented in a given ANSI code page.
+  lead to data loss. Because any given ANSI code page contains only a small subset of Unicode
+  characters, converting a Unicode type to ANSI will cause all non-ANSI characters to be replaced
+  with question marks.
 </p>
+<h2>How to fix it</h2>
+<p>
+  Code that casts Unicode types directly to ANSI types are generally problematic on a design level.
+  As such, there is no single solution.
+</p>
+<p>
+  If you are casting to <code>AnsiString</code> to get the string as bytes, consider using
+  <code>TEncoding.GetBytes</code> to convert the contents of the string into bytes using a specific
+  encoding:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure WriteToFile(MyStr: string);
+var
+  MyAnsiStr: AnsiString;
+  MyStream: TFileStream;
+begin
+  MyAnsiStr := AnsiString(MyStr);
+
+  MyStream := TFileStream.Create('myfile.txt');
+  try
+    MyStream.WriteBuffer(MyAnsiStr[1], Length(MyAnsiStr));
+  finally
+    FreeAndNil(MyStream);
+  end;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure WriteToFile(MyStr: string);
+var
+  MyBytes: TBytes;
+  MyStream: TFileStream;
+begin
+  MyBytes := TEncoding.ANSI.GetBytes(MyStr);
+
+  MyStream := TFileStream.Create('myfile.txt');
+  try
+    MyStream.WriteBuffer(MyBytes, Length(MyBytes));
+  finally
+    FreeAndNil(MyStream);
+  end;
+end;
+</pre>
+<p>
+  If you are casting to <code>AnsiString</code> to pass to a WinAPI method, use a
+  <code>WideString</code> overload instead.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Unicode_in_RAD_Studio">
+      RAD Studio documentation: Unicode in RAD Studio
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.TEncoding.GetBytes">
+      RAD Studio API documentation: System.SysUtils.TEncoding.GetBytes
+    </a>
+  </li>
+</ul>

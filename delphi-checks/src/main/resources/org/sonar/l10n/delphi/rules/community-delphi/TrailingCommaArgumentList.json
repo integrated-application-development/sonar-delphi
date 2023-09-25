@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "MEDIUM"
     }
   },
-  "tags": [],
+  "tags": ["lock-in", "bad-practice"],
   "defaultSeverity": "Blocker",
   "scope": "ALL",
   "quickfix": "unknown"

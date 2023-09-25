@@ -1,4 +1,8 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Overriding a method just to call the same method from the super class without performing any other
-  actions is useless and misleading.
+  An overridden method containing only an inherited statement without any other
+  actions is superfluous. The presence of the overridden method is also misleading, as it
+  implies that the behaviour has been changed from the base class.
 </p>
+<h2>How to fix it</h2>
+<p>Remove the method override.</p>

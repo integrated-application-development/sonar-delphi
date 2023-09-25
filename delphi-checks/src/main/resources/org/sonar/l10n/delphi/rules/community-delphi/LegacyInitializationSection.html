@@ -1,18 +1,32 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Legacy initialization sections using <code>begin .. end</code> are functionally equivalent to a
-  regular initialization section. However:
-  <br />
-  - A finalization section cannot be specified.
-  <br />
-  - The syntax is old and not recommended by Embarcadero.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#The_Initialization_Section"
-  >
-    The Initialization Section
-  </a>
+  Specifying the initialization section using <code>begin</code> was superseded by the newer
+  <code>initialization</code> syntax. The <code>initialization</code> syntax works identically, but
+  also supports the addition of a <code>finalization</code> section.
 </p>
+<h2>How to fix it</h2>
+<p>Use the modern initialization syntax instead:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+// ...
+
+begin
+  Writeln('Initializing application...');
+
+end.
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+// ...
+
+initialization
+  Writeln('Initializing application...');
+
+end.
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Programs_and_Units_(Delphi)#The_Initialization_Section">
+      RAD Studio documentation: Programs and Units (Delphi)
+    </a>
+  </li>
+</ul>

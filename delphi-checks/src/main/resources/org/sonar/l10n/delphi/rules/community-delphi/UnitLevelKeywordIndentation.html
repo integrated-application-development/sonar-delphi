@@ -1,18 +1,39 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Unit-level keywords should never be indented, as they are all top-level and indentation indicates
-  a form of scope.
-  <br />
-  This includes
-  <code>unit</code>/<code>program</code>/<code>package</code>/<code>library</code>
-  file headings,
-  <code>interface</code>/<code>implementation</code> section headings,
-  <code>initialization</code>/<code>finalization</code> section headings, top-level
-  <code>uses</code>/<code>type</code>/<code>var</code>/<code>const</code> keywords, and the final
-  <code>end.</code>.
-  <br />
-  <br />
-  For more information, see the Indentation section of the Embarcadero style guide page on
-  <a href="https://docwiki.embarcadero.com/RADStudio/en/White_Space_Usage#Indentation">
-    White Space Usage
-  </a>
+  In Delphi, indentation is an indicator of scope. Following this, top-level keywords and elements
+  should never be indented, as it allows the structure of a unit to be read immediately at a glance.
 </p>
+<p>Top level elements include:</p>
+<ul>
+  <li>
+    The file heading (<code>unit</code>, <code>program</code>, <code>package</code>, and <code>library</code>)
+  </li>
+  <li>
+    Section headings (<code>interface</code>, <code>implementation</code>, <code>initialization</code>, <code>finalization</code>)
+  </li>
+  <li>
+    Uses clauses (<code>uses</code>)
+  </li>
+  <li>
+    Top-level <code>type</code>, <code>var</code>, and <code>const</code> sections
+  </li>
+  <li>
+    Top-level <code>begin</code> and <code>end</code>
+  </li>
+  <li>
+    Top-level method declarations
+  </li>
+  <li>
+    Method implementations
+  </li>
+</ul>
+<h2>How to fix it</h2>
+<p>Remove all indentation before the beginning keyword of the top-level element.</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/White_Space_Usage#Indentation">
+      RAD Studio documentation: White Space Usage
+    </a>
+  </li>
+</ul>

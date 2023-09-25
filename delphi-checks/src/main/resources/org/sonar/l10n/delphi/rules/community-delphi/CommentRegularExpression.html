@@ -1,13 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>
-  This rule template can be used to create rules which will be triggered when the full content of a
-  comment matches a given regular expression. Note that the regular expression should be expressed
-  using the dotall format (where the <code>.</code> character matches any character).
-  <br />
-  <br />
+  This rule template allows you to track the use of comments matching a given regular expression.
+  Note that the regular expression must match the full text of the comment and will be executed
+  in dotall mode (where the <code>.</code> character matches any character, including newlines).
+</p>
+<p>
   For example, one can create a rule with the regular expression <code>.*REVIEW.*</code>
-  to match all comments containing "REVIEW".
-  <br />
-  <br />
-  Note that, in order to match REVIEW regardless of the case, the <code>(?i)</code> modifier should
-  be prepended to the expression, as in <code>(?i).*REVIEW.*</code>.
+  to match all comments containing "REVIEW". To match REVIEW regardless of the case, the
+  <code>(?i)</code> modifier should be prepended to the expression: <code>(?i).*REVIEW.*</code>.
 </p>

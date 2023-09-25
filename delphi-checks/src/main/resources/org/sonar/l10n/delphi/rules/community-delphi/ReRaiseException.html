@@ -1,36 +1,45 @@
+<h2>Why is this an issue?</h2>
 <p>
-  You should never explicitly re-raise a caught exception.
-  <br />
-  The exception will still be freed at the end of the exception handler, causing tricky access
-  violations.
-  <br />
-  Use 'raise;' instead of 'raise E;'.
-  <br />
-  <br />
-  <b> See: </b>
-  <br />
-  -
-  <a
-    href="http://zerolith.com/delphi/on-delphi-exception-raising-re-raising-and-try-except-blocks.html"
-  >
-    On Delphi Exception raising, re-raising and try-except blocks
-  </a>
-  <br />
-  -
-  <a href="http://delphi.org/2017/06/really-bad-exception-abuse/">
-    Exceptionally Bad Exception Abuse
-  </a>
+  Re-raising a caught exception explicitly (i.e. passing the exception as an argument) causes a
+  double free, as Delphi does not know that the re-raised exception is the original one and
+  frees it at the end of the exception handler.
 </p>
-<pre>
-    
-<b>on</b> E: Exception <b>do begin</b>
-  Log.Debug(<i>'Exception message = '</i> + E.Message);
-  <b>raise</b> E; // Noncompliant
-<b>end;</b>
-
-<b>on</b> E: Exception <b>do begin</b>
-  Log.Debug(<i>'Exception message = '</i> + E.Message);
-  <b>raise</b>; // Compliant
-<b>end;</b>
-        
+<p>
+  In these situations, a bare <code>raise</code> should be used. This correctly indicates that the
+  current exception should be re-raised.
+</p>
+<h2>How to fix it</h2>
+<p>Replace the <code>raise X</code> statement with a simple <code>raise</code>:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+try
+  DoSomething;
+except
+  on E: Exception do begin
+    Log.Debug('Exception message = ' + E.Message);
+    raise E;
+  end;
+end;
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+try
+  DoSomething;
+except
+  on E: Exception do begin
+    Log.Debug('Exception message = ' + E.Message);
+    raise;
+  end;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://marc.durdin.net/2012/10/how-not-to-re-raise-an-exception-in-delphi/">
+      Marc Durdin's Blog: How not to re-raise an exception in Delphi
+    </a>
+  </li>
+  <li>
+    <a href="http://delphi.org/2017/06/really-bad-exception-abuse/">
+      Delphi.org: Exceptionally Bad Exception Abuse
+    </a>
+  </li>
+</ul>

@@ -1,1 +1,64 @@
 <p>Too many variables can indicate that a method is doing too many things.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  Using many variables in a method can be an indicator that the method is doing too many things.
+
+  A method should be a single logical task, not a number of disconnected tasks.
+</p>
+<p>
+  Using a large number of redundant variables in a short span of code can also adversely affect
+  readability.
+</p>
+<h2>How to fix it</h2>
+<p>Consider breaking the method up into multiple methods with different responsibilities:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure TMyObject.DoThing;
+var
+  MyFoo: TFoo;
+  MyBar: TBar;
+begin
+  MyFoo := TFoo.Create;
+  FMyFoo := MyFoo;
+
+  MyBar := TBar.Create;
+  FMyBar := MyBar;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure TMyObject.DoFooThing;
+var
+  MyFoo: TFoo;
+begin
+  MyFoo := TFoo.Create;
+  FMyFoo := MyFoo;
+end;
+
+procedure TMyObject.DoBarThing;
+var
+  MyFoo: TFoo;
+begin
+  MyBar := TBar.Create;
+  FMyBar := MyBar;
+end;
+</pre>
+<p>Another option is to inline unnecessarily verbose variables:</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+procedure TMyObject.DoThing;
+var
+  MyFoo: TFoo;
+  MyBar: TBar;
+begin
+  MyFoo := TFoo.Create;
+  FMyFoo := MyFoo;
+
+  MyBar := TBar.Create;
+  FMyBar := MyBar;
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+procedure TMyObject.DoThing;
+begin
+  FMyFoo := TFoo.Create;
+  FMyBar := TBar.Create;
+end;
+</pre>

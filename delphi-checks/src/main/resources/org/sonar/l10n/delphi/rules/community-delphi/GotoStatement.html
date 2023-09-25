@@ -1,6 +1,63 @@
+<h2>Why is this an issue?</h2>
 <p>
   <code>goto</code> is an unstructured control flow statement. It makes code less readable and
-  maintainable. Structured control flow statements such as <code>if</code>, <code>for</code>,
-  <code>while</code>, <code>Continue</code>, or <code>Break</code>
-  should be used instead.
+  maintainable, and is not recommended in modern code.
 </p>
+<h2>How to fix it</h2>
+<p>
+  Use condition variables with structured control flow statements such as <code>if</code>,
+  <code>for</code>, <code>while</code>, <code>Continue</code>, or <code>Break</code> instead.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+  function Foo: Boolean;
+  var
+    Sentence: string;
+  begin
+    for I := 1 to 10 do begin
+      Sentence := Sentence + Readln;
+
+      if Input = '.' then begin
+        Goto SentenceEnded;
+      end;
+    end;
+
+    ShowMessage('Cutting off the sentence here');
+  SentenceEnded:
+    ShowMessage('Sentence: ' + Sentence);
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+function Foo: Boolean;
+var
+  Sentence: string;
+  SentenceShown: Boolean;
+begin
+  for I := 1 to 10 do begin
+    Sentence := Sentence + Readln;
+
+    if Input = '.' then begin
+      ShowMessage('Sentence: ' + Sentence);
+      SentenceShown := True;
+      Break;
+    end;
+  end;
+
+  if not SentenceShown then begin
+    ShowMessage('Cutting off the sentence here');
+    ShowMessage('Sentence: ' + Sentence);
+  end;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://stackoverflow.com/questions/3517726/what-is-wrong-with-using-goto">
+      Stack Overflow: What is wrong with using goto?
+    </a>
+  </li>
+  <li>
+    <a href="https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf">
+      Dijkstra (1968). Go To Statement Considered Harmful
+    </a>
+  </li>
+</ul>

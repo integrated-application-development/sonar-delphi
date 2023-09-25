@@ -1,11 +1,36 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Variables should be defined one per line of code.
-  <br />
-  <br />
-  For more information, see the Embarcadero style guide page on
-  <a
-    href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations"
-  >
-    Delphi Statements
-  </a>
+  Multiple variables should not be declared on a single line. This affects readability, is less
+  convenient to change for version control purposes, and can be error-prone to modify.
 </p>
+<h2>How to fix it</h2>
+<p>Separate the grouped variables into separate lines.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure MyProc;
+var
+  MyName: string;
+  MyId, MyAge: Integer;
+begin
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure MyProc;
+var
+  MyName: string;
+  MyId: Integer;
+  MyAge: Integer;
+begin
+  // ...
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a
+        href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements#Local_Variable_and_Constants_Declarations"
+    >
+      Delphi's Object Pascal Style Guide: Statements
+    </a>
+  </li>
+</ul>

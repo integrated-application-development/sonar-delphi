@@ -1,1 +1,50 @@
-<p>A case statement with less than 2 case items would be better expressed as an if-statement.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  Case statements are syntactic sugar for a series of conditionals that all test the same
+  value for equality.
+</p>
+<p>
+  A case statement with only one item is functionally equivalent to a single <code>if</code>
+  statement, and a case statement with only one item and an <code>else</code> is functionally
+  equivalent to an <code>if</code> statement and a corresponding <code>else</code>.
+</p>
+<p>
+  In both these cases, using an <code>if</code> statement would be clearer.
+</p>
+<h2>How to fix it</h2>
+<p>
+  If it is a case statement with one item, replace it with an <code>if</code> statement using
+  the same condition.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+// Noncompliant
+case MyNum of
+  0: Exit;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+// Compliant
+if MyNum = 0 then begin
+  Exit;
+end;
+</pre>
+<p>
+  If it is a case statement with one item and an <code>else</code>, replace the item with an
+  <code>if</code> statement using the same condition and a corresponding identical <code>else</code>.
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+case MyNum of
+  0: Exit;
+  else begin
+    Writeln('Not 0!');
+  end;
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+if MyNum = 0 then begin
+  Exit;
+end
+else begin
+  Writeln('Not 0!');
+end;
+</pre>

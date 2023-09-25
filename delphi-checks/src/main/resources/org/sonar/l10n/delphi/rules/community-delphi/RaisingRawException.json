@@ -13,7 +13,7 @@
       "RELIABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["confusing", "bad-practice"],
   "defaultSeverity": "Critical",
   "scope": "ALL",
   "quickfix": "unknown"

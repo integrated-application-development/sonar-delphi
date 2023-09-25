@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["convention"],
   "defaultSeverity": "Major",
   "scope": "MAIN",
   "quickfix": "unknown"

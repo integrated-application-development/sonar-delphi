@@ -1,14 +1,22 @@
+<h2>Why is this an issue?</h2>
 <p>
   The argument passed to <code>FreeAndNil</code> must be an instance of a TObject descendant.
-  <br />
-  Prior to Delphi 10.4, the <code>Obj</code> parameter is untyped. This erroneously loose contract
-  allows any variable to be passed into <code>FreeAndNil</code>.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a href="https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.FreeAndNil">
-    System.SysUtils.FreeAndNil
-  </a>
 </p>
+<p>
+  Prior to Delphi 10.4, the signature for <code>FreeAndNil</code> is untyped. This erroneously
+  loose contract allows any variable to be passed into <code>FreeAndNil</code>, which will cause
+  a runtime exception.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Remove the incorrect call to <code>FreeAndNil</code> - non-object types are either managed or
+  have an alternative way of freeing associated memory.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/System.SysUtils.FreeAndNil">
+      RAD Studio API documentation: System.SysUtils.FreeAndNil
+    </a>
+  </li>
+</ul>

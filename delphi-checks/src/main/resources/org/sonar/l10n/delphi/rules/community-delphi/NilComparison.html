@@ -1,7 +1,38 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Use 'Assigned' instead of comparing to nil.
-  <br />
-  <br />
-  For more information, see the Embarcadero wiki page for
-  <a href="http://docwiki.embarcadero.com/Libraries/en/System.Assigned"> System.Assigned </a>
+  <code>System.Assigned</code> is more flexible and has less edge cases than a normal nil
+  comparison. In particular:
 </p>
+<ul>
+  <li><code>Assigned</code> can be used to test if object procedures are assigned</li>
+  <li>
+    <code>Assigned</code> always checks the assignment of function references themselves -
+    nil comparisons may call the function and check the assignment of its return value
+  </li>
+  <li><code>Assigned</code> is clearer and more self-documenting</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Replace the nil comparison with a call to <code>Assigned</code>:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure LogAssigned(MyObj: TObject);
+begin
+  if MyObj &lt;> nil then begin
+    Writeln('Object is assigned');
+  end;
+end;
+</pre><pre data-diff-id="1" data-diff-type="compliant">
+procedure LogAssigned(MyObj: TObject);
+begin
+  if Assigned(MyObj) then begin
+    Writeln('Object is assigned');
+  end;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/Libraries/en/System.Assigned">
+      RAD Studio documentation: System.Assigned
+    </a>
+  </li>
+</ul>

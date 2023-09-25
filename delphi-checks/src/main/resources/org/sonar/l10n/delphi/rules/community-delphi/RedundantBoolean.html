@@ -1,24 +1,29 @@
-<p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
-<pre>
-    
-<b>if</b> Foo = True <b>then begin</b> // Noncompliant
-  DoSomething;
-<b>end;</b>
+<h2>Why is this an issue?</h2>
+<p>
+  Boolean expressions do not have to be explicitly compared to <code>True</code> or
+  <code>False</code>. Doing so adds unnecessary complexity to the statement.
+</p>
+<h2>How to fix it</h2>
+<p>Remove the redundancy in the boolean expression:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+if Foo = True then begin
+  // ...
+end;
 
-<b>if</b> Bar = False <b>then begin</b> // Noncompliant
-  DoSomething;
-<b>end;</b>
+if Bar = False then begin
+  // ...
+end;
 
-DoSomething(not False); // Noncompliant
+DoSomething(not False);
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+if Foo then begin
+  // ...
+end;
 
-<b>if</b> Foo <b>then begin</b> // Compliant
-  DoSomething;
-<b>end;</b>
+if not Bar then begin
+  // ...
+end;
 
-<b>if</b> <b>not</b> Bar <b>then begin</b> // Compliant
-  DoSomething;
-<b>end;</b>
-
-DoSomething(True); // Compliant
-        
+DoSomething(True);
 </pre>

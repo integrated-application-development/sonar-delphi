@@ -1,15 +1,35 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Semicolons in Delphi are sometimes optional after a:
+  Terminating all Delphi statements with a semicolon allows them to be easily read, swapped around,
+  and added to.
 </p>
+<p>
+  While semicolons can be omitted for some statements immediately preceding an <code>end</code>,
+  this is not recommended.
+</p>
+<h2>How to fix it</h2>
+<p>Add the missing semicolon:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example;
+begin
+  Foo;
+  Bar;
+  Baz
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example;
+begin
+  Foo;
+  Bar;
+  Baz;
+end;
+</pre>
+<h2>Resources</h2>
 <ul>
-  <li>statement</li>
-  <li>field declaration</li>
-  <li>method heading</li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements">
+      Delphi's Object Pascal Style Guide: Delphi Statements
+    </a>
+  </li>
 </ul>
-<p>
-  Regardless, these optional semicolons should still be used.
-</p>
-<p>
-  For more information, see the Embarcadero style guide page on
-  <a href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Statements">Delphi Statements</a>
-</p>

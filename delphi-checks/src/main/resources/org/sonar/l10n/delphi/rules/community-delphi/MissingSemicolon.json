@@ -12,7 +12,7 @@
       "MAINTAINABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["convention", "pitfall"],
   "defaultSeverity": "Minor",
   "scope": "ALL",
   "quickfix": "unknown"

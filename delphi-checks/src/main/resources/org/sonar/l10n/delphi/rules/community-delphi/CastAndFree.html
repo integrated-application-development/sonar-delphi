@@ -1,12 +1,29 @@
-<p>Casting an object only to free it is superfluous.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  Casting an object only to free it is superfluous. <code>TObject.Free</code> will always call the
+  correct destructor, regardless of the variable's type.
+</p>
+<p>
+  Also, because the <code>Free</code> method is on <code>TObject</code>, it is present on
+  all objects inheriting from  <code>TObject</code> - no casting is needed to access it.
+</p>
+<h3>Noncompliant Code Example</h3>
 <pre>
-    
 TMyObject(MyVar).Free; // Noncompliant
 (MyVar <b>as</b> TMyObject).Free; // Noncompliant
-MyVar.Free; // Compliant
-
 FreeAndNil(TMyObject(MyVar)); // Noncompliant
 FreeAndNil(MyVar <b>as</b> TMyObject); // Noncompliant
+
+MyVar.Free; // Compliant
 FreeAndNil(MyVar); // Compliant
-        
+</pre>
+<h2>How to fix it</h2>
+<p>Remove the unnecessary cast:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+TMyObject(MyVar).Free;
+FreeAndNil(TMyObject(MyVar));
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+MyVar.Free;
+FreeAndNil(MyVar);
 </pre>

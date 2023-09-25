@@ -1,14 +1,55 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Variables must be initialized before use.
-  <br />
-  <br />
-  The following Managed types are initialized by default:
-  <br />
-  - Strings
-  <br />
-  - Dynamic Arrays
-  <br />
-  - Variants
-  <br />
-  - Interfaces
+  Local variables must be initialized before use to ensure the code behaves deterministically and
+  in an error-free manner.
 </p>
+<p>
+  Unlike object fields and global variables, contents of local variables are generally undefined
+  until initialized. The only exceptions are the following managed types:
+</p>
+<ul>
+  <li>Strings</li>
+  <li>Variants</li>
+  <li>Interfaces</li>
+  <li>Arrays of the above types</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Assign the variable with an initial value before using it.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure GetCount(MyList: TList);
+var
+  ListSize: Integer;
+begin
+  if (MyList.Count > 0) then begin
+    ListSize := MyList.Count;
+  end;
+
+  Writeln(Format('The list has %d elements', [ListSize]);
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure GetCount(MyList: TList);
+var
+  ListSize: Integer;
+begin
+  ListSize := 0;
+  if (MyList.Count > 0) then begin
+    ListSize := MyList.Count;
+  end;
+
+  Writeln(Format('The list has %d elements', [ListSize]);
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://stackoverflow.com/questions/132725/are-delphi-variables-initialized-with-a-value-by-default">
+      Stack Overflow: Are delphi variables initialized with a value by default?
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Variables_(Delphi)">
+      RAD Studio documentation: Variables (Delphi)
+    </a>
+  </li>
+</ul>

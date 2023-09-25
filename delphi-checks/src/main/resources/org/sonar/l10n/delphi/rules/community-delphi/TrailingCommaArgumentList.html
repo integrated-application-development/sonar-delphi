@@ -1,14 +1,17 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Earlier versions of the Delphi parser (including XE3) allow a trailing comma in argument lists.
-  <br />
-  This is no longer permitted in Delphi Rio. Therefore, these extraneous commas should be removed.
-  <br />
-  <br />
+  While past Delphi versions allowed a trailing comma in argument lists, more recent versions treat
+  trailing commas as a parsing error and do not compile.
 </p>
-<pre>
-    
-Foo(1, 2, 3,); // Noncompliant
-
-Foo(1, 2, 3); // Compliant
-        
+<p>
+  Having trailing commas in argument lists makes code non-portable between different versions of
+  Delphi and may pose a problem during upgrades.
+</p>
+<h2>How to fix it</h2>
+<p>Remove the extraneous trailing comma:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Foo(1, 2, 3,);
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Foo(1, 2, 3);
 </pre>

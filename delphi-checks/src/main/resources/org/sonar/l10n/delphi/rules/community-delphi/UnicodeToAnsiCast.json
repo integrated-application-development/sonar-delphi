@@ -12,7 +12,7 @@
       "RELIABILITY": "HIGH"
     }
   },
-  "tags": [],
+  "tags": ["bad-practice", "suspicious"],
   "defaultSeverity": "Critical",
   "scope": "ALL",
   "quickfix": "unknown"

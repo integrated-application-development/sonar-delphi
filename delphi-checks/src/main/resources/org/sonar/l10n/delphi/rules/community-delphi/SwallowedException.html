@@ -1,30 +1,32 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Exceptions should not be swallowed.
-  <br />
-  Exception handlers should contain logic to handle the caught exception.
+  Exception handlers should contain logic to handle the caught exception. Empty exception handlers
+  indicate that an exception is being ignored instead of correctly handled.
 </p>
-<pre>
-    
-<b>try</b>
+<h2>How to fix it</h2>
+<p>If the exception should be handled at a higher level, remove the exception handler:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+try
   RaiseException;
-<b>except</b>	// Noncompliant
+except
   // Do nothing
-<b>end;</b>
-
-<b>try</b>
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+RaiseException;
+</pre>
+<p>If the exception should be handled at this level, add some logic to handle it:</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+try
   RaiseException;
-<b>except</b>	// Noncompliant
-  <b>on</b> E: Exception <b>do begin</b>
-    // Do nothing
-  <b>end;</b>
-<b>end;</b>
-
-<b>try</b>
+except
+  // Do nothing
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+try
   RaiseException;
-<b>except</b>	// Compliant
-  <b>on</b> E: Exception <b>do begin</b>
-    Log.Audit(<i>'He''s dead, Jim!'</i>);
-  <b>end;</b>
-<b>end;</b>
-        
+except
+  Log('Oh no, exception raised :(');
+end;
 </pre>

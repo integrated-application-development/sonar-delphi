@@ -1,1 +1,38 @@
-<p>Every interface should have a unique GUID.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  Each interface should be associated with a unique GUID. While this is not required, interfaces
+  without a GUID cannot be used for COM interoperability.
+</p>
+<p>
+  Adding a GUID also enables <code>QueryInterface</code>, which provides the means to obtain a
+  reference to the different interfaces that an object supports.
+</p>
+<h2>How to fix it</h2>
+<p>Add a GUID in square brackets at the beginning of the interface declaration:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  IMyInterface = interface
+    procedure MyProc;
+    function MyFunc: Integer;
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  IMyInterface = interface
+    ['{B5D90CF6-B2C9-473D-9DB9-1BB75EAFC517}']
+    procedure MyProc;
+    function MyFunc: Integer;
+  end;
+</pre>
+<p>
+  The Delphi IDE implements a shortcut for generating a GUID, defaulting to
+  <code>Ctrl+Shift+G</code>.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Object_Interfaces_(Delphi)">
+      RAD Studio documentation: Object Interfaces
+    </a>
+  </li>
+</ul>

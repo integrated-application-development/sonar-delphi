@@ -1,1 +1,19 @@
-<p>Empty visibility sections are superfluous and can be safely removed.</p>
+<h2>Why is this an issue?</h2>
+<p>Empty visibility sections are superfluous and should be removed.</p>
+<h2>How to fix it</h2>
+Remove the empty visibility section:
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TFoo = class(TObject)
+  private
+  public
+    procedure Bar;
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TFoo = class(TObject)
+  public
+    procedure Bar;
+  end;
+</pre>

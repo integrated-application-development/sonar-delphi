@@ -1,16 +1,31 @@
-<p>Empty finally blocks are superfluous.</p>
-<pre>
-    
-<b>try</b>
+<h2>Why is this an issue?</h2>
+<p>
+  Empty finally blocks are superfluous. The purpose of a finally block is to be executed
+  regardless of whether an exception was raised within the try block, so an empty finally
+  block has no effect.
+</p>
+<h2>How to fix it</h2>
+<p>If there should be something in the finally block, add it:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+try
   DoSomething;
-<b>finally</b>	// Noncompliant
-  // Do nothing
-<b>end;</b>
-
-<b>try</b>
+finally
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+try
   DoSomething;
-<b>finally</b>	// Compliant
-  Log.Info(<i>'All done!'</i>);
-<b>end;</b>
-        
+finally
+  Writeln('All done!');
+end;
+</pre>
+<p>If not, the try/finally statement can be removed:</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+try
+  DoSomething;
+finally
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+DoSomething;
 </pre>

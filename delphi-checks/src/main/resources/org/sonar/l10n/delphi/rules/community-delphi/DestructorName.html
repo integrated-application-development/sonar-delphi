@@ -1,8 +1,60 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Destroy is a virtual destructor of TObject.
-  <br />
-  When an object is destroyed, TObject.Free calls the Destroy virtual destructor of the specific
-  class.
-  <br />
-  With this behavior in mind, destructors should always override TObject.Destroy.
+  When objects are freed, the <code>Destroy</code> destructor method is called.
+  <code>Destroy</code> must be an <code>override</code> (or <code>virtual</code>) method.
 </p>
+<p>
+  All classes inherit from <code>TObject</code>, which declares a virtual <code>Destroy</code>
+  method, and should override this method to provide their own implementation.
+</p>
+<p>
+  Not naming the destructor <code>Destroy</code> will cause it not to be called when the object
+  is freed. The same thing happens if <code>Destroy</code> is not an <code>override</code>, because
+  the destructor is invoked polymorphically when the object is freed.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Rename the destructor to <code>Destroy</code> and/or mark it with the
+  <code>override</code> directive.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TNode = class(TObject)
+  private
+    FChildNode: TNode;
+  public
+    destructor CustomDestroy;
+  end;
+
+destructor TNode.CustomDestroy;
+begin
+  FChildNode.Free;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TNode = class(TObject)
+  private
+    FChildNode: TNode;
+  public
+    destructor Destroy; override;
+  end;
+
+destructor TNode.Destroy;
+begin
+  FChildNode.Free;
+  inherited;
+end;
+</pre>
+<p>
+  Note that in the "before" case above, <code>FChildNode.Free</code> would not call the destructor
+  on <code>TNode</code>, causing a memory leak.
+</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Methods_(Delphi)#Destructors">
+      RAD Studio documentation: Methods (Delphi)
+    </a>
+  </li>
+</ul>

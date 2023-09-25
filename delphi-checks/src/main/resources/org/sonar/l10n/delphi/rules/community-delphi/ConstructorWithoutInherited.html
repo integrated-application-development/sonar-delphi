@@ -1,1 +1,72 @@
-<p>Constructors should contain an 'inherited' statement.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  The constructor of a class does not call the constructors of any of its ancestor classes by
+  default. This means that the fields of any ancestor classes will not be initialized, potentially
+  causing unexpected program errors. The constructor of the ancestor class can be called using the
+  <code>inherited</code> keyword.
+</p>
+<p>
+  Note that while <code>TObject</code> does not contain any code in its constructor or destructor,
+  the <code>inherited</code> keyword should still be used for immediate descendants. This is for
+  consistency and to guard against bugs that may emerge if the class's parent is changed from
+  <code>TObject</code> in future.
+</p>
+<h2>How to fix it</h2>
+<p>
+  If there is a parent constructor with the same parameters, adding an <code>inherited</code>
+  to the beginning of the method will call it:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+constructor TParent.Create;
+  // ...
+end;
+
+constructor TChild.Create;
+begin
+  FMyStr := 'hello!';
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+constructor TParent.Create;
+  // ...
+end;
+
+constructor TChild.Create;
+begin
+  inherited;
+  FMyStr := 'hello!';
+end;
+</pre>
+<p>
+  Otherwise, the desired parent constructor can be called using an <code>inherited</code> keyword
+  followed by its name and arguments:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+constructor TParent.Create(MyInt: Integer);
+  // ...
+end;
+
+constructor TChild.Create(MyStr: string; MyInt: Integer);
+begin
+  FMyStr := MyStr;
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+constructor TParent.Create(MyInt: Integer);
+  // ...
+end;
+
+constructor TChild.Create(MyStr: string; MyInt: Integer);
+begin
+  inherited Create(MyInt);
+  FMyStr := MyStr;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Methods_(Delphi)#Constructors">
+      RAD Studio documentation: Methods (Delphi)
+    </a>
+  </li>
+</ul>

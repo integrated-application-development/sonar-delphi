@@ -1,31 +1,29 @@
-<p>
-  Inline var declarations can omit the type and allow the compiler to infer it.
-  <br />
-  <br />
-  There are a few downsides to using this feature:
-  <br />
-  - Lack of type information can make code harder to follow and understand at a glance.
-  <br />
-  - Type expansion that occurs during type inference can lead to unexpected inferred types.
-  <br />
-  - Wrapper types relying on implicit type conversions will not have those conversions invoked.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a
-    href="http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables"
-  >
-    Type Inference for Inlined Variables
-  </a>
-</p>
-<pre>
-    
-<b>procedure</b> Example;
-<b>begin</b>
-  <b>var</b> Foo := 123; // Noncompliant
-  <b>var</b> Bar: Integer := 123; // Compliant
-<b>end</b>;
-        
+<h2>Why is this an issue?</h2>
+<p>Omitting the type for inline variable declarations has a few downsides, including:</p>
+<ul>
+  <li>The lack of type information can make code harder to follow and understand at a glance.</li>
+  <li>Type expansion that occurs during type inference can lead to unexpected inferred types.</li>
+  <li>Wrapper types relying on implicit type conversions will not have those conversions invoked.</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Explicitly specify the variable's type:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure Example;
+begin
+  var Foo := 123;
+end;
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure Example;
+begin
+  var Foo: Integer := 123;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/RADStudio/en/Inline_Variable_Declaration#Type_Inference_for_Inlined_Variables">
+      RAD Studio documentation: Type Inference for Inlined Variables
+    </a>
+  </li>
+</ul>

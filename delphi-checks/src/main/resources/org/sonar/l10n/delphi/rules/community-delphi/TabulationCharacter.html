@@ -1,10 +1,26 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Developers should not need to configure the tab width of their text editors in order to be able to
-  read source code, so the use of the tabulation character must be banned.
-  <br />
-  <br />
-  For more information, see the Embarcadero style guide page on
-  <a href="https://docwiki.embarcadero.com/RADStudio/en/White_Space_Usage#Indentation">
-    White Space Usage
-  </a>
+  Delphi code should not be indented with tab characters. Doing so has a number of detriments:
 </p>
+<ul>
+  <li>Developers must configure the tab width of their text editors</li>
+  <li>Spaces and tabs may be mixed in code</li>
+  <li>The resultant code violates Delphi's Object Pascal Style Guide</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Instead of using tab characters, indent two spaces for all indentation levels.</p>
+<pre>
+type
+  TMyObject = class(TObject)
+  public
+    procedure Foo;
+  end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/White_Space_Usage#Indentation">
+      Delphi's Object Pascal Style Guide: White Space Usage
+    </a>
+  </li>
+</ul>

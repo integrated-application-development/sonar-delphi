@@ -1,20 +1,42 @@
-<p>Raw exceptions should not be caught. Catch specific exception types instead.</p>
-<pre>
-    
-<b>try</b>
-  ThrowMyException;
-<b>except</b>
-  <b>on</b> e : Exception <b>do begin</b>	// Noncompliant
-    HandleException;
-  <b>end;</b>
-<b>end;</b>
-
-<b>try</b>
-  ThrowMyException;
-<b>except</b>
-  <b>on</b> e : MyException <b>do begin</b> // Compliant
-    HandleException;
-  <b>end;</b>
-<b>end;</b>
-        
+<h2>Why is this an issue?</h2>
+<p>
+  The purpose of <code>catch</code> blocks is to recover from what went wrong in the
+  <code>try</code> block. If it's not known which error occurred, then it is difficult to know how
+  to recover.
+</p>
+<p>
+  This can lead to overly general error handling scenarios, like blindly displaying a
+  "something went wrong" message.
+</p>
+<p>
+  Catching all exceptions regardless of whether they are expected to be raised or not may also
+  hide bugs. For example, a new bug raising an unexpected exception might introduced within the
+  <code>try</code> block. A more specific catch block would not swallow this exception.
+</p>
+<p>
+  Code that catches specific exceptions is also much clearer, aiding the long-term maintainability
+  of your code.
+</p>
+<h2>How to fix it</h2>
+<p>Rewrite the exception handling block to catch specific exception types:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+try
+  Contents := TFile.ReadAllText(FileName, TEncoding.UTF8);
+except
+  on E: Exception do begin
+    Writeln('Could not read file');
+  end;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+try
+  Contents := TFile.ReadAllText(FileName, TEncoding.UTF8);
+except
+  on E: EFileNotFoundException do begin
+    Writeln('The file you have specified does not exist');
+  end;
+  on E: EEncodingError do begin
+    Writeln('The file you have specified is not UTF-8 encoded');
+  end;
+end;
 </pre>

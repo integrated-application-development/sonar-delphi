@@ -13,7 +13,7 @@
       "RELIABILITY": "LOW"
     }
   },
-  "tags": [],
+  "tags": ["pitfall"],
   "defaultSeverity": "Major",
   "scope": "ALL",
   "quickfix": "unknown"

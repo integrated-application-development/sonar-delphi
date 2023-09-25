@@ -1,1 +1,52 @@
-<p>Public fields do not respect the encapsulation principle. Use properties instead.</p>
+<h2>Why is this an issue?</h2>
+<p>
+  Public fields break the encapsulation principle, in which other code should not be allowed to
+  manipulate the internal state of an object. The class should provide an API to allow state changes
+  in a controlled manner.
+</p>
+<p>This API could be:</p>
+<ul>
+  <li>A public property that gets or sets an internal field</li>
+  <li>A read-only public property that gets an internal field</li>
+  <li>Methods that set the internal field to a predefined value</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Use a property to access the internal variable in a controlled way:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TMyType = class(TObject)
+  public
+    FName: string;
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TMyType = class(TObject)
+  private
+    FName: string;
+  public
+    property MyName: string read FName write FName;
+  end;
+</pre>
+<p>
+  If the state should only be observed, not modified, consider enforcing immutability on the
+  property:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+type
+  TMyType = class(TObject)
+  private
+    FName: string;
+  public
+    property MyName: string read FName write FName;
+  end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+type
+  TMyType = class(TObject)
+  private
+    FName: string;
+  public
+    property MyName: string read FName;
+  end;
+</pre>

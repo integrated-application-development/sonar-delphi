@@ -1,6 +1,20 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Variable names should follow Pascal case. Global variables should begin with 'G' and not contain
-  underscores.
-  <br />
-  <br />
+  Code that follows a consistent naming convention is self-documenting. In Delphi, all variable
+  names should be in PascalCase. Global variables should have a consistent prefix.
 </p>
+<p>
+  The default prefix for global variables is <code>G</code>, but some projects may use another
+  prefix to separate their global variables from those of other projects. This can make code
+  spanning several projects more easily understandable.
+</p>
+<h2>How to fix it</h2>
+<p>Rename the variable name to follow the convention.</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/General_Rules">
+      Delphi's Object Pascal Style Guide: General Rules
+    </a>
+  </li>
+</ul>

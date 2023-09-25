@@ -1,16 +1,22 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Default array properties should not be explicitly referenced.
-  <br />
-  Use the [] accessor directly on the object instead.
+  Explicitly referencing array properties marked as <code>default</code>
+  (e.g. <code>MyObj.Items[0]</code>) is unnecessarily verbose. It can also be unclear
+  that it is accessing the same collection as the implicit reference (<code>MyObj[0]</code>).
 </p>
-<pre>
-    
-<b>procedure</b> Foo(Bar: TObjectList);
-<b>var</b>
-  Baz: TObject;
-<b>begin</b>
-  Baz := Bar.Items[0]; // Noncompliant
-  Baz := Bar[0]; // Compliant
-<b>end</b>;
-        
+<h2>How to fix it</h2>
+<p>Use the array accessor directly on the object:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Baz := Bar.Items[0];
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Baz := Bar[0];
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Properties_(Delphi)#Array_Properties">
+      RAD Studio documentation: Properties (Delphi)
+    </a>
+  </li>
+</ul>

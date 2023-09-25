@@ -1,4 +1,29 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Delphi is case-insensitive, but casing of name declarations and references should be kept
-  consistent.
+  While Delphi is case-insensitive, casing of name declarations and references should be kept
+  consistent to aid readability.
 </p>
+<h2>How to fix it</h2>
+<p>Rename the identifier to match the casing in the original declaration:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure FooBar;
+begin
+  // ...
+end;
+
+procedure Example;
+begin
+  Foobar;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure FooBar;
+begin
+  // ...
+end;
+
+procedure Example;
+begin
+  FooBar;
+end;
+</pre>

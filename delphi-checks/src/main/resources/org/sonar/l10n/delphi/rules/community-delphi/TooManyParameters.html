@@ -1,4 +1,14 @@
+<h2>Why is this an issue?</h2>
 <p>
-  A long parameter list can indicate that a new structure should be created to wrap the numerous
-  parameters or that the method is doing too many things.
+  Long parameter lists are confusing to read, difficult to keep track of in the body of the method,
+  and makes call sites inscrutable.
+</p>
+<p>
+  A long parameter list indicates that a new structure should be created to wrap the numerous
+  parameters, or that the method is doing too many things.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Consider breaking this method up into multiple methods with a more narrow focus, or create a new
+  class or record to encapsulate this method's configuration into fewer parameters.
 </p>

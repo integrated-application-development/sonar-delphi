@@ -1,28 +1,49 @@
+<h2>Why is this an issue?</h2>
 <p>
-  TStringLists must be sorted if setting the Duplicates property.
-  <br />
-  For the purposes of this rule, the list must be sorted on the next or previous line.
-  <br />
-  <br />
-  <b>See:</b>
-  <br />
-  -
-  <a href="http://docwiki.embarcadero.com/Libraries/en/System.Classes.TStringList.Duplicates">
-    System.Classes.TStringList.Duplicates
-  </a>
+  The <code>Duplicates</code> property on <code>TStringList</code> has no effect unless the list
+  is sorted, so setting <code>Duplicates</code> on an unsorted list is either an unnecessary line
+  of code or a bug.
 </p>
-<pre>
-    
-List1.Duplicates := <i>dupIgnore</i>; // Noncompliant
-
-List2.Duplicates := <i>dupError</i>; // Noncompliant
-
-List3.Duplicates := <i>dupAccept</i>; // Compliant (dupAccept doesn't require a sorted list)
-
-List4.Sorted := True;
-List4.Duplicates := <i>dupIgnore</i>; // Compliant
-
-List5.Sorted := True;
-List5.Duplicates := <i>dupError</i>; // Compliant
-        
+<p>
+  Note that for the purposes of this rule, the list must be sorted in the same block where
+  <code>Duplicates</code> is set.
+</p>
+<h2>How to fix it</h2>
+<p>If the list should be forbidding duplicates, sort the list:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure DoSomething(MyList: TStringList);
+begin
+  MyList.Duplicates := dupError;
+  // ...
+end;
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure DoSomething(MyList: TStringList);
+begin
+  MyList.Sorted := True;
+  MyList.Duplicates := dupError;
+  // ...
+end;
+</pre>
+<p>If the list should not be forbidding duplicates, remove the assignment:</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+procedure DoSomething(MyList: TStringList);
+begin
+  MyList.Duplicates := dupError;
+  // ...
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+procedure DoSomething(MyList: TStringList);
+begin
+  // ...
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/Libraries/en/System.Classes.TStringList.Duplicates">
+      RAD Studio API documentation: System.Classes.TStringList.Duplicates
+    </a>
+  </li>
+</ul>

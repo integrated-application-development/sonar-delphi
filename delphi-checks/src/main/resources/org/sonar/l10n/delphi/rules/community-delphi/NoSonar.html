@@ -1,8 +1,20 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Any issue to quality rule can be deactivated with the <code>NOSONAR</code> marker. This marker is
-  pretty useful to exclude false-positive results but it can also be used abusively to hide real
-  quality flaws.
-  <br />
-  <br />
-  This rule raises an issue when <code>NOSONAR</code> is used.
+  Any issues raised on lines with a <code>NOSONAR</code> marker are ignored. This marker can be
+  useful to exclude false-positive results, but it can also be misused to hide real quality flaws.
 </p>
+<p>This rule raises an issue when <code>NOSONAR</code> is used.</p>
+<h2>How to fix it</h2>
+<p>Remove the <code>NOSONAR</code> comment:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  MyMisnamedType = class(TObject) // NOSONAR
+    // ...
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  MyMisnamedType = class(TObject)
+    // ...
+  end;
+</pre>
