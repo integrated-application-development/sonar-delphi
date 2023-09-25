@@ -22,7 +22,6 @@
  */
 package au.com.integradev.delphi.utils;
 
-import au.com.integradev.delphi.core.Delphi;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputPath;
 import org.sonarsource.analyzer.commons.ProgressReport;
@@ -61,28 +59,6 @@ public final class DelphiUtils {
     URL url = DelphiUtils.class.getResource(fileName);
     File file = FileUtils.toFile(url);
     return Objects.requireNonNull(file, "Resource not found: " + fileName);
-  }
-
-  /**
-   * Accept file based on file extension.
-   *
-   * @param file The file
-   * @return True if the file has a valid extension
-   */
-  public static boolean acceptFile(Path file) {
-    return acceptFile(file.toString());
-  }
-
-  /**
-   * Accept file based on file extension.
-   *
-   * @param fileName The file name
-   * @return True if the file has a valid extension
-   */
-  public static boolean acceptFile(String fileName) {
-    String extension = FilenameUtils.getExtension(fileName);
-    return Delphi.FILE_SUFFIXES.stream()
-        .anyMatch(acceptable -> acceptable.equalsIgnoreCase(extension));
   }
 
   /**

@@ -18,24 +18,18 @@
  */
 package au.com.integradev.delphi.coverage;
 
-import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
-import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.scanner.ScannerSide;
 
 @ScannerSide
 public class DelphiCoverageParserFactory {
-  private static final Logger LOG = LoggerFactory.getLogger(DelphiCoverageParserFactory.class);
+  private final DelphiProjectHelper delphiProjectHelper;
 
-  public Optional<DelphiCoverageParser> getParser(String key, DelphiProjectHelper helper) {
-    if (DelphiProperties.COVERAGE_TOOL_DELPHI_CODE_COVERAGE.equals(key)) {
-      return Optional.of(new DelphiCodeCoverageToolParser(helper));
-    } else {
-      LOG.warn("Unsupported coverage tool '{}'", key);
-      return Optional.empty();
-    }
+  public DelphiCoverageParserFactory(DelphiProjectHelper delphiProjectHelper) {
+    this.delphiProjectHelper = delphiProjectHelper;
+  }
+
+  public DelphiCoverageParser create() {
+    return new DelphiCodeCoverageParser(delphiProjectHelper);
   }
 }

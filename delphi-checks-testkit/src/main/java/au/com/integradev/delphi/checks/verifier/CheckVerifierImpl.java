@@ -226,7 +226,7 @@ public class CheckVerifierImpl implements CheckVerifier {
         .visit(file.getAst(), new SymbolAssociationVisitor.Data(symbolTable));
 
     var sensorContext = SensorContextTester.create(FileUtils.getTempDirectory());
-    sensorContext.settings().setProperty(DelphiProperties.TEST_SUITE_TYPE_KEY, "Test.TTestSuite");
+    sensorContext.settings().setProperty(DelphiProperties.TEST_TYPE_KEY, "Test.TTestSuite");
 
     var compilerDirectiveParser = new CompilerDirectiveParserImpl(Platform.WINDOWS);
 

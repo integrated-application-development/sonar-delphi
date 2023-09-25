@@ -29,13 +29,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.core.Delphi;
+import au.com.integradev.delphi.coverage.DelphiCodeCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
-import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
-import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +52,7 @@ class DelphiCoverageSensorTest {
   private final DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
   private final DelphiCoverageParserFactory coverageParserFactory =
       mock(DelphiCoverageParserFactory.class);
-  private final DelphiCoverageParser coverageParser = mock(DelphiCodeCoverageToolParser.class);
+  private final DelphiCoverageParser coverageParser = mock(DelphiCodeCoverageParser.class);
 
   private DelphiCoverageSensor sensor;
 
@@ -61,14 +60,7 @@ class DelphiCoverageSensorTest {
   void setupSensor() {
     sensor = new DelphiCoverageSensor(delphiProjectHelper, coverageParserFactory);
     when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
-    when(coverageParserFactory.getParser(anyString(), any()))
-        .thenReturn(Optional.of(coverageParser));
-
-    context
-        .settings()
-        .setProperty(
-            DelphiProperties.COVERAGE_TOOL_KEY,
-            DelphiProperties.COVERAGE_TOOL_DELPHI_CODE_COVERAGE);
+    when(coverageParserFactory.create()).thenReturn(coverageParser);
   }
 
   @Test
@@ -100,14 +92,6 @@ class DelphiCoverageSensorTest {
 
     context.settings().setProperty(DelphiProperties.COVERAGE_REPORT_KEY, "</invalidPath");
 
-    sensor.execute(context);
-
-    verify(coverageParser, never()).parse(any(), any());
-  }
-
-  @Test
-  void testWhenNoCoverageToolDoNotInvokeParser() {
-    context.settings().removeProperty(DelphiProperties.COVERAGE_TOOL_KEY);
     sensor.execute(context);
 
     verify(coverageParser, never()).parse(any(), any());

@@ -45,18 +45,4 @@ class DelphiUtilsTest {
     assertThat(str2).isEqualTo(rootPath + File.separatorChar + "tempDir");
     assertThat(str3).isEqualTo(rootPath);
   }
-
-  @Test
-  void testAcceptFile() {
-    assertThat(DelphiUtils.acceptFile("Unit.pas")).isTrue();
-    assertThat(DelphiUtils.acceptFile("Project.dpr")).isTrue();
-    assertThat(DelphiUtils.acceptFile("Package.dpk")).isTrue();
-  }
-
-  @Test
-  void testAcceptFileCaseInsensitive() {
-    assertThat(DelphiUtils.acceptFile("Unit.Pas")).isTrue();
-    assertThat(DelphiUtils.acceptFile("Project.dPr")).isTrue();
-    assertThat(DelphiUtils.acceptFile("Package.DPK")).isTrue();
-  }
 }

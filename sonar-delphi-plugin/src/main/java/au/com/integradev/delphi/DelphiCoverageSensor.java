@@ -45,7 +45,7 @@ public class DelphiCoverageSensor implements Sensor {
    * Dependency-injection constructor
    *
    * @param delphiProjectHelper Helper class for navigating delphi projects
-   * @param coverageParserFactory provides a coverage parser provided its key
+   * @param coverageParserFactory Provides a coverage parsers
    */
   public DelphiCoverageSensor(
       DelphiProjectHelper delphiProjectHelper, DelphiCoverageParserFactory coverageParserFactory) {
@@ -69,20 +69,8 @@ public class DelphiCoverageSensor implements Sensor {
 
   private void addCoverage(SensorContext context) {
     LOG.info("Adding coverage reports.");
-    context
-        .config()
-        .get(DelphiProperties.COVERAGE_TOOL_KEY)
-        .flatMap(
-            key -> {
-              LOG.info("Coverage tool: '{}'.", key);
-              return coverageParserFactory.getParser(key, delphiProjectHelper);
-            })
-        .ifPresentOrElse(
-            coverageParser -> addCoverage(context, coverageParser),
-            () ->
-                LOG.info(
-                    "No coverage tool specified (see '{}' property)",
-                    DelphiProperties.COVERAGE_TOOL_KEY));
+    DelphiCoverageParser parser = coverageParserFactory.create();
+    addCoverage(context, parser);
   }
 
   private void addCoverage(SensorContext context, DelphiCoverageParser parser) {

@@ -20,9 +20,8 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.coverage.delphicodecoveragetool;
+package au.com.integradev.delphi.coverage;
 
-import au.com.integradev.delphi.coverage.DelphiCoverageParser;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.File;
 import java.util.Arrays;
@@ -40,11 +39,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class DelphiCodeCoverageToolParser implements DelphiCoverageParser {
-  private static final Logger LOG = LoggerFactory.getLogger(DelphiCodeCoverageToolParser.class);
+public class DelphiCodeCoverageParser implements DelphiCoverageParser {
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiCodeCoverageParser.class);
   private final DelphiProjectHelper delphiProjectHelper;
 
-  public DelphiCodeCoverageToolParser(DelphiProjectHelper delphiProjectHelper) {
+  public DelphiCodeCoverageParser(DelphiProjectHelper delphiProjectHelper) {
     this.delphiProjectHelper = delphiProjectHelper;
   }
 

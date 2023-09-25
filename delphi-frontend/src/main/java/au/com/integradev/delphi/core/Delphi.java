@@ -22,21 +22,37 @@
  */
 package au.com.integradev.delphi.core;
 
-import java.util.List;
+import java.util.Arrays;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 
 /** Delphi language implementation */
 public class Delphi extends AbstractLanguage {
+  /** Delphi key */
   public static final String KEY = "delphi";
-  public static final String LANGUAGE_NAME = "Delphi";
-  public static final List<String> FILE_SUFFIXES = List.of("pas", "dpr", "dpk");
 
-  public Delphi() {
-    super(KEY, LANGUAGE_NAME);
+  /** Delphi name */
+  public static final String NAME = "Delphi";
+
+  /** Key of the file suffix parameter */
+  public static final String FILE_SUFFIXES_KEY = "sonar.delphi.file.suffixes";
+
+  /** Default Delphi file suffixes */
+  public static final String DEFAULT_FILE_SUFFIXES = ".pas,.dpr,.dpk";
+
+  private final Configuration settings;
+
+  public Delphi(Configuration settings) {
+    super(KEY, NAME);
+    this.settings = settings;
   }
 
   @Override
   public String[] getFileSuffixes() {
-    return FILE_SUFFIXES.toArray(new String[0]);
+    String[] suffixes =
+        Arrays.stream(settings.getStringArray(Delphi.FILE_SUFFIXES_KEY))
+            .filter(s -> s != null && !s.trim().isEmpty())
+            .toArray(String[]::new);
+    return suffixes.length > 0 ? suffixes : DEFAULT_FILE_SUFFIXES.split(",");
   }
 }

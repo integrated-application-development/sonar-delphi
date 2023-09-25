@@ -19,23 +19,15 @@
 package au.com.integradev.delphi.coverage;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
-import au.com.integradev.delphi.coverage.delphicodecoveragetool.DelphiCodeCoverageToolParser;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 class DelphiCoverageParserFactoryTest {
-  private final DelphiCoverageParserFactory factory = new DelphiCoverageParserFactory();
-
-  @Test
-  void testGetNonExistentParser() {
-    assertThat(factory.getParser(UUID.randomUUID().toString(), null)).isEmpty();
-  }
+  private final DelphiCoverageParserFactory factory = new DelphiCoverageParserFactory(mock());
 
   @Test
   void testGetDelphiCodeCoverageParser() {
-    assertThat(factory.getParser("dcc", null))
-        .get()
-        .isInstanceOf(DelphiCodeCoverageToolParser.class);
+    assertThat(factory.create()).isInstanceOf(DelphiCodeCoverageParser.class);
   }
 }

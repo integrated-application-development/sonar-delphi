@@ -238,10 +238,8 @@ public final class DelphiIssueBuilder {
   private boolean isTestType(Type type) {
     return context
         .config()
-        .get(DelphiProperties.TEST_SUITE_TYPE_KEY)
-        .map(
-            testSuiteTypeImage ->
-                type.is(testSuiteTypeImage) || type.isSubTypeOf(testSuiteTypeImage))
+        .get(DelphiProperties.TEST_TYPE_KEY)
+        .map(testTypeImage -> type.is(testTypeImage) || type.isSubTypeOf(testTypeImage))
         .orElse(false);
   }
 

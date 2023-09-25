@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom rules plugin API:
   - See: [Writing Custom Delphi Rules 101](docs/CUSTOM_RULES_101.md)
 - Rule metadata for the new [Clean Code Taxonomy](https://docs.sonarsource.com/sonarqube/10.2/user-guide/clean-code/).
+- `sonar.delphi.file.suffixes` property to specify the file extensions that should be analyzed.
 - Support for identifiers prefixed with 2 ampersands (`&&`).
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
 - `InlineAssembly` analysis rule, which flags inline assembly usage.
@@ -23,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename language key from `delph` to `delphi`.
 - Rename repository key from `delph` to `community-delphi`.
 - Rename repository from `Delphi` to `Community Delphi`.
+- Rename `sonar.delphi.bds.path` property to `sonar.delphi.bdsPath`.
+- Rename `sonar.delphi.compiler.toolchain` property to `sonar.delphi.toolchain`.
+- Rename `sonar.delphi.compiler.version` property to `sonar.delphi.compilerVersion`.'
+- Rename `sonar.delphi.sources.searchPath` property to `sonar.delphi.searchPath`.'
+- Rename `sonar.delphi.testSuiteType` property to `sonar.delphi.testType`.
+- Clean up descriptions of all plugin properties.
 - Improve name resolution for declarations within types.
 - Improve type resolution for array accesses into variants.
 
@@ -30,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `XPathTemplateRule` analysis rule template.
 - `MemoryManagementRule` analysis rule.
+- `sonar.delphi.coverage.tool` property.
+  ([Delphi Code Coverage](https://github.com/DelphiCodeCoverage/DelphiCodeCoverage) is the only supported coverage tool.)
 
 ### Fixed
 

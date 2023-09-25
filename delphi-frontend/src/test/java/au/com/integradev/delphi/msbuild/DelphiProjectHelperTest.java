@@ -129,7 +129,7 @@ class DelphiProjectHelperTest {
             "UNDERSCOREIMPORTNAME",
             "CONDITIONALEXPRESSIONS",
             "FullDebugMode",
-            "VER340");
+            "VER350");
     assertThat(delphiProjectHelper.getUnitScopeNames()).containsExactlyInAnyOrder("System", "Vcl");
   }
 
@@ -166,7 +166,7 @@ class DelphiProjectHelperTest {
             "UNDERSCOREIMPORTNAME",
             "CONDITIONALEXPRESSIONS",
             "FullDebugMode",
-            "VER340");
+            "VER350");
     assertThat(delphiProjectHelper.getUnitScopeNames()).containsExactlyInAnyOrder("System", "Vcl");
   }
 

@@ -29,7 +29,6 @@ import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclarationImpl;
-import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -160,7 +159,7 @@ public class SymbolTableBuilder {
             Integer.MAX_VALUE,
             (filePath, attributes) -> attributes.isRegularFile())) {
       fileStream
-          .filter(DelphiUtils::acceptFile)
+          .filter(SymbolTableBuilder::isPasFile)
           .filter(path -> !path.startsWith(tools))
           .forEach(file -> createUnitData(file, false));
     } catch (IOException e) {
@@ -172,11 +171,15 @@ public class SymbolTableBuilder {
     try (Stream<Path> fileStream = Files.list(path)) {
       fileStream
           .filter(Files::isRegularFile)
-          .filter(DelphiUtils::acceptFile)
+          .filter(SymbolTableBuilder::isPasFile)
           .forEach(file -> createUnitData(file, false));
     } catch (IOException e) {
       throw new SymbolTableConstructionException(e);
     }
+  }
+
+  private static boolean isPasFile(Path path) {
+    return path.getFileName().toString().endsWith(".pas");
   }
 
   private void createUnitData(Path unitPath, boolean isSourceFile) {

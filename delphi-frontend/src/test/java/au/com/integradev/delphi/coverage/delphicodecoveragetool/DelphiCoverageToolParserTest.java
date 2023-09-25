@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.core.Delphi;
+import au.com.integradev.delphi.coverage.DelphiCodeCoverageParser;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -65,7 +66,7 @@ class DelphiCoverageToolParserTest {
   private EnvironmentVariableProvider environmentVariableProvider;
   private File baseDir;
   private DelphiProjectHelper delphiProjectHelper;
-  private DelphiCodeCoverageToolParser parser;
+  private DelphiCodeCoverageParser parser;
 
   private static final String ROOT_NAME = "/au/com/integradev/delphi/projects/SimpleProject";
 
@@ -91,7 +92,7 @@ class DelphiCoverageToolParserTest {
     delphiProjectHelper =
         new DelphiProjectHelper(
             context.config(), context.fileSystem(), environmentVariableProvider);
-    parser = new DelphiCodeCoverageToolParser(delphiProjectHelper);
+    parser = new DelphiCodeCoverageParser(delphiProjectHelper);
 
     addFile(ROOT_NAME + "/" + GLOBALS_FILENAME);
     addFile(ROOT_NAME + "/" + MAIN_WINDOW_FILENAME);
