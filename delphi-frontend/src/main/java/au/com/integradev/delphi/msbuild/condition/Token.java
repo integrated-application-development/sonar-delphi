@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.msbuild.condition;
 
 public class Token {
-  enum TokenType {
+  public enum TokenType {
     COMMA,
     LPAREN,
     RPAREN,
