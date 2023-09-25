@@ -362,19 +362,11 @@ public class DelphiProjectHelper {
     return fs.inputFile(fs.predicates().hasURI(Paths.get(path).toUri()));
   }
 
-  public InputFile getFile(File file) {
-    return getFile(file.getPath());
-  }
-
   public InputFile getFileFromBasename(String basename) {
     return fs.inputFile(fs.predicates().hasFilename(basename));
   }
 
   public String encoding() {
     return fs != null ? fs.encoding().name() : Charset.defaultCharset().name();
-  }
-
-  public String testSuiteType() {
-    return settings.get(DelphiProperties.TEST_SUITE_TYPE_KEY).orElse("");
   }
 }
