@@ -101,7 +101,8 @@
     <sonar.issue.ignore.allfile>r1</sonar.issue.ignore.allfile>
     <sonar.issue.ignore.allfile.r1.fileRegexp>@(javax\\.annotation\\.)?Generated</sonar.issue.ignore.allfile.r1.fileRegexp>
     <!-- Dependency versions -->
-    <sonar.version>7.9</sonar.version>
+    <sonarqube.version>9.9.0.65466</sonarqube.version>
+    <sonar-plugin-api.version>9.14.0.375</sonar-plugin-api.version>
     <sonar-analyzer-commons.version>2.7.0.1482</sonar-analyzer-commons.version>
     <sonar-orchestrator.version>4.0.0.404</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
@@ -136,9 +137,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.sonarsource.sonarqube</groupId>
+        <groupId>org.sonarsource.api.plugin</groupId>
         <artifactId>sonar-plugin-api</artifactId>
-        <version>${sonar.version}</version>
+        <version>${sonar-plugin-api.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -192,6 +193,12 @@
         <version>${json-simple.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.sonarsource.sonarqube</groupId>
+        <artifactId>sonar-plugin-api-impl</artifactId>
+        <version>${sonarqube.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>
         <artifactId>sonar-analyzer-test-commons</artifactId>
         <version>${sonar-analyzer-commons.version}</version>
@@ -230,7 +237,7 @@
       <dependency>
         <groupId>org.sonarsource.sonarqube</groupId>
         <artifactId>sonar-ws</artifactId>
-        <version>${sonar.version}</version>
+        <version>${sonarqube.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>

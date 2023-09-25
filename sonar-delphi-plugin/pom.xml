@@ -46,9 +46,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
+      <groupId>org.sonarsource.api.plugin</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.analyzer-commons</groupId>
@@ -64,6 +63,11 @@
       <artifactId>jdom2</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api-impl</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.sonarsource.analyzer-commons</groupId>
       <artifactId>sonar-analyzer-test-commons</artifactId>
@@ -97,7 +101,7 @@
           <pluginName>Delphi</pluginName>
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
           <pluginClass>au.com.integradev.delphi.DelphiPlugin</pluginClass>
-          <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+          <sonarQubeMinVersion>9.9</sonarQubeMinVersion>
           <jreMinVersion>11</jreMinVersion>
         </configuration>
       </plugin>

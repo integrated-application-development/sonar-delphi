@@ -76,7 +76,7 @@ you rename or move the class implementing `org.sonar.api.Plugin`.
     <pluginName>Delphi Custom Rules</pluginName>
     <pluginClass>au.com.integradev.samples.delphi.MyDelphiRulesPlugin</pluginClass>
     <skipDependenciesPackaging>true</skipDependenciesPackaging>
-    <sonarQubeMinVersion>${sonarqube.version}</sonarQubeMinVersion>
+    <sonarQubeMinVersion>9.9</sonarQubeMinVersion>
     <requirePlugins>communitydelphi:${sonar.delphi.version}</requirePlugins>
   </configuration>
 </plugin>
