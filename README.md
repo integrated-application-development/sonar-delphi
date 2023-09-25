@@ -9,7 +9,7 @@ The project was originally a [Sabre Airline Solutions](https://www.sabre.com) do
 various open-source maintainers in the intervening years. In 2018, it was revived as a Monash University student
 project for [IntegraDev](https://www.integradev.com.au).
 
-Since 2019, the plugin has been maintained by IntegraDev.
+Since 2019, the project has been maintained by IntegraDev.
 
 Features
 -------
@@ -22,12 +22,13 @@ Features
 Analyzing a Delphi project
 --------------------------
 
-1. Install the SonarQube server (see [SonarQube - Install the Server](https://docs.sonarqube.org/latest/setup/install-server/)).
-Check the plugin releases page for supported versions of SonarQube - the latest release should be compatible with 7.9+.
-2. Download the SonarDelphi plugin from the [releases page](https://github.com/Integrated-Application-Development/sonar-delphi) and install
-in the SonarQube server (see [SonarQube - Install a Plugin](https://docs.sonarqube.org/latest/setup/install-plugin/)).
-3. Install a [SonarScanner](https://docs.sonarqube.org/latest/analysis/overview/) of your choice.
-4. Configure [project analysis settings](https://docs.sonarqube.org/latest/analysis/analysis-parameters/) for your Delphi project.
+1. Install [SonarQube](https://docs.sonarqube.org/latest/setup/install-server/).
+   The latest release is compatible with 9.9+.
+2. Download the SonarDelphi plugin from the [Releases](https://github.com/integrated-application-development/sonar-delphi/releases)
+   page and [install it in SonarQube](https://docs.sonarqube.org/latest/setup/install-plugin/).
+3. Install the [SonarScanner](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/).
+4. Configure [project analysis settings](https://docs.sonarqube.org/latest/analysis/analysis-parameters/)
+   for your Delphi project.
 5. Run the SonarScanner.
 6. Follow the link provided at the end of the scan to view the results.
 
