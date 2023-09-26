@@ -21,9 +21,13 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
+import org.sonar.plugins.communitydelphi.api.type.CodePages;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode {
@@ -42,10 +46,32 @@ public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode
   }
 
   @Override
+  public ExpressionNode getCodePageExpression() {
+    return (ExpressionNode) getChild(1);
+  }
+
+  @Override
   @Nonnull
   protected Type createType() {
     TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) getParent();
     String typeName = typeDeclaration.fullyQualifiedName();
-    return getTypeFactory().typeType(typeName, getOriginalTypeNode().getType());
+
+    Type originalType = getOriginalTypeNode().getType();
+    ExpressionNode codePageExpression = getCodePageExpression();
+
+    if (originalType.is(IntrinsicType.ANSISTRING) && codePageExpression != null) {
+      int codePage = extractCodePage(codePageExpression);
+      originalType = getTypeFactory().ansiString(codePage);
+    }
+
+    return getTypeFactory().typeType(typeName, originalType);
+  }
+
+  private static int extractCodePage(ExpressionNode expression) {
+    LiteralNode codePage = expression.extractLiteral();
+    if (codePage != null) {
+      return codePage.getValueAsInt();
+    }
+    return CodePages.CP_ACP;
   }
 }

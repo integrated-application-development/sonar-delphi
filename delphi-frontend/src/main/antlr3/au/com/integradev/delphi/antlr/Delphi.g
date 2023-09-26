@@ -306,7 +306,6 @@ fileType                     : 'file'<FileTypeNodeImpl>^ ('of' varType)?
 pointerType                  : '^'<PointerTypeNodeImpl>^ varType
                              ;
 stringType                   : 'string'<StringTypeNodeImpl>^ (lbrack! expression rbrack!)?
-                             | ANSISTRING<AnsiStringTypeNodeImpl>^ ('('! expression ')'!)?
                              ;
 procedureType                : methodType
                              | procedureReference
@@ -323,7 +322,9 @@ procedureTypeHeading         : 'function'<ProcedureTypeHeadingNodeImpl>^ methodP
                              ;
 typeOfType                   : 'type'<TypeOfTypeNodeImpl>^ 'of' typeDecl
                              ;
-typeType                     : 'type'<TypeTypeNodeImpl>^ typeDecl
+typeType                     : 'type'<TypeTypeNodeImpl>^ typeReference codePageExpression?
+                             ;
+codePageExpression           : '('! expression ')'!
                              ;
 typeAlias                    : typeReference -> ^(TkTypeAlias<TypeAliasNodeImpl> typeReference)
                              ;
@@ -852,7 +853,7 @@ ident                        : TkIdentifier
 identifierOrKeyword          : TkIdentifier
                              | keywords -> ^({changeTokenType(TkIdentifier)})
                              ;
-keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ANSISTRING | ASSEMBLER | AT | AUTOMATED | CDECL)
+keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | AT | AUTOMATED | CDECL)
                              | (CONTAINS | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
                              | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
@@ -860,7 +861,7 @@ keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ANSISTRING | ASSEM
                              | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
                              | (VARARGS | VIRTUAL | WRITE | WRITEONLY)
                              ;
-keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN |ANSISTRING | ARRAY | AS | ASM | ASSEMBLER)
+keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS | ASM | ASSEMBLER)
                              | (AT | AUTOMATED | BEGIN | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS| DEFAULT)
                              | (DELAYED | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DYNAMIC)
                              | (ELSE | END | EXCEPT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL)
@@ -921,7 +922,6 @@ ABSOLUTE          : 'absolute'       	         ;
 ABSTRACT          : 'abstract'       	         ;
 ALIGN             : 'align'                    ;
 AND               : 'and'           	         ;
-ANSISTRING        : 'ansistring'     	         ;
 ARRAY             : 'array'          	         ;
 AS                : 'as'             	         ;
 ASM               : 'asm' { asmMode = true; }  ;

@@ -18,6 +18,11 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import javax.annotation.Nullable;
+
 public interface TypeTypeNode extends TypeNode {
   TypeNode getOriginalTypeNode();
+
+  @Nullable
+  ExpressionNode getCodePageExpression();
 }

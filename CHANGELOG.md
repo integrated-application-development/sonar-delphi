@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clean up descriptions of all plugin properties.
 - Improve name resolution for declarations within types.
 - Improve type resolution for array accesses into variants.
+- Improve parsing and type modeling around `AnsiString` types with specified code pages.
 
 ### Removed
 

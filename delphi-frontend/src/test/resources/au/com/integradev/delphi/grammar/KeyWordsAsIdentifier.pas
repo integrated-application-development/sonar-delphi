@@ -9,7 +9,6 @@ var
   ABSTRACT: Boolean;
   ADD: Boolean;
   ALIGN: Boolean;
-  ANSISTRING: Boolean;
   ASSEMBLER: Boolean;
   AT: Boolean;
   AUTOMATED: Boolean;
