@@ -23,7 +23,7 @@ import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 
-public class VariableUtils {
+public final class VariableUtils {
   private VariableUtils() {
     // Utility class
   }

@@ -46,7 +46,7 @@ public class EmptyBlockCheck extends DelphiCheck {
     return super.visit(block, context);
   }
 
-  private boolean shouldAddViolation(CompoundStatementNode block) {
+  private static boolean shouldAddViolation(CompoundStatementNode block) {
     DelphiNode parent = block.getParent();
 
     if (parent instanceof MethodBodyNode) {

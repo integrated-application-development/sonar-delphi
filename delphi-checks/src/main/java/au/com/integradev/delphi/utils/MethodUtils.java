@@ -26,7 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
-public class MethodUtils {
+public final class MethodUtils {
   private MethodUtils() {
     // Utility class
   }

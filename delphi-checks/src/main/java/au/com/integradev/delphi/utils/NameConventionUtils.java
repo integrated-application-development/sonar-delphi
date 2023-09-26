@@ -20,7 +20,7 @@ package au.com.integradev.delphi.utils;
 
 import com.google.common.collect.Iterables;
 
-public class NameConventionUtils {
+public final class NameConventionUtils {
 
   private NameConventionUtils() {
     // Utility class

@@ -28,7 +28,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
-public class IntrinsicMethod implements Qualifiable {
+public final class IntrinsicMethod implements Qualifiable {
   private final QualifiedName qualifiedName;
   private final List<IntrinsicParameterData> parameters;
   private final Type returnType;
@@ -67,7 +67,7 @@ public class IntrinsicMethod implements Qualifiable {
     return isVariadic;
   }
 
-  public static class IntrinsicParameterData {
+  public static final class IntrinsicParameterData {
     private final Type type;
     private final boolean isOut;
     private final boolean isVar;
@@ -103,7 +103,7 @@ public class IntrinsicMethod implements Qualifiable {
       return hasDefaultValue;
     }
 
-    static class Builder {
+    static final class Builder {
       private final Type type;
       private final boolean isOut;
       private final boolean isVar;
@@ -129,7 +129,7 @@ public class IntrinsicMethod implements Qualifiable {
     }
   }
 
-  static class Builder {
+  static final class Builder {
     private final String methodName;
     private List<IntrinsicParameterData.Builder> parameters;
     private IntrinsicParameterData.Builder variadicParameter;

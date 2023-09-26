@@ -51,13 +51,13 @@ public class ReRaiseExceptionCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ExceptItemNode handler, DelphiCheckContext data) {
-    for (NameReferenceNode raise : findViolations(handler)) {
+    for (NameReferenceNode raise : findIssueNodes(handler)) {
       reportIssue(data, raise, MESSAGE);
     }
     return super.visit(handler, data);
   }
 
-  private List<NameReferenceNode> findViolations(ExceptItemNode handler) {
+  private static List<NameReferenceNode> findIssueNodes(ExceptItemNode handler) {
     NameDeclarationNode exceptionName = handler.getExceptionName();
     if (exceptionName != null) {
       return handler.findDescendantsOfType(RaiseStatementNode.class).stream()

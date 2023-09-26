@@ -41,16 +41,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /** Parses NUnit test reports from XML files. */
-public class DelphiNUnitParser {
-  private static class MissingNodeException extends RuntimeException {
-    private MissingNodeException(String msg) {
-      super(msg);
-    }
-  }
-
+public final class DelphiNUnitParser {
   private static final Logger LOG = LoggerFactory.getLogger(DelphiNUnitParser.class);
 
-  private DelphiNUnitParser() {}
+  private DelphiNUnitParser() {
+    // Utility class
+  }
 
   public static ResultsAggregator collect(File reportsDir) {
     LOG.info("Processing reports in {}", reportsDir);
@@ -126,7 +122,7 @@ public class DelphiNUnitParser {
       try {
         results.add(parseTestResult(testCase.getAttributes()));
       } catch (MissingNodeException e) {
-        LOG.warn("Skipping test case because of exception while parsing: {}", e);
+        LOG.warn("Skipping test case because of exception while parsing:", e);
       }
     }
   }
@@ -135,5 +131,11 @@ public class DelphiNUnitParser {
     ResultsAggregator results = new ResultsAggregator();
     reports.forEach(report -> parse(report, results));
     return results;
+  }
+
+  private static final class MissingNodeException extends RuntimeException {
+    private MissingNodeException(String msg) {
+      super(msg);
+    }
   }
 }

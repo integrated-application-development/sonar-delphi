@@ -71,11 +71,11 @@ final class DelphiProjectParser {
     return project;
   }
 
-  private Set<String> createDefinitions(ProjectProperties properties) {
+  private static Set<String> createDefinitions(ProjectProperties properties) {
     return Set.copyOf(propertyList(properties.get("DCC_Define")));
   }
 
-  private Set<String> createUnitScopeNames(ProjectProperties properties) {
+  private static Set<String> createUnitScopeNames(ProjectProperties properties) {
     return Set.copyOf(propertyList(properties.get("DCC_Namespace")));
   }
 

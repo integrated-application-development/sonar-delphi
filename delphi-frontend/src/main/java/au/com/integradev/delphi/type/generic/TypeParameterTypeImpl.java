@@ -27,7 +27,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-public class TypeParameterTypeImpl extends TypeImpl implements TypeParameterType {
+public final class TypeParameterTypeImpl extends TypeImpl implements TypeParameterType {
   private final String image;
   private List<Type> constraints;
 

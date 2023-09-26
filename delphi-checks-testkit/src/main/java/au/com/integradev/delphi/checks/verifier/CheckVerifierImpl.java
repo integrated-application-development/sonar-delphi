@@ -117,12 +117,12 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   @Override
   public void verifyIssueOnLine(int... lines) {
-    List<Issue> issues = execute();
-
     if (lines.length == 0) {
       throw new AssertionError(
           "At least one line number must be provided (did you mean verifyNoIssues?)");
     }
+
+    List<Issue> issues = execute();
 
     if (issues.isEmpty()) {
       throw new AssertionError("No issue raised. At least one issue expected");

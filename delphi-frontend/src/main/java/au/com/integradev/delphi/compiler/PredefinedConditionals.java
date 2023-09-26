@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PredefinedConditionals {
+public final class PredefinedConditionals {
   private static final CompilerVersion VERSION_6 = CompilerVersion.fromVersionNumber("14.0");
   private static final CompilerVersion VERSION_2006 = CompilerVersion.fromVersionNumber("18.0");
   private static final CompilerVersion VERSION_2007 = CompilerVersion.fromVersionNumber("18.5");

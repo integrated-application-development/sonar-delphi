@@ -54,7 +54,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
 
-class TypeComparer {
+final class TypeComparer {
   private TypeComparer() {
     // Utility class
   }

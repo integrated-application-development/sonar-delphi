@@ -97,7 +97,7 @@ public final class ExpressionTypeResolver {
     boolean regularArrayProperty = false;
     boolean classReference = false;
 
-    for (Node child : expression.getChildren()) {
+    for (DelphiNode child : expression.getChildren()) {
       if (child instanceof Typed) {
         type = handleTyped((Typed) child);
       } else if (child instanceof ArgumentListNode) {

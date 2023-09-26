@@ -26,8 +26,9 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class DelphiNoSonarExecutor implements Executor {
-  private final NoSonarFilter noSonarFilter;
   private static final Pattern PATTERN = Pattern.compile(".*\\bNOSONAR\\b.*");
+
+  private final NoSonarFilter noSonarFilter;
 
   public DelphiNoSonarExecutor(NoSonarFilter noSonarFilter) {
     this.noSonarFilter = noSonarFilter;

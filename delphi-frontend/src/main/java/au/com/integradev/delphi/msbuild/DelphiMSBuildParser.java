@@ -70,7 +70,7 @@ public class DelphiMSBuildParser {
           .filter(this::isConditionMet)
           .forEach(this::parseTopLevelElement);
     } catch (JDOMException | IOException e) {
-      LOG.error("Error while parsing {}: ", path.toAbsolutePath().toString(), e);
+      LOG.error("Error while parsing {}: ", path.toAbsolutePath(), e);
     }
 
     return new Result(properties, sourceFiles, projects);
@@ -130,7 +130,7 @@ public class DelphiMSBuildParser {
     }
 
     if (!(Files.exists(importPath) && Files.isRegularFile(importPath))) {
-      LOG.warn("File specified by {} does not exist: {}", name, importPath.toString());
+      LOG.warn("File specified by {} does not exist: {}", name, importPath);
       return;
     }
 
@@ -149,7 +149,7 @@ public class DelphiMSBuildParser {
     }
 
     if (!(Files.exists(importPath) && Files.isRegularFile(importPath))) {
-      LOG.warn("File specified by {} does not exist: {}", name, importPath.toString());
+      LOG.warn("File specified by {} does not exist: {}", name, importPath);
       return;
     }
 

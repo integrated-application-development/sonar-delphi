@@ -20,7 +20,7 @@ package au.com.integradev.delphi.utils;
 
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
-public class IndentationUtils {
+public final class IndentationUtils {
   private IndentationUtils() {
     // Utility class
   }

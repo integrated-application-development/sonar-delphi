@@ -79,11 +79,11 @@ public class DelphiNUnitSensor implements Sensor {
             });
   }
 
-  protected void collect(SensorContext context, File reportsDir) {
+  private static void collect(SensorContext context, File reportsDir) {
     save(context, DelphiNUnitParser.collect(reportsDir));
   }
 
-  private void save(SensorContext context, ResultsAggregator results) {
+  private static void save(SensorContext context, ResultsAggregator results) {
     int testsRun = results.getTestsRun();
     context
         .<Integer>newMeasure()

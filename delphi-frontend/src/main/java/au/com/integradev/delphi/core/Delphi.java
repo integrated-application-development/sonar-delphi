@@ -22,6 +22,7 @@
  */
 package au.com.integradev.delphi.core;
 
+import com.google.common.base.Splitter;
 import java.util.Arrays;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
@@ -53,6 +54,11 @@ public class Delphi extends AbstractLanguage {
         Arrays.stream(settings.getStringArray(Delphi.FILE_SUFFIXES_KEY))
             .filter(s -> s != null && !s.trim().isEmpty())
             .toArray(String[]::new);
-    return suffixes.length > 0 ? suffixes : DEFAULT_FILE_SUFFIXES.split(",");
+
+    if (suffixes.length == 0) {
+      suffixes = Splitter.on(',').splitToList(DEFAULT_FILE_SUFFIXES).toArray(String[]::new);
+    }
+
+    return suffixes;
   }
 }

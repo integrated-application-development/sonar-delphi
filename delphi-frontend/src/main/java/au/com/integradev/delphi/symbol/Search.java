@@ -51,7 +51,7 @@ public class Search {
 
   public Search(NameOccurrence occurrence, SearchMode mode) {
     if (TRACE) {
-      LOG.info("new search for reference " + occurrence + " in mode " + mode);
+      LOG.info("new search for reference {} in mode {}", occurrence, mode);
     }
     this.occurrence = occurrence;
     this.mode = mode;
@@ -80,7 +80,7 @@ public class Search {
     }
 
     if (TRACE) {
-      LOG.info("search finished, found " + found);
+      LOG.info("search finished, found {}", found);
     }
 
     declarations.addAll(found);
@@ -93,14 +93,14 @@ public class Search {
 
   private Set<NameDeclaration> searchUpward(DelphiScope scope) {
     if (TRACE) {
-      LOG.info(" checking scope " + scope + " for name occurrence " + occurrence);
+      LOG.info(" checking scope {} for name occurrence {}", scope, occurrence);
     }
 
     Set<NameDeclaration> result = findDeclaration(scope);
 
     if (result.isEmpty() && scope.getParent() != null) {
       if (TRACE) {
-        LOG.info(" moving up from " + scope + " to " + scope.getParent());
+        LOG.info(" moving up from {} to {}", scope, scope.getParent());
       }
       return searchUpward(scope.getParent());
     }
@@ -160,7 +160,7 @@ public class Search {
    */
   private Set<NameDeclaration> searchTypeScope(TypeScope scope) {
     if (TRACE) {
-      LOG.info(" checking type scope " + scope + " for name occurrence " + occurrence);
+      LOG.info(" checking type scope {} for name occurrence {}", scope, occurrence);
     }
 
     Type type = scope.getType();
@@ -174,7 +174,7 @@ public class Search {
       DelphiScope ancestorType = scope.getSuperTypeScope();
       if (ancestorType instanceof TypeScope) {
         if (TRACE) {
-          LOG.info(" moving up from type scope " + scope + " to type scope " + ancestorType);
+          LOG.info(" moving up from type scope {} to type scope {}", scope, ancestorType);
         }
 
         result = searchTypeScope((TypeScope) ancestorType);
@@ -194,7 +194,7 @@ public class Search {
       TypeScope nextTypeScope = scope.getEnclosingScope(TypeScope.class);
       if (nextTypeScope != null) {
         if (TRACE) {
-          LOG.info("  checking enclosing type scope " + nextTypeScope);
+          LOG.info("  checking enclosing type scope {}", nextTypeScope);
         }
         result = filterTypeScopeResults(nextTypeScope.findDeclaration(occurrence));
         if (result.isEmpty()) {
@@ -211,7 +211,7 @@ public class Search {
       DelphiScope extendedTypeScope = ((ScopedType) extendedType).typeScope();
       if (extendedTypeScope instanceof TypeScope) {
         if (TRACE) {
-          LOG.info(" moving into extended type scope " + extendedTypeScope);
+          LOG.info(" moving into extended type scope {}", extendedTypeScope);
         }
         return searchTypeScope((TypeScope) extendedTypeScope);
       }
@@ -236,7 +236,7 @@ public class Search {
       while (result.isEmpty() && helperType.isHelper()) {
         DelphiScope helperScope = ((ScopedType) helperType).typeScope();
         if (TRACE) {
-          LOG.info(" checking helper scope " + helperScope + " for name occurrence " + occurrence);
+          LOG.info(" checking helper scope {} for name occurrence {}", helperScope, occurrence);
         }
         result = helperScope.findDeclaration(occurrence);
         helperType = helperType.superType();

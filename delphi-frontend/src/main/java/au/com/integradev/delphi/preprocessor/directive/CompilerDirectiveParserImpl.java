@@ -39,12 +39,6 @@ import org.sonar.plugins.communitydelphi.api.directive.WarnDirective.WarnParamet
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
-  static class CompilerDirectiveParserError extends RuntimeException {
-    private CompilerDirectiveParserError(Exception e, DelphiToken token) {
-      super(e.getMessage() + " <Line " + token.getBeginLine() + ">", e);
-    }
-  }
-
   private static final ExpressionLexer EXPRESSION_LEXER = new ExpressionLexer();
   private static final ExpressionParser EXPRESSION_PARSER = new ExpressionParser();
 
@@ -99,9 +93,7 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
       Optional<Boolean> switchValue = shortSwitchValue.or(this::readLongSwitchValue);
       if (switchValue.isPresent()) {
         return new SwitchDirectiveImpl(token, switchKind.get(), switchValue.get());
-      } else if (switchKind.get() == SwitchKind.MINENUMSIZE1
-          || switchKind.get() == SwitchKind.MINENUMSIZE2
-          || switchKind.get() == SwitchKind.MINENUMSIZE4) {
+      } else if (isMinEnumSize(switchKind.get())) {
         return new SwitchDirectiveImpl(token, switchKind.get(), true);
       }
     }
@@ -159,6 +151,12 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
     }
 
     return null;
+  }
+
+  private static boolean isMinEnumSize(SwitchKind switchKind) {
+    return switchKind == SwitchKind.MINENUMSIZE1
+        || switchKind == SwitchKind.MINENUMSIZE2
+        || switchKind == SwitchKind.MINENUMSIZE4;
   }
 
   private WarnDirective createWarnDirective() {
@@ -293,5 +291,11 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
 
   private char getChar(int position) {
     return (position < data.length()) ? data.charAt(position) : END_OF_INPUT;
+  }
+
+  static final class CompilerDirectiveParserError extends RuntimeException {
+    private CompilerDirectiveParserError(Exception e, DelphiToken token) {
+      super(e.getMessage() + " <Line " + token.getBeginLine() + ">", e);
+    }
   }
 }

@@ -93,20 +93,20 @@ public class FunctionCallExpression implements Expression {
     }
   }
 
-  public static class ArgumentCountMismatchException extends RuntimeException {
+  public static final class ArgumentCountMismatchException extends RuntimeException {
     private ArgumentCountMismatchException(String name, int actualCount, int expectedCount) {
       super(
           String.format("Expected %d arguments for %s, got %d.", expectedCount, name, actualCount));
     }
   }
 
-  public static class ScalarFunctionWithMultipleItemsException extends RuntimeException {
+  public static final class ScalarFunctionWithMultipleItemsException extends RuntimeException {
     private ScalarFunctionWithMultipleItemsException(String name, int itemCount) {
       super(String.format("Scalar function %s can only accept 1 item, got %d", name, itemCount));
     }
   }
 
-  public static class UnknownFunctionException extends RuntimeException {
+  public static final class UnknownFunctionException extends RuntimeException {
     private UnknownFunctionException(String name) {
       super(String.format("Unknown function: %s", name));
     }

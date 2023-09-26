@@ -37,7 +37,7 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
-public abstract class DelphiNodeImpl implements DelphiNode, MutableDelphiNode {
+public abstract class DelphiNodeImpl implements MutableDelphiNode {
   private final DelphiToken token;
   protected DelphiNode parent;
   private List<DelphiNode> children;

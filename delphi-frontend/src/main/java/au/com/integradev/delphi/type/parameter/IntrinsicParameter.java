@@ -22,7 +22,7 @@ import au.com.integradev.delphi.type.intrinsic.IntrinsicMethod.IntrinsicParamete
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public class IntrinsicParameter extends AbstractParameter {
+public final class IntrinsicParameter extends AbstractParameter {
   private IntrinsicParameter(
       Type type, boolean hasDefaultValue, boolean isOut, boolean isVar, boolean isConst) {
     super(type, hasDefaultValue, isOut, isVar, isConst);

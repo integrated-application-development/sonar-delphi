@@ -148,7 +148,7 @@ public class OperatorInvocableCollector {
     return addAll(collection, Set.of(other));
   }
 
-  private Set<Invocable> collectOperatorOverloads(StructType type, Operator operator) {
+  private static Set<Invocable> collectOperatorOverloads(StructType type, Operator operator) {
     return type.typeScope().getMethodDeclarations().stream()
         .filter(method -> method.getMethodKind() == MethodKind.OPERATOR)
         .filter(operator::isOverloadedByMethod)
@@ -246,7 +246,7 @@ public class OperatorInvocableCollector {
     return typeFactory.arrayConstructor(List.of(elementType));
   }
 
-  private Set<Invocable> createDynamicArray(CollectionType type, Operator operator) {
+  private static Set<Invocable> createDynamicArray(CollectionType type, Operator operator) {
     Set<Invocable> result = new HashSet<>();
     if (operator == BinaryOperator.ADD) {
       result.add(new OperatorIntrinsic("Add", List.of(type, type), type));

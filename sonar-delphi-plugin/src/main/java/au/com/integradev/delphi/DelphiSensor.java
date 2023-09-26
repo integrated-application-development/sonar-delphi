@@ -91,7 +91,7 @@ public class DelphiSensor implements Sensor {
 
     LOG.info("Platform: {}", toolchain.platform.name());
     LOG.info("Architecture: {}", toolchain.architecture.name());
-    LOG.info("Compiler version: {}", compilerVersion.number().toString());
+    LOG.info("Compiler version: {}", compilerVersion.number());
     LOG.info("Conditional defines: {}", delphiProjectHelper.getConditionalDefines());
 
     var preprocessorFactory = new DelphiPreprocessorFactory(toolchain.platform);

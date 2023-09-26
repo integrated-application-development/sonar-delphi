@@ -21,7 +21,7 @@ package org.sonar.plugins.communitydelphi.api.ast;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface MethodImplementationNode extends MethodNode, Visibility {
+public interface MethodImplementationNode extends MethodNode {
   MethodBodyNode getMethodBody();
 
   @Nullable

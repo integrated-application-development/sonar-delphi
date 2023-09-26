@@ -164,7 +164,7 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
     return DelphiParserVisitor.super.visit(expression, data);
   }
 
-  private Stream<BinaryExpressionNode> flattenLogicalExpression(
+  private static Stream<BinaryExpressionNode> flattenLogicalExpression(
       ExpressionNode expression, Data data) {
     if (isAndOrExpression(expression)) {
       data.ignored.add(expression);

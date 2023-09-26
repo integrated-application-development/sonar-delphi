@@ -144,20 +144,21 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     return DelphiParserVisitor.super.visit(nameNode, data);
   }
 
-  private void handleExplicitImportReferences(@Nullable NameDeclaration declaration, Data data) {
+  private static void handleExplicitImportReferences(
+      @Nullable NameDeclaration declaration, Data data) {
     if (declaration instanceof UnitImportNameDeclaration) {
       addDependenciesForDeclaration(
           ((UnitImportNameDeclaration) declaration).getOriginalDeclaration(), data);
     }
   }
 
-  private void handleTypeAliases(@Nullable NameDeclaration declaration, Data data) {
+  private static void handleTypeAliases(@Nullable NameDeclaration declaration, Data data) {
     if (declaration instanceof TypeNameDeclaration) {
       addDependenciesForDeclaration(((TypeNameDeclaration) declaration).getAliased(), data);
     }
   }
 
-  private void handleInlineMethods(@Nullable NameDeclaration declaration, Data data) {
+  private static void handleInlineMethods(@Nullable NameDeclaration declaration, Data data) {
     if (isInlineMethodReference(declaration)) {
       addDependenciesRequiredByMethod(declaration, data);
     }

@@ -74,7 +74,7 @@ public final class TypeConverter {
     return new TypeConversion(from, to, equality, source);
   }
 
-  public static class TypeConversion {
+  public static final class TypeConversion {
     public enum Source {
       NONE,
       FROM,

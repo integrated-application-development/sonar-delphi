@@ -44,7 +44,7 @@ import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
-public class Expressions {
+public final class Expressions {
   private Expressions() {
     // Utility class
   }
@@ -123,7 +123,7 @@ public class Expressions {
     }
   }
 
-  static class UnaryExpression implements Expression {
+  static final class UnaryExpression implements Expression {
     private static final Map<TokenType, UnaryEvaluator> EVALUATORS =
         Map.of(
             TokenType.PLUS, ExpressionValues::plus,
@@ -148,7 +148,7 @@ public class Expressions {
     }
   }
 
-  static class LiteralExpression implements Expression {
+  static final class LiteralExpression implements Expression {
     private final ExpressionValue value;
 
     private LiteralExpression(TokenType type, String text) {
@@ -195,7 +195,7 @@ public class Expressions {
     }
   }
 
-  static class SetExpression implements Expression {
+  static final class SetExpression implements Expression {
     private final Set<Expression> elements;
 
     private SetExpression(Set<Expression> elements) {
@@ -213,7 +213,7 @@ public class Expressions {
     }
   }
 
-  static class NameReferenceExpression implements Expression {
+  static final class NameReferenceExpression implements Expression {
     private final String name;
 
     private NameReferenceExpression(String name) {
@@ -231,7 +231,7 @@ public class Expressions {
     }
   }
 
-  static class InvocationExpression implements Expression {
+  static final class InvocationExpression implements Expression {
     private final String name;
     private final List<Expression> arguments;
 

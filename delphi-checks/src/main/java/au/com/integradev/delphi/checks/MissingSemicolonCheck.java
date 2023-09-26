@@ -37,13 +37,10 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
-import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKeys;
 
-@DeprecatedRuleKeys({
-  @DeprecatedRuleKey(ruleKey = "NoSemicolonRule", repositoryKey = "delph"),
-  @DeprecatedRuleKey(ruleKey = "NoSemiAfterFieldDeclarationRuleTest", repositoryKey = "delph"),
-  @DeprecatedRuleKey(ruleKey = "NoSemiAfterMethodDeclarationRuleTest", repositoryKey = "delph")
-})
+@DeprecatedRuleKey(ruleKey = "NoSemicolonRule", repositoryKey = "delph")
+@DeprecatedRuleKey(ruleKey = "NoSemiAfterFieldDeclarationRuleTest", repositoryKey = "delph")
+@DeprecatedRuleKey(ruleKey = "NoSemiAfterMethodDeclarationRuleTest", repositoryKey = "delph")
 @Rule(key = "MissingSemicolon")
 public class MissingSemicolonCheck extends DelphiCheck {
   @Override

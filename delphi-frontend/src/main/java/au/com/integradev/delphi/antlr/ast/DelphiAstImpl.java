@@ -112,16 +112,16 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
 
   @Override
   public boolean isProgram() {
-    return getChildren().size() > 0 && getFileHeader() instanceof ProgramDeclarationNode;
+    return !getChildren().isEmpty() && getFileHeader() instanceof ProgramDeclarationNode;
   }
 
   @Override
   public boolean isUnit() {
-    return getChildren().size() > 0 && getFileHeader() instanceof UnitDeclarationNode;
+    return !getChildren().isEmpty() && getFileHeader() instanceof UnitDeclarationNode;
   }
 
   @Override
   public boolean isPackage() {
-    return getChildren().size() > 0 && getFileHeader() instanceof PackageDeclarationNode;
+    return !getChildren().isEmpty() && getFileHeader() instanceof PackageDeclarationNode;
   }
 }

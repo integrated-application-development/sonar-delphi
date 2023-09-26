@@ -112,7 +112,7 @@ public class VariableNameCheck extends DelphiCheck {
     return context;
   }
 
-  private List<NameDeclarationNode> getParametersToCheck(
+  private static List<NameDeclarationNode> getParametersToCheck(
       MethodNameDeclaration methodDeclaration, List<NameDeclarationNode> parameterNodes) {
     if (methodDeclaration == null) {
       return parameterNodes;

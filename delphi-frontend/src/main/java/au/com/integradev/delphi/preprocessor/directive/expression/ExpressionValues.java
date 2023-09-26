@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.IntBinaryOperator;
 
-class ExpressionValues {
+final class ExpressionValues {
   private static final ExpressionValue UNKNOWN_VALUE = () -> UNKNOWN;
 
   private ExpressionValues() {

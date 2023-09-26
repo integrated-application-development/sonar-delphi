@@ -119,7 +119,7 @@ public class InvocationResolver {
    * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L2884">
    *     tcallcandidates.get_information</a>
    */
-  private void processArgument(
+  private static void processArgument(
       InvocationCandidate candidate, InvocationArgument argument, Parameter parameter) {
     Type argumentType = argument.getType();
     Type parameterType = parameter.getType();
@@ -330,7 +330,7 @@ public class InvocationResolver {
     candidate.addVariantConversion(variantConversionType);
   }
 
-  private EqualityType varParameterAllowed(Type argType, Parameter parameter) {
+  private static EqualityType varParameterAllowed(Type argType, Parameter parameter) {
     Type paramType = parameter.getType();
 
     if (paramType.isUntyped() && !parameter.isConst()) {
@@ -545,7 +545,7 @@ public class InvocationResolver {
    * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L3367">
    *     is_better_candidate_single_variant</a>
    */
-  private int isBetterVariantConversion(
+  private static int isBetterVariantConversion(
       VariantConversionType currentVcl, VariantConversionType bestVcl) {
     if (currentVcl == bestVcl) {
       return 0;

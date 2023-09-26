@@ -206,12 +206,10 @@ public class SymbolTableBuilder {
     if (data != null) {
       process(data, ResolutionLevel.INTERFACE);
       unitDeclaration = data.unitDeclaration;
-    } else {
-      LOG.debug(
-          StringUtils.repeat('\t', nestingLevel + 1)
-              + "X "
-              + node.getNameNode().fullyQualifiedName()
-              + " **Failed to locate unit**");
+    } else if (LOG.isDebugEnabled()) {
+      String indentation = StringUtils.repeat('\t', nestingLevel + 1);
+      String unitName = node.getNameNode().fullyQualifiedName();
+      LOG.debug("{}X {} **Failed to locate unit**", indentation, unitName);
     }
 
     return new UnitImportNameDeclarationImpl(node, unitDeclaration);
@@ -272,7 +270,12 @@ public class SymbolTableBuilder {
 
     try {
       ++nestingLevel;
-      LOG.debug(StringUtils.repeat('\t', nestingLevel) + "> " + unit.unitFile.getFileName());
+
+      if (LOG.isDebugEnabled()) {
+        String indentation = StringUtils.repeat('\t', nestingLevel);
+        Path fileName = unit.unitFile.getFileName();
+        LOG.debug("{}> {}", indentation, fileName);
+      }
 
       boolean shouldSkipImplementation = (resolutionLevel != ResolutionLevel.COMPLETE);
       DelphiFileConfig fileConfig = createFileConfig(unit, shouldSkipImplementation);
@@ -324,7 +327,7 @@ public class SymbolTableBuilder {
     unit.resolved = resolutionLevel;
   }
 
-  private void runDependencyAnalysisVisitor(
+  private static void runDependencyAnalysisVisitor(
       UnitData unit, DelphiFile delphiFile, ResolutionLevel resolutionLevel) {
     var data = new DependencyAnalysisVisitor.Data(unit.unitDeclaration);
     dependencyVisitor(resolutionLevel).visit(delphiFile.getAst(), data);
@@ -492,7 +495,7 @@ public class SymbolTableBuilder {
     COMPLETE
   }
 
-  private static class UnitData {
+  private static final class UnitData {
     private final Path unitFile;
     private final boolean isSourceFile;
     private ResolutionLevel resolved;

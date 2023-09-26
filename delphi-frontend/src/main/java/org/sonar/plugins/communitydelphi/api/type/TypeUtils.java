@@ -25,7 +25,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 
 public final class TypeUtils {
   private TypeUtils() {
-    // utility class
+    // Utility class
   }
 
   public static Type findBaseType(Type type) {

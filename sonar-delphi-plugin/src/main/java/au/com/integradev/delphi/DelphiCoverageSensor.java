@@ -73,7 +73,7 @@ public class DelphiCoverageSensor implements Sensor {
     addCoverage(context, parser);
   }
 
-  private void addCoverage(SensorContext context, DelphiCoverageParser parser) {
+  private static void addCoverage(SensorContext context, DelphiCoverageParser parser) {
     String[] paths = context.config().getStringArray(DelphiProperties.COVERAGE_REPORT_KEY);
     if (paths == null || paths.length == 0) {
       LOG.info(
@@ -84,7 +84,7 @@ public class DelphiCoverageSensor implements Sensor {
     }
   }
 
-  private void addCoverage(SensorContext context, String path, DelphiCoverageParser parser) {
+  private static void addCoverage(SensorContext context, String path, DelphiCoverageParser parser) {
     try (Stream<Path> coverageReportStream = Files.walk(Path.of(path))) {
       coverageReportStream
           .filter(Files::isRegularFile)

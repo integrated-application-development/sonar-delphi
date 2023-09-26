@@ -270,7 +270,7 @@ public class NameResolutionHelper {
     completeTypeParameterReferences(method);
   }
 
-  private boolean isBareInterfaceMethodReference(MethodNode method, NameResolver resolver) {
+  private static boolean isBareInterfaceMethodReference(MethodNode method, NameResolver resolver) {
     return method.getMethodHeading().getMethodParametersNode() == null
         && resolver.getDeclarations().size() == 1;
   }
@@ -361,7 +361,7 @@ public class NameResolutionHelper {
   }
 
   @Nullable
-  private DelphiScope findTypeScope(NameResolver resolver) {
+  private static DelphiScope findTypeScope(NameResolver resolver) {
     DelphiScope typeScope = null;
     for (NameDeclaration declaration : resolver.getResolvedDeclarations()) {
       if (declaration instanceof TypeNameDeclaration) {
@@ -374,7 +374,7 @@ public class NameResolutionHelper {
     return typeScope;
   }
 
-  private boolean handleAddressOf(PrimaryExpressionNode expression, NameResolver resolver) {
+  private static boolean handleAddressOf(PrimaryExpressionNode expression, NameResolver resolver) {
     Node parent = expression.getParent();
 
     if (parent instanceof UnaryExpressionNode) {
@@ -394,7 +394,8 @@ public class NameResolutionHelper {
     return false;
   }
 
-  private boolean handleMethodReference(PrimaryExpressionNode expression, NameResolver resolver) {
+  private static boolean handleMethodReference(
+      PrimaryExpressionNode expression, NameResolver resolver) {
     DelphiNode parent = expression.getParent();
 
     if (parent instanceof UnaryExpressionNode) {
@@ -426,7 +427,8 @@ public class NameResolutionHelper {
     return false;
   }
 
-  private boolean handlePascalReturn(PrimaryExpressionNode expression, NameResolver resolver) {
+  private static boolean handlePascalReturn(
+      PrimaryExpressionNode expression, NameResolver resolver) {
     if (expression.getChildren().size() != 1) {
       return false;
     }
@@ -471,7 +473,7 @@ public class NameResolutionHelper {
     return false;
   }
 
-  private void completeTypeParameterReferences(MethodImplementationNode method) {
+  private static void completeTypeParameterReferences(MethodImplementationNode method) {
     NameReferenceNode reference = method.getNameReferenceNode().getLastName();
     NameDeclaration declaration = reference.getNameDeclaration();
     if (!(declaration instanceof GenerifiableDeclaration)) {

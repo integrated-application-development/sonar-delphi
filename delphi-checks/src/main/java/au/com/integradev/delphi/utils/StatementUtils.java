@@ -31,7 +31,7 @@ import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
-public class StatementUtils {
+public final class StatementUtils {
   private StatementUtils() {
     // Utility class
   }

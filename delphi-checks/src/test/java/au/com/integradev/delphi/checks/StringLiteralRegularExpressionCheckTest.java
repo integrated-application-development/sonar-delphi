@@ -36,7 +36,7 @@ class StringLiteralRegularExpressionCheckTest {
   }
 
   @Test
-  void tesNonMatchingStringShouldNotAddIssue() {
+  void testNonMatchingStringShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck(PATTERN))
         .onFile(

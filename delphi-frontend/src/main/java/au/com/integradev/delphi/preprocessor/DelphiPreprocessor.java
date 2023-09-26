@@ -252,7 +252,7 @@ public class DelphiPreprocessor {
       LOG.debug("Error occurred while resolving includes: ", e);
     }
 
-    LOG.warn("Failed to resolve include '" + filename + "'.");
+    LOG.warn("Failed to resolve include '{}'.", filename);
     return Collections.emptyList();
   }
 

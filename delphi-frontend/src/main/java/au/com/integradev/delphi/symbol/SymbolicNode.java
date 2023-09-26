@@ -77,7 +77,7 @@ public final class SymbolicNode implements Node {
         DelphiTokenType.INVALID, IMAGINARY_TOKEN_INDEX.incrementAndGet(), image, 0, 0, 0, 0, scope);
   }
 
-  public static SymbolicNode fromRange(String image, DelphiNode begin, Node end) {
+  public static SymbolicNode fromRange(String image, DelphiNode begin, DelphiNode end) {
     return new SymbolicNode(
         begin.getTokenType(),
         begin.getTokenIndex(),

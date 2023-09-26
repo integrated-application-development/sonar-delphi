@@ -21,6 +21,7 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 import au.com.integradev.delphi.antlr.ast.visitors.MetricsVisitor.Data;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -30,6 +31,8 @@ import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class MetricsVisitor implements DelphiParserVisitor<Data> {
+  private static final Pattern NEW_LINE_PATTERN = Pattern.compile("\r\n|\n|\r");
+
   public static class Data {
     private int classes;
     private int methods;
@@ -85,7 +88,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
   public void visitToken(DelphiToken token, Data data) {
     if (token.isComment()) {
       int line = token.getBeginLine();
-      String[] commentLines = token.getImage().split("\r\n|\n|\r", -1);
+      String[] commentLines = NEW_LINE_PATTERN.split(token.getImage(), -1);
       for (String commentLine : commentLines) {
         if (StringUtils.isNotBlank(commentLine)) {
           data.commentLines.add(line);

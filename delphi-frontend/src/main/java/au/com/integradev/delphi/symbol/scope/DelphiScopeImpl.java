@@ -207,7 +207,7 @@ public class DelphiScopeImpl implements DelphiScope {
     return declarationSet;
   }
 
-  private void handleGenerics(NameOccurrence occurrence, Set<NameDeclaration> result) {
+  private static void handleGenerics(NameOccurrence occurrence, Set<NameDeclaration> result) {
     int typeArgumentCount = occurrence.getTypeArguments().size();
     result.removeIf(
         declaration -> {

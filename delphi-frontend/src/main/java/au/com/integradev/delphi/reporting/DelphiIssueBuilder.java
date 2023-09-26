@@ -292,18 +292,21 @@ public final class DelphiIssueBuilder {
     return Optional.empty();
   }
 
-  private boolean nodeEnclosesFilePosition(DelphiNode node, FilePosition position) {
-    if (node.getBeginLine() > position.getBeginLine()
-        || (node.getBeginLine() == position.getBeginLine()
-            && node.getBeginColumn() < position.getBeginColumn())) {
-      return false;
-    } else if (node.getEndLine() < position.getEndLine()
-        || (node.getEndLine() == position.getEndLine()
-            && node.getEndColumn() > position.getEndColumn())) {
-      return false;
-    } else {
-      return true;
-    }
+  private static boolean nodeEnclosesFilePosition(DelphiNode node, FilePosition position) {
+    return nodeStartsBeforeFilePosition(node, position)
+        && nodeEndsAfterFilePosition(node, position);
+  }
+
+  private static boolean nodeStartsBeforeFilePosition(DelphiNode node, FilePosition position) {
+    return node.getBeginLine() <= position.getBeginLine()
+        && (node.getBeginLine() != position.getBeginLine()
+            || node.getBeginColumn() >= position.getBeginColumn());
+  }
+
+  private static boolean nodeEndsAfterFilePosition(DelphiNode node, FilePosition position) {
+    return node.getEndLine() >= position.getEndLine()
+        && (node.getEndLine() != position.getEndLine()
+            || node.getEndColumn() <= position.getEndColumn());
   }
 
   private static TextRange createTextRange(InputFile inputFile, FilePosition position) {

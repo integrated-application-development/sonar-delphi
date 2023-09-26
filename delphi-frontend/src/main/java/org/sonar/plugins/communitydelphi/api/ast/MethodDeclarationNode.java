@@ -18,7 +18,7 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface MethodDeclarationNode extends MethodNode, Visibility {
+public interface MethodDeclarationNode extends MethodNode {
   boolean isOverride();
 
   boolean isVirtual();

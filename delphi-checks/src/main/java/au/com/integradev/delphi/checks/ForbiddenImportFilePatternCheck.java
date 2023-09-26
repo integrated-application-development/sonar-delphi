@@ -99,7 +99,7 @@ public class ForbiddenImportFilePatternCheck extends DelphiCheck {
     return whitelistMatcher != null && whitelistMatcher.matches(path.toAbsolutePath());
   }
 
-  private PathMatcher makePathMatcher(String syntax, String pattern) {
+  private static PathMatcher makePathMatcher(String syntax, String pattern) {
     String patternAndSyntax = syntax.toLowerCase() + ":" + pattern;
     try {
       return FileSystems.getDefault().getPathMatcher(patternAndSyntax);

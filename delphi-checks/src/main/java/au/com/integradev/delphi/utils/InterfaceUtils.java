@@ -25,7 +25,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclar
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
-public class InterfaceUtils {
+public final class InterfaceUtils {
   private InterfaceUtils() {
     // Utility class
   }

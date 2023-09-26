@@ -19,11 +19,12 @@
 package au.com.integradev.delphi.compiler;
 
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 public final class CompilerVersion implements Comparable<CompilerVersion> {
-  private static final String VERSION_SYMBOL_REGEX = "VER\\d{2,3}";
-  private static final String VERSION_NUMBER_REGEX = "\\d{1,2}\\.\\d";
+  private static final Pattern VERSION_SYMBOL_PATTERN = Pattern.compile("VER\\d{2,3}");
+  private static final Pattern VERSION_NUMBER_PATTERN = Pattern.compile("\\d{1,2}\\.\\d");
   private final String symbol;
   private final BigDecimal number;
 
@@ -33,9 +34,9 @@ public final class CompilerVersion implements Comparable<CompilerVersion> {
   }
 
   public static CompilerVersion fromVersionSymbol(String symbol) {
-    if (!symbol.matches(VERSION_SYMBOL_REGEX)) {
+    if (!VERSION_SYMBOL_PATTERN.matcher(symbol).matches()) {
       throw new FormatException(
-          "Version symbol \"" + symbol + "\" must match regex \"" + VERSION_SYMBOL_REGEX + "\"");
+          "Version symbol \"" + symbol + "\" must match regex \"" + VERSION_SYMBOL_PATTERN + "\"");
     }
 
     return new CompilerVersion(
@@ -43,9 +44,9 @@ public final class CompilerVersion implements Comparable<CompilerVersion> {
   }
 
   public static CompilerVersion fromVersionNumber(String number) {
-    if (!number.matches(VERSION_NUMBER_REGEX)) {
+    if (!VERSION_NUMBER_PATTERN.matcher(number).matches()) {
       throw new FormatException(
-          "Version number \"" + number + "\" must match regex \"" + VERSION_NUMBER_REGEX + "\"");
+          "Version number \"" + number + "\" must match regex \"" + VERSION_NUMBER_PATTERN + "\"");
     }
 
     return new CompilerVersion("VER" + StringUtils.remove(number, '.'), new BigDecimal(number));

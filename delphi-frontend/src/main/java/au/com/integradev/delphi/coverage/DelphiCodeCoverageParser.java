@@ -23,8 +23,8 @@
 package au.com.integradev.delphi.coverage;
 
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
+import com.google.common.base.Splitter;
 import java.io.File;
-import java.util.Arrays;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,22 +47,44 @@ public class DelphiCodeCoverageParser implements DelphiCoverageParser {
     this.delphiProjectHelper = delphiProjectHelper;
   }
 
-  private void parseLineHit(String lineHit, int numLines, NewCoverage newCoverage) {
-    int eq = lineHit.indexOf('=');
-    if (eq > 0) {
-      int lineNumber = Integer.parseInt(lineHit.substring(0, eq));
-      int lineHits = Integer.parseInt(lineHit.substring(eq + 1));
-      if (lineNumber > numLines) {
-        LOG.debug(
-            "skipping line hit on line {} because it's beyond the end of the file", lineNumber);
-      } else {
-        newCoverage.lineHits(lineNumber, lineHits);
-      }
+  @Override
+  public void parse(SensorContext context, File reportFile) {
+    if (!reportFile.exists()) {
+      LOG.warn("Report file '{}' does not exist", reportFile);
+      return;
     }
+
+    LOG.info("Parsing coverage report: {}", reportFile);
+    parseReportFile(context, reportFile);
   }
 
-  private void parseValue(String lineCoverage, NewCoverage newCoverage, int numLines) {
-    Arrays.stream(lineCoverage.split(";")).forEach(s -> parseLineHit(s, numLines, newCoverage));
+  private void parseReportFile(SensorContext sensorContext, File reportFile) {
+    try {
+      DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+      docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      docBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      docBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+      DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+      Document doc = docBuilder.parse(reportFile);
+
+      doc.getDocumentElement().normalize();
+
+      NodeList dataNodes = doc.getElementsByTagName("linehits");
+      Element lineHits = (Element) dataNodes.item(0);
+      if (lineHits == null) {
+        LOG.warn("'linehits' element not found in coverage report: {}", reportFile);
+        return;
+      }
+
+      NodeList files = lineHits.getElementsByTagName("file");
+      for (int i = 0; i < files.getLength(); i++) {
+        parseFileNode(sensorContext, files.item(i));
+      }
+    } catch (SAXException e) {
+      LOG.error("Failed to parse coverage report: ", e);
+    } catch (Exception e) {
+      LOG.error("Unexpected exception while parsing coverage reports: ", e);
+    }
   }
 
   private void parseFileNode(SensorContext sensorContext, Node srcFile) {
@@ -82,44 +104,23 @@ public class DelphiCodeCoverageParser implements DelphiCoverageParser {
     newCoverage.save();
   }
 
-  private void parseReportFile(SensorContext sensorContext, File reportFile) {
-    try {
-      DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-      docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-      docBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-      docBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-      DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-      Document doc = docBuilder.parse(reportFile);
-
-      // normalize text representation
-      doc.getDocumentElement().normalize();
-
-      NodeList dataNodes = doc.getElementsByTagName("linehits");
-      Element lineHits = (Element) dataNodes.item(0);
-      if (lineHits == null) {
-        LOG.warn("'linehits' element not found in coverage report: {}", reportFile);
-        return;
-      }
-
-      NodeList files = lineHits.getElementsByTagName("file");
-      for (int f = 0; f < files.getLength(); f++) {
-        parseFileNode(sensorContext, files.item(f));
-      }
-    } catch (SAXException e) {
-      LOG.error("Failed to parse coverage report: ", e);
-    } catch (Exception e) {
-      LOG.error("Unexpected exception while parsing coverage reports: ", e);
-    }
+  private static void parseValue(String lineCoverage, NewCoverage newCoverage, int numLines) {
+    Splitter.on(';')
+        .split(lineCoverage)
+        .forEach(lineHit -> parseLineHit(lineHit, numLines, newCoverage));
   }
 
-  @Override
-  public void parse(SensorContext context, File reportFile) {
-    if (!reportFile.exists()) {
-      LOG.warn("Report file '{}' does not exist", reportFile);
-      return;
+  private static void parseLineHit(String lineHit, int numLines, NewCoverage newCoverage) {
+    int eq = lineHit.indexOf('=');
+    if (eq > 0) {
+      int lineNumber = Integer.parseInt(lineHit.substring(0, eq));
+      int lineHits = Integer.parseInt(lineHit.substring(eq + 1));
+      if (lineNumber > numLines) {
+        LOG.debug(
+            "skipping line hit on line {} because it's beyond the end of the file", lineNumber);
+      } else {
+        newCoverage.lineHits(lineNumber, lineHits);
+      }
     }
-
-    LOG.info("Parsing coverage report: {}", reportFile);
-    parseReportFile(context, reportFile);
   }
 }

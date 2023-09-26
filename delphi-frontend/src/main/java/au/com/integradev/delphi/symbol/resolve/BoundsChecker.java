@@ -41,14 +41,14 @@ interface BoundsChecker {
 
   boolean violatesBounds(ExpressionNode expression);
 
-  class DefaultBoundsChecker implements BoundsChecker {
+  final class DefaultBoundsChecker implements BoundsChecker {
     @Override
     public boolean violatesBounds(ExpressionNode expression) {
       return false;
     }
   }
 
-  class IntegerBoundsChecker implements BoundsChecker {
+  final class IntegerBoundsChecker implements BoundsChecker {
     private final IntegerType type;
 
     private IntegerBoundsChecker(IntegerType type) {
@@ -66,7 +66,7 @@ interface BoundsChecker {
     }
   }
 
-  class CollectionBoundsChecker implements BoundsChecker {
+  final class CollectionBoundsChecker implements BoundsChecker {
     private final CollectionType type;
 
     private CollectionBoundsChecker(CollectionType type) {
@@ -84,7 +84,7 @@ interface BoundsChecker {
       return false;
     }
 
-    protected boolean elementViolatesBounds(ExpressionNode element) {
+    private boolean elementViolatesBounds(ExpressionNode element) {
       return BoundsChecker.forType(type.elementType()).violatesBounds(element);
     }
   }

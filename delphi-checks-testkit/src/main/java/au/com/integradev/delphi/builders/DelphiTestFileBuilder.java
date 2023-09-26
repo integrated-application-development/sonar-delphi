@@ -32,16 +32,15 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
-import java.io.BufferedReader;
+import com.google.common.base.Splitter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,17 +119,10 @@ public abstract class DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> 
   }
 
   public void printSourceCode() {
-    StringBuilder source = getSourceCode();
-    Reader reader = new StringReader(source.toString());
-    BufferedReader lineReader = new BufferedReader(reader);
-    String line;
-    int lineNumber = 0;
-    try {
-      while ((line = lineReader.readLine()) != null) {
-        LOG.info(String.format("%03d %s", ++lineNumber, line));
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Failed to print source code.", e);
+    List<String> lines = Splitter.on('\n').splitToList(getSourceCode().toString());
+    for (int i = 0; i < lines.size(); ++i) {
+      String printLine = String.format("%03d %s", i + 1, lines.get(i));
+      LOG.info(printLine);
     }
   }
 
