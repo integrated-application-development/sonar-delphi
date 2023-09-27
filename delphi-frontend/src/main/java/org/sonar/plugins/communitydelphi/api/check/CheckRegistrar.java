@@ -18,11 +18,7 @@
  */
 package org.sonar.plugins.communitydelphi.api.check;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import java.util.List;
 import java.util.function.Function;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.api.scanner.ScannerSide;
@@ -58,11 +54,7 @@ public interface CheckRegistrar {
    */
   void register(RegistrarContext registrarContext);
 
-  /** Context for checks registration. */
-  class RegistrarContext {
-    private String repositoryKey;
-    private List<Class<?>> checkClasses;
-    private Function<RuleKey, RuleScope> scopeFunction;
+  interface RegistrarContext {
 
     /**
      * Registers delphi checks for a given repository.
@@ -71,42 +63,9 @@ public interface CheckRegistrar {
      * @param checkClasses classes of checks
      * @param scopeFunction function that returns a {@code RuleScope} for a given rule's engine key
      */
-    public void registerClassesForRepository(
+    void registerClassesForRepository(
         String repositoryKey,
         Iterable<Class<?>> checkClasses,
-        Function<RuleKey, RuleScope> scopeFunction) {
-      Preconditions.checkArgument(
-          StringUtils.isNotBlank(repositoryKey), "Please specify a valid repository key");
-      this.repositoryKey = repositoryKey;
-      this.checkClasses = ImmutableList.copyOf(checkClasses);
-      this.scopeFunction = scopeFunction;
-    }
-
-    /**
-     * Returns the repository key.
-     *
-     * @return repository key
-     */
-    public String repositoryKey() {
-      return repositoryKey;
-    }
-
-    /**
-     * Returns the registered check classes.
-     *
-     * @return registered check classes
-     */
-    public List<Class<?>> checkClasses() {
-      return checkClasses;
-    }
-
-    /**
-     * Returns a function that returns a {@code RuleScope} for a given rule's engine key.
-     *
-     * @return scope function
-     */
-    public Function<RuleKey, RuleScope> getScopeFunction() {
-      return scopeFunction;
-    }
+        Function<RuleKey, RuleScope> scopeFunction);
   }
 }

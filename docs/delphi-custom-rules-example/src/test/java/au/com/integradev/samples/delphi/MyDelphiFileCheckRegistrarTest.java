@@ -9,9 +9,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.check.CheckRegistrarContextImpl;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.check.CheckRegistrar;
-import org.sonar.plugins.communitydelphi.api.check.CheckRegistrar.RegistrarContext;
 import org.sonar.plugins.communitydelphi.api.check.MetadataResourcePath;
 
 class MyDelphiFileCheckRegistrarTest {
@@ -22,7 +22,7 @@ class MyDelphiFileCheckRegistrarTest {
         .thenReturn("org/sonar/l10n/delphi/rules/" + MyDelphiRulesDefinition.REPOSITORY_KEY);
 
     CheckRegistrar registrar = new MyDelphiFileCheckRegistrar(metadataResourcePath);
-    RegistrarContext context = new RegistrarContext();
+    CheckRegistrarContextImpl context = new CheckRegistrarContextImpl();
 
     registrar.register(context);
 

@@ -50,9 +50,9 @@ public class MasterCheckRegistrar {
     checksByScope = MultimapBuilder.enumKeys(RuleScope.class).hashSetValues().build();
     scopesByCheck = new IdentityHashMap<>();
 
-    CheckRegistrar.RegistrarContext registrarContext = new CheckRegistrar.RegistrarContext();
-    for (CheckRegistrar checkClassesRegister : checkRegistrars) {
-      checkClassesRegister.register(registrarContext);
+    CheckRegistrarContextImpl registrarContext = new CheckRegistrarContextImpl();
+    for (CheckRegistrar registrar : checkRegistrars) {
+      registrar.register(registrarContext);
 
       Checks<DelphiCheck> checks =
           checkFactory
