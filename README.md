@@ -1,6 +1,7 @@
 # ![SonarDelphi](docs/images/sonar-delphi-title-gh.png)
 
-[![Format](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/format.yml) [![Build](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/build.yml/badge.svg?branch=master&event=push)](https://github.com/Integrated-Application-Development/sonar-delphi/actions/workflows/build.yml)
+[![format](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/format.yml/badge.svg?branch=master&event=push)](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/format.yml)
+[![build](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/build.yml/badge.svg?branch=master&event=push)](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/build.yml)
 
 [SonarQube](https://www.sonarqube.org) is an open platform to manage code quality. This plugin adds Delphi support to
 SonarQube.
