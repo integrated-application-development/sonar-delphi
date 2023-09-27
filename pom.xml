@@ -130,8 +130,11 @@
     <antlr3-plugin.version>3.5.3</antlr3-plugin.version>
     <build-helper-plugin.version>3.3.0</build-helper-plugin.version>
     <replacer-plugin.version>1.5.3</replacer-plugin.version>
-    <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
     <shade-plugin.version>3.2.1</shade-plugin.version>
+    <source-plugin.version>3.2.1</source-plugin.version>
+    <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
+    <gpg-plugin.version>3.0.1</gpg-plugin.version>
+    <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -333,15 +336,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${javadoc-plugin.version}</version>
-          <configuration>
-            <quiet>true</quiet>
-            <doclint>none</doclint>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
           <version>${shade-plugin.version}</version>
         </plugin>
@@ -468,6 +462,72 @@
       <properties>
         <license.failIfMissing>true</license.failIfMissing>
       </properties>
+    </profile>
+
+    <profile>
+      <id>release</id>
+      <properties>
+        <license.failIfMissing>true</license.failIfMissing>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${source-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${javadoc-plugin.version}</version>
+            <configuration>
+              <quiet>true</quiet>
+              <doclint>none</doclint>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>${nexus-staging-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>

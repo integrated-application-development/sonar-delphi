@@ -12,7 +12,9 @@ jobs:
       HTTP_PROXY_SERVER: ''
       HTTP_PROXY_PORT: ''
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -20,4 +22,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Run Maven Verify
-        run: mvn --batch-mode --update-snapshots -Pci verify
+        run: mvn verify -Pci --batch-mode --no-transfer-progress
