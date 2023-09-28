@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.builders.DelphiTestProgramBuilder;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
@@ -122,6 +123,15 @@ class UnusedImportCheckTest {
                 .appendImpl("  Obj := TObject.Create;")
                 .appendImpl("end;"))
         .verifyIssueOnLine(8);
+  }
+
+  @Test
+  void testUnusedDprImportShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(new DelphiTestProgramBuilder().appendDecl("uses System.SysUtils;"))
+        .verifyNoIssues();
   }
 
   private static DelphiTestUnitBuilder createSysUtils() {

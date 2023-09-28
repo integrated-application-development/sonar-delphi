@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.builders.DelphiTestProgramBuilder;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
@@ -57,6 +58,19 @@ class ImportSpecificityCheckTest {
         .withCheck(new ImportSpecificityCheck())
         .withSearchPathUnit(createSystemUITypes())
         .onFile(new DelphiTestUnitBuilder().appendImpl("uses System.UITypes;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedDprImportShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestProgramBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.UITypes;")
+                .appendImpl("var DlgType := mtWarning;"))
         .verifyNoIssues();
   }
 

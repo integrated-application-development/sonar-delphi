@@ -53,7 +53,11 @@ public abstract class AbstractImportCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(DelphiAst ast, DelphiCheckContext context) {
     unitDeclaration = null;
-    return super.visit(ast, context);
+    if (ast.isUnit()) {
+      return super.visit(ast, context);
+    } else {
+      return context;
+    }
   }
 
   @Override

@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `sonar.delphi.sources.searchPath` property to `sonar.delphi.searchPath`.'
 - Rename `sonar.delphi.testSuiteType` property to `sonar.delphi.testType`.
 - Clean up descriptions of all plugin properties.
+- Exclude dpr and dpk files in `UnusedImport`.
+- Exclude dpr and dpk files in `ImportSpecificity`.
 - Improve name resolution for declarations within types.
 - Improve type resolution for array accesses into variants.
 - Improve parsing and type modeling around `AnsiString` types with specified code pages.
