@@ -21,7 +21,7 @@ Features
 * 100+ rules
 * Metrics (complexity, number of lines, etc.)
 * Import of test coverage reports (compatible
-  with [DelphiCodeCoverage](https://sourceforge.net/p/delphicodecoverage/git/ci/master/tree/))
+  with [Delphi Code Coverage](https://github.com/DelphiCodeCoverage/DelphiCodeCoverage))
 * Custom rules
 
 Quickstart
