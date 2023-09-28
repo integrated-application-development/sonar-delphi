@@ -29,6 +29,7 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
 public final class DelphiProperties {
+  public static final String EXCLUSIONS_KEY = "sonar.delphi.exclusions";
   public static final String INSTALLATION_PATH_KEY = "sonar.delphi.installationPath";
   public static final String COMPILER_TOOLCHAIN_KEY = "sonar.delphi.toolchain";
   public static final String COMPILER_VERSION_KEY = "sonar.delphi.compilerVersion";
@@ -47,6 +48,7 @@ public final class DelphiProperties {
   private static final String COMPILER_OPTIONS_SUBCATEGORY = "Compiler Options";
   private static final String TEST_SUBCATEGORY = "Test and Coverage";
 
+  public static final String EXCLUSIONS_DEFAULT_VALUE = "**/__history/**,**/__recovery/**";
   private static final String INSTALLATION_PATH_DEFAULT =
       "C:\\Program Files (x86)\\Embarcadero\\Studio\\22.0";
   public static final Toolchain COMPILER_TOOLCHAIN_DEFAULT = Toolchain.DCC32;
@@ -68,6 +70,15 @@ public final class DelphiProperties {
             .description(
                 "List of suffixes for Delphi files to analyze."
                     + " To not filter, leave the list empty.")
+            .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(EXCLUSIONS_KEY)
+            .category(DELPHI_CATEGORY)
+            .subCategory(GENERAL_SUBCATEGORY)
+            .defaultValue(EXCLUSIONS_DEFAULT_VALUE)
+            .name("Delphi exclusions")
+            .description("List of file path patterns to be excluded from analysis of Delphi files.")
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),

@@ -54,6 +54,7 @@ public class DelphiPlugin implements Plugin {
     builder.add(
         // Core
         Delphi.class,
+        DelphiExclusionsFileFilter.class,
         // Checks
         DelphiRulesDefinition.class,
         MasterCheckRegistrar.class,
