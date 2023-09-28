@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename language key from `delph` to `delphi`.
 - Rename repository key from `delph` to `community-delphi`.
 - Rename repository from `Delphi` to `Community Delphi`.
-- Rename `sonar.delphi.bds.path` property to `sonar.delphi.bdsPath`.
+- Rename `sonar.delphi.bds.path` property to `sonar.delphi.installationPath`.
 - Rename `sonar.delphi.compiler.toolchain` property to `sonar.delphi.toolchain`.
 - Rename `sonar.delphi.compiler.version` property to `sonar.delphi.compilerVersion`.'
 - Rename `sonar.delphi.sources.searchPath` property to `sonar.delphi.searchPath`.'

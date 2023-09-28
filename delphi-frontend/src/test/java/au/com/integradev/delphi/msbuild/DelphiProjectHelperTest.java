@@ -56,7 +56,7 @@ class DelphiProjectHelperTest {
   private Configuration settings;
   private DefaultFileSystem fs;
   private EnvironmentVariableProvider environmentVariableProvider;
-  private String bdsPath;
+  private String installationPath;
   private String standardLibraryPath;
 
   @BeforeEach
@@ -65,13 +65,14 @@ class DelphiProjectHelperTest {
     fs = new DefaultFileSystem(BASE_DIR);
     environmentVariableProvider = mock(EnvironmentVariableProvider.class);
 
-    bdsPath =
+    installationPath =
         Files.createDirectories(Files.createTempDirectory("bds").resolve("foo/bds/bar"))
             .toAbsolutePath()
             .toString();
-    standardLibraryPath = Path.of(bdsPath, "source").toAbsolutePath().toString();
+    standardLibraryPath = Path.of(installationPath, "source").toAbsolutePath().toString();
 
-    when(settings.get(DelphiProperties.BDS_PATH_KEY)).thenReturn(Optional.of(bdsPath));
+    when(settings.get(DelphiProperties.INSTALLATION_PATH_KEY))
+        .thenReturn(Optional.of(installationPath));
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
 
@@ -179,21 +180,21 @@ class DelphiProjectHelperTest {
   }
 
   @Test
-  void testBdsPath() {
+  void testInstallationPath() {
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
-    assertThat(delphiProjectHelper.bdsPath()).isEqualTo(Path.of(bdsPath));
+    assertThat(delphiProjectHelper.installationPath()).isEqualTo(Path.of(installationPath));
   }
 
   @Test
-  void testMissingBdsPathShouldThrowException() {
-    when(settings.get(DelphiProperties.BDS_PATH_KEY)).thenReturn(Optional.empty());
+  void testMissingInstallationPathShouldThrowException() {
+    when(settings.get(DelphiProperties.INSTALLATION_PATH_KEY)).thenReturn(Optional.empty());
 
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
-    assertThatThrownBy(delphiProjectHelper::bdsPath).isInstanceOf(RuntimeException.class);
+    assertThatThrownBy(delphiProjectHelper::installationPath).isInstanceOf(RuntimeException.class);
   }
 
   @Test
@@ -208,8 +209,9 @@ class DelphiProjectHelperTest {
   }
 
   @Test
-  void testEnvironmentProjPathShouldBeNullWhenBDSPathIsTooShort() {
-    when(settings.get(DelphiProperties.BDS_PATH_KEY)).thenReturn(Optional.of("/a/short_path"));
+  void testEnvironmentProjPathShouldBeNullWhenInstallationPathIsTooShort() {
+    when(settings.get(DelphiProperties.INSTALLATION_PATH_KEY))
+        .thenReturn(Optional.of("/a/short_path"));
 
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);

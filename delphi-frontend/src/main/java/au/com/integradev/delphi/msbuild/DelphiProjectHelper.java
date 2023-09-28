@@ -215,7 +215,7 @@ public class DelphiProjectHelper {
 
   @VisibleForTesting
   Path environmentProjPath() {
-    Path bdsPath = bdsPath();
+    Path bdsPath = installationPath();
     if (bdsPath.getNameCount() < 3) {
       return null;
     }
@@ -251,29 +251,32 @@ public class DelphiProjectHelper {
   }
 
   /**
-   * Returns a path to the Delphi BDS folder, as specified in settings
+   * Returns a path to the Delphi installation folder, as specified in settings
    *
-   * @return Path to the BDS folder
+   * @return Path to the installation folder
    */
-  public Path bdsPath() {
+  public Path installationPath() {
     String path =
         settings
-            .get(DelphiProperties.BDS_PATH_KEY)
+            .get(DelphiProperties.INSTALLATION_PATH_KEY)
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "Property '" + DelphiProperties.BDS_PATH_KEY + "' must be supplied."));
+                        "Property '"
+                            + DelphiProperties.INSTALLATION_PATH_KEY
+                            + "' must be supplied."));
 
     return Path.of(path);
   }
 
   /**
-   * Returns a path to the Delphi standard library, based on the BDS path specified in settings.
+   * Returns a path to the Delphi standard library, based on the installation path specified in
+   * settings.
    *
    * @return Path to standard library
    */
   public Path standardLibraryPath() {
-    return bdsPath().resolve("source");
+    return installationPath().resolve("source");
   }
 
   /**

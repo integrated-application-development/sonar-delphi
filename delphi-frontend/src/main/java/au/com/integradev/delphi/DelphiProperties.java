@@ -29,7 +29,7 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
 public final class DelphiProperties {
-  public static final String BDS_PATH_KEY = "sonar.delphi.bdsPath";
+  public static final String INSTALLATION_PATH_KEY = "sonar.delphi.installationPath";
   public static final String COMPILER_TOOLCHAIN_KEY = "sonar.delphi.toolchain";
   public static final String COMPILER_VERSION_KEY = "sonar.delphi.compilerVersion";
   public static final String SEARCH_PATH_KEY = "sonar.delphi.searchPath";
@@ -47,7 +47,7 @@ public final class DelphiProperties {
   private static final String COMPILER_OPTIONS_SUBCATEGORY = "Compiler Options";
   private static final String TEST_SUBCATEGORY = "Test and Coverage";
 
-  private static final String BDS_PATH_DEFAULT =
+  private static final String INSTALLATION_PATH_DEFAULT =
       "C:\\Program Files (x86)\\Embarcadero\\Studio\\22.0";
   public static final Toolchain COMPILER_TOOLCHAIN_DEFAULT = Toolchain.DCC32;
   public static final CompilerVersion COMPILER_VERSION_DEFAULT =
@@ -71,12 +71,12 @@ public final class DelphiProperties {
             .multiValues(true)
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
-        PropertyDefinition.builder(DelphiProperties.BDS_PATH_KEY)
+        PropertyDefinition.builder(DelphiProperties.INSTALLATION_PATH_KEY)
             .category(DELPHI_CATEGORY)
             .subCategory(TOOLCHAIN_SUBCATEGORY)
-            .defaultValue(BDS_PATH_DEFAULT)
-            .name("BDS path")
-            .description("Path to the Delphi BDS folder.")
+            .defaultValue(INSTALLATION_PATH_DEFAULT)
+            .name("Delphi installation path")
+            .description("Path to the Delphi installation folder.")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiProperties.COMPILER_TOOLCHAIN_KEY)

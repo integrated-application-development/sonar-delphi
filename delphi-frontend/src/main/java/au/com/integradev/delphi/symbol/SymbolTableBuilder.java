@@ -401,7 +401,7 @@ public class SymbolTableBuilder {
     throw new SymbolTableConstructionException(
         String.format(
             "%s unit could not be found. (Is '"
-                + DelphiProperties.BDS_PATH_KEY
+                + DelphiProperties.INSTALLATION_PATH_KEY
                 + "' set correctly?)",
             unit));
   }
