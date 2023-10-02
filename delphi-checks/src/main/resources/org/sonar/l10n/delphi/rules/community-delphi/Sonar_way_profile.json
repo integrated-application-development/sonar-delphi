@@ -26,7 +26,6 @@
     "EmptyFinallyBlock",
     "EmptyInterface",
     "EmptyMethod",
-    "EmptyTypeSection",
     "EmptyVisibilitySection",
     "EnumName",
     "ExplicitDefaultPropertyReference",

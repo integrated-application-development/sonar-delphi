@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `XPathTemplateRule` analysis rule template.
 - `MemoryManagementRule` analysis rule.
+- `EmptyTypeSection` analysis rule.
 - `sonar.delphi.coverage.tool` property.
   ([Delphi Code Coverage](https://github.com/DelphiCodeCoverage/DelphiCodeCoverage) is the only supported coverage tool.)
 

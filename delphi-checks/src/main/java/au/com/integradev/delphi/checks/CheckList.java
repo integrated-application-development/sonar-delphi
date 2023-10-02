@@ -60,7 +60,6 @@ public final class CheckList {
           EmptyFinallyBlockCheck.class,
           EmptyInterfaceCheck.class,
           EmptyMethodCheck.class,
-          EmptyTypeSectionCheck.class,
           EmptyVisibilitySectionCheck.class,
           EnumNameCheck.class,
           ExplicitDefaultPropertyReferenceCheck.class,
