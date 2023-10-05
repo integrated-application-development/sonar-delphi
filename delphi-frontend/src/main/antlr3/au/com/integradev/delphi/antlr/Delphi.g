@@ -566,7 +566,7 @@ customAttribute              : customAttributeList -> ^(TkCustomAttributeList<Cu
 customAttributeList          : customAttributeDecl+
                              ;
 customAttributeDecl          : lbrack (nameReference argumentList? ','?)+ rbrack
-                             -> ^(TkCustomAttribute<CustomAttributeNodeImpl> lbrack (nameReference argumentList?)+ rbrack)
+                             -> ^(TkCustomAttribute<CustomAttributeNodeImpl> (nameReference argumentList?)+)
                              ;
 
 //----------------------------------------------------------------------------
