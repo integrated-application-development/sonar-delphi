@@ -222,7 +222,7 @@ constSection                 : ('const'<ConstSectionNodeImpl>^ | 'resourcestring
                              // Is this really the appropriate solution?
                              ;
 constDeclaration             : customAttributeList? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
-                             -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration constExpression varType? portabilityDirective*)
+                             -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration constExpression varType? customAttributeList? portabilityDirective*)
                              ;
 typeSection                  : 'type'<TypeSectionNodeImpl>^ typeDeclaration+
                              ;

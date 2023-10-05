@@ -20,6 +20,7 @@ package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
@@ -35,6 +36,9 @@ public interface MethodHeadingNode extends DelphiNode {
   List<Type> getParameterTypes();
 
   MethodReturnTypeNode getMethodReturnType();
+
+  @Nullable
+  CustomAttributeListNode getAttributeList();
 
   boolean isClassMethod();
 

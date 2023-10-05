@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
@@ -105,6 +106,11 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
   public List<Type> getParameterTypes() {
     FormalParameterListNode paramList = getParameterListNode();
     return (paramList == null) ? Collections.emptyList() : paramList.getParameterTypes();
+  }
+
+  @Override
+  public CustomAttributeListNode getAttributeList() {
+    return getFirstChildOfType(CustomAttributeListNode.class);
   }
 
   @Override

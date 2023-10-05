@@ -40,6 +40,9 @@ public interface PropertyNode extends DelphiNode, Typed, Visibility {
 
   List<FormalParameterData> getParameters();
 
+  @Nullable
+  CustomAttributeListNode getAttributeList();
+
   List<Type> getParameterTypes();
 
   boolean isClassProperty();

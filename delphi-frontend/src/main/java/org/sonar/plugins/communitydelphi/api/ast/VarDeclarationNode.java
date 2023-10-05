@@ -18,12 +18,16 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public interface VarDeclarationNode extends DelphiNode, Typed {
   NameDeclarationListNode getNameDeclarationList();
 
   VarSectionNode getVarSection();
+
+  @Nullable
+  CustomAttributeListNode getAttributeList();
 
   TypeNode getTypeNode();
 

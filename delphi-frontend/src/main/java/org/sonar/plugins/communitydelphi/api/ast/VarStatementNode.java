@@ -28,4 +28,7 @@ public interface VarStatementNode extends StatementNode {
 
   @Nullable
   ExpressionNode getExpression();
+
+  @Nullable
+  CustomAttributeListNode getAttributeList();
 }

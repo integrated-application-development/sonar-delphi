@@ -19,6 +19,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
@@ -28,6 +29,9 @@ public interface ConstDeclarationNode extends DelphiNode, Typed, Visibility {
   ExpressionNode getExpression();
 
   TypeNode getTypeNode();
+
+  @Nullable
+  CustomAttributeListNode getAttributeList();
 
   @Override
   @Nonnull

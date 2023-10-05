@@ -18,6 +18,7 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public interface FieldDeclarationNode extends DelphiNode, Typed, Visibility {
@@ -25,6 +26,9 @@ public interface FieldDeclarationNode extends DelphiNode, Typed, Visibility {
   VisibilityType getVisibility();
 
   NameDeclarationListNode getDeclarationList();
+
+  @Nullable
+  CustomAttributeListNode getAttributeList();
 
   TypeNode getTypeNode();
 }

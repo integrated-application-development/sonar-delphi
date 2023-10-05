@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
@@ -53,6 +54,11 @@ public final class FieldDeclarationNodeImpl extends DelphiNodeImpl implements Fi
   @Override
   public NameDeclarationListNode getDeclarationList() {
     return (NameDeclarationListNode) getChild(0);
+  }
+
+  @Override
+  public CustomAttributeListNode getAttributeList() {
+    return getFirstChildOfType(CustomAttributeListNode.class);
   }
 
   @Override
