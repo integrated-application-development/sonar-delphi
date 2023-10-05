@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
@@ -54,6 +55,11 @@ public final class VarDeclarationNodeImpl extends DelphiNodeImpl implements VarD
   @Override
   public TypeNode getTypeNode() {
     return (TypeNode) getChild(1);
+  }
+
+  @Override
+  public CustomAttributeListNode getAttributeList() {
+    return getFirstChildOfType(CustomAttributeListNode.class);
   }
 
   @Override

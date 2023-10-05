@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ObjectTypeNode;
@@ -74,6 +75,11 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements Typ
   @Override
   public TypeNode getTypeNode() {
     return (TypeNode) getChild(1);
+  }
+
+  @Override
+  public CustomAttributeListNode getAttributeList() {
+    return getFirstChildOfType(CustomAttributeListNode.class);
   }
 
   @Override

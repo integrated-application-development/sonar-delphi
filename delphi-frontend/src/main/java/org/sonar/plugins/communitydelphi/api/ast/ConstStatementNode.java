@@ -29,4 +29,7 @@ public interface ConstStatementNode extends StatementNode {
 
   @Nonnull
   ExpressionNode getExpression();
+
+  @Nullable
+  CustomAttributeListNode getAttributeList();
 }

@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
@@ -47,6 +48,12 @@ public final class ConstStatementNodeImpl extends DelphiNodeImpl implements Cons
   @Nonnull
   public ExpressionNode getExpression() {
     return getFirstChildOfType(ExpressionNode.class);
+  }
+
+  @Override
+  @Nullable
+  public CustomAttributeListNode getAttributeList() {
+    return getFirstChildOfType(CustomAttributeListNode.class);
   }
 
   @Override

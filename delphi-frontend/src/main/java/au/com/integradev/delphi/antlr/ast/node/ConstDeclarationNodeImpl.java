@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
@@ -56,6 +57,11 @@ public final class ConstDeclarationNodeImpl extends DelphiNodeImpl implements Co
   public TypeNode getTypeNode() {
     DelphiNode typeNode = getChild(2);
     return (typeNode instanceof TypeNode) ? (TypeNode) typeNode : null;
+  }
+
+  @Override
+  public CustomAttributeListNode getAttributeList() {
+    return getFirstChildOfType(CustomAttributeListNode.class);
   }
 
   @Override
