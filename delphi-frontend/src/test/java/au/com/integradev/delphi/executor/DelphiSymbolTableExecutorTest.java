@@ -1013,6 +1013,70 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testSimpleAttribute() {
+    execute("attributes/SimpleAttribute.pas");
+    verifyUsages(6, 2, reference(9, 3));
+  }
+
+  @Test
+  void testGroupedAttributes() {
+    execute("attributes/GroupedAttributes.pas");
+    verifyUsages(6, 2, reference(12, 3));
+    verifyUsages(9, 2, reference(12, 8));
+  }
+
+  @Test
+  void testSuffixedAttribute() {
+    execute("attributes/SuffixedAttribute.pas");
+    verifyUsages(6, 2, reference(9, 3));
+  }
+
+  @Test
+  void testLayeredAttribute() {
+    execute("attributes/LayeredAttribute.pas");
+    verifyUsages(8, 4, reference(12, 14));
+  }
+
+  @Test
+  void testLayeredSuffixedAttribute() {
+    execute("attributes/LayeredSuffixedAttribute.pas");
+    verifyUsages(8, 4, reference(12, 14));
+  }
+
+  @Test
+  void testMultipleSimpleAttributes() {
+    execute("attributes/MultipleSimpleAttributes.pas");
+    verifyUsages(11, 4, reference(14, 5));
+  }
+
+  @Test
+  void testHigherScopeSuffixedAttribute() {
+    execute("attributes/HigherScopeSuffixedAttribute.pas");
+    verifyUsages(6, 2, reference(14, 5));
+  }
+
+  @Test
+  void testHigherScopeUnsuffixedAttribute() {
+    execute("attributes/HigherScopeUnsuffixedAttribute.pas");
+    verifyUsages(11, 4, reference(14, 5));
+  }
+
+  @Test
+  void testAttributeWithConstructor() {
+    execute("attributes/AttributeWithConstructor.pas");
+    verifyUsages(7, 16, reference(10, 6));
+  }
+
+  @Test
+  void testAttributeWithMultipleConstructors() {
+    execute("attributes/AttributeWithMultipleConstructors.pas");
+    verifyUsages(7, 16, reference(13, 6));
+    verifyUsages(8, 16, reference(14, 6));
+    verifyUsages(9, 16, reference(15, 6));
+    verifyUsages(10, 16, reference(16, 6));
+  }
+
+  @Test
   void testSimpleMethodResolutionClause() {
     execute("methodResolutionClauses/Simple.pas");
     verifyUsages(7, 14, reference(12, 26));
