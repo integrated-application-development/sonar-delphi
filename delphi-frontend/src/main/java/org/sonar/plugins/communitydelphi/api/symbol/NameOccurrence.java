@@ -39,6 +39,8 @@ public interface NameOccurrence {
 
   boolean isMethodReference();
 
+  boolean isAttributeReference();
+
   boolean isGeneric();
 
   List<Type> getTypeArguments();

@@ -221,20 +221,20 @@ constSection                 : ('const'<ConstSectionNodeImpl>^ | 'resourcestring
                              // example: "const {$include versioninfo.inc}"
                              // Is this really the appropriate solution?
                              ;
-constDeclaration             : customAttribute? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
+constDeclaration             : customAttributeList? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
                              -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration constExpression varType? portabilityDirective*)
                              ;
 typeSection                  : 'type'<TypeSectionNodeImpl>^ typeDeclaration+
                              ;
 innerTypeSection             : 'type'<TypeSectionNodeImpl>^ typeDeclaration*
                              ;
-typeDeclaration              : customAttribute? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
-                             -> ^(TkTypeDeclaration<TypeDeclarationNodeImpl> genericNameDeclaration typeDecl customAttribute? portabilityDirective*)
+typeDeclaration              : customAttributeList? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
+                             -> ^(TkTypeDeclaration<TypeDeclarationNodeImpl> genericNameDeclaration typeDecl customAttributeList? portabilityDirective*)
                              ;
 varSection                   : ('var'<VarSectionNodeImpl>^ | 'threadvar'<VarSectionNodeImpl>^) varDeclaration varDeclaration*
                              ;
-varDeclaration               : customAttribute? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
-                             -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList varType varValueSpec? customAttribute?)
+varDeclaration               : customAttributeList? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
+                             -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList varType varValueSpec? customAttributeList?)
                              ;
 varValueSpec                 : 'absolute' constExpression
                              | '=' constExpression
@@ -371,7 +371,7 @@ fieldSectionKey              : 'var'
 fieldSection                 : 'class'? fieldSectionKey fieldDecl* -> ^(TkFieldSection<FieldSectionNodeImpl> 'class'? fieldSectionKey fieldDecl*)
                              | fieldDecl+ -> ^(TkFieldSection<FieldSectionNodeImpl> fieldDecl+)
                              ;
-fieldDecl                    : customAttribute? nameDeclarationList ':' varType portabilityDirective* ';'?
+fieldDecl                    : customAttributeList? nameDeclarationList ':' varType portabilityDirective* ';'?
                              -> ^(TkFieldDeclaration<FieldDeclarationNodeImpl> nameDeclarationList varType portabilityDirective* ';'?)
                              ;
 classHelperType              : 'class'<ClassHelperTypeNodeImpl>^ 'helper' classParent? 'for' typeReference visibilitySection* 'end'
@@ -399,8 +399,8 @@ recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSe
                              ;
 recordHelperType             : 'record'<RecordHelperTypeNodeImpl>^ 'helper' 'for' typeReference visibilitySection* 'end'
                              ;
-property                     : customAttribute? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
-                             -> ^('property'<PropertyNodeImpl> nameDeclaration propertyArray? varType? 'class'? customAttribute? propertyDirective*)
+property                     : customAttributeList? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
+                             -> ^('property'<PropertyNodeImpl> nameDeclaration propertyArray? varType? 'class'? customAttributeList? propertyDirective*)
                              ;
 propertyArray                : lbrack! formalParameterList rbrack!
                              ;
@@ -481,46 +481,46 @@ forwardMethod                : forwardMethodHeading
                                     forwardMethodHeading
                                  )
                              ;
-methodInterfaceHeading       : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? interfaceDirectiveSection
+methodInterfaceHeading       : customAttributeList? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? interfaceDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodDeclarationName
                                     methodParameters?
                                     methodReturnType?
-                                    customAttribute?
+                                    customAttributeList?
                                     'class'?
                                     interfaceDirectiveSection
                                  )
                              ;
-methodImplementationHeading  : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? implDirectiveSection
+methodImplementationHeading  : customAttributeList? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? implDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodImplementationName
                                     methodParameters?
                                     methodReturnType?
-                                    customAttribute?
+                                    customAttributeList?
                                     'class'?
                                     implDirectiveSection
                                  )
                              ;
-externalMethodHeading        : customAttribute? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? externalDirectiveSection
+externalMethodHeading        : customAttributeList? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? externalDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodImplementationName
                                     methodParameters?
                                     methodReturnType?
-                                    customAttribute?
+                                    customAttributeList?
                                     'class'?
                                     externalDirectiveSection
                                  )
                              ;
-forwardMethodHeading         : customAttribute? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? forwardDirectiveSection
+forwardMethodHeading         : customAttributeList? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? forwardDirectiveSection
                              -> ^(TkMethodHeading<MethodHeadingNodeImpl>
                                     methodKey
                                     methodDeclarationName
                                     methodParameters?
                                     methodReturnType?
-                                    customAttribute?
+                                    customAttributeList?
                                     'class'?
                                     forwardDirectiveSection
                                  )
@@ -539,7 +539,7 @@ methodKey                    : 'procedure'
                              | 'function'
                              | 'operator'
                              ;
-methodReturnType             : ':' customAttribute? returnType -> ^(TkMethodReturn<MethodReturnTypeNodeImpl> returnType customAttribute?)
+methodReturnType             : ':' customAttributeList? returnType -> ^(TkMethodReturn<MethodReturnTypeNodeImpl> returnType customAttributeList?)
                              ;
 returnType                   : stringType
                              | typeReference
@@ -548,7 +548,7 @@ methodParameters             : '(' formalParameterList? ')' -> ^(TkMethodParamet
                              ;
 formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFormalParameterList<FormalParameterListNodeImpl> formalParameter formalParameter*)
                              ;
-formalParameter              : a1=customAttribute? (paramSpecifier a2=customAttribute?)? nameDeclarationList (':' parameterType)? ('=' expression)?
+formalParameter              : a1=customAttributeList? (paramSpecifier a2=customAttributeList?)? nameDeclarationList (':' parameterType)? ('=' expression)?
                              -> ^(TkFormalParameter<FormalParameterNodeImpl> nameDeclarationList parameterType? paramSpecifier? expression? $a1? $a2?)
                              ;
 paramSpecifier               : 'const'
@@ -561,12 +561,14 @@ methodBody                   : block ';' -> ^(TkMethodBody<MethodBodyNodeImpl> b
 //----------------------------------------------------------------------------
 // Custom Attributes
 //----------------------------------------------------------------------------
-customAttribute              : customAttributeList -> ^(TkCustomAttributeList<CustomAttributeListNodeImpl> customAttributeList)
+customAttributeList          : customAttributeGroup+
+                             -> ^(TkCustomAttributeList<CustomAttributeListNodeImpl> customAttributeGroup+)
                              ;
-customAttributeList          : customAttributeDecl+
+customAttributeGroup         : lbrack (customAttribute ','?)+ rbrack
+                             -> ^(TkCustomAttributeGroup<CustomAttributeGroupNodeImpl> customAttribute+)
                              ;
-customAttributeDecl          : lbrack (nameReference argumentList? ','?)+ rbrack
-                             -> ^(TkCustomAttribute<CustomAttributeNodeImpl> (nameReference argumentList?)+)
+customAttribute              : nameReference argumentList?
+                             -> ^(TkCustomAttribute<CustomAttributeNodeImpl> nameReference argumentList?)
                              ;
 
 //----------------------------------------------------------------------------
@@ -715,11 +717,11 @@ statement                    : ifStatement
                              ;
 ifStatement                  : 'if'<IfStatementNodeImpl>^ expression 'then' statement? ('else' statement?)?
                              ;
-varStatement                 : 'var' customAttribute? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
-                             -> ^('var'<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? customAttribute?)
+varStatement                 : 'var' customAttributeList? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
+                             -> ^('var'<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? customAttributeList?)
                              ;
-constStatement               : 'const' customAttribute? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
-                             -> ^('const'<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod customAttribute?)
+constStatement               : 'const' customAttributeList? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
+                             -> ^('const'<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod customAttributeList?)
                              ;
 caseStatement                : 'case'<CaseStatementNodeImpl>^ expression 'of' caseItem* elseBlock? 'end'
                              ;
@@ -1086,6 +1088,8 @@ TkMethodParameters      : 'METHOD_PARAMETERS'
 TkMethodReturn          : 'METHOD_RETURN'
                         ;
 TkCustomAttributeList   : 'CUSTOM_ATTRIBUTE_LIST'
+                        ;
+TkCustomAttributeGroup  : 'CUSTOM_ATTRIBUTE_GROUP'
                         ;
 TkCustomAttribute       : 'CUSTOM_ATTRIBUTE'
                         ;

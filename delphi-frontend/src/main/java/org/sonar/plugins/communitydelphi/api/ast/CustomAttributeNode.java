@@ -18,8 +18,14 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+
 public interface CustomAttributeNode extends DelphiNode {
   NameReferenceNode getNameReference();
+
+  NameOccurrence getTypeNameOccurrence();
+
+  NameOccurrence getConstructorNameOccurrence();
 
   ArgumentListNode getArgumentList();
 }

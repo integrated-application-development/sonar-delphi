@@ -59,7 +59,10 @@ public class Search {
   }
 
   public void execute(DelphiScope startingScope) {
-    Set<NameDeclaration> found = searchUpward(startingScope);
+    Set<NameDeclaration> found =
+        occurrence.isAttributeReference()
+            ? searchUpwardForAttribute(startingScope)
+            : searchUpward(startingScope);
 
     if (!enclosingTypeResults.isEmpty()) {
       FileScope occurrenceFileScope =
@@ -106,6 +109,65 @@ public class Search {
     }
 
     return result;
+  }
+
+  private Set<NameDeclaration> searchUpwardForAttribute(DelphiScope scope) {
+    if (TRACE) {
+      LOG.info(" checking scope {} for attribute name occurrence {}", scope, occurrence);
+    }
+
+    Set<NameDeclaration> thisScopeAttributes = findDeclaration(scope);
+
+    if (!thisScopeAttributes.isEmpty()) {
+      if (TRACE) {
+        LOG.info(" found attributes!");
+      }
+
+      Set<NameDeclaration> thisScopeSuffixedAttributes =
+          thisScopeAttributes.stream()
+              .filter(this::hasExplicitAttributeSuffix)
+              .collect(Collectors.toSet());
+
+      if (!thisScopeSuffixedAttributes.isEmpty()) {
+        // Always prefer the nearest explicit attribute
+        return thisScopeSuffixedAttributes;
+      }
+
+      if (scope.getParent() == null) {
+        // If top scope, these unsuffixed attributes are best
+        return thisScopeAttributes;
+      }
+
+      if (TRACE) {
+        LOG.info(" moving up from {} to {}", scope, scope.getParent());
+      }
+
+      Set<NameDeclaration> higherScopeSuffixedAttributes =
+          searchUpwardForAttribute(scope.getParent()).stream()
+              .filter(this::hasExplicitAttributeSuffix)
+              .collect(Collectors.toSet());
+
+      if (higherScopeSuffixedAttributes.isEmpty()) {
+        // If there aren't any suffixed attributes at all, these unsuffixed attributes are best
+        return thisScopeAttributes;
+      } else {
+        // If there are suffixed attributes in a higher scope, they supersede these attributes
+        return higherScopeSuffixedAttributes;
+      }
+    } else if (scope.getParent() == null) {
+      // If top scope, whatever is here is best
+      return thisScopeAttributes;
+    }
+
+    if (TRACE) {
+      LOG.info(" moving up from {} to {}", scope, scope.getParent());
+    }
+
+    return searchUpwardForAttribute(scope.getParent());
+  }
+
+  private boolean hasExplicitAttributeSuffix(NameDeclaration declaration) {
+    return declaration.getName().equalsIgnoreCase(occurrence.getImage() + "Attribute");
   }
 
   private Set<NameDeclaration> findDeclaration(DelphiScope scope) {

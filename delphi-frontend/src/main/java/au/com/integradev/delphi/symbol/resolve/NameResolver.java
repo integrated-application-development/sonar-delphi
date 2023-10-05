@@ -54,6 +54,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
@@ -529,7 +530,29 @@ public class NameResolver {
     }
   }
 
-  void readNameReference(NameReferenceNode node) {
+  void readAttribute(CustomAttributeNode node) {
+    readNameReferenceWithOptionalSuffix(node.getNameReference(), true);
+    addResolvedDeclaration();
+
+    List<NameReferenceNode> references = node.getNameReference().flatten();
+    NameReferenceNode lastReference = references.get(references.size() - 1);
+
+    // Attributes are a shorthand for an invocation of a constructor named 'Create'
+    SymbolicNode imaginaryConstructor = SymbolicNode.imaginaryAfterNode("Create", lastReference);
+    NameOccurrenceImpl occurrence = new NameOccurrenceImpl(imaginaryConstructor);
+    ((NameOccurrenceImpl) lastReference.getNameOccurrence()).setNameWhichThisQualifies(occurrence);
+    resolveNameReferenceOccurrence(occurrence, true);
+
+    ArgumentListNode argumentList = node.getArgumentList();
+    if (argumentList != null) {
+      handleArgumentList(argumentList);
+    } else {
+      disambiguateArguments(Collections.emptyList(), true);
+    }
+  }
+
+  private void readNameReferenceWithOptionalSuffix(
+      NameReferenceNode node, boolean isAttributeReference) {
     boolean couldBeUnitNameReference =
         currentScope == null
             || (!(currentScope instanceof UnknownScope) && currentScope.equals(node.getScope()));
@@ -540,20 +563,12 @@ public class NameResolver {
       }
 
       NameOccurrenceImpl occurrence = createNameOccurrence(reference);
-      addName(occurrence);
-      searchForDeclaration(occurrence);
-
-      if (occurrence.isGeneric()) {
-        specializeDeclarations(occurrence);
+      // Only apply the suffix on the last name
+      if (reference.nextName() == null && isAttributeReference) {
+        occurrence.setIsAttributeReference();
       }
 
-      disambiguateIsCallable();
-      disambiguateVisibility();
-
-      if (reference.nextName() != null) {
-        disambiguateImplicitEmptyArgumentList();
-        addResolvedDeclaration();
-      }
+      resolveNameReferenceOccurrence(occurrence, reference.nextName() == null);
 
       if (nameResolutionFailed()) {
         if (couldBeUnitNameReference) {
@@ -564,6 +579,27 @@ public class NameResolver {
 
       ((NameReferenceNodeImpl) reference).setNameOccurrence(occurrence);
     }
+  }
+
+  private void resolveNameReferenceOccurrence(NameOccurrence occurrence, boolean isLastName) {
+    addName((NameOccurrenceImpl) occurrence);
+    searchForDeclaration(occurrence);
+
+    if (occurrence.isGeneric()) {
+      specializeDeclarations(occurrence);
+    }
+
+    disambiguateIsCallable();
+    disambiguateVisibility();
+
+    if (!isLastName) {
+      disambiguateImplicitEmptyArgumentList();
+      addResolvedDeclaration();
+    }
+  }
+
+  void readNameReference(NameReferenceNode node) {
+    readNameReferenceWithOptionalSuffix(node, false);
   }
 
   private NameOccurrenceImpl createNameOccurrence(NameReferenceNode reference) {

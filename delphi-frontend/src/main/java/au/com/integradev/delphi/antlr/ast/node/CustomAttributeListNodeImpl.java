@@ -19,8 +19,11 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeGroupNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 
 public final class CustomAttributeListNodeImpl extends DelphiNodeImpl
     implements CustomAttributeListNode {
@@ -35,5 +38,15 @@ public final class CustomAttributeListNodeImpl extends DelphiNodeImpl
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public List<CustomAttributeGroupNode> getAttributeGroups() {
+    return findChildrenOfType(CustomAttributeGroupNode.class);
+  }
+
+  @Override
+  public List<CustomAttributeNode> getAttributes() {
+    return findDescendantsOfType(CustomAttributeNode.class);
   }
 }

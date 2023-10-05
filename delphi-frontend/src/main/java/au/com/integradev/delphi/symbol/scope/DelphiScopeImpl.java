@@ -316,6 +316,10 @@ public class DelphiScopeImpl implements DelphiScope {
     Set<NameDeclaration> result = Collections.emptySet();
 
     Set<NameDeclaration> found = declarationsByName.get(occurrence.getImage());
+    if (occurrence.isAttributeReference()) {
+      found.addAll(declarationsByName.get(occurrence.getImage() + "Attribute"));
+    }
+
     if (!found.isEmpty()) {
       result = new HashSet<>(found);
       findMethodOverloads(occurrence, result);
