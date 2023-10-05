@@ -20,7 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 
 public final class CustomAttributeNodeImpl extends DelphiNodeImpl implements CustomAttributeNode {
   public CustomAttributeNodeImpl(Token token) {
@@ -29,6 +31,16 @@ public final class CustomAttributeNodeImpl extends DelphiNodeImpl implements Cus
 
   public CustomAttributeNodeImpl(int tokenType) {
     super(tokenType);
+  }
+
+  @Override
+  public NameReferenceNode getNameReference() {
+    return (NameReferenceNode) getChild(0);
+  }
+
+  @Override
+  public ArgumentListNode getArgumentList() {
+    return (ArgumentListNode) getChild(1);
   }
 
   @Override
