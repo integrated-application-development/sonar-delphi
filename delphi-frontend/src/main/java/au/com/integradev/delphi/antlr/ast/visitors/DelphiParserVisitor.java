@@ -46,6 +46,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ContainsClauseNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeGroupNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
@@ -212,6 +213,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(CustomAttributeNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(CustomAttributeGroupNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

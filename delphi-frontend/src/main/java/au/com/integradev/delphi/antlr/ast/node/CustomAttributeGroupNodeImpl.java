@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2023 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,48 +19,36 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeGroupNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 
-public final class CustomAttributeNodeImpl extends DelphiNodeImpl implements CustomAttributeNode {
-  public CustomAttributeNodeImpl(Token token) {
+public final class CustomAttributeGroupNodeImpl extends DelphiNodeImpl
+    implements CustomAttributeGroupNode {
+  public CustomAttributeGroupNodeImpl(Token token) {
     super(token);
   }
 
-  public CustomAttributeNodeImpl(int tokenType) {
+  public CustomAttributeGroupNodeImpl(int tokenType) {
     super(tokenType);
-  }
-
-  @Override
-  public NameReferenceNode getNameReference() {
-    return (NameReferenceNode) getChild(0);
-  }
-
-  @Override
-  public NameOccurrence getTypeNameOccurrence() {
-    return getNameReference().getNameOccurrence();
-  }
-
-  @Override
-  public NameOccurrence getConstructorNameOccurrence() {
-    return getTypeNameOccurrence().getNameForWhichThisIsAQualifier();
-  }
-
-  @Override
-  public ArgumentListNode getArgumentList() {
-    return (ArgumentListNode) getChild(1);
-  }
-
-  @Override
-  public String getImage() {
-    return "[" + getNameReference().fullyQualifiedName() + "]";
   }
 
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public List<CustomAttributeNode> getAttributes() {
+    return findChildrenOfType(CustomAttributeNode.class);
+  }
+
+  @Override
+  public String getImage() {
+    return getAttributes().stream()
+        .map(attribute -> attribute.getNameReference().fullyQualifiedName())
+        .collect(Collectors.joining(", ", "[", "]"));
   }
 }

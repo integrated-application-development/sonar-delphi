@@ -34,6 +34,7 @@ public final class NameOccurrenceImpl implements NameOccurrence {
   private boolean isExplicitInvocation;
   private boolean isMethodReference;
   private boolean isGeneric;
+  private boolean isAttribute;
   private List<Type> typeParameters = Collections.emptyList();
 
   public NameOccurrenceImpl(DelphiNode concreteNode, String imageOverride) {
@@ -124,6 +125,15 @@ public final class NameOccurrenceImpl implements NameOccurrence {
   @Override
   public boolean isSelf() {
     return "Self".equals(getImage());
+  }
+
+  @Override
+  public boolean isAttributeReference() {
+    return isAttribute;
+  }
+
+  public void setIsAttributeReference() {
+    isAttribute = true;
   }
 
   @Override

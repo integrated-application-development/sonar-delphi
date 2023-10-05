@@ -62,6 +62,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
@@ -694,6 +695,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         .forEach(
             arrayConstructor ->
                 arrayConstructor.getElements().forEach(element -> element.accept(this, data)));
+    data.nameResolutionHelper.resolve(node);
+    return data;
+  }
+
+  @Override
+  public Data visit(CustomAttributeNode node, Data data) {
     data.nameResolutionHelper.resolve(node);
     return data;
   }
