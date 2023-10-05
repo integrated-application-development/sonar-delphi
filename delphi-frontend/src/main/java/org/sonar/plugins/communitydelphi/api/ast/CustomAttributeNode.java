@@ -18,4 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface CustomAttributeNode extends DelphiNode {}
+public interface CustomAttributeNode extends DelphiNode {
+  NameReferenceNode getNameReference();
+
+  ArgumentListNode getArgumentList();
+}
