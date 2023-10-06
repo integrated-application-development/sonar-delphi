@@ -1201,9 +1201,9 @@ TkIntNumber             : DigitSeq (
                               )?
                           )?
                         ;
-TkHexNumber             : '$' HexDigitSeq
+TkHexNumber             : '$' ('_' | HexDigit)*
                         ;
-TkBinaryNumber          : '%' BinaryDigitSeq
+TkBinaryNumber          : '%' ('_' | BinaryDigit)*
                         ;
 TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
                         ;
@@ -1213,9 +1213,9 @@ TkQuotedString          : '\'' ('\'\'' | ~('\''))* '\''
                         ;
 TkAsmDoubleQuotedString : { asmMode }? => '"' (~('\"'))* '"'
                         ;
-TkCharacterEscapeCode   : '#' DigitSeq
-                        | '#' '$' HexDigitSeq
-                        | '#' '%' BinaryDigitSeq
+TkCharacterEscapeCode   : '#' ('_' | Digit)+
+                        | '#' '$' ('_' | HexDigit)+
+                        | '#' '%' ('_' | BinaryDigit)+
                         ;
 //----------------------------------------------------------------------------
 // Fragments
