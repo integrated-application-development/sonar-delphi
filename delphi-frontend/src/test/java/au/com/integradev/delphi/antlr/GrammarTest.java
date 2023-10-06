@@ -237,4 +237,9 @@ class GrammarTest {
                     DelphiFileUtils.mockConfig()))
         .isInstanceOf(DelphiFileConstructionException.class);
   }
+
+  @Test
+  void testUnusualWhitespace() {
+    parseFile("UnusualWhitespace.pas");
+  }
 }
