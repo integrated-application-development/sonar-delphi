@@ -22,8 +22,13 @@
  */
 package au.com.integradev.delphi.checks;
 
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
@@ -39,6 +44,32 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "MixedNames")
 public class MixedNamesCheck extends DelphiCheck {
   private static final String MESSAGE = "Avoid mixing names (found: \"%s\" expected: \"%s\").";
+  private static final Pattern ATTRIBUTE_REGEX =
+      Pattern.compile("Attribute$", Pattern.CASE_INSENSITIVE);
+
+  private void checkNameAgainstValidOptions(
+      DelphiNode node, DelphiCheckContext context, String actualName, Set<String> expectedNames) {
+    if (!expectedNames.contains(actualName)) {
+      reportIssue(
+          context, node, String.format(MESSAGE, actualName, String.join(" or ", expectedNames)));
+    }
+  }
+
+  private void checkAttributeTypeReferenceForViolations(
+      DelphiNode node, DelphiCheckContext context, NameOccurrence occurrence) {
+    NameDeclaration declaration = occurrence.getNameDeclaration();
+
+    if (declaration != null && !occurrence.isSelf()) {
+      String actual = occurrence.getImage();
+
+      Set<String> expected =
+          Set.of(
+              declaration.getImage(),
+              ATTRIBUTE_REGEX.matcher(declaration.getImage()).replaceFirst(""));
+
+      checkNameAgainstValidOptions(node, context, actual, expected);
+    }
+  }
 
   private void checkNameOccurrenceForViolations(
       DelphiNode node, DelphiCheckContext context, NameOccurrence occurrence) {
@@ -46,11 +77,7 @@ public class MixedNamesCheck extends DelphiCheck {
 
     if (declaration != null && !occurrence.isSelf()) {
       String actual = occurrence.getImage();
-      String expected = declaration.getImage();
-
-      if (!expected.equals(actual)) {
-        reportIssue(context, node, String.format(MESSAGE, actual, expected));
-      }
+      checkNameAgainstValidOptions(node, context, actual, Set.of(declaration.getImage()));
     }
   }
 
@@ -100,5 +127,29 @@ public class MixedNamesCheck extends DelphiCheck {
     checkUnitReferenceForViolations(
         importNode.getNameNode(), context, declaration.fullyQualifiedName(), declaration);
     return super.visit(importNode, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(CustomAttributeNode attributeNode, DelphiCheckContext context) {
+    List<NameReferenceNode> nameReferences = attributeNode.getNameReference().flatten();
+
+    for (int i = 0; i + 1 < nameReferences.size(); i++) {
+      context = super.visit(nameReferences.get(i), context);
+    }
+
+    NameReferenceNode lastNameReference = nameReferences.get(nameReferences.size() - 1);
+    NameOccurrence occurrence = lastNameReference.getNameOccurrence();
+
+    if (occurrence != null) {
+      checkAttributeTypeReferenceForViolations(
+          lastNameReference.getIdentifier(), context, occurrence);
+    }
+
+    ArgumentListNode argumentListNode = attributeNode.getArgumentList();
+    if (argumentListNode != null) {
+      return super.visit(argumentListNode, context);
+    } else {
+      return context;
+    }
   }
 }
