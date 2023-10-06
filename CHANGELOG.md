@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `add` is no longer colorized as a keyword in the SonarQube web interface.
 - `remove` is no longer colorized as a keyword in the SonarQube web interface.
 - `variant` is no longer colorized as a keyword in the SonarQube web interface.
+- Parsing errors on unusual whitespace characters.
 
 ## [0.40.0] - 2023-01-10
 

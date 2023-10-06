@@ -1276,7 +1276,7 @@ COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel
                           }
                         }
                         ;
-WHITESPACE              : (' '|'\t'|'\r'|'\n'|'\f')+ {$channel=HIDDEN;}
+WHITESPACE              : ('\u0000'..'\u0020' | '\u3000')+ {$channel=HIDDEN;}
                         ;
 UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;}
                         ;
