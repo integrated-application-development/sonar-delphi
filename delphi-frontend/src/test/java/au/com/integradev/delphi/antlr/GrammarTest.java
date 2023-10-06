@@ -242,4 +242,9 @@ class GrammarTest {
   void testUnusualWhitespace() {
     parseFile("UnusualWhitespace.pas");
   }
+
+  @Test
+  void testUnusualIntegerLiterals() {
+    parseFile("UnusualIntegerLiterals.pas");
+  }
 }

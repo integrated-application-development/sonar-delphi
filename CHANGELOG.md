@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `remove` is no longer colorized as a keyword in the SonarQube web interface.
 - `variant` is no longer colorized as a keyword in the SonarQube web interface.
 - Parsing errors on unusual whitespace characters.
+- Parsing errors on unusual escaped character, hex integer, and binary integer literals.
 
 ## [0.40.0] - 2023-01-10
 

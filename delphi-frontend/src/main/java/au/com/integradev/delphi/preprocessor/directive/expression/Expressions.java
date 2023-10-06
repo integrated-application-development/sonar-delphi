@@ -169,7 +169,10 @@ public final class Expressions {
         default:
           radix = 10;
       }
-      return new BigInteger(StringUtils.remove(text, '_'), radix);
+      String withoutUnderscores = StringUtils.remove(text, '_');
+      return withoutUnderscores.isEmpty()
+          ? BigInteger.ZERO
+          : new BigInteger(withoutUnderscores, radix);
     }
 
     private static double doubleFromTextWithDigitSeparators(String text) {
