@@ -1,0 +1,19 @@
+{
+  "title": "Object casts should only be to ancestor or child classes",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "10min"
+  },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["unpredictable", "suspicious"],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

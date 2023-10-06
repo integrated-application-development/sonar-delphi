@@ -49,6 +49,7 @@
     "MissingSemicolon",
     "MixedNames",
     "NilComparison",
+    "NonLinearCast",
     "NoSonar",
     "ObjectType",
     "PascalStyleResult",

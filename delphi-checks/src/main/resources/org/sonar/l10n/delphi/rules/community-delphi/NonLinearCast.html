@@ -1,0 +1,39 @@
+<h2>Why is this an issue?</h2>
+<p>Casting an object to a type that is not guaranteed to have the same memory configuration can
+cause access violations if used improperly.</p>
+<h2>How to fix it</h2>
+<p>Remove the improper cast by refactoring the code. If the intention is to provide additional
+  methods to operate on an object, consider using a class helper instead.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TAdditionalFunctionality = class(TObject)
+  public
+    procedure DebugPrint;
+  end;
+
+procedure DoStuff(MyObj: TSecretString);
+begin
+  TAdditionalFunctionality(MyObj).DebugPrint;
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+type
+  TAdditionalFunctionality = class helper for TSecretString
+  public
+    procedure DebugPrint;
+  end;
+
+procedure DoStuff(MyObj: TSecretString);
+begin
+  MyObj.DebugPrint;
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Class_and_Record_Helpers_(Delphi)">
+      RAD Studio documentation: Class and Record Helpers (Delphi)
+    </a>
+  </li>
+</ul>

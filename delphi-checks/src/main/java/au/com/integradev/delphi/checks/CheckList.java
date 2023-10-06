@@ -102,6 +102,7 @@ public final class CheckList {
           MissingSemicolonCheck.class,
           MixedNamesCheck.class,
           NilComparisonCheck.class,
+          NonLinearCastCheck.class,
           NoSonarCheck.class,
           ObjectTypeCheck.class,
           PascalStyleResultCheck.class,
