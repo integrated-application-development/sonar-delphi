@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `DigitGrouping` analysis rule, which flags numeric literals that use non-standard digit groupings.
 - `AddressOfCharacterData` analysis rule, which flags attempts to manually get the address of the
   first character in a string.
+- `NonLinearCast` analysis rule, which flags unsafe object and pointer casts.
 
 ### Changed
 
