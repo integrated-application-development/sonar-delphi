@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude dpr and dpk files in `ImportSpecificity`.
 - Exclude uses clauses of dpr and dpk files in `LineTooLong`.
 - Include methods in `UnitLevelKeywordIndentation`.
+- Include implicit attribute constructor calls in `ForbiddenMethod`.
 - Always enforce the `Attribute` suffix in `AttributeName`.
 - Improve name resolution for declarations within types.
 - Improve type resolution for array accesses into variants.

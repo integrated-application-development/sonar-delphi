@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -64,6 +65,16 @@ public class ForbiddenMethodCheck extends DelphiCheck {
       reportIssue(context, reference.getIdentifier(), message);
     }
     return super.visit(reference, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(CustomAttributeNode attribute, DelphiCheckContext context) {
+    NameDeclaration declaration = attribute.getConstructorNameOccurrence().getNameDeclaration();
+    if (declaration instanceof MethodNameDeclaration
+        && methodsSet.contains(((MethodNameDeclaration) declaration).fullyQualifiedName())) {
+      reportIssue(context, attribute.getNameReference().getIdentifier(), message);
+    }
+    return super.visit(attribute, context);
   }
 
   @Override

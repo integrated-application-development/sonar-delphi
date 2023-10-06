@@ -93,4 +93,41 @@ class ForbiddenMethodCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testForbiddenAttributeConstructorShouldAddIssue() {
+    ForbiddenMethodCheck check = new ForbiddenMethodCheck();
+    check.blacklist = UNIT_NAME + ".FooAttribute.Create";
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("    constructor Create(MyVal: string);")
+                .appendDecl("  end;")
+                .appendDecl("  [Foo('hello')]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(9);
+  }
+
+  @Test
+  void testAllowedAttributeConstructorShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("    constructor Create(MyVal: string);")
+                .appendDecl("  end;")
+                .appendDecl("  [Foo('hello')]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
 }
