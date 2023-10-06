@@ -337,6 +337,53 @@ class MixedNamesCheckTest {
         .verifyIssueOnLine(5, 14);
   }
 
+  @Test
+  void testAttributeWithSuffixShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendDecl("  [Foo]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testMismatchedAttributeWithSuffixShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  FOOAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendDecl("  [Foo]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(8);
+  }
+
+  @Test
+  void testMismatchedQualifiedAttributeShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Foo = class(TObject)")
+                .appendDecl("    type BarAttribute = class(TCustomAttribute)")
+                .appendDecl("    end;")
+                .appendDecl("  end;")
+                .appendDecl("  [foo.Bar]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(10);
+  }
+
   private static DelphiTestUnitBuilder createSysUtils() {
     return new DelphiTestUnitBuilder()
         .unitName("System.SysUtils")
