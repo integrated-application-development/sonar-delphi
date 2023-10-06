@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.reporting;
 
-import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import com.google.common.base.Preconditions;
@@ -30,7 +29,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
@@ -41,21 +39,11 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext.Location;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
-import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
-import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 /**
  * Based directly on {@code InternalJavaIssueBuilder} from the sonar-java project.
@@ -176,7 +164,7 @@ public final class DelphiIssueBuilder {
     }
 
     RuleScope scope = checkRegistrar.getScope(check);
-    if (isOutOfScope(scope)) {
+    if (!filePositionInScope(scope)) {
       return;
     }
 
@@ -220,114 +208,15 @@ public final class DelphiIssueBuilder {
         .message(location.getMessage());
   }
 
-  private boolean isOutOfScope(RuleScope scope) {
-    switch (scope) {
-      case MAIN:
-        return isWithinTestCode();
-      case TEST:
-        return !isWithinTestCode();
-      default:
-        return false;
-    }
-  }
-
-  private boolean isWithinTestCode() {
-    Type type = findEnclosingType(position);
-    return isTestType(type) || isNestedInsideTestType(type);
-  }
-
-  private boolean isTestType(Type type) {
-    return isTestTypeByAncestry(type) || isTestTypeByAttribute(type);
-  }
-
-  private boolean isTestTypeByAncestry(Type type) {
-    return context
-        .config()
-        .get(DelphiProperties.TEST_TYPE_KEY)
-        .map(testTypeImage -> type.is(testTypeImage) || type.isSubTypeOf(testTypeImage))
-        .orElse(false);
-  }
-
-  private boolean isTestTypeByAttribute(Type type) {
-    if (!(type instanceof StructType)) {
-      return false;
+  private boolean filePositionInScope(RuleScope scope) {
+    if (scope == RuleScope.ALL) {
+      return true;
     }
 
-    return context
-        .config()
-        .get(DelphiProperties.TEST_ATTRIBUTE_KEY)
-        .map(
-            testAttributeName ->
-                ((StructType) type)
-                    .attributeTypes().stream()
-                        .anyMatch(attribute -> attribute.is(testAttributeName)))
-        .orElse(false);
-  }
+    boolean inTestCode =
+        new TestCodeDetector(context.config()).isInTestCode(delphiFile.getAst(), position);
 
-  private boolean isNestedInsideTestType(Type type) {
-    if (type instanceof ScopedType) {
-      DelphiScope scope = ((ScopedType) type).typeScope();
-      while ((scope = scope.getParent()) instanceof TypeScope) {
-        if (isTestType(((TypeScope) scope).getType())) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private Type findEnclosingType(FilePosition filePosition) {
-    Optional<TypeDeclarationNode> typeDeclarationNode =
-        findNodeEnclosingFilePosition(TypeDeclarationNode.class, filePosition);
-
-    if (typeDeclarationNode.isPresent()) {
-      return typeDeclarationNode.get().getType();
-    }
-
-    Optional<MethodImplementationNode> methodImplementationNode =
-        findNodeEnclosingFilePosition(MethodImplementationNode.class, filePosition);
-
-    if (methodImplementationNode.isPresent()) {
-      TypeNameDeclaration typeDeclaration = methodImplementationNode.get().getTypeDeclaration();
-      if (typeDeclaration != null) {
-        return typeDeclaration.getType();
-      }
-    }
-
-    return TypeFactory.unknownType();
-  }
-
-  private <T extends DelphiNode> Optional<T> findNodeEnclosingFilePosition(
-      Class<T> nodeClass, FilePosition filePosition) {
-    if (filePosition != null) {
-      DelphiAst ast = delphiFile.getAst();
-      return ast.findDescendantsOfType(nodeClass).stream()
-          .filter(node -> nodeEnclosesFilePosition(node, filePosition))
-          .max(
-              (a, b) ->
-                  new CompareToBuilder()
-                      .append(a.getBeginLine(), b.getBeginLine())
-                      .append(a.getBeginColumn(), b.getBeginColumn())
-                      .toComparison());
-    }
-    return Optional.empty();
-  }
-
-  private static boolean nodeEnclosesFilePosition(DelphiNode node, FilePosition position) {
-    return nodeStartsBeforeFilePosition(node, position)
-        && nodeEndsAfterFilePosition(node, position);
-  }
-
-  private static boolean nodeStartsBeforeFilePosition(DelphiNode node, FilePosition position) {
-    return node.getBeginLine() <= position.getBeginLine()
-        && (node.getBeginLine() != position.getBeginLine()
-            || node.getBeginColumn() >= position.getBeginColumn());
-  }
-
-  private static boolean nodeEndsAfterFilePosition(DelphiNode node, FilePosition position) {
-    return node.getEndLine() >= position.getEndLine()
-        && (node.getEndLine() != position.getEndLine()
-            || node.getEndColumn() <= position.getEndColumn());
+    return (scope == RuleScope.TEST) == inTestCode;
   }
 
   private static TextRange createTextRange(InputFile inputFile, FilePosition position) {
