@@ -54,6 +54,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 /**
@@ -236,10 +237,30 @@ public final class DelphiIssueBuilder {
   }
 
   private boolean isTestType(Type type) {
+    return isTestTypeByAncestry(type) || isTestTypeByAttribute(type);
+  }
+
+  private boolean isTestTypeByAncestry(Type type) {
     return context
         .config()
         .get(DelphiProperties.TEST_TYPE_KEY)
         .map(testTypeImage -> type.is(testTypeImage) || type.isSubTypeOf(testTypeImage))
+        .orElse(false);
+  }
+
+  private boolean isTestTypeByAttribute(Type type) {
+    if (!(type instanceof StructType)) {
+      return false;
+    }
+
+    return context
+        .config()
+        .get(DelphiProperties.TEST_ATTRIBUTE_KEY)
+        .map(
+            testAttributeName ->
+                ((StructType) type)
+                    .attributeTypes().stream()
+                        .anyMatch(attribute -> attribute.is(testAttributeName)))
         .orElse(false);
   }
 

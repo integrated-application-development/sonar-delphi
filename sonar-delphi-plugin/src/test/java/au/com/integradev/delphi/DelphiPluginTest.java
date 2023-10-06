@@ -57,6 +57,6 @@ class DelphiPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat((List<?>) context.getExtensions()).hasSize(34);
+    assertThat((List<?>) context.getExtensions()).hasSize(35);
   }
 }

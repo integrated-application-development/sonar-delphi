@@ -25,6 +25,6 @@ import org.junit.jupiter.api.Test;
 class DelphiPropertiesTest {
   @Test
   void testGetProperties() {
-    assertThat(DelphiProperties.getProperties()).hasSize(13);
+    assertThat(DelphiProperties.getProperties()).hasSize(14);
   }
 }
