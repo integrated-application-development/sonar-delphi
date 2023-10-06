@@ -127,12 +127,12 @@ public class TestCodeDetector {
   private static boolean nodeStartsBeforeFilePosition(DelphiNode node, FilePosition position) {
     return node.getBeginLine() <= position.getBeginLine()
         && (node.getBeginLine() != position.getBeginLine()
-            || node.getBeginColumn() >= position.getBeginColumn());
+            || node.getBeginColumn() <= position.getBeginColumn());
   }
 
   private static boolean nodeEndsAfterFilePosition(DelphiNode node, FilePosition position) {
     return node.getEndLine() >= position.getEndLine()
         && (node.getEndLine() != position.getEndLine()
-            || node.getEndColumn() <= position.getEndColumn());
+            || node.getEndColumn() >= position.getEndColumn());
   }
 }
