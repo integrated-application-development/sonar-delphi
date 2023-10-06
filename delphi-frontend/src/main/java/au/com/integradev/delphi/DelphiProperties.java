@@ -39,6 +39,7 @@ public final class DelphiProperties {
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
   public static final String UNIT_ALIASES_KEY = "sonar.delphi.unitAliases";
   public static final String TEST_TYPE_KEY = "sonar.delphi.testType";
+  public static final String TEST_ATTRIBUTE_KEY = "sonar.delphi.testAttribute";
   public static final String NUNIT_REPORT_PATHS_PROPERTY = "sonar.delphi.nunit.reportPaths";
   public static final String COVERAGE_REPORT_KEY = "sonar.delphi.coverage.reportPaths";
 
@@ -55,6 +56,7 @@ public final class DelphiProperties {
   public static final CompilerVersion COMPILER_VERSION_DEFAULT =
       CompilerVersion.fromVersionSymbol("VER350");
   private static final String TEST_TYPE_DEFAULT = "TestFramework.TTestCase";
+  private static final String TEST_ATTRIBUTE_DEFAULT = "DUnitX.Attributes.TestFixtureAttribute";
 
   private DelphiProperties() {
     // hide public constructor
@@ -169,6 +171,16 @@ public final class DelphiProperties {
             .description(
                 "A fully qualified type name. Any code within this type or its descendants will be"
                     + " treated as test code.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiProperties.TEST_ATTRIBUTE_KEY)
+            .category(DELPHI_CATEGORY)
+            .subCategory(TEST_SUBCATEGORY)
+            .defaultValue(TEST_ATTRIBUTE_DEFAULT)
+            .name("Test Attribute")
+            .description(
+                "A fully qualified type name. Any code within a type that is annotated"
+                    + " with this attribute will be treated as test code.")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiProperties.NUNIT_REPORT_PATHS_PROPERTY)

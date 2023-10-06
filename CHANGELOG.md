@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `sonar.delphi.file.suffixes` property to specify the file extensions that should be analyzed.
 - `sonar.delphi.exclusions` property to specify file path patterns to exclude from analysis of
   Delphi files.
+- `sonar.delphi.test.attribute` property to specify an attribute that will cause annotated types to
+  be treated as test code.
 - Support for attributes in semantic analysis.
 - Support for identifiers prefixed with 2 ampersands (`&&`).
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
