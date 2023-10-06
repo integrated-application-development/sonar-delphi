@@ -411,6 +411,8 @@ public interface Type {
      * @return set of types that this type defines implicit conversion from
      */
     Set<Type> typesWithImplicitConversionsToThis();
+
+    List<Type> attributeTypes();
   }
 
   interface HelperType extends StructType {
