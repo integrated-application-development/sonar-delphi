@@ -34,8 +34,9 @@ public final class HelperTypeImpl extends StructTypeImpl implements HelperType {
       DelphiScope scope,
       Set<Type> parents,
       Type extendedType,
-      StructKind kind) {
-    super(imageParts, size, scope, parents, kind);
+      StructKind kind,
+      List<Type> attributeTypes) {
+    super(imageParts, size, scope, parents, kind, attributeTypes);
     this.extendedType = extendedType;
   }
 

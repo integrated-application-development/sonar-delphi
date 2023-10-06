@@ -35,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
@@ -96,6 +97,11 @@ public class NameResolutionHelper {
   }
 
   public void resolve(TypeDeclarationNode typeDeclaration) {
+    CustomAttributeListNode attributeListNode = typeDeclaration.getAttributeList();
+    if (attributeListNode != null) {
+      attributeListNode.getAttributes().forEach(this::resolve);
+    }
+
     typeDeclaration.getTypeNode().getParentTypeNodes().forEach(this::resolve);
     resolve(typeDeclaration.getTypeNode());
   }

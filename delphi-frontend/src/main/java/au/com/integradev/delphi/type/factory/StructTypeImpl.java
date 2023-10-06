@@ -49,14 +49,21 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private Type superType;
   private Set<Type> typesWithImplicitConversionsToThis;
   private Set<Type> typesWithImplicitConversionsFromThis;
+  private List<Type> attributeTypes;
   private boolean isForwardType;
 
   StructTypeImpl(
-      List<ImagePart> imageParts, int size, DelphiScope scope, Set<Type> parents, StructKind kind) {
+      List<ImagePart> imageParts,
+      int size,
+      DelphiScope scope,
+      Set<Type> parents,
+      StructKind kind,
+      List<Type> attributeTypes) {
     this.imageParts = imageParts;
     this.size = size;
     this.scope = scope;
     this.kind = kind;
+    this.attributeTypes = attributeTypes;
     setParents(parents);
   }
 
@@ -193,6 +200,11 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   }
 
   @Override
+  public List<Type> attributeTypes() {
+    return attributeTypes;
+  }
+
+  @Override
   public boolean canBeSpecialized(TypeSpecializationContext context) {
     for (ImagePart part : imageParts) {
       for (Type parameter : part.getTypeParameters()) {
@@ -221,7 +233,8 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
         size,
         scope,
         parents,
-        kind);
+        kind,
+        attributeTypes);
   }
 
   @Override

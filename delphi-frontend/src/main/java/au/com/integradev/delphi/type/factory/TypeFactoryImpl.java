@@ -36,12 +36,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
@@ -67,6 +69,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public class TypeFactoryImpl implements TypeFactory {
   private static final CompilerVersion VERSION_4 = CompilerVersion.fromVersionSymbol("VER120");
@@ -473,17 +476,33 @@ public class TypeFactoryImpl implements TypeFactory {
     Set<Type> ancestors = Collections.emptySet();
     StructKind kind = StructKind.fromNode(node);
     Node parent = node.getParent();
+    List<Type> attributeTypes = Collections.emptyList();
 
     if (parent instanceof TypeDeclarationNode) {
       TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) parent;
       ancestors = getAncestors(typeDeclaration, kind);
       imageParts.addAll(createImageParts(typeDeclaration));
+      attributeTypes = getAttributeTypes(typeDeclaration);
     } else {
       String anonymousImage = "<anonymous_type_" + ANONYMOUS_STRUCT_COUNTER.incrementAndGet() + ">";
       imageParts.add(new ImagePart(anonymousImage));
     }
 
-    return new StructTypeImpl(imageParts, pointerSize(), node.getScope(), ancestors, kind);
+    return new StructTypeImpl(
+        imageParts, pointerSize(), node.getScope(), ancestors, kind, attributeTypes);
+  }
+
+  private static List<Type> getAttributeTypes(TypeDeclarationNode typeDeclaration) {
+    CustomAttributeListNode attributeList = typeDeclaration.getAttributeList();
+    if (attributeList == null) {
+      return Collections.emptyList();
+    }
+
+    return attributeList.getAttributes().stream()
+        .map(attribute -> attribute.getTypeNameOccurrence().getNameDeclaration())
+        .map(TypeNameDeclaration.class::cast)
+        .map(Typed::getType)
+        .collect(Collectors.toList());
   }
 
   public HelperType helper(HelperTypeNode node) {
@@ -496,7 +515,8 @@ public class TypeFactoryImpl implements TypeFactory {
         node.getScope(),
         getAncestors(declaration, kind),
         node.getFor().getType(),
-        kind);
+        kind,
+        getAttributeTypes(declaration));
   }
 
   @Override
