@@ -1,7 +1,36 @@
+<h2>Why is this an issue?</h2>
 <p>
-  Attribute names should follow Pascal case and possess an <code>Attribute</code>
-  suffix.
-  <br />
-  <code>attributeSuffix</code> can be <code>allowed</code> for an optional suffix,
-  <code>required</code>, or <code>forbidden</code>.
+  Code that follows a consistent naming convention is self-documenting. In Delphi, all custom
+  attribute class names should be in PascalCase and end with <code>Attribute</code>. No prefix
+  is required.
 </p>
+<p>
+  Custom attributes suffixed with <code>Attribute</code> may have the suffix omitted when
+  used. This means that attributes can be defined with the same name (e.g. <code>MyCustom</code>
+  and <code>MyCustomAttribute</code>), which may cause unexpected behaviour.
+</p>
+<p>
+  To safeguard against this, the <code>Attribute</code> suffix should be used consistently.
+  The suffix is also recommended for clarity, as attribute classes should not be used in other ways
+  or instantiated directly.
+</p>
+<h2>How to fix it</h2>
+<p>Rename the attribute class name to follow the convention.</p>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations">
+      Delphi's Object Pascal Style Guide: Type Declarations
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Declaring_Custom_Attributes_(RTTI)">
+      RAD Studio documentation: Declaring Custom Attributes (RTTI)
+    </a>
+  </li>
+  <li>
+    <a href="https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-classes-structs-and-interfaces#names-of-common-types">
+      .NET documentation: Names of Classes, Structs, and Interfaces
+    </a>
+  </li>
+</ul>
