@@ -29,6 +29,8 @@ import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LibraryDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
@@ -44,13 +46,13 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @DeprecatedRuleKey(ruleKey = "UnitLevelKeywordIndentationRule", repositoryKey = "delph")
 @Rule(key = "UnitLevelKeywordIndentation")
 public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
-  private static final String MESSAGE = "Unindent this unit-level keyword.";
+  private static final String MESSAGE = "Unindent this top-level element.";
 
   private static void checkNodeIndentation(DelphiNode node, DelphiCheckContext context) {
-    if (!IndentationUtils.getLineIndentation(node).equals("")) {
+    if (!IndentationUtils.getLineIndentation(node).isEmpty()) {
       context
           .newIssue()
-          .onFilePosition(FilePosition.from(node.getToken()))
+          .onFilePosition(FilePosition.from(node.getFirstToken()))
           .withMessage(MESSAGE)
           .report();
     }
@@ -152,6 +154,30 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
       checkNodeIndentation(getEnd(compoundStatementNode), context);
     }
     return super.visit(compoundStatementNode, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(
+      MethodDeclarationNode methodDeclarationNode, DelphiCheckContext context) {
+    if (methodDeclarationNode.getParent() instanceof InterfaceSectionNode) {
+      checkNodeIndentation(methodDeclarationNode, context);
+    }
+    return super.visit(methodDeclarationNode, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(
+      MethodImplementationNode methodImplementationNode, DelphiCheckContext context) {
+    checkNodeIndentation(methodImplementationNode, context);
+
+    DelphiNode block = methodImplementationNode.getBlock();
+
+    if (block != null) {
+      checkNodeIndentation(block, context);
+      checkNodeIndentation(getEnd(block), context);
+    }
+
+    return super.visit(methodImplementationNode, context);
   }
 
   @Override

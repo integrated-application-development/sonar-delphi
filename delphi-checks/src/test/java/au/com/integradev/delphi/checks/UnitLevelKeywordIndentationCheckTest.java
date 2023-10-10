@@ -46,7 +46,7 @@ class UnitLevelKeywordIndentationCheckTest {
     CheckVerifier.newVerifier()
         .withCheck(new UnitLevelKeywordIndentationCheck())
         .onFile(DelphiTestFileBuilder.fromResource(INDENTED_PAS))
-        .verifyIssueOnLine(1, 3, 5, 9, 13, 15, 19, 23, 25, 27);
+        .verifyIssueOnLine(1, 3, 5, 9, 13, 15, 17, 21, 28, 29, 31, 33, 34, 36, 38, 40, 42);
   }
 
   @Test
