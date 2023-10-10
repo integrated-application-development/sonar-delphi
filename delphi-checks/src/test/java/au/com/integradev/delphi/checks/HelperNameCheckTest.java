@@ -28,9 +28,10 @@ import org.sonar.plugins.communitydelphi.api.ast.SetTypeNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class HelperNameCheckTest {
-  private static DelphiCheck createCheck(String prefixes) {
+  private static DelphiCheck createCheck(String prefixes, String extendedTypePrefixes) {
     HelperNameCheck check = new HelperNameCheck();
     check.helperPrefixes = prefixes;
+    check.extendedTypePrefixes = extendedTypePrefixes;
     return check;
   }
 
@@ -51,13 +52,27 @@ class HelperNameCheckTest {
   @Test
   void testMismatchedPrefixesShouldNotAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(createCheck("T,Prefix"))
+        .withCheck(createCheck("Prefix", "Tx"))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  TxFoo = class(TObject)")
                 .appendDecl("  end;")
-                .appendDecl("  PrefixFooHelper = class helper for TFoo")
+                .appendDecl("  PrefixFooHelper = class helper for TxFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testExtendedTypePrefixesNotStrippedShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck("Th", "Tx"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TxFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  ThTxFooHelper = class helper for TxFoo")
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
@@ -91,7 +106,7 @@ class HelperNameCheckTest {
   }
 
   @Test
-  void testArbitraryTextShouldAddIssue() {
+  void testContainsOriginalNameShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new HelperNameCheck())
         .onFile(
@@ -99,9 +114,67 @@ class HelperNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  end;")
-                .appendDecl("  TabcFooHelper = class helper for TFoo // Noncompliant")
+                .appendDecl("  TAbcFooHelper = class helper for TFoo")
                 .appendDecl("  end;")
-                .appendDecl("  TFoodefHelper = class helper for TFoo // Noncompliant")
+                .appendDecl("  TFooAbcHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNoOriginalNameShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  THelper = class helper for TFoo // Noncompliant")
+                .appendDecl("  end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testOriginalNameInsideOtherWordShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TFootHelper = class helper for TFoo // Noncompliant")
+                .appendDecl("  end;")
+                .appendDecl("  TfooHelper = class helper for TFoo // Noncompliant")
+                .appendDecl("  end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testOriginalNameAnywhereShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TFootFooHelper = class helper for TFoo")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNotPascalCaseShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new HelperNameCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TmyFooHelper = class helper for TFoo // Noncompliant")
                 .appendDecl("  end;"))
         .verifyIssues();
   }
@@ -109,7 +182,7 @@ class HelperNameCheckTest {
   @Test
   void testNoSuffixShouldAddIssue() {
     CheckVerifier.newVerifier()
-        .withCheck(createCheck("T,Prefix"))
+        .withCheck(new HelperNameCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")

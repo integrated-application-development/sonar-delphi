@@ -21,8 +21,10 @@ package au.com.integradev.delphi.checks;
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
-import java.util.ArrayList;
+import com.google.common.collect.Streams;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -83,28 +85,16 @@ public class HelperNameCheck extends DelphiCheck {
       return false;
     }
 
-    var possibleNames = new ArrayList<String>();
-    possibleNames.add(extendedTypeName + "Helper");
-
-    for (String typePrefix : extendedTypePrefixesList) {
-      possibleNames.add(typePrefix + extendedTypeName + "Helper");
-
-      String baseClassName = StringUtils.removeStart(extendedTypeName, typePrefix);
-
-      // Prefix must be stripped and must be followed by a capital letter
-      if (baseClassName.equals(extendedTypeName)
-          || baseClassName.isEmpty()
-          || Character.isLowerCase(baseClassName.charAt(0))) {
-        continue;
-      }
-
-      possibleNames.add(baseClassName + "Helper");
-      for (String helperPrefix : helperPrefixesList) {
-        possibleNames.add(helperPrefix + baseClassName + "Helper");
-      }
-    }
-
-    return possibleNames.stream().anyMatch(possibleName -> possibleName.equals(helperName));
+    return Streams.concat(
+            extendedTypePrefixesList.stream()
+                .filter(extendedTypeName::startsWith)
+                .map(prefix -> StringUtils.removeStart(extendedTypeName, prefix)),
+            Stream.of(extendedTypeName))
+        .anyMatch(
+            extendedNameNoPrefix ->
+                Pattern.compile(Pattern.quote(extendedNameNoPrefix) + "([A-Z]|$)")
+                    .matcher(helperName)
+                    .find());
   }
 
   @Override
