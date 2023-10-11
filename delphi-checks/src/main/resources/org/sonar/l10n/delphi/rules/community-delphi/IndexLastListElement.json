@@ -1,0 +1,21 @@
+{
+  "title": "The last element in a `TList` descendant should be retrieved with the `Last` method.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    }
+  },
+  "tags": [
+    "clumsy"
+  ],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

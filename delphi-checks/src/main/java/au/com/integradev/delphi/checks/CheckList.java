@@ -81,6 +81,7 @@ public final class CheckList {
           HelperNameCheck.class,
           IfThenShortCircuitCheck.class,
           ImportSpecificityCheck.class,
+          IndexLastListElementCheck.class,
           InheritedMethodWithNoCodeCheck.class,
           InheritedTypeNameCheck.class,
           InlineAssemblyCheck.class,

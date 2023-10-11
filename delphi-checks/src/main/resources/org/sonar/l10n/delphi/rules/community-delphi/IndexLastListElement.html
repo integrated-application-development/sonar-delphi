@@ -1,0 +1,24 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Manually computing the index of the last element in a <code>TList</code> descendant is less clear
+  and less terse than using <code>TList.Last</code>. The <code>Last</code> method is equivalent in
+  functionality, and it's inlined so there shouldn't be any performance difference.
+</p>
+
+<h2>How to fix it</h2>
+<p>
+  Use <code>TList.Last</code> instead of indexing with <code>Count - 1</code>.
+</p>
+
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/Special:Search/System.Generics.Collections.TList.Last">
+      RAD Studio documentation: System.Generics.Collections.TList.Last
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/Libraries/en/Special:Search/System.Classes.TList.Last">
+      RAD Studio documentation: System.Classes.TList.Last
+    </a>
+  </li>
+</ul>
