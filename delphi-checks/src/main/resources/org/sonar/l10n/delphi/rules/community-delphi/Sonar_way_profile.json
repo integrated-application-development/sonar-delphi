@@ -35,6 +35,7 @@
     "HelperName",
     "IfThenShortCircuit",
     "ImportSpecificity",
+    "IndexLastListElement",
     "InheritedMethodWithNoCode",
     "InlineDeclarationCapturedByAnonymousMethod",
     "InstanceInvokedConstructor",
