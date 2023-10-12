@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
@@ -35,6 +35,7 @@ import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
+import com.google.common.base.Splitter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -52,6 +53,8 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -70,8 +73,9 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
  *     InternalCheckVerifier </a>
  */
 public class CheckVerifierImpl implements CheckVerifier {
+  private static final Logger LOG = LoggerFactory.getLogger(CheckVerifierImpl.class);
   private DelphiCheck check;
-  private DelphiTestFileBuilder<?> builder;
+  private DelphiTestFile builder;
   private final Set<String> unitScopeNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
   private final Map<String, String> unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   private final List<DelphiTestUnitBuilder> searchPathUnits = new ArrayList<>();
@@ -109,7 +113,7 @@ public class CheckVerifierImpl implements CheckVerifier {
   }
 
   @Override
-  public CheckVerifier onFile(DelphiTestFileBuilder<?> builder) {
+  public CheckVerifier onFile(DelphiTestFile builder) {
     requireUnassigned(this.builder, "file");
     this.builder = builder;
     return this;
@@ -201,7 +205,11 @@ public class CheckVerifierImpl implements CheckVerifier {
     requireAssigned(check, "check");
     requireAssigned(builder, "file");
 
-    builder.printSourceCode();
+    List<String> lines = Splitter.on('\n').splitToList(builder.getSourceCode());
+    for (int lineNum = 0; lineNum < lines.size(); ++lineNum) {
+      String printLine = String.format("%03d %s", lineNum + 1, lines.get(lineNum));
+      LOG.info(printLine);
+    }
 
     Path standardLibraryPath = createStandardLibrary();
 
@@ -519,7 +527,7 @@ public class CheckVerifierImpl implements CheckVerifier {
   private SearchPath createSearchPath() {
     return SearchPath.create(
         searchPathUnits.stream()
-            .map(DelphiTestFileBuilder::inputFile)
+            .map(DelphiTestFile::inputFile)
             .map(InputFile::uri)
             .map(DelphiUtils::uriToAbsolutePath)
             .map(Path::of)

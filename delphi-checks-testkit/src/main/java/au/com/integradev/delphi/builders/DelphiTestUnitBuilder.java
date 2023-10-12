@@ -22,53 +22,63 @@
  */
 package au.com.integradev.delphi.builders;
 
-public final class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
+public class DelphiTestUnitBuilder
+    implements BuildableDelphiTestFile, DelphiTestFileBuilder<DelphiTestUnitBuilder> {
 
   private String unitName = "Test";
+  private final StringBuilder declaration = new StringBuilder();
+  private final StringBuilder implementation = new StringBuilder();
 
   @Override
-  protected DelphiTestUnitBuilder getThis() {
-    return this;
-  }
-
-  @Override
-  protected StringBuilder generateSourceCode() {
+  public String getSourceCode() {
     StringBuilder source = new StringBuilder();
     source.append(String.format("unit %s;\n", this.unitName));
     source.append("\n");
     source.append("interface\n");
     source.append("\n");
 
-    if (!getDeclaration().isEmpty()) {
-      source.append(getDeclaration());
+    if (!this.declaration.toString().isEmpty()) {
+      source.append(this.declaration);
       source.append("\n");
     }
 
     source.append("implementation\n");
     source.append("\n");
 
-    if (!getImplementation().isEmpty()) {
-      source.append(this.getImplementation());
+    if (!this.implementation.toString().isEmpty()) {
+      source.append(this.implementation);
       source.append("\n");
     }
 
     source.append("end.\n");
-
-    return source;
+    return source.toString();
   }
 
   @Override
-  protected String getFilename() {
+  public String getFileName() {
     return unitName;
   }
 
   @Override
-  protected String getExtension() {
+  public String getExtension() {
     return "pas";
   }
 
+  @Override
+  public DelphiTestUnitBuilder appendDecl(String value) {
+    declaration.append(value).append("\n");
+    return this;
+  }
+
+  @Override
+  public DelphiTestUnitBuilder appendImpl(String value) {
+    implementation.append(value).append("\n");
+    return this;
+  }
+
+  @Override
   public DelphiTestUnitBuilder unitName(String unitName) {
     this.unitName = unitName;
-    return getThis();
+    return this;
   }
 }

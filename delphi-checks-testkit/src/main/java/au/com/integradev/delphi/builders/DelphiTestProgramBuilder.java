@@ -19,54 +19,63 @@
 package au.com.integradev.delphi.builders;
 
 public final class DelphiTestProgramBuilder
-    extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
+    implements BuildableDelphiTestFile, DelphiTestFileBuilder<DelphiTestProgramBuilder> {
   private String programName = "omTestProgram";
-
-  @Override
-  protected DelphiTestProgramBuilder getThis() {
-    return this;
-  }
+  private final StringBuilder declaration = new StringBuilder();
+  private final StringBuilder implementation = new StringBuilder();
 
   @Override
   public DelphiTestProgramBuilder appendImpl(String value) {
     // Just adding a tab for pretty-printing.
-    return super.appendImpl("  " + value);
+    implementation.append("  ").append(value).append("\n");
+    return this;
   }
 
   @Override
-  protected StringBuilder generateSourceCode() {
+  public DelphiTestProgramBuilder appendDecl(String value) {
+    declaration.append(value).append("\n");
+    return this;
+  }
+
+  @Override
+  public String getSourceCode() {
     StringBuilder source = new StringBuilder();
     source.append(String.format("program %s;\n", this.programName));
     source.append("\n");
 
-    if (!getDeclaration().isEmpty()) {
-      source.append(getDeclaration());
+    if (!this.declaration.toString().isEmpty()) {
+      source.append(this.declaration);
       source.append("\n");
     }
 
     source.append("begin\n");
 
-    if (!getImplementation().isEmpty()) {
-      source.append(this.getImplementation());
+    if (!this.implementation.toString().isEmpty()) {
+      source.append(this.implementation);
     }
 
     source.append("end.\n");
-
-    return source;
+    return source.toString();
   }
 
   @Override
-  protected String getFilename() {
+  public String getFileName() {
     return programName;
   }
 
   @Override
-  protected String getExtension() {
+  public String getExtension() {
     return "dpr";
   }
 
-  public DelphiTestProgramBuilder programName(String programName) {
-    this.programName = programName;
-    return getThis();
+  public DelphiTestProgramBuilder programName(String value) {
+    this.programName = value;
+    return this;
+  }
+
+  @Override
+  public DelphiTestProgramBuilder unitName(String value) {
+    this.programName = value;
+    return this;
   }
 }

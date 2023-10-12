@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class UnitLevelKeywordIndentationCheckTest {
   void testIndentedProgramShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnitLevelKeywordIndentationCheck())
-        .onFile(DelphiTestFileBuilder.fromResource(INDENTED_DPR))
+        .onFile(DelphiTestFile.fromResource(INDENTED_DPR))
         .verifyIssueOnLine(1, 3, 8, 10);
   }
 
@@ -45,7 +45,7 @@ class UnitLevelKeywordIndentationCheckTest {
   void testIndentedUnitShouldAddIssues() {
     CheckVerifier.newVerifier()
         .withCheck(new UnitLevelKeywordIndentationCheck())
-        .onFile(DelphiTestFileBuilder.fromResource(INDENTED_PAS))
+        .onFile(DelphiTestFile.fromResource(INDENTED_PAS))
         .verifyIssueOnLine(1, 3, 5, 9, 13, 15, 19, 23, 25, 27);
   }
 
@@ -68,7 +68,7 @@ class UnitLevelKeywordIndentationCheckTest {
   void testUnindentedKeywordsShouldNotAddIssue(String correctFile) {
     CheckVerifier.newVerifier()
         .withCheck(new UnitLevelKeywordIndentationCheck())
-        .onFile(DelphiTestFileBuilder.fromResource(correctFile))
+        .onFile(DelphiTestFile.fromResource(correctFile))
         .verifyNoIssues();
   }
 }
