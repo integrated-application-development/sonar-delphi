@@ -20,6 +20,7 @@ package au.com.integradev.delphi.builders;
 
 public final class DelphiTestProgramBuilder
     implements BuildableDelphiTestFile, DelphiTestFileBuilder<DelphiTestProgramBuilder> {
+  private static final String EXTENSION = ".dpr";
   private String programName = "omTestProgram";
   private final StringBuilder declaration = new StringBuilder();
   private final StringBuilder implementation = new StringBuilder();
@@ -81,21 +82,10 @@ public final class DelphiTestProgramBuilder
 
   @Override
   public String getFileName() {
-    return programName;
-  }
-
-  @Override
-  public String getExtension() {
-    return "dpr";
+    return programName + EXTENSION;
   }
 
   public DelphiTestProgramBuilder programName(String value) {
-    this.programName = value;
-    return this;
-  }
-
-  @Override
-  public DelphiTestProgramBuilder unitName(String value) {
     this.programName = value;
     return this;
   }

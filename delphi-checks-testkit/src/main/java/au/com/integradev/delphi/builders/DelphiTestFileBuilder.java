@@ -22,6 +22,4 @@ public interface DelphiTestFileBuilder<T extends DelphiTestFileBuilder<T>> {
   T appendDecl(String value);
 
   T appendImpl(String value);
-
-  T unitName(String value);
 }

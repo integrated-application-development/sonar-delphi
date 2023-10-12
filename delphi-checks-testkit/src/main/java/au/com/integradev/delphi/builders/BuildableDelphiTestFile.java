@@ -34,15 +34,13 @@ public interface BuildableDelphiTestFile extends DelphiTestFile {
 
   String getFileName();
 
-  String getExtension();
-
   @Override
   default InputFile inputFile() {
     try {
       File baseDir = Files.createTempDirectory("baseDir").toFile();
       baseDir.deleteOnExit();
 
-      File file = baseDir.toPath().resolve(getFileName() + "." + getExtension()).toFile();
+      File file = baseDir.toPath().resolve(getFileName()).toFile();
       file.deleteOnExit();
 
       try (FileWriter fileWriter = new FileWriter(file, UTF_8)) {

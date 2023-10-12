@@ -25,6 +25,7 @@ package au.com.integradev.delphi.builders;
 public class DelphiTestUnitBuilder
     implements BuildableDelphiTestFile, DelphiTestFileBuilder<DelphiTestUnitBuilder> {
 
+  private static final String EXTENSION = ".pas";
   private String unitName = "Test";
   private final StringBuilder declaration = new StringBuilder();
   private final StringBuilder implementation = new StringBuilder();
@@ -77,12 +78,7 @@ public class DelphiTestUnitBuilder
 
   @Override
   public String getFileName() {
-    return unitName;
-  }
-
-  @Override
-  public String getExtension() {
-    return "pas";
+    return unitName + EXTENSION;
   }
 
   @Override
@@ -97,7 +93,6 @@ public class DelphiTestUnitBuilder
     return this;
   }
 
-  @Override
   public DelphiTestUnitBuilder unitName(String unitName) {
     this.unitName = unitName;
     return this;
