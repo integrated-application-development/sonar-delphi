@@ -1,6 +1,7 @@
 {
   "name": "Sonar way",
   "ruleKeys": [
+    "AddressOfCharacterData",
     "AddressOfSubroutine",
     "AssertMessage",
     "AssignedAndFree",

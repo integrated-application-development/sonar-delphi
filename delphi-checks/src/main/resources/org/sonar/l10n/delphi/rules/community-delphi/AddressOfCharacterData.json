@@ -1,0 +1,19 @@
+{
+  "title": "The first character in a string should not be addressed by index.",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "logical",
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    }
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

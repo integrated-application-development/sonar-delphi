@@ -1,0 +1,30 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Using an array index to compute the address of the first character in a string can lead to a range
+  check error if range checking is enabled and the string is empty. When range checking is disabled,
+  such an expression evaluates to <code>nil</code>. In all cases except that of empty strings with
+  range checking enabled, casting to an <i>untyped</i> pointer type is equivalent.
+</p>
+<p>
+  If a non-nil pointer is required, then the result of the cast can be checked and handled
+  appropriately.
+</p>
+<p>
+  This is especially relevant to interactions with the WinAPI, where strings are always passed by
+  character pointer.
+</p>
+
+<h2>How to fix it</h2>
+<p>
+  Cast the string to <code>Pointer</code> to get the address of the first character without the
+  possibility of a range check error.
+</p>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/Alexandria/en/String_Types_(Delphi)#Mixing_Delphi_Strings_and_Null-Terminated_Strings">
+      RAD Studio documentation: String Types (Delphi)
+    </a>
+  </li>
+</ul>
