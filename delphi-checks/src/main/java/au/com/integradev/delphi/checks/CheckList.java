@@ -27,6 +27,7 @@ public final class CheckList {
   private static final List<Class<? extends DelphiCheck>> ALL_CHECKS =
       List.of(
           // Listed alphabetically
+          AddressOfCharacterDataCheck.class,
           AddressOfSubroutineCheck.class,
           AssertMessageCheck.class,
           AssignedAndFreeCheck.class,

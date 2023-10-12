@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `DigitSeparator` analysis rule, which flags numeric literals that should use digit separators to
   improve readability.
 - `DigitGrouping` analysis rule, which flags numeric literals that use non-standard digit groupings.
+- `AddressOfCharacterData` analysis rule, which flags attempts to manually get the address of the
+  first character in a string.
 
 ### Changed
 
