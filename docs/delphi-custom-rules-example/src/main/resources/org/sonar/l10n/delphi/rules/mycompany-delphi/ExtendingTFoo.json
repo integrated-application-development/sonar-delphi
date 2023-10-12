@@ -6,6 +6,12 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
+  "code": {
+    "attribute": "MODULAR",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
   "tags": [
     "example"
   ],

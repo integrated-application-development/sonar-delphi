@@ -6,6 +6,12 @@
     "func": "Constant\/Issue",
     "constantCost": "10min"
   },
+  "code": {
+    "attribute": "FOCUSED",
+    "impacts": {
+      "MAINTAINABILITY": "HIGH"
+    }
+  },
   "tags": [
     "pitfall"
   ],
