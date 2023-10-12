@@ -55,6 +55,27 @@ public class DelphiTestUnitBuilder
   }
 
   @Override
+  public int[] getOffset(DelphiTestFileBuilderOffset offset) {
+    int sectionOffset;
+    int declCount = (int) this.declaration.toString().lines().count();
+    int declOffset = declCount == 0 ? declCount : (declCount + 1);
+    switch (offset.getSection()) {
+      case Start:
+        sectionOffset = 0;
+        break;
+      case Declaration:
+        sectionOffset = 4;
+        break;
+      case Implementation:
+        sectionOffset = 6 + declOffset;
+        break;
+      default:
+        throw new UnsupportedOperationException("Unsupported builder offset section");
+    }
+    return offset.getOffsetLines(sectionOffset);
+  }
+
+  @Override
   public String getFileName() {
     return unitName;
   }

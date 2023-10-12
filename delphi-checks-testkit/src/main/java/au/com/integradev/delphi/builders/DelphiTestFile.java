@@ -39,6 +39,8 @@ import org.apache.commons.io.FileUtils;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public interface DelphiTestFile {
@@ -57,6 +59,8 @@ public interface DelphiTestFile {
         .setType(InputFile.Type.MAIN)
         .build();
   }
+
+  int[] getOffset(DelphiTestFileBuilderOffset offset);
 
   default DelphiInputFile delphiFile() {
     return DelphiInputFile.from(inputFile(), mockConfig());
@@ -99,6 +103,27 @@ public interface DelphiTestFile {
     @Override
     public InputFile inputFile() {
       return createInputFile(resource.getParentFile(), resource);
+    }
+
+    @Override
+    public int[] getOffset(DelphiTestFileBuilderOffset offset) {
+      int sectionOffset;
+      switch (offset.getSection()) {
+        case Start:
+          sectionOffset = 0;
+          break;
+        case Declaration:
+          sectionOffset =
+              parse().getFirstDescendantOfType(InterfaceSectionNode.class).getBeginLine();
+          break;
+        case Implementation:
+          sectionOffset =
+              parse().getFirstDescendantOfType(ImplementationSectionNode.class).getBeginLine();
+          break;
+        default:
+          throw new UnsupportedOperationException("Unsupported builder offset section");
+      }
+      return offset.getOffsetLines(sectionOffset);
     }
   }
 }

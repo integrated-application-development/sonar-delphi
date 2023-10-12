@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.checks.verifier;
 
 import au.com.integradev.delphi.builders.DelphiTestFile;
+import au.com.integradev.delphi.builders.DelphiTestFileBuilderOffset;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
@@ -40,6 +41,8 @@ public interface CheckVerifier {
   CheckVerifier onFile(DelphiTestFile builder);
 
   void verifyIssueOnLine(int... lines);
+
+  void verifyIssueOnLine(DelphiTestFileBuilderOffset... offsets);
 
   void verifyIssueOnFile();
 

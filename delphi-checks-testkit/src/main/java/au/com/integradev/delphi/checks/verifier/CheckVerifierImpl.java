@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.builders.DelphiTestFile;
+import au.com.integradev.delphi.builders.DelphiTestFileBuilderOffset;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
@@ -51,6 +52,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -165,6 +167,15 @@ public class CheckVerifierImpl implements CheckVerifier {
       }
       throw new AssertionError(message.toString());
     }
+  }
+
+  @Override
+  public void verifyIssueOnLine(DelphiTestFileBuilderOffset... offsets) {
+    int[] offsetLines =
+        Stream.of(offsets)
+            .flatMapToInt(offset -> Arrays.stream(this.builder.getOffset(offset)))
+            .toArray();
+    verifyIssueOnLine(offsetLines);
   }
 
   @Override
