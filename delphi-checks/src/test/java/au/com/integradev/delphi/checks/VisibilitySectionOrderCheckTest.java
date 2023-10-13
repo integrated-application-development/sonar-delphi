@@ -84,7 +84,7 @@ class VisibilitySectionOrderCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
-                .appendDecl("  public // Noncompliant")
+                .appendDecl("  public")
                 .appendDecl("    procedure Bar;")
                 .appendDecl("    property Baz: Integer;")
                 .appendDecl("  public")
@@ -115,6 +115,44 @@ class VisibilitySectionOrderCheckTest {
   }
 
   @Test
+  void testMultipleReferencedOutOfOrderSectionsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    type TBar = string;")
+                .appendDecl("  public")
+                .appendDecl("    const CBaz = 'abcd';")
+                .appendDecl("  private")
+                .appendDecl("    procedure Flarp(Arg: TBar = CBaz);")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutOfOrderSectionAfterMultipleReferencedOutOfOrderSectionsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  protected")
+                .appendDecl("    FMyVar: Integer;")
+                .appendDecl("  public")
+                .appendDecl("    type TBar = string;")
+                .appendDecl("  public")
+                .appendDecl("    const CBaz = 'abcd';")
+                .appendDecl("  private // Noncompliant")
+                .appendDecl("    procedure Flarp(Arg: TBar = CBaz);")
+                .appendDecl(" end;"))
+        .verifyIssues();
+  }
+
+  @Test
   void testImplicitPublishedFollowedByPrivateShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilitySectionOrderCheck())
@@ -125,6 +163,111 @@ class VisibilitySectionOrderCheckTest {
                 .appendDecl("    procedure Bar;")
                 .appendDecl("  private")
                 .appendDecl("    procedure Baz;")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutOfOrderUnreferencedVisibilitySectionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    const")
+                .appendDecl("      CMyConst = 'abcd';")
+                .appendDecl("    type")
+                .appendDecl("      TBar = TFlarp;")
+                .appendDecl("    FZorp: string;")
+                .appendDecl("    function GetMyInt: Integer;")
+                .appendDecl("  private // Noncompliant")
+                .appendDecl("    procedure Baz;")
+                .appendDecl(" end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testOutOfOrderVisibilitySectionWithReferencedConstantShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    const")
+                .appendDecl("      CMyConst = 'abcd';")
+                .appendDecl("    type")
+                .appendDecl("      TBar = TFlarp;")
+                .appendDecl("    FZorp: string;")
+                .appendDecl("    function GetMyInt: Integer;")
+                .appendDecl("  private")
+                .appendDecl("    procedure Baz(MyArg: string = CMyConst);")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutOfOrderVisibilitySectionWithReferencedTypeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    const")
+                .appendDecl("      CMyConst = 'abcd';")
+                .appendDecl("    type")
+                .appendDecl("      TBar = TFlarp;")
+                .appendDecl("    FZorp: string;")
+                .appendDecl("    function GetMyInt: Integer;")
+                .appendDecl("  private")
+                .appendDecl("    procedure Baz(MyArg: TBar);")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutOfOrderVisibilitySectionWithReferencedVarShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    const")
+                .appendDecl("      CMyConst = 'abcd';")
+                .appendDecl("    type")
+                .appendDecl("      TBar = TFlarp;")
+                .appendDecl("    FZorp: string;")
+                .appendDecl("    function GetMyInt: Integer;")
+                .appendDecl("  private")
+                .appendDecl("    property Baz: string read FZorp;")
+                .appendDecl(" end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutOfOrderVisibilitySectionWithReferencedFunctionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilitySectionOrderCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    const")
+                .appendDecl("      CMyConst = 'abcd';")
+                .appendDecl("    type")
+                .appendDecl("      TBar = TFlarp;")
+                .appendDecl("    FZorp: string;")
+                .appendDecl("    function GetMyInt: Integer;")
+                .appendDecl("  private")
+                .appendDecl("    property Baz: Integer read GetMyInt;")
                 .appendDecl(" end;"))
         .verifyNoIssues();
   }

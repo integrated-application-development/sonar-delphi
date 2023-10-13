@@ -12,6 +12,24 @@
   <li>public</li>
   <li>published</li>
 </ol>
+<h3>Exceptions</h3>
+<p>
+  This rule excludes cases where visibility sections declare a member that is used in later
+  visibility sections, such as the below:
+</p>
+<pre>
+type
+  TMyType = class(TObject)
+  public
+    type
+      TMySubType = class(TObject);
+      end;
+  private
+    procedure DoSecretThing(Obj: TMySubType);
+  public
+    procedure DoPublicThing(Obj: TMySubType);
+  end;
+</pre>
 <h2>How to fix it</h2>
 <p>Reorder the visibility sections within the type declaration into ascending order.</p>
 <h2>Resources</h2>
