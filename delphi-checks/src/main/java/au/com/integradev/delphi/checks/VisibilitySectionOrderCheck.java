@@ -19,17 +19,31 @@
 package au.com.integradev.delphi.checks;
 
 import com.google.common.collect.Maps;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "VisibilitySectionOrderRule", repositoryKey = "delph")
@@ -56,18 +70,98 @@ public class VisibilitySectionOrderCheck extends DelphiCheck {
 
   private void checkOrder(
       List<VisibilitySectionNode> visibilitySections, DelphiCheckContext context) {
-    int currentVisibilityOrder = VISIBILITY_ORDER.get(VisibilityType.IMPLICIT_PUBLISHED);
+    if (visibilitySections.size() < 2) {
+      return;
+    }
 
-    for (var visibilitySection : visibilitySections) {
-      int sectionVisibilityOrder = VISIBILITY_ORDER.get(visibilitySection.getVisibility());
+    Deque<VisibilitySectionNode> pastSections = new ArrayDeque<>();
+    pastSections.add(visibilitySections.get(0));
 
-      if (sectionVisibilityOrder >= currentVisibilityOrder) {
-        currentVisibilityOrder = sectionVisibilityOrder;
-      } else {
-        var visibilityNode = getVisibilityNode(visibilitySection);
-        reportIssue(
-            context, Objects.requireNonNullElse(visibilityNode, visibilitySection), MESSAGE);
+    for (int i = 1; i < visibilitySections.size(); i++) {
+      VisibilitySectionNode thisSection = visibilitySections.get(i);
+      VisibilitySectionNode lastSection = pastSections.peek();
+
+      int thisSectionVisibility = VISIBILITY_ORDER.get(thisSection.getVisibility());
+
+      // If this section has a lower visibility than the last section...
+      if (lastSection != null
+          && VISIBILITY_ORDER.get(lastSection.getVisibility()) > thisSectionVisibility) {
+        // Remove excluded sections until a non-excluded one is found
+        while (lastSection != null && isExcludedSection(lastSection)) {
+          pastSections.pop();
+          lastSection = pastSections.peek();
+        }
+
+        // If the nearest non-excluded section is higher visibility, report an issue
+        if (lastSection != null
+            && VISIBILITY_ORDER.get(lastSection.getVisibility()) > thisSectionVisibility) {
+          report(context, thisSection);
+        }
       }
+
+      pastSections.add(thisSection);
+    }
+  }
+
+  private void report(DelphiCheckContext context, VisibilitySectionNode visibilitySection) {
+    var visibilityNode = getVisibilityNode(visibilitySection);
+    reportIssue(context, Objects.requireNonNullElse(visibilityNode, visibilitySection), MESSAGE);
+  }
+
+  private boolean isExcludedSection(VisibilitySectionNode visibilitySection) {
+    return visibilitySection.getChildren().stream().anyMatch(this::hasUsagesInsideType);
+  }
+
+  private boolean hasUsagesInsideType(DelphiNode node) {
+    StructTypeNode structNode = node.getFirstParentOfType(StructTypeNode.class);
+    return getVisibilitySectionItemUsages(node).stream()
+        .anyMatch(usage -> isInsideNode(structNode, usage.getLocation()));
+  }
+
+  private boolean isInsideNode(StructTypeNode structNode, Node node) {
+    if (!node.getScope()
+        .getEnclosingScope(FileScope.class)
+        .equals(structNode.getScope().getEnclosingScope(FileScope.class))) {
+      return false;
+    }
+
+    boolean afterStart =
+        structNode.getBeginLine() < node.getBeginLine()
+            || (structNode.getBeginLine() == node.getBeginLine()
+                && structNode.getBeginColumn() <= node.getBeginColumn());
+    boolean beforeEnd =
+        structNode.getEndLine() > node.getEndLine()
+            || (structNode.getEndLine() == node.getEndLine()
+                && structNode.getEndColumn() >= node.getEndColumn());
+
+    return afterStart && beforeEnd;
+  }
+
+  private List<NameOccurrence> getVisibilitySectionItemUsages(DelphiNode node) {
+    if (node instanceof MethodDeclarationNode) {
+      return ((MethodDeclarationNode) node).getMethodNameNode().getUsages();
+    } else if (node instanceof FieldSectionNode) {
+      return ((FieldSectionNode) node)
+          .getDeclarations().stream()
+              .flatMap(
+                  declarationNode ->
+                      declarationNode.getDeclarationList().getDeclarations().stream()
+                          .map(NameDeclarationNode::getUsages)
+                          .flatMap(Collection::stream))
+              .collect(Collectors.toList());
+    } else if (node instanceof ConstSectionNode) {
+      return node.findChildrenOfType(ConstDeclarationNode.class).stream()
+          .map(declarationNode -> declarationNode.getNameDeclarationNode().getUsages())
+          .flatMap(Collection::stream)
+          .collect(Collectors.toList());
+    } else if (node instanceof TypeSectionNode) {
+      return ((TypeSectionNode) node)
+          .getDeclarations().stream()
+              .map(typeDecl -> typeDecl.getTypeNameNode().getUsages())
+              .flatMap(Collection::stream)
+              .collect(Collectors.toList());
+    } else {
+      return Collections.emptyList();
     }
   }
 
