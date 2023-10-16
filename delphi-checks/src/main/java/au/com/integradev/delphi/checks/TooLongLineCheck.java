@@ -18,9 +18,11 @@
  */
 package au.com.integradev.delphi.checks;
 
+import java.util.function.IntPredicate;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
@@ -39,7 +41,13 @@ public class TooLongLineCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(DelphiAst ast, DelphiCheckContext context) {
+    IntPredicate isLineExcluded = getLineExclusionFilter(ast);
+
     for (int i = 0; i < context.getFileLines().size(); ++i) {
+      if (isLineExcluded.test(i)) {
+        continue;
+      }
+
       String line = context.getFileLines().get(i);
       int lineLength = getLineLength(line);
 
@@ -55,7 +63,18 @@ public class TooLongLineCheck extends DelphiCheck {
             .report();
       }
     }
+
     return context;
+  }
+
+  private static IntPredicate getLineExclusionFilter(DelphiAst ast) {
+    if (ast.isPackage() || ast.isProgram()) {
+      UsesClauseNode usesClause = ast.getFirstChildOfType(UsesClauseNode.class);
+      if (usesClause != null) {
+        return line -> usesClause.getBeginLine() <= line && usesClause.getEndLine() >= line;
+      }
+    }
+    return line -> false;
   }
 
   private static int getLineLength(String line) {

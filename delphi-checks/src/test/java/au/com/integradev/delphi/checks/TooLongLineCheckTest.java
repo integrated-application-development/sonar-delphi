@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.builders.DelphiTestProgramBuilder;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,20 @@ class TooLongLineCheckTest {
                     "  FMessage := 'This line is not too long, but there is trailing whitespace.';"
                         + "                               ")
                 .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testProgramImportShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooLongLineCheck())
+        .onFile(
+            new DelphiTestProgramBuilder()
+                .appendDecl("uses")
+                .appendDecl(
+                    "  Fooooooooooooooooooooooooooooooooooooooooooooooooo"
+                        + ".Baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar"
+                        + ".Baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaz;"))
         .verifyNoIssues();
   }
 }
