@@ -21,6 +21,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 
 import au.com.integradev.delphi.antlr.DelphiParser;
+import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import com.google.common.base.Preconditions;
@@ -213,7 +214,7 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
 
   @Override
   public List<DelphiToken> getComments() {
-    return getAst().getCommentsInsideNode(this);
+    return ((DelphiAstImpl) getAst()).getCommentsInsideNode(this);
   }
 
   @Override

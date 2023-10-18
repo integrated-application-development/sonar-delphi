@@ -27,6 +27,7 @@ import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
@@ -86,11 +87,6 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
   }
 
   @Override
-  public List<DelphiToken> getCommentsInsideNode(DelphiNode node) {
-    return getCommentsBetweenTokens(node.getFirstToken(), node.getLastToken());
-  }
-
-  @Override
   public List<DelphiToken> getTokens() {
     return delphiFile.getTokens();
   }
@@ -123,5 +119,19 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
   @Override
   public boolean isPackage() {
     return !getChildren().isEmpty() && getFileHeader() instanceof PackageDeclarationNode;
+  }
+
+  public List<DelphiToken> getCommentsInsideNode(DelphiNode node) {
+    return getCommentsBetweenTokens(node.getFirstToken(), node.getLastToken());
+  }
+
+  private List<DelphiToken> getCommentsBetweenTokens(DelphiToken first, DelphiToken last) {
+    return getComments().stream()
+        .filter(
+            token -> {
+              int index = token.getIndex();
+              return index > first.getIndex() && index < last.getIndex();
+            })
+        .collect(Collectors.toList());
   }
 }
