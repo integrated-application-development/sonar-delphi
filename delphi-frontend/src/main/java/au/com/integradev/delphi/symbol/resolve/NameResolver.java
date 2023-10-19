@@ -24,6 +24,7 @@ import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unk
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.voidType;
 
+import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
@@ -751,7 +752,7 @@ public class NameResolver {
         if (propertyDeclaration instanceof PropertyNameDeclaration) {
           NameOccurrenceImpl implicitOccurrence = new NameOccurrenceImpl(accessor);
           implicitOccurrence.setNameDeclaration(propertyDeclaration);
-          accessor.setImplicitNameOccurrence(implicitOccurrence);
+          ((ArrayAccessorNodeImpl) accessor).setImplicitNameOccurrence(implicitOccurrence);
           ((DelphiScopeImpl) propertyDeclaration.getScope()).addNameOccurrence(implicitOccurrence);
           registerOccurrence(implicitOccurrence);
         }

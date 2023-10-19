@@ -49,14 +49,13 @@ public final class ArrayAccessorNodeImpl extends DelphiNodeImpl implements Array
   }
 
   @Override
-  public void setImplicitNameOccurrence(NameOccurrence implicitNameOccurrence) {
-    this.implicitNameOccurrence = implicitNameOccurrence;
-  }
-
-  @Override
   @Nullable
   public NameOccurrence getImplicitNameOccurrence() {
     return implicitNameOccurrence;
+  }
+
+  public void setImplicitNameOccurrence(NameOccurrence implicitNameOccurrence) {
+    this.implicitNameOccurrence = implicitNameOccurrence;
   }
 
   @Override

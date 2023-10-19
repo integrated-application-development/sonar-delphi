@@ -20,6 +20,7 @@ package au.com.integradev.delphi.symbol.scope;
 
 import static java.util.function.Predicate.not;
 
+import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
@@ -176,7 +177,8 @@ abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope {
 
   @Override
   public void attach(ArrayAccessorNode node) {
-    node.setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+    ((ArrayAccessorNodeImpl) node)
+        .setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
   }
 
   @Override

@@ -25,8 +25,6 @@ import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 public interface ArrayAccessorNode extends DelphiNode {
   List<ExpressionNode> getExpressions();
 
-  void setImplicitNameOccurrence(NameOccurrence implicitNameOccurrence);
-
   @Nullable
   NameOccurrence getImplicitNameOccurrence();
 }
