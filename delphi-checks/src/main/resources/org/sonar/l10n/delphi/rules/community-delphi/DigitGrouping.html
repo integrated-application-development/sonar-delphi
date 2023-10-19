@@ -1,0 +1,54 @@
+<h2>Why is this an issue?</h2>
+<p>From Delphi 11 onwards, digit separators <code>_</code> can be used to split numeric literals
+  into groups.</p>
+<p>
+  To improve readability, this rule verifies that numeric literals using separators have groups of a
+  standard, homogeneous size.
+</p>
+<ul>
+  <li>Decimal literals: groups of 3 digits</li>
+  <li>Hexadecimal literals: groups of 2 or 4 digits</li>
+  <li>Binary literals: groups of 2, 3, or 4 digits</li>
+</ul>
+
+<b>Noncompliant code example</b>
+<pre>
+  const
+    WrongGroupSize = 1_0000;     // Noncompliant; using groups of 4 instead of 3
+    MixedGroupSize = $F_7F_FFFF; // Noncompliant; using mixed group sizes
+</pre>
+
+<b>Compliant code example</b>
+<pre>
+  const
+    DecimalInt       = 10_000;
+    HexadecimalInt2  = $7_FF_FF;
+    HexadecimalInt4  = $7_FFFF;
+    BinaryInt2       = %0_10_10;
+    BinaryInt3       = %01_010;
+    BinaryInt4       = %0_1010;
+    LongDecimalFloat = 10_000.0;
+    FloatWithAnySeps = 10.0_0_00_1;
+</pre>
+
+<h2>Exceptions</h2>
+<p>
+  Only the integer component of floating point numbers is checked for compliance; the fractional and
+  exponent parts are ignored.
+</p>
+
+<h2>How to fix it</h2>
+<ol>
+  <li>Pick an appropriate, standard digit group size from the above list.</li>
+  <li>Starting from the right, group the digits in the integer using <code>_</code> between groups.
+  </li>
+</ol>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/Alexandria/en/What's_New#Binary_Literals_and_Digit_Separator">
+      Delphi Alexandria Release Notes
+    </a>
+  </li>
+</ul>
