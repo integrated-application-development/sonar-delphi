@@ -1,0 +1,27 @@
+name: Inquiry
+description: Suggest an inquiry
+title: "[Inquiry]: "
+labels: ["question", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for inquiring about SonarDelphi!
+        Please make sure to be as specific as possible in your description and title.
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: |
+        Please check the following before making an inquiry.
+      options:
+        - label: This question has not already been answered.
+          required: true
+        - label: This question is about SonarDelphi, not SonarQube or Delphi.
+          required: true
+  - type: textarea
+    attributes:
+      label: Inquiry
+      description: |
+        What's your question?
+    validations:
+      required: true

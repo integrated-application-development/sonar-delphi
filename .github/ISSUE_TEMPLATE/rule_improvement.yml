@@ -1,0 +1,41 @@
+name: Rule Improvement
+description: Suggest a rule improvement
+title: "[Rule Improvement]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement!
+        Please make sure to be as specific as possible in your description and title.
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: |
+        Please check the following before suggesting a rule improvement:
+      options:
+        - label: This improvement has not already been suggested.
+          required: true
+        - label: This improvement should not be implemented as a separate rule.
+          required: true
+  - type: input
+    attributes:
+      label: Rule to improve
+      description: >
+        Supply the name of the rule that the improvement affects.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Improvement description
+      description: |
+        Describe the improvement. What's currently missing, or should be changed about the rule?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Rationale
+      description: |
+        Explain the utility of the proposed rule improvement. Why is this helpful? How does this improvement address the root problem?
+    validations:
+      required: true
