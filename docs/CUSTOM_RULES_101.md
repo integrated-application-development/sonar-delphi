@@ -1,13 +1,13 @@
 Writing Custom Delphi Rules 101
 ==========
 
-If you are using SonarQube along with the SonarDelphi Analyzer to analyze your projects, you might
+If you are using SonarQube along with SonarDelphi to analyze your projects, you might
 find that certain specific requirements of your company cannot be addressed by the existing rules.
 In such cases, the most suitable option would be to develop your own custom Delphi rules.
 
-This document introduces custom rule writing for the SonarDelphi Analyzer.
+This document introduces custom rule writing for SonarDelphi.
 It will cover all the main concepts of static analysis required to understand and develop effective
-rules, relying on the API provided by the SonarDelphi Analyzer.
+rules that rely on the API provided by SonarDelphi.
 
 ## Content
 
@@ -30,14 +30,14 @@ rules, relying on the API provided by the SonarDelphi Analyzer.
 
 ## Getting started
 
-The rules you develop will be delivered using a dedicated, custom plugin, relying on the
-**SonarDelphi Analyzer**. In order to start working efficiently, we provide a template Maven project
+The rules you develop will be delivered using a dedicated custom plugin that relies on
+**SonarDelphi**. In order to start working efficiently, we provide a template Maven project
 that you will fill in while following this tutorial.
 
 Grab the template project by:
 
 * cloning [this repository](https://github.com/integrated-application-development/sonar-delphi)
-* importing the
+* opening the
 [delphi-custom-rules-example](https://github.com/integrated-application-development/sonar-delphi/tree/master/docs/delphi-custom-rules-example)
 sub-module in your IDE
 
@@ -119,7 +119,7 @@ class MyFirstCustomCheckTest {
 
 2. In package `au.com.integradev.samples.delphi.checks` of `/src/main/java`, create a new class
    called `MyFirstCustomCheck` extending
-   class `org.sonar.plugins.communitydelphi.api.check.DelphiCheck` provided by the Delphi Plugin
+   class `org.sonar.plugins.communitydelphi.api.check.DelphiCheck` provided by the SonarDelphi
    API.
    This file will be described when dealing with the implementation of the rule!
 
@@ -264,7 +264,7 @@ are going to implement:
 * A function with a single parameter, but a different return type
 * A method with more than 1 parameter
 
-To do so, it relies on the usage of the `CheckVerifier` class, provided by the Delphi Analyzer
+To do so, it relies on the usage of the `CheckVerifier` class, provided by the SonarDelphi
 rule-testing API.
 This `CheckVerifier` class provides useful methods to validate rule implementations, allowing us to
 totally abstract all the mechanisms related to analyzer initialization.
@@ -287,10 +287,9 @@ java.lang.AssertionError: Issues were expected at [7]
 
 Before we start with the implementation of the rule itself, a little background is needed.
 
-Prior to running any rule, the SonarDelphi Analyzer parses a given Delphi code file and produces an
+Prior to running any rule, SonarDelphi parses a given Delphi code file and produces an
 equivalent data structure: the **Abstract Syntax Tree**.
-Each construction of the Delphi language can be represented with a specific kind of AST node,
-detailing each of its particularities.
+Each construction of the Delphi language can be represented with a specific kind of AST node.
 For instance, the node associated with the declaration of a method is defined by
 the `org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode` interface.
 
@@ -352,7 +351,7 @@ This time, we will need to use the semantic API!
 
 Up to now, our rule implementation only relied on the data provided directly by the AST that
 resulted from the parsing of the code.
-However, the SonarDelphi Analyzer provides a lot more regarding the code being analyzed, because it
+However, SonarDelphi provides a lot more regarding the code being analyzed, because it
 also constructs a ***semantic model*** of the code.
 This semantic model provides information related to each ***symbol*** being manipulated.
 For a method, for instance, the semantic API will provide useful data such as a method's declaring
@@ -416,7 +415,7 @@ If it passed...
 >
 > :tada: **Congratulations!** :confetti_ball:
 >
-> *You implemented your first custom rule for the SonarDelphi Analyzer!*
+> *You implemented your first custom rule for SonarDelphi!*
 >
 
 ### What you can use, and what you can't
@@ -424,14 +423,15 @@ If it passed...
 When writing custom Delphi rules, you can only use classes from
 package [org.sonar.plugins.communitydelphi.api](https://github.com/integrated-application-development/sonar-delphi/tree/master/delphi-frontend/src/main/java/org/sonar/plugins/communitydelphi/api).
 
-When browsing the existing rules from the SonarDelphi Analyzer, you will sometime notice the use of
+When browsing the existing rules from SonarDelphi, you will sometime notice the use of
 some other utility classes which are not part of the API.
 While these classes could be useful in your context, **these classes are not available at runtime**
 for custom rule plugins.
 It means that, while your unit tests are still going to pass when building your plugin, your rules
 will most likely make analysis **crash at analysis time**.
 
-Feel free to reach out through GitHub Discussions to suggest features and API improvements!
+Feel free to reach out through a [GitHub issue](https://github.com/integrated-application-development/sonar-delphi/issues)
+to suggest features and API improvements!
 
 ## Registering the rule in the custom plugin
 
@@ -467,10 +467,11 @@ We first need to populate the HTML file with some information that will help dev
 issue.
 
 ```html
+<h2>Why is this an issue?</h2>
 <p>For a method having a single parameter, the types of its return value and its parameter should
   never be the same.</p>
 
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant Code Example</h3>
 <pre>
 type
   TFoo = class
@@ -478,7 +479,7 @@ type
   end;
 </pre>
 
-<h2>Compliant Solution</h2>
+<h3>Compliant Solution</h3>
 <pre>
 type
   TFoo = class
@@ -496,6 +497,16 @@ to `src/main/resources/org/sonar/l10n/delphi/rules/mycompany-delphi/MyFirstCusto
   "title": "Return type and parameter of a method should not be the same",
   "type": "BUG",
   "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "DISTINCT",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
   "tags": [
     "bugs",
     "gandalf",
@@ -508,7 +519,10 @@ to `src/main/resources/org/sonar/l10n/delphi/rules/mycompany-delphi/MyFirstCusto
 
 With this example, we have a concise but descriptive `title` for our rule, the `type` of an issue it
 highlights, its `status` (ready or deprecated), the `tags` that should bring it up in a search,
-the `severity` of the issue, and the `scope` of the rule.
+the `severity` of the issue, and the `scope` of the rule. We've also included some clean `code` metadata:
+the [Clean Code attribute](https://docs.sonarsource.com/sonarqube/10.2/user-guide/clean-code/)
+`attribute` that the rule most embodies, as well as the [software quality](https://docs.sonarsource.com/sonarqube/10.2/user-guide/clean-code/)
+or qualities that it most `impacts`.
 
 ### Rule Activation
 
@@ -529,8 +543,8 @@ private static final List<Class<?extends DelphiCheck>> ALL_CHECKS =
 
 ### Rule Registrar
 
-Because your rules are relying on the Delphi Plugin API, you also need to tell the core SonarDelphi
-plugin that some new rules have to be retrieved.
+Because your rules will be run by the core SonarDelphi plugin, you also need to tell it
+that some new rules have to be retrieved.
 
 If you are using the template custom plugin for this tutorial, you should have everything
 done already, but feel free to have a look at the `MyDelphiFileCheckRegistrar.java` class, which
