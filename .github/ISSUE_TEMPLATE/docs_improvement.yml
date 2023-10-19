@@ -1,0 +1,34 @@
+name: Documentation Improvement
+description: Suggest a documentation improvement
+title: "[Docs Improvement]: "
+labels: ["documentation", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement to the SonarDelphi documentation!
+        Please make sure to be as specific as possible in your description and title.
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: |
+        Please check the following before suggesting a documentation improvement.
+      options:
+        - label: This improvement has not already been suggested.
+          required: true
+        - label: This improvement relates specifically to SonarDelphi, not SonarQube or Delphi.
+          required: true
+  - type: textarea
+    attributes:
+      label: Improvement description
+      description: |
+        Describe the improvement. What's currently missing, or should be changed?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Rationale
+      description: |
+        Explain the utility of the proposed improvement. Why is this beneficial?
+    validations:
+      required: true

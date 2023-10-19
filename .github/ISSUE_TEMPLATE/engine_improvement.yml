@@ -1,0 +1,48 @@
+name: Engine Improvement
+description: Suggest an engine improvement
+title: "[Engine Improvement]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement!
+        Please make sure to be as specific as possible in your description and title.
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: |
+        Please check the following before suggesting an engine improvement.
+      options:
+        - label: This improvement has not already been suggested.
+          required: true
+        - label: This improvement would be generally useful, not specific to my code or setup.
+          required: true
+  - type: dropdown
+    attributes:
+      label: Engine area
+      description: >
+        Supply the area of SonarDelphi that the improvement affects.
+      options:
+        - Delphi language support
+        - Rule execution
+        - Testing
+        - Metrics calculation
+        - Other
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Improvement description
+      description: |
+        Describe the improvement. What's currently missing, or should be changed?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Rationale
+      description: |
+        Explain the utility of the proposed improvement. Why is this beneficial?
+    validations:
+      required: true

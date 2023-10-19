@@ -1,0 +1,56 @@
+name: Bug Report
+description: Report a bug in SonarDelphi
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out a bug report!
+        Please make sure to be as specific as possible in your description and title.
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: |
+        Please check the following before filing a bug report.
+      options:
+        - label: This bug is in SonarDelphi, not SonarQube or my Delphi code.
+          required: true
+        - label: This bug has not already been reported.
+          required: true
+  - type: input
+    attributes:
+      label: SonarDelphi version
+      description: >
+        Specify the SonarDelphi version, including the Git commit hash if using a development build.
+        If you use a development build, please test if your issue is reproducible in a release version too.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: SonarQube version
+      description: >
+        If applicable, specify the SonarQube version you are using.
+      placeholder: "10.0"
+  - type: textarea
+    attributes:
+      label: Issue description
+      description: |
+        Describe your issue briefly. What doesn't work, and how do you expect it to work instead?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Provide steps that can be used to reproduce the issue. Issues that are not reproducible are
+        unlikely to be resolved. If you include a minimal Delphi project below, you can detail what to look for here.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Minimal Delphi code exhibiting the issue
+      description: |
+        If applicable, a zip file of a minimal Delphi project that exhibits the issue when scanned.
+        Drag and drop a ZIP archive to upload it.

@@ -1,0 +1,50 @@
+name: New Rule
+description: Propose a new rule
+title: "[New Rule]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a new rule!
+        Please make sure to be as specific as possible in your description and title.
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: |
+        Please check the following before proposing a new rule:
+      options:
+        - label: This rule has not already been suggested.
+          required: true
+        - label: This should be a new rule, not an improvement to an existing rule.
+          required: true
+        - label: This rule would be generally useful, not specific to my code or setup.
+          required: true
+  - type: input
+    attributes:
+      label: Suggested rule title
+      description: |
+        Provide a short description of the rule as it would appear on the SonarQube interface.
+
+        This should follow the [SonarSource rule title guidelines](https://docs.sonarsource.com/sonarqube/latest/extension-guide/adding-coding-rules/#titles):
+
+        * The title of the rule should follow the pattern "X should [not] Y", excepting finding rules, which should be "Track X"
+        * The positive form is preferred
+        * Titles should be written in plural form if possible
+        * Titles should be as concise as possible
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Rule description
+      description: |
+        Describe the proposed rule. What cases would it pick up, and how would it work?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Rationale
+      description: |
+        Explain the utility of the proposed rule. Why is this helpful? How does this rule address the root problem?
+    validations:
+      required: true
