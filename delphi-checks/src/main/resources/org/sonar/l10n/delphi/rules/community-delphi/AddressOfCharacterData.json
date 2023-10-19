@@ -7,7 +7,7 @@
     "constantCost": "1min"
   },
   "code": {
-    "attribute": "logical",
+    "attribute": "LOGICAL",
     "impacts": {
       "RELIABILITY": "MEDIUM"
     }
