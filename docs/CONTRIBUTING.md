@@ -38,5 +38,6 @@ When making a pull request, please do the following:
 * For new features, ensure that it has been proposed and discussed in an issue prior to making the pull request
 * Describe the contents of your pull request
 * Clearly explain the rationale for adding it to SonarDelphi
+* If you are implementing a rule, follow [the workflow for adding new rules](ADDING_NEW_RULES.md)
 
 Please note that SonarDelphi uses a rebase workflow, so PRs should have a clean and linear history.
