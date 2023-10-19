@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for identifiers prefixed with 2 ampersands (`&&`).
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.
 - `InlineAssembly` analysis rule, which flags inline assembly usage.
+- `DigitSeparator` analysis rule, which flags numeric literals that should use digit separators to
+  improve readability.
 
 ### Changed
 

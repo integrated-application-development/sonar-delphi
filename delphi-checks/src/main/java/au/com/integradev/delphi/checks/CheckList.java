@@ -50,6 +50,7 @@ public final class CheckList {
           DateFormatSettingsCheck.class,
           DestructorNameCheck.class,
           DestructorWithoutInheritedCheck.class,
+          DigitSeparatorCheck.class,
           EmptyArgumentListCheck.class,
           EmptyBlockCheck.class,
           EmptyFieldSectionCheck.class,
