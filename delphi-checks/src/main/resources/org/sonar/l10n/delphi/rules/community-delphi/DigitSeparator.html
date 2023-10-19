@@ -1,0 +1,47 @@
+<h2>Why is this an issue?</h2>
+<p>From Delphi 11 onwards, digit separators <code>_</code> can be used to split numeric literals into
+  groups.</p>
+<p>
+  To improve readability, this rule verifies that numeric literals above a configurable size
+  in digits use separators.
+</p>
+
+<b>Noncompliant code example</b>
+<pre>
+  const
+    DecimalInt     = 10000;      // Noncompliant; more than 4 digits without separators
+    HexadecimalInt = $7FFFF;     // Noncompliant; more than 4 digits without separators
+    BinaryInt      = %01010;     // Noncompliant; more than 4 digits without separators
+    Float          = 10000.0;    // Noncompliant; more than 4 (integer) digits without separators
+</pre>
+
+<b>Compliant code example</b>
+<pre>
+  const
+    DecimalInt       = 10_000;
+    HexadecimalInt   = $7_FFFF;
+    BinaryInt        = %0_10_10;
+    LongDecimalFloat = 10_000.0;
+    FloatWithAnySeps = 10.0_0_00_1;
+    FloatWithoutSeps = 10.00001;
+</pre>
+
+<h2>Exceptions</h2>
+<p>
+  Only the integer component of floating point numbers is checked for compliance; the fractional and
+  exponent parts are ignored.
+</p>
+
+<h2>How to fix it</h2>
+<ol>
+  <li>Group the digits in the number using <code>_</code> between groups.</li>
+</ol>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/Alexandria/en/What's_New#Binary_Literals_and_Digit_Separator">
+      Delphi Alexandria Release Notes
+    </a>
+  </li>
+</ul>
