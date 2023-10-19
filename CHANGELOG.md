@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `InlineAssembly` analysis rule, which flags inline assembly usage.
 - `DigitSeparator` analysis rule, which flags numeric literals that should use digit separators to
   improve readability.
+- `DigitGrouping` analysis rule, which flags numeric literals that use non-standard digit groupings.
 
 ### Changed
 

@@ -1,0 +1,21 @@
+{
+  "title": "Digit separators should be used with standard groupings",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "FORMATTED",
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    }
+  },
+  "tags": [
+    "convention"
+  ],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}
