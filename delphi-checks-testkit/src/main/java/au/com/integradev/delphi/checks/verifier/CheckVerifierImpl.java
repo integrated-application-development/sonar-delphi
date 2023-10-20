@@ -50,6 +50,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
@@ -120,6 +122,47 @@ public class CheckVerifierImpl implements CheckVerifier {
   }
 
   @Override
+  public void verifyIssues() {
+
+    List<Issue> issues = execute();
+
+    if (issues.isEmpty()) {
+      throw new AssertionError("No issue raised. At least one issue expected");
+    }
+
+    Pattern nonCompliantPattern = Pattern.compile("(?i)^//\\s*Noncompliant(?:@([-+]\\d+))?\\b");
+    List<Integer> expected =
+        testFile.delphiFile().getComments().stream()
+            .map(
+                c -> {
+                  Matcher matcher = nonCompliantPattern.matcher(c.getImage());
+                  if (!matcher.matches()) {
+                    return Optional.<Integer>empty();
+                  }
+
+                  var matchResult = matcher.toMatchResult();
+                  String offset = matchResult.group(1);
+                  if (offset == null) {
+                    return Optional.of(c.getBeginLine());
+                  }
+
+                  try {
+                    return Optional.of(c.getBeginLine() + Integer.parseInt(offset));
+                  } catch (NumberFormatException e) {
+                    throw new AssertionError(
+                        String.format(
+                            "Failed to parse 'Noncompliant' comment line offset '%s' as an"
+                                + " integer.",
+                            offset));
+                  }
+                })
+            .flatMap(Optional::stream)
+            .collect(Collectors.toList());
+
+    verifyIssuesOnLinesInternal(issues, expected);
+  }
+
+  @Override
   public void verifyIssueOnLine(int... lines) {
     if (lines.length == 0) {
       throw new AssertionError(
@@ -133,6 +176,10 @@ public class CheckVerifierImpl implements CheckVerifier {
     }
 
     List<Integer> expected = Arrays.stream(lines).sorted().boxed().collect(Collectors.toList());
+    verifyIssuesOnLinesInternal(issues, expected);
+  }
+
+  private static void verifyIssuesOnLinesInternal(List<Issue> issues, List<Integer> expected) {
     List<Integer> unexpectedLines = new ArrayList<>();
 
     for (Issue issue : issues) {

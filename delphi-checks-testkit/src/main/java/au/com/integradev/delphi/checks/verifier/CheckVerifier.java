@@ -46,4 +46,6 @@ public interface CheckVerifier {
   void verifyIssueOnProject();
 
   void verifyNoIssues();
+
+  void verifyIssues();
 }
