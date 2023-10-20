@@ -26,6 +26,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 
@@ -63,6 +64,70 @@ class CheckVerifierImplTest {
   }
 
   @Test
+  void testImpliedIssueOnExactMatchingLines() {
+    CheckVerifier verifier =
+        CheckVerifier.newVerifier()
+            .withCheck(new WillRaiseIssueOnFooCheck())
+            .onFile(
+                new DelphiTestUnitBuilder()
+                    .appendDecl("const")
+                    .appendDecl("  Foo = 0;")
+                    .appendDecl("  Foo2 = Foo; // Noncompliant")
+                    .appendImpl("const")
+                    .appendImpl("  Bar = Foo; // Noncompliant"));
+
+    assertThatCode(verifier::verifyIssues).doesNotThrowAnyException();
+
+    assertThatThrownBy(verifier::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyNoIssues).isInstanceOf(AssertionError.class);
+  }
+
+  @Test
+  void testImpliedIssuesWithOffset() {
+    CheckVerifier verifier =
+        CheckVerifier.newVerifier()
+            .withCheck(new WillRaiseIssueOnFooCheck())
+            .onFile(
+                new DelphiTestUnitBuilder()
+                    .appendDecl("const")
+                    .appendDecl("  Foo = 0;")
+                    .appendDecl("  // Noncompliant@+1")
+                    .appendDecl("  Foo2 = Foo;")
+                    .appendImpl("const")
+                    .appendImpl("  Bar = Foo;")
+                    .appendImpl("  Bar2 = Foo;")
+                    .appendImpl("  // Noncompliant@-1")
+                    .appendImpl("  // Noncompliant@-3"));
+
+    assertThatCode(verifier::verifyIssues).doesNotThrowAnyException();
+
+    assertThatThrownBy(verifier::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyNoIssues).isInstanceOf(AssertionError.class);
+  }
+
+  @Test
+  void testImpliedIssueOnNonMatchingLines() {
+    CheckVerifier verifier =
+        CheckVerifier.newVerifier()
+            .withCheck(new WillRaiseIssueOnFooCheck())
+            .onFile(
+                new DelphiTestUnitBuilder()
+                    .appendDecl("const")
+                    .appendDecl("  Baz = 0; // Noncompliant")
+                    .appendImpl("const")
+                    .appendImpl("  // Noncompliant@+1")
+                    .appendImpl("  Bar = Baz;"));
+
+    assertThatCode(verifier::verifyNoIssues).doesNotThrowAnyException();
+
+    assertThatThrownBy(verifier::verifyIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  @Test
   void testFileIssue() {
     CheckVerifier verifier =
         CheckVerifier.newVerifier()
@@ -74,6 +139,18 @@ class CheckVerifierImplTest {
     assertThatThrownBy(() -> verifier.verifyIssueOnLine(1)).isInstanceOf(AssertionError.class);
     assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
     assertThatThrownBy(verifier::verifyNoIssues).isInstanceOf(AssertionError.class);
+  }
+
+  @Rule(key = "WillRaiseIssueOnFoo")
+  public static class WillRaiseIssueOnFooCheck extends DelphiCheck {
+    @Override
+    public DelphiCheckContext visit(
+        NameReferenceNode nameReferenceNode, DelphiCheckContext context) {
+      if (nameReferenceNode.getImage().equalsIgnoreCase("Foo")) {
+        reportIssue(context, nameReferenceNode, MESSAGE);
+      }
+      return super.visit(nameReferenceNode, context);
+    }
   }
 
   @Rule(key = "WillRaiseLineIssueOnFileHeader")
