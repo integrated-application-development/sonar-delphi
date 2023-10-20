@@ -31,6 +31,7 @@ import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.EnumElementNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationImpl;
@@ -796,7 +797,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   private static void handleImplementationDeclaration(
       NameDeclaration declaration, DelphiNode node) {
     if (node.getFirstParentOfType(ImplementationSectionNode.class) != null) {
-      declaration.setIsImplementationDeclaration();
+      ((NameDeclarationImpl) declaration).setIsImplementationDeclaration();
     }
   }
 }

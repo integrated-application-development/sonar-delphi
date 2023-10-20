@@ -91,7 +91,7 @@ class MethodNameDeclarationTest {
             VISIBILITY,
             TYPE_PARAMETERS);
 
-    MethodNameDeclaration forwardMethod =
+    MethodNameDeclarationImpl forwardMethod =
         new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
@@ -106,7 +106,7 @@ class MethodNameDeclarationTest {
             TYPE_PARAMETERS);
     forwardMethod.setIsForwardDeclaration();
 
-    MethodNameDeclaration implementationMethod =
+    MethodNameDeclarationImpl implementationMethod =
         new MethodNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,

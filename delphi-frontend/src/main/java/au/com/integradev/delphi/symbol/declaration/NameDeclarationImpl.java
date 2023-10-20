@@ -79,7 +79,7 @@ public abstract class NameDeclarationImpl implements NameDeclaration {
     if (!context.hasSignatureMismatch()) {
       NameDeclaration specialized = doSpecialization(context);
       if (!specialized.equals(this)) {
-        specialized.setGenericDeclaration(this);
+        ((NameDeclarationImpl) specialized).genericDeclaration = this;
         return specialized;
       }
     }
@@ -108,25 +108,13 @@ public abstract class NameDeclarationImpl implements NameDeclaration {
   }
 
   @Override
-  public void setGenericDeclaration(NameDeclaration genericDeclaration) {
-    this.genericDeclaration = genericDeclaration;
-  }
-
-  @Override
   @Nullable
   public NameDeclaration getForwardDeclaration() {
     return forwardDeclaration;
   }
 
-  @Override
   public void setForwardDeclaration(NameDeclaration declaration) {
     this.forwardDeclaration = declaration;
-  }
-
-  @Override
-  public void setIsForwardDeclaration() {
-    this.isForwardDeclaration = true;
-    generateHashCode();
   }
 
   @Override
@@ -134,15 +122,19 @@ public abstract class NameDeclarationImpl implements NameDeclaration {
     return isForwardDeclaration;
   }
 
-  @Override
-  public void setIsImplementationDeclaration() {
-    this.isImplementationDeclaration = true;
+  public void setIsForwardDeclaration() {
+    this.isForwardDeclaration = true;
     generateHashCode();
   }
 
   @Override
   public boolean isImplementationDeclaration() {
     return isImplementationDeclaration;
+  }
+
+  public void setIsImplementationDeclaration() {
+    this.isImplementationDeclaration = true;
+    generateHashCode();
   }
 
   @SuppressWarnings("EqualsGetClass")

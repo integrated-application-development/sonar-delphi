@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
+import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -112,7 +113,7 @@ public class DelphiScopeImpl implements DelphiScope {
       return;
     }
 
-    TypeNameDeclaration fullTypeDeclaration = (TypeNameDeclaration) typeDeclaration;
+    var fullTypeDeclaration = (TypeNameDeclarationImpl) typeDeclaration;
     Type fullType = fullTypeDeclaration.getType();
     if (!fullType.isStruct()) {
       return;
@@ -123,7 +124,7 @@ public class DelphiScopeImpl implements DelphiScope {
         .removeIf(
             declaration -> {
               if (declaration instanceof TypeNameDeclaration) {
-                TypeNameDeclaration forwardDeclaration = (TypeNameDeclaration) declaration;
+                var forwardDeclaration = (TypeNameDeclarationImpl) declaration;
 
                 // A generic type's forward declaration must also be generic, or vice versa
                 if (forwardDeclaration.isGeneric() != fullTypeDeclaration.isGeneric()) {

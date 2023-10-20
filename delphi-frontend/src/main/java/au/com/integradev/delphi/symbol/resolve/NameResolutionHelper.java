@@ -23,6 +23,7 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SearchMode;
+import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
@@ -496,7 +497,8 @@ public class NameResolutionHelper {
 
       NameOccurrence occurrence = parameterReference.getNameNode().getNameOccurrence();
       if (occurrence != null) {
-        parameterDeclaration.setForwardDeclaration(occurrence.getNameDeclaration());
+        ((NameDeclarationImpl) parameterDeclaration)
+            .setForwardDeclaration(occurrence.getNameDeclaration());
       }
 
       TypeParameterType parameterType = (TypeParameterType) parameterDeclaration.getType();

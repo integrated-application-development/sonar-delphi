@@ -24,7 +24,6 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public interface NameDeclaration extends Comparable<NameDeclaration> {
-
   Node getNode();
 
   String getImage();
@@ -42,22 +41,14 @@ public interface NameDeclaration extends Comparable<NameDeclaration> {
    */
   NameDeclaration specialize(TypeSpecializationContext context);
 
-  boolean isSpecializedDeclaration();
-
   NameDeclaration getGenericDeclaration();
-
-  void setGenericDeclaration(NameDeclaration genericDeclaration);
 
   @Nullable
   NameDeclaration getForwardDeclaration();
 
-  void setForwardDeclaration(NameDeclaration declaration);
-
-  void setIsForwardDeclaration();
+  boolean isSpecializedDeclaration();
 
   boolean isForwardDeclaration();
-
-  void setIsImplementationDeclaration();
 
   boolean isImplementationDeclaration();
 }
