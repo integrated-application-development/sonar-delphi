@@ -21,9 +21,9 @@ package au.com.integradev.delphi.symbol.resolve;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
-import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SearchMode;
 import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
+import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;

@@ -273,4 +273,49 @@ class UnusedMethodCheckTest {
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testUsedAttributeConstructorsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Foo = class(TCustomAttribute)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create; overload;")
+                .appendDecl("    constructor Create(Bar: Integer); overload;")
+                .appendDecl("    constructor Create(Bar: string); overload;")
+                .appendDecl("    constructor Create(Bar: Integer; Baz: Integer); overload;")
+                .appendDecl("  end;")
+                .appendDecl("  [Foo]")
+                .appendDecl("  [Foo(5)]")
+                .appendDecl("  [Foo('hello')]")
+                .appendDecl("  [Foo(10, 15)]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedAttributeConstructorsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedMethodCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Foo = class(TCustomAttribute)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create; overload;")
+                .appendDecl("    constructor Create(Bar: Integer); overload;")
+                .appendDecl("    constructor Create(Bar: string); overload;")
+                .appendDecl("    constructor Create(Bar: Integer; Baz: Integer); overload;")
+                .appendDecl("  end;")
+                .appendDecl("  [Foo]")
+                .appendDecl("  [Foo(5)]")
+                .appendDecl("  [Foo(10, 15)]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  end;"))
+        .verifyIssueOnLine(10);
+  }
 }

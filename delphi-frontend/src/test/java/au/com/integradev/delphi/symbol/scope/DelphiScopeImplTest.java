@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
-import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
 import java.util.List;
