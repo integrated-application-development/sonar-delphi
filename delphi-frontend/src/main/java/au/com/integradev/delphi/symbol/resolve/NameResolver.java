@@ -27,11 +27,12 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.voidType;
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
-import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.Search;
 import au.com.integradev.delphi.symbol.SearchMode;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
+import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
@@ -531,16 +532,19 @@ public class NameResolver {
   }
 
   void readAttribute(CustomAttributeNode node) {
-    readNameReferenceWithOptionalSuffix(node.getNameReference(), true);
+    readNameReference(node.getNameReference(), true);
     addResolvedDeclaration();
 
     List<NameReferenceNode> references = node.getNameReference().flatten();
     NameReferenceNode lastReference = references.get(references.size() - 1);
 
     // Attributes are a shorthand for an invocation of a constructor named 'Create'
-    SymbolicNode imaginaryConstructor = SymbolicNode.imaginaryAfterNode("Create", lastReference);
+    SymbolicNode imaginaryConstructor = SymbolicNode.imaginary("Create", node.getScope());
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(imaginaryConstructor);
     ((NameOccurrenceImpl) lastReference.getNameOccurrence()).setNameWhichThisQualifies(occurrence);
+    ((AttributeNameOccurrenceImpl) lastReference.getNameOccurrence())
+        .setImplicitConstructorNameOccurrence(occurrence);
+
     resolveNameReferenceOccurrence(occurrence, true);
 
     ArgumentListNode argumentList = node.getArgumentList();
@@ -551,8 +555,7 @@ public class NameResolver {
     }
   }
 
-  private void readNameReferenceWithOptionalSuffix(
-      NameReferenceNode node, boolean isAttributeReference) {
+  private void readNameReference(NameReferenceNode node, boolean attribute) {
     boolean couldBeUnitNameReference =
         currentScope == null
             || (!(currentScope instanceof UnknownScope) && currentScope.equals(node.getScope()));
@@ -562,12 +565,7 @@ public class NameResolver {
         return;
       }
 
-      NameOccurrenceImpl occurrence = createNameOccurrence(reference);
-      // Only apply the suffix on the last name
-      if (reference.nextName() == null && isAttributeReference) {
-        occurrence.setIsAttributeReference();
-      }
-
+      NameOccurrence occurrence = createNameOccurrence(reference, attribute);
       resolveNameReferenceOccurrence(occurrence, reference.nextName() == null);
 
       if (nameResolutionFailed()) {
@@ -599,11 +597,16 @@ public class NameResolver {
   }
 
   void readNameReference(NameReferenceNode node) {
-    readNameReferenceWithOptionalSuffix(node, false);
+    readNameReference(node, false);
   }
 
-  private NameOccurrenceImpl createNameOccurrence(NameReferenceNode reference) {
-    NameOccurrenceImpl occurrence = new NameOccurrenceImpl(reference.getIdentifier());
+  private NameOccurrence createNameOccurrence(NameReferenceNode reference, boolean attribute) {
+    DelphiNode node = reference.getIdentifier();
+    NameOccurrenceImpl occurrence =
+        attribute && reference.nextName() == null
+            ? new AttributeNameOccurrenceImpl(node)
+            : new NameOccurrenceImpl(node);
+
     GenericArgumentsNode genericArguments = reference.getGenericArguments();
     if (genericArguments != null) {
       List<TypeNode> typeArgumentNodes = genericArguments.getTypeArguments();
@@ -612,6 +615,7 @@ public class NameResolver {
       occurrence.setTypeArguments(
           typeArgumentNodes.stream().map(TypeNode::getType).collect(Collectors.toList()));
     }
+
     return occurrence;
   }
 

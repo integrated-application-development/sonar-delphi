@@ -1064,16 +1064,16 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testAttributeWithConstructor() {
     execute("attributes/AttributeWithConstructor.pas");
-    verifyUsages(7, 16, reference(10, 6));
+    verifyUsages(7, 16); // The constructor reference is implicit
   }
 
   @Test
   void testAttributeWithMultipleConstructors() {
     execute("attributes/AttributeWithMultipleConstructors.pas");
-    verifyUsages(7, 16, reference(13, 6));
-    verifyUsages(8, 16, reference(14, 6));
-    verifyUsages(9, 16, reference(15, 6));
-    verifyUsages(10, 16, reference(16, 6));
+    verifyUsages(7, 16); // The constructor reference is implicit
+    verifyUsages(8, 16); // The constructor reference is implicit
+    verifyUsages(9, 16); // The constructor reference is implicit
+    verifyUsages(10, 16); // The constructor reference is implicit
   }
 
   @Test

@@ -16,8 +16,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.symbol;
+package au.com.integradev.delphi.symbol.occurrence;
 
+import au.com.integradev.delphi.symbol.SymbolicNode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +27,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class NameOccurrenceImpl implements NameOccurrence {
+public class NameOccurrenceImpl implements NameOccurrence {
   private final SymbolicNode location;
   private NameDeclaration declaration;
   private NameOccurrence qualifiedName;
@@ -34,7 +35,6 @@ public final class NameOccurrenceImpl implements NameOccurrence {
   private boolean isExplicitInvocation;
   private boolean isMethodReference;
   private boolean isGeneric;
-  private boolean isAttribute;
   private List<Type> typeParameters = Collections.emptyList();
 
   public NameOccurrenceImpl(DelphiNode concreteNode, String imageOverride) {
@@ -129,13 +129,10 @@ public final class NameOccurrenceImpl implements NameOccurrence {
 
   @Override
   public boolean isAttributeReference() {
-    return isAttribute;
+    return false;
   }
 
-  public void setIsAttributeReference() {
-    isAttribute = true;
-  }
-
+  @SuppressWarnings("EqualsGetClass")
   @Override
   public boolean equals(Object o) {
     if (this == o) {

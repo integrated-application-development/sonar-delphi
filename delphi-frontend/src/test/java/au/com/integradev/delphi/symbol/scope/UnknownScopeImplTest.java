@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
-import au.com.integradev.delphi.symbol.NameOccurrenceImpl;
+import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Set;

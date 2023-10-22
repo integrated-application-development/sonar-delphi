@@ -29,6 +29,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTable> {
 
@@ -67,6 +68,11 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
     for (NameOccurrence occurrence : occurrences) {
       location = occurrence.getLocation();
       String referenceUnit = location.getUnitName();
+
+      if (location.getTokenType() == DelphiTokenType.INVALID) {
+        // imaginary node
+        continue;
+      }
 
       if (symbolUnit.equals(referenceUnit)) {
         newSymbol.newReference(

@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
@@ -41,12 +42,16 @@ public final class CustomAttributeNodeImpl extends DelphiNodeImpl implements Cus
 
   @Override
   public NameOccurrence getTypeNameOccurrence() {
-    return getNameReference().getNameOccurrence();
+    return getNameReference().getLastName().getNameOccurrence();
   }
 
   @Override
   public NameOccurrence getConstructorNameOccurrence() {
-    return getTypeNameOccurrence().getNameForWhichThisIsAQualifier();
+    NameOccurrence occurrence = getTypeNameOccurrence();
+    if (occurrence != null) {
+      return ((AttributeNameOccurrenceImpl) occurrence).getImplicitConstructorNameOccurrence();
+    }
+    return null;
   }
 
   @Override

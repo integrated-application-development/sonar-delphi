@@ -16,11 +16,12 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.symbol;
+package au.com.integradev.delphi.symbol.occurrence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import au.com.integradev.delphi.symbol.SymbolicNode;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
@@ -68,6 +69,14 @@ class NameOccurrenceImplTest {
     occurrence.setIsGeneric();
 
     assertThat(occurrence.isGeneric()).isTrue();
+  }
+
+  @Test
+  void testIsAttributeReference() {
+    SymbolicNode symbolicNode = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
+    NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
+
+    assertThat(occurrence.isAttributeReference()).isFalse();
   }
 
   @Test
