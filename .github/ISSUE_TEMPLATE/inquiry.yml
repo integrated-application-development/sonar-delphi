@@ -1,5 +1,5 @@
 name: Inquiry
-description: Suggest an inquiry
+description: Ask a question
 title: "[Inquiry]: "
 labels: ["question", "triage"]
 body:
