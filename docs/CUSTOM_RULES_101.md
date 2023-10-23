@@ -63,7 +63,7 @@ modified.
 In the code snippet below, there's a couple of important configuration properties to note:
 * `<pluginClass>` provides the **entry point of the plugin**. You must change this configuration if
 you rename or move the class implementing `org.sonar.api.Plugin`.
-* `<sonarQubeMinVersion>` guarantees compatibility with the SonarQube version you target.
+* `<pluginApiMinVersion>` guarantees compatibility with the plugin API version you target.
 
 ```xml
 <plugin>
@@ -76,11 +76,14 @@ you rename or move the class implementing `org.sonar.api.Plugin`.
     <pluginName>Delphi Custom Rules</pluginName>
     <pluginClass>au.com.integradev.samples.delphi.MyDelphiRulesPlugin</pluginClass>
     <skipDependenciesPackaging>true</skipDependenciesPackaging>
-    <sonarQubeMinVersion>9.9</sonarQubeMinVersion>
+    <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
     <requirePlugins>communitydelphi:${sonar.delphi.version}</requirePlugins>
   </configuration>
 </plugin>
 ```
+
+> [!NOTE]
+> `9.14.0.375` is the latest plugin API version supported by SonarQube 9.9.
 
 ## Writing a rule
 

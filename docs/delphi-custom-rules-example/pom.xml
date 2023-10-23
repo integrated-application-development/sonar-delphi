@@ -50,7 +50,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.delphi.version>0.40.0</sonar.delphi.version>
-    <sonar.plugin.api.version>9.14.0.375</sonar.plugin.api.version>
+    <sonar.plugin.api.version>10.1.0.809</sonar.plugin.api.version>
     <sonar.analyzer.commons.version>2.7.0.1482</sonar.analyzer.commons.version>
     <junit.version>5.9.0</junit.version>
     <assertj.version>3.23.1</assertj.version>
@@ -59,7 +59,7 @@
     <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
     <fmt.plugin.version>2.19</fmt.plugin.version>
     <license.plugin.version>4.2</license.plugin.version>
-    <sonar.packaging.plugin.version>1.21.0.505</sonar.packaging.plugin.version>
+    <sonar.packaging.plugin.version>1.23.0.740</sonar.packaging.plugin.version>
     <shade.plugin.version>3.2.1</shade.plugin.version>
   </properties>
 
@@ -136,7 +136,7 @@
           <pluginName>Delphi Custom Rules</pluginName>
           <pluginClass>au.com.integradev.samples.delphi.MyDelphiRulesPlugin</pluginClass>
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
-          <sonarQubeMinVersion>9.9</sonarQubeMinVersion>
+          <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
           <requirePlugins>communitydelphi:${sonar.delphi.version}</requirePlugins>
         </configuration>
       </plugin>
