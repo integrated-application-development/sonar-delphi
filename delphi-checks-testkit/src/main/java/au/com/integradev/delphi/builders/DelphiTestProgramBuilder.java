@@ -19,8 +19,9 @@
 package au.com.integradev.delphi.builders;
 
 public final class DelphiTestProgramBuilder
-    extends DelphiTestFileBuilder<DelphiTestProgramBuilder> {
-  private String programName = "omTestProgram";
+    extends AbstractDelphiTestFileBuilder<DelphiTestProgramBuilder> {
+  private static final String EXTENSION = ".dpr";
+  private String programName = "TestProgram";
 
   @Override
   protected DelphiTestProgramBuilder getThis() {
@@ -29,44 +30,37 @@ public final class DelphiTestProgramBuilder
 
   @Override
   public DelphiTestProgramBuilder appendImpl(String value) {
-    // Just adding a tab for pretty-printing.
     return super.appendImpl("  " + value);
   }
 
   @Override
-  protected StringBuilder generateSourceCode() {
+  public String sourceCode() {
     StringBuilder source = new StringBuilder();
     source.append(String.format("program %s;\n", this.programName));
     source.append("\n");
 
-    if (!getDeclaration().isEmpty()) {
-      source.append(getDeclaration());
+    if (!this.declaration.toString().isEmpty()) {
+      source.append(this.declaration);
       source.append("\n");
     }
 
     source.append("begin\n");
 
-    if (!getImplementation().isEmpty()) {
-      source.append(this.getImplementation());
+    if (!this.implementation.toString().isEmpty()) {
+      source.append(this.implementation);
     }
 
     source.append("end.\n");
-
-    return source;
+    return source.toString();
   }
 
   @Override
-  protected String getFilename() {
-    return programName;
+  public String getFileName() {
+    return programName + EXTENSION;
   }
 
-  @Override
-  protected String getExtension() {
-    return "dpr";
-  }
-
-  public DelphiTestProgramBuilder programName(String programName) {
-    this.programName = programName;
-    return getThis();
+  public DelphiTestProgramBuilder programName(String value) {
+    this.programName = value;
+    return this;
   }
 }
