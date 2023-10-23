@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in SonarDelphi
+description: Report a bug
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
