@@ -24,5 +24,5 @@ public interface MethodReturnTypeNode extends DelphiNode {
   TypeNode getTypeNode();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 }

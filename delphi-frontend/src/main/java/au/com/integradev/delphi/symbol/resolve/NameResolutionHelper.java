@@ -35,8 +35,8 @@ import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
@@ -97,7 +97,7 @@ public class NameResolutionHelper {
   }
 
   public void resolve(TypeDeclarationNode typeDeclaration) {
-    CustomAttributeListNode attributeListNode = typeDeclaration.getAttributeList();
+    AttributeListNode attributeListNode = typeDeclaration.getAttributeList();
     if (attributeListNode != null) {
       attributeListNode.getAttributes().forEach(this::resolve);
     }
@@ -149,7 +149,7 @@ public class NameResolutionHelper {
     resolver.addToSymbolTable();
   }
 
-  public void resolve(CustomAttributeNode attribute) {
+  public void resolve(AttributeNode attribute) {
     NameResolver resolver = createNameResolver();
     resolver.readAttribute(attribute);
     resolver.addToSymbolTable();

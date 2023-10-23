@@ -20,6 +20,6 @@ package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.List;
 
-public interface CustomAttributeGroupNode extends DelphiNode {
-  List<CustomAttributeNode> getAttributes();
+public interface AttributeGroupNode extends DelphiNode {
+  List<AttributeNode> getAttributes();
 }

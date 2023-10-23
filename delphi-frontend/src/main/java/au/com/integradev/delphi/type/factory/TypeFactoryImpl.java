@@ -35,8 +35,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
@@ -493,7 +493,7 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   private static List<Type> getAttributeTypes(TypeDeclarationNode typeDeclaration) {
-    CustomAttributeListNode attributeList = typeDeclaration.getAttributeList();
+    AttributeListNode attributeList = typeDeclaration.getAttributeList();
     if (attributeList == null) {
       return Collections.emptyList();
     }

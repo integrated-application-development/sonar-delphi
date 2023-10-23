@@ -31,7 +31,7 @@ public interface ConstDeclarationNode extends DelphiNode, Typed, Visibility {
   TypeNode getTypeNode();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 
   @Override
   @Nonnull

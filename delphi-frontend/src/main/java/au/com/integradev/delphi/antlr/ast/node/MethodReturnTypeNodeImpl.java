@@ -20,7 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 
@@ -34,8 +34,8 @@ public final class MethodReturnTypeNodeImpl extends DelphiNodeImpl implements Me
   }
 
   @Override
-  public CustomAttributeListNode getAttributeList() {
-    return getFirstChildOfType(CustomAttributeListNode.class);
+  public AttributeListNode getAttributeList() {
+    return getFirstChildOfType(AttributeListNode.class);
   }
 
   @Override

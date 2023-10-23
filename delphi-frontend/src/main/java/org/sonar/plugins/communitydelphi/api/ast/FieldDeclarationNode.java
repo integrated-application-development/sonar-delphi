@@ -28,7 +28,7 @@ public interface FieldDeclarationNode extends DelphiNode, Typed, Visibility {
   NameDeclarationListNode getDeclarationList();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 
   TypeNode getTypeNode();
 }

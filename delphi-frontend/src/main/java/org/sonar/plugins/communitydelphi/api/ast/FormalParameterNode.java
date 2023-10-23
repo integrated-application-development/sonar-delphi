@@ -31,7 +31,7 @@ public interface FormalParameterNode extends DelphiNode, Typed {
   @Nullable
   TypeNode getTypeNode();
 
-  List<CustomAttributeListNode> getAttributeLists();
+  List<AttributeListNode> getAttributeLists();
 
   default ExpressionNode getDefaultValue() {
     return getFirstChildOfType(ExpressionNode.class);

@@ -21,17 +21,16 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeGroupNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 
-public final class CustomAttributeListNodeImpl extends DelphiNodeImpl
-    implements CustomAttributeListNode {
-  public CustomAttributeListNodeImpl(Token token) {
+public final class AttributeListNodeImpl extends DelphiNodeImpl implements AttributeListNode {
+  public AttributeListNodeImpl(Token token) {
     super(token);
   }
 
-  public CustomAttributeListNodeImpl(int tokenType) {
+  public AttributeListNodeImpl(int tokenType) {
     super(tokenType);
   }
 
@@ -41,12 +40,12 @@ public final class CustomAttributeListNodeImpl extends DelphiNodeImpl
   }
 
   @Override
-  public List<CustomAttributeGroupNode> getAttributeGroups() {
-    return findChildrenOfType(CustomAttributeGroupNode.class);
+  public List<AttributeGroupNode> getAttributeGroups() {
+    return findChildrenOfType(AttributeGroupNode.class);
   }
 
   @Override
-  public List<CustomAttributeNode> getAttributes() {
-    return findDescendantsOfType(CustomAttributeNode.class);
+  public List<AttributeNode> getAttributes() {
+    return findDescendantsOfType(AttributeNode.class);
   }
 }

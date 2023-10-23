@@ -55,7 +55,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
@@ -531,7 +531,7 @@ public class NameResolver {
     }
   }
 
-  void readAttribute(CustomAttributeNode node) {
+  void readAttribute(AttributeNode node) {
     readNameReference(node.getNameReference(), true);
     addResolvedDeclaration();
 

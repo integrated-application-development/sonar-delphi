@@ -30,5 +30,5 @@ public interface VarStatementNode extends StatementNode {
   ExpressionNode getExpression();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 }

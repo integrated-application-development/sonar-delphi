@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
@@ -130,7 +130,7 @@ public class MixedNamesCheck extends DelphiCheck {
   }
 
   @Override
-  public DelphiCheckContext visit(CustomAttributeNode attributeNode, DelphiCheckContext context) {
+  public DelphiCheckContext visit(AttributeNode attributeNode, DelphiCheckContext context) {
     List<NameReferenceNode> nameReferences = attributeNode.getNameReference().flatten();
 
     for (int i = 0; i + 1 < nameReferences.size(); i++) {
