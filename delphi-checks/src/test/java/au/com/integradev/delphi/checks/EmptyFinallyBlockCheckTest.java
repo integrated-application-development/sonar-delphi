@@ -50,9 +50,9 @@ class EmptyFinallyBlockCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  try")
                 .appendImpl("    WriteLn('try block');")
-                .appendImpl("  finally")
+                .appendImpl("  finally // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 }

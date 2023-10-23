@@ -77,10 +77,10 @@ class RedundantCastCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo2: TFoo;")
                 .appendImpl("begin")
-                .appendImpl("  Foo2 := TFoo(Foo);")
-                .appendImpl("  Foo2 := Foo as TFoo;")
+                .appendImpl("  Foo2 := TFoo(Foo); // Noncompliant")
+                .appendImpl("  Foo2 := Foo as TFoo; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15, 16);
+        .verifyIssues();
   }
 
   @Test
@@ -96,10 +96,10 @@ class RedundantCastCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo: TFoo;")
                 .appendImpl("begin")
-                .appendImpl("  Foo := TFoo(TFoo.Create);")
-                .appendImpl("  Foo := TFoo.Create as TFoo;")
+                .appendImpl("  Foo := TFoo(TFoo.Create); // Noncompliant")
+                .appendImpl("  Foo := TFoo.Create as TFoo; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15, 16);
+        .verifyIssues();
   }
 
   @Test
@@ -112,10 +112,10 @@ class RedundantCastCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Str: String;")
                 .appendImpl("begin")
-                .appendImpl("  Str := String(Arg);")
-                .appendImpl("  Str := Arg as String;")
+                .appendImpl("  Str := String(Arg); // Noncompliant")
+                .appendImpl("  Str := Arg as String; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11, 12);
+        .verifyIssues();
   }
 
   @Test
@@ -128,10 +128,10 @@ class RedundantCastCheckTest {
                 .appendImpl("var")
                 .appendImpl("  FileVar: file;")
                 .appendImpl("begin")
-                .appendImpl("  FileVar := file(Arg);")
-                .appendImpl("  FileVar := Arg as file;")
+                .appendImpl("  FileVar := file(Arg); // Noncompliant")
+                .appendImpl("  FileVar := Arg as file; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11, 12);
+        .verifyIssues();
   }
 
   @Test
@@ -145,10 +145,10 @@ class RedundantCastCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Str: String;")
                 .appendImpl("begin")
-                .appendImpl("  Str := String(GetString);")
-                .appendImpl("  Str := GetString as String;")
+                .appendImpl("  Str := String(GetString); // Noncompliant")
+                .appendImpl("  Str := GetString as String; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13, 14);
+        .verifyIssues();
   }
 
   @Test

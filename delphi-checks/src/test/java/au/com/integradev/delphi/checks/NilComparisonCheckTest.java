@@ -93,22 +93,22 @@ class NilComparisonCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure Test(Foo: TObject);")
                 .appendImpl("begin")
-                .appendImpl("  if TBar.FBar = nil then begin")
+                .appendImpl("  if TBar.FBar = nil then begin // Noncompliant")
                 .appendImpl("    Exit;")
                 .appendImpl("  end;")
-                .appendImpl("  if Foo = nil then begin")
+                .appendImpl("  if Foo = nil then begin // Noncompliant")
                 .appendImpl("    Exit;")
                 .appendImpl("  end;")
-                .appendImpl("  if Foo <> ((nil)) then begin")
+                .appendImpl("  if Foo <> ((nil)) then begin // Noncompliant")
                 .appendImpl("    Exit;")
                 .appendImpl("  end;")
-                .appendImpl("  if (nil) = Foo then begin")
+                .appendImpl("  if (nil) = Foo then begin // Noncompliant")
                 .appendImpl("    Exit;")
                 .appendImpl("  end;")
-                .appendImpl("  if nil <> Foo then begin")
+                .appendImpl("  if nil <> Foo then begin // Noncompliant")
                 .appendImpl("    Exit;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 17, 20, 23, 26);
+        .verifyIssues();
   }
 }

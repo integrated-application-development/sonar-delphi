@@ -47,13 +47,21 @@ class SuperfluousSemicolonCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure SemicolonTest;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl(";")
+                .appendImpl("  // Noncompliant@+3")
+                .appendImpl("  // Noncompliant@+2")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  ;SomeVar := 5;; ;")
                 .appendImpl("  if SomeVar = 5 then begin")
+                .appendImpl("    // Noncompliant@+2")
+                .appendImpl("    // Noncompliant@+1")
                 .appendImpl("    ;SomeVar := 6;;")
+                .appendImpl("    // Noncompliant@+1")
                 .appendImpl("    ;")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  end;;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9, 10, 10, 10, 12, 12, 13, 14);
+        .verifyIssues();
   }
 }

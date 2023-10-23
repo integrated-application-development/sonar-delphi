@@ -21,15 +21,15 @@ class MethodDeclarationCheckTest {
   void testProcedureShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new MethodDeclarationCheck())
-        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure Foo;"))
-        .verifyIssueOnLine(5);
+        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure Foo; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
   void testFunctionShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new MethodDeclarationCheck())
-        .onFile(new DelphiTestUnitBuilder().appendDecl("function Foo;"))
-        .verifyIssueOnLine(5);
+        .onFile(new DelphiTestUnitBuilder().appendDecl("function Foo; // Noncompliant"))
+        .verifyIssues();
   }
 }

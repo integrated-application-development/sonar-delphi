@@ -42,9 +42,9 @@ class AttributeNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  Foo = class(TCustomAttribute)")
+                .appendDecl("  Foo = class(TCustomAttribute) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -54,9 +54,9 @@ class AttributeNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  Fooattribute = class(TCustomAttribute)")
+                .appendDecl("  fooAttribute = class(TCustomAttribute) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -66,8 +66,8 @@ class AttributeNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  fooAttribute = class(TCustomAttribute)")
+                .appendDecl("  fooAttribute = class(TCustomAttribute) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 }

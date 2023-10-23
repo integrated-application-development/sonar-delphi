@@ -58,9 +58,9 @@ class ExplicitDefaultPropertyReferenceCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Bar: TObject;")
                 .appendImpl("begin")
-                .appendImpl("  Bar := Foo.Bar[0];")
+                .appendImpl("  Bar := Foo.Bar[0]; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test

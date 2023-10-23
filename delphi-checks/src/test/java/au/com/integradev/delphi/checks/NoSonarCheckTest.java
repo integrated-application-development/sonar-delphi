@@ -27,16 +27,20 @@ class NoSonarCheckTest {
   void testNoSonarShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new NoSonarCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("//NOSONAR"))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder().appendImpl("// Noncompliant@+1").appendImpl("//NOSONAR"))
+        .verifyIssues();
   }
 
   @Test
   void testNoSonarWithMessageShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new NoSonarCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("//NOSONAR foobar"))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("//NOSONAR foobar"))
+        .verifyIssues();
   }
 
   @Test

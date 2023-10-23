@@ -73,12 +73,12 @@ class SwallowedExceptionCheckTest {
                 .appendImpl("    on E: MyException do begin")
                 .appendImpl("      Log.Debug('exception handler');")
                 .appendImpl("    end;")
-                .appendImpl("    else begin")
+                .appendImpl("    else begin // Noncompliant")
                 .appendImpl("      // Do nothing")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -95,11 +95,11 @@ class SwallowedExceptionCheckTest {
                 .appendImpl("    on E: MyException do begin")
                 .appendImpl("      Log.Debug('exception handler');")
                 .appendImpl("    end;")
-                .appendImpl("    else")
+                .appendImpl("    else // Noncompliant")
                 .appendImpl("      // Do nothing")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -155,11 +155,11 @@ class SwallowedExceptionCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  try")
                 .appendImpl("    ThrowException;")
-                .appendImpl("  except")
+                .appendImpl("  except // Noncompliant")
                 .appendImpl("    // Do nothing")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -173,12 +173,12 @@ class SwallowedExceptionCheckTest {
                 .appendImpl("  try")
                 .appendImpl("    ThrowException;")
                 .appendImpl("  except")
-                .appendImpl("    on E: MyException do begin")
+                .appendImpl("    on E: MyException do begin // Noncompliant")
                 .appendImpl("      // Do nothing")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -192,9 +192,9 @@ class SwallowedExceptionCheckTest {
                 .appendImpl("  try")
                 .appendImpl("    ThrowException;")
                 .appendImpl("  except")
-                .appendImpl("    on E: MyException do;")
+                .appendImpl("    on E: MyException do; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 }

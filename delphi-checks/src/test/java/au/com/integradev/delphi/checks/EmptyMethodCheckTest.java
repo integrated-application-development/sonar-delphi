@@ -74,27 +74,27 @@ class EmptyMethodCheckTest {
                 .appendDecl("    procedure Four;")
                 .appendDecl("    procedure Five;")
                 .appendDecl("  end;")
-                .appendImpl("procedure TEmptyProcs.One;")
+                .appendImpl("procedure TEmptyProcs.One; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;")
-                .appendImpl("procedure TEmptyProcs.Two;")
+                .appendImpl("procedure TEmptyProcs.Two; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;")
-                .appendImpl("procedure TEmptyProcs.Three;")
+                .appendImpl("procedure TEmptyProcs.Three; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;")
-                .appendImpl("procedure GlobalProcedureFour;")
+                .appendImpl("procedure GlobalProcedureFour; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;")
-                .appendImpl("procedure TNonexistentType.ProcedureFive;")
+                .appendImpl("procedure TNonexistentType.ProcedureFive; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17, 21, 25, 29, 33);
+        .verifyIssues();
   }
 
   @Test
@@ -114,16 +114,17 @@ class EmptyMethodCheckTest {
                 .appendDecl("    procedure OverrideProc; override;")
                 .appendDecl("    procedure VirtualProc; virtual;")
                 .appendDecl("  end;")
-                .appendImpl("procedure TEmptyProcs.OverrideProc;")
+                .appendImpl("procedure TEmptyProcs.OverrideProc; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("end;")
-                .appendImpl("procedure TEmptyProcs.VirtualProc;")
+                .appendImpl("procedure TEmptyProcs.VirtualProc; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("end;")
-                .appendImpl("procedure TEmptyProcs.TTestedType<T>.NestedOverride<T>;")
+                .appendImpl(
+                    "procedure TEmptyProcs.TTestedType<T>.NestedOverride<T>; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(19, 22, 25);
+        .verifyIssues();
   }
 
   @Test

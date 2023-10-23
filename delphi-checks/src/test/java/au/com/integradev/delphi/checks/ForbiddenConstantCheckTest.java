@@ -47,9 +47,9 @@ class ForbiddenConstantCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo: String;")
                 .appendImpl("begin")
-                .appendImpl("  Foo := CFoo;")
+                .appendImpl("  Foo := CFoo; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14);
+        .verifyIssues();
   }
 
   @Test
@@ -65,9 +65,9 @@ class ForbiddenConstantCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo: String;")
                 .appendImpl("begin")
-                .appendImpl("  Foo := " + UNIT_NAME + ".CFoo;")
+                .appendImpl("  Foo := " + UNIT_NAME + ".CFoo; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14);
+        .verifyIssues();
   }
 
   @Test

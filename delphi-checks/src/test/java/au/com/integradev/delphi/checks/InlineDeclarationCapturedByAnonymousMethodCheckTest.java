@@ -66,10 +66,10 @@ class InlineDeclarationCapturedByAnonymousMethodCheckTest {
                 .appendImpl("  var Foo: Integer;")
                 .appendImpl("  var Proc: TProc := procedure")
                 .appendImpl("    begin")
-                .appendImpl("      Foo := 123;")
+                .appendImpl("      Foo := 123; // Noncompliant")
                 .appendImpl("    end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test

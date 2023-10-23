@@ -42,8 +42,8 @@ class ObjectTypeCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TObjectType = object")
+                .appendDecl("  TObjectType = object // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 }

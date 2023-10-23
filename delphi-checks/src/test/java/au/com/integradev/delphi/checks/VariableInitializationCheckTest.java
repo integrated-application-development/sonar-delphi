@@ -99,10 +99,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("  Int1: Integer;")
                 .appendImpl("  Int2: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  Int2 := Int1;")
-                .appendImpl("  Foo(Int2);")
+                .appendImpl("  Int2 := Int1; // Noncompliant")
+                .appendImpl("  Foo(Int2); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 15);
+        .verifyIssues();
   }
 
   @Test
@@ -137,10 +137,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  var FormatSettings1: TFormatSettings;")
-                .appendImpl("  var FormatSettings2 := FormatSettings1;")
-                .appendImpl("  Foo(FormatSettings2);")
+                .appendImpl("  var FormatSettings2 := FormatSettings1; // Noncompliant")
+                .appendImpl("  Foo(FormatSettings2); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15, 16);
+        .verifyIssues();
   }
 
   @Test
@@ -175,10 +175,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  var FormatSettings1: TFormatSettings;")
-                .appendImpl("  const FormatSettings2 = FormatSettings1;")
-                .appendImpl("  Foo(FormatSettings2);")
+                .appendImpl("  const FormatSettings2 = FormatSettings1; // Noncompliant")
+                .appendImpl("  Foo(FormatSettings2); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15, 16);
+        .verifyIssues();
   }
 
   @Test
@@ -276,9 +276,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  FormatSettings: TFormatSettings;")
                 .appendImpl("begin")
-                .appendImpl("  Foo(FormatSettings);")
+                .appendImpl("  Foo(FormatSettings); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(16);
+        .verifyIssues();
   }
 
   @Test
@@ -295,10 +295,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  FormatSettings: TFormatSettings;")
                 .appendImpl("begin")
-                .appendImpl("  Foo(FormatSettings);")
+                .appendImpl("  Foo(FormatSettings); // Noncompliant")
                 .appendImpl("  Foo(FormatSettings);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(16);
+        .verifyIssues();
   }
 
   @Test
@@ -314,9 +314,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  var FormatSettings: TFormatSettings;")
-                .appendImpl("  Foo(FormatSettings);")
+                .appendImpl("  Foo(FormatSettings); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -333,11 +333,11 @@ class VariableInitializationCheckTest {
                 .appendImpl("begin")
                 .appendImpl(
                     "  var FormatSettings, FormatSettings2, FormatSettings3: TFormatSettings;")
-                .appendImpl("  Foo(FormatSettings);")
-                .appendImpl("  Foo(FormatSettings2);")
-                .appendImpl("  Foo(FormatSettings3);")
+                .appendImpl("  Foo(FormatSettings); // Noncompliant")
+                .appendImpl("  Foo(FormatSettings2); // Noncompliant")
+                .appendImpl("  Foo(FormatSettings3); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15, 16, 17);
+        .verifyIssues();
   }
 
   @Test
@@ -357,9 +357,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("  Bar: TBar;")
                 .appendImpl("begin")
                 .appendImpl("  Bar.Int := 123;")
-                .appendImpl("  Foo(Bar);")
+                .appendImpl("  Foo(Bar); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(19);
+        .verifyIssues();
   }
 
   @Test
@@ -402,9 +402,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Bar: TBar;")
                 .appendImpl("begin")
-                .appendImpl("  Foo(Bar);")
+                .appendImpl("  Foo(Bar); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(20);
+        .verifyIssues();
   }
 
   @Test
@@ -494,10 +494,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Bar: TBar;")
                 .appendImpl("begin")
-                .appendImpl("  Bar.Int := Int;")
-                .appendImpl("  Foo(Bar.Int);")
+                .appendImpl("  Bar.Int := Int; // Noncompliant")
+                .appendImpl("  Foo(Bar.Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(19, 20);
+        .verifyIssues();
   }
 
   @Test
@@ -539,10 +539,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("  Bar: TBar;")
                 .appendImpl("  Int: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Bar.Int;")
-                .appendImpl("  Foo(Int);")
+                .appendImpl("  Int := Bar.Int; // Noncompliant")
+                .appendImpl("  Foo(Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(18, 19);
+        .verifyIssues();
   }
 
   @Test
@@ -608,9 +608,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  I := I + 1;")
+                .appendImpl("  I := I + 1; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -623,9 +623,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  Arr[I] := 1;")
+                .appendImpl("  Arr[I] := 1; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -714,9 +714,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  Proc(I);")
+                .appendImpl("  Proc(I); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14);
+        .verifyIssues();
   }
 
   @Test
@@ -751,10 +751,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  ProcArray[0](I);")
+                .appendImpl("  ProcArray[0](I); // Noncompliant")
                 .appendImpl("  Foo(I);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -926,11 +926,11 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo: TFoo;")
                 .appendImpl("begin")
-                .appendImpl("  if Assigned(Foo) then begin")
+                .appendImpl("  if Assigned(Foo) then begin // Noncompliant")
                 .appendImpl("    Foo.Bar;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(16);
+        .verifyIssues();
   }
 
   @Test
@@ -946,9 +946,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("  Size: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  Size := SizeOf(I);")
-                .appendImpl("  Foo(I);")
+                .appendImpl("  Foo(I); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -983,9 +983,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo: TFoo;")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(Foo);")
+                .appendImpl("  FreeAndNil(Foo); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(18);
+        .verifyIssues();
   }
 
   @Test
@@ -1040,10 +1040,10 @@ class VariableInitializationCheckTest {
                 .appendImpl("    I := 123;")
                 .appendImpl("  end;")
                 .appendImpl("begin")
-                .appendImpl("  Foo(I);")
+                .appendImpl("  Foo(I); // Noncompliant")
                 .appendImpl("  Sub;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -1103,9 +1103,9 @@ class VariableInitializationCheckTest {
                 .appendImpl("  Bar: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  Foo := 123;")
-                .appendImpl("  Bar.Baz := Foo;")
+                .appendImpl("  Bar.Baz := Foo; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test

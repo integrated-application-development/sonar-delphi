@@ -218,9 +218,9 @@ class MyFirstCustomCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TFoo = class")
-                .appendDecl("    function Bar(Foo: TFoo): TFoo; ")
+                .appendDecl("    function Bar(Foo: TFoo): TFoo; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -274,8 +274,8 @@ code snippet below.
 Since our check is not yet implemented, no issue can be raised yet, so that's the expected behavior.
 
 ```
-java.lang.AssertionError: No issue raised. At least one issue expected
-	at au.com.integradev.delphi.checks.verifier.CheckVerifierImpl.verifyIssueOnLine(CheckVerifierImpl.java:102)
+java.lang.AssertionError: Issues were expected at [7]
+	at au.com.integradev.delphi.checks.verifier.CheckVerifierImpl.verifyIssuesOnLinesInternal(CheckVerifierImpl.java:195)
 	at au.com.integradev.samples.delphi.checks.MyFirstCustomCheck.testFunctionReturningSameTypeAsParameterShouldAddIssue(MyFirstCustomCheckTest.java:57)
     ...
 ```

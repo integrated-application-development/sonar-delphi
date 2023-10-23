@@ -43,9 +43,9 @@ class PointerNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  pMyPointer = ^Integer;")
-                .appendDecl("  PInteger = ^TFooInteger;"))
-        .verifyIssueOnLine(6, 7);
+                .appendDecl("  pMyPointer = ^Integer; // Noncompliant")
+                .appendDecl("  PInteger = ^TFooInteger; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -55,8 +55,8 @@ class PointerNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("type")
-                .appendDecl("  Pinteger = ^Integer;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  Pinteger = ^Integer; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

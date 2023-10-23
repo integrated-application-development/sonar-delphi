@@ -37,10 +37,10 @@ class LowercaseKeywordCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
-                .appendImpl("Begin")
+                .appendImpl("Begin // Noncompliant")
                 .appendImpl("  MyVar := True;")
-                .appendImpl("END;"))
-        .verifyIssueOnLine(8, 10);
+                .appendImpl("END; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

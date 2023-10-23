@@ -39,8 +39,8 @@ class DigitSeparatorCheckTest {
   void testDefaultMaximumShouldAddIssue(String actual) {
     CheckVerifier.newVerifier()
         .withCheck(new DigitSeparatorCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("const A = " + actual + ";"))
-        .verifyIssueOnLine(7);
+        .onFile(new DelphiTestUnitBuilder().appendImpl("const A = " + actual + "; // Noncompliant"))
+        .verifyIssues();
   }
 
   @ParameterizedTest
@@ -56,7 +56,7 @@ class DigitSeparatorCheckTest {
 
     CheckVerifier.newVerifier()
         .withCheck(check)
-        .onFile(new DelphiTestUnitBuilder().appendImpl("const A = " + actual + ";"))
+        .onFile(new DelphiTestUnitBuilder().appendImpl("const A = " + actual + "; // Noncompliant"))
         .verifyNoIssues();
   }
 
@@ -80,7 +80,10 @@ class DigitSeparatorCheckTest {
   void testDefaultMaximumShouldNotAddIssue(String actual) {
     CheckVerifier.newVerifier()
         .withCheck(new DigitSeparatorCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("const").appendImpl("  A = " + actual + ";"))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("const")
+                .appendImpl("  A = " + actual + "; // Noncompliant"))
         .verifyNoIssues();
   }
 }

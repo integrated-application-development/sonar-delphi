@@ -59,8 +59,8 @@ class ConstantNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("const")
-                .appendDecl("  C_MyConstant = 'Value';"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  C_MyConstant = 'Value'; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -70,8 +70,8 @@ class ConstantNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("const")
-                .appendDecl("  CmyConstant = 'Value';"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  CmyConstant = 'Value'; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -108,9 +108,9 @@ class ConstantNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  const C_Constant = 'Value';")
+                .appendImpl("  const C_Constant = 'Value'; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -121,8 +121,8 @@ class ConstantNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  const CmyConstant = 'Value';")
+                .appendImpl("  const CmyConstant = 'Value'; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

@@ -50,9 +50,9 @@ class ForbiddenFieldCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Baz: String;")
                 .appendImpl("begin")
-                .appendImpl("  Baz := Foo.Bar;")
+                .appendImpl("  Baz := Foo.Bar; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(16);
+        .verifyIssues();
   }
 
   @Test

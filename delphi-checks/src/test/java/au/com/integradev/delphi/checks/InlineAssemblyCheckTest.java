@@ -43,10 +43,10 @@ class InlineAssemblyCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
-                .appendImpl("asm")
+                .appendImpl("asm // Noncompliant")
                 .appendImpl("  SHR   eax, 16")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -57,10 +57,10 @@ class InlineAssemblyCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
-                .appendImpl("  asm")
+                .appendImpl("  asm // Noncompliant")
                 .appendImpl("    SHR   eax, 16")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

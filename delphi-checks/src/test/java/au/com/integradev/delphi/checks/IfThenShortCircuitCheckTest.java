@@ -45,9 +45,9 @@ class IfThenShortCircuitCheckTest {
             builder
                 .appendImpl("function Foo(Bar: TObject): String;")
                 .appendImpl("begin")
-                .appendImpl("  Result := IfThen(Bar <> nil, Bar.ToString, 'Baz');")
+                .appendImpl("  Result := IfThen(Bar <> nil, Bar.ToString, 'Baz'); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -58,9 +58,9 @@ class IfThenShortCircuitCheckTest {
             builder
                 .appendImpl("function Foo(Bar: TObject): String;")
                 .appendImpl("begin")
-                .appendImpl("  Result := IfThen(nil = Bar, 'Baz', Bar.ToString);")
+                .appendImpl("  Result := IfThen(nil = Bar, 'Baz', Bar.ToString); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -71,9 +71,10 @@ class IfThenShortCircuitCheckTest {
             builder
                 .appendImpl("function Foo(Bar: TObject): String;")
                 .appendImpl("begin")
-                .appendImpl("  Result := IfThen(Assigned(Bar), Bar.ToString, 'Baz');")
+                .appendImpl(
+                    "  Result := IfThen(Assigned(Bar), Bar.ToString, 'Baz'); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test

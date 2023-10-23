@@ -48,9 +48,9 @@ class MixedNamesCheckTest {
                 .appendImpl("var")
                 .appendImpl("  MyVar: Boolean;")
                 .appendImpl("begin")
-                .appendImpl("  myvar := True;")
+                .appendImpl("  myvar := True; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -93,11 +93,11 @@ class MixedNamesCheckTest {
                 .appendDecl("type TFoo = class(TObject)")
                 .appendDecl("  procedure DoThing(SomeArg: ArgType);")
                 .appendDecl("end;")
-                .appendImpl("procedure Tfoo.DoThing(SomeArg: ArgType);")
+                .appendImpl("procedure Tfoo.DoThing(SomeArg: ArgType); // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  DoAnotherThing(SomeArg);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -109,11 +109,11 @@ class MixedNamesCheckTest {
                 .appendDecl("type TFoo = class(TObject)")
                 .appendDecl("  procedure DoThing(SomeArg: ArgType);")
                 .appendDecl("end;")
-                .appendImpl("procedure TFoo.doThing(SomeArg: ArgType);")
+                .appendImpl("procedure TFoo.doThing(SomeArg: ArgType); // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  DoAnotherThing(SomeArg);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -128,11 +128,11 @@ class MixedNamesCheckTest {
                 .appendImpl("    raise Exception.Create('Everything is on fire!');")
                 .appendImpl("  except")
                 .appendImpl("    on E: Exception do begin")
-                .appendImpl("      e.Bar;")
+                .appendImpl("      e.Bar; // Noncompliant")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test
@@ -213,8 +213,8 @@ class MixedNamesCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("uses")
-                .appendDecl("  System.sysutils;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  System.sysutils; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -225,8 +225,8 @@ class MixedNamesCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("uses")
-                .appendDecl("  system.SysUtils;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  system.SysUtils; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -263,8 +263,8 @@ class MixedNamesCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("uses")
-                .appendDecl("  sysutils;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  sysutils; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -307,7 +307,7 @@ class MixedNamesCheckTest {
         .withSearchPathUnit(createSysUtils())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendDecl("uses sysutils;")
+                .appendDecl("uses sysutils; // Noncompliant")
                 .appendImpl("procedure Proc;")
                 .appendImpl("var")
                 .appendImpl("  MyObject: TObject;")
@@ -315,7 +315,7 @@ class MixedNamesCheckTest {
                 .appendImpl("  MyObject := TObject.Create;")
                 .appendImpl("  SysUtils.FreeAndNil(MyObject);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(5);
+        .verifyIssues();
   }
 
   @Test
@@ -326,15 +326,15 @@ class MixedNamesCheckTest {
         .withSearchPathUnit(createSysUtils())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendDecl("uses sysutils;")
+                .appendDecl("uses sysutils; // Noncompliant")
                 .appendImpl("procedure Proc;")
                 .appendImpl("var")
                 .appendImpl("  MyObject: TObject;")
                 .appendImpl("begin")
                 .appendImpl("  MyObject := TObject.Create;")
-                .appendImpl("  sysutils.FreeAndNil(MyObject);")
+                .appendImpl("  sysutils.FreeAndNil(MyObject); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(5, 14);
+        .verifyIssues();
   }
 
   @Test
@@ -361,10 +361,10 @@ class MixedNamesCheckTest {
                 .appendDecl("type")
                 .appendDecl("  FOOAttribute = class(TCustomAttribute)")
                 .appendDecl("  end;")
-                .appendDecl("  [Foo]")
+                .appendDecl("  [Foo] // Noncompliant")
                 .appendDecl("  TBar = class(TObject)")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -378,10 +378,10 @@ class MixedNamesCheckTest {
                 .appendDecl("    type BarAttribute = class(TCustomAttribute)")
                 .appendDecl("    end;")
                 .appendDecl("  end;")
-                .appendDecl("  [foo.Bar]")
+                .appendDecl("  [foo.Bar] // Noncompliant")
                 .appendDecl("  TBar = class(TObject)")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   private static DelphiTestUnitBuilder createSysUtils() {

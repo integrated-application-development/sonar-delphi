@@ -53,11 +53,11 @@ class DestructorWithoutInheritedCheckTest {
                 .appendDecl("  public")
                 .appendDecl("    destructor Destroy; override;")
                 .appendDecl("  end;")
-                .appendImpl("destructor TTestDestructor.Destroy;")
+                .appendImpl("destructor TTestDestructor.Destroy; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  WriteLn('do something');")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test

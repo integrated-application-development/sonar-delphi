@@ -29,11 +29,11 @@ class MethodResultAssignedCheckTest {
         .withCheck(new MethodResultAssignedCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("function Foo: TObject;")
+                .appendImpl("function Foo: TObject; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -43,11 +43,11 @@ class MethodResultAssignedCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo(")
-                .appendImpl(" out Bar: TObject);")
+                .appendImpl(" out Bar: TObject); // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test

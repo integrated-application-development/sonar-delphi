@@ -44,8 +44,8 @@ class InlineConstExplicitTypeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  const CFoo = 123;")
+                .appendImpl("  const CFoo = 123; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

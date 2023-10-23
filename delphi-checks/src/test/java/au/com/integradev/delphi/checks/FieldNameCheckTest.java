@@ -48,12 +48,12 @@ class FieldNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TMyClass = class (TObject)")
                 .appendDecl("    private")
-                .appendDecl("     Id: Integer;")
-                .appendDecl("     Code: Integer;")
+                .appendDecl("     Id: Integer; // Noncompliant")
+                .appendDecl("     Code: Integer; // Noncompliant")
                 .appendDecl("    protected")
-                .appendDecl("     Name: String;")
+                .appendDecl("     Name: String; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -66,13 +66,13 @@ class FieldNameCheckTest {
                 .appendDecl("  TMyClass = class")
                 .appendDecl("     DefaultId: Integer;")
                 .appendDecl("    private")
-                .appendDecl("     Id: Integer;")
+                .appendDecl("     Id: Integer; // Noncompliant")
                 .appendDecl("    protected")
-                .appendDecl("     Name: String;")
+                .appendDecl("     Name: String; // Noncompliant")
                 .appendDecl("    public")
                 .appendDecl("     PublicName: String;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -85,9 +85,9 @@ class FieldNameCheckTest {
                 .appendDecl("  TMyClass = class")
                 .appendDecl("     DefaultId: Integer;")
                 .appendDecl("    private")
-                .appendDecl("     Id: Integer;")
+                .appendDecl("     Id: Integer; // Noncompliant")
                 .appendDecl("    protected")
-                .appendDecl("     Name: String;")
+                .appendDecl("     Name: String; // Noncompliant")
                 .appendDecl("    public")
                 .appendDecl("     PublicName: String;")
                 .appendDecl("  end;")
@@ -95,13 +95,13 @@ class FieldNameCheckTest {
                 .appendDecl("  TMyOtherClass = class")
                 .appendDecl("     DefaultId: Integer;")
                 .appendDecl("    private")
-                .appendDecl("     Id: Integer;")
+                .appendDecl("     Id: Integer; // Noncompliant")
                 .appendDecl("    protected")
-                .appendDecl("     Name: String;")
+                .appendDecl("     Name: String; // Noncompliant")
                 .appendDecl("    public")
                 .appendDecl("     PublicName: String;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(9, 11, 19, 21);
+        .verifyIssues();
   }
 
   @Test
@@ -113,12 +113,12 @@ class FieldNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TMyClass = class(TObject)")
                 .appendDecl("    private")
-                .appendDecl("     Ffoo: Integer;")
-                .appendDecl("     Foo: Integer;")
+                .appendDecl("     Ffoo: Integer; // Noncompliant")
+                .appendDecl("     Foo: Integer; // Noncompliant")
                 .appendDecl("    protected")
-                .appendDecl("     Fbar: String;")
+                .appendDecl("     Fbar: String; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -130,10 +130,10 @@ class FieldNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TMyClass = class")
                 .appendDecl("    private")
-                .appendDecl("     X: Integer;")
-                .appendDecl("     F: Integer;")
+                .appendDecl("     X: Integer; // Noncompliant")
+                .appendDecl("     F: Integer; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 9);
+        .verifyIssues();
   }
 
   @Test
@@ -145,9 +145,9 @@ class FieldNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TMyClass = class(TObject)")
                 .appendDecl("    private")
-                .appendDecl("     X,")
-                .appendDecl("     Y: Integer;")
+                .appendDecl("     X, // Noncompliant")
+                .appendDecl("     Y: Integer; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 9);
+        .verifyIssues();
   }
 }

@@ -57,10 +57,10 @@ class EmptyInterfaceCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  IPublisher = interface")
+                .appendDecl("  IPublisher = interface // Noncompliant")
                 .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -71,8 +71,8 @@ class EmptyInterfaceCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  // Looks like a forward declaration, but isn't.")
-                .appendDecl("  IPublisher = interface;"))
-        .verifyIssueOnLine(7);
+                .appendDecl("  IPublisher = interface; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

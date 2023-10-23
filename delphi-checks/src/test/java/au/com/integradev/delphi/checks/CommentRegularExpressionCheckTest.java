@@ -45,8 +45,11 @@ class CommentRegularExpressionCheckTest {
   void testMatchingCommentShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck("(?i).*todo.*"))
-        .onFile(new DelphiTestUnitBuilder().appendImpl("// TODO: Add comment"))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("// TODO: Add comment"))
+        .verifyIssues();
   }
 
   @Test

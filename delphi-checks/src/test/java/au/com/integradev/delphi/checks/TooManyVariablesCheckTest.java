@@ -44,7 +44,7 @@ class TooManyVariablesCheckTest {
         .withCheck(new TooManyVariablesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo;")
+                .appendImpl("procedure Foo; // Noncompliant")
                 .appendImpl("var")
                 .appendImpl("  MyVar1: Boolean;")
                 .appendImpl("  MyVar2: Boolean;")
@@ -60,7 +60,7 @@ class TooManyVariablesCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -69,7 +69,7 @@ class TooManyVariablesCheckTest {
         .withCheck(new TooManyVariablesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo;")
+                .appendImpl("procedure Foo; // Noncompliant")
                 .appendImpl("var")
                 .appendImpl("  MyVar1,")
                 .appendImpl("  MyVar2,")
@@ -85,6 +85,6 @@ class TooManyVariablesCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

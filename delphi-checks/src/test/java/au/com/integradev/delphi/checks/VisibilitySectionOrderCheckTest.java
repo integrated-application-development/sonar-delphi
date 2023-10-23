@@ -44,11 +44,11 @@ class VisibilitySectionOrderCheckTest {
                 .appendDecl("  " + firstVisibility)
                 .appendDecl("    procedure Bar;")
                 .appendDecl("    property Baz: Integer;")
-                .appendDecl("  " + secondVisibility)
+                .appendDecl("  " + secondVisibility + " // Noncompliant")
                 .appendDecl("    procedure Bar2;")
                 .appendDecl("    property Baz2: Integer;")
                 .appendDecl(" end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @ParameterizedTest(name = "[{index}] {0} before {1}")
@@ -84,7 +84,7 @@ class VisibilitySectionOrderCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
-                .appendDecl("  public")
+                .appendDecl("  public // Noncompliant")
                 .appendDecl("    procedure Bar;")
                 .appendDecl("    property Baz: Integer;")
                 .appendDecl("  public")
@@ -104,14 +104,14 @@ class VisibilitySectionOrderCheckTest {
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  public")
                 .appendDecl("    procedure Baz;")
-                .appendDecl("  private")
+                .appendDecl("  private // Noncompliant")
                 .appendDecl("    procedure Bee;")
-                .appendDecl("  protected")
+                .appendDecl("  protected // Noncompliant")
                 .appendDecl("    procedure Bee;")
                 .appendDecl("  published")
                 .appendDecl("    procedure Bee;")
                 .appendDecl(" end;"))
-        .verifyIssueOnLine(9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -147,9 +147,9 @@ class VisibilitySectionOrderCheckTest {
                 .appendDecl("  TFoo  = " + structType)
                 .appendDecl("  public")
                 .appendDecl("    procedure Bar;")
-                .appendDecl("  protected")
+                .appendDecl("  protected // Noncompliant")
                 .appendDecl("    procedure Baz;")
                 .appendDecl(" end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

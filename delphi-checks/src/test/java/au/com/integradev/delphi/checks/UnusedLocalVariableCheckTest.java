@@ -47,11 +47,11 @@ class UnusedLocalVariableCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("var")
-                .appendImpl("  Foo: Integer;")
+                .appendImpl("  Foo: Integer; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  Foo := 0;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -79,11 +79,11 @@ class UnusedLocalVariableCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("var")
-                .appendImpl("  Foo: Integer;")
+                .appendImpl("  Foo: Integer; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -109,9 +109,9 @@ class UnusedLocalVariableCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  var Foo: Integer;")
+                .appendImpl("  var Foo: Integer; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -122,10 +122,10 @@ class UnusedLocalVariableCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  var Foo: Integer;")
+                .appendImpl("  var Foo: Integer; // Noncompliant")
                 .appendImpl("  Foo := 0;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test

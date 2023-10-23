@@ -38,9 +38,9 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited;")
+                .appendImpl("  inherited; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -58,9 +58,9 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited")
+                .appendImpl("  inherited // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -143,9 +143,9 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited MyProcedure;")
+                .appendImpl("  inherited MyProcedure; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -163,9 +163,9 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure(X, Y);")
                 .appendImpl("begin")
-                .appendImpl("  inherited MyProcedure(X, Y);")
+                .appendImpl("  inherited MyProcedure(X, Y); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -223,9 +223,9 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited MyProcedure();")
+                .appendImpl("  inherited MyProcedure(); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -263,9 +263,9 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("function TChild.MyFunction: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  Result := inherited MyFunction;")
+                .appendImpl("  Result := inherited MyFunction; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test

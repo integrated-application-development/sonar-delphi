@@ -42,7 +42,7 @@ class GroupedVariableDeclarationCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("var")
-                .appendDecl("  GFoo, GBar: Integer;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  GFoo, GBar: Integer; // Noncompliant"))
+        .verifyIssues();
   }
 }

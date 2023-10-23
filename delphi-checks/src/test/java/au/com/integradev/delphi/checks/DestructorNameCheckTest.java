@@ -44,9 +44,9 @@ class DestructorNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TObject = class(TObject)")
-                .appendDecl("    destructor NotDestroy; override;")
+                .appendDecl("    destructor NotDestroy; override; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -57,9 +57,9 @@ class DestructorNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TObject = class(TObject)")
-                .appendDecl("    destructor Destroy;")
+                .appendDecl("    destructor Destroy; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -70,9 +70,9 @@ class DestructorNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TObject = class(TObject)")
-                .appendDecl("    destructor Destroy(Arg: Boolean); override;")
+                .appendDecl("    destructor Destroy(Arg: Boolean); override; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test

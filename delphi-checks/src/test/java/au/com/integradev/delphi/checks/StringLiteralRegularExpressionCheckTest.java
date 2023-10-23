@@ -53,8 +53,8 @@ class StringLiteralRegularExpressionCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("const")
-                .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR';"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR'; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -67,7 +67,7 @@ class StringLiteralRegularExpressionCheckTest {
                         new DelphiTestUnitBuilder()
                             .appendDecl("const")
                             .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR';"))
-                    .verifyIssueOnLine(6))
+                    .verifyIssues())
         .isInstanceOf(FatalAnalysisError.class);
   }
 }

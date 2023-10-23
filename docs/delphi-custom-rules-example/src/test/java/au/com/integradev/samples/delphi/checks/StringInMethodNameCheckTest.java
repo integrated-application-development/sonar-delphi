@@ -22,16 +22,16 @@ class StringInMethodNameCheckTest {
   void testNameWithStringShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
-        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure MethodWithFoo;"))
-        .verifyIssueOnLine(5);
+        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure MethodWithFoo; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
   void testNameWithUppercaseBrandShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
-        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure MethodWithFOO;"))
-        .verifyIssueOnLine(5);
+        .onFile(new DelphiTestUnitBuilder().appendDecl("procedure MethodWithFOO; // Noncompliant"))
+        .verifyIssues();
   }
 
   private static DelphiCheck createCheck() {

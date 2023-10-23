@@ -35,9 +35,9 @@ class MissingSemicolonCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure SemicolonTest;")
                 .appendImpl("begin")
-                .appendImpl("  SomeVar := 5")
+                .appendImpl("  SomeVar := 5 // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -51,9 +51,9 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  SomeNumber: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  while SomeNumber <> 0 do")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -67,9 +67,9 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  SomeNumber: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  for SomeNumber := 0 to 3 do")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -81,10 +81,10 @@ class MissingSemicolonCheckTest {
                 .appendImpl("procedure SemicolonTest(Int: Integer);")
                 .appendImpl("begin")
                 .appendImpl("  repeat")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("  until Int <> 0;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -98,12 +98,12 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  SomeNumber: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  try")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("  except")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 14);
+        .verifyIssues();
   }
 
   @Test
@@ -120,10 +120,10 @@ class MissingSemicolonCheckTest {
                 .appendImpl("    WriteLn('test');")
                 .appendImpl("  except")
                 .appendImpl("    on E: Exception do")
-                .appendImpl("      WriteLn('test')")
+                .appendImpl("      WriteLn('test') // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -137,12 +137,12 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  SomeNumber: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  try")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("  finally")
-                .appendImpl("    WriteLn('test')")
+                .appendImpl("    WriteLn('test') // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 14);
+        .verifyIssues();
   }
 
   @Test
@@ -156,9 +156,9 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  while Int <> 0 do")
                 .appendImpl("  begin")
                 .appendImpl("    WriteLn('test');")
-                .appendImpl("  end")
+                .appendImpl("  end // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -172,10 +172,10 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  SomeVar: Integer;")
                 .appendImpl("begin")
                 .appendImpl("  case SomeVar of")
-                .appendImpl("    1: WriteLn('test')")
+                .appendImpl("    1: WriteLn('test') // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -297,9 +297,9 @@ class MissingSemicolonCheckTest {
                 .appendImpl("  asm")
                 .appendImpl("    MOV EAX, 1")
                 .appendImpl("    ADD EAX, 2")
-                .appendImpl("  end")
+                .appendImpl("  end // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -323,9 +323,9 @@ class MissingSemicolonCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TType = class(TObject)")
-                .appendDecl("    Foo: TObject")
+                .appendDecl("    Foo: TObject // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -369,11 +369,11 @@ class MissingSemicolonCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TType = class(TObject)")
                 .appendDecl("  public")
-                .appendDecl("    constructor Create; override")
-                .appendDecl("    destructor Destroy; override")
-                .appendDecl("    procedure MyProcedure; overload")
-                .appendDecl("    function MyFunction: String; overload")
+                .appendDecl("    constructor Create; override // Noncompliant")
+                .appendDecl("    destructor Destroy; override // Noncompliant")
+                .appendDecl("    procedure MyProcedure; overload // Noncompliant")
+                .appendDecl("    function MyFunction: String; overload // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 9, 10, 11);
+        .verifyIssues();
   }
 }

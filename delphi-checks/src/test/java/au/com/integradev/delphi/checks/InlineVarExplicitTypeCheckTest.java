@@ -44,8 +44,8 @@ class InlineVarExplicitTypeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  var Foo := 123;")
+                .appendImpl("  var Foo := 123; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

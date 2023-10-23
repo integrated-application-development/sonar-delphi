@@ -61,8 +61,8 @@ class EmptyVisibilitySectionCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TClass = class(TObject)")
-                .appendDecl("    public")
+                .appendDecl("    public // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

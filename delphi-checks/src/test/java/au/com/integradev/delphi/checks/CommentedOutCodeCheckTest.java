@@ -48,13 +48,16 @@ class CommentedOutCodeCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("// type")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("{MyClass = class")
                 .appendDecl("end;}")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("{MyInterface = interface;}")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("(*MyCustomString = type String;*)"))
-        .verifyIssueOnLine(6, 9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -63,16 +66,21 @@ class CommentedOutCodeCheckTest {
         .withCheck(new CommentedOutCodeCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("// var")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("//MyVariable: Integer;")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("{MyOtherVariable: String;}")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("{MyFirstVariable, MySecondVariable: String;}")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("(*MyFinalVariable: Boolean;*)"))
-        .verifyIssueOnLine(5, 7, 9, 11, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -81,14 +89,18 @@ class CommentedOutCodeCheckTest {
         .withCheck(new CommentedOutCodeCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("// const")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("//C_Const1 = C_SomeOtherConstant;")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("{C_Const2 = 123;}")
                 .appendDecl("")
+                .appendDecl("// Noncompliant@+1")
                 .appendDecl("(*C_Const3 = 'MyString';*)"))
-        .verifyIssueOnLine(5, 7, 9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -99,9 +111,10 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TType = class(TObject)")
+                .appendDecl("    // Noncompliant@+1")
                 .appendDecl("    //property MyProperty: String default;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -110,6 +123,7 @@ class CommentedOutCodeCheckTest {
         .withCheck(new CommentedOutCodeCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendImpl("// Noncompliant@+2")
                 .appendImpl("{")
                 .appendImpl("  procedure Foo;")
                 .appendImpl("  begin")
@@ -119,13 +133,14 @@ class CommentedOutCodeCheckTest {
                 .appendImpl("    FreeAndNil(Bar);")
                 .appendImpl("  end;")
                 .appendImpl("}")
+                .appendImpl("// Noncompliant@+2")
                 .appendImpl("{")
                 .appendImpl("  function Add(Fmt: String; Values: array of const): String;")
                 .appendImpl("  begin")
                 .appendImpl("    Result := Format(Fmt, Values);")
                 .appendImpl("  end;")
                 .appendImpl("}"))
-        .verifyIssueOnLine(8, 17);
+        .verifyIssues();
   }
 
   @Test
@@ -136,14 +151,17 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  // inherited Foo(False);")
                 .appendImpl("  inherited Foo(True);")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  //Bar.ClearCommandQueue;")
                 .appendImpl("  Bar.IndexExecutors;")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  //Bar.GetExecutorPointerArray[0]^.ExecuteCommand(cpHighPriority);")
                 .appendImpl("  FreeAndNil(Bar);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9, 11, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -154,15 +172,18 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  // inherited Foo(False) {comment} ; //comment")
                 .appendImpl("  inherited Foo(True);")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  //Bar.ClearCommandQueue; (* comment *)")
                 .appendImpl("  Bar.IndexExecutors;")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl(
                     "  //Bar.GetExecutorPointerArray[0]^.ExecuteCommand(cpHighPriority){};//;")
                 .appendImpl("  FreeAndNil(Bar);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9, 11, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -173,10 +194,11 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  //Bar := TBar.Create;")
                 .appendImpl("  FreeAndNil(Bar);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -187,19 +209,20 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+2")
                 .appendImpl("  {")
                 .appendImpl("    if Assigned(Bar) then begin")
                 .appendImpl("      Bar.ClearCommandQueue;")
                 .appendImpl("    end;")
                 .appendImpl("  }")
-                .appendImpl("")
+                .appendImpl("// Noncompliant@+2")
                 .appendImpl("  {")
                 .appendImpl(
                     "    if Assigned(Bar) then Bar.ClearCommandQueue else Bar := TBar.Create;")
                 .appendImpl("  }")
                 .appendImpl("  FreeAndNil(Bar);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10, 16);
+        .verifyIssues();
   }
 
   @Test
@@ -210,6 +233,7 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+2")
                 .appendImpl("  {")
                 .appendImpl("    with Bar do begin")
                 .appendImpl("      ClearCommandQueue;")
@@ -217,7 +241,7 @@ class CommentedOutCodeCheckTest {
                 .appendImpl("  }")
                 .appendImpl("  FreeAndNil(Bar);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -228,12 +252,14 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  // {$IFDEF SOME_DIRECTIVE}")
                 .appendImpl("  Bar.ClearCommandQueue;")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  // {$ENDIF}")
                 .appendImpl("  FreeAndNil(Bar);")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9, 11);
+        .verifyIssues();
   }
 
   @Test
@@ -244,18 +270,20 @@ class CommentedOutCodeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+2")
                 .appendImpl("  {")
                 .appendImpl("    for Executor in Bar.Executors do begin")
                 .appendImpl("      Executor.ExecuteCommand(cpLowPriority);")
                 .appendImpl("    end;")
                 .appendImpl("  }")
                 .appendImpl("  Bar.ClearCommandQueue;")
+                .appendImpl("  // Noncompliant@+2")
                 .appendImpl("  (*")
                 .appendImpl("    for Index := 0 to Bar.Executors.Length do begin")
                 .appendImpl("      Bar.Executors[Index].ExecuteCommand(cpMediumPriority);")
                 .appendImpl("    end;")
                 .appendImpl("  *)")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10, 16);
+        .verifyIssues();
   }
 }

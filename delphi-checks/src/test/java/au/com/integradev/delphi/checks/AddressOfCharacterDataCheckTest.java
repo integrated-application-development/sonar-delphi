@@ -43,9 +43,9 @@ class AddressOfCharacterDataCheckTest {
                 .appendImpl("var")
                 .appendImpl("  S: String;")
                 .appendImpl("begin")
-                .appendImpl("  " + expr)
+                .appendImpl("  " + expr + " // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @ParameterizedTest
@@ -63,7 +63,7 @@ class AddressOfCharacterDataCheckTest {
                 .appendImpl("var")
                 .appendImpl("  S: String;")
                 .appendImpl("begin")
-                .appendImpl("  " + expr)
+                .appendImpl("  " + expr + " // Noncompliant")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -85,9 +85,9 @@ class AddressOfCharacterDataCheckTest {
                 .appendImpl("var")
                 .appendImpl("  S: " + type + ";")
                 .appendImpl("begin")
-                .appendImpl("  @S[1];")
+                .appendImpl("  @S[1]; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -100,12 +100,12 @@ class AddressOfCharacterDataCheckTest {
                 .appendImpl("var")
                 .appendImpl("  S: String;")
                 .appendImpl("begin")
-                .appendImpl("  @S[{$ZEROBASEDSTRINGS ON} 0]")
+                .appendImpl("  @S[{$ZEROBASEDSTRINGS ON} 0] // Noncompliant")
                 // This isn't quite correct, because the compiler actually effects the switch
                 // directive at the start of the [] context. We don't model that correctly yet.
-                .appendImpl("  @S[0 {$ZEROBASEDSTRINGS OFF}]")
-                .appendImpl("  @S[1]")
+                .appendImpl("  @S[0 {$ZEROBASEDSTRINGS OFF}] // Noncompliant")
+                .appendImpl("  @S[1] // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11, 12, 13);
+        .verifyIssues();
   }
 }

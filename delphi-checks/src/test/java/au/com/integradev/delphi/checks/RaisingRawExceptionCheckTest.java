@@ -44,9 +44,9 @@ class RaisingRawExceptionCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
-                .appendImpl("  raise Exception.Create;")
+                .appendImpl("  raise Exception.Create; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test

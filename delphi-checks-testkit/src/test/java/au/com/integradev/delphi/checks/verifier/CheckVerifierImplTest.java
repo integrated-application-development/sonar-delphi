@@ -136,7 +136,7 @@ class CheckVerifierImplTest {
 
     assertThatCode(verifier::verifyIssueOnFile).doesNotThrowAnyException();
 
-    assertThatThrownBy(() -> verifier.verifyIssueOnLine(1)).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier::verifyIssues).isInstanceOf(AssertionError.class);
     assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
     assertThatThrownBy(verifier::verifyNoIssues).isInstanceOf(AssertionError.class);
   }

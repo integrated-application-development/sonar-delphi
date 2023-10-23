@@ -101,9 +101,9 @@ class CastAndFreeCheckTest {
                 .appendDecl("  TXyzz = class(TObject) end;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  (Bar as TXyzz).Free;")
+                .appendImpl("  (Bar as TXyzz).Free; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -130,9 +130,9 @@ class CastAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  (Bar as Xyzzy).Free;")
+                .appendImpl("  (Bar as Xyzzy).Free; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -145,9 +145,9 @@ class CastAndFreeCheckTest {
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  TObject(Bar).Free;")
+                .appendImpl("  TObject(Bar).Free; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -161,9 +161,9 @@ class CastAndFreeCheckTest {
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(Bar as TObject);")
+                .appendImpl("  FreeAndNil(Bar as TObject); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -177,9 +177,9 @@ class CastAndFreeCheckTest {
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(TObject(Bar));")
+                .appendImpl("  FreeAndNil(TObject(Bar)); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -190,9 +190,9 @@ class CastAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  (((Bar as TObject))).Free;")
+                .appendImpl("  (((Bar as TObject))).Free; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -203,9 +203,9 @@ class CastAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  ((Xyzzy(Bar))).Free;")
+                .appendImpl("  ((Xyzzy(Bar))).Free; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -219,9 +219,9 @@ class CastAndFreeCheckTest {
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(((Bar as Xyzzy)));")
+                .appendImpl("  FreeAndNil(((Bar as Xyzzy))); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -235,9 +235,9 @@ class CastAndFreeCheckTest {
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(((Xyzzy(Bar))));")
+                .appendImpl("  FreeAndNil(((Xyzzy(Bar)))); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   private static DelphiTestUnitBuilder createSysUtils() {

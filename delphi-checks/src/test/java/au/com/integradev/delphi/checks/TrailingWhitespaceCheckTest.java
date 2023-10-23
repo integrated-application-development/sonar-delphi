@@ -27,24 +27,33 @@ class TrailingWhitespaceCheckTest {
   void testTrailingSpaceShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TrailingWhitespaceCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject; "))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("var Foo: TObject; "))
+        .verifyIssues();
   }
 
   @Test
   void testTrailingTabShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TrailingWhitespaceCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;\t"))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("var Foo: TObject;\t"))
+        .verifyIssues();
   }
 
   @Test
   void testTrailingMixedWhitespaceShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TrailingWhitespaceCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("var Foo: TObject;\t   \t\t \t  "))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("var Foo: TObject;\t   \t\t \t "))
+        .verifyIssues();
   }
 
   @Test

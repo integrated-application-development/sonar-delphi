@@ -70,8 +70,8 @@ class TrailingCommaArgumentListCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  Foo(1, 2, 3,);")
+                .appendImpl("  Foo(1, 2, 3,); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

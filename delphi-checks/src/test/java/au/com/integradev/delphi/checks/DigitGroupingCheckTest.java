@@ -40,8 +40,8 @@ class DigitGroupingCheckTest {
   void testNonStandardGroupingShouldAddIssue(String actual) {
     CheckVerifier.newVerifier()
         .withCheck(new DigitGroupingCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("const A = " + actual + ";"))
-        .verifyIssueOnLine(7);
+        .onFile(new DelphiTestUnitBuilder().appendImpl("const A = " + actual + "; // Noncompliant"))
+        .verifyIssues();
   }
 
   @ParameterizedTest

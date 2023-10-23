@@ -42,9 +42,9 @@ class ExplicitTObjectInheritanceCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TClass = class")
+                .appendDecl("  TClass = class // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test

@@ -46,11 +46,11 @@ class InterfaceGuidCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  IPublisher = interface")
+                .appendDecl("  IPublisher = interface // Noncompliant")
                 .appendDecl("    procedure RegisterSubscriber(Handler: TNotifyEvent);")
                 .appendDecl("    procedure DeregisterSubscriber(Handler: TNotifyEvent);")
                 .appendDecl("    procedure Notify(Event: TObject);")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 }

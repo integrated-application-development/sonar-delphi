@@ -59,7 +59,7 @@ class CyclomaticComplexityMethodCheckTest {
   void testTooComplexMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;") // 1
+            .appendImpl("function Foo: Integer; // Noncompliant") // 1
             .appendImpl("begin");
 
     for (int i = 1; i <= 20; ++i) {
@@ -71,7 +71,7 @@ class CyclomaticComplexityMethodCheckTest {
     CheckVerifier.newVerifier()
         .withCheck(new CyclomaticComplexityMethodCheck())
         .onFile(builder)
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -79,7 +79,7 @@ class CyclomaticComplexityMethodCheckTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1
-            .appendImpl("  function Bar: Integer;") // 1
+            .appendImpl("  function Bar: Integer; // Noncompliant") // 1
             .appendImpl("  begin");
 
     for (int i = 1; i <= 20; ++i) {
@@ -95,6 +95,6 @@ class CyclomaticComplexityMethodCheckTest {
     CheckVerifier.newVerifier()
         .withCheck(new CyclomaticComplexityMethodCheck())
         .onFile(builder)
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 }

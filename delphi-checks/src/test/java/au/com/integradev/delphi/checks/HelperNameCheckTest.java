@@ -85,9 +85,9 @@ class HelperNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  end;")
-                .appendDecl("  FooHelper = class helper for TFoo")
+                .appendDecl("  FooHelper = class helper for TFoo // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -99,11 +99,11 @@ class HelperNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  end;")
-                .appendDecl("  TabcFooHelper = class helper for TFoo")
+                .appendDecl("  TabcFooHelper = class helper for TFoo // Noncompliant")
                 .appendDecl("  end;")
-                .appendDecl("  TFoodefHelper = class helper for TFoo")
+                .appendDecl("  TFoodefHelper = class helper for TFoo // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 10);
+        .verifyIssues();
   }
 
   @Test
@@ -115,9 +115,9 @@ class HelperNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  end;")
-                .appendDecl("  PrefixFoo = class helper for TFoo")
+                .appendDecl("  PrefixFoo = class helper for TFoo // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test

@@ -41,10 +41,10 @@ class VisibilityKeywordIndentationCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TFoo = " + structType)
-                .appendDecl("    public")
+                .appendDecl("    public // Noncompliant")
                 .appendDecl("    procedure Proc;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @ParameterizedTest
@@ -91,9 +91,9 @@ class VisibilityKeywordIndentationCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
-                .appendDecl("strict private")
+                .appendDecl("strict private // Noncompliant")
                 .appendDecl("    procedure Proc;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

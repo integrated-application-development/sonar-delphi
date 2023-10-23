@@ -46,11 +46,11 @@ class UnusedConstantCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("const")
-                .appendImpl("  C_Foo = 0;")
+                .appendImpl("  C_Foo = 0; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -75,9 +75,9 @@ class UnusedConstantCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  const C_Foo = 0;")
+                .appendImpl("  const C_Foo = 0; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -102,8 +102,8 @@ class UnusedConstantCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("const")
-                .appendDecl("  C_Foo = 0;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  C_Foo = 0; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

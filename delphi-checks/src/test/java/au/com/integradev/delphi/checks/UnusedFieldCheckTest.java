@@ -31,9 +31,9 @@ class UnusedFieldCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type TFoo = class")
                 .appendDecl("public")
-                .appendDecl("  Bar: Integer;")
+                .appendDecl("  Bar: Integer; // Noncompliant")
                 .appendDecl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test

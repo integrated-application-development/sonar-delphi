@@ -33,11 +33,11 @@ class RedundantBooleanCheckTest {
                 .appendImpl("var")
                 .appendImpl("  X: Boolean;")
                 .appendImpl("begin")
-                .appendImpl("  if X = True then begin")
+                .appendImpl("  if X = True then begin // Noncompliant")
                 .appendImpl("    DoSomething;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -67,11 +67,11 @@ class RedundantBooleanCheckTest {
                 .appendImpl("var")
                 .appendImpl("  X: Boolean;")
                 .appendImpl("begin")
-                .appendImpl("  if X <> False then begin")
+                .appendImpl("  if X <> False then begin // Noncompliant")
                 .appendImpl("    DoSomething;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -84,11 +84,11 @@ class RedundantBooleanCheckTest {
                 .appendImpl("var")
                 .appendImpl("  X: Boolean;")
                 .appendImpl("begin")
-                .appendImpl("  if ((((X))) = (((True)))) then begin")
+                .appendImpl("  if ((((X))) = (((True)))) then begin // Noncompliant")
                 .appendImpl("    DoSomething;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -100,8 +100,8 @@ class RedundantBooleanCheckTest {
                 .appendDecl("procedure Foo(Bar: Boolean);")
                 .appendImpl("procedure Baz;")
                 .appendImpl("begin")
-                .appendImpl("  Foo(not True);")
+                .appendImpl("  Foo(not True); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 }

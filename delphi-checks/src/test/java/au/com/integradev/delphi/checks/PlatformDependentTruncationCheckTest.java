@@ -50,9 +50,9 @@ class PlatformDependentTruncationCheckTest {
                 .appendImpl("  I64: Int64;")
                 .appendImpl("  Nat: NativeInt;")
                 .appendImpl("begin")
-                .appendImpl("  Nat := I64;")
+                .appendImpl("  Nat := I64; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -66,9 +66,9 @@ class PlatformDependentTruncationCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Nat: NativeInt;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Nat;")
+                .appendImpl("  Int := Nat; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -130,9 +130,9 @@ class PlatformDependentTruncationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I64: Int64;")
                 .appendImpl("begin")
-                .appendImpl("  Bar(I64);")
+                .appendImpl("  Bar(I64); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test
@@ -146,9 +146,9 @@ class PlatformDependentTruncationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I64: Int64;")
                 .appendImpl("begin")
-                .appendImpl("  Bar(I64);")
+                .appendImpl("  Bar(I64); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test

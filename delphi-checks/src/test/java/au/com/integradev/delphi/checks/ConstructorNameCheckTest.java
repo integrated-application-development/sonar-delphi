@@ -58,9 +58,9 @@ class ConstructorNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TMyForm = class(TForm)")
-                .appendDecl("    constructor NotCreate;")
+                .appendDecl("    constructor NotCreate; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -71,9 +71,9 @@ class ConstructorNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TMyForm = class(TForm)")
-                .appendDecl("    constructor Createclass;")
+                .appendDecl("    constructor Createclass; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
