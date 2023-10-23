@@ -25,7 +25,8 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class ForbiddenTypeCheckTest {
   private static final String UNIT_NAME = "TestUnit";
-  private static final String FORBIDDEN_TYPES = "TestUnit.TFoo,TestUnit.TFoo.TBar";
+  private static final String FORBIDDEN_TYPES =
+      "TestUnit.TFoo,TestUnit.TFoo.TBar,TestUnit.FooAttribute";
 
   private static DelphiCheck createCheck() {
     ForbiddenTypeCheck check = new ForbiddenTypeCheck();
@@ -95,5 +96,95 @@ class ForbiddenTypeCheckTest {
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
         .verifyNoIssues();
+  }
+
+  @Test
+  void testForbiddenAttributeUsageShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendImpl("[Foo]")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(11);
+  }
+
+  @Test
+  void testUsingAttributeOfSameNameShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  Foo = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendImpl("[Foo]")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNotUsingAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendDecl("  BarAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendImpl("[Bar]")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testForbiddenAttributeInGroupShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendDecl("  BarAttribute = class(TCustomAttribute)")
+                .appendDecl("  end;")
+                .appendImpl("[Bar, Foo]")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(13);
+  }
+
+  @Test
+  void testForbiddenAttributeWithConstructorShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
+                .appendDecl("type")
+                .appendDecl("  FooAttribute = class(TCustomAttribute)")
+                .appendDecl("    constructor Create(MyVal: string);")
+                .appendDecl("  end;")
+                .appendImpl("[Foo('hello')]")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyIssueOnLine(12);
   }
 }
