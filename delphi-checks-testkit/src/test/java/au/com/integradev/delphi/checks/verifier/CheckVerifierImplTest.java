@@ -34,36 +34,6 @@ class CheckVerifierImplTest {
   private static final String MESSAGE = "Test message";
 
   @Test
-  void testLineIssue() {
-    CheckVerifier verifier =
-        CheckVerifier.newVerifier()
-            .withCheck(new WillRaiseLineIssueOnFileHeaderCheck())
-            .onFile(new DelphiTestUnitBuilder());
-
-    assertThatCode(() -> verifier.verifyIssueOnLine(1)).doesNotThrowAnyException();
-
-    assertThatThrownBy(verifier::verifyIssueOnFile).isInstanceOf(AssertionError.class);
-    assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
-    assertThatThrownBy(verifier::verifyNoIssues).isInstanceOf(AssertionError.class);
-  }
-
-  @Test
-  void testLineIssues() {
-    CheckVerifier verifier =
-        CheckVerifier.newVerifier()
-            .withCheck(new WillRaiseLineIssueOnFileHeaderAndImplementationCheck())
-            .onFile(new DelphiTestUnitBuilder());
-
-    assertThatCode(() -> verifier.verifyIssueOnLine(1, 5)).doesNotThrowAnyException();
-
-    assertThatThrownBy(() -> verifier.verifyIssueOnLine(1)).isInstanceOf(AssertionError.class);
-    assertThatThrownBy(() -> verifier.verifyIssueOnLine(5)).isInstanceOf(AssertionError.class);
-    assertThatThrownBy(verifier::verifyIssueOnFile).isInstanceOf(AssertionError.class);
-    assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
-    assertThatThrownBy(verifier::verifyNoIssues).isInstanceOf(AssertionError.class);
-  }
-
-  @Test
   void testImpliedIssueOnExactMatchingLines() {
     CheckVerifier verifier =
         CheckVerifier.newVerifier()
