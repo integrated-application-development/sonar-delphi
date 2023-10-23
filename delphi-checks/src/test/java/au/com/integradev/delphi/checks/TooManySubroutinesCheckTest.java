@@ -54,7 +54,7 @@ class TooManySubroutinesCheckTest {
         .withCheck(new TooManySubroutinesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("function Foo: Integer;")
+                .appendImpl("function Foo: Integer; // Noncompliant")
                 .appendImpl("  function Bar: Integer;")
                 .appendImpl("  begin")
                 .appendImpl("    Result := 1;")
@@ -74,7 +74,7 @@ class TooManySubroutinesCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  Result := Bar + Baz + Qux + Xyzzy;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -83,7 +83,7 @@ class TooManySubroutinesCheckTest {
         .withCheck(new TooManySubroutinesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("constructor TMyObject.Create;")
+                .appendImpl("constructor TMyObject.Create; // Noncompliant")
                 .appendImpl("  function Bar: Integer;")
                 .appendImpl("  begin")
                 .appendImpl("    Result := 1;")
@@ -104,7 +104,7 @@ class TooManySubroutinesCheckTest {
                 .appendImpl("  inherited;")
                 .appendImpl("  FMyField := Bar + Baz + Qux + Xyzzy;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -113,7 +113,7 @@ class TooManySubroutinesCheckTest {
         .withCheck(new TooManySubroutinesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("destructor TMyObject.Destroy;")
+                .appendImpl("destructor TMyObject.Destroy; // Noncompliant")
                 .appendImpl("  function Bar: Integer;")
                 .appendImpl("  begin")
                 .appendImpl("    Result := 1;")
@@ -134,7 +134,7 @@ class TooManySubroutinesCheckTest {
                 .appendImpl("  FMyField := Bar + Baz + Qux + Xyzzy;")
                 .appendImpl("  inherited;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -143,7 +143,7 @@ class TooManySubroutinesCheckTest {
         .withCheck(new TooManySubroutinesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo;")
+                .appendImpl("procedure Foo; // Noncompliant")
                 .appendImpl("  function Bar: Integer;")
                 .appendImpl("    function Baz: Integer;")
                 .appendImpl("      function Qux: Integer;")
@@ -163,6 +163,6 @@ class TooManySubroutinesCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  FMyField := Bar;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

@@ -33,9 +33,9 @@ class InstanceInvokedConstructorCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Obj: TObject;")
                 .appendImpl("begin")
-                .appendImpl("  Obj.Create;")
+                .appendImpl("  Obj.Create; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test

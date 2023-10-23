@@ -48,10 +48,10 @@ class ForbiddenImportFilePatternCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("uses")
-                .appendDecl("    Foo")
+                .appendDecl("    Foo // Noncompliant")
                 .appendDecl("  , Bar")
                 .appendDecl("  ;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test

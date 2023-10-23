@@ -50,10 +50,10 @@ class VariableNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("var")
-                .appendDecl("  G_My_Char: Char;")
-                .appendDecl("  gAnotherChar: Char;")
-                .appendDecl("  GlobalChar: Char;"))
-        .verifyIssueOnLine(6, 7, 8);
+                .appendDecl("  G_My_Char: Char; // Noncompliant")
+                .appendDecl("  gAnotherChar: Char; // Noncompliant")
+                .appendDecl("  GlobalChar: Char; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -79,11 +79,11 @@ class VariableNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("var")
-                .appendImpl("  someVar: Integer;")
+                .appendImpl("  someVar: Integer; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  someVar := 0;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -122,11 +122,11 @@ class VariableNameCheckTest {
         .withCheck(createCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure MyProcedure(arg: Integer);")
+                .appendImpl("procedure MyProcedure(arg: Integer); // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  arg := 0;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -150,9 +150,9 @@ class VariableNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  var someVar: Integer;")
+                .appendImpl("  var someVar: Integer; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -176,9 +176,9 @@ class VariableNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  for var someVar := 1 to 100 do;")
+                .appendImpl("  for var someVar := 1 to 100 do; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -193,11 +193,11 @@ class VariableNameCheckTest {
                 .appendDecl("  end;")
                 .appendDecl("  TBar = class(TObject, IFoo)")
                 .appendDecl("    procedure Proc(")
-                .appendDecl("      myStr: string;")
-                .appendDecl("      myInt: Integer")
+                .appendDecl("      myStr: string; // Noncompliant")
+                .appendDecl("      myInt: Integer // Noncompliant")
                 .appendDecl("    );")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(11, 12);
+        .verifyIssues();
   }
 
   @Test
@@ -208,12 +208,14 @@ class VariableNameCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  IFoo = interface")
+                .appendDecl("    // Noncompliant@+2")
+                .appendDecl("    // Noncompliant@+1")
                 .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
                 .appendDecl("  end;")
                 .appendDecl("  TBar = class(TObject, IFoo)")
                 .appendDecl("    procedure Proc(myStr: string; myInt: Integer);")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7, 7);
+        .verifyIssues();
   }
 
   private static DelphiTestUnitBuilder createVclForms() {

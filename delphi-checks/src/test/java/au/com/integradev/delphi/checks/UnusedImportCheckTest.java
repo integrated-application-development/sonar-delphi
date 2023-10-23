@@ -43,14 +43,14 @@ class UnusedImportCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("uses")
-                .appendImpl("  System.SysUtils;")
+                .appendImpl("  System.SysUtils; // Noncompliant")
                 .appendImpl("procedure Test;")
                 .appendImpl("var")
                 .appendImpl("  Obj: TObject;")
                 .appendImpl("begin")
                 .appendImpl("  Obj := TObject.Create;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -115,14 +115,14 @@ class UnusedImportCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("uses")
-                .appendImpl("  System.SysUtils;")
+                .appendImpl("  System.SysUtils; // Noncompliant")
                 .appendImpl("procedure Test;")
                 .appendImpl("var")
                 .appendImpl("  Obj: TObject;")
                 .appendImpl("begin")
                 .appendImpl("  Obj := TObject.Create;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test

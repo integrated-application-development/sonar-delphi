@@ -45,9 +45,9 @@ class EmptyFieldSectionCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TClass = class(TObject)")
-                .appendDecl("  var")
+                .appendDecl("  var // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -58,8 +58,8 @@ class EmptyFieldSectionCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TClass = class(TObject)")
-                .appendDecl("  class var")
+                .appendDecl("  class var // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

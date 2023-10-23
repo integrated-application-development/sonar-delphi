@@ -53,11 +53,11 @@ class ConstructorWithoutInheritedCheckTest {
                 .appendDecl("  public")
                 .appendDecl("    constructor Create;")
                 .appendDecl("  end;")
-                .appendImpl("constructor TTestConstructor.Create;")
+                .appendImpl("constructor TTestConstructor.Create; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  WriteLn('do something');")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test
@@ -102,10 +102,10 @@ class ConstructorWithoutInheritedCheckTest {
         .withCheck(new ConstructorWithoutInheritedCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("constructor TTestConstructor.Create;")
+                .appendImpl("constructor TTestConstructor.Create; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  WriteLn('do something');")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

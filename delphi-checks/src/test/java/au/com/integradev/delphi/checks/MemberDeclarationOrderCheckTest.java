@@ -58,9 +58,9 @@ class MemberDeclarationOrderCheckTest {
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  private")
                 .appendDecl("    " + firstItem + " Bar: Integer;")
-                .appendDecl("    " + secondItem + " Baz: Integer;")
+                .appendDecl("    " + secondItem + " Baz: Integer; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -73,10 +73,10 @@ class MemberDeclarationOrderCheckTest {
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("  private")
                 .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-                .appendDecl("    FMyField: Integer;")
+                .appendDecl("    FMyField: Integer; // Noncompliant")
                 .appendDecl("    FMyOtherField: Integer;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -111,11 +111,11 @@ class MemberDeclarationOrderCheckTest {
                 .appendDecl("    FMyField: Integer;")
                 .appendDecl("    procedure MyProc;")
                 .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("    FMyOtherField: Integer; // Noncompliant")
                 .appendDecl("    procedure MyOtherProc;")
                 .appendDecl("    property MyOtherProp: Integer read FMyField write FMyField;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -130,11 +130,11 @@ class MemberDeclarationOrderCheckTest {
                 .appendDecl("    FMyField: Integer;")
                 .appendDecl("    procedure MyProc;")
                 .appendDecl("    property MyProp: Integer read FMyField write FMyField;")
-                .appendDecl("    FMyOtherField: Integer;")
+                .appendDecl("    FMyOtherField: Integer; // Noncompliant")
                 .appendDecl("    procedure MyOtherProc;")
                 .appendDecl("    property MyOtherProp: Integer read FMyField write FMyField;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @ParameterizedTest
@@ -163,9 +163,9 @@ class MemberDeclarationOrderCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("    property MyProp: Integer;")
-                .appendDecl("    procedure MyProc;")
+                .appendDecl("    procedure MyProc; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @ParameterizedTest
@@ -178,8 +178,8 @@ class MemberDeclarationOrderCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = " + structType)
                 .appendDecl("    property MyProp: Integer;")
-                .appendDecl("    procedure MyProc;")
+                .appendDecl("    procedure MyProc; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 }

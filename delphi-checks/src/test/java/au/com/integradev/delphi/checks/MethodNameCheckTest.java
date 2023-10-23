@@ -46,10 +46,10 @@ class MethodNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IMyInterface = interface")
                 .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-                .appendDecl("    procedure foo;")
-                .appendDecl("    function bar: Integer;")
+                .appendDecl("    procedure foo; // Noncompliant")
+                .appendDecl("    function bar: Integer; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 9);
+        .verifyIssues();
   }
 
   @Test
@@ -58,9 +58,9 @@ class MethodNameCheckTest {
         .withCheck(new MethodNameCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendDecl("procedure foo;")
-                .appendDecl("function bar: Integer;"))
-        .verifyIssueOnLine(5, 6);
+                .appendDecl("procedure foo; // Noncompliant")
+                .appendDecl("function bar: Integer; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -85,13 +85,13 @@ class MethodNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFoo = interface")
                 .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-                .appendDecl("    procedure invalidName;")
+                .appendDecl("    procedure invalidName; // Noncompliant")
                 .appendDecl("  end;")
                 .appendDecl("  TFoo = class(TObject, IFoo)")
                 .appendDecl("    public")
                 .appendDecl("      procedure invalidName;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -103,13 +103,13 @@ class MethodNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("    public")
-                .appendDecl("      procedure invalidName;")
+                .appendDecl("      procedure invalidName; // Noncompliant")
                 .appendDecl("  end;")
                 .appendDecl("  TBar = class(TFoo)")
                 .appendDecl("    public")
                 .appendDecl("      procedure invalidName; override;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -121,13 +121,13 @@ class MethodNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFoo = interface")
                 .appendDecl("    ['{ACCD0A8C-A60F-464A-8152-52DD36F86356}']")
-                .appendDecl("    procedure invalidname;")
+                .appendDecl("    procedure invalidname; // Noncompliant")
                 .appendDecl("  end;")
                 .appendDecl("  TFoo = class(TObject, IFoo)")
                 .appendDecl("    public")
-                .appendDecl("      procedure invalidName;")
+                .appendDecl("      procedure invalidName; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 12);
+        .verifyIssues();
   }
 
   @Test
@@ -139,13 +139,13 @@ class MethodNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(TObject)")
                 .appendDecl("    public")
-                .appendDecl("      procedure invalidname;")
+                .appendDecl("      procedure invalidname; // Noncompliant")
                 .appendDecl("  end;")
                 .appendDecl("  TBar = class(TFoo)")
                 .appendDecl("    public")
-                .appendDecl("      procedure invalidName; override;")
+                .appendDecl("      procedure invalidName; override; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8, 12);
+        .verifyIssues();
   }
 
   @Test
@@ -157,8 +157,8 @@ class MethodNameCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class(UNKNOWN_TYPE)")
                 .appendDecl("    public")
-                .appendDecl("      procedure invalidname; override;")
+                .appendDecl("      procedure invalidname; override; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 }

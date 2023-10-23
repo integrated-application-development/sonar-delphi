@@ -91,7 +91,7 @@ class TooLargeMethodCheckTest {
   void testTooLargeMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder() //
-            .appendImpl("function Foo: Integer;")
+            .appendImpl("function Foo: Integer; // Noncompliant")
             .appendImpl("begin");
 
     for (int i = 1; i <= 101; i++) {
@@ -100,17 +100,14 @@ class TooLargeMethodCheckTest {
 
     builder.appendImpl("end;");
 
-    CheckVerifier.newVerifier()
-        .withCheck(new TooLargeMethodCheck())
-        .onFile(builder)
-        .verifyIssueOnLine(7);
+    CheckVerifier.newVerifier().withCheck(new TooLargeMethodCheck()).onFile(builder).verifyIssues();
   }
 
   @Test
   void testComplexTooLargeMethodShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
-            .appendImpl("function Foo: Integer;")
+            .appendImpl("function Foo: Integer; // Noncompliant")
             .appendImpl("begin")
             .appendImpl("  if X then begin") // 1
             .appendImpl("    Bar;") // 2
@@ -162,9 +159,6 @@ class TooLargeMethodCheckTest {
 
     builder.appendImpl("end;");
 
-    CheckVerifier.newVerifier()
-        .withCheck(new TooLargeMethodCheck())
-        .onFile(builder)
-        .verifyIssueOnLine(7);
+    CheckVerifier.newVerifier().withCheck(new TooLargeMethodCheck()).onFile(builder).verifyIssues();
   }
 }

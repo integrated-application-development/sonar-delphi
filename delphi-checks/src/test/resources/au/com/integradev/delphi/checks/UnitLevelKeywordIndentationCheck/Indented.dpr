@@ -1,10 +1,10 @@
-      program correct;
+      program correct; // Noncompliant
 
-  uses
+  uses // Noncompliant
   System.SysUtils;
 
   var
   MyVar: Integer;
-    begin
+    begin // Noncompliant
 
-  end.
+  end. // Noncompliant

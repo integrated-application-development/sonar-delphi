@@ -50,9 +50,9 @@ class FreeAndNilTObjectCheckTest {
                 .appendDecl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Double);")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(Bar);")
+                .appendImpl("  FreeAndNil(Bar); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   private static DelphiTestUnitBuilder createSysUtils() {

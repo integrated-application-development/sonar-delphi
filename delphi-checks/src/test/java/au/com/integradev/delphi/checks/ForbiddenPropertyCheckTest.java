@@ -50,9 +50,9 @@ class ForbiddenPropertyCheckTest {
                 .appendImpl("  Foo: TFoo;")
                 .appendImpl("begin")
                 .appendImpl("  Foo := TFoo.Create;")
-                .appendImpl("  Foo := TFoo.Bar;")
+                .appendImpl("  Foo := TFoo.Bar; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(18);
+        .verifyIssues();
   }
 
   @Test

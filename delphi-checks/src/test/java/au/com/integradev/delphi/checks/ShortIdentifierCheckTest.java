@@ -30,18 +30,18 @@ class ShortIdentifierCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  A = class")
-                .appendDecl("    procedure B;")
+                .appendDecl("  A = class // Noncompliant")
+                .appendDecl("    procedure B; // Noncompliant")
                 .appendDecl("  end;")
                 .appendImpl("procedure A.B;")
                 .appendImpl("var")
-                .appendImpl("  C: Boolean;")
+                .appendImpl("  C: Boolean; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  if C then begin")
                 .appendImpl("    Proc;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(6, 7, 14);
+        .verifyIssues();
   }
 
   @Test

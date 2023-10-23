@@ -43,9 +43,9 @@ class ClassNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  tType = class(TObject)")
+                .appendDecl("  tType = class(TObject) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test

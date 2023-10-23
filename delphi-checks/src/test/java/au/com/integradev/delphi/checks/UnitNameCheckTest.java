@@ -18,12 +18,17 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class UnitNameCheckTest {
+
+  private static final String RESOURCE_PATH = "/au/com/integradev/delphi/checks/UnitNameCheck";
+  private static final String INVALID_PREFIX = RESOURCE_PATH + "/InvalidPrefix.pas";
+
   private static DelphiCheck createCheck() {
     UnitNameCheck check = new UnitNameCheck();
     check.prefixes = "Prefix";
@@ -50,7 +55,7 @@ class UnitNameCheckTest {
   void testInvalidPrefixShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
-        .onFile(new DelphiTestUnitBuilder().unitName("myUnit"))
-        .verifyIssueOnLine(1);
+        .onFile(DelphiTestFile.fromResource(INVALID_PREFIX))
+        .verifyIssues();
   }
 }

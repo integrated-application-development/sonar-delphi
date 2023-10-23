@@ -41,7 +41,7 @@ class CognitiveComplexityMethodCheckTest {
   void testTooComplexMethod() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder() //
-            .appendImpl("function Foo: Integer;")
+            .appendImpl("function Foo: Integer; // Noncompliant")
             .appendImpl("begin");
 
     for (int i = 1; i <= 16; ++i) {
@@ -53,7 +53,7 @@ class CognitiveComplexityMethodCheckTest {
     CheckVerifier.newVerifier()
         .withCheck(new CognitiveComplexityMethodCheck())
         .onFile(builder)
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -61,7 +61,7 @@ class CognitiveComplexityMethodCheckTest {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")
-            .appendImpl("  function Bar: Integer;")
+            .appendImpl("  function Bar: Integer; // Noncompliant")
             .appendImpl("  begin");
 
     for (int i = 1; i <= 16; ++i) {
@@ -77,6 +77,6 @@ class CognitiveComplexityMethodCheckTest {
     CheckVerifier.newVerifier()
         .withCheck(new CognitiveComplexityMethodCheck())
         .onFile(builder)
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 }

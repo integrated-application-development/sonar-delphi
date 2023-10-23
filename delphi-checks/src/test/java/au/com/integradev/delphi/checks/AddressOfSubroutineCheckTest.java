@@ -114,9 +114,9 @@ class AddressOfSubroutineCheckTest {
                 .appendImpl("    Exit;")
                 .appendImpl("  end;")
                 .appendImpl("begin")
-                .appendImpl("  ProcVar := @Nested;")
-                .appendImpl("  ProcMethod(@Nested);")
+                .appendImpl("  ProcVar := @Nested; // Noncompliant")
+                .appendImpl("  ProcMethod(@Nested); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17, 18);
+        .verifyIssues();
   }
 }

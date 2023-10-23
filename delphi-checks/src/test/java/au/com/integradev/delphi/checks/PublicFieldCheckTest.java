@@ -54,9 +54,9 @@ class PublicFieldCheckTest {
                 .appendDecl("    protected")
                 .appendDecl("     FProtectedField: String;")
                 .appendDecl("    public")
-                .appendDecl("     FPublicField: String;")
+                .appendDecl("     FPublicField: String; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test

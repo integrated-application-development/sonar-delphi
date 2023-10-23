@@ -1,42 +1,42 @@
-   unit indented;
+   unit indented; // Noncompliant
 
-  interface
+  interface // Noncompliant
 
-   uses
+   uses // Noncompliant
   SysUtils,
   System;
 
-  type
+  type // Noncompliant
     TMyObject = class(TObject)
     end;
 
-    procedure MyProc;
+    procedure MyProc; // Noncompliant
 
-        implementation
+        implementation // Noncompliant
 
-      uses
+      uses // Noncompliant
       StrUtils,
       Math;
 
-    type
+    type // Noncompliant
         TMyOtherObject = class(TObject)
         private
           class procedure MyClassProc;
         end;
 
 
-  class procedure TMyOtherObject.MyClassProc;
-  begin
+  class procedure TMyOtherObject.MyClassProc; // Noncompliant
+  begin // Noncompliant
     Writeln('Hello world');
-  end;
+  end; // Noncompliant
 
-  procedure MyProc;
-  begin
+  procedure MyProc; // Noncompliant
+  begin // Noncompliant
     Writeln('Hello world');
-  end;
+  end; // Noncompliant
 
- initialization
+ initialization // Noncompliant
 
-    finalization
+    finalization // Noncompliant
 
-          end.
+          end. // Noncompliant

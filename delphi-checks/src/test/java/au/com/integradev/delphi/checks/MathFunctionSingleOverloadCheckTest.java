@@ -68,10 +68,10 @@ class MathFunctionSingleOverloadCheckTest {
                 .appendImpl("  System.Math;")
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  IntPower(Single(1.0), 1);")
-                .appendImpl("  IntPower(1, 1);")
+                .appendImpl("  IntPower(Single(1.0), 1); // Noncompliant")
+                .appendImpl("  IntPower(1, 1); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11, 12);
+        .verifyIssues();
   }
 
   private static DelphiTestUnitBuilder createSystemMath() {

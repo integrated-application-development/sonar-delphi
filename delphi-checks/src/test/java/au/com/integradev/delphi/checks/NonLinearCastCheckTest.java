@@ -146,9 +146,9 @@ class NonLinearCastCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("function AsOtherChild(Obj: TChild): TOtherChild;")
                 .appendImpl("begin")
-                .appendImpl("  Result := TOtherChild(Obj);")
+                .appendImpl("  Result := TOtherChild(Obj); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -164,9 +164,9 @@ class NonLinearCastCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("function AsCat(Obj: TDog): TCat;")
                 .appendImpl("begin")
-                .appendImpl("  Result := TCat(Obj);")
+                .appendImpl("  Result := TCat(Obj); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test
@@ -254,8 +254,8 @@ class NonLinearCastCheckTest {
                 .appendDecl("  PCat = ^TCat;")
                 .appendImpl("function AsPointer(Obj: TDog): PCat;")
                 .appendImpl("begin")
-                .appendImpl("  Result := PCat(Obj);")
+                .appendImpl("  Result := PCat(Obj); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(16);
+        .verifyIssues();
   }
 }

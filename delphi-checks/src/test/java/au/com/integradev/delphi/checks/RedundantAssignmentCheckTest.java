@@ -33,9 +33,9 @@ class RedundantAssignmentCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Bar: String;")
                 .appendImpl("begin")
-                .appendImpl("  Bar := Bar;")
+                .appendImpl("  Bar := Bar; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -48,9 +48,9 @@ class RedundantAssignmentCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Bar: String;")
                 .appendImpl("begin")
-                .appendImpl("  Bar := (Bar);")
+                .appendImpl("  Bar := (Bar); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test

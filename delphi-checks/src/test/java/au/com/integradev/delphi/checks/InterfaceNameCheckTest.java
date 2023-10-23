@@ -46,12 +46,12 @@ class InterfaceNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  Publisher = interface")
+                .appendDecl("  Publisher = interface // Noncompliant")
                 .appendDecl("    ['{E1787C21-0FF2-11D5-A978-006067000685}']")
                 .appendDecl("      procedure RegisterSubscriber(Handler: TNotifyEvent);")
                 .appendDecl("      procedure DeregisterSubscriber(Handler: TNotifyEvent);")
                 .appendDecl("      procedure Notify(Event: TObject);")
                 .appendDecl("end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 }

@@ -31,9 +31,9 @@ class AssertMessageCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
-                .appendImpl("  Assert(False);")
+                .appendImpl("  Assert(False); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test

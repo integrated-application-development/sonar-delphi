@@ -36,12 +36,12 @@ class CharacterToCharacterPointerCastCheckTest {
                 .appendImpl("  AnsiCharacterPointer: PAnsiChar;")
                 .appendImpl("  CharacterPointer: PChar;")
                 .appendImpl("begin")
-                .appendImpl("  AnsiCharacterPointer := PAnsiChar(AnsiCharacter);")
-                .appendImpl("  AnsiCharacterPointer := PAnsiChar(Character);")
-                .appendImpl("  CharacterPointer := PChar(AnsiCharacter);")
-                .appendImpl("  CharacterPointer := PChar(Character);")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(AnsiCharacter); // Noncompliant")
+                .appendImpl("  AnsiCharacterPointer := PAnsiChar(Character); // Noncompliant")
+                .appendImpl("  CharacterPointer := PChar(AnsiCharacter); // Noncompliant")
+                .appendImpl("  CharacterPointer := PChar(Character); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 15, 16, 17);
+        .verifyIssues();
   }
 
   @Test

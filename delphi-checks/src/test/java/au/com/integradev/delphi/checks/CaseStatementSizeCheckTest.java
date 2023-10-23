@@ -67,11 +67,11 @@ class CaseStatementSizeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  case MyNumber of")
+                .appendImpl("  case MyNumber of // Noncompliant")
                 .appendImpl("    1: Break;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -82,13 +82,13 @@ class CaseStatementSizeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  case MyNumber of")
+                .appendImpl("  case MyNumber of // Noncompliant")
                 .appendImpl("    1: Break;")
                 .appendImpl("    else begin")
                 .appendImpl("      Break;")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

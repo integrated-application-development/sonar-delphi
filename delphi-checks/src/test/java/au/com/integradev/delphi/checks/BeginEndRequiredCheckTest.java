@@ -45,9 +45,9 @@ class BeginEndRequiredCheckTest {
                 .appendImpl("procedure Foo(Int: Integer);")
                 .appendImpl("begin")
                 .appendImpl("  while Int <> 0 do")
-                .appendImpl("    WriteLn('test');")
+                .appendImpl("    WriteLn('test'); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -59,9 +59,9 @@ class BeginEndRequiredCheckTest {
                 .appendImpl("procedure Foo(Int: Integer);")
                 .appendImpl("begin")
                 .appendImpl("  for Int := 0 to 3 do")
-                .appendImpl("    WriteLn('test');")
+                .appendImpl("    WriteLn('test'); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -110,10 +110,10 @@ class BeginEndRequiredCheckTest {
                 .appendImpl("    on Exception do begin")
                 .appendImpl("      WriteLn('Foo');")
                 .appendImpl("    end;")
-                .appendImpl("    else WriteLn('Bar');")
+                .appendImpl("    else WriteLn('Bar'); // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(15);
+        .verifyIssues();
   }
 
   @Test

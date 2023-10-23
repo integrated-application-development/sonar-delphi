@@ -36,8 +36,8 @@ class ExtendingTFooCheckTest {
                 .appendDecl("  TFoo = class")
                 .appendDecl("  end;")
                 .appendDecl("type")
-                .appendDecl("  TBar = class(TFoo)")
+                .appendDecl("  TBar = class(TFoo) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

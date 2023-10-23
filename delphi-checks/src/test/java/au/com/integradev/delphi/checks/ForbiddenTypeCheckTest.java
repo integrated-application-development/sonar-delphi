@@ -47,11 +47,11 @@ class ForbiddenTypeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure Test;")
                 .appendImpl("var")
-                .appendImpl("  Foo: TFoo;")
+                .appendImpl("  Foo: TFoo; // Noncompliant")
                 .appendImpl("begin")
-                .appendImpl("  TFoo.Bar;")
+                .appendImpl("  TFoo.Bar; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 16);
+        .verifyIssues();
   }
 
   @Test
@@ -71,13 +71,13 @@ class ForbiddenTypeCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure Test;")
                 .appendImpl("var")
-                .appendImpl("  Foo: TFoo;")
-                .appendImpl("  Nested: TFoo.TNested;")
+                .appendImpl("  Foo: TFoo; // Noncompliant")
+                .appendImpl("  Nested: TFoo.TNested; // Noncompliant")
                 .appendImpl("begin")
-                .appendImpl("  TFoo.Bar;")
-                .appendImpl("  TFoo.TNested.Bar;")
+                .appendImpl("  TFoo.Bar; // Noncompliant")
+                .appendImpl("  TFoo.TNested.Bar; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(18, 19, 21, 22);
+        .verifyIssues();
   }
 
   @Test
@@ -108,11 +108,11 @@ class ForbiddenTypeCheckTest {
                 .appendDecl("type")
                 .appendDecl("  FooAttribute = class(TCustomAttribute)")
                 .appendDecl("  end;")
-                .appendImpl("[Foo]")
+                .appendImpl("[Foo] // Noncompliant")
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(11);
+        .verifyIssues();
   }
 
   @Test
@@ -163,11 +163,11 @@ class ForbiddenTypeCheckTest {
                 .appendDecl("  end;")
                 .appendDecl("  BarAttribute = class(TCustomAttribute)")
                 .appendDecl("  end;")
-                .appendImpl("[Bar, Foo]")
+                .appendImpl("[Bar, Foo] // Noncompliant")
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test
@@ -181,10 +181,10 @@ class ForbiddenTypeCheckTest {
                 .appendDecl("  FooAttribute = class(TCustomAttribute)")
                 .appendDecl("    constructor Create(MyVal: string);")
                 .appendDecl("  end;")
-                .appendImpl("[Foo('hello')]")
+                .appendImpl("[Foo('hello')] // Noncompliant")
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 }

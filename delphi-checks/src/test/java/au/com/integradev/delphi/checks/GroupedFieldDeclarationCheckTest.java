@@ -45,8 +45,8 @@ class GroupedFieldDeclarationCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TType = class(TObject)")
-                .appendDecl("    FFoo, FBar: Integer;")
+                .appendDecl("    FFoo, FBar: Integer; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

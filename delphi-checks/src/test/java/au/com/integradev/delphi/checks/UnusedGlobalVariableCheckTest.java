@@ -45,8 +45,8 @@ class UnusedGlobalVariableCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("var")
-                .appendDecl("  Foo: Integer;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  Foo: Integer; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

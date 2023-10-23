@@ -44,8 +44,8 @@ class InlineLoopVarExplicitTypeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
-                .appendImpl("  for var I := 1 to 100 do Continue;")
+                .appendImpl("  for var I := 1 to 100 do Continue; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

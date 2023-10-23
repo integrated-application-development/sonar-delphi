@@ -39,9 +39,9 @@ class DateFormatSettingsCheckTest {
                 .appendImpl("var")
                 .appendImpl("  DateTime: TDateTime;")
                 .appendImpl("begin")
-                .appendImpl("  DateTime := StrToDateTime(C_Epoch);")
+                .appendImpl("  DateTime := StrToDateTime(C_Epoch); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(16);
+        .verifyIssues();
   }
 
   @Test

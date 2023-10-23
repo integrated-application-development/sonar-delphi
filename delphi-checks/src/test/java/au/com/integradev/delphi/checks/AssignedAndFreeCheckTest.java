@@ -32,10 +32,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if MyVar <> nil then begin")
-                .appendImpl("    MyVar.Free;")
+                .appendImpl("    MyVar.Free; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -47,10 +47,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if MyClass.MyVar <> nil then begin")
-                .appendImpl("    MyClass.MyVar.Free;")
+                .appendImpl("    MyClass.MyVar.Free; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -62,10 +62,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if nil <> MyVar then begin")
-                .appendImpl("    MyVar.Free;")
+                .appendImpl("    MyVar.Free; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -77,10 +77,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if nil <> MyClass.MyVar then begin")
-                .appendImpl("    MyClass.MyVar.Free;")
+                .appendImpl("    MyClass.MyVar.Free; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -92,10 +92,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if Assigned(MyVar) then begin")
-                .appendImpl("    MyVar.Free;")
+                .appendImpl("    MyVar.Free; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -107,10 +107,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if Assigned(MyClass.MyVar) then begin")
-                .appendImpl("    MyClass.MyVar.Free;")
+                .appendImpl("    MyClass.MyVar.Free; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -134,9 +134,9 @@ class AssignedAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  if MyVar <> nil then MyVar.Free")
+                .appendImpl("  if MyVar <> nil then MyVar.Free // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -147,9 +147,9 @@ class AssignedAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  if nil <> MyVar then MyVar.Free")
+                .appendImpl("  if nil <> MyVar then MyVar.Free // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -160,9 +160,9 @@ class AssignedAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  if Assigned(MyVar) then MyVar.Free")
+                .appendImpl("  if Assigned(MyVar) then MyVar.Free // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -174,10 +174,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if MyVar <> nil then begin")
-                .appendImpl("    FreeAndNil(MyVar);")
+                .appendImpl("    FreeAndNil(MyVar); // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -189,10 +189,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if MyClass.MyVar <> nil then begin")
-                .appendImpl("    FreeAndNil(MyClass.MyVar);")
+                .appendImpl("    FreeAndNil(MyClass.MyVar); // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -204,10 +204,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if nil <> MyVar then begin")
-                .appendImpl("    FreeAndNil(MyVar);")
+                .appendImpl("    FreeAndNil(MyVar); // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -219,10 +219,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if Assigned(MyVar) then begin")
-                .appendImpl("    FreeAndNil(MyVar);")
+                .appendImpl("    FreeAndNil(MyVar); // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -234,10 +234,10 @@ class AssignedAndFreeCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  if Assigned(MyClass.MyVar) then begin")
-                .appendImpl("    FreeAndNil(MyClass.MyVar);")
+                .appendImpl("    FreeAndNil(MyClass.MyVar); // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -261,9 +261,9 @@ class AssignedAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  if MyVar <> nil then FreeAndNil(MyVar)")
+                .appendImpl("  if MyVar <> nil then FreeAndNil(MyVar) // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -274,9 +274,9 @@ class AssignedAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  if nil <> MyVar then FreeAndNil(MyVar)")
+                .appendImpl("  if nil <> MyVar then FreeAndNil(MyVar) // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -287,9 +287,9 @@ class AssignedAndFreeCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  if Assigned(MyVar) then FreeAndNil(MyVar)")
+                .appendImpl("  if Assigned(MyVar) then FreeAndNil(MyVar) // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test

@@ -101,11 +101,11 @@ class ReRaiseExceptionCheckTest {
                 .appendImpl("    ThrowException;")
                 .appendImpl("  except")
                 .appendImpl("    on E: MyException do begin")
-                .appendImpl("      raise E;")
+                .appendImpl("      raise E; // Noncompliant")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 
   @Test
@@ -119,10 +119,10 @@ class ReRaiseExceptionCheckTest {
                 .appendImpl("  try")
                 .appendImpl("    ThrowException;")
                 .appendImpl("  except")
-                .appendImpl("    on E: Exception do raise E")
+                .appendImpl("    on E: Exception do raise E // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 
   @Test
@@ -138,13 +138,13 @@ class ReRaiseExceptionCheckTest {
                 .appendImpl("  except")
                 .appendImpl("    on E: MyException do begin")
                 .appendImpl("      if SomeCondition then begin")
-                .appendImpl("        raise E;")
+                .appendImpl("        raise E; // Noncompliant")
                 .appendImpl("      end;")
-                .appendImpl("      raise E;")
+                .appendImpl("      raise E; // Noncompliant")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 16);
+        .verifyIssues();
   }
 
   @Test

@@ -48,9 +48,9 @@ class TooLongLineCheckTest {
                 .appendImpl(
                     "  FMessage := 'This line is too long. Look, it''s running right off the"
                         + " screen! Who would do such a thing? I am horrified by the audacity of"
-                        + " this line!';")
+                        + " this line!'; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test

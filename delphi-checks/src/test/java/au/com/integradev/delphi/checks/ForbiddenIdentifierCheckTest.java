@@ -50,7 +50,7 @@ class ForbiddenIdentifierCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("var")
-                .appendDecl("  BadName: TObject;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  BadName: TObject; // Noncompliant"))
+        .verifyIssues();
   }
 }

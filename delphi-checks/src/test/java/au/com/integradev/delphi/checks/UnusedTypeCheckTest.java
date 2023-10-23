@@ -30,9 +30,9 @@ class UnusedTypeCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TFoo = class")
+                .appendDecl("  TFoo = class // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -42,10 +42,10 @@ class UnusedTypeCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TFoo = class")
+                .appendDecl("  TFoo = class // Noncompliant")
                 .appendDecl("    Bar: TFoo;")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -55,14 +55,14 @@ class UnusedTypeCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TFoo = class")
+                .appendDecl("  TFoo = class // Noncompliant")
                 .appendDecl("    procedure Baz;")
                 .appendDecl("  end;")
                 .appendImpl("procedure TFoo.Baz;")
                 .appendImpl("begin")
                 .appendImpl("  var Foo: TFoo;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -72,14 +72,14 @@ class UnusedTypeCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TFoo = class")
+                .appendDecl("  TFoo = class // Noncompliant")
                 .appendDecl("    procedure Baz(Foo: TFoo);")
                 .appendDecl("  end;")
                 .appendImpl("procedure TFoo.Baz(Foo: TFoo);")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test

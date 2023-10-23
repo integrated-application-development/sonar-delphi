@@ -42,10 +42,10 @@ class UnspecifiedReturnTypeCheckTest {
         .withCheck(new UnspecifiedReturnTypeCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("function TClass.MyFunction;")
+                .appendImpl("function TClass.MyFunction; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  Result := 'MyString';")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

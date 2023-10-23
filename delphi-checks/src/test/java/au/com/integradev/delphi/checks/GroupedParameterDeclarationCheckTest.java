@@ -43,10 +43,10 @@ class GroupedParameterDeclarationCheckTest {
         .withCheck(new GroupedParameterDeclarationCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Test(Foo, Bar: Integer);")
+                .appendImpl("procedure Test(Foo, Bar: Integer); // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

@@ -42,7 +42,7 @@ class TooManyParametersCheckTest {
         .withCheck(new TooManyParametersCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo(")
+                .appendImpl("procedure Foo( // Noncompliant")
                 .appendImpl("  Param1: Boolean;")
                 .appendImpl("  Param2: Boolean;")
                 .appendImpl("  Param3: Boolean;")
@@ -55,6 +55,6 @@ class TooManyParametersCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

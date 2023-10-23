@@ -48,9 +48,9 @@ class ForbiddenEnumValueCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Bar: TBar;")
                 .appendImpl("begin")
-                .appendImpl("  Bar := Baz;")
+                .appendImpl("  Bar := Baz; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14);
+        .verifyIssues();
   }
 
   @Test
@@ -66,9 +66,9 @@ class ForbiddenEnumValueCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Bar: TBar;")
                 .appendImpl("begin")
-                .appendImpl("  Bar := TBar.Baz;")
+                .appendImpl("  Bar := TBar.Baz; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14);
+        .verifyIssues();
   }
 
   @Test

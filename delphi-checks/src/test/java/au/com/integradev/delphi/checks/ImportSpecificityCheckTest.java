@@ -32,10 +32,10 @@ class ImportSpecificityCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("uses")
-                .appendDecl("  System.UITypes;")
+                .appendDecl("  System.UITypes; // Noncompliant")
                 .appendImpl("type")
                 .appendImpl("  Alias = System.UITypes.TMsgDlgType;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test

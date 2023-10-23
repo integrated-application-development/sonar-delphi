@@ -41,8 +41,8 @@ class EnumNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum);"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  tEnum = (someEnum, someOtherEnum, someThirdEnum); // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -52,8 +52,8 @@ class EnumNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum);"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  Tenum = (someEnum, someOtherEnum, someThirdEnum); // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -63,7 +63,7 @@ class EnumNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum);"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  T = (someEnum, someOtherEnum, someThirdEnum); // Noncompliant"))
+        .verifyIssues();
   }
 }

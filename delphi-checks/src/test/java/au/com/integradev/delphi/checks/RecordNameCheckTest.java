@@ -43,9 +43,9 @@ class RecordNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  MyRecord = record")
+                .appendDecl("  MyRecord = record // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -55,8 +55,8 @@ class RecordNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TmyRecord = record")
+                .appendDecl("  TmyRecord = record // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 }

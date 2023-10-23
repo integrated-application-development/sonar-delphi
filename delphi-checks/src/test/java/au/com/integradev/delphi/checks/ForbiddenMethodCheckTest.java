@@ -49,9 +49,9 @@ class ForbiddenMethodCheckTest {
                 .appendImpl("  Foo: TFoo;")
                 .appendImpl("begin")
                 .appendImpl("  Foo := TFoo.Create;")
-                .appendImpl("  Foo.Bar;")
+                .appendImpl("  Foo.Bar; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(17);
+        .verifyIssues();
   }
 
   @Test
@@ -108,10 +108,10 @@ class ForbiddenMethodCheckTest {
                 .appendDecl("  FooAttribute = class(TCustomAttribute)")
                 .appendDecl("    constructor Create(MyVal: string);")
                 .appendDecl("  end;")
-                .appendDecl("  [Foo('hello')]")
+                .appendDecl("  [Foo('hello')] // Noncompliant")
                 .appendDecl("  TBar = class(TObject)")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test

@@ -36,10 +36,10 @@ class UnicodeToAnsiCastCheckTest {
                 .appendImpl("  AnsiCharacter: AnsiChar;")
                 .appendImpl("  Character: Char;")
                 .appendImpl("begin")
-                .appendImpl("  AnsiStr := AnsiString(Str);")
-                .appendImpl("  AnsiCharacter := AnsiChar(Character);")
+                .appendImpl("  AnsiStr := AnsiString(Str); // Noncompliant")
+                .appendImpl("  AnsiCharacter := AnsiChar(Character); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 15);
+        .verifyIssues();
   }
 
   @Test

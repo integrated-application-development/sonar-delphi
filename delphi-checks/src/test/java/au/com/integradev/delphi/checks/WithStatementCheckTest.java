@@ -32,10 +32,10 @@ class WithStatementCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  with FMyField do begin")
+                .appendImpl("  with FMyField do begin // Noncompliant")
                 .appendImpl("    Value := True;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

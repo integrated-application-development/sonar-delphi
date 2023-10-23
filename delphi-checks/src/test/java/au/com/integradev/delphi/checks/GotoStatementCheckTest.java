@@ -34,10 +34,10 @@ class GotoStatementCheckTest {
                 .appendImpl("  Foo: TFoo;")
                 .appendImpl("  label Here;")
                 .appendImpl("begin")
-                .appendImpl("  goto Here;")
+                .appendImpl("  goto Here; // Noncompliant")
                 .appendImpl("  Here:")
                 .appendImpl("    Exit;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 }

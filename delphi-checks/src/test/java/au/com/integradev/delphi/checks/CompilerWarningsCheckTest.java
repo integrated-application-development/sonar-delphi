@@ -27,8 +27,8 @@ class CompilerWarningsCheckTest {
   void testWarningsOffShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new CompilerWarningsCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARNINGS OFF}"))
-        .verifyIssueOnLine(7);
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARNINGS OFF} // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -43,8 +43,9 @@ class CompilerWarningsCheckTest {
   void testWarnOffShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new CompilerWarningsCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED OFF}"))
-        .verifyIssueOnLine(7);
+        .onFile(
+            new DelphiTestUnitBuilder().appendImpl("{$WARN SYMBOL_DEPRECATED OFF} // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

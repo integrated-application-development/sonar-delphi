@@ -41,11 +41,11 @@ class ProjectFileVariableCheckTest {
         .onFile(
             new DelphiTestProgramBuilder()
                 .appendDecl("var")
-                .appendDecl("  GMyString: String;")
-                .appendDecl("  GMyBool: Boolean;")
-                .appendDecl("  GMyInt: Integer;")
+                .appendDecl("  GMyString: String; // Noncompliant")
+                .appendDecl("  GMyBool: Boolean; // Noncompliant")
+                .appendDecl("  GMyInt: Integer; // Noncompliant")
                 .appendImpl("Exit;"))
-        .verifyIssueOnLine(4, 5, 6);
+        .verifyIssues();
   }
 
   @Test

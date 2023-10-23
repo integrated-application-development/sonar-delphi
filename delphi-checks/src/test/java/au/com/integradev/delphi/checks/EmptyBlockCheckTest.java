@@ -84,7 +84,7 @@ class EmptyBlockCheckTest {
                 .appendImpl("end;")
                 .appendImpl("procedure TEmptyProcs.Three;")
                 .appendImpl("begin")
-                .appendImpl("  if Foo then begin")
+                .appendImpl("  if Foo then begin // Noncompliant")
                 .appendImpl("    // Do nothing")
                 .appendImpl("  end;")
                 .appendImpl("end;")
@@ -94,11 +94,11 @@ class EmptyBlockCheckTest {
                 .appendImpl("end;")
                 .appendImpl("procedure GlobalProcedureFive;")
                 .appendImpl("begin")
-                .appendImpl("  if Foo then begin")
+                .appendImpl("  if Foo then begin // Noncompliant")
                 .appendImpl("    // Do nothing")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(27, 37);
+        .verifyIssues();
   }
 
   @Test
@@ -110,13 +110,15 @@ class EmptyBlockCheckTest {
                 .appendImpl("procedure Test(Arg: Integer);")
                 .appendImpl("begin")
                 .appendImpl("  case Arg of")
+                .appendImpl("    // Noncompliant@+1")
                 .appendImpl("    0: begin")
                 .appendImpl("    end;")
+                .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  else begin")
                 .appendImpl("  end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10, 12);
+        .verifyIssues();
   }
 
   @Test

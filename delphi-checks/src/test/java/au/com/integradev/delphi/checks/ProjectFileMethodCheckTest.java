@@ -41,16 +41,16 @@ class ProjectFileMethodCheckTest {
         .withCheck(new ProjectFileMethodCheck())
         .onFile(
             new DelphiTestProgramBuilder()
-                .appendDecl("procedure MyProcedure;")
+                .appendDecl("procedure MyProcedure; // Noncompliant")
                 .appendDecl("begin")
                 .appendDecl("  DoSomething;")
                 .appendDecl("end;")
-                .appendDecl("function MyFunction: Integer;")
+                .appendDecl("function MyFunction: Integer; // Noncompliant")
                 .appendDecl("begin")
                 .appendDecl("  Result := 5;")
                 .appendDecl("end;")
                 .appendImpl("MyProcedure;")
                 .appendImpl("MyVar := MyFunction;"))
-        .verifyIssueOnLine(3, 7);
+        .verifyIssues();
   }
 }

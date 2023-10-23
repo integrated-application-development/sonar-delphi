@@ -33,9 +33,9 @@ class UnusedPropertyCheckTest {
                 .appendDecl("private")
                 .appendDecl("  FBar: Integer;")
                 .appendDecl("public")
-                .appendDecl("  property Bar: Integer read FBar;")
+                .appendDecl("  property Bar: Integer read FBar; // Noncompliant")
                 .appendDecl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -99,13 +99,13 @@ class UnusedPropertyCheckTest {
                 .appendDecl("private")
                 .appendDecl("  FBar: Integer;")
                 .appendDecl("private")
-                .appendDecl("  property Baz: Integer read FBar;")
+                .appendDecl("  property Baz: Integer read FBar; // Noncompliant")
                 .appendDecl("end;")
                 .appendDecl("type TBar = class(TFoo)")
                 .appendDecl("public")
-                .appendDecl("  property Baz;")
+                .appendDecl("  property Baz; // Noncompliant")
                 .appendDecl("end;"))
-        .verifyIssueOnLine(9, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -164,12 +164,12 @@ class UnusedPropertyCheckTest {
                 .appendDecl("end;")
                 .appendDecl("type TBar = class(TFoo)")
                 .appendDecl("public")
-                .appendDecl("  property Baz;")
+                .appendDecl("  property Baz; // Noncompliant")
                 .appendDecl("end;")
                 .appendImpl("function Flarp(Foo: TFoo): Integer;")
                 .appendImpl("begin")
                 .appendImpl("  Result := Foo.Baz;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(13);
+        .verifyIssues();
   }
 }

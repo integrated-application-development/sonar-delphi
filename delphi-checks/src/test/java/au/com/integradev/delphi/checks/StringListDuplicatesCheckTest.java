@@ -74,9 +74,9 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -87,9 +87,9 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore")
+                .appendImpl("  List.Duplicates := dupIgnore // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -101,9 +101,9 @@ class StringListDuplicatesCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  List.Sorted := False;")
-                .appendImpl("  List.Duplicates := dupError;")
+                .appendImpl("  List.Duplicates := dupError; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -114,10 +114,10 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  List.Sorted := False;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -129,9 +129,9 @@ class StringListDuplicatesCheckTest {
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
                 .appendImpl("  OtherList.Sorted := False;")
-                .appendImpl("  List.Duplicates := dupError;")
+                .appendImpl("  List.Duplicates := dupError; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 
   @Test
@@ -142,10 +142,10 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  OtherList.Duplicates := dupIgnore;")
+                .appendImpl("  OtherList.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  List.Sorted := False;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -182,10 +182,10 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  List.Sorted")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -196,10 +196,10 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  Sorted;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -210,10 +210,10 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  List.SomeProcedure")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -238,9 +238,9 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  SomeClass.List.Duplicates := dupIgnore;")
+                .appendImpl("  SomeClass.List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -265,10 +265,10 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  List.Sorted := System.False;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -279,9 +279,9 @@ class StringListDuplicatesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  List.Duplicates := dupIgnore;")
+                .appendImpl("  List.Duplicates := dupIgnore; // Noncompliant")
                 .appendImpl("  List.X := True;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

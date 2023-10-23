@@ -44,9 +44,9 @@ class PascalStyleResultCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("function Foo: TObject;")
                 .appendImpl("begin")
-                .appendImpl("  Foo := nil;")
+                .appendImpl("  Foo := nil; // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 
   @Test
@@ -58,11 +58,11 @@ class PascalStyleResultCheckTest {
                 .appendImpl("function Foo: TObject;")
                 .appendImpl("  procedure Bar;")
                 .appendImpl("  begin")
-                .appendImpl("    Foo := nil;")
+                .appendImpl("    Foo := nil; // Noncompliant")
                 .appendImpl("  end;")
                 .appendImpl("begin")
                 .appendImpl("  Bar;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 }

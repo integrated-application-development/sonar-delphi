@@ -53,9 +53,9 @@ class InheritedTypeNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TType = class(TType_Parent)")
+                .appendDecl("  TType = class(TType_Parent) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test
@@ -65,9 +65,9 @@ class InheritedTypeNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TType = class(IType, TType_Parent)")
+                .appendDecl("  TType = class(IType, TType_Parent) // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(6);
+        .verifyIssues();
   }
 
   @Test

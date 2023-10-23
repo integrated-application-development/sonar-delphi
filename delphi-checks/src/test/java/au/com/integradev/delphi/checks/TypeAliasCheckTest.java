@@ -31,8 +31,8 @@ class TypeAliasCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("type")
-                .appendDecl("  TMyChar = Char;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  TMyChar = Char; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
@@ -42,8 +42,8 @@ class TypeAliasCheckTest {
         .onFile(
             new DelphiTestUnitBuilder() //
                 .appendDecl("type")
-                .appendDecl("  TMyChar = type Char;"))
-        .verifyIssueOnLine(6);
+                .appendDecl("  TMyChar = type Char; // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

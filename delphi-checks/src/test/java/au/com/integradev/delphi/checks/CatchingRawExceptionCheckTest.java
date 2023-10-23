@@ -54,11 +54,11 @@ class CatchingRawExceptionCheckTest {
                 .appendImpl("  try")
                 .appendImpl("    ThrowException;")
                 .appendImpl("  except")
-                .appendImpl("    on Exception do begin")
+                .appendImpl("    on Exception do begin // Noncompliant")
                 .appendImpl("      raise;")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12);
+        .verifyIssues();
   }
 }

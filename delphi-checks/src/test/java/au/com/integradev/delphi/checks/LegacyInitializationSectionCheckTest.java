@@ -40,8 +40,8 @@ class LegacyInitializationSectionCheckTest {
         .withCheck(new LegacyInitializationSectionCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("begin")
+                .appendImpl("begin // Noncompliant")
                 .appendImpl("  WriteLn('This is a legacy initialization section.');"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 }

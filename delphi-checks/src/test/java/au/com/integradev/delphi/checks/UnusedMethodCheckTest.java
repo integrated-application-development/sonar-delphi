@@ -29,11 +29,11 @@ class UnusedMethodCheckTest {
         .withCheck(new UnusedMethodCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo;")
+                .appendImpl("procedure Foo; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -42,11 +42,11 @@ class UnusedMethodCheckTest {
         .withCheck(new UnusedMethodCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo;")
+                .appendImpl("procedure Foo; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  Foo;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(7);
+        .verifyIssues();
   }
 
   @Test
@@ -70,12 +70,12 @@ class UnusedMethodCheckTest {
         .withCheck(new UnusedMethodCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendDecl("procedure Foo;")
+                .appendDecl("procedure Foo; // Noncompliant")
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(5);
+        .verifyIssues();
   }
 
   @Test
@@ -84,12 +84,12 @@ class UnusedMethodCheckTest {
         .withCheck(new UnusedMethodCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendDecl("procedure Foo;")
+                .appendDecl("procedure Foo; // Noncompliant")
                 .appendImpl("procedure Foo;")
                 .appendImpl("begin")
                 .appendImpl("  Foo;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(5);
+        .verifyIssues();
   }
 
   @Test
@@ -101,13 +101,13 @@ class UnusedMethodCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class")
                 .appendDecl("  public")
-                .appendDecl("    procedure Foo;")
+                .appendDecl("    procedure Foo; // Noncompliant")
                 .appendDecl("  end;")
                 .appendImpl("procedure TFoo.Foo;")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -119,13 +119,13 @@ class UnusedMethodCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class")
                 .appendDecl("  public")
-                .appendDecl("    procedure Foo;")
+                .appendDecl("    procedure Foo; // Noncompliant")
                 .appendDecl("  end;")
                 .appendImpl("procedure TFoo.Foo;")
                 .appendImpl("begin")
                 .appendImpl("  Foo;")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -137,13 +137,13 @@ class UnusedMethodCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class")
                 .appendDecl("  public")
-                .appendDecl("    constructor Create;")
+                .appendDecl("    constructor Create; // Noncompliant")
                 .appendDecl("  end;")
                 .appendImpl("constructor TFoo.Create;")
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -155,9 +155,9 @@ class UnusedMethodCheckTest {
                 .appendDecl("type")
                 .appendDecl("  TFoo = class")
                 .appendDecl("  public")
-                .appendDecl("    constructor Create;")
+                .appendDecl("    constructor Create; // Noncompliant")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(8);
+        .verifyIssues();
   }
 
   @Test
@@ -308,7 +308,7 @@ class UnusedMethodCheckTest {
                 .appendDecl("  public")
                 .appendDecl("    constructor Create; overload;")
                 .appendDecl("    constructor Create(Bar: Integer); overload;")
-                .appendDecl("    constructor Create(Bar: string); overload;")
+                .appendDecl("    constructor Create(Bar: string); overload; // Noncompliant")
                 .appendDecl("    constructor Create(Bar: Integer; Baz: Integer); overload;")
                 .appendDecl("  end;")
                 .appendDecl("  [Foo]")
@@ -316,6 +316,6 @@ class UnusedMethodCheckTest {
                 .appendDecl("  [Foo(10, 15)]")
                 .appendDecl("  TBar = class(TObject)")
                 .appendDecl("  end;"))
-        .verifyIssueOnLine(10);
+        .verifyIssues();
   }
 }

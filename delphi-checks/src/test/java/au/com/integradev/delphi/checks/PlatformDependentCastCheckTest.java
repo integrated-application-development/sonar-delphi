@@ -34,10 +34,10 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Ptr: Pointer;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Integer(Ptr);")
-                .appendImpl("  Ptr := Pointer(Int);")
+                .appendImpl("  Int := Integer(Ptr); // Noncompliant")
+                .appendImpl("  Ptr := Pointer(Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -51,10 +51,10 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Obj: TObject;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Integer(Obj);")
-                .appendImpl("  Obj := TObject(Int);")
+                .appendImpl("  Int := Integer(Obj); // Noncompliant")
+                .appendImpl("  Obj := TObject(Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -68,10 +68,10 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Intf: IInterface;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Integer(Intf);")
-                .appendImpl("  Intf := IInterface(Int);")
+                .appendImpl("  Int := Integer(Intf); // Noncompliant")
+                .appendImpl("  Intf := IInterface(Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -85,10 +85,10 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Nat: NativeInt;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Integer(Nat);")
-                .appendImpl("  Nat := NativeInt(Int);")
+                .appendImpl("  Int := Integer(Nat); // Noncompliant")
+                .appendImpl("  Nat := NativeInt(Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -260,10 +260,10 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Str: String;")
                 .appendImpl("begin")
-                .appendImpl("  Str := String(Int);")
-                .appendImpl("  Int := Integer(Str);")
+                .appendImpl("  Str := String(Int); // Noncompliant")
+                .appendImpl("  Int := Integer(Str); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -294,10 +294,10 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Arr: TArray<Byte>;")
                 .appendImpl("begin")
-                .appendImpl("  Arr := TArray<Byte>(Int);")
-                .appendImpl("  Int := Integer(Arr);")
+                .appendImpl("  Arr := TArray<Byte>(Int); // Noncompliant")
+                .appendImpl("  Int := Integer(Arr); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(12, 13);
+        .verifyIssues();
   }
 
   @Test
@@ -330,9 +330,9 @@ class PlatformDependentCastCheckTest {
                 .appendImpl("  Int: Integer;")
                 .appendImpl("  Nat: MyNativeInt;")
                 .appendImpl("begin")
-                .appendImpl("  Int := Integer(Nat);")
-                .appendImpl("  Nat := MyNativeInt(Int);")
+                .appendImpl("  Int := Integer(Nat); // Noncompliant")
+                .appendImpl("  Nat := MyNativeInt(Int); // Noncompliant")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(14, 15);
+        .verifyIssues();
   }
 }

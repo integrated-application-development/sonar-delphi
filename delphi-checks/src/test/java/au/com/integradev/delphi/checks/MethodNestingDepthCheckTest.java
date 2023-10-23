@@ -48,7 +48,7 @@ class MethodNestingDepthCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Outer;")
                 .appendImpl("  procedure Inner;")
-                .appendImpl("    procedure Innerest;")
+                .appendImpl("    procedure Innerest; // Noncompliant")
                 .appendImpl("    begin")
                 .appendImpl("      // Nesting level: 2")
                 .appendImpl("    end;")
@@ -58,6 +58,6 @@ class MethodNestingDepthCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  // Nesting level: 0")
                 .appendImpl("end;"))
-        .verifyIssueOnLine(9);
+        .verifyIssues();
   }
 }

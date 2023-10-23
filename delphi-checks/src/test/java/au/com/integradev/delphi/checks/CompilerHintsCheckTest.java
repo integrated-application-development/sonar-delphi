@@ -27,8 +27,8 @@ class CompilerHintsCheckTest {
   void testHintsOffShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new CompilerHintsCheck())
-        .onFile(new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF}"))
-        .verifyIssueOnLine(7);
+        .onFile(new DelphiTestUnitBuilder().appendImpl("{$HINTS OFF} // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test
