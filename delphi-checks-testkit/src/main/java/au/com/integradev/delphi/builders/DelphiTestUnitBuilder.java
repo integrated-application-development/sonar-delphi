@@ -22,8 +22,10 @@
  */
 package au.com.integradev.delphi.builders;
 
-public final class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTestUnitBuilder> {
+public final class DelphiTestUnitBuilder
+    extends AbstractDelphiTestFileBuilder<DelphiTestUnitBuilder> {
 
+  private static final String EXTENSION = ".pas";
   private String unitName = "Test";
 
   @Override
@@ -32,43 +34,37 @@ public final class DelphiTestUnitBuilder extends DelphiTestFileBuilder<DelphiTes
   }
 
   @Override
-  protected StringBuilder generateSourceCode() {
+  public String sourceCode() {
     StringBuilder source = new StringBuilder();
     source.append(String.format("unit %s;\n", this.unitName));
     source.append("\n");
     source.append("interface\n");
     source.append("\n");
 
-    if (!getDeclaration().isEmpty()) {
-      source.append(getDeclaration());
+    if (!this.declaration.toString().isEmpty()) {
+      source.append(this.declaration);
       source.append("\n");
     }
 
     source.append("implementation\n");
     source.append("\n");
 
-    if (!getImplementation().isEmpty()) {
-      source.append(this.getImplementation());
+    if (!this.implementation.toString().isEmpty()) {
+      source.append(this.implementation);
       source.append("\n");
     }
 
     source.append("end.\n");
-
-    return source;
+    return source.toString();
   }
 
   @Override
-  protected String getFilename() {
-    return unitName;
-  }
-
-  @Override
-  protected String getExtension() {
-    return "pas";
+  public String getFileName() {
+    return unitName + EXTENSION;
   }
 
   public DelphiTestUnitBuilder unitName(String unitName) {
     this.unitName = unitName;
-    return getThis();
+    return this;
   }
 }

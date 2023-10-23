@@ -150,7 +150,8 @@ class HelperNameCheckTest {
         new DelphiTestUnitBuilder()
             .appendDecl("type")
             .appendDecl("  TMySet = set of string;")
-            .parse();
+            .delphiFile()
+            .getAst();
 
     SetTypeNode setTypeNode = ast.getFirstChildOfType(SetTypeNode.class);
     assertThat(HelperNameCheck.getExtendedTypeSimpleName(setTypeNode)).isNull();

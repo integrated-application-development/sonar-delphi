@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.checks.verifier;
 
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
@@ -37,7 +37,7 @@ public interface CheckVerifier {
 
   CheckVerifier withStandardLibraryUnit(DelphiTestUnitBuilder builder);
 
-  CheckVerifier onFile(DelphiTestFileBuilder<?> builder);
+  CheckVerifier onFile(DelphiTestFile builder);
 
   void verifyIssueOnLine(int... lines);
 

@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.builders.DelphiTestFileBuilder;
+import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
@@ -110,7 +110,7 @@ class EmptyFileCheckTest {
   void testIgnorePackage() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyFileCheck())
-        .onFile(DelphiTestFileBuilder.fromResource(PACKAGE_FILE))
+        .onFile(DelphiTestFile.fromResource(PACKAGE_FILE))
         .verifyNoIssues();
   }
 }
