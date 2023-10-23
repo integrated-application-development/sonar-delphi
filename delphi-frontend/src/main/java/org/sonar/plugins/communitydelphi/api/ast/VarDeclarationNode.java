@@ -27,7 +27,7 @@ public interface VarDeclarationNode extends DelphiNode, Typed {
   VarSectionNode getVarSection();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 
   TypeNode getTypeNode();
 

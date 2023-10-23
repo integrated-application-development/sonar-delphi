@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
@@ -83,8 +83,8 @@ public final class FormalParameterNodeImpl extends DelphiNodeImpl implements For
   }
 
   @Override
-  public List<CustomAttributeListNode> getAttributeLists() {
-    return findChildrenOfType(CustomAttributeListNode.class);
+  public List<AttributeListNode> getAttributeLists() {
+    return findChildrenOfType(AttributeListNode.class);
   }
 
   private static final class FormalParameterDataImpl implements FormalParameterData {

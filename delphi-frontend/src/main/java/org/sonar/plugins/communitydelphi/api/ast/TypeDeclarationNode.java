@@ -30,7 +30,7 @@ public interface TypeDeclarationNode extends DelphiNode, Typed, Qualifiable {
   TypeNode getTypeNode();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 
   @Nullable
   TypeNameDeclaration getTypeNameDeclaration();

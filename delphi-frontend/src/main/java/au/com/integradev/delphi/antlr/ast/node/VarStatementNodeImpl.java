@@ -21,7 +21,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
@@ -51,8 +51,8 @@ public final class VarStatementNodeImpl extends DelphiNodeImpl implements VarSta
 
   @Override
   @Nullable
-  public CustomAttributeListNode getAttributeList() {
-    return getFirstChildOfType(CustomAttributeListNode.class);
+  public AttributeListNode getAttributeList() {
+    return getFirstChildOfType(AttributeListNode.class);
   }
 
   @Override

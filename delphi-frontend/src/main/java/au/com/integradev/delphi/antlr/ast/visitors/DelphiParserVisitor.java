@@ -32,6 +32,9 @@ import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.AsmStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
@@ -46,9 +49,6 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ContainsClauseNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeGroupNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -212,15 +212,15 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(CustomAttributeNode node, T data) {
+  default T visit(AttributeNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(CustomAttributeGroupNode node, T data) {
+  default T visit(AttributeGroupNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(CustomAttributeListNode node, T data) {
+  default T visit(AttributeListNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

@@ -22,16 +22,15 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeGroupNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 
-public final class CustomAttributeGroupNodeImpl extends DelphiNodeImpl
-    implements CustomAttributeGroupNode {
-  public CustomAttributeGroupNodeImpl(Token token) {
+public final class AttributeGroupNodeImpl extends DelphiNodeImpl implements AttributeGroupNode {
+  public AttributeGroupNodeImpl(Token token) {
     super(token);
   }
 
-  public CustomAttributeGroupNodeImpl(int tokenType) {
+  public AttributeGroupNodeImpl(int tokenType) {
     super(tokenType);
   }
 
@@ -41,8 +40,8 @@ public final class CustomAttributeGroupNodeImpl extends DelphiNodeImpl
   }
 
   @Override
-  public List<CustomAttributeNode> getAttributes() {
-    return findChildrenOfType(CustomAttributeNode.class);
+  public List<AttributeNode> getAttributes() {
+    return findChildrenOfType(AttributeNode.class);
   }
 
   @Override

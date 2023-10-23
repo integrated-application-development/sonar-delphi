@@ -38,7 +38,7 @@ public interface MethodHeadingNode extends DelphiNode {
   MethodReturnTypeNode getMethodReturnType();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 
   boolean isClassMethod();
 

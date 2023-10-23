@@ -41,7 +41,7 @@ public interface PropertyNode extends DelphiNode, Typed, Visibility {
   List<FormalParameterData> getParameters();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 
   List<Type> getParameterTypes();
 

@@ -22,16 +22,16 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CustomAttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 
-public final class CustomAttributeNodeImpl extends DelphiNodeImpl implements CustomAttributeNode {
-  public CustomAttributeNodeImpl(Token token) {
+public final class AttributeNodeImpl extends DelphiNodeImpl implements AttributeNode {
+  public AttributeNodeImpl(Token token) {
     super(token);
   }
 
-  public CustomAttributeNodeImpl(int tokenType) {
+  public AttributeNodeImpl(int tokenType) {
     super(tokenType);
   }
 

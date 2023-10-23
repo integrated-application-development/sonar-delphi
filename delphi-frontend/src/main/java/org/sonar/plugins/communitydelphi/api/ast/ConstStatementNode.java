@@ -31,5 +31,5 @@ public interface ConstStatementNode extends StatementNode {
   ExpressionNode getExpression();
 
   @Nullable
-  CustomAttributeListNode getAttributeList();
+  AttributeListNode getAttributeList();
 }
