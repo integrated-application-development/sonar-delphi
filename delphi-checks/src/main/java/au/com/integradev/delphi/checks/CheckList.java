@@ -65,7 +65,6 @@ public final class CheckList {
           ExplicitDefaultPropertyReferenceCheck.class,
           ExplicitTObjectInheritanceCheck.class,
           FieldNameCheck.class,
-          ForbidWithCheck.class,
           ForbiddenConstantCheck.class,
           ForbiddenEnumValueCheck.class,
           ForbiddenFieldCheck.class,
