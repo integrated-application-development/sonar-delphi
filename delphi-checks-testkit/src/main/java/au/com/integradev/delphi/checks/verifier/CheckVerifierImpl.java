@@ -42,7 +42,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -159,23 +158,6 @@ public class CheckVerifierImpl implements CheckVerifier {
             .flatMap(Optional::stream)
             .collect(Collectors.toList());
 
-    verifyIssuesOnLinesInternal(issues, expected);
-  }
-
-  @Override
-  public void verifyIssueOnLine(int... lines) {
-    if (lines.length == 0) {
-      throw new AssertionError(
-          "At least one line number must be provided (did you mean verifyNoIssues?)");
-    }
-
-    List<Issue> issues = execute();
-
-    if (issues.isEmpty()) {
-      throw new AssertionError("No issue raised. At least one issue expected");
-    }
-
-    List<Integer> expected = Arrays.stream(lines).sorted().boxed().collect(Collectors.toList());
     verifyIssuesOnLinesInternal(issues, expected);
   }
 

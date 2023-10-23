@@ -39,8 +39,6 @@ public interface CheckVerifier {
 
   CheckVerifier onFile(DelphiTestFile builder);
 
-  void verifyIssueOnLine(int... lines);
-
   void verifyIssueOnFile();
 
   void verifyIssueOnProject();
