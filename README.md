@@ -3,11 +3,11 @@
 [![format](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/format.yml/badge.svg?branch=master&event=push)](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/format.yml)
 [![build](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/build.yml/badge.svg?branch=master&event=push)](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/build.yml)
 
-SonarDelphi is a modern, performant, and fully-featured community code analyzer for the Delphi language. As
-a plugin for the [SonarQube](https://www.sonarqube.org) code analysis platform, it can be easily integrated
-into existing workflows.
+SonarDelphi is a modern, performant, and fully-featured community code analyzer for the Delphi
+language. As a plugin for the [SonarQube](https://www.sonarqube.org) code analysis platform, it can
+be easily integrated into existing workflows.
 
-This project has four primary goals:
+This project has three primary goals:
 
 * **Correctness:** All valid Delphi code should be accepted and understood correctly.
 * **Utility:** Analysis results should be easily understandable and immediately actionable.
@@ -67,20 +67,12 @@ Advanced features unique to this version of SonarDelphi include:
    * [Unused fields](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedFieldCheck.java)
    * [Unused local variables](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedLocalVariableCheck.java)
    * [Unused constants](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedConstantCheck.java)
-* **Support for additional rule plugins:** If the custom rules bundled in this plugin are insufficient for your
-   customisation needs, SonarDelphi supports additional rule plugins, allowing you to define new rules using
-   the same API as the core plugin. For more details, refer to the
-   [Custom Rules 101](docs/CUSTOM_RULES_101.md).
-**Custom rules:** SonarDelphi is easily customized through rule parameters and template rules, but for more advanced
-   functionality you can also create your own custom rules:
-* Exposes a Java-based rules API with the full power of the SonarDelphi analysis engine.
-* For more details, refer to [Custom Rules 101](docs/CUSTOM_RULES_101.md).
+* **Custom rules:** SonarDelphi can be customized through rule parameters and templates, but you can
+  also create your own custom rules:
+  * Make use of the Java-based rules API, with the full power of the SonarDelphi analysis engine.
+  * For more details, refer to [Custom Rules 101](docs/CUSTOM_RULES_101.md).
 
 ## Usage
-
-> [!WARNING]
-> Unfortunately, Delphi Community Edition is **not** supported. SonarDelphi requires source code for all dependencies,
-> including the standard library.
 
 1. Install the following:
     - [SonarQube](https://docs.sonarqube.org/latest/setup/install-server/) (v9.9+)
@@ -99,28 +91,29 @@ Advanced features unique to this version of SonarDelphi include:
 4. View analysis results:
     - Visit the link provided at the end of the scan to view analysis results on SonarQube.
 
+> [!WARNING]
+> Unfortunately, Delphi Community Edition is **not** supported.
+>
+> SonarDelphi requires source code for all dependencies, including the standard library.
+
 ### Advanced configuration
 
 You can configure SonarDelphi [analysis parameters](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/analysis-parameters/)
  on the SonarQube server at **Administration > General Settings > Languages > Delphi**.
 
+For the full list of SonarDelphi properties, [see here](docs/CONFIGURATION.md).
+
 > [!IMPORTANT]
 > `sonar.delphi.installationPath` must point to a valid Delphi installation for the scan to succeed.
 
-For the full list of SonarDelphi properties, [see here](docs/CONFIGURATION.md).
-
 ## Contributing
 
-SonarDelphi is open for contributions, from bug reports to new features. For more details, please read the
-[contributing guide](docs/CONTRIBUTING.md).
+SonarDelphi is open for contributions, from bug reports to new features. For more details, please
+read the [contributing guide](docs/CONTRIBUTING.md).
 
 ## Development
 
 SonarDelphi can be built with JDK 17+ using [Maven](https://maven.apache.org/).
-
-The project targets Java 11, which is
-[required](https://docs.sonarsource.com/sonarqube/9.9/requirements/prerequisites-and-overview/#java)
-for compatibility with SonarQube 9.9.
 
 To build the project and run all tests, execute the following command from the project's root directory:
 
@@ -130,10 +123,14 @@ mvn clean install
 
 After building, the plugin jar can be found in `sonar-delphi-plugin/target`.
 
+> [!NOTE]
+> The project targets Java 11, which is [required](https://docs.sonarsource.com/sonarqube/9.9/requirements/prerequisites-and-overview/#java)
+> for compatibility with SonarQube 9.9.
+
 ## History
 
-SonarDelphi was originally released by [Sabre Airline Solutions](https://www.sabre.com) in 2012, and has been iterated
-on by various open-source maintainers over the years.
+SonarDelphi was originally released by [Sabre Airline Solutions](https://www.sabre.com) in 2012, and
+has been iterated on by various open-source maintainers over the years.
 
 In 2018, it was picked up as a Monash University student project for [IntegraDev](https://www.integradev.com.au).
 Since 2019, the project has been actively developed by IntegraDev.
