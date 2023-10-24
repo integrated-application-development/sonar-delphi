@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -164,10 +164,12 @@ class CheckListTest {
   }
 
   @Test
-  void testCheckListShouldBeAlphabetic() {
+  void testCheckListShouldBeSortedAlphabetically() {
     List<String> checkListNames =
-        CheckList.getChecks().stream().map(Class::getSimpleName).collect(Collectors.toList());
+        CheckList.getChecks().stream()
+            .map(Class::getSimpleName)
+            .collect(Collectors.toUnmodifiableList());
 
-    assertEquals(checkListNames.stream().sorted().collect(Collectors.toList()), checkListNames);
+    assertThat(checkListNames).isSorted();
   }
 }
