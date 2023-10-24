@@ -54,6 +54,8 @@ public interface DelphiFile {
 
   List<String> getSourceCodeFilesLines();
 
+  String getSourceCodeFileEncoding();
+
   DelphiAst getAst();
 
   List<DelphiToken> getTokens();
@@ -143,6 +145,7 @@ public interface DelphiFile {
       DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
       DelphiPreprocessor preprocessor = preprocess(fileStream, config);
       delphiFile.setSourceCodeFile(sourceFile);
+      delphiFile.setSourceCodeEncoding(fileStream.getEncoding());
       delphiFile.setTypeFactory(config.getTypeFactory());
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
