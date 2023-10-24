@@ -1,16 +1,16 @@
 # Configuring SonarDelphi
 
-You can discover and update SonarDelphi [analysis parameters](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/analysis-parameters/)
-on the SonarQube server at **Administration > General Settings > Languages > Delphi**.
+SonarDelphi exposes a number of language-specific properties as [analysis parameters](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/analysis-parameters/),
+which can be:
+* configured via the SonarQube UI (**Administration > General Settings > Languages > Delphi**)
+* specified in `sonar-project.properties`
+* passed as command-line parameters to the `sonar-scanner`
 
-Please note:
-
-* At minimum, `sonar.delphi.installationPath` must be set correctly for the scan to succeed.
-* By default, all `__history` and `__recovery` directories are excluded from the analysis.
+By default, all `__history` and `__recovery` directories are excluded from the analysis.
 However, you can change the property `sonar.delphi.exclusions` to a different pattern if you want to
 force their analysis (not recommended).
 
-## All SonarDelphi properties
+## Language-specific properties
 
 | Key                                 | Value                                                                                                                                                                                                                                                  | Default Value                                    |
 |-------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|

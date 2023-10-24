@@ -5,20 +5,20 @@
 To implement a new rule in SonarDelphi:
 
 1. Add a class inheriting from `DelphiCheck` in `delphi-checks/src/main/java/au/com/integradev/delphi/checks`
-  * This class must be annotated with `@Rule(key = "xyz")`, where `xyz` is the rule key in PascalCase
-  * This class must be named the rule key + `Check`, e.g. `UnusedImportCheck`
+    * This class must be annotated with `@Rule(key = "xyz")`, where `xyz` is the rule key in PascalCase
+    * This class must be named the rule key + `Check`, e.g. `UnusedImportCheck`
 2. Add a test suite in `delphi-checks/src/test/java/au/com/integradev/delphi/checks`
-  * Methods in this class should be annotated with `@Test` or `@ParameterizedTest`
-  * Methods in this class should follow the format `xyzShouldAddIssue` or `xyzShouldNotAddIssue`
+    * Test names should follow the format `test...ShouldAddIssue` or `test...ShouldNotAddIssue`
 3. Add the rule implementation class from step 1 to the `CheckList` in `delphi-checks/src/main/java/au/com/integradev/delphi/checks`
 4. Add rule metadata in `delphi-checks/src/main/resources/org/sonar/l10n/delphi/rules/community-delphi`
-  * JSON rule metadata must be named the rule key and [follow the expected metadata format](#json-metadata)
-  * The rule description HTML must be named the rule key and [follow the expected description format](#html-description)
+    * JSON rule metadata must be named the rule key and [follow the expected metadata format](#json-metadata)
+    * The rule description HTML must be named the rule key and [follow the expected description format](#html-description)
 
 ## JSON metadata
 
 The structure the JSON metadata should have is reproduced below. In particular:
 
+* The title should follow the [SonarSource rule title guidelines](https://docs.sonarsource.com/sonarqube/latest/extension-guide/adding-coding-rules/#titles)
 * The attribute should be one of the fourteen [Clean Code Attributes](https://docs.sonarsource.com/sonarqube/latest/user-guide/clean-code/#clean-code-attributes)
 * There must be at least one impact, there can be multiple impacts that are for different [software qualities](https://docs.sonarsource.com/sonarqube/latest/user-guide/clean-code/#software-qualities)
 * The tags should be one or more of the [built-in rule tags](https://docs.sonarsource.com/sonarqube/latest/user-guide/rules/built-in-rule-tags/)
@@ -30,7 +30,7 @@ The structure the JSON metadata should have is reproduced below. In particular:
   "status": "ready",
   "remediation": {
     "func": "Constant/Issue",
-    "constantCost": "<roughly how many mins it should take to fix>min"
+    "constantCost": "<Roughly how many minutes it should take to fix>min"
   },
   "code": {
     "attribute": "<Clean code attribute>",

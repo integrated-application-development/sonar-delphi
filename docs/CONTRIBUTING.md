@@ -18,15 +18,15 @@ When reporting a bug, please do the following:
 
 ### Proposing features or improvements
 
-Please propose new features on via [GitHub issues](https://github.com/integrated-application-development/sonar-delphi/issues).
+Please propose new features via [GitHub issues](https://github.com/integrated-application-development/sonar-delphi/issues).
 
 When proposing a feature, please do the following:
 
 * Check that a similar feature has not already been requested
 * Be as specific as possible in your description
 
-Note that this does not necessarily mean a developer will decide to fix the bug or implement the feature - if you would
-like a feature, consider implementing it yourself and [making a pull request](#making-pull-requests).
+There are no guarantees that a developer will decide to implement the feature - if you would like a
+feature, consider implementing it yourself and [making a pull request](#making-pull-requests).
 
 ### Contributing pull requests
 
