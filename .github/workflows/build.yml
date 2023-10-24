@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - 'master'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.svg'
+      - '**.png'
+      - 'LICENSE.txt'
+      - 'NOTICE.txt'
+      - '.git*'
 
 jobs:
   verify:
