@@ -35,10 +35,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.NewRepository;
 import org.sonar.api.utils.AnnotationUtils;
@@ -54,6 +57,22 @@ class CheckMetadataTest {
           .filter(Objects::nonNull)
           .map(Rule::key)
           .collect(Collectors.toUnmodifiableSet());
+
+  private static final Set<String> ALLOWED_TAGS =
+      Set.of(
+          "brain-overload",
+          "bad-practice",
+          "clumsy",
+          "confusing",
+          "convention",
+          "design",
+          "lock-in",
+          "pitfall",
+          "suspicious",
+          "unpredictable",
+          "unused",
+          "user-experience",
+          "tests");
 
   @Test
   void testJsonMetadataIsNotUnused() {
@@ -78,13 +97,56 @@ class CheckMetadataTest {
   }
 
   @Test
-  void testRulesTargetingTestsShouldHaveTestsTag() throws Exception {
+  void testRulesShouldHaveTags() throws Exception {
     for (String key : RULE_KEYS) {
       Map<String, Object> metadata = getMetadataForRuleKey(key);
 
       String status = ((String) metadata.get("status")).toUpperCase();
 
       if (status.equals("DEPRECATED")) {
+        // deprecated rules shouldn't have tags
+        continue;
+      }
+
+      @SuppressWarnings("unchecked")
+      var tags = (List<String>) metadata.get("tags");
+      assertThat(tags).as("Rule " + key + " has no tags.").isNotEmpty();
+    }
+  }
+
+  @Test
+  void testRulesShouldOnlyHaveAllowedTags() throws Exception {
+    for (String key : RULE_KEYS) {
+      Map<String, Object> metadata = getMetadataForRuleKey(key);
+
+      String status = (String) metadata.get("status");
+      RuleStatus ruleStatus = EnumUtils.getEnumIgnoreCase(RuleStatus.class, status);
+
+      if (ruleStatus == RuleStatus.DEPRECATED) {
+        // deprecated rules shouldn't have tags
+        continue;
+      }
+
+      @SuppressWarnings("unchecked")
+      var tags = (List<String>) metadata.get("tags");
+      var unknownTags =
+          tags.stream().filter(tag -> !ALLOWED_TAGS.contains(tag)).collect(Collectors.toList());
+
+      assertThat(unknownTags)
+          .as("Rule " + key + " has unknown tags (" + StringUtils.join(unknownTags) + ").")
+          .isEmpty();
+    }
+  }
+
+  @Test
+  void testRulesTargetingTestsShouldHaveTestsTag() throws Exception {
+    for (String key : RULE_KEYS) {
+      Map<String, Object> metadata = getMetadataForRuleKey(key);
+
+      String status = (String) metadata.get("status");
+      RuleStatus ruleStatus = EnumUtils.getEnumIgnoreCase(RuleStatus.class, status);
+
+      if (ruleStatus == RuleStatus.DEPRECATED) {
         // deprecated rules shouldn't have tags
         continue;
       }
