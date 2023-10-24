@@ -18,7 +18,9 @@
  */
 package au.com.integradev.delphi.checks;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.check.MetadataResourcePathImpl;
 import au.com.integradev.delphi.core.Delphi;
@@ -42,6 +44,7 @@ import org.sonar.api.server.rule.RulesDefinition.NewRepository;
 import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.Version;
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
 import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 
 class CheckMetadataTest {
@@ -115,14 +118,51 @@ class CheckMetadataTest {
         .doesNotThrowAnyException();
   }
 
+  @Test
+  void testSonarWayHasValidFormat() {
+    assertThatCode(
+            () ->
+                BuiltInQualityProfileJsonLoader.load(
+                    mock(),
+                    CheckList.REPOSITORY_KEY,
+                    "/"
+                        + new MetadataResourcePathImpl().forRepository(CheckList.REPOSITORY_KEY)
+                        + "/Sonar_way_profile.json"))
+        .doesNotThrowAnyException();
+  }
+
+  @Test
+  void testSonarWayContainsValidRuleKeys() throws Exception {
+    assertThat(getSonarWayRuleKeys())
+        .isNotEmpty()
+        .allSatisfy(
+            ruleKey ->
+                assertThat(RULE_KEYS)
+                    .overridingErrorMessage("'" + ruleKey + "' was not found in CheckList.")
+                    .contains(ruleKey));
+  }
+
+  @Test
+  void testSonarWayShouldBeSortedAlphabetically() throws Exception {
+    assertThat(getSonarWayRuleKeys()).isSorted();
+  }
+
   private static List<Path> listJsonMetadata() {
+    Path sonarWay = sonarWayMetadata();
     return listMetadata(".json").stream()
-        .filter(path -> !path.getFileName().toString().equals("Sonar_way_profile.json"))
+        .filter(path -> !path.equals(sonarWay))
         .collect(Collectors.toList());
   }
 
   private static List<Path> listHtmlMetadata() {
     return listMetadata(".html");
+  }
+
+  private static Path sonarWayMetadata() {
+    return listMetadata(".json").stream()
+        .filter(path -> path.getFileName().toString().equals("Sonar_way_profile.json"))
+        .findFirst()
+        .orElseThrow();
   }
 
   private static List<Path> listMetadata(String extension) {
@@ -147,5 +187,19 @@ class CheckMetadataTest {
     var metadata = (Map<String, Object>) new JSONParser().parse(data);
 
     return metadata;
+  }
+
+  private static List<String> getSonarWayRuleKeys() throws Exception {
+    Path sonarWayPath = sonarWayMetadata();
+
+    String data = Files.readString(sonarWayPath);
+
+    @SuppressWarnings("unchecked")
+    var metadata = (Map<String, Object>) new JSONParser().parse(data);
+
+    @SuppressWarnings("unchecked")
+    var ruleKeys = (List<String>) metadata.get("ruleKeys");
+
+    return ruleKeys;
   }
 }
