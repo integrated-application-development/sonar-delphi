@@ -32,6 +32,8 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
@@ -44,6 +46,7 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "MixedNames")
 public class MixedNamesCheck extends DelphiCheck {
   private static final String MESSAGE = "Avoid mixing names (found: \"%s\" expected: \"%s\").";
+  private static final String QUICK_FIX_MESSAGE = "Correct to \"%s\"";
 
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
@@ -64,7 +67,15 @@ public class MixedNamesCheck extends DelphiCheck {
         String expected = declaration.getImage();
         if (!actual.equals(expected)) {
           DelphiNode location = reference.getIdentifier();
-          reportIssue(context, location, String.format(MESSAGE, actual, expected));
+
+          context
+              .newIssue()
+              .onNode(location)
+              .withMessage(String.format(MESSAGE, actual, expected))
+              .withQuickFixes(
+                  QuickFix.newFix(QUICK_FIX_MESSAGE, expected)
+                      .withEdit(QuickFixEdit.replace(location, expected)))
+              .report();
         }
       }
     }
@@ -106,7 +117,14 @@ public class MixedNamesCheck extends DelphiCheck {
 
         if (!actual.equals(expected)) {
           DelphiNode location = lastNameReference.getIdentifier();
-          reportIssue(context, location, String.format(MESSAGE, actual, expected));
+          context
+              .newIssue()
+              .onNode(location)
+              .withMessage(String.format(MESSAGE, actual, expected))
+              .withQuickFixes(
+                  QuickFix.newFix(QUICK_FIX_MESSAGE, expected)
+                      .withEdit(QuickFixEdit.replace(location, expected)))
+              .report();
         }
       }
     }
@@ -152,7 +170,15 @@ public class MixedNamesCheck extends DelphiCheck {
       // Only add violations on import names that are not aliases and do not match the original case
       if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
         String matchingSegment = unitName.substring(unitName.length() - importName.length());
-        reportIssue(context, location, String.format(MESSAGE, importName, matchingSegment));
+
+        context
+            .newIssue()
+            .onNode(location)
+            .withMessage(String.format(MESSAGE, importName, matchingSegment))
+            .withQuickFixes(
+                QuickFix.newFix(QUICK_FIX_MESSAGE, matchingSegment)
+                    .withEdit(QuickFixEdit.replace(location, matchingSegment)))
+            .report();
       }
     }
   }
