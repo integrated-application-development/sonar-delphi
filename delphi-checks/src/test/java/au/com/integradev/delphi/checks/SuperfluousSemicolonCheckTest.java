@@ -64,4 +64,26 @@ class SuperfluousSemicolonCheckTest {
                 .appendImpl("end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testStraySemicolonsShouldAddQuickFixes() {
+    CheckVerifier.newVerifier()
+        .withCheck(new SuperfluousSemicolonCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure SemicolonTest;")
+                .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl(";")
+                .appendImpl("  // Fix qf1@[-1:0 to -1:1] <<>>")
+                .appendImpl("  // Noncompliant@+3")
+                .appendImpl("  // Noncompliant@+2")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl("  ;SomeVar := 5;; ;")
+                .appendImpl("  // Fix qf2@[-1:2 to -1:3] <<>>")
+                .appendImpl("  // Fix qf3@[-2:16 to -2:17] <<>>")
+                .appendImpl("  // Fix qf4@[-3:18 to -3:19] <<>>")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }

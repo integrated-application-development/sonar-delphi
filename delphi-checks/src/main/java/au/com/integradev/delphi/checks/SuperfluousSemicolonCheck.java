@@ -24,6 +24,8 @@ import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -38,7 +40,14 @@ public class SuperfluousSemicolonCheck extends DelphiCheck {
     for (DelphiNode current : statementList.getChildren()) {
       if (current.getTokenType() == DelphiTokenType.SEMICOLON
           && !(previous instanceof StatementNode)) {
-        reportIssue(context, current, MESSAGE);
+        context
+            .newIssue()
+            .onNode(current)
+            .withMessage(MESSAGE)
+            .withQuickFixes(
+                QuickFix.newFix("Remove the superfluous semicolon")
+                    .withEdit(QuickFixEdit.delete(current)))
+            .report();
       }
       previous = current;
     }
