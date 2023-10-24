@@ -18,25 +18,37 @@
  */
 package au.com.integradev.delphi.reporting;
 
+import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
+import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import au.com.integradev.delphi.reporting.edits.QuickFixEditImpl;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Suppliers;
 import com.google.errorprone.annotations.FormatMethod;
 import com.google.errorprone.annotations.FormatString;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.batch.sensor.issue.fix.NewInputFileEdit;
+import org.sonar.api.batch.sensor.issue.fix.NewQuickFix;
+import org.sonar.api.batch.sensor.issue.fix.NewTextEdit;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -44,6 +56,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext.Location;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.reporting.DelphiIssueBuilder;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 
 /**
  * Based directly on {@code InternalJavaIssueBuilder} from the sonar-java project.
@@ -58,6 +71,7 @@ public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
   private static final String MESSAGE_NAME = "message";
   private static final String FLOWS_NAME = "flows";
   private static final String SECONDARIES_NAME = "secondaries";
+  private static final String QUICK_FIXES_NAME = "quickFixes";
 
   private final DelphiCheck check;
   private final SensorContext context;
@@ -67,6 +81,7 @@ public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
   private String message;
   @Nullable private List<Location> secondaries;
   @Nullable private List<List<Location>> flows;
+  @Nullable private List<QuickFix> quickFixes;
   @Nullable private Integer cost;
   private boolean reported;
 
@@ -154,6 +169,21 @@ public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
   }
 
   @Override
+  public DelphiIssueBuilder withQuickFixes(QuickFix... quickFixes) {
+    withQuickFixes(Arrays.asList(quickFixes));
+    return this;
+  }
+
+  @Override
+  public DelphiIssueBuilder withQuickFixes(List<QuickFix> quickFixes) {
+    requiresValueToBeSet(this.message, MESSAGE_NAME);
+    requiresSetOnlyOnce(this.quickFixes, QUICK_FIXES_NAME);
+
+    this.quickFixes = Collections.unmodifiableList(quickFixes);
+    return this;
+  }
+
+  @Override
   public DelphiIssueBuilderImpl withCost(int cost) {
     requiresValueToBeSet(this.message, MESSAGE_NAME);
     requiresSetOnlyOnce(this.cost, "cost");
@@ -205,8 +235,64 @@ public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
       }
     }
 
+    if (quickFixes != null && context.runtime().getProduct() == SonarProduct.SONARLINT) {
+      Supplier<DelphiFileStream> fileStreamSupplier =
+          Suppliers.memoize(() -> getDelphiFileStream(delphiFile));
+
+      for (QuickFix quickFix : quickFixes) {
+        newIssue.addQuickFix(
+            createNewQuickFix(delphiFile.getInputFile(), newIssue, quickFix, fileStreamSupplier));
+      }
+    }
+
     newIssue.save();
     reported = true;
+  }
+
+  private static DelphiFileStream getDelphiFileStream(DelphiFile delphiFile) {
+    try {
+      return new DelphiFileStream(
+          delphiFile.getSourceCodeFile().getAbsolutePath(), delphiFile.getSourceCodeFileEncoding());
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  private static NewQuickFix createNewQuickFix(
+      InputFile inputFile,
+      NewIssue newIssue,
+      QuickFix quickFix,
+      Supplier<DelphiFileStream> fileStreamSupplier) {
+    NewQuickFix newQuickFix = newIssue.newQuickFix().message(quickFix.getDescription());
+
+    NewInputFileEdit fileEdit = newQuickFix.newInputFileEdit().on(inputFile);
+
+    quickFix.getEdits().stream()
+        .map(QuickFixEditImpl.class::cast)
+        .map(e -> e.toTextEdits(fileStreamSupplier))
+        .flatMap(Collection::stream)
+        .map(textEdit -> toSonarTextEdit(inputFile, fileEdit, textEdit))
+        .forEach(fileEdit::addTextEdit);
+
+    newQuickFix.addInputFileEdit(fileEdit);
+
+    return newQuickFix;
+  }
+
+  private static NewTextEdit toSonarTextEdit(
+      InputFile inputFile, NewInputFileEdit fileEdit, TextRangeReplacement textEdit) {
+    return fileEdit
+        .newTextEdit()
+        .at(filePositionToTextRange(textEdit.getLocation(), inputFile))
+        .withNewText(textEdit.getReplacement());
+  }
+
+  private static TextRange filePositionToTextRange(FilePosition position, InputFile inputFile) {
+    return inputFile.newRange(
+        position.getBeginLine(),
+        position.getBeginColumn(),
+        position.getEndLine(),
+        position.getEndColumn());
   }
 
   public boolean isReported() {

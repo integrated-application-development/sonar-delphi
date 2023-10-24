@@ -43,6 +43,10 @@ public interface DelphiIssueBuilder {
 
   DelphiIssueBuilder withFlows(List<List<DelphiCheckContext.Location>> flows);
 
+  public DelphiIssueBuilder withQuickFixes(QuickFix... quickFixes);
+
+  public DelphiIssueBuilder withQuickFixes(List<QuickFix> quickFixes);
+
   DelphiIssueBuilder withCost(int cost);
 
   void report();

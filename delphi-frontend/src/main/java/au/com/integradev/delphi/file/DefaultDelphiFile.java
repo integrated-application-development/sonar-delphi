@@ -35,6 +35,7 @@ class DefaultDelphiFile implements DelphiFile {
   private CompilerSwitchRegistry switchRegistry;
   private TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry;
   private TypeFactory typeFactory;
+  private String encoding;
 
   DefaultDelphiFile() {
     // package-private constructor
@@ -48,6 +49,11 @@ class DefaultDelphiFile implements DelphiFile {
   @Override
   public List<String> getSourceCodeFilesLines() {
     return sourceCodeLines;
+  }
+
+  @Override
+  public String getSourceCodeFileEncoding() {
+    return encoding;
   }
 
   @Override
@@ -86,6 +92,10 @@ class DefaultDelphiFile implements DelphiFile {
 
   void setSourceCodeLines(List<String> sourceCodeLines) {
     this.sourceCodeLines = List.copyOf(sourceCodeLines);
+  }
+
+  void setSourceCodeEncoding(String encoding) {
+    this.encoding = encoding;
   }
 
   void setAst(DelphiAst ast) {
