@@ -83,7 +83,7 @@ public class TestCodeDetector {
     return false;
   }
 
-  private Type findEnclosingType(DelphiAst ast, FilePosition filePosition) {
+  private static Type findEnclosingType(DelphiAst ast, FilePosition filePosition) {
     Optional<TypeDeclarationNode> typeDeclarationNode =
         findNodeEnclosingFilePosition(ast, filePosition, TypeDeclarationNode.class);
 
@@ -104,7 +104,7 @@ public class TestCodeDetector {
     return TypeFactory.unknownType();
   }
 
-  private <T extends DelphiNode> Optional<T> findNodeEnclosingFilePosition(
+  private static <T extends DelphiNode> Optional<T> findNodeEnclosingFilePosition(
       DelphiAst ast, FilePosition filePosition, Class<T> nodeClass) {
     if (filePosition != null) {
       return ast.findDescendantsOfType(nodeClass).stream()
