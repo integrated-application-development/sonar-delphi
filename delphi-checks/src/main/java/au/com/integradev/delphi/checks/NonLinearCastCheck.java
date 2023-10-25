@@ -36,7 +36,7 @@ public class NonLinearCastCheck extends AbstractCastCheck {
     }
   }
 
-  private boolean isValidStructToStructCast(StructType from, StructType to) {
+  private static boolean isValidStructToStructCast(StructType from, StructType to) {
     if (!from.isClass() || !to.isClass()) {
       return true;
     } else {
@@ -44,7 +44,7 @@ public class NonLinearCastCheck extends AbstractCastCheck {
     }
   }
 
-  private boolean isValidStructToPointerCast(StructType from, PointerType to) {
+  private static boolean isValidStructToPointerCast(StructType from, PointerType to) {
     if (!from.isClass() || to.isUntypedPointer() || !to.dereferencedType().isClass()) {
       return true;
     } else {

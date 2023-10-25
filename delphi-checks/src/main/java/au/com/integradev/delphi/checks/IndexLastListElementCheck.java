@@ -49,18 +49,19 @@ public class IndexLastListElementCheck extends DelphiCheck {
     if (expressions.size() != 1) {
       return;
     }
-    ExpressionNode indexExpr = expressions.get(0);
 
     if (arrayTypeNode.getChildIndex() <= 0) {
       return;
     }
+
+    ExpressionNode indexExpr = expressions.get(0);
     DelphiNode arrayVar = arrayTypeNode.getParent().getChild(arrayTypeNode.getChildIndex() - 1);
 
     Optional.ofNullable(indexExpr)
         .map(ExpressionNode::skipParentheses)
         .filter(BinaryExpressionNode.class::isInstance)
         .map(BinaryExpressionNode.class::cast)
-        .filter(b -> isSubOne(b))
+        .filter(IndexLastListElementCheck::isSubOne)
         .flatMap(b -> getArrayPropertyReference(b.getLeft(), arrayVar.getImage()))
         .ifPresent(
             propertyName -> {

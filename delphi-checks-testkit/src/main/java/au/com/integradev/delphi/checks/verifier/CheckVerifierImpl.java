@@ -75,6 +75,9 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
  */
 public class CheckVerifierImpl implements CheckVerifier {
   private static final Logger LOG = LoggerFactory.getLogger(CheckVerifierImpl.class);
+  private static final Pattern NONCOMPLIANT_PATTERN =
+      Pattern.compile("(?i)^//\\s*Noncompliant(?:@([-+]\\d+))?\\b");
+
   private DelphiCheck check;
   private DelphiTestFile testFile;
   private final Set<String> unitScopeNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
@@ -129,12 +132,11 @@ public class CheckVerifierImpl implements CheckVerifier {
       throw new AssertionError("No issue raised. At least one issue expected");
     }
 
-    Pattern nonCompliantPattern = Pattern.compile("(?i)^//\\s*Noncompliant(?:@([-+]\\d+))?\\b");
     List<Integer> expected =
         testFile.delphiFile().getComments().stream()
             .map(
                 c -> {
-                  Matcher matcher = nonCompliantPattern.matcher(c.getImage());
+                  Matcher matcher = NONCOMPLIANT_PATTERN.matcher(c.getImage());
                   if (!matcher.matches()) {
                     return Optional.<Integer>empty();
                   }

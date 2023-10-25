@@ -22,6 +22,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import com.google.common.base.Joiner;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -51,7 +52,7 @@ public class MixedNamesCheck extends DelphiCheck {
       DelphiNode node, DelphiCheckContext context, String actualName, Set<String> expectedNames) {
     if (!expectedNames.contains(actualName)) {
       reportIssue(
-          context, node, String.format(MESSAGE, actualName, String.join(" or ", expectedNames)));
+          context, node, String.format(MESSAGE, actualName, Joiner.on(" or ").join(expectedNames)));
     }
   }
 

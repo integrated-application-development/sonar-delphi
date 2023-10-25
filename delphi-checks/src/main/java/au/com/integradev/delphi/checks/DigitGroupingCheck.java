@@ -71,7 +71,7 @@ public class DigitGroupingCheck extends DelphiCheck {
     return super.visit(literal, context);
   }
 
-  private boolean isCheckRelevant(DelphiToken token) {
+  private static boolean isCheckRelevant(DelphiToken token) {
     return token.getImage().contains("_");
   }
 
