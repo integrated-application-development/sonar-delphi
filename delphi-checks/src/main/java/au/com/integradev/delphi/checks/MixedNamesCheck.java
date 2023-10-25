@@ -22,10 +22,7 @@
  */
 package au.com.integradev.delphi.checks;
 
-import com.google.common.base.Joiner;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
@@ -45,60 +42,6 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "MixedNames")
 public class MixedNamesCheck extends DelphiCheck {
   private static final String MESSAGE = "Avoid mixing names (found: \"%s\" expected: \"%s\").";
-  private static final Pattern ATTRIBUTE_REGEX =
-      Pattern.compile("Attribute$", Pattern.CASE_INSENSITIVE);
-
-  private void checkNameAgainstValidOptions(
-      DelphiNode node, DelphiCheckContext context, String actualName, Set<String> expectedNames) {
-    if (!expectedNames.contains(actualName)) {
-      reportIssue(
-          context, node, String.format(MESSAGE, actualName, Joiner.on(" or ").join(expectedNames)));
-    }
-  }
-
-  private void checkAttributeTypeReferenceForViolations(
-      DelphiNode node, DelphiCheckContext context, NameOccurrence occurrence) {
-    NameDeclaration declaration = occurrence.getNameDeclaration();
-
-    if (declaration != null && !occurrence.isSelf()) {
-      String actual = occurrence.getImage();
-
-      Set<String> expected =
-          Set.of(
-              declaration.getImage(),
-              ATTRIBUTE_REGEX.matcher(declaration.getImage()).replaceFirst(""));
-
-      checkNameAgainstValidOptions(node, context, actual, expected);
-    }
-  }
-
-  private void checkNameOccurrenceForViolations(
-      DelphiNode node, DelphiCheckContext context, NameOccurrence occurrence) {
-    NameDeclaration declaration = occurrence.getNameDeclaration();
-
-    if (declaration != null && !occurrence.isSelf()) {
-      String actual = occurrence.getImage();
-      checkNameAgainstValidOptions(node, context, actual, Set.of(declaration.getImage()));
-    }
-  }
-
-  private void checkUnitReferenceForViolations(
-      DelphiNode node,
-      DelphiCheckContext context,
-      String importName,
-      UnitImportNameDeclaration importDeclaration) {
-    UnitNameDeclaration originalDeclaration = importDeclaration.getOriginalDeclaration();
-
-    if (originalDeclaration != null) {
-      String unitName = originalDeclaration.fullyQualifiedName();
-
-      // Only add violations on import names that are not aliases and do not match the original case
-      if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
-        String matchingSegment = unitName.substring(unitName.length() - importName.length());
-        reportIssue(context, node, String.format(MESSAGE, importName, matchingSegment));
-      }
-    }
-  }
 
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
@@ -109,13 +52,18 @@ public class MixedNamesCheck extends DelphiCheck {
       if (declaration instanceof UnitImportNameDeclaration) {
         // Checks the occurrence against the original unit declaration instead of the import
         // declaration
-        checkUnitReferenceForViolations(
+        checkUnitReference(
             reference.getIdentifier(),
             context,
             occurrence.getImage(),
             (UnitImportNameDeclaration) declaration);
       } else {
-        checkNameOccurrenceForViolations(reference.getIdentifier(), context, occurrence);
+        String actual = occurrence.getImage();
+        String expected = declaration.getImage();
+        if (!actual.equals(expected)) {
+          DelphiNode location = reference.getIdentifier();
+          reportIssue(context, location, String.format(MESSAGE, actual, expected));
+        }
       }
     }
 
@@ -125,8 +73,11 @@ public class MixedNamesCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(UnitImportNode importNode, DelphiCheckContext context) {
     UnitImportNameDeclaration declaration = importNode.getImportNameDeclaration();
-    checkUnitReferenceForViolations(
-        importNode.getNameNode(), context, declaration.fullyQualifiedName(), declaration);
+
+    DelphiNode location = importNode.getNameNode();
+    String importName = declaration.fullyQualifiedName();
+    checkUnitReference(location, context, importName, declaration);
+
     return super.visit(importNode, context);
   }
 
@@ -142,8 +93,20 @@ public class MixedNamesCheck extends DelphiCheck {
     NameOccurrence occurrence = lastNameReference.getNameOccurrence();
 
     if (occurrence != null) {
-      checkAttributeTypeReferenceForViolations(
-          lastNameReference.getIdentifier(), context, occurrence);
+      NameDeclaration declaration = occurrence.getNameDeclaration();
+
+      if (declaration != null && !occurrence.isSelf()) {
+        String actual = occurrence.getImage();
+        String expected = declaration.getImage();
+        if (actual.length() != expected.length()) {
+          expected = StringUtils.removeEndIgnoreCase(expected, "Attribute");
+        }
+
+        if (!actual.equals(expected)) {
+          DelphiNode location = lastNameReference.getIdentifier();
+          reportIssue(context, location, String.format(MESSAGE, actual, expected));
+        }
+      }
     }
 
     ArgumentListNode argumentListNode = attributeNode.getArgumentList();
@@ -151,6 +114,24 @@ public class MixedNamesCheck extends DelphiCheck {
       return super.visit(argumentListNode, context);
     } else {
       return context;
+    }
+  }
+
+  private void checkUnitReference(
+      DelphiNode location,
+      DelphiCheckContext context,
+      String importName,
+      UnitImportNameDeclaration importDeclaration) {
+    UnitNameDeclaration originalDeclaration = importDeclaration.getOriginalDeclaration();
+
+    if (originalDeclaration != null) {
+      String unitName = originalDeclaration.fullyQualifiedName();
+
+      // Only add violations on import names that are not aliases and do not match the original case
+      if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
+        String matchingSegment = unitName.substring(unitName.length() - importName.length());
+        reportIssue(context, location, String.format(MESSAGE, importName, matchingSegment));
+      }
     }
   }
 }
