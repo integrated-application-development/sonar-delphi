@@ -25,6 +25,8 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "LegacyInitializationSectionRule", repositoryKey = "delph")
@@ -37,10 +39,14 @@ public class LegacyInitializationSectionCheck extends DelphiCheck {
     if (ast.isUnit()) {
       DelphiNode compoundStatement = ast.getFirstChildOfType(CompoundStatementNode.class);
       if (compoundStatement != null) {
+        var beginPosition = FilePosition.from(compoundStatement.getFirstToken());
         context
             .newIssue()
-            .onFilePosition(FilePosition.from(compoundStatement.getFirstToken()))
+            .onFilePosition(beginPosition)
             .withMessage(MESSAGE)
+            .withQuickFixes(
+                QuickFix.newFix("Convert to initialization section")
+                    .withEdit(QuickFixEdit.replace(beginPosition, "initialization")))
             .report();
       }
     }
