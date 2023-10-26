@@ -29,6 +29,8 @@ import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -50,7 +52,14 @@ public class PascalStyleResultCheck extends DelphiCheck {
           .forEach(
               assignee -> {
                 if (assignee.getNameDeclaration() == routineNameDeclaration) {
-                  reportIssue(context, assignee, MESSAGE);
+                  context
+                      .newIssue()
+                      .onNode(assignee)
+                      .withMessage(MESSAGE)
+                      .withQuickFixes(
+                          QuickFix.newFix("Replace Pascal-style result with Result")
+                              .withEdit(QuickFixEdit.replace(assignee, "Result")))
+                      .report();
                 }
               });
     }
