@@ -19,6 +19,7 @@
     "CyclomaticComplexityMethod",
     "DestructorName",
     "DestructorWithoutInherited",
+    "DigitGrouping",
     "EmptyArgumentList",
     "EmptyBlock",
     "EmptyFieldSection",
