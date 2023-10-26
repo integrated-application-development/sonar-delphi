@@ -27,10 +27,12 @@ import org.sonar.plugins.communitydelphi.api.FatalAnalysisError;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class InheritedTypeNameCheckTest {
+  private static final String UNIT_NAME = "UnitName";
+
   private static DelphiCheck createCheck() {
     InheritedTypeNameCheck check = new InheritedTypeNameCheck();
     check.nameRegex = ".*_Child";
-    check.parentNameRegex = ".*_Parent";
+    check.parentTypeName = UNIT_NAME + ".Parent";
     return check;
   }
 
@@ -40,8 +42,11 @@ class InheritedTypeNameCheckTest {
         .withCheck(createCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
                 .appendDecl("type")
-                .appendDecl("  TType_Child = class(TType_Parent)")
+                .appendDecl("  Parent = class")
+                .appendDecl("  end;")
+                .appendDecl("  TType_Child = class(Parent)")
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
@@ -52,8 +57,11 @@ class InheritedTypeNameCheckTest {
         .withCheck(createCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
                 .appendDecl("type")
-                .appendDecl("  TType = class(TType_Parent) // Noncompliant")
+                .appendDecl("  Parent = class")
+                .appendDecl("  end;")
+                .appendDecl("  TType = class(Parent) // Noncompliant")
                 .appendDecl("  end;"))
         .verifyIssues();
   }
@@ -64,8 +72,11 @@ class InheritedTypeNameCheckTest {
         .withCheck(createCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
                 .appendDecl("type")
-                .appendDecl("  TType = class(IType, TType_Parent) // Noncompliant")
+                .appendDecl("  Parent = class")
+                .appendDecl("  end;")
+                .appendDecl("  TType = class(IType, Parent) // Noncompliant")
                 .appendDecl("  end;"))
         .verifyIssues();
   }
@@ -76,8 +87,11 @@ class InheritedTypeNameCheckTest {
         .withCheck(createCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
                 .appendDecl("type")
-                .appendDecl("  TType = class(TSomeOtherType)")
+                .appendDecl("  Parent = class")
+                .appendDecl("  end;")
+                .appendDecl("  TType = class(TObject)")
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
@@ -88,8 +102,11 @@ class InheritedTypeNameCheckTest {
         .withCheck(createCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .unitName(UNIT_NAME)
                 .appendDecl("type")
-                .appendDecl("  TType = class(TObject)")
+                .appendDecl("  Parent = class")
+                .appendDecl("  end;")
+                .appendDecl("  TType = class")
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
@@ -97,7 +114,7 @@ class InheritedTypeNameCheckTest {
   @Test
   void testBadNameRegexShouldThrow() {
     InheritedTypeNameCheck check = new InheritedTypeNameCheck();
-    check.parentNameRegex = ".*";
+    check.parentTypeName = "Parent";
     check.nameRegex = "*";
 
     assertThatThrownBy(
@@ -107,26 +124,9 @@ class InheritedTypeNameCheckTest {
                     .onFile(
                         new DelphiTestUnitBuilder()
                             .appendDecl("type")
-                            .appendDecl("  TType = class(TType_Parent)")
-                            .appendDecl("  end;"))
-                    .verifyNoIssues())
-        .isInstanceOf(FatalAnalysisError.class);
-  }
-
-  @Test
-  void testBadParentRegexShouldNotAddIssue() {
-    InheritedTypeNameCheck check = new InheritedTypeNameCheck();
-    check.parentNameRegex = "*";
-    check.nameRegex = ".*";
-
-    assertThatThrownBy(
-            () ->
-                CheckVerifier.newVerifier()
-                    .withCheck(check)
-                    .onFile(
-                        new DelphiTestUnitBuilder()
-                            .appendDecl("type")
-                            .appendDecl("  TType = class(TType_Parent)")
+                            .appendDecl("  Parent = class")
+                            .appendDecl("  end;")
+                            .appendDecl("  TType = class(Parent)")
                             .appendDecl("  end;"))
                     .verifyNoIssues())
         .isInstanceOf(FatalAnalysisError.class);

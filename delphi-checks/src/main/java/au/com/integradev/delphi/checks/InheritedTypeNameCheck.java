@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.IllegalRuleParameterError;
@@ -34,7 +33,6 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "InheritedTypeName")
 public class InheritedTypeNameCheck extends DelphiCheck {
   private static final String DEFAULT_NAME_REGULAR_EXPRESSION = "(?!)";
-  private static final String DEFAULT_PARENT_NAME_REGULAR_EXPRESSION = "(?!)";
   private static final String DEFAULT_MESSAGE =
       "Rename this type to match the expected naming convention.";
 
@@ -45,16 +43,14 @@ public class InheritedTypeNameCheck extends DelphiCheck {
   public String nameRegex = DEFAULT_NAME_REGULAR_EXPRESSION;
 
   @RuleProperty(
-      key = "parentNameRegex",
-      description = "The regular expression used to match parent type names.",
-      defaultValue = DEFAULT_PARENT_NAME_REGULAR_EXPRESSION)
-  public String parentNameRegex = DEFAULT_PARENT_NAME_REGULAR_EXPRESSION;
+      key = "parentTypeName",
+      description = "The (fully qualified) type name of the parent type. (case-insensitive)")
+  public String parentTypeName = "";
 
   @RuleProperty(key = "message", description = "The issue message", defaultValue = DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
 
   private Pattern namePattern;
-  private Pattern parentPattern;
 
   @Override
   public void start(DelphiCheckContext context) {
@@ -66,30 +62,15 @@ public class InheritedTypeNameCheck extends DelphiCheck {
             "Unable to compile regular expression: " + nameRegex, e);
       }
     }
-
-    if (parentPattern == null) {
-      try {
-        parentPattern = Pattern.compile(parentNameRegex, Pattern.DOTALL);
-      } catch (IllegalArgumentException e) {
-        throw new IllegalRuleParameterError(
-            "Unable to compile regular expression: " + parentNameRegex, e);
-      }
-    }
   }
 
   @Override
   public DelphiCheckContext visit(TypeDeclarationNode type, DelphiCheckContext context) {
-    if (parentPattern != null && namePattern != null) {
-      TypeNode typeDecl = type.getTypeNode();
-      if (inheritsFromType(typeDecl) && !namePattern.matcher(type.simpleName()).matches()) {
-        reportIssue(context, type.getTypeNameNode(), message);
-      }
+    if (namePattern != null
+        && type.getType().isSubTypeOf(parentTypeName)
+        && !namePattern.matcher(type.simpleName()).matches()) {
+      reportIssue(context, type.getTypeNameNode(), message);
     }
     return super.visit(type, context);
-  }
-
-  private boolean inheritsFromType(TypeNode typeDecl) {
-    return typeDecl.getParentTypeNodes().stream()
-        .anyMatch(typeRef -> parentPattern.matcher(typeRef.fullyQualifiedName()).matches());
   }
 }
