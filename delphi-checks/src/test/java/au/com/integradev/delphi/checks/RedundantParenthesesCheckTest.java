@@ -57,6 +57,8 @@ class RedundantParenthesesCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("function GetInteger: Integer;")
                 .appendImpl("begin")
+                .appendImpl("  // Fix@[+2:13 to +2:14] <<>>")
+                .appendImpl("  // Fix@[+1:17 to +1:18] <<>>")
                 .appendImpl("  Result := ((123)); // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
