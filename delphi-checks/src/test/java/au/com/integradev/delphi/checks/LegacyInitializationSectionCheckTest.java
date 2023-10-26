@@ -40,6 +40,7 @@ class LegacyInitializationSectionCheckTest {
         .withCheck(new LegacyInitializationSectionCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendImpl("// Fix@[+1:0 to +1:5] <<initialization>>")
                 .appendImpl("begin // Noncompliant")
                 .appendImpl("  WriteLn('This is a legacy initialization section.');"))
         .verifyIssues();
