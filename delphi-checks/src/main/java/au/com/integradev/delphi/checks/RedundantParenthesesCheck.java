@@ -22,6 +22,8 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "RedundantParenthesesRule", repositoryKey = "delph")
@@ -30,10 +32,20 @@ public class RedundantParenthesesCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove these redundant parentheses.";
 
   @Override
-  public DelphiCheckContext visit(ParenthesizedExpressionNode expression, DelphiCheckContext data) {
+  public DelphiCheckContext visit(
+      ParenthesizedExpressionNode expression, DelphiCheckContext context) {
     if (expression.getParent() instanceof ParenthesizedExpressionNode) {
-      reportIssue(data, expression.getChild(0), MESSAGE);
+      context
+          .newIssue()
+          .onNode(expression.getChild(0))
+          .withMessage(MESSAGE)
+          .withQuickFixes(
+              QuickFix.newFix("Remove redundant parentheses")
+                  .withEdits(
+                      QuickFixEdit.delete(expression.getChild(0)),
+                      QuickFixEdit.delete(expression.getChild(2))))
+          .report();
     }
-    return super.visit(expression, data);
+    return super.visit(expression, context);
   }
 }
