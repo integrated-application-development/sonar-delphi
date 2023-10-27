@@ -18,9 +18,19 @@
  */
 package au.com.integradev.delphi.checks;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "GroupedParameterDeclarationRule", repositoryKey = "delph")
@@ -34,5 +44,52 @@ public class GroupedParameterDeclarationCheck extends AbstractGroupedDeclaration
   @Override
   protected boolean isRelevantDeclarationList(NameDeclarationListNode declarationList) {
     return declarationList.getFirstParentOfType(RoutineParametersNode.class) != null;
+  }
+
+  private static String getFormalParameterTextPrefix(FormalParameterNode formalParameter) {
+    if (formalParameter.isOut()) {
+      return "out ";
+    } else if (formalParameter.isConst()) {
+      return "const ";
+    } else if (formalParameter.isVar()) {
+      return "var ";
+    } else {
+      return "";
+    }
+  }
+
+  @Override
+  protected QuickFix createQuickFix(
+      NameDeclarationListNode declarationList, DelphiCheckContext context) {
+    FormalParameterNode formalParameter = (FormalParameterNode) declarationList.getParent();
+
+    TypeNode typeNode = formalParameter.getTypeNode();
+
+    if (typeNode == null) {
+      return null;
+    }
+
+    List<NameDeclarationNode> declarations = declarationList.getDeclarations();
+    List<QuickFixEdit> fixEdits = new ArrayList<>();
+
+    for (int i = 1; i < declarations.size(); i++) {
+      NameDeclarationNode first = declarations.get(i - 1);
+      NameDeclarationNode second = declarations.get(i);
+
+      DelphiNode commaNode = second.getParent().getChild(second.getChildIndex() - 1);
+      if (commaNode.getTokenType() == DelphiTokenType.COMMA) {
+        fixEdits.add(QuickFixEdit.replace(commaNode, ";"));
+      }
+
+      fixEdits.add(QuickFixEdit.copyAfter(typeNode, first));
+      fixEdits.add(QuickFixEdit.insertAfter(": ", first));
+
+      String prefix = getFormalParameterTextPrefix(formalParameter);
+      if (!prefix.isEmpty()) {
+        fixEdits.add(QuickFixEdit.insertBefore(prefix, second));
+      }
+    }
+
+    return QuickFix.newFix("Separate grouped parameters").withEdits(fixEdits);
   }
 }
