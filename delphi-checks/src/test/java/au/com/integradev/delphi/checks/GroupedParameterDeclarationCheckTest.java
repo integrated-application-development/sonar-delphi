@@ -43,7 +43,48 @@ class GroupedParameterDeclarationCheckTest {
         .withCheck(new GroupedParameterDeclarationCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendImpl("// Fix@[+3:18 to +3:19] <<;>>")
+                .appendImpl("// Fix@[+2:18 to +2:18] <<Integer>>")
+                .appendImpl("// Fix@[+1:18 to +1:18] <<: >>")
                 .appendImpl("procedure Test(Foo, Bar: Integer); // Noncompliant")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testConstParameterKeywordShouldPropagateInQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new GroupedParameterDeclarationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix@[+4:24 to +4:25] <<;>>")
+                .appendImpl("// Fix@[+3:24 to +3:24] <<Integer>>")
+                .appendImpl("// Fix@[+2:24 to +2:24] <<: >>")
+                .appendImpl("// Fix@[+1:26 to +1:26] <<const >>")
+                .appendImpl("procedure Test(const Foo, Bar: Integer); // Noncompliant")
+                .appendImpl("begin")
+                .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testThreeParametersInQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new GroupedParameterDeclarationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix@[+8:24 to +8:25] <<;>>")
+                .appendImpl("// Fix@[+7:24 to +7:24] <<Integer>>")
+                .appendImpl("// Fix@[+6:24 to +6:24] <<: >>")
+                .appendImpl("// Fix@[+5:26 to +5:26] <<const >>")
+                .appendImpl("// Fix@[+4:29 to +4:30] <<;>>")
+                .appendImpl("// Fix@[+3:29 to +3:29] <<Integer>>")
+                .appendImpl("// Fix@[+2:29 to +2:29] <<: >>")
+                .appendImpl("// Fix@[+1:31 to +1:31] <<const >>")
+                .appendImpl("procedure Test(const Foo, Bar, Baz: Integer); // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
                 .appendImpl("end;"))

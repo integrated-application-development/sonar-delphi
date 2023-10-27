@@ -21,6 +21,8 @@ package au.com.integradev.delphi.checks;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.DelphiIssueBuilder;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 
 public abstract class AbstractGroupedDeclarationCheck extends DelphiCheck {
   protected abstract boolean isRelevantDeclarationList(NameDeclarationListNode declarationList);
@@ -32,8 +34,21 @@ public abstract class AbstractGroupedDeclarationCheck extends DelphiCheck {
       NameDeclarationListNode declarationList, DelphiCheckContext context) {
     if (isRelevantDeclarationList(declarationList)
         && declarationList.getDeclarations().size() > 1) {
-      reportIssue(context, declarationList, getIssueMessage());
+      DelphiIssueBuilder newIssue =
+          context.newIssue().onNode(declarationList).withMessage(getIssueMessage());
+
+      QuickFix quickFix = createQuickFix(declarationList, context);
+      if (quickFix != null) {
+        newIssue.withQuickFixes(quickFix);
+      }
+
+      newIssue.report();
     }
     return super.visit(declarationList, context);
+  }
+
+  protected QuickFix createQuickFix(
+      NameDeclarationListNode declarationList, DelphiCheckContext context) {
+    return null;
   }
 }
