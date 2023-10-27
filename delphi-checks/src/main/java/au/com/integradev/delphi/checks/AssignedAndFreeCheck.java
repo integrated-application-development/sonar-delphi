@@ -38,6 +38,9 @@ import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.reporting.DelphiIssueBuilder;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "AssignedAndFreeRule", repositoryKey = "delph")
@@ -49,9 +52,26 @@ public class AssignedAndFreeCheck extends DelphiCheck {
   public DelphiCheckContext visit(IfStatementNode statement, DelphiCheckContext context) {
     DelphiNode violation = findViolation(statement);
     if (violation != null) {
-      reportIssue(context, violation, MESSAGE);
+      DelphiIssueBuilder newIssue = context.newIssue().onNode(violation).withMessage(MESSAGE);
+
+      if (!statement.hasElseBranch()) {
+        newIssue.withQuickFixes(buildQuickFix(statement));
+      }
+
+      newIssue.report();
     }
     return super.visit(statement, context);
+  }
+
+  private QuickFix buildQuickFix(IfStatementNode ifStatement) {
+    StatementNode thenStatement = ifStatement.getThenStatement();
+
+    if (thenStatement instanceof CompoundStatementNode) {
+      thenStatement = ((CompoundStatementNode) thenStatement).getStatements().get(0);
+    }
+
+    return QuickFix.newFix("Remove redundant assignment check")
+        .withEdits(QuickFixEdit.copyReplacing(thenStatement, ifStatement));
   }
 
   private static DelphiNode findViolation(IfStatementNode ifStatement) {
