@@ -69,6 +69,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `OSX(64)` symbols weren't treated as defined on macOS.
+- `MACOS(32|64)` symbols weren't treated as defined on iOS.
 - Name collisions between generic and non-generic forward declarations.
 - Incorrect type conversions from pointers to arrays.
 - Fixed arrays were overly-eager to convert to dynamic arrays.

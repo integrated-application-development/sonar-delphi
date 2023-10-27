@@ -58,7 +58,7 @@ public final class PredefinedConditionals {
     Set<String> result = Sets.newHashSet("DCC", compilerVersion.symbol());
 
     if (compilerVersion.equals(VERSION_2007)) {
-      //  Delphi 2006 and 2007 are binary compatible, so ver180 is defined for both.
+      // Delphi 2006 and 2007 are binary compatible, so ver180 is defined for both.
       result.add(VERSION_2006.symbol());
     }
 
@@ -78,8 +78,10 @@ public final class PredefinedConditionals {
         result.add(selectByArchitecture("LINUX32", "LINUX64"));
         break;
       case MACOS:
-        result.add("MACOS");
-        result.add(selectByArchitecture("MACOS32", "MACOS64"));
+        result.add("OSX");
+        if (toolchain.architecture == Architecture.X64) {
+          result.add("OSX64");
+        }
         break;
       case IOS:
         result.add("IOS");
@@ -91,6 +93,13 @@ public final class PredefinedConditionals {
         break;
       default:
         // Do nothing
+    }
+
+    if (toolchain.platform == Platform.MACOS || toolchain.platform == Platform.IOS) {
+      // Indicates the target platform is an Apple Darwin OS (macOS or iOS).
+      // Note: This symbol existed before Apple changed the name of OS X to macOS.
+      result.add("MACOS");
+      result.add(selectByArchitecture("MACOS32", "MACOS64"));
     }
 
     if (toolchain.platform != Platform.WINDOWS) {
