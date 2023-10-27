@@ -128,7 +128,12 @@ public final class PredefinedConditionals {
     }
 
     if (checkToolchain(
-        Toolchain.DCCIOSARM, Toolchain.DCCIOSARM64, Toolchain.DCCAARM, Toolchain.DCCAARM64)) {
+        Toolchain.DCCOSXARM64,
+        Toolchain.DCCIOSARM,
+        Toolchain.DCCIOSARM64,
+        Toolchain.DCCIOSSIMARM64,
+        Toolchain.DCCAARM,
+        Toolchain.DCCAARM64)) {
       result.add("CPUARM");
       result.add(selectByArchitecture("CPUARM32", "CPUARM64"));
     }
@@ -163,8 +168,10 @@ public final class PredefinedConditionals {
     boolean basedOnLLVM =
         checkToolchain(
             Toolchain.DCCOSX64,
+            Toolchain.DCCOSXARM64,
             Toolchain.DCCIOSARM,
             Toolchain.DCCIOSARM64,
+            Toolchain.DCCIOSSIMARM64,
             Toolchain.DCCAARM,
             Toolchain.DCCAARM64,
             Toolchain.DCCLINUX64);

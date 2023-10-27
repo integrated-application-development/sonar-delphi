@@ -23,9 +23,11 @@ public enum Toolchain {
   DCC64(Architecture.X64, Platform.WINDOWS),
   DCCOSX(Architecture.X86, Platform.MACOS),
   DCCOSX64(Architecture.X64, Platform.MACOS),
+  DCCOSXARM64(Architecture.X64, Platform.MACOS),
   DCCIOSARM(Architecture.X86, Platform.IOS),
   DCCIOSARM64(Architecture.X64, Platform.IOS),
   DCCIOS32(Architecture.X86, Platform.IOS),
+  DCCIOSSIMARM64(Architecture.X64, Platform.IOS),
   DCCAARM(Architecture.X86, Platform.ANDROID),
   DCCAARM64(Architecture.X64, Platform.ANDROID),
   DCCLINUX64(Architecture.X64, Platform.LINUX);

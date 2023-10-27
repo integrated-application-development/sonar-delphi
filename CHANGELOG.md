@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Delphi files.
 - `sonar.delphi.test.attribute` property to specify an attribute that will cause annotated types to
   be treated as test code.
+- Support for the `DCCOSXARM64` toolchain.
+- Support for the `DCCIOSSIMARM64` toolchain.
 - Support for attributes in semantic analysis.
 - Support for identifiers prefixed with 2 ampersands (`&&`).
 - `OleVariant` overloads for `VarArrayRedim` and `VarClear` intrinsics.

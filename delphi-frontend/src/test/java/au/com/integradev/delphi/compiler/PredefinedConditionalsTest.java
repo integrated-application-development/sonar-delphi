@@ -29,6 +29,8 @@ class PredefinedConditionalsTest {
   private static final CompilerVersion VERSION_TOKYO = CompilerVersion.fromVersionNumber("32.0");
   private static final CompilerVersion VERSION_RIO = CompilerVersion.fromVersionNumber("33.0");
   private static final CompilerVersion VERSION_SYDNEY = CompilerVersion.fromVersionNumber("34.0");
+  private static final CompilerVersion VERSION_ALEXANDRIA =
+      CompilerVersion.fromVersionNumber("35.0");
 
   private static final Set<String> NEXT_GEN_FEATURES =
       Set.of("NEXTGEN", "AUTOREFCOUNT", "WEAKINSTREF");
@@ -123,6 +125,32 @@ class PredefinedConditionalsTest {
   }
 
   @Test
+  void testDCCOSXARM64() {
+    assertThat(
+            PredefinedConditionals.getConditionalDefines(Toolchain.DCCOSXARM64, VERSION_ALEXANDRIA))
+        .containsExactlyInAnyOrder(
+            "DCC",
+            "VER350",
+            "CONSOLE",
+            "NATIVECODE",
+            "OSX",
+            "OSX64",
+            "MACOS",
+            "MACOS64",
+            "POSIX",
+            "POSIX64",
+            "CPU64BITS",
+            "CPUARM",
+            "CPUARM64",
+            "EXTERNALLINKER",
+            "UNICODE",
+            "CONDITIONALEXPRESSIONS",
+            "PIC",
+            "WEAKREF",
+            "WEAKINTFREF");
+  }
+
+  @Test
   void testDDCIOSARM() {
     assertThat(PredefinedConditionals.getConditionalDefines(Toolchain.DCCIOSARM, VERSION_RIO))
         .containsExactlyInAnyOrder(
@@ -178,6 +206,33 @@ class PredefinedConditionalsTest {
             "UNDERSCOREIMPORTNAME",
             "WEAKREF",
             "WEAKINSTREF",
+            "WEAKINTFREF");
+  }
+
+  @Test
+  void testDCCIOSSIMARM64() {
+    assertThat(
+            PredefinedConditionals.getConditionalDefines(
+                Toolchain.DCCIOSSIMARM64, VERSION_ALEXANDRIA))
+        .containsExactlyInAnyOrder(
+            "DCC",
+            "VER350",
+            "CONSOLE",
+            "NATIVECODE",
+            "IOS",
+            "IOS64",
+            "MACOS",
+            "MACOS64",
+            "POSIX",
+            "POSIX64",
+            "CPU64BITS",
+            "CPUARM",
+            "CPUARM64",
+            "EXTERNALLINKER",
+            "UNICODE",
+            "CONDITIONALEXPRESSIONS",
+            "PIC",
+            "WEAKREF",
             "WEAKINTFREF");
   }
 
