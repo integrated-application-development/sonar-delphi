@@ -32,6 +32,8 @@ import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
@@ -67,12 +69,24 @@ public class IndexLastListElementCheck extends DelphiCheck {
         .ifPresent(
             propertyName -> {
               if (propertyName.equalsIgnoreCase("System.Classes.TList.Count")) {
-                reportIssue(context, arrayTypeNode, "Use TList.Last.");
+                reportIssueWithQuickFix(context, arrayTypeNode, "Use TList.Last.");
               } else if (propertyName.equalsIgnoreCase(
                   "System.Generics.Collections.TList<T>.Count")) {
-                reportIssue(context, arrayTypeNode, "Use TList<T>.Last.");
+                reportIssueWithQuickFix(context, arrayTypeNode, "Use TList<T>.Last.");
               }
             });
+  }
+
+  private static void reportIssueWithQuickFix(
+      DelphiCheckContext context, ArrayAccessorNode node, String message) {
+    context
+        .newIssue()
+        .onNode(node)
+        .withMessage(message)
+        .withQuickFixes(
+            QuickFix.newFix("Replace with TList.Last")
+                .withEdit(QuickFixEdit.replace(node, ".Last")))
+        .report();
   }
 
   private static boolean isSubOne(BinaryExpressionNode binary) {
