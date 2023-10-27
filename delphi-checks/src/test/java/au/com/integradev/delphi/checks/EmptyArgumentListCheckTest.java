@@ -32,6 +32,7 @@ class EmptyArgumentListCheckTest {
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
                 .appendDecl("  TMyForm = class(TObject)")
+                .appendDecl("    // Fix@[+1:25 to +1:27] <<>>")
                 .appendDecl("    procedure MyProcedure(); // Noncompliant")
                 .appendDecl("  end;"))
         .verifyIssues();
@@ -45,6 +46,7 @@ class EmptyArgumentListCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
+                .appendImpl("  // Fix@[+1:13 to +1:15] <<>>")
                 .appendImpl("  MyProcedure(); // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
@@ -76,6 +78,7 @@ class EmptyArgumentListCheckTest {
                 .appendImpl("var")
                 .appendImpl("  Foo: TIntArray;")
                 .appendImpl("begin")
+                .appendDecl("  // Fix@[+1:25 to +1:27] <<>>")
                 .appendImpl("  Foo := TIntArray.Create();")
                 .appendImpl("end;"))
         .verifyNoIssues();

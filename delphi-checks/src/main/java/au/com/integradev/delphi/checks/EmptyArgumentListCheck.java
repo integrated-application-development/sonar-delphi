@@ -27,6 +27,8 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
@@ -36,12 +38,19 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "EmptyArgumentList")
 public class EmptyArgumentListCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this empty argument list.";
+  private static final String QUICK_FIX_MESSAGE = "Remove empty argument list";
   private static final String SYSTEM_ASSIGNED_IMAGE = "System.Assigned";
 
   @Override
   public DelphiCheckContext visit(RoutineParametersNode parameters, DelphiCheckContext context) {
     if (parameters.isEmpty()) {
-      reportIssue(context, parameters, MESSAGE);
+      context
+          .newIssue()
+          .onNode(parameters)
+          .withMessage(MESSAGE)
+          .withQuickFixes(
+              QuickFix.newFix(QUICK_FIX_MESSAGE).withEdit(QuickFixEdit.delete(parameters)))
+          .report();
     }
     return super.visit(parameters, context);
   }
@@ -51,7 +60,13 @@ public class EmptyArgumentListCheck extends DelphiCheck {
     if (arguments.isEmpty()
         && !isExplicitArrayConstructorInvocation(arguments)
         && !isRequiredToDistinguishProceduralFromReturn(arguments)) {
-      reportIssue(context, arguments, MESSAGE);
+      context
+          .newIssue()
+          .onNode(arguments)
+          .withMessage(MESSAGE)
+          .withQuickFixes(
+              QuickFix.newFix(QUICK_FIX_MESSAGE).withEdit(QuickFixEdit.delete(arguments)))
+          .report();
     }
     return super.visit(arguments, context);
   }
