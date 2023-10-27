@@ -76,6 +76,7 @@ class IndexLastListElementCheckTest {
                 .appendImpl("var")
                 .appendImpl("  List: TObjectList;")
                 .appendImpl("begin")
+                .appendImpl("  // Fix@[+1:6 to +1:22] <<.Last>>")
                 .appendImpl("  List[List.Count - 1]; // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
