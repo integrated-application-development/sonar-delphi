@@ -18,14 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.scope;
 
-import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import java.util.Set;
 import javax.annotation.Nullable;
-import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -43,81 +37,13 @@ public interface FileScope extends DelphiScope {
   Set<NameDeclaration> shallowFindDeclaration(NameOccurrence occurrence);
 
   /**
-   * Find a helper type in this scope without traversing imports
+   * Find a helper type in this scope without traversing imports.
    *
    * @param type The type for which we are trying to find a helper
    * @return Helper type for the specified type
    */
   @Nullable
   HelperType shallowGetHelperForType(Type type);
-
-  /**
-   * Registers a node as being associated with a scope so it can be re-attached later
-   *
-   * @param node The node which we are registering
-   * @param scope The scope we want to associate the node to
-   */
-  void registerScope(Node node, DelphiScope scope);
-
-  /**
-   * Registers a node as being associated with a declaration so it can be re-attached later
-   *
-   * @param node The node which we want to associate the declaration with
-   * @param declaration The declaration we are registering
-   */
-  void registerDeclaration(Node node, NameDeclaration declaration);
-
-  /**
-   * Registers a node as being associated with an occurrence so it can be re-attached later
-   *
-   * @param node The node which we want to associate the name occurrence with
-   * @param occurrence The occurrence we are registering
-   */
-  void registerOccurrence(Node node, NameOccurrence occurrence);
-
-  /**
-   * Attaches scope information to a particular node
-   *
-   * @param node The node which we want to attach symbol information to
-   */
-  void attach(MutableDelphiNode node);
-
-  /**
-   * Attaches symbol declaration information to a particular node
-   *
-   * @param node The node which we want to attach symbol information to
-   */
-  void attach(NameDeclarationNode node);
-
-  /**
-   * Attaches symbol declaration information to a method name node
-   *
-   * @param node The node which we want to attach symbol information to
-   */
-  void attach(MethodNameNode node);
-
-  /** Removes all scope registrations */
-  void unregisterScopes();
-
-  /** Removes all name declaration registrations */
-  void unregisterDeclarations();
-
-  /** Removes all name occurrence registrations */
-  void unregisterOccurrences();
-
-  /**
-   * Attaches symbol occurrence information to a name reference node
-   *
-   * @param node The node which we want to attach symbol information to
-   */
-  void attach(NameReferenceNode node);
-
-  /**
-   * Attaches symbol occurrence information to an array accessor node
-   *
-   * @param node The node which we want to attach symbol information to
-   */
-  void attach(ArrayAccessorNode node);
 
   /**
    * Returns the system scope

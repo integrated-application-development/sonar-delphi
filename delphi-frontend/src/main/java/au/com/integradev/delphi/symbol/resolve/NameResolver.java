@@ -34,6 +34,7 @@ import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationI
 import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
+import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
@@ -1384,11 +1385,8 @@ public class NameResolver {
   }
 
   private static void registerOccurrence(NameOccurrenceImpl occurrence) {
-    occurrence
-        .getLocation()
-        .getScope()
-        .getEnclosingScope(FileScope.class)
-        .registerOccurrence(occurrence.getLocation(), occurrence);
+    FileScope scope = occurrence.getLocation().getScope().getEnclosingScope(FileScope.class);
+    ((FileScopeImpl) scope).registerOccurrence(occurrence.getLocation(), occurrence);
   }
 
   private static class DisambiguationException extends RuntimeException {

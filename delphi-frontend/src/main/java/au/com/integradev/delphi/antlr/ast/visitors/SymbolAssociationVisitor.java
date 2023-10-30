@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
 import au.com.integradev.delphi.symbol.SymbolTable;
+import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import com.google.common.base.Preconditions;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -30,7 +31,6 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 
 /**
  * Visitor for symbol association.
@@ -47,7 +47,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
   public static class Data {
     private final SymbolTable symbolTable;
-    private FileScope fileScope;
+    private FileScopeImpl fileScope;
 
     public Data(SymbolTable symbolTable) {
       this.symbolTable = symbolTable;
@@ -64,7 +64,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
     Preconditions.checkNotNull(
         declaration, "Expected unit '%s' to exist in global scope.", unitName);
 
-    data.fileScope = declaration.getFileScope();
+    data.fileScope = (FileScopeImpl) declaration.getFileScope();
     ((DelphiAstImpl) node).setScope(data.fileScope);
 
     return node.childrenAccept(this, data);

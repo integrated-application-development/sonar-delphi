@@ -29,6 +29,7 @@ import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,7 +57,6 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclarat
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SysInitScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
@@ -317,7 +317,7 @@ public class SymbolTableBuilder {
       unit.unitDeclaration = data.getUnitDeclaration();
       symbolTable.addUnit(filePath, unit.unitDeclaration);
       if (!unit.isSourceFile) {
-        FileScope fileScope = data.getUnitDeclaration().getFileScope();
+        FileScopeImpl fileScope = (FileScopeImpl) data.getUnitDeclaration().getFileScope();
         fileScope.unregisterScopes();
         fileScope.unregisterDeclarations();
         fileScope.unregisterOccurrences();

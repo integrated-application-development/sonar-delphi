@@ -46,7 +46,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 
-abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope {
+public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope {
   private final String name;
   private final Deque<FileScope> imports = new ArrayDeque<>();
   private Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
@@ -122,60 +122,95 @@ abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope {
     this.imports.addFirst(scope);
   }
 
-  @Override
+  /**
+   * Registers a node as being associated with a scope so it can be re-attached later
+   *
+   * @param node The node which we are registering
+   * @param scope The scope we want to associate the node to
+   */
   public void registerScope(Node node, DelphiScope scope) {
     registeredScopes.put(node.getTokenIndex(), scope);
   }
 
-  @Override
+  /**
+   * Registers a node as being associated with a declaration so it can be re-attached later
+   *
+   * @param node The node which we want to associate the declaration with
+   * @param declaration The declaration we are registering
+   */
   public void registerDeclaration(Node node, NameDeclaration declaration) {
     registeredDeclarations.put(node.getTokenIndex(), declaration);
   }
 
-  @Override
+  /**
+   * Registers a node as being associated with an occurrence so it can be re-attached later
+   *
+   * @param node The node which we want to associate the name occurrence with
+   * @param occurrence The occurrence we are registering
+   */
   public void registerOccurrence(Node node, NameOccurrence occurrence) {
     registeredOccurrences.put(node.getTokenIndex(), occurrence);
   }
 
-  @Override
+  /**
+   * Attaches scope information to a particular node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
   public void attach(MutableDelphiNode node) {
     node.setScope(registeredScopes.get(node.getTokenIndex()));
   }
 
-  @Override
+  /**
+   * Attaches symbol declaration information to a particular node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
   public void attach(NameDeclarationNode node) {
     ((NameDeclarationNodeImpl) node)
         .setNameDeclaration(registeredDeclarations.get(node.getTokenIndex()));
   }
 
-  @Override
+  /**
+   * Attaches symbol declaration information to a method name node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
   public void attach(MethodNameNode node) {
     var declaration = (MethodNameDeclaration) registeredDeclarations.get(node.getTokenIndex());
     node.setMethodNameDeclaration(declaration);
   }
 
-  @Override
+  /** Removes all scope registrations */
   public void unregisterScopes() {
     registeredScopes = new HashMap<>(0);
   }
 
-  @Override
+  /** Removes all name declaration registrations */
   public void unregisterDeclarations() {
     registeredDeclarations = new HashMap<>(0);
   }
 
-  @Override
+  /** Removes all name occurrence registrations */
   public void unregisterOccurrences() {
     registeredOccurrences = new HashMap<>(0);
   }
 
-  @Override
+  /**
+   * Attaches symbol occurrence information to a name reference node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
   public void attach(NameReferenceNode node) {
     ((NameReferenceNodeImpl) node)
         .setNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
   }
 
-  @Override
+  /**
+   * Attaches symbol occurrence information to an array accessor node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
   public void attach(ArrayAccessorNode node) {
     ((ArrayAccessorNodeImpl) node)
         .setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));

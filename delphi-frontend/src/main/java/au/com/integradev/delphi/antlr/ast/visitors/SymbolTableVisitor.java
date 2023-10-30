@@ -40,6 +40,7 @@ import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.resolve.NameResolutionHelper;
 import au.com.integradev.delphi.symbol.scope.DeclarationScopeImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
+import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import au.com.integradev.delphi.symbol.scope.LocalScopeImpl;
 import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
 import au.com.integradev.delphi.symbol.scope.SysInitScopeImpl;
@@ -195,7 +196,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
      * @param node the AST node which the scope is associated to
      */
     protected void addScope(DelphiScope newScope, DelphiNode node) {
-      unitDeclaration.getFileScope().registerScope(node, newScope);
+      ((FileScopeImpl) unitDeclaration.getFileScope()).registerScope(node, newScope);
       addScope(newScope);
       ((MutableDelphiNode) node).setScope(newScope);
     }
@@ -225,7 +226,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     protected void registerDeclaration(NameDeclaration declaration, DelphiNode node) {
-      unitDeclaration.getFileScope().registerDeclaration(node, declaration);
+      ((FileScopeImpl) unitDeclaration.getFileScope()).registerDeclaration(node, declaration);
     }
 
     protected void addDeclarationToCurrentScope(NameDeclaration declaration) {
