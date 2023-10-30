@@ -42,7 +42,7 @@ public final class UnitNameDeclarationImpl extends QualifiedNameDeclarationImpl
     super(node.getNameNode(), fileScope);
     this.fileScope = fileScope;
     this.namespace = node.getNamespace();
-    this.path = Path.of(node.getAst().getFileName());
+    this.path = Path.of(node.getAst().getDelphiFile().getSourceCodeFile().getAbsolutePath());
     this.interfaceDependencies = new HashSet<>();
     this.implementationDependencies = new HashSet<>();
   }

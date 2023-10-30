@@ -19,15 +19,9 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import au.com.integradev.delphi.file.DelphiFile;
-import java.util.List;
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public interface DelphiAst extends DelphiNode {
-  List<DelphiToken> getTokens();
-
   DelphiFile getDelphiFile();
-
-  String getFileName();
 
   FileHeaderNode getFileHeader();
 

@@ -18,19 +18,24 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
+import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.implType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.ast.DelphiNodeUtils;
+import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
+import au.com.integradev.delphi.file.DelphiFile;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.support.ModifierSupport;
+import org.mockito.Answers;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
@@ -84,10 +89,26 @@ class DelphiParserVisitorTest {
         .collect(Collectors.toSet());
   }
 
+  @SuppressWarnings("unchecked")
   private static <T extends DelphiNode> T getNodeInstance(Class<T> clazz) {
-    if (Modifier.isAbstract(clazz.getModifiers()) || DelphiAst.class.isAssignableFrom(clazz)) {
+    if (DelphiAst.class.isAssignableFrom(clazz)) {
+      DelphiFile delphiFile = mock(Answers.RETURNS_DEEP_STUBS);
+
+      DelphiAst ast = (DelphiAst) mock(clazz);
+      when(ast.getDelphiFile()).thenReturn(delphiFile);
+
+      return clazz.cast(ast);
+    }
+
+    Class<? extends DelphiNodeImpl> implType = implType(clazz);
+    if (implType == null) {
       return mock(clazz);
     }
-    return DelphiNodeUtils.instantiateNode(clazz);
+
+    if (ModifierSupport.isAbstract(implType)) {
+      return (T) mock(implType);
+    }
+
+    return (T) DelphiNodeUtils.instantiateNode(implType);
   }
 }

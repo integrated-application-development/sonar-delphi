@@ -169,7 +169,7 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(DelphiAst node, T data) {
-    for (DelphiToken token : node.getTokens()) {
+    for (DelphiToken token : node.getDelphiFile().getTokens()) {
       visitToken(token, data);
     }
 

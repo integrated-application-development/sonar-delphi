@@ -87,18 +87,8 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
   }
 
   @Override
-  public List<DelphiToken> getTokens() {
-    return delphiFile.getTokens();
-  }
-
-  @Override
   public DelphiFile getDelphiFile() {
     return delphiFile;
-  }
-
-  @Override
-  public String getFileName() {
-    return delphiFile.getSourceCodeFile().getAbsolutePath();
   }
 
   @Override

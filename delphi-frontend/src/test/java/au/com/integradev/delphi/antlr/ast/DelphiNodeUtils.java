@@ -39,6 +39,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
@@ -118,6 +119,26 @@ public final class DelphiNodeUtils {
         .filter(nodeType -> !Modifier.isAbstract(nodeType.getModifiers()))
         .map(DelphiNodeUtils::instantiateNode)
         .collect(Collectors.toSet());
+  }
+
+  @Nullable
+  @SuppressWarnings("unchecked")
+  public static Class<? extends DelphiNodeImpl> implType(Class<? extends DelphiNode> nodeType) {
+    Class<?> result;
+
+    if (nodeType.isAssignableFrom(DelphiNodeImpl.class)) {
+      result = nodeType;
+    } else {
+      result =
+          NODE_IMPL_PACKAGE.stream()
+              .filter(type -> type.isAssignableTo(nodeType))
+              .filter(type -> type.getSimpleName().equals(nodeType.getSimpleName() + "Impl"))
+              .findFirst()
+              .map(JavaClass::reflect)
+              .orElse(null);
+    }
+
+    return (Class<? extends DelphiNodeImpl>) result;
   }
 
   public static <T extends DelphiNode> T instantiateNode(Class<T> nodeType) {

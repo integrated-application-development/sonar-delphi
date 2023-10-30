@@ -26,6 +26,8 @@ import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNodeImpl;
+import au.com.integradev.delphi.file.DelphiFile;
+import java.io.File;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -72,8 +74,14 @@ class UnitImportNameDeclarationTest {
   }
 
   private static UnitNameDeclaration createUnit(String name) {
+    File file = mock(File.class);
+    when(file.getAbsolutePath()).thenReturn(name + ".pas");
+
+    DelphiFile delphiFile = mock(DelphiFile.class);
+    when(delphiFile.getSourceCodeFile()).thenReturn(file);
+
     DelphiAst ast = mock(DelphiAst.class);
-    when(ast.getFileName()).thenReturn(name + ".pas");
+    when(ast.getDelphiFile()).thenReturn(delphiFile);
 
     FileHeaderNode location = mock(FileHeaderNode.class);
     when(location.getNameNode()).thenReturn(createNameNode(name));

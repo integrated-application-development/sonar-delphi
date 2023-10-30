@@ -25,6 +25,8 @@ import static org.mockito.Mockito.when;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
+import au.com.integradev.delphi.file.DelphiFile;
+import java.io.File;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -66,8 +68,14 @@ class UnitNameDeclarationTest {
     var nameNode = new QualifiedNameDeclarationNodeImpl(DelphiLexer.TkNameDeclaration);
     nameNode.addChild(identifierNode);
 
+    File file = mock(File.class);
+    when(file.getAbsolutePath()).thenReturn(path);
+
+    DelphiFile delphiFile = mock(DelphiFile.class);
+    when(delphiFile.getSourceCodeFile()).thenReturn(file);
+
     DelphiAst ast = mock(DelphiAst.class);
-    when(ast.getFileName()).thenReturn(path);
+    when(ast.getDelphiFile()).thenReturn(delphiFile);
 
     FileHeaderNode location = mock(FileHeaderNode.class);
     when(location.getNameNode()).thenReturn(nameNode);
