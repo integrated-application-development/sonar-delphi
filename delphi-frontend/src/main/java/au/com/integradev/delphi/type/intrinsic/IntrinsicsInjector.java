@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
-import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.compilerVariable;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
@@ -50,6 +49,7 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WORD;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -337,6 +337,7 @@ public final class IntrinsicsInjector {
   }
 
   private void injectConstant(String image, IntrinsicType intrinsic) {
-    scope.addDeclaration(compilerVariable(image, type(intrinsic), scope));
+    var declaration = VariableNameDeclarationImpl.constant(image, type(intrinsic), scope);
+    scope.addDeclaration(declaration);
   }
 }

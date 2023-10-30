@@ -37,7 +37,7 @@ class LocalScopeImplTest {
     LocalScopeImpl scope = new LocalScopeImpl();
 
     VariableNameDeclaration variable =
-        VariableNameDeclarationImpl.compilerVariable(
+        VariableNameDeclarationImpl.parameter(
             "Foo", TypeFactory.unknownType(), DelphiScope.unknownScope());
 
     scope.addDeclaration(variable);

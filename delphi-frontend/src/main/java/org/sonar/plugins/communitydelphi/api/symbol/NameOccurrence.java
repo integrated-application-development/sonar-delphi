@@ -29,11 +29,7 @@ public interface NameOccurrence {
 
   String getImage();
 
-  NameOccurrence getNameForWhichThisIsAQualifier();
-
   NameDeclaration getNameDeclaration();
-
-  boolean isPartOfQualifiedName();
 
   boolean isExplicitInvocation();
 
@@ -44,6 +40,4 @@ public interface NameOccurrence {
   boolean isGeneric();
 
   List<Type> getTypeArguments();
-
-  boolean isSelf();
 }

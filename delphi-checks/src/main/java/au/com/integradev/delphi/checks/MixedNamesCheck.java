@@ -36,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "MixedNamesRule", repositoryKey = "delph")
@@ -95,7 +96,7 @@ public class MixedNamesCheck extends DelphiCheck {
     if (occurrence != null) {
       NameDeclaration declaration = occurrence.getNameDeclaration();
 
-      if (declaration != null && !occurrence.isSelf()) {
+      if (declaration != null && !isSelf(declaration)) {
         String actual = occurrence.getImage();
         String expected = declaration.getImage();
         if (actual.length() != expected.length()) {
@@ -115,6 +116,11 @@ public class MixedNamesCheck extends DelphiCheck {
     } else {
       return context;
     }
+  }
+
+  private static boolean isSelf(NameDeclaration declaration) {
+    return declaration instanceof VariableNameDeclaration
+        && ((VariableNameDeclaration) declaration).isSelf();
   }
 
   private void checkUnitReference(

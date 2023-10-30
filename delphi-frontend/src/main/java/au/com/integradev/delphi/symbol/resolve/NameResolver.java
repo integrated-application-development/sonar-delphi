@@ -541,7 +541,6 @@ public class NameResolver {
     // Attributes are a shorthand for an invocation of a constructor named 'Create'
     SymbolicNode imaginaryConstructor = SymbolicNode.imaginary("Create", node.getScope());
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(imaginaryConstructor);
-    ((NameOccurrenceImpl) lastReference.getNameOccurrence()).setNameWhichThisQualifies(occurrence);
     ((AttributeNameOccurrenceImpl) lastReference.getNameOccurrence())
         .setImplicitConstructorNameOccurrence(occurrence);
 
@@ -1295,10 +1294,6 @@ public class NameResolver {
 
   void addName(NameOccurrenceImpl name) {
     names.add(name);
-    if (names.size() > 1) {
-      NameOccurrenceImpl qualifiedName = names.get(names.size() - 2);
-      qualifiedName.setNameWhichThisQualifies(name);
-    }
   }
 
   void searchForDeclaration(NameOccurrence occurrence) {

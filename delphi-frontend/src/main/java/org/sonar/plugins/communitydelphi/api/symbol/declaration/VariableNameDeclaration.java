@@ -21,12 +21,19 @@ package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility;
 
 public interface VariableNameDeclaration extends TypedDeclaration, Visibility {
-
   boolean isInline();
+
+  boolean isVar();
+
+  boolean isConst();
 
   boolean isField();
 
-  boolean isClassVariable();
+  boolean isClassVar();
 
   boolean isUnion();
+
+  boolean isSelf();
+
+  boolean isResult();
 }

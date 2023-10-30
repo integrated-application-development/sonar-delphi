@@ -52,7 +52,7 @@ class DelphiScopeImplTest {
   }
 
   private static VariableNameDeclaration createVariable(String image) {
-    return VariableNameDeclarationImpl.compilerVariable(image, unknownType(), unknownScope());
+    return VariableNameDeclarationImpl.parameter(image, unknownType(), unknownScope());
   }
 
   private static TypeNameDeclaration createType(String image) {

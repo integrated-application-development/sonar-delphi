@@ -76,4 +76,25 @@ public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
     }
     return usages;
   }
+
+  public abstract DeclarationKind getKind();
+
+  public enum DeclarationKind {
+    CONST,
+    ENUM_ELEMENT,
+    EXCEPT_ITEM,
+    FIELD,
+    IMPORT,
+    INLINE_CONST,
+    INLINE_VAR,
+    LOOP_VAR,
+    METHOD,
+    PARAMETER,
+    PROPERTY,
+    RECORD_VARIANT_TAG,
+    TYPE,
+    TYPE_PARAMETER,
+    VAR,
+    UNIT
+  }
 }

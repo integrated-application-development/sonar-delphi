@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.compilerVariable;
+import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,28 +58,28 @@ class UnknownScopeImplTest {
 
   @Test
   void testContains() {
-    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
+    VariableNameDeclaration declaration = constant("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     assertThat(unknownScope.contains(makeNameOccurrence())).isFalse();
   }
 
   @Test
   void testAddNameOccurrence() {
-    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
+    VariableNameDeclaration declaration = constant("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     assertThat(unknownScope.addNameOccurrence(makeNameOccurrence())).isEmpty();
   }
 
   @Test
   void testFindDeclaration() {
-    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
+    VariableNameDeclaration declaration = constant("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     assertThat(unknownScope.findDeclaration(makeNameOccurrence())).isEmpty();
   }
 
   @Test
   void testGetOccurrencesFor() {
-    VariableNameDeclaration declaration = compilerVariable("Image", unknownType(), unknownScope);
+    VariableNameDeclaration declaration = constant("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
     assertThat(unknownScope.addNameOccurrence(makeNameOccurrence())).isEmpty();
     assertThat(unknownScope.getOccurrencesFor(declaration)).isEmpty();

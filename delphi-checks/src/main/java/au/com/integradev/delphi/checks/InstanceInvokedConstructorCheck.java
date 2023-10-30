@@ -63,6 +63,6 @@ public class InstanceInvokedConstructorCheck extends DelphiCheck {
     NameDeclaration declaration = previous.getNameDeclaration();
     return declaration instanceof VariableNameDeclaration
         && !((Typed) declaration).getType().isClassReference()
-        && !previous.getNameOccurrence().isSelf();
+        && !((VariableNameDeclaration) declaration).isSelf();
   }
 }

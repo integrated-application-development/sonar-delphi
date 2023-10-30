@@ -31,25 +31,4 @@ public interface NameDeclarationNode extends DelphiNode {
   NameDeclaration getNameDeclaration();
 
   List<NameOccurrence> getUsages();
-
-  DeclarationKind getKind();
-
-  enum DeclarationKind {
-    CONST,
-    ENUM_ELEMENT,
-    EXCEPT_ITEM,
-    FIELD,
-    IMPORT,
-    INLINE_CONST,
-    INLINE_VAR,
-    LOOP_VAR,
-    METHOD,
-    PARAMETER,
-    PROPERTY,
-    RECORD_VARIANT_TAG,
-    TYPE,
-    TYPE_PARAMETER,
-    VAR,
-    UNIT
-  }
 }

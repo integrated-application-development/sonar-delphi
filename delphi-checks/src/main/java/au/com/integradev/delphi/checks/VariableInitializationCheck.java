@@ -752,7 +752,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     public RecordInitializationState(StructType type) {
       type.typeScope().getVariableDeclarations().stream()
           .filter(VariableNameDeclaration::isField)
-          .filter(Predicate.not(VariableNameDeclaration::isClassVariable))
+          .filter(Predicate.not(VariableNameDeclaration::isClassVar))
           .filter(VariableInitializationCheck::isUnmanagedVariable)
           .forEach(
               declaration -> {

@@ -30,7 +30,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 public class NameOccurrenceImpl implements NameOccurrence {
   private final SymbolicNode location;
   private NameDeclaration declaration;
-  private NameOccurrence qualifiedName;
   private String image;
   private boolean isExplicitInvocation;
   private boolean isMethodReference;
@@ -63,15 +62,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
     return image;
   }
 
-  public void setNameWhichThisQualifies(NameOccurrence qualifiedName) {
-    this.qualifiedName = qualifiedName;
-  }
-
-  @Override
-  public NameOccurrence getNameForWhichThisIsAQualifier() {
-    return qualifiedName;
-  }
-
   public void setNameDeclaration(NameDeclaration declaration) {
     this.declaration = declaration;
   }
@@ -79,11 +69,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
   @Override
   public NameDeclaration getNameDeclaration() {
     return declaration;
-  }
-
-  @Override
-  public boolean isPartOfQualifiedName() {
-    return qualifiedName != null;
   }
 
   public void setIsExplicitInvocation(boolean isExplicitInvocation) {
@@ -123,11 +108,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
   }
 
   @Override
-  public boolean isSelf() {
-    return "Self".equals(getImage());
-  }
-
-  @Override
   public boolean isAttributeReference() {
     return false;
   }
@@ -147,7 +127,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
         && isGeneric == that.isGeneric
         && location.equals(that.location)
         && Objects.equals(declaration, that.declaration)
-        && Objects.equals(qualifiedName, that.qualifiedName)
         && typeParameters.equals(that.typeParameters);
   }
 
@@ -156,7 +135,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
     return Objects.hash(
         location,
         declaration,
-        qualifiedName,
         image,
         isExplicitInvocation,
         isMethodReference,

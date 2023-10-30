@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
-import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.compilerVariable;
+import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.parameter;
 
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
@@ -411,13 +411,13 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         && node.getMethodHeading().getMethodParametersNode() == null
         && !node.hasDirective(MethodDirective.EXTERNAL)) {
       methodDeclaration.getParameters().stream()
-          .map(parameter -> compilerVariable(parameter.getImage(), parameter.getType(), scope))
+          .map(parameter -> parameter(parameter.getImage(), parameter.getType(), scope))
           .forEach(data::addDeclarationToCurrentScope);
     }
 
     if (node.isFunction() || node.isOperator()) {
       Type resultType = findResultType(node, methodDeclaration);
-      NameDeclaration result = compilerVariable("Result", resultType, scope);
+      NameDeclaration result = VariableNameDeclarationImpl.result(resultType, scope);
       data.addDeclarationToCurrentScope(result);
     }
 
@@ -434,7 +434,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     if (!hasSelfParameter) {
       Type selfType = findSelfType(node, methodDeclaration, data);
       if (selfType != null) {
-        NameDeclaration self = compilerVariable("Self", selfType, scope);
+        NameDeclaration self = VariableNameDeclarationImpl.self(selfType, scope);
         data.addDeclarationToCurrentScope(self);
       }
     }
@@ -523,7 +523,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     data.nameResolutionHelper.resolve(node.getMethodParametersNode());
     data.nameResolutionHelper.resolve(node.getReturnTypeNode());
     if (node.isFunction()) {
-      NameDeclaration result = compilerVariable("Result", node.getReturnType(), scope);
+      NameDeclaration result = VariableNameDeclarationImpl.result(node.getReturnType(), scope);
       data.addDeclarationToCurrentScope(result);
     }
     return visitScope(node, data);
@@ -671,7 +671,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   private static boolean isVariableNameDeclaration(NameDeclarationNode node) {
-    switch (node.getKind()) {
+    var nodeKind = ((NameDeclarationNodeImpl) node).getKind();
+    switch (nodeKind) {
       case CONST:
       case EXCEPT_ITEM:
       case FIELD:

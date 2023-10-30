@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.symbol.declaration;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.resolve.TypeInferrer;
 import java.util.List;
@@ -29,7 +30,6 @@ import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode.DeclarationKind;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.RecordVariantItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
@@ -50,57 +50,44 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     implements VariableNameDeclaration {
   private final Type type;
   private final VisibilityType visibility;
-  private final boolean inline;
-  private final boolean field;
-  private final boolean classVar;
-  private final boolean union;
+  private final Kind kind;
   private int hashCode;
 
   public VariableNameDeclarationImpl(NameDeclarationNode node) {
-    this(
-        new SymbolicNode(node),
-        extractType(node),
-        extractVisibility(node),
-        extractInline(node),
-        extractField(node),
-        extractClassVar(node),
-        extractUnion(node));
-  }
-
-  private VariableNameDeclarationImpl(String image, Type type, DelphiScope scope) {
-    super(SymbolicNode.imaginary(image, scope));
-    this.type = type;
-    this.visibility = VisibilityType.PUBLIC;
-    this.inline = false;
-    this.field = false;
-    this.classVar = false;
-    this.union = false;
+    this(new SymbolicNode(node), extractType(node), extractVisibility(node), extractKind(node));
   }
 
   private VariableNameDeclarationImpl(
-      SymbolicNode location,
-      Type type,
-      VisibilityType visibility,
-      boolean inline,
-      boolean field,
-      boolean classVar,
-      boolean union) {
+      SymbolicNode location, Type type, VisibilityType visibility, Kind kind) {
     super(location);
     this.type = type;
     this.visibility = visibility;
-    this.inline = inline;
-    this.field = field;
-    this.classVar = classVar;
-    this.union = union;
+    this.kind = kind;
   }
 
-  public static VariableNameDeclaration compilerVariable(
-      String image, Type type, DelphiScope scope) {
-    return new VariableNameDeclarationImpl(image, type, scope);
+  public static VariableNameDeclaration result(Type type, DelphiScope scope) {
+    return new VariableNameDeclarationImpl(
+        SymbolicNode.imaginary("Result", scope), type, VisibilityType.PUBLIC, Kind.RESULT);
+  }
+
+  public static VariableNameDeclaration self(Type type, DelphiScope scope) {
+    return new VariableNameDeclarationImpl(
+        SymbolicNode.imaginary("Self", scope), type, VisibilityType.PUBLIC, Kind.SELF);
+  }
+
+  public static VariableNameDeclaration parameter(String name, Type type, DelphiScope scope) {
+    return new VariableNameDeclarationImpl(
+        SymbolicNode.imaginary(name, scope), type, VisibilityType.PUBLIC, Kind.PARAMETER);
+  }
+
+  public static VariableNameDeclaration constant(String name, Type type, DelphiScope scope) {
+    return new VariableNameDeclarationImpl(
+        SymbolicNode.imaginary(name, scope), type, VisibilityType.PUBLIC, Kind.CONST);
   }
 
   private static Type extractType(NameDeclarationNode node) {
-    switch (node.getKind()) {
+    var nodeKind = ((NameDeclarationNodeImpl) node).getKind();
+    switch (nodeKind) {
       case CONST:
         return constType(node);
       case EXCEPT_ITEM:
@@ -180,8 +167,9 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
 
   private static VisibilityType extractVisibility(NameDeclarationNode node) {
     Visibility visibility;
+    var nodeKind = ((NameDeclarationNodeImpl) node).getKind();
 
-    switch (node.getKind()) {
+    switch (nodeKind) {
       case CONST:
         visibility = (Visibility) node.getParent();
         break;
@@ -195,38 +183,39 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     return visibility.getVisibility();
   }
 
-  private static boolean extractInline(NameDeclarationNode node) {
-    switch (node.getKind()) {
+  private static Kind extractKind(NameDeclarationNode node) {
+    var nodeKind = ((NameDeclarationNodeImpl) node).getKind();
+    switch (nodeKind) {
+      case CONST:
+        return Kind.CONST;
+      case EXCEPT_ITEM:
+        return Kind.EXCEPT_ITEM;
+      case FIELD:
+        Node ancestor = node.getNthParent(3);
+        if (ancestor instanceof FieldSectionNode
+            && ((FieldSectionNode) ancestor).isClassFieldSection()) {
+          return Kind.CLASS_VAR;
+        }
+        if (node.getNthParent(3) instanceof RecordVariantItemNode) {
+          return Kind.RECORD_VARIANT_FIELD;
+        }
+        return Kind.FIELD;
       case INLINE_CONST:
+        return Kind.INLINE_CONST;
       case INLINE_VAR:
       case LOOP_VAR:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  private static boolean extractField(NameDeclarationNode node) {
-    return node.getKind() == DeclarationKind.FIELD;
-  }
-
-  private static boolean extractClassVar(NameDeclarationNode node) {
-    if (node.getKind() == DeclarationKind.FIELD) {
-      Node ancestor = node.getNthParent(3);
-      return ancestor instanceof FieldSectionNode
-          && ((FieldSectionNode) ancestor).isClassFieldSection();
-    }
-    return false;
-  }
-
-  private static boolean extractUnion(NameDeclarationNode node) {
-    switch (node.getKind()) {
-      case FIELD:
-        return node.getNthParent(3) instanceof RecordVariantItemNode;
+        return Kind.INLINE_VAR;
+      case PARAMETER:
+        return Kind.PARAMETER;
+      case RECORD_VARIANT_TAG:
+        return Kind.RECORD_VARIANT_TAG;
       case VAR:
-        return ((VarDeclarationNode) node.getNthParent(2)).isAbsolute();
+        if (((VarDeclarationNode) node.getNthParent(2)).isAbsolute()) {
+          return Kind.ABSOLUTE_VAR;
+        }
+        return Kind.VAR;
       default:
-        return false;
+        throw new AssertionError("Unhandled DeclarationKind");
     }
   }
 
@@ -242,28 +231,78 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
 
   @Override
   public boolean isInline() {
-    return inline;
+    switch (kind) {
+      case INLINE_VAR:
+      case INLINE_CONST:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  @Override
+  public boolean isVar() {
+    switch (kind) {
+      case VAR:
+      case INLINE_VAR:
+      case ABSOLUTE_VAR:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  @Override
+  public boolean isConst() {
+    switch (kind) {
+      case CONST:
+      case INLINE_CONST:
+        return true;
+      default:
+        return false;
+    }
   }
 
   @Override
   public boolean isField() {
-    return field;
+    switch (kind) {
+      case FIELD:
+      case RECORD_VARIANT_FIELD:
+        return true;
+      default:
+        return false;
+    }
   }
 
   @Override
-  public boolean isClassVariable() {
-    return classVar;
+  public boolean isClassVar() {
+    return kind == Kind.CLASS_VAR;
   }
 
   @Override
   public boolean isUnion() {
-    return union;
+    switch (kind) {
+      case ABSOLUTE_VAR:
+      case RECORD_VARIANT_FIELD:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  @Override
+  public boolean isSelf() {
+    return kind == Kind.SELF;
+  }
+
+  @Override
+  public boolean isResult() {
+    return kind == Kind.RESULT;
   }
 
   @Override
   protected NameDeclaration doSpecialization(TypeSpecializationContext context) {
-    return new VariableNameDeclarationImpl(
-        node, type.specialize(context), visibility, inline, field, classVar, union);
+    return new VariableNameDeclarationImpl(node, type.specialize(context), visibility, kind);
   }
 
   @Override
@@ -272,13 +311,13 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
       return false;
     }
     VariableNameDeclarationImpl that = (VariableNameDeclarationImpl) other;
-    return getImage().equalsIgnoreCase(that.getImage()) && type.is(that.type);
+    return getImage().equalsIgnoreCase(that.getImage()) && type.is(that.type) && kind == that.kind;
   }
 
   @Override
   public int hashCode() {
     if (hashCode == 0) {
-      hashCode = Objects.hash(getImage().toLowerCase(), type.getImage());
+      hashCode = Objects.hash(getImage().toLowerCase(), type.getImage(), kind);
     }
     return hashCode;
   }
@@ -286,5 +325,21 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
   @Override
   public String toString() {
     return "Variable: image = '" + getImage();
+  }
+
+  private enum Kind {
+    VAR,
+    CLASS_VAR,
+    ABSOLUTE_VAR,
+    CONST,
+    FIELD,
+    RECORD_VARIANT_FIELD,
+    RECORD_VARIANT_TAG,
+    EXCEPT_ITEM,
+    INLINE_CONST,
+    INLINE_VAR,
+    PARAMETER,
+    SELF,
+    RESULT
   }
 }

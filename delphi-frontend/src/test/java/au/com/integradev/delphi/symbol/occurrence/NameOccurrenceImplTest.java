@@ -31,23 +31,6 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class NameOccurrenceImplTest {
   @Test
-  void testQualifiedName() {
-    SymbolicNode foo = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
-    NameOccurrenceImpl occurrenceA = new NameOccurrenceImpl(foo);
-
-    SymbolicNode bar = SymbolicNode.imaginary("Bar", DelphiScope.unknownScope());
-    NameOccurrence occurrenceB = new NameOccurrenceImpl(bar);
-
-    assertThat(occurrenceA.isPartOfQualifiedName()).isFalse();
-    assertThat(occurrenceA.getNameForWhichThisIsAQualifier()).isNull();
-
-    occurrenceA.setNameWhichThisQualifies(occurrenceB);
-
-    assertThat(occurrenceA.isPartOfQualifiedName()).isTrue();
-    assertThat(occurrenceA.getNameForWhichThisIsAQualifier()).isEqualTo(occurrenceB);
-  }
-
-  @Test
   void testIsMethodReference() {
     SymbolicNode symbolicNode = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
@@ -80,13 +63,6 @@ class NameOccurrenceImplTest {
   }
 
   @Test
-  void testIsSelf() {
-    SymbolicNode symbolicNode = SymbolicNode.imaginary("Self", DelphiScope.unknownScope());
-    NameOccurrence occurrence = new NameOccurrenceImpl(symbolicNode);
-    assertThat(occurrence.isSelf()).isTrue();
-  }
-
-  @Test
   void testEquals() {
     SymbolicNode foo = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
 
@@ -115,10 +91,6 @@ class NameOccurrenceImplTest {
     NameOccurrenceImpl occurrenceG = new NameOccurrenceImpl(foo);
     occurrenceG.setNameDeclaration(mock(NameDeclaration.class));
     assertThat(occurrenceA).isNotEqualTo(occurrenceG);
-
-    NameOccurrenceImpl occurrenceH = new NameOccurrenceImpl(foo);
-    occurrenceH.setNameWhichThisQualifies(new NameOccurrenceImpl(bar));
-    assertThat(occurrenceA).isNotEqualTo(occurrenceH);
 
     NameOccurrenceImpl occurrenceI = new NameOccurrenceImpl(foo);
     occurrenceI.setTypeArguments(List.of(TypeFactory.unknownType()));
