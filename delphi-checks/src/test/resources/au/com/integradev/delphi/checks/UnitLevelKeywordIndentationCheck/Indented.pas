@@ -31,8 +31,15 @@
   end; // Noncompliant
 
   procedure MyProc; // Noncompliant
+    procedure MySubProc;
+    begin
+    end;
+  var
+    Anon: TProc;
   begin // Noncompliant
-    Writeln('Hello world');
+    Anon :=
+    procedure begin
+    end;
   end; // Noncompliant
 
  initialization // Noncompliant

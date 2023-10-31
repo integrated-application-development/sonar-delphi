@@ -177,7 +177,8 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
       checkNodeIndentation(getEnd(block), context);
     }
 
-    return super.visit(methodImplementationNode, context);
+    // Exclude nested methods
+    return context;
   }
 
   @Override
