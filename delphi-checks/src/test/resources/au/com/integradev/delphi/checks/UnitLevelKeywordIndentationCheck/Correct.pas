@@ -30,8 +30,15 @@ begin
 end;
 
 procedure MyProc;
+  procedure MySubProc;
+  begin
+  end;
+var
+  Anon: TProc;
 begin
-  Writeln('Hello world');
+  Anon :=
+    procedure begin
+    end;
 end;
 
 initialization
