@@ -18,6 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface TextLiteralNode extends LiteralNode {
+import org.sonar.plugins.communitydelphi.api.type.Typed;
+
+public interface TextLiteralNode extends DelphiNode, Typed {
   CharSequence getImageWithoutQuotes();
 }

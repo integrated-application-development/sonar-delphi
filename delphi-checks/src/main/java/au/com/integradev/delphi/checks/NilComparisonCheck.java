@@ -22,6 +22,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
@@ -48,7 +49,7 @@ public class NilComparisonCheck extends DelphiCheck {
                 .getLastName()
                 .getNameDeclaration()
             instanceof VariableNameDeclaration
-        && b.isNilLiteral();
+        && ExpressionNodeUtils.isNilLiteral(b);
   }
 
   private static boolean isViolation(BinaryExpressionNode expression) {

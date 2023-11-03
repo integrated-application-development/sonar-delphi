@@ -25,6 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -84,7 +85,7 @@ public class StringListDuplicatesCheck extends DelphiCheck {
       return false;
     }
 
-    if (!sortedStatement.getValue().isTrue()) {
+    if (!ExpressionNodeUtils.isTrue(sortedStatement.getValue())) {
       return false;
     }
 

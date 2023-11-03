@@ -18,4 +18,9 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface DecimalLiteralNode extends LiteralNode {}
+import java.math.BigDecimal;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
+
+public interface DecimalLiteralNode extends DelphiNode, Typed {
+  BigDecimal getValue();
+}

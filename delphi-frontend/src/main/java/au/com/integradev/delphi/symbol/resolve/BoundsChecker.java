@@ -19,11 +19,11 @@
 package au.com.integradev.delphi.symbol.resolve;
 
 import java.math.BigInteger;
-import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
@@ -57,9 +57,9 @@ interface BoundsChecker {
 
     @Override
     public boolean violatesBounds(ExpressionNode expression) {
-      if (expression.isIntegerLiteral()) {
-        LiteralNode literal = Objects.requireNonNull(expression.extractLiteral());
-        BigInteger value = literal.getValueAsBigInteger();
+      IntegerLiteralNode literal = ExpressionNodeUtils.unwrapInteger(expression);
+      if (literal != null && literal.getRadix() == 10) {
+        BigInteger value = literal.getValue();
         return type.min().compareTo(value) > 0 || type.max().compareTo(value) < 0;
       }
       return false;

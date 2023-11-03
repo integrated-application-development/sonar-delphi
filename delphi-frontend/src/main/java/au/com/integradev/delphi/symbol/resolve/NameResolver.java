@@ -68,6 +68,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
@@ -326,13 +327,13 @@ public class NameResolver {
   }
 
   private boolean handleInheritedExpression(PrimaryExpressionNode node) {
-    if (!node.isInheritedCall()) {
+    if (!ExpressionNodeUtils.isInherited(node)) {
       return false;
     }
 
     moveToInheritedScope(node);
 
-    if (node.isBareInherited()) {
+    if (ExpressionNodeUtils.isBareInherited(node)) {
       MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
       DelphiNode inheritedNode = node.getChild(0);
 
@@ -370,7 +371,7 @@ public class NameResolver {
       }
     }
 
-    int nextChild = (node.isBareInherited() ? 1 : 2);
+    int nextChild = ExpressionNodeUtils.isBareInherited(node) ? 1 : 2;
 
     for (int i = nextChild; i < node.getChildren().size(); ++i) {
       if (!readPrimaryExpressionPart(node.getChild(i))) {
@@ -401,7 +402,7 @@ public class NameResolver {
       // See: https://wiki.freepascal.org/Helper_types#Inherited_with_function_name
       if (type.isHelper()) {
         newType = ((HelperType) type).extendedType();
-        if (node.isBareInherited()) {
+        if (ExpressionNodeUtils.isBareInherited(node)) {
           newType = newType.superType();
         }
       }

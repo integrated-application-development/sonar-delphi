@@ -19,13 +19,14 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.math.BigDecimal;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class DecimalLiteralNodeImpl extends LiteralNodeImpl implements DecimalLiteralNode {
+public final class DecimalLiteralNodeImpl extends DelphiNodeImpl implements DecimalLiteralNode {
   public DecimalLiteralNodeImpl(Token token) {
     super(token);
   }
@@ -36,8 +37,8 @@ public final class DecimalLiteralNodeImpl extends LiteralNodeImpl implements Dec
   }
 
   @Override
-  public double getValueAsDouble() {
-    return Double.parseDouble(StringUtils.remove(getImage(), '_'));
+  public BigDecimal getValue() {
+    return new BigDecimal(StringUtils.remove(getImage(), '_'));
   }
 
   @Override

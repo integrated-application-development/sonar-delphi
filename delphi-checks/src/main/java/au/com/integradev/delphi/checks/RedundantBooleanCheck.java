@@ -23,6 +23,7 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
@@ -37,7 +38,8 @@ public class RedundantBooleanCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(PrimaryExpressionNode bool, DelphiCheckContext data) {
-    if (bool.isBooleanLiteral() && (isRedundantComparison(bool) || isNeedlesslyInverted(bool))) {
+    if (ExpressionNodeUtils.isBooleanLiteral(bool)
+        && (isRedundantComparison(bool) || isNeedlesslyInverted(bool))) {
       reportIssue(data, bool, MESSAGE);
     }
 

@@ -25,7 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class TextLiteralNodeImpl extends LiteralNodeImpl implements TextLiteralNode {
+public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLiteralNode {
   private String image;
 
   public TextLiteralNodeImpl(Token token) {

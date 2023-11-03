@@ -20,11 +20,13 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import com.google.common.base.Preconditions;
+import java.math.BigInteger;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
@@ -79,10 +81,10 @@ public class InvocationArgument implements Typed {
   }
 
   boolean isImplicitlyConvertibleToNilPointer() {
-    LiteralNode literal = expression.extractLiteral();
+    IntegerLiteralNode literal = ExpressionNodeUtils.unwrapInteger(expression);
     return literal != null
-        && (literal.isIntegerLiteral() || literal.isHexadecimalLiteral())
-        && literal.getValueAsInt() == 0;
+        && (literal.getRadix() == 10 || literal.getRadix() == 16)
+        && literal.getValue().equals(BigInteger.ZERO);
   }
 
   Type findMethodReferenceType(Type parameterType) {

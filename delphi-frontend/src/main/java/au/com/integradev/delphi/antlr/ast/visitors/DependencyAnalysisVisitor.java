@@ -23,6 +23,7 @@ import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
@@ -30,9 +31,9 @@ import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
@@ -251,14 +252,14 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   }
 
   private static boolean isNameStart(NameReferenceNode nameNode) {
-    Node parent = nameNode.getParent();
+    DelphiNode parent = nameNode.getParent();
     if (parent instanceof NameReferenceNode) {
       return false;
     }
 
     if (parent instanceof PrimaryExpressionNode) {
       PrimaryExpressionNode primaryExpression = (PrimaryExpressionNode) parent;
-      int nameStartIndex = primaryExpression.isInheritedCall() ? 1 : 0;
+      int nameStartIndex = ExpressionNodeUtils.isInherited(primaryExpression) ? 1 : 0;
       return nameNode.getChildIndex() == nameStartIndex;
     }
 

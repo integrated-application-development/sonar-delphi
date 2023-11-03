@@ -34,6 +34,7 @@ import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
@@ -94,11 +95,11 @@ public class AssignedAndFreeCheck extends DelphiCheck {
   private static String findVariableNameForNilComparison(ExpressionNode guard) {
     BinaryExpressionNode expr = (BinaryExpressionNode) guard;
     if (expr.getOperator() == BinaryOperator.NOT_EQUAL) {
-      if (expr.getLeft().isNilLiteral()) {
+      if (ExpressionNodeUtils.isNilLiteral(expr.getLeft())) {
         return expr.getRight().getImage();
       }
 
-      if (expr.getRight().isNilLiteral()) {
+      if (ExpressionNodeUtils.isNilLiteral(expr.getRight())) {
         return expr.getLeft().getImage();
       }
     }

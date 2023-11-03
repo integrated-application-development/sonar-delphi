@@ -31,6 +31,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
@@ -84,9 +85,9 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
           || binaryExpression.getOperator() == BinaryOperator.NOT_EQUAL) {
         ExpressionNode left = binaryExpression.getLeft();
         ExpressionNode right = binaryExpression.getRight();
-        if (left.isNilLiteral()) {
+        if (ExpressionNodeUtils.isNilLiteral(left)) {
           images.add(right.getImage());
-        } else if (right.isNilLiteral()) {
+        } else if (ExpressionNodeUtils.isNilLiteral(right)) {
           images.add(left.getImage());
         }
       }

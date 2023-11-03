@@ -28,6 +28,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
@@ -91,11 +92,10 @@ public class IndexLastListElementCheck extends DelphiCheck {
         .flatMap(left -> getPropertyReference(left.getChild(2)));
   }
 
-  private static boolean isIntLiteral(ExpressionNode right, int i) {
-    return right.isIntegerLiteral()
-        && Optional.ofNullable(right.extractLiteral())
-            .filter(literal -> literal.getValueAsInt() == i)
-            .isPresent();
+  private static boolean isIntLiteral(ExpressionNode node, int i) {
+    return Optional.ofNullable(ExpressionNodeUtils.unwrapInteger(node))
+        .filter(literal -> literal.getValue().intValue() == i)
+        .isPresent();
   }
 
   private static Optional<String> getPropertyReference(DelphiNode child) {

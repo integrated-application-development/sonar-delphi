@@ -38,6 +38,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
@@ -80,7 +81,7 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
       expr = ((ExpressionStatementNode) statement).getExpression();
     } else if (statement instanceof AssignmentStatementNode) {
       AssignmentStatementNode assignment = (AssignmentStatementNode) statement;
-      if (assignment.getAssignee().isResult()) {
+      if (ExpressionNodeUtils.isResult(assignment.getAssignee())) {
         expr = assignment.getValue();
       }
     }
@@ -149,11 +150,11 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
     }
 
     PrimaryExpressionNode expression = (PrimaryExpressionNode) expr;
-    if (expression.isBareInherited()) {
+    if (ExpressionNodeUtils.isBareInherited(expression)) {
       return true;
     }
 
-    if (!expression.isInheritedCall()) {
+    if (!ExpressionNodeUtils.isInherited(expression)) {
       return false;
     }
 

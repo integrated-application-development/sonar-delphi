@@ -26,6 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 
@@ -49,6 +50,6 @@ public abstract class AbstractWithoutInheritedCheck extends DelphiCheck {
         .map(ExpressionStatementNode::getExpression)
         .filter(PrimaryExpressionNode.class::isInstance)
         .map(PrimaryExpressionNode.class::cast)
-        .anyMatch(PrimaryExpressionNode::isInheritedCall);
+        .anyMatch(ExpressionNodeUtils::isInherited);
   }
 }

@@ -25,6 +25,7 @@ import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -47,7 +48,7 @@ public final class TypeInferrer {
 
       if (arrayConstructor instanceof ArrayConstructorNode) {
         type = inferArrayConstructor((ArrayConstructorNode) arrayConstructor);
-      } else if (expression.isIntegerLiteral() && type.size() <= 4) {
+      } else if (ExpressionNodeUtils.isIntegerLiteral(expression) && type.size() <= 4) {
         type = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
       }
     }

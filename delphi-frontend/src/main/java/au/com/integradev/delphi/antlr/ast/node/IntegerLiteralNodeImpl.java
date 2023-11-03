@@ -25,8 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements IntegerLiteralNode {
-  private String image;
+public final class IntegerLiteralNodeImpl extends DelphiNodeImpl implements IntegerLiteralNode {
   private Type type;
 
   public IntegerLiteralNodeImpl(Token token) {
@@ -39,27 +38,8 @@ public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements Int
   }
 
   @Override
-  public BigInteger getValueAsBigInteger() {
-    return new BigInteger(getImage(), getRadix());
-  }
-
-  @Override
-  public String getImage() {
-    if (image == null) {
-      image = getToken().getImage();
-      image = StringUtils.remove(image, '_');
-      switch (getTokenType()) {
-        case HEX_NUMBER:
-          image = StringUtils.removeStart(image, "$");
-          break;
-        case BINARY_NUMBER:
-          image = StringUtils.removeStart(image, "%");
-          break;
-        default:
-          // do nothing
-      }
-    }
-    return image;
+  public BigInteger getValue() {
+    return new BigInteger(getDigits(), getRadix());
   }
 
   @Override
@@ -75,9 +55,26 @@ public final class IntegerLiteralNodeImpl extends LiteralNodeImpl implements Int
   }
 
   @Override
+  public String getDigits() {
+    String digits = getImage();
+    digits = StringUtils.remove(digits, '_');
+    switch (getTokenType()) {
+      case HEX_NUMBER:
+        digits = StringUtils.removeStart(digits, "$");
+        break;
+      case BINARY_NUMBER:
+        digits = StringUtils.removeStart(digits, "%");
+        break;
+      default:
+        // do nothing
+    }
+    return digits;
+  }
+
+  @Override
   public Type getType() {
     if (type == null) {
-      type = getTypeFactory().integerFromLiteralValue(this.getValueAsBigInteger());
+      type = getTypeFactory().integerFromLiteralValue(this.getValue());
     }
     return type;
   }

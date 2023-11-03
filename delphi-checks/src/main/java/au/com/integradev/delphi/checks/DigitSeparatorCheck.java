@@ -49,13 +49,13 @@ public class DigitSeparatorCheck extends DelphiCheck {
   }
 
   private boolean isIntMissingUnderscores(IntegerLiteralNode literal) {
-    return literal.getImage().length() > maxDigitsWithoutUnderscores
-        && !StringUtils.contains(literal.getToken().getImage(), '_');
+    return literal.getDigits().length() > maxDigitsWithoutUnderscores
+        && !StringUtils.contains(literal.getImage(), '_');
   }
 
   @Override
   public DelphiCheckContext visit(DecimalLiteralNode literal, DelphiCheckContext context) {
-    if (isIntegerPartMissingUnderscores(literal.getToken().getImage())) {
+    if (isIntegerPartMissingUnderscores(literal.getImage())) {
       reportIssue(context, literal, MESSAGE);
     }
 

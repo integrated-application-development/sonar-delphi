@@ -24,6 +24,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -48,7 +49,8 @@ public class PlatformDependentCastCheck extends DelphiCheck {
     List<ExpressionNode> arguments = argumentList.getArguments();
     if (arguments.size() == 1) {
       ExpressionNode expression = arguments.get(0);
-      if (!expression.isLiteral()) {
+      if (!ExpressionNodeUtils.isNilLiteral(expression)
+          && !ExpressionNodeUtils.isIntegerLiteral(expression)) {
         Type originalType = TypeUtils.findBaseType(getOriginalType(expression));
         Type castedType = TypeUtils.findBaseType(getHardCastedType(argumentList, context));
 

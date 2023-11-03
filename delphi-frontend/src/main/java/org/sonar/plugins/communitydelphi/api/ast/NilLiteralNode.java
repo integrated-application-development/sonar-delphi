@@ -18,4 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface NilLiteralNode extends LiteralNode {}
+import org.sonar.plugins.communitydelphi.api.type.Typed;
+
+public interface NilLiteralNode extends DelphiNode, Typed {}

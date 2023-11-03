@@ -25,6 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 
 public final class MethodUtils {
   private MethodUtils() {
@@ -50,6 +51,7 @@ public final class MethodUtils {
   }
 
   private static boolean isAssertFalse(StatementNode statement) {
-    return isMethodInvocation(statement, "System.Assert", arguments -> arguments.get(0).isFalse());
+    return isMethodInvocation(
+        statement, "System.Assert", arguments -> ExpressionNodeUtils.isFalse(arguments.get(0)));
   }
 }

@@ -23,7 +23,7 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class NilLiteralNodeImpl extends LiteralNodeImpl implements NilLiteralNode {
+public final class NilLiteralNodeImpl extends DelphiNodeImpl implements NilLiteralNode {
   public NilLiteralNodeImpl(Token token) {
     super(token);
   }

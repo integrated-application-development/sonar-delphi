@@ -23,9 +23,7 @@ import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
-import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
@@ -43,17 +41,6 @@ public final class PrimaryExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
-  }
-
-  @Override
-  public boolean isInheritedCall() {
-    return getChild(0).getTokenType() == DelphiTokenType.INHERITED;
-  }
-
-  @Override
-  public boolean isBareInherited() {
-    return (getChildren().size() == 1 || !(getChild(1) instanceof NameReferenceNode))
-        && isInheritedCall();
   }
 
   @Override

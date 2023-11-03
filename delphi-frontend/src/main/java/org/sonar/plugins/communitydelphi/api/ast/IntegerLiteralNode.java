@@ -18,6 +18,13 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface IntegerLiteralNode extends LiteralNode {
+import java.math.BigInteger;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
+
+public interface IntegerLiteralNode extends DelphiNode, Typed {
   int getRadix();
+
+  BigInteger getValue();
+
+  String getDigits();
 }

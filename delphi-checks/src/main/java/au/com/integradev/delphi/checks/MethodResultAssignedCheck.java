@@ -39,6 +39,7 @@ import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -73,7 +74,7 @@ public class MethodResultAssignedCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(AssignmentStatementNode assignment, DelphiCheckContext context) {
-    NameReferenceNode assignee = assignment.getAssignee().extractSimpleNameReference();
+    NameReferenceNode assignee = extractSimpleNameReference(assignment.getAssignee());
     if (assignee != null && !handlePascalResultAssignments(assignee)) {
       handleResultReference(assignee);
     }
@@ -153,7 +154,7 @@ public class MethodResultAssignedCheck extends DelphiCheck {
   }
 
   private void handleResultReference(ExpressionNode expression) {
-    NameReferenceNode nameReference = expression.extractSimpleNameReference();
+    NameReferenceNode nameReference = extractSimpleNameReference(expression);
     if (nameReference != null) {
       handleResultReference(nameReference);
     }
@@ -179,6 +180,17 @@ public class MethodResultAssignedCheck extends DelphiCheck {
         }
       }
     }
+  }
+
+  private static NameReferenceNode extractSimpleNameReference(ExpressionNode node) {
+    node = node.skipParentheses();
+    if (node instanceof PrimaryExpressionNode && node.getChildren().size() == 1) {
+      DelphiNode child = node.getChild(0);
+      if (child instanceof NameReferenceNode && ((NameReferenceNode) child).nextName() == null) {
+        return (NameReferenceNode) child;
+      }
+    }
+    return null;
   }
 
   private final class MethodResultContext {

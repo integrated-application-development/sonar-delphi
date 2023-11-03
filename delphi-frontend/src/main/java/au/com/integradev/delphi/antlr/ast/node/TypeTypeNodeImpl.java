@@ -22,10 +22,11 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.LiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -68,9 +69,9 @@ public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode
   }
 
   private static int extractCodePage(ExpressionNode expression) {
-    LiteralNode codePage = expression.extractLiteral();
+    IntegerLiteralNode codePage = ExpressionNodeUtils.unwrapInteger(expression);
     if (codePage != null) {
-      return codePage.getValueAsInt();
+      return codePage.getValue().intValue();
     }
     return CodePages.CP_ACP;
   }

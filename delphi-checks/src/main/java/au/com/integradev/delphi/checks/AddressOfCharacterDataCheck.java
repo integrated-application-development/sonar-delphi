@@ -26,6 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
@@ -60,16 +61,12 @@ public class AddressOfCharacterDataCheck extends DelphiCheck {
   }
 
   private static boolean isLiteralForFirstCharIndex(DelphiCheckContext context, DelphiNode inner) {
-    if (inner instanceof ExpressionNode) {
-      inner = ((ExpressionNode) inner).skipParentheses();
-    }
-    if (inner.getChildren().size() != 1) {
+    if (!(inner instanceof ExpressionNode)) {
       return false;
     }
-    var intLiteral = inner.getFirstChildOfType(IntegerLiteralNode.class);
-
-    return intLiteral != null
-        && intLiteral.getValueAsInt() == (isZeroBasedStrings(intLiteral, context) ? 0 : 1);
+    IntegerLiteralNode literal = ExpressionNodeUtils.unwrapInteger((ExpressionNode) inner);
+    return literal != null
+        && literal.getValue().intValue() == (isZeroBasedStrings(literal, context) ? 0 : 1);
   }
 
   private static boolean isReferenceToString(DelphiNode node) {

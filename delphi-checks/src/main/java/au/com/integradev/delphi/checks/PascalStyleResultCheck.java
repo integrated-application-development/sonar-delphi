@@ -21,8 +21,11 @@ package au.com.integradev.delphi.checks;
 import java.util.Objects;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -42,7 +45,7 @@ public class PascalStyleResultCheck extends DelphiCheck {
           .filter(AssignmentStatementNode.class::isInstance)
           .map(AssignmentStatementNode.class::cast)
           .map(AssignmentStatementNode::getAssignee)
-          .map(ExpressionNode::extractSimpleNameReference)
+          .map(PascalStyleResultCheck::extractSimpleNameReference)
           .filter(Objects::nonNull)
           .forEach(
               assignee -> {
@@ -52,5 +55,16 @@ public class PascalStyleResultCheck extends DelphiCheck {
               });
     }
     return super.visit(method, context);
+  }
+
+  private static NameReferenceNode extractSimpleNameReference(ExpressionNode node) {
+    node = node.skipParentheses();
+    if (node instanceof PrimaryExpressionNode && node.getChildren().size() == 1) {
+      DelphiNode child = node.getChild(0);
+      if (child instanceof NameReferenceNode && ((NameReferenceNode) child).nextName() == null) {
+        return (NameReferenceNode) child;
+      }
+    }
+    return null;
   }
 }
