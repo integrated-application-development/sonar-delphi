@@ -21,6 +21,7 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.parameter;
 
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
+import au.com.integradev.delphi.antlr.ast.node.MethodNameNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.WithStatementNodeImpl;
@@ -221,7 +222,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     protected void addDeclaration(MethodNameDeclaration declaration, MethodNameNode node) {
       handleImplementationDeclaration(declaration, node);
       registerDeclaration(declaration, node);
-      node.setMethodNameDeclaration(declaration);
+      ((MethodNameNodeImpl) node).setMethodNameDeclaration(declaration);
       addDeclarationToCurrentScope(declaration);
     }
 

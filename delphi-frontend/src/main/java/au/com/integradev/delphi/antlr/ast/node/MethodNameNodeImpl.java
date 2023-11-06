@@ -108,16 +108,6 @@ public final class MethodNameNodeImpl extends DelphiNodeImpl implements MethodNa
   }
 
   @Override
-  public String getImage() {
-    return simpleName();
-  }
-
-  @Override
-  public void setMethodNameDeclaration(MethodNameDeclaration declaration) {
-    this.methodNameDeclaration = declaration;
-  }
-
-  @Override
   public List<NameOccurrence> getUsages() {
     if (usages == null) {
       if (methodNameDeclaration != null) {
@@ -127,6 +117,15 @@ public final class MethodNameNodeImpl extends DelphiNodeImpl implements MethodNa
       }
     }
     return usages;
+  }
+
+  public void setMethodNameDeclaration(MethodNameDeclaration declaration) {
+    this.methodNameDeclaration = declaration;
+  }
+
+  @Override
+  public String getImage() {
+    return simpleName();
   }
 
   private MethodNameDeclaration findMethodNameDeclaration() {

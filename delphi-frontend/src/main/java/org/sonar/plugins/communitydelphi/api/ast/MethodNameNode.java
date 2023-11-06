@@ -34,7 +34,5 @@ public interface MethodNameNode extends DelphiNode, Qualifiable {
 
   String simpleNameWithTypeParameters();
 
-  void setMethodNameDeclaration(MethodNameDeclaration declaration);
-
   List<NameOccurrence> getUsages();
 }

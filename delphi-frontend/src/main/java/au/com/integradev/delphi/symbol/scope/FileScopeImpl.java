@@ -21,6 +21,7 @@ package au.com.integradev.delphi.symbol.scope;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.MethodNameNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
@@ -178,7 +179,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    */
   public void attach(MethodNameNode node) {
     var declaration = (MethodNameDeclaration) registeredDeclarations.get(node.getTokenIndex());
-    node.setMethodNameDeclaration(declaration);
+    ((MethodNameNodeImpl) node).setMethodNameDeclaration(declaration);
   }
 
   /** Removes all scope registrations */
