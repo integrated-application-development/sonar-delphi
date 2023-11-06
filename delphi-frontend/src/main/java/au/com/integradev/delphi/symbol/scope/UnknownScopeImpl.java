@@ -93,9 +93,4 @@ public final class UnknownScopeImpl extends DelphiScopeImpl implements UnknownSc
   public HelperType getHelperForType(Type type) {
     return null;
   }
-
-  @Override
-  public boolean contains(NameOccurrence nameOccurrence) {
-    return false;
-  }
 }

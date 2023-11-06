@@ -151,7 +151,7 @@ public class OperatorInvocableCollector {
   private static Set<Invocable> collectOperatorOverloads(StructType type, Operator operator) {
     return type.typeScope().getMethodDeclarations().stream()
         .filter(method -> method.getMethodKind() == MethodKind.OPERATOR)
-        .filter(operator::isOverloadedByMethod)
+        .filter(method -> operator.getNames().contains(method.getImage()))
         .collect(Collectors.toSet());
   }
 

@@ -369,9 +369,7 @@ public interface Type {
      *
      * @return true if the array constructor has no elements
      */
-    default boolean isEmpty() {
-      return elementTypes().isEmpty();
-    }
+    boolean isEmpty();
   }
 
   interface ScopedType extends Type {

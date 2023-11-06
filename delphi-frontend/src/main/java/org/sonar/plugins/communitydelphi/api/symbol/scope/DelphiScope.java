@@ -72,10 +72,6 @@ public interface DelphiScope {
 
   Set<VariableNameDeclaration> getVariableDeclarations();
 
-  default boolean contains(NameOccurrence occurrence) {
-    return !findDeclaration(occurrence).isEmpty();
-  }
-
   static DelphiScope unknownScope() {
     return UnknownScopeImpl.instance();
   }

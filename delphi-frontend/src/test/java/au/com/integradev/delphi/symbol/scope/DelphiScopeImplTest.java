@@ -81,17 +81,17 @@ class DelphiScopeImplTest {
   }
 
   @Test
-  void testContains() {
+  void testFindDeclaration() {
     VariableNameDeclaration declaration = createVariable();
     scope.addDeclaration(declaration);
 
     NameOccurrence occurrence = createOccurrenceOf(declaration);
     scope.addNameOccurrence(occurrence);
 
-    assertThat(scope.contains(occurrence)).isTrue();
+    assertThat(scope.findDeclaration(occurrence)).isNotEmpty();
 
     var foo = new NameOccurrenceImpl(SymbolicNode.imaginary("Foo", unknownScope()));
-    assertThat(scope.contains(foo)).isFalse();
+    assertThat(scope.findDeclaration(foo)).isEmpty();
   }
 
   @Test

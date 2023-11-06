@@ -49,6 +49,11 @@ public final class ArrayConstructorTypeImpl extends TypeImpl implements ArrayCon
   }
 
   @Override
+  public boolean isEmpty() {
+    return elementTypes.isEmpty();
+  }
+
+  @Override
   public boolean isArrayConstructor() {
     return true;
   }

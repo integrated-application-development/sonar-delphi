@@ -31,6 +31,7 @@ import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -85,6 +86,26 @@ public final class FormalParameterNodeImpl extends DelphiNodeImpl implements For
   @Override
   public List<AttributeListNode> getAttributeLists() {
     return findChildrenOfType(AttributeListNode.class);
+  }
+
+  @Override
+  public ExpressionNode getDefaultValue() {
+    return getFirstChildOfType(ExpressionNode.class);
+  }
+
+  @Override
+  public boolean isOut() {
+    return getFirstChildWithTokenType(DelphiTokenType.OUT) != null;
+  }
+
+  @Override
+  public boolean isVar() {
+    return getFirstChildWithTokenType(DelphiTokenType.VAR) != null;
+  }
+
+  @Override
+  public boolean isConst() {
+    return getFirstChildWithTokenType(DelphiTokenType.CONST) != null;
   }
 
   private static final class FormalParameterDataImpl implements FormalParameterData {

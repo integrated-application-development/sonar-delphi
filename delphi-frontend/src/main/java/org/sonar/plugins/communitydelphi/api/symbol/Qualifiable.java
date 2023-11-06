@@ -18,8 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol;
 
-import java.util.List;
-
 public interface Qualifiable {
   default String simpleName() {
     return getQualifiedName().simpleName();
@@ -29,12 +27,8 @@ public interface Qualifiable {
     return getQualifiedName().fullyQualifiedName();
   }
 
-  default List<String> getQualifiedNameParts() {
-    return getQualifiedName().parts();
-  }
-
   default boolean isQualified() {
-    return getQualifiedNameParts().size() > 1;
+    return getQualifiedName().parts().size() > 1;
   }
 
   QualifiedName getQualifiedName();

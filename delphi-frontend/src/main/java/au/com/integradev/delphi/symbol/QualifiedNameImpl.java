@@ -26,6 +26,7 @@ import com.google.errorprone.annotations.Immutable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
@@ -64,5 +65,22 @@ public final class QualifiedNameImpl implements QualifiedName {
   @Override
   public List<String> parts() {
     return parts;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    QualifiedNameImpl that = (QualifiedNameImpl) o;
+    return Objects.equals(parts, that.parts);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(parts);
   }
 }

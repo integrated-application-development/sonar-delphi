@@ -679,7 +679,7 @@ public class NameResolver {
 
   private boolean matchReferenceToUnitNameDeclaration(
       NameReferenceNode node, QualifiedNameDeclaration declaration) {
-    List<String> declarationParts = declaration.getQualifiedNameParts();
+    List<String> declarationParts = declaration.getQualifiedName().parts();
     List<NameReferenceNode> references = node.flatten();
 
     if (declarationParts.size() > references.size()) {

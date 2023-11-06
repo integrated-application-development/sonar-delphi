@@ -24,6 +24,7 @@ import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
+import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -215,6 +216,14 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
   @Override
   public List<DelphiToken> getComments() {
     return ((DelphiAstImpl) getAst()).getCommentsInsideNode(this);
+  }
+
+  @Override
+  public <T> T childrenAccept(DelphiParserVisitor<T> visitor, T data) {
+    for (DelphiNode child : getChildren()) {
+      child.accept(visitor, data);
+    }
+    return data;
   }
 
   @Override

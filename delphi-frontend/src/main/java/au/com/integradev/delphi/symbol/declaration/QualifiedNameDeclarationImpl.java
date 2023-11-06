@@ -20,6 +20,7 @@ package au.com.integradev.delphi.symbol.declaration;
 
 import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.QualifiedNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -45,8 +46,7 @@ public abstract class QualifiedNameDeclarationImpl extends NameDeclarationImpl
 
   @Override
   public boolean equals(Object o) {
-    return super.equals(o)
-        && getQualifiedNameParts().equals(((QualifiedNameDeclaration) o).getQualifiedNameParts());
+    return super.equals(o) && getQualifiedName().equals(((Qualifiable) o).getQualifiedName());
   }
 
   @Override

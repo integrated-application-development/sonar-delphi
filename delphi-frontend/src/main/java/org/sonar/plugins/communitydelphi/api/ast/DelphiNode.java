@@ -88,10 +88,5 @@ public interface DelphiNode extends Node {
    * @param data Data related to this visit
    * @return Data related to this visit
    */
-  default <T> T childrenAccept(DelphiParserVisitor<T> visitor, T data) {
-    for (DelphiNode child : getChildren()) {
-      child.accept(visitor, data);
-    }
-    return data;
-  }
+  <T> T childrenAccept(DelphiParserVisitor<T> visitor, T data);
 }

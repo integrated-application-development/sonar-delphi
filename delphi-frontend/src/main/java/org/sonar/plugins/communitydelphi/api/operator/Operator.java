@@ -19,13 +19,7 @@
 package org.sonar.plugins.communitydelphi.api.operator;
 
 import java.util.Set;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 
 public interface Operator {
   Set<String> getNames();
-
-  default boolean isOverloadedByMethod(MethodNameDeclaration method) {
-    return method.getMethodKind() == MethodKind.OPERATOR && getNames().contains(method.getImage());
-  }
 }

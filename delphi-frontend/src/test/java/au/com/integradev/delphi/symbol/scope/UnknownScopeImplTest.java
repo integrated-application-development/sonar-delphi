@@ -57,13 +57,6 @@ class UnknownScopeImplTest {
   }
 
   @Test
-  void testContains() {
-    VariableNameDeclaration declaration = constant("Image", unknownType(), unknownScope);
-    unknownScope.addDeclaration(declaration);
-    assertThat(unknownScope.contains(makeNameOccurrence())).isFalse();
-  }
-
-  @Test
   void testAddNameOccurrence() {
     VariableNameDeclaration declaration = constant("Image", unknownType(), unknownScope);
     unknownScope.addDeclaration(declaration);
