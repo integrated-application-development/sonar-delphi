@@ -108,17 +108,18 @@ public class VisibilitySectionOrderCheck extends DelphiCheck {
     reportIssue(context, Objects.requireNonNullElse(visibilityNode, visibilitySection), MESSAGE);
   }
 
-  private boolean isExcludedSection(VisibilitySectionNode visibilitySection) {
-    return visibilitySection.getChildren().stream().anyMatch(this::hasUsagesInsideType);
+  private static boolean isExcludedSection(VisibilitySectionNode visibilitySection) {
+    return visibilitySection.getChildren().stream()
+        .anyMatch(VisibilitySectionOrderCheck::hasUsagesInsideType);
   }
 
-  private boolean hasUsagesInsideType(DelphiNode node) {
+  private static boolean hasUsagesInsideType(DelphiNode node) {
     StructTypeNode structNode = node.getFirstParentOfType(StructTypeNode.class);
     return getVisibilitySectionItemUsages(node).stream()
         .anyMatch(usage -> isInsideNode(structNode, usage.getLocation()));
   }
 
-  private boolean isInsideNode(StructTypeNode structNode, Node node) {
+  private static boolean isInsideNode(StructTypeNode structNode, Node node) {
     if (!node.getScope()
         .getEnclosingScope(FileScope.class)
         .equals(structNode.getScope().getEnclosingScope(FileScope.class))) {
@@ -137,7 +138,7 @@ public class VisibilitySectionOrderCheck extends DelphiCheck {
     return afterStart && beforeEnd;
   }
 
-  private List<NameOccurrence> getVisibilitySectionItemUsages(DelphiNode node) {
+  private static List<NameOccurrence> getVisibilitySectionItemUsages(DelphiNode node) {
     if (node instanceof MethodDeclarationNode) {
       return ((MethodDeclarationNode) node).getMethodNameNode().getUsages();
     } else if (node instanceof FieldSectionNode) {
