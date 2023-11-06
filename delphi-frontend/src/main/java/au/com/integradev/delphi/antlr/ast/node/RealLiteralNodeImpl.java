@@ -22,12 +22,12 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.math.BigDecimal;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class DecimalLiteralNodeImpl extends DelphiNodeImpl implements DecimalLiteralNode {
-  public DecimalLiteralNodeImpl(Token token) {
+public final class RealLiteralNodeImpl extends DelphiNodeImpl implements RealLiteralNode {
+  public RealLiteralNodeImpl(Token token) {
     super(token);
   }
 

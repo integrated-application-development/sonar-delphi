@@ -21,8 +21,8 @@ package au.com.integradev.delphi.checks;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 
@@ -54,7 +54,7 @@ public class DigitSeparatorCheck extends DelphiCheck {
   }
 
   @Override
-  public DelphiCheckContext visit(DecimalLiteralNode literal, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RealLiteralNode literal, DelphiCheckContext context) {
     if (isIntegerPartMissingUnderscores(literal.getImage())) {
       reportIssue(context, literal, MESSAGE);
     }

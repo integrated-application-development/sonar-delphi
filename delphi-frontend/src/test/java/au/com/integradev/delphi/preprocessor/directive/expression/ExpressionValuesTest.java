@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createBoolean;
-import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createDecimal;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createInteger;
+import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createReal;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createSet;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createString;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.unknownValue;
@@ -41,7 +41,7 @@ class ExpressionValuesTest {
     assertThat(value.asString()).isEqualTo("string");
     assertThat(value.asInteger()).isZero();
     assertThat(value.asBigInteger()).isZero();
-    assertThat(value.asDecimal()).isZero();
+    assertThat(value.asDouble()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
   }
@@ -66,7 +66,7 @@ class ExpressionValuesTest {
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isEqualTo(1);
     assertThat(value.asBigInteger()).isEqualTo(1);
-    assertThat(value.asDecimal()).isEqualTo(1.0);
+    assertThat(value.asDouble()).isEqualTo(1.0);
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
   }
@@ -86,25 +86,25 @@ class ExpressionValuesTest {
 
   @Test
   void testDecimalValue() {
-    ExpressionValue value = createDecimal(1.0);
-    assertThat(value.type()).isEqualTo(ConstExpressionType.DECIMAL);
+    ExpressionValue value = createReal(1.0);
+    assertThat(value.type()).isEqualTo(ConstExpressionType.REAL);
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isEqualTo(1);
     assertThat(value.asBigInteger()).isEqualTo(1);
-    assertThat(value.asDecimal()).isEqualTo(1.0);
+    assertThat(value.asDouble()).isEqualTo(1.0);
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
   }
 
   @Test
   void testDecimalValueEquals() {
-    ExpressionValue value = createDecimal(1.0);
+    ExpressionValue value = createReal(1.0);
     assertThat(value)
-        .isNotEqualTo(createDecimal(2.0))
+        .isNotEqualTo(createReal(2.0))
         .isNotEqualTo(unknownValue())
         .isEqualTo(value)
-        .isEqualTo(createDecimal(1.0))
-        .hasSameHashCodeAs(createDecimal(1.0))
+        .isEqualTo(createReal(1.0))
+        .hasSameHashCodeAs(createReal(1.0))
         .isNotEqualTo(null)
         .isNotEqualTo(new Object());
   }
@@ -116,7 +116,7 @@ class ExpressionValuesTest {
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isZero();
     assertThat(value.asBigInteger()).isZero();
-    assertThat(value.asDecimal()).isZero();
+    assertThat(value.asDouble()).isZero();
     assertThat(value.asBoolean()).isTrue();
     assertThat(value.asSet()).isEmpty();
   }
@@ -141,7 +141,7 @@ class ExpressionValuesTest {
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isZero();
     assertThat(value.asBigInteger()).isZero();
-    assertThat(value.asDecimal()).isZero();
+    assertThat(value.asDouble()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).hasSize(3);
   }
@@ -168,7 +168,7 @@ class ExpressionValuesTest {
     assertThat(value.asString()).isEmpty();
     assertThat(value.asInteger()).isZero();
     assertThat(value.asBigInteger()).isZero();
-    assertThat(value.asDecimal()).isZero();
+    assertThat(value.asDouble()).isZero();
     assertThat(value.asBoolean()).isFalse();
     assertThat(value.asSet()).isEmpty();
   }

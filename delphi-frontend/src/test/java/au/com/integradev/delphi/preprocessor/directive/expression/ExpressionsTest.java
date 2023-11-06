@@ -77,7 +77,7 @@ class ExpressionsTest {
     }
   }
 
-  static class DecimalMathArgumentsProvider implements ArgumentsProvider {
+  static class RealMathArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
@@ -284,7 +284,7 @@ class ExpressionsTest {
   @ParameterizedTest(name = "\"{0}\" should evaluate to: {1}")
   @ArgumentsSource(NumericExpressionArgumentsProvider.class)
   @ArgumentsSource(IntegerMathArgumentsProvider.class)
-  @ArgumentsSource(DecimalMathArgumentsProvider.class)
+  @ArgumentsSource(RealMathArgumentsProvider.class)
   @ArgumentsSource(StringConcatenationArgumentsProvider.class)
   @ArgumentsSource(EqualityArgumentsProvider.class)
   @ArgumentsSource(ComparisonArgumentsProvider.class)
@@ -337,7 +337,7 @@ class ExpressionsTest {
     } else if (expected instanceof Integer) {
       assertThat(value.asInteger()).isEqualTo(expected);
     } else if (expected instanceof Double) {
-      assertThat(value.asDecimal()).isEqualTo(expected);
+      assertThat(value.asDouble()).isEqualTo(expected);
     } else if (expected instanceof Boolean) {
       assertThat(value.asBoolean()).isEqualTo(expected);
     }

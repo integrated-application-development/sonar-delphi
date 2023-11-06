@@ -20,8 +20,8 @@ package au.com.integradev.delphi.checks;
 
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
@@ -63,7 +63,7 @@ public class DigitGroupingCheck extends DelphiCheck {
   }
 
   @Override
-  public DelphiCheckContext visit(DecimalLiteralNode literal, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RealLiteralNode literal, DelphiCheckContext context) {
     if (isCheckRelevant(literal.getToken()) && invalidFloat(literal)) {
       reportIssue(context, literal, MESSAGE);
     }
@@ -92,7 +92,7 @@ public class DigitGroupingCheck extends DelphiCheck {
     return notMatching(VALID_DEC_UNDERSCORE_PATTERN, literalNode.getToken());
   }
 
-  private static boolean invalidFloat(DecimalLiteralNode literalNode) {
+  private static boolean invalidFloat(RealLiteralNode literalNode) {
     return notMatching(VALID_DEC_FLOAT_UNDERSCORE_PATTERN, literalNode.getToken());
   }
 

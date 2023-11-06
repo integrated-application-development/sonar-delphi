@@ -33,7 +33,7 @@ public interface Expression {
     UNKNOWN,
     STRING,
     INTEGER,
-    DECIMAL,
+    REAL,
     BOOLEAN,
     SET
   }
@@ -59,7 +59,7 @@ public interface Expression {
       return BigInteger.ZERO;
     }
 
-    default Double asDecimal() {
+    default Double asDouble() {
       return 0.0;
     }
 

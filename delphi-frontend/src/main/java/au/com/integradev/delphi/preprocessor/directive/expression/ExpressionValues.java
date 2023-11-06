@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.BOOLEAN;
-import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.DECIMAL;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.INTEGER;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.REAL;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.SET;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.STRING;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.UNKNOWN;
@@ -56,8 +56,8 @@ final class ExpressionValues {
     return new PrimitiveExpressionValue(INTEGER, value);
   }
 
-  static ExpressionValue createDecimal(Double value) {
-    return new PrimitiveExpressionValue(DECIMAL, value);
+  static ExpressionValue createReal(Double value) {
+    return new PrimitiveExpressionValue(REAL, value);
   }
 
   static ExpressionValue createString(String value) {
@@ -73,18 +73,18 @@ final class ExpressionValues {
   }
 
   private static boolean isNumeric(ExpressionValue value) {
-    return value.type() == INTEGER || value.type() == DECIMAL;
+    return value.type() == INTEGER || value.type() == REAL;
   }
 
   private static ExpressionValue calculate(
       ExpressionValue left, ExpressionValue right, DoubleBinaryOperator op) {
     if (isNumeric(left) && isNumeric(right)) {
-      double value = op.applyAsDouble(left.asDecimal(), right.asDecimal());
+      double value = op.applyAsDouble(left.asDouble(), right.asDouble());
 
       if (DoubleMath.isMathematicalInteger(value)) {
         return createInteger((int) value);
       }
-      return createDecimal(value);
+      return createReal(value);
     }
     return unknownValue();
   }
@@ -138,8 +138,8 @@ final class ExpressionValues {
     }
 
     if (isNumeric(left) && isNumeric(right)) {
-      double leftValue = left.asDecimal();
-      double rightValue = right.asDecimal();
+      double leftValue = left.asDouble();
+      double rightValue = right.asDouble();
       return createBoolean(DoubleMath.fuzzyEquals(leftValue, rightValue, ulp(leftValue)));
     }
 
@@ -148,21 +148,21 @@ final class ExpressionValues {
 
   static ExpressionValue greaterThan(ExpressionValue left, ExpressionValue right) {
     if (isNumeric(left) && isNumeric(right)) {
-      return createBoolean(left.asDecimal() > right.asDecimal());
+      return createBoolean(left.asDouble() > right.asDouble());
     }
     return unknownValue();
   }
 
   static ExpressionValue lessThan(ExpressionValue left, ExpressionValue right) {
     if (isNumeric(left) && isNumeric(right)) {
-      return createBoolean(left.asDecimal() < right.asDecimal());
+      return createBoolean(left.asDouble() < right.asDouble());
     }
     return unknownValue();
   }
 
   static ExpressionValue greaterThanEqual(ExpressionValue left, ExpressionValue right) {
     if (isNumeric(left) && isNumeric(right)) {
-      return createBoolean(left.asDecimal() >= right.asDecimal());
+      return createBoolean(left.asDouble() >= right.asDouble());
     } else if (left.type() == SET && right.type() == SET) {
       return createBoolean(left.asSet().containsAll(right.asSet()));
     }
@@ -171,7 +171,7 @@ final class ExpressionValues {
 
   static ExpressionValue lessThanEqual(ExpressionValue left, ExpressionValue right) {
     if (isNumeric(left) && isNumeric(right)) {
-      return createBoolean(left.asDecimal() <= right.asDecimal());
+      return createBoolean(left.asDouble() <= right.asDouble());
     } else if (left.type() == SET && right.type() == SET) {
       return createBoolean(right.asSet().containsAll(left.asSet()));
     }
@@ -211,7 +211,7 @@ final class ExpressionValues {
   }
 
   static ExpressionValue plus(ExpressionValue value) {
-    if (value.type() == INTEGER || value.type() == DECIMAL) {
+    if (value.type() == INTEGER || value.type() == REAL) {
       return value;
     } else {
       return unknownValue();
@@ -222,8 +222,8 @@ final class ExpressionValues {
     switch (value.type()) {
       case INTEGER:
         return createInteger(value.asBigInteger().negate());
-      case DECIMAL:
-        return createDecimal(-value.asDecimal());
+      case REAL:
+        return createReal(-value.asDouble());
       case BOOLEAN:
         return createBoolean(!value.asBoolean());
       default:
@@ -281,7 +281,7 @@ final class ExpressionValues {
     }
 
     @Override
-    public Double asDecimal() {
+    public Double asDouble() {
       if (value instanceof Double) {
         return (Double) value;
       } else if (value instanceof BigInteger) {

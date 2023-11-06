@@ -49,7 +49,6 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ContainsClauseNode;
-import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
@@ -118,6 +117,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RangeExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordHelperTypeNode;
@@ -613,7 +613,7 @@ public interface DelphiParserVisitor<T> {
   }
 
   /* Literals */
-  default T visit(DecimalLiteralNode node, T data) {
+  default T visit(RealLiteralNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

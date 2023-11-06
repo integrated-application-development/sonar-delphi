@@ -214,7 +214,7 @@ public class ExpressionLexer {
     TokenType type;
     StringBuilder value = new StringBuilder();
     private Predicate<Character> isDigitCharacter;
-    private boolean canBeDecimal;
+    private boolean canBeReal;
 
     private void init() {
       type = TokenType.INTEGER;
@@ -222,32 +222,32 @@ public class ExpressionLexer {
       switch (peekChar()) {
         case '$':
           isDigitCharacter = ExpressionLexer::isHexDigit;
-          canBeDecimal = false;
+          canBeReal = false;
           value.append(getChar());
           break;
         case '%':
           isDigitCharacter = ExpressionLexer::isBinaryDigit;
-          canBeDecimal = false;
+          canBeReal = false;
           value.append(getChar());
           break;
         default:
           isDigitCharacter = Character::isDigit;
-          canBeDecimal = true;
+          canBeReal = true;
       }
     }
 
     private boolean readCharacter(char character) {
       if (character == '.') {
-        if (type == TokenType.DECIMAL || !canBeDecimal) {
+        if (type == TokenType.REAL || !canBeReal) {
           throw new ExpressionLexerError("Unexpected '.' in numeric literal");
         }
-        type = TokenType.DECIMAL;
+        type = TokenType.REAL;
         value.append(getChar());
         return true;
       }
 
-      if (canBeDecimal && Character.toLowerCase(character) == 'e') {
-        type = TokenType.DECIMAL;
+      if (canBeReal && Character.toLowerCase(character) == 'e') {
+        type = TokenType.REAL;
         value.append(getChar());
         if (peekChar() == '+' || peekChar() == '-') {
           value.append(getChar());

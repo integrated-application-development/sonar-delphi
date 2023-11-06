@@ -170,7 +170,7 @@ public class ExpressionParser {
     switch (token.getType()) {
       case STRING:
       case INTEGER:
-      case DECIMAL:
+      case REAL:
         return parseLiteral();
 
       case IDENTIFIER:

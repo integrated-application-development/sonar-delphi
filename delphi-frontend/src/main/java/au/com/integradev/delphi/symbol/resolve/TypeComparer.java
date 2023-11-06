@@ -85,8 +85,8 @@ final class TypeComparer {
 
     if (to.isInteger()) {
       result = compareInteger(from, to);
-    } else if (to.isDecimal()) {
-      result = compareDecimal(from, to);
+    } else if (to.isReal()) {
+      result = compareReal(from, to);
     } else if (to.isString()) {
       result = compareString(from, to);
     } else if (to.isChar()) {
@@ -153,16 +153,16 @@ final class TypeComparer {
     return INCOMPATIBLE_TYPES;
   }
 
-  private static EqualityType compareDecimal(Type from, Type to) {
+  private static EqualityType compareReal(Type from, Type to) {
     if (from.isInteger()) {
-      return compareIntegerToDecimal(from, to);
-    } else if (from.isDecimal()) {
-      return compareDecimalToDecimal(from, to);
+      return compareIntegerToReal(from, to);
+    } else if (from.isReal()) {
+      return compareRealToReal(from, to);
     }
     return INCOMPATIBLE_TYPES;
   }
 
-  private static EqualityType compareIntegerToDecimal(Type from, Type to) {
+  private static EqualityType compareIntegerToReal(Type from, Type to) {
     if (from.is(IntrinsicType.INT64) || from.is(IntrinsicType.UINT64)) {
       if (to.is(IntrinsicType.EXTENDED)) {
         return CONVERT_LEVEL_1;
@@ -191,25 +191,25 @@ final class TypeComparer {
   }
 
   @VisibleForTesting
-  static EqualityType compareDecimalToDecimal(Type from, Type to) {
+  static EqualityType compareRealToReal(Type from, Type to) {
     if (from.is(to)) {
       return EQUAL;
     } else if (from.is(IntrinsicType.SINGLE)) {
-      return compareSingleToDecimal(to);
+      return compareSingleToReal(to);
     } else if (from.is(IntrinsicType.REAL48)) {
-      return compareReal48ToDecimal(to);
+      return compareReal48ToReal(to);
     } else if (from.is(IntrinsicType.DOUBLE)) {
-      return compareDoubleToDecimal(to);
+      return compareDoubleToReal(to);
     } else if (from.is(IntrinsicType.EXTENDED)) {
-      return compareExtendedToDecimal(to);
+      return compareExtendedToReal(to);
     } else if (from.is(IntrinsicType.CURRENCY) || from.is(IntrinsicType.COMP)) {
-      return compareIntegerRealsToDecimal(to);
+      return compareIntegerRealToReal(to);
     }
 
-    throw new AssertionError("Unhandled decimal type");
+    throw new AssertionError("Unhandled real type");
   }
 
-  private static EqualityType compareSingleToDecimal(Type to) {
+  private static EqualityType compareSingleToReal(Type to) {
     if (to.is(IntrinsicType.REAL48)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(IntrinsicType.DOUBLE)) {
@@ -221,7 +221,7 @@ final class TypeComparer {
     }
   }
 
-  private static EqualityType compareReal48ToDecimal(Type to) {
+  private static EqualityType compareReal48ToReal(Type to) {
     if (to.is(IntrinsicType.DOUBLE)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(IntrinsicType.EXTENDED)) {
@@ -233,7 +233,7 @@ final class TypeComparer {
     }
   }
 
-  private static EqualityType compareDoubleToDecimal(Type to) {
+  private static EqualityType compareDoubleToReal(Type to) {
     if (to.is(IntrinsicType.EXTENDED)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(IntrinsicType.REAL48)) {
@@ -245,7 +245,7 @@ final class TypeComparer {
     }
   }
 
-  private static EqualityType compareExtendedToDecimal(Type to) {
+  private static EqualityType compareExtendedToReal(Type to) {
     if (to.is(IntrinsicType.DOUBLE)) {
       return CONVERT_LEVEL_4;
     } else if (to.is(IntrinsicType.REAL48)) {
@@ -257,7 +257,7 @@ final class TypeComparer {
     }
   }
 
-  private static EqualityType compareIntegerRealsToDecimal(Type to) {
+  private static EqualityType compareIntegerRealToReal(Type to) {
     if (to.is(IntrinsicType.EXTENDED)) {
       return CONVERT_LEVEL_1;
     } else if (to.is(IntrinsicType.DOUBLE)) {

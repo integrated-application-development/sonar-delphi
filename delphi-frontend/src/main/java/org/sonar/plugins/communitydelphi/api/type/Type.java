@@ -191,11 +191,11 @@ public interface Type {
   boolean isInteger();
 
   /**
-   * Check if this type is a decimal type
+   * Check if this type is a real type
    *
-   * @return true if the type is a decimal type
+   * @return true if the type is a real type
    */
-  boolean isDecimal();
+  boolean isReal();
 
   /**
    * Check if this type is a string type (ShortString, WideString, UnicodeString, etc...)
@@ -608,7 +608,7 @@ public interface Type {
     double ordinalDistance(IntegerType other);
   }
 
-  interface DecimalType extends Type {}
+  interface RealType extends Type {}
 
   interface BooleanType extends Type {}
 

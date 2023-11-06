@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createBoolean;
-import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createDecimal;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createInteger;
+import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createReal;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createSet;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.createString;
 import static au.com.integradev.delphi.preprocessor.directive.expression.ExpressionValues.unknownValue;
@@ -183,8 +183,8 @@ public final class Expressions {
       switch (type) {
         case INTEGER:
           return createInteger(bigIntegerFromTextWithDigitSeparatorsAndRadixPrefix(text));
-        case DECIMAL:
-          return createDecimal(doubleFromTextWithDigitSeparators(text));
+        case REAL:
+          return createReal(doubleFromTextWithDigitSeparators(text));
         case STRING:
           return createString(text);
         default:
@@ -274,7 +274,7 @@ public final class Expressions {
           case INTEGER:
             type = typeFactory.integerFromLiteralValue(value.asBigInteger());
             break;
-          case DECIMAL:
+          case REAL:
             type = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
             break;
           case BOOLEAN:

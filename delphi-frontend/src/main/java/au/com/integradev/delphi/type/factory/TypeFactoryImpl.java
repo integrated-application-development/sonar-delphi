@@ -158,8 +158,8 @@ public class TypeFactoryImpl implements TypeFactory {
     intrinsicTypes.put(intrinsic, new BooleanTypeImpl(intrinsic.fullyQualifiedName(), size));
   }
 
-  private void addDecimal(IntrinsicType intrinsic, int size) {
-    intrinsicTypes.put(intrinsic, new DecimalTypeImpl(intrinsic.fullyQualifiedName(), size));
+  private void addReal(IntrinsicType intrinsic, int size) {
+    intrinsicTypes.put(intrinsic, new RealTypeImpl(intrinsic.fullyQualifiedName(), size));
   }
 
   private void addInteger(IntrinsicType intrinsic, int size, boolean signed) {
@@ -199,12 +199,12 @@ public class TypeFactoryImpl implements TypeFactory {
     addBoolean(IntrinsicType.WORDBOOL, 2);
     addBoolean(IntrinsicType.LONGBOOL, 4);
 
-    addDecimal(IntrinsicType.SINGLE, 4);
-    addDecimal(IntrinsicType.DOUBLE, 8);
-    addDecimal(IntrinsicType.REAL48, 6);
-    addDecimal(IntrinsicType.COMP, 8);
-    addDecimal(IntrinsicType.CURRENCY, 8);
-    addDecimal(IntrinsicType.EXTENDED, extendedSize());
+    addReal(IntrinsicType.SINGLE, 4);
+    addReal(IntrinsicType.DOUBLE, 8);
+    addReal(IntrinsicType.REAL48, 6);
+    addReal(IntrinsicType.COMP, 8);
+    addReal(IntrinsicType.CURRENCY, 8);
+    addReal(IntrinsicType.EXTENDED, extendedSize());
 
     if (isReal48Bit()) {
       addAlias(IntrinsicType.REAL, IntrinsicType.REAL48);

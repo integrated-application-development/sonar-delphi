@@ -914,7 +914,7 @@ intNum                       : TkIntNumber<IntegerLiteralNodeImpl>
                              | TkHexNumber<IntegerLiteralNodeImpl>
                              | TkBinaryNumber<IntegerLiteralNodeImpl>
                              ;
-realNum                      : TkRealNumber<DecimalLiteralNodeImpl>
+realNum                      : TkRealNumber<RealLiteralNodeImpl>
                              ;
 
 //----------------------------------------------------------------------------

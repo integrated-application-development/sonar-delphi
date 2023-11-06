@@ -97,7 +97,7 @@ public abstract class TypeImpl implements Type {
   }
 
   @Override
-  public boolean isDecimal() {
+  public boolean isReal() {
     return false;
   }
 

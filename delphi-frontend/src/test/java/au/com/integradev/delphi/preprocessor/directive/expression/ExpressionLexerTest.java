@@ -41,13 +41,13 @@ class ExpressionLexerTest {
           Arguments.of("123_456_789", TokenType.INTEGER),
           Arguments.of("%01101011", TokenType.INTEGER),
           Arguments.of("$014FE89", TokenType.INTEGER),
-          Arguments.of("123.45", TokenType.DECIMAL),
-          Arguments.of("5E5", TokenType.DECIMAL),
-          Arguments.of("5E+5", TokenType.DECIMAL),
-          Arguments.of("5E-5", TokenType.DECIMAL),
-          Arguments.of("123_45.6_789", TokenType.DECIMAL),
-          Arguments.of("12345____.6__78_9", TokenType.DECIMAL),
-          Arguments.of("     123.45      ", TokenType.DECIMAL));
+          Arguments.of("123.45", TokenType.REAL),
+          Arguments.of("5E5", TokenType.REAL),
+          Arguments.of("5E+5", TokenType.REAL),
+          Arguments.of("5E-5", TokenType.REAL),
+          Arguments.of("123_45.6_789", TokenType.REAL),
+          Arguments.of("12345____.6__78_9", TokenType.REAL),
+          Arguments.of("     123.45      ", TokenType.REAL));
     }
   }
 

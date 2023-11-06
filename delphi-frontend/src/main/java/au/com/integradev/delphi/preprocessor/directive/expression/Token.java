@@ -22,7 +22,7 @@ public class Token {
   enum TokenType {
     UNKNOWN,
     INTEGER,
-    DECIMAL,
+    REAL,
     IDENTIFIER,
     STRING,
     EQUALS,

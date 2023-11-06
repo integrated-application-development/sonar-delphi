@@ -111,7 +111,7 @@ class TypeComparerTest {
   }
 
   @Test
-  void testToDecimal() {
+  void testToReal() {
     compare(IntrinsicType.INTEGER, IntrinsicType.SINGLE, CONVERT_LEVEL_1);
     compare(IntrinsicType.INTEGER, IntrinsicType.REAL48, CONVERT_LEVEL_2);
     compare(IntrinsicType.INTEGER, IntrinsicType.DOUBLE, CONVERT_LEVEL_3);
@@ -134,7 +134,7 @@ class TypeComparerTest {
   }
 
   @Test
-  void testDecimalToDecimal() {
+  void testRealToReal() {
     compare(IntrinsicType.SINGLE, typeType("Single_", IntrinsicType.SINGLE), EQUAL);
     compare(IntrinsicType.SINGLE, IntrinsicType.REAL48, CONVERT_LEVEL_1);
     compare(IntrinsicType.SINGLE, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
@@ -161,12 +161,12 @@ class TypeComparerTest {
     compare(IntrinsicType.EXTENDED, IntrinsicType.COMP, CONVERT_LEVEL_7);
 
     assertThatThrownBy(
-            () -> TypeComparer.compareDecimalToDecimal(unknownType(), toType(IntrinsicType.SINGLE)))
+            () -> TypeComparer.compareRealToReal(unknownType(), toType(IntrinsicType.SINGLE)))
         .isInstanceOf(AssertionError.class);
   }
 
   @Test
-  void testIntegerRealsToDecimal() {
+  void testIntegerRealToReal() {
     compare(IntrinsicType.CURRENCY, IntrinsicType.EXTENDED, CONVERT_LEVEL_1);
     compare(IntrinsicType.CURRENCY, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
     compare(IntrinsicType.CURRENCY, IntrinsicType.REAL48, CONVERT_LEVEL_3);

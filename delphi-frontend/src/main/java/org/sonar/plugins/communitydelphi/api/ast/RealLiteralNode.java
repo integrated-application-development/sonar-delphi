@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2023 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,32 +16,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.type.factory;
+package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.type.TypeImpl;
-import org.sonar.plugins.communitydelphi.api.type.Type.DecimalType;
+import java.math.BigDecimal;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
-public final class DecimalTypeImpl extends TypeImpl implements DecimalType {
-  private final String image;
-  private final int size;
-
-  DecimalTypeImpl(String image, int size) {
-    this.image = image;
-    this.size = size;
-  }
-
-  @Override
-  public String getImage() {
-    return image;
-  }
-
-  @Override
-  public boolean isDecimal() {
-    return true;
-  }
-
-  @Override
-  public int size() {
-    return size;
-  }
+public interface RealLiteralNode extends DelphiNode, Typed {
+  BigDecimal getValue();
 }

@@ -19,13 +19,13 @@
 package org.sonar.plugins.communitydelphi.api.ast.utils;
 
 import javax.annotation.Nullable;
-import org.sonar.plugins.communitydelphi.api.ast.DecimalLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
@@ -55,8 +55,8 @@ public final class ExpressionNodeUtils {
   }
 
   @Nullable
-  public static DecimalLiteralNode unwrapDecimal(ExpressionNode node) {
-    return unwrap(node, DecimalLiteralNode.class);
+  public static RealLiteralNode unwrapDecimal(ExpressionNode node) {
+    return unwrap(node, RealLiteralNode.class);
   }
 
   @Nullable

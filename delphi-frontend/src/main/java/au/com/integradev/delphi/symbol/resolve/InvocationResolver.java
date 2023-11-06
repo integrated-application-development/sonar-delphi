@@ -184,7 +184,7 @@ public class InvocationResolver {
 
       if (!equalTypeRequired(parameter)) {
         checkIntegerDistance(candidate, argumentType, parameterType);
-        checkDecimalDistance(candidate, argumentType, parameterType);
+        checkRealDistance(candidate, argumentType, parameterType);
         checkNumericMismatch(candidate, argumentType, parameterType);
         checkStructTypes(candidate, argumentType, parameterType);
         checkProceduralDistance(candidate, argumentType, parameterType);
@@ -255,9 +255,9 @@ public class InvocationResolver {
     }
   }
 
-  private static void checkDecimalDistance(
+  private static void checkRealDistance(
       InvocationCandidate candidate, Type argumentType, Type parameterType) {
-    if (argumentType.isDecimal() && parameterType.isDecimal()) {
+    if (argumentType.isReal() && parameterType.isReal()) {
       int argumentSize = argumentType.size();
       int parameterSize = parameterType.size();
       int distance;
@@ -273,7 +273,7 @@ public class InvocationResolver {
 
   private static void checkNumericMismatch(
       InvocationCandidate candidate, Type argumentType, Type parameterType) {
-    if (argumentType.isInteger() && parameterType.isDecimal()) {
+    if (argumentType.isInteger() && parameterType.isReal()) {
       candidate.incrementNumericMismatchCount();
     }
   }
