@@ -12,11 +12,13 @@
 <h2>How to fix it</h2>
 <p>If the empty method is an omission, remove it.</p>
 <p>If the method should be empty, add a nested comment explaining why the method is blank:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-procedure MyEmptyMethod;
+procedure MyEmptyMethod; // Noncompliant
 begin
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure MyEmptyMethod;
 begin

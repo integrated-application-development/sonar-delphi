@@ -9,15 +9,17 @@
 </p>
 <h2>How to fix it</h2>
 <p>Use a longer and more explicit identifier name:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 var
-  M: string;
+  M: string; // Noncompliant
 begin
   M := LoadMessage;
   // ...
   Log(M);
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 var
   Message: string;

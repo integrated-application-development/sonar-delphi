@@ -8,6 +8,7 @@
   Use condition variables with structured control flow statements such as <code>if</code>,
   <code>for</code>, <code>while</code>, <code>Continue</code>, or <code>Break</code> instead.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
   function Foo: Boolean;
   var
@@ -17,7 +18,7 @@
       Sentence := Sentence + Readln;
 
       if Input = '.' then begin
-        Goto SentenceEnded;
+        goto SentenceEnded; // Noncompliant
       end;
     end;
 
@@ -26,6 +27,7 @@
     ShowMessage('Sentence: ' + Sentence);
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 function Foo: Boolean;
 var

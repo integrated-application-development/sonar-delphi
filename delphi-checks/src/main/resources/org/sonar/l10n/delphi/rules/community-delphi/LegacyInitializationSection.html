@@ -6,14 +6,16 @@
 </p>
 <h2>How to fix it</h2>
 <p>Use the modern initialization syntax instead:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 // ...
 
-begin
+begin // Noncompliant
   Writeln('Initializing application...');
 
 end.
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 // ...
 

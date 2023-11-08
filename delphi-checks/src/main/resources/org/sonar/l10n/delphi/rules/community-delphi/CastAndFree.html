@@ -19,10 +19,12 @@ FreeAndNil(MyVar); // Compliant
 </pre>
 <h2>How to fix it</h2>
 <p>Remove the unnecessary cast:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-TMyObject(MyVar).Free;
-FreeAndNil(TMyObject(MyVar));
+TMyObject(MyVar).Free; // Noncompliant
+FreeAndNil(TMyObject(MyVar)); // Noncompliant
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 MyVar.Free;
 FreeAndNil(MyVar);

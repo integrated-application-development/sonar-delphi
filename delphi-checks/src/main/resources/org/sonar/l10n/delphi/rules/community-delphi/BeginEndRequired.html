@@ -24,13 +24,14 @@ Foo.Bar;
 </pre>
 <h2>How to fix it</h2>
 Surround the statement with <code>begin</code> and <code>end</code>:
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 if not Assigned(MyObj) then
-  Exit;
+  Exit; // Noncompliant
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
-if not Assigned(MyObj) then
-begin
+if not Assigned(MyObj) then begin
   Exit;
 end;
 </pre>

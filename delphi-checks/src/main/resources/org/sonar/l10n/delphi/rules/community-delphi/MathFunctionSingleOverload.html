@@ -56,12 +56,14 @@ end;
 <p>
   If possible, refactor your code to use the <code>Double</code> or <code>Extended</code> overloads:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example(MyNum: Single);
 begin
-  Power(MyNum, 2);
+  Power(MyNum, 2); // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example(MyNum: Double);
 begin
@@ -69,12 +71,14 @@ begin
 end;
 </pre>
 <p>Otherwise, cast the number to <code>Double</code> or <code>Extended</code> before invocation:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 procedure Example(MyNum: Integer);
 begin
-  Power(MyNum, 2);
+  Power(MyNum, 2); // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure Example(MyNum: Integer);
 begin

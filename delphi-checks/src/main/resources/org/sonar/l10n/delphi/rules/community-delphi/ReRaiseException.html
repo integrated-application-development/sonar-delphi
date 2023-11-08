@@ -10,16 +10,18 @@
 </p>
 <h2>How to fix it</h2>
 <p>Replace the <code>raise X</code> statement with a simple <code>raise</code>:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 try
   DoSomething;
 except
   on E: Exception do begin
     Log.Debug('Exception message = ' + E.Message);
-    raise E;
+    raise E; // Noncompliant
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 try
   DoSomething;

@@ -5,17 +5,19 @@
 </p>
 <h2>How to fix it</h2>
 <p>Remove the redundancy in the boolean expression:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-if Foo = True then begin
+if Foo = True then begin // Noncompliant
   // ...
 end;
 
-if Bar = False then begin
+if Bar = False then begin // Noncompliant
   // ...
 end;
 
-DoSomething(not False);
+DoSomething(not False); // Noncompliant
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 if Foo then begin
   // ...

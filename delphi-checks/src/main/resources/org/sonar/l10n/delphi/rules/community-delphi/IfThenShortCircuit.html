@@ -10,7 +10,10 @@
   of the condition.
 </p>
 <h2>How to fix it</h2>
-<p>Use a long-form if condition instead, which does perform short-circuit evaluation:</p>
+<p>
+  Use a long-form <code>if</code> condition instead, which does perform short-circuit evaluation:
+</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 function MyFunc: string;
 var
@@ -18,9 +21,10 @@ var
 begin
   Foo := nil;
 
-  Result := IfThen(Assigned(Foo), Foo.Bar, 'Baz');
+  Result := IfThen(Assigned(Foo), Foo.Bar, 'Baz'); // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 function MyFunc: string;
 var

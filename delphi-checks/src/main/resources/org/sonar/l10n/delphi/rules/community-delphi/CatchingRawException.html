@@ -19,15 +19,17 @@
 </p>
 <h2>How to fix it</h2>
 <p>Rewrite the exception handling block to catch specific exception types:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 try
   Contents := TFile.ReadAllText(FileName, TEncoding.UTF8);
 except
-  on E: Exception do begin
+  on E: Exception do begin // Noncompliant
     Writeln('Could not read file');
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 try
   Contents := TFile.ReadAllText(FileName, TEncoding.UTF8);

@@ -8,12 +8,14 @@
 <p>
   Assign the function result to the <code>Result</code> variable instead of the function identifier:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 function GetFoo: TFoo;
 begin
-  GetFoo := TFoo.Create;
+  GetFoo := TFoo.Create; // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 function GetFoo: TFoo;
 begin

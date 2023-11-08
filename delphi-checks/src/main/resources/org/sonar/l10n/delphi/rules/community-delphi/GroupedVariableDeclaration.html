@@ -5,15 +5,17 @@
 </p>
 <h2>How to fix it</h2>
 <p>Separate the grouped variables into separate lines.</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure MyProc;
 var
   MyName: string;
-  MyId, MyAge: Integer;
+  MyId, MyAge: Integer; // Noncompliant
 begin
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure MyProc;
 var

@@ -21,10 +21,11 @@
 </p>
 <h2>How to fix it</h2>
 <p>Remove the <code>with</code> statement and qualify any accesses within it:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure TMyForm.MyEvent(Sender: TObject);
 begin
-  with TButton.Create(Self) do begin
+  with TButton.Create(Self) do begin // Noncompliant
     Parent := Self;
     Left := 50;
     Top := 20;
@@ -33,6 +34,7 @@ begin
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure TMyForm.MyEvent(Sender: TObject);
 var

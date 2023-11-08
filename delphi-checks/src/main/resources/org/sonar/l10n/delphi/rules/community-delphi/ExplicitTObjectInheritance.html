@@ -4,13 +4,15 @@
   explicitly inherit from TObject for readability.
 </p>
 <h2>How to fix it</h2>
-<p>Specify <code>TObject</code> as the class's ancestor:
+<p>Specify <code>TObject</code> as the class's ancestor:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
-  TMyClass = class
+  TMyClass = class // Noncompliant
     // ...
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   TMyClass = class(TObject)

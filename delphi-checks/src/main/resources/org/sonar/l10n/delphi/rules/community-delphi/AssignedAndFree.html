@@ -5,15 +5,17 @@
 </p>
 <h2>How to fix it</h2>
 <p>Remove the nil check:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-if Assigned(Foo) then begin
+if Assigned(Foo) then begin // Noncompliant
   Foo.Free;
 end;
 
-if Bar &lt;> nil then begin
+if Bar &lt;> nil then begin // Noncompliant
   FreeAndNil(Bar);
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 Foo.Free;
 FreeAndNil(Bar);

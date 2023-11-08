@@ -16,12 +16,14 @@
 <p>
   Add an <code>inherited</code> call to the end of the destructor:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-destructor TMyObj.Destroy;
+destructor TMyObj.Destroy; // Noncompliant
 begin
   FreeAndNil(FObj);
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 destructor TMyObj.Destroy;
 begin

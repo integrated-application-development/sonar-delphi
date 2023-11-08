@@ -15,19 +15,21 @@
 </p>
 <h2>How to fix it</h2>
 <p>Use a specialized exception type (or define your own):</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure EatIceCream(IceCream: TIceCream);
 begin
   if IceCream.Melted then begin
-    raise Exception.Create('The ice cream is melted');
+    raise Exception.Create('The ice cream is melted'); // Noncompliant
   end
   else if IceCream.Flavour = 'mint' then begin
-    raise Exception.Create('I hate mint');
+    raise Exception.Create('I hate mint'); // Noncompliant
   end;
 
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure EatIceCream(IceCream: TIceCream);
 begin

@@ -21,14 +21,16 @@
   To consistently use the pre-Delphi 10.4 behaviour, convert the character to its ordinal value
   before casting.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example(MyChar: Char);
 var
   MyPointer: PChar;
 begin
-  MyPointer := PChar(MyChar);
+  MyPointer := PChar(MyChar); // Noncompliant, inconsistent behavior
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example(MyChar: Char);
 var
@@ -41,14 +43,16 @@ end;
   To consistently use the post-Delphi 10.4 behaviour, cast the character to a string type before
   casting to the character pointer type:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 procedure Example(MyChar: Char);
 var
   MyPointer: PChar;
 begin
-  MyPointer := PChar(MyChar);
+  MyPointer := PChar(MyChar); // Noncompliant, inconsistent behavior
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure Example(MyChar: Char);
 var

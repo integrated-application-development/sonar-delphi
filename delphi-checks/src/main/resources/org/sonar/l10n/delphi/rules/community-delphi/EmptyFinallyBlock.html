@@ -1,17 +1,19 @@
 <h2>Why is this an issue?</h2>
 <p>
-  Empty finally blocks are superfluous. The purpose of a finally block is to be executed
-  regardless of whether an exception was raised within the try block, so an empty finally
-  block has no effect.
+  Empty <code>finally</code> blocks are superfluous. The purpose of a <code>finally</code> block is
+  to be executed regardless of whether an exception was raised within the <code>try</code> block, so
+  an empty <code>finally</code> block has no effect.
 </p>
 <h2>How to fix it</h2>
-<p>If there should be something in the finally block, add it:</p>
+<p>If there should be something in the <code>finally</code> block, add it:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 try
   DoSomething;
-finally
+finally // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 try
   DoSomething;
@@ -19,13 +21,15 @@ finally
   Writeln('All done!');
 end;
 </pre>
-<p>If not, the try/finally statement can be removed:</p>
+<p>If not, the <code>try</code>/<code>finally</code> statement can be removed:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 try
   DoSomething;
-finally
+finally // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 DoSomething;
 </pre>

@@ -5,12 +5,14 @@
 </p>
 <h2>How to fix it</h2>
 <p>Separate the grouped parameters explicitly:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-procedure MyProc(MyName: string; MyId, MyAge: Integer);
+procedure MyProc(MyName: string; MyId, MyAge: Integer); // Noncompliant
 begin
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure MyProc(MyName: string; MyId: Integer; MyAge: Integer);
 begin
@@ -21,12 +23,14 @@ end;
   If the grouped parameters are <code>const</code>, <code>var</code>, or <code>out</code>
   parameters, make sure that each parameter has the same keywords after separating:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
-procedure MyProc(MyName: string; const MyId, MyAge: Integer);
+procedure MyProc(MyName: string; const MyId, MyAge: Integer); // Noncompliant
 begin
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure MyProc(MyName: string; const MyId: Integer; const MyAge: Integer);
 begin

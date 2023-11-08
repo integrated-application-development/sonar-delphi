@@ -7,15 +7,17 @@
 <p>
   If desired, it can be replaced with <code>IInterface</code> for the same effect:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
-  IRefCounted = interface
+  IRefCounted = interface // Noncompliant
   end;
 
   TMyClass = class(TObject, IRefCounted)
     // ...
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   TMyClass = class(TObject, IInterface)

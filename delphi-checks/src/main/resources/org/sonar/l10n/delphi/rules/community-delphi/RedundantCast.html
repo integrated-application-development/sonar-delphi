@@ -5,13 +5,15 @@
 </p>
 <h2>How to fix it</h2>
 <p>Remove the redundant cast:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example(Foo: TFoo);
 begin
-  Foo := TFoo(Foo);
+  Foo := TFoo(Foo); // Noncompliant
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example(Foo: TFoo);
 begin

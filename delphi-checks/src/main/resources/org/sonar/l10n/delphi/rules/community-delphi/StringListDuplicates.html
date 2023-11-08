@@ -10,13 +10,15 @@
 </p>
 <h2>How to fix it</h2>
 <p>If the list should be forbidding duplicates, sort the list:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure DoSomething(MyList: TStringList);
 begin
-  MyList.Duplicates := dupError;
+  MyList.Duplicates := dupError; // Noncompliant
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure DoSomething(MyList: TStringList);
 begin
@@ -26,13 +28,15 @@ begin
 end;
 </pre>
 <p>If the list should not be forbidding duplicates, remove the assignment:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 procedure DoSomething(MyList: TStringList);
 begin
-  MyList.Duplicates := dupError;
+  MyList.Duplicates := dupError; // Noncompliant
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure DoSomething(MyList: TStringList);
 begin

@@ -9,14 +9,16 @@
 </p>
 <h2>How to fix it</h2>
 <p>For a function, ensure that <code>Result</code> is initialized by the end of every branch:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-function GetWeapon(Ranged: Boolean): TWeapon;
+function GetWeapon(Ranged: Boolean): TWeapon; // Noncompliant
 begin
   if Ranged then begin
     Result := TBow.Create;
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 function GetWeapon(Ranged: Boolean): TWeapon;
 begin
@@ -29,8 +31,9 @@ begin
 end;
 </pre>
 <p>Ensure that all <code>out</code> parameters are initialized by the end of every branch:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
-procedure GetOutfit(PersonName: string; out Shirt: TShirt; out Pants: TPants);
+procedure GetOutfit(PersonName: string; out Shirt: TShirt; out Pants: TPants); // Noncompliant
 begin
   if (PersonName &lt;> '') then begin
     Shirt := GetShirt(PersonName);
@@ -38,6 +41,7 @@ begin
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure GetOutfit(PersonName: string; out Shirt: TShirt; out Pants: TPants);
 begin

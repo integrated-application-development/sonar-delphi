@@ -13,16 +13,18 @@
   Move any complex logic into a method in a separate unit, which you can then reference from the
   initialization section of the project file:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 // MyProject.dpr
 // ...
 var
-  MyVar: string;
+  MyVar: string; // Noncompliant
 begin
   MyVar := Readln;
   Writeln(MyVar);
 end.
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 // MyProject.dpr
 // ...

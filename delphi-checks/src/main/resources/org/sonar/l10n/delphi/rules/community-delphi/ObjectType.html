@@ -8,12 +8,14 @@
 <p>
   Change the <code>object</code> keyword to <code>class</code>:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
   type
-    TFoo = object
+    TFoo = object // Noncompliant
       // ...
     end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
   type
     TFoo = class

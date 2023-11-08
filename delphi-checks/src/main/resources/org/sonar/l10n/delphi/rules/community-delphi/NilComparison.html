@@ -13,14 +13,17 @@
 </ul>
 <h2>How to fix it</h2>
 <p>Replace the nil comparison with a call to <code>Assigned</code>:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure LogAssigned(MyObj: TObject);
 begin
-  if MyObj &lt;> nil then begin
+  if MyObj &lt;> nil then begin // Noncompliant
     Writeln('Object is assigned');
   end;
 end;
-</pre><pre data-diff-id="1" data-diff-type="compliant">
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 procedure LogAssigned(MyObj: TObject);
 begin
   if Assigned(MyObj) then begin

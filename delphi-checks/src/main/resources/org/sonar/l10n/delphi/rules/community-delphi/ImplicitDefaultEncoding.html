@@ -23,9 +23,11 @@
 
 <h2>How to fix it</h2>
 <p>Explicitly specify the encoding:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-MyStringList.LoadFromFile(FileName);
+MyStringList.LoadFromFile(FileName); // Noncompliant
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 MyStringList.LoadFromFile(FileName, TEncoding.UTF8);
 </pre>

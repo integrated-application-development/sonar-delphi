@@ -14,17 +14,19 @@
 </p>
 <h2>How to fix it</h2>
 <p>Reorder the offending visibility section into fields, then methods, then properties:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   TMyType = class(TObject)
   private
     FMyVar: Integer;
     property MyVar: Integer read FMyVar;
-    procedure DoThing;
+    procedure DoThing; // Noncompliant
     procedure DoAnotherThing;
     property MyOtherVar: Integer read FMyVar;
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   TMyType = class(TObject)

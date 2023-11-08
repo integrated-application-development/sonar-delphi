@@ -15,6 +15,7 @@
 </ul>
 <h2>How to fix it</h2>
 <p>Assign the variable with an initial value before using it.</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure GetCount(MyList: TList);
 var
@@ -24,9 +25,10 @@ begin
     ListSize := MyList.Count;
   end;
 
-  Writeln(Format('The list has %d elements', [ListSize]);
+  Writeln(Format('The list has %d elements', [ListSize])); // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure GetCount(MyList: TList);
 var
@@ -37,7 +39,7 @@ begin
     ListSize := MyList.Count;
   end;
 
-  Writeln(Format('The list has %d elements', [ListSize]);
+  Writeln(Format('The list has %d elements', [ListSize]));
 end;
 </pre>
 <h2>Resources</h2>

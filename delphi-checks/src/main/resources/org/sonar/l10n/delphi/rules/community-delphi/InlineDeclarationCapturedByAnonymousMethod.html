@@ -15,10 +15,11 @@
 </ol>
 <h2>How to fix it</h2>
 <p>Use a traditional variable declaration instead of an an inline declaration:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example;
 begin
-  var MyObj := TFoo.Create as IFoo;
+  var MyObj := TFoo.Create as IFoo; // Noncompliant
 
   TTask.Run(
     procedure begin
@@ -28,6 +29,7 @@ begin
   );
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example;
 var

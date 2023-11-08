@@ -9,15 +9,17 @@
 </p>
 <h2>How to fix it</h2>
 <p>Indent the visibility specifier at the same level as the enclosing type declaration:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
   type
     TFoo = class(TObject)
-      private
+      private // Noncompliant
       procedure Bar;
-      public
-      public constructor Create;
+      public // Noncompliant
+      public constructor Create; // Noncompliant
     end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
   type
     TFoo = class(TObject)

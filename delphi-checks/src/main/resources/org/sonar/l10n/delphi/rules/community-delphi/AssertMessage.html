@@ -6,12 +6,14 @@
 </p>
 <h2>How to fix it</h2>
 <p>Add a descriptive message string as the second parameter to the <code>System.Assert</code> call:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Foo(Bar: TObject);
 begin
-  Assert(Assigned(Bar));
+  Assert(Assigned(Bar)); // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Foo(Bar: TObject);
 begin

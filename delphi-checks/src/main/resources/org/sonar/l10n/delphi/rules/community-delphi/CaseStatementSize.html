@@ -16,14 +16,14 @@
   If it is a case statement with one item, replace it with an <code>if</code> statement using
   the same condition.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-// Noncompliant
-case MyNum of
+case MyNum of // Noncompliant
   0: Exit;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
-// Compliant
 if MyNum = 0 then begin
   Exit;
 end;
@@ -32,14 +32,16 @@ end;
   If it is a case statement with one item and an <code>else</code>, replace the item with an
   <code>if</code> statement using the same condition and a corresponding identical <code>else</code>.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
-case MyNum of
+case MyNum of // Noncompliant
   0: Exit;
   else begin
     Writeln('Not 0!');
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 if MyNum = 0 then begin
   Exit;

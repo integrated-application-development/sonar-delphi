@@ -20,16 +20,18 @@ end;
 </pre>
 <h2>How to fix it</h2>
 <p>Declare the type of the inline const declaration explicitly:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example;
 const
   Foo = 123; // ShortInt
   Bar = [1, 2, 3]; // set of Byte
 begin
-  const Beep = 123; // Integer
-  const Boop = [1, 2, 3]; // Array of Integer
+  const Beep = 123; // Noncompliant, inferred to Integer
+  const Boop = [1, 2, 3]; // Noncompliant, inferred to array of Integer
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example;
 const

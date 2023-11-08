@@ -5,6 +5,7 @@ cause access violations if used improperly.</p>
 <p>Remove the improper cast by refactoring the code. If the intention is to provide additional
   methods to operate on an object, consider using a class helper instead.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   TAdditionalFunctionality = class(TObject)
@@ -14,10 +15,11 @@ type
 
 procedure DoStuff(MyObj: TSecretString);
 begin
-  TAdditionalFunctionality(MyObj).DebugPrint;
+  TAdditionalFunctionality(MyObj).DebugPrint; // Noncompliant
 end;
 </pre>
-<pre data-diff-id="2" data-diff-type="compliant">
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 type
   TAdditionalFunctionality = class helper for TSecretString
   public

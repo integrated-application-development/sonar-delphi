@@ -14,16 +14,17 @@
 </p>
 <h2>How to fix it</h2>
 <p>
-  Rename the destructor to <code>Destroy</code> and/or mark it with the
-  <code>override</code> directive.
+  Ensure the destructor is named <code>Destroy</code> and marked with the <code>override</code>
+  directive.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   TNode = class(TObject)
   private
     FChildNode: TNode;
   public
-    destructor CustomDestroy;
+    destructor CustomDestroy; // Noncompliant
   end;
 
 destructor TNode.CustomDestroy;
@@ -31,6 +32,7 @@ begin
   FChildNode.Free;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   TNode = class(TObject)

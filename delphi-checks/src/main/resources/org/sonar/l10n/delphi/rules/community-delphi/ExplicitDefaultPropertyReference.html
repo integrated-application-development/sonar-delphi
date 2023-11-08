@@ -6,9 +6,11 @@
 </p>
 <h2>How to fix it</h2>
 <p>Use the array accessor directly on the object:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-Baz := Bar.Items[0];
+Baz := Bar.Items[0]; // Noncompliant
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 Baz := Bar[0];
 </pre>

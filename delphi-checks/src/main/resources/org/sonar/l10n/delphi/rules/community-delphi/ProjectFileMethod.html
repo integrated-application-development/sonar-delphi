@@ -13,10 +13,11 @@
   Move any methods out of the project file and into a separate unit, which you can then
   reference from the initialization section of the project file:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 // MyProject.dpr
 // ...
-procedure Foo;
+procedure Foo; // Noncompliant
 begin
   // ...
 end;
@@ -25,6 +26,7 @@ begin
   Foo;
 end.
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 // MyProject.dpr
 // ...

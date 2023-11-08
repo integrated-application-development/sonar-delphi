@@ -11,8 +11,9 @@
 </p>
 <h2>How to fix it</h2>
 <p>Consider breaking the method up into multiple methods with different responsibilities:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-procedure TMyObject.DoThing;
+procedure TMyObject.DoThing; // Noncompliant
 var
   MyFoo: TFoo;
   MyBar: TBar;
@@ -24,6 +25,7 @@ begin
   FMyBar := MyBar;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure TMyObject.DoFooThing;
 var
@@ -42,8 +44,9 @@ begin
 end;
 </pre>
 <p>Another option is to inline unnecessarily verbose variables:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
-procedure TMyObject.DoThing;
+procedure TMyObject.DoThing; // Noncompliant
 var
   MyFoo: TFoo;
   MyBar: TBar;
@@ -55,6 +58,7 @@ begin
   FMyBar := MyBar;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure TMyObject.DoThing;
 begin

@@ -2,13 +2,15 @@
 <p>Empty field sections are superfluous and should be removed.</p>
 <h2>How to fix it</h2>
 Remove the empty field section:
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   TFoo = class(TObject)
-  var
+  var // Noncompliant
     procedure Bar;
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   TFoo = class(TObject)

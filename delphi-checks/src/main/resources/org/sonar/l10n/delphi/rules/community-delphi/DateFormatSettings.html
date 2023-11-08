@@ -25,12 +25,14 @@
   Create a local <code>TFormatSettings</code> instance, configure it with the desired date
   formatting properties, and pass it in as the last parameter of the formatting method.
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure PrintCurrentTime;
 begin
-  Writeln(DateToStr(Now));
+  Writeln(DateToStr(Now)); // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure PrintCurrentTime;
 var

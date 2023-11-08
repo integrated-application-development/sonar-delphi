@@ -15,13 +15,14 @@
   <code>TEncoding.GetBytes</code> to convert the contents of the string into bytes using a specific
   encoding:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure WriteToFile(MyStr: string);
 var
   MyAnsiStr: AnsiString;
   MyStream: TFileStream;
 begin
-  MyAnsiStr := AnsiString(MyStr);
+  MyAnsiStr := AnsiString(MyStr); // Noncompliant
 
   MyStream := TFileStream.Create('myfile.txt');
   try
@@ -31,6 +32,7 @@ begin
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure WriteToFile(MyStr: string);
 var

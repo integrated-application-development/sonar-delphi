@@ -6,12 +6,14 @@
 <p>This rule raises an issue when <code>NOSONAR</code> is used.</p>
 <h2>How to fix it</h2>
 <p>Remove the <code>NOSONAR</code> comment:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   MyMisnamedType = class(TObject) // NOSONAR
     // ...
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   MyMisnamedType = class(TObject)

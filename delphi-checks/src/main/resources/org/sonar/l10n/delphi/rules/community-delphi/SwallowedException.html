@@ -5,24 +5,28 @@
 </p>
 <h2>How to fix it</h2>
 <p>If the exception should be handled at a higher level, remove the exception handler:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 try
   RaiseException;
-except
+except // Noncompliant
   // Do nothing
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 RaiseException;
 </pre>
 <p>If the exception should be handled at this level, add some logic to handle it:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 try
   RaiseException;
-except
+except // Noncompliant
   // Do nothing
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 try
   RaiseException;

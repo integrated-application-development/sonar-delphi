@@ -20,12 +20,13 @@
 <p>
   Move the import into the implementation uses clause:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 unit Unit1;
 
 interface
 
-uses System.IOUtils;
+uses System.IOUtils; // Noncompliant
 
 procedure Run;
 
@@ -36,6 +37,7 @@ begin
   TFile.WriteAllText('myfile.txt', 'Hello world');
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 unit Unit1;
 

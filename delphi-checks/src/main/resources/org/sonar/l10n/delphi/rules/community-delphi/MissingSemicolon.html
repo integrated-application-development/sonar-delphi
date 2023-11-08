@@ -9,14 +9,16 @@
 </p>
 <h2>How to fix it</h2>
 <p>Add the missing semicolon:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example;
 begin
   Foo;
   Bar;
-  Baz
+  Baz // Noncompliant
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example;
 begin

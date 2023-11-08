@@ -12,13 +12,15 @@
 </ul>
 <h2>How to fix it</h2>
 <p>Use a property to access the internal variable in a controlled way:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   TMyType = class(TObject)
   public
-    FName: string;
+    FName: string; // Noncompliant
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   TMyType = class(TObject)
@@ -38,7 +40,7 @@ type
   private
     FName: string;
   public
-    property MyName: string read FName write FName;
+    property MyName: string read FName write FName; // Mutable
   end;
 </pre>
 <pre data-diff-id="2" data-diff-type="compliant">
@@ -47,6 +49,6 @@ type
   private
     FName: string;
   public
-    property MyName: string read FName;
+    property MyName: string read FName; // Immutable
   end;
 </pre>

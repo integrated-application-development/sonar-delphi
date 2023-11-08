@@ -8,6 +8,7 @@
 <p>
   Ensure that the function's implementation signature matches its declaration:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 interface
 
@@ -17,11 +18,12 @@ end;
 
 implementation
 
-function TFoo.Bar(Baz: Byte);
+function TFoo.Bar(Baz: Byte); // Noncompliant
 begin
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 interface
 

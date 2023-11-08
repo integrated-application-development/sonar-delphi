@@ -7,9 +7,10 @@
 </p>
 <h2>How to fix it</h2>
 <p>Consider if the subroutines can be inlined to the body of the main method:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure DoThing;
-  procedure DoSubThing;
+  procedure DoSubThing; // Noncompliant
   begin
     Log('Hello!');
   end;
@@ -19,6 +20,7 @@ begin
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure DoThing;
 begin
@@ -27,17 +29,20 @@ begin
 end;
 </pre>
 <p>Otherwise, extract the subroutines out into one or more independent methods:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 procedure DoThing;
-  procedure DoSubThing;
+  procedure DoSubThing; // Noncompliant
   begin
     // ...
   end;
   // ...
 begin
+  DoSubThing;
   // ...
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 procedure DoSubThing;
 begin
@@ -46,6 +51,7 @@ end;
 
 procedure DoThing;
 begin
+  DoSubThing;
   // ...
 end;
 </pre>

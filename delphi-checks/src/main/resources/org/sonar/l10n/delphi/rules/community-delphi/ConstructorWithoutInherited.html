@@ -16,16 +16,18 @@
   If there is a parent constructor with the same parameters, adding an <code>inherited</code>
   to the beginning of the method will call it:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 constructor TParent.Create;
   // ...
 end;
 
-constructor TChild.Create;
+constructor TChild.Create; // Noncompliant
 begin
   FMyStr := 'hello!';
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 constructor TParent.Create;
   // ...
@@ -41,16 +43,18 @@ end;
   Otherwise, the desired parent constructor can be called using an <code>inherited</code> keyword
   followed by its name and arguments:
 </p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="2" data-diff-type="noncompliant">
 constructor TParent.Create(MyInt: Integer);
   // ...
 end;
 
-constructor TChild.Create(MyStr: string; MyInt: Integer);
+constructor TChild.Create(MyStr: string; MyInt: Integer); // Noncompliant
 begin
   FMyStr := MyStr;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
 constructor TParent.Create(MyInt: Integer);
   // ...

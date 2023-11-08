@@ -7,14 +7,16 @@
 </ul>
 <h2>How to fix it</h2>
 <p>Explicitly specify the loop variable's type:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure Example;
 begin
-  for var I := 1 to 100 do begin
+  for var I := 1 to 100 do begin // Noncompliant
     Continue;
   end;
 end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 procedure Example;
 begin

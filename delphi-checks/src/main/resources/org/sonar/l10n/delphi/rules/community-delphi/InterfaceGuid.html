@@ -9,13 +9,15 @@
 </p>
 <h2>How to fix it</h2>
 <p>Add a GUID in square brackets at the beginning of the interface declaration:</p>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
-  IMyInterface = interface
+  IMyInterface = interface // Noncompliant
     procedure MyProc;
     function MyFunc: Integer;
   end;
 </pre>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 type
   IMyInterface = interface
