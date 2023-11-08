@@ -90,7 +90,7 @@ In addition to template rules, SonarDelphi can be extended with custom rules plu
 ## Configuration
 
 You can configure SonarDelphi [analysis parameters](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/analysis-parameters/)
-on the SonarQube server at **Administration > General Settings > Languages > Delphi**.
+on the SonarQube server at **Administration > General Settings > Delphi**.
 
 For the full list, see [Language-specific properties](docs/CONFIGURATION.md#language-specific-properties).
 

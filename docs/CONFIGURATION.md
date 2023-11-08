@@ -2,7 +2,7 @@
 
 SonarDelphi exposes a number of language-specific properties as [analysis parameters](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/analysis-parameters/),
 which can be:
-* configured via the SonarQube UI (**Administration > General Settings > Languages > Delphi**)
+* configured via the SonarQube UI (**Administration > General Settings > Delphi**)
 * specified in `sonar-project.properties`
 * passed as command-line parameters to the `sonar-scanner`
 
