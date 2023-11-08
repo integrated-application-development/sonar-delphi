@@ -43,7 +43,7 @@ public final class DelphiProperties {
   public static final String NUNIT_REPORT_PATHS_PROPERTY = "sonar.delphi.nunit.reportPaths";
   public static final String COVERAGE_REPORT_KEY = "sonar.delphi.coverage.reportPaths";
 
-  private static final String DELPHI_CATEGORY = "delphi";
+  private static final String DELPHI_CATEGORY = "Delphi";
   private static final String GENERAL_SUBCATEGORY = "General";
   private static final String TOOLCHAIN_SUBCATEGORY = "Toolchain";
   private static final String COMPILER_OPTIONS_SUBCATEGORY = "Compiler Options";
