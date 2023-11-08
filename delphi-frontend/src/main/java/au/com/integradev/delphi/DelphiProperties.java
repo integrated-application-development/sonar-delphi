@@ -46,7 +46,7 @@ public final class DelphiProperties {
   private static final String DELPHI_CATEGORY = "Delphi";
   private static final String GENERAL_SUBCATEGORY = "General";
   private static final String TOOLCHAIN_SUBCATEGORY = "Toolchain";
-  private static final String COMPILER_OPTIONS_SUBCATEGORY = "Compiler Options";
+  private static final String PROJECT_OPTIONS_SUBCATEGORY = "Project Options";
   private static final String TEST_SUBCATEGORY = "Test and Coverage";
 
   public static final String EXCLUSIONS_DEFAULT_VALUE = "**/__history/**,**/__recovery/**";
@@ -117,7 +117,7 @@ public final class DelphiProperties {
             .build(),
         PropertyDefinition.builder(DelphiProperties.SEARCH_PATH_KEY)
             .category(DELPHI_CATEGORY)
-            .subCategory(COMPILER_OPTIONS_SUBCATEGORY)
+            .subCategory(PROJECT_OPTIONS_SUBCATEGORY)
             .name("Search path")
             .description(
                 "List of directories to search for include files and unit imports."
@@ -127,7 +127,7 @@ public final class DelphiProperties {
             .build(),
         PropertyDefinition.builder(DelphiProperties.CONDITIONAL_DEFINES_KEY)
             .category(DELPHI_CATEGORY)
-            .subCategory(COMPILER_OPTIONS_SUBCATEGORY)
+            .subCategory(PROJECT_OPTIONS_SUBCATEGORY)
             .name("Conditional defines")
             .description(
                 "List of conditional defines to define while parsing the project, in addition to"
@@ -137,7 +137,7 @@ public final class DelphiProperties {
             .build(),
         PropertyDefinition.builder(DelphiProperties.CONDITIONAL_UNDEFINES_KEY)
             .category(DELPHI_CATEGORY)
-            .subCategory(COMPILER_OPTIONS_SUBCATEGORY)
+            .subCategory(PROJECT_OPTIONS_SUBCATEGORY)
             .name("Conditional undefines")
             .description(
                 "List of conditional defines to consider undefined while parsing the project."
@@ -148,7 +148,7 @@ public final class DelphiProperties {
             .build(),
         PropertyDefinition.builder(DelphiProperties.UNIT_SCOPE_NAMES_KEY)
             .category(DELPHI_CATEGORY)
-            .subCategory(COMPILER_OPTIONS_SUBCATEGORY)
+            .subCategory(PROJECT_OPTIONS_SUBCATEGORY)
             .name("Unit scope names")
             .description("List of unit scope names, used for import resolution.")
             .multiValues(true)
@@ -156,7 +156,7 @@ public final class DelphiProperties {
             .build(),
         PropertyDefinition.builder(DelphiProperties.UNIT_ALIASES_KEY)
             .category(DELPHI_CATEGORY)
-            .subCategory(COMPILER_OPTIONS_SUBCATEGORY)
+            .subCategory(PROJECT_OPTIONS_SUBCATEGORY)
             .name("Unit aliases")
             .description(
                 "List of unit aliases, used for import resolution. Format: `AliasName=UnitName`")
