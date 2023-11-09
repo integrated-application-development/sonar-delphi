@@ -59,15 +59,14 @@ class StringLiteralRegularExpressionCheckTest {
 
   @Test
   void testInvalidRegexShouldThrow() {
-    assertThatThrownBy(
-            () ->
-                CheckVerifier.newVerifier()
-                    .withCheck(createCheck("*"))
-                    .onFile(
-                        new DelphiTestUnitBuilder()
-                            .appendDecl("const")
-                            .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR';"))
-                    .verifyIssues())
-        .isInstanceOf(FatalAnalysisError.class);
+    var verifier =
+        CheckVerifier.newVerifier()
+            .withCheck(createCheck("*"))
+            .onFile(
+                new DelphiTestUnitBuilder()
+                    .appendDecl("const")
+                    .appendDecl("  C_HardcodedIDRef = 'FOO1234X6U8BAR';"));
+
+    assertThatThrownBy(verifier::verifyIssues).isInstanceOf(FatalAnalysisError.class);
   }
 }

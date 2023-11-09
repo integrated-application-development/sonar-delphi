@@ -160,8 +160,10 @@ class TypeComparerTest {
     compare(IntrinsicType.EXTENDED, IntrinsicType.CURRENCY, CONVERT_LEVEL_7);
     compare(IntrinsicType.EXTENDED, IntrinsicType.COMP, CONVERT_LEVEL_7);
 
-    assertThatThrownBy(
-            () -> TypeComparer.compareRealToReal(unknownType(), toType(IntrinsicType.SINGLE)))
+    Type unknown = unknownType();
+    Type single = toType(IntrinsicType.SINGLE);
+
+    assertThatThrownBy(() -> TypeComparer.compareRealToReal(unknown, single))
         .isInstanceOf(AssertionError.class);
   }
 
@@ -212,10 +214,9 @@ class TypeComparerTest {
 
     compare(typeType("Test", IntrinsicType.UNICODESTRING), IntrinsicType.UNICODESTRING, EQUAL);
 
-    assertThatThrownBy(
-            () ->
-                TypeComparer.compareStringToString(
-                    unknownType(), toType(IntrinsicType.UNICODESTRING)))
+    Type unknown = unknownType();
+    Type unicodeString = toType(IntrinsicType.UNICODESTRING);
+    assertThatThrownBy(() -> TypeComparer.compareStringToString(unknown, unicodeString))
         .isInstanceOf(AssertionError.class);
   }
 
@@ -274,7 +275,8 @@ class TypeComparerTest {
     compare(IntrinsicType.CHAR, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_6);
     assertThat(TypeComparer.compareWideCharToString(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
-    assertThatThrownBy(() -> TypeComparer.compareCharToString(unknownType(), unknownType()))
+    Type unknown = unknownType();
+    assertThatThrownBy(() -> TypeComparer.compareCharToString(unknown, unknown))
         .isInstanceOf(AssertionError.class);
   }
 
@@ -285,10 +287,10 @@ class TypeComparerTest {
     compare(IntrinsicType.WIDECHAR, IntrinsicType.ANSICHAR, CONVERT_LEVEL_2);
     assertThat(TypeComparer.compareWideCharToChar(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
-    assertThatThrownBy(() -> TypeComparer.compareCharToString(unknownType(), unknownType()))
+    Type unknown = unknownType();
+    assertThatThrownBy(() -> TypeComparer.compareCharToString(unknown, unknown))
         .isInstanceOf(AssertionError.class);
-
-    assertThatThrownBy(() -> TypeComparer.compareCharToChar(unknownType(), unknownType()))
+    assertThatThrownBy(() -> TypeComparer.compareCharToChar(unknown, unknown))
         .isInstanceOf(AssertionError.class);
   }
 
@@ -384,7 +386,8 @@ class TypeComparerTest {
     compare(unknownType(), toDynamicArray, INCOMPATIBLE_TYPES);
     compare(unknownType(), toFixedArray, INCOMPATIBLE_TYPES);
 
-    assertThat(TypeComparer.compareOpenArray(set(IntrinsicType.INTEGER), toOpenArray))
+    CollectionType integerSet = set(IntrinsicType.INTEGER);
+    assertThat(TypeComparer.compareOpenArray(integerSet, toOpenArray))
         .isEqualTo(INCOMPATIBLE_TYPES);
   }
 

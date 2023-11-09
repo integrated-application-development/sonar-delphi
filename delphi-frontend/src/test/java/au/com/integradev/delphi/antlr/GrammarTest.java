@@ -33,6 +33,7 @@ import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
@@ -240,11 +241,10 @@ class GrammarTest {
 
   @Test
   void testEmptyFileShouldThrow() {
-    assertThatThrownBy(
-            () ->
-                DelphiFile.from(
-                    DelphiUtils.getResource(BASE_DIR + "EmptyFile.pas"),
-                    DelphiFileUtils.mockConfig()))
+    File emptyFile = DelphiUtils.getResource(BASE_DIR + "EmptyFile.pas");
+    DelphiFileConfig config = DelphiFileUtils.mockConfig();
+
+    assertThatThrownBy(() -> DelphiFile.from(emptyFile, config))
         .isInstanceOf(DelphiFileConstructionException.class);
   }
 }

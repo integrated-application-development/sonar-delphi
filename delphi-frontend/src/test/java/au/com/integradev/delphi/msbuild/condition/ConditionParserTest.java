@@ -64,12 +64,10 @@ class ConditionParserTest {
     assertThat(parse("Foo()")).isInstanceOf(FunctionCallExpression.class);
     assertThatThrownBy(() -> parse("HasTrailingSlash('./foo/bar'"))
         .isInstanceOf(ConditionParserError.class);
-    assertThatThrownBy(
-            () -> {
-              ConditionParser parser = new ConditionParser();
-              parser.parse(List.of(new Token(TokenType.FUNCTION, "HasTrailingSlash")));
-            })
-        .isInstanceOf(ConditionParserError.class);
+
+    ConditionParser parser = new ConditionParser();
+    List<Token> tokenList = List.of(new Token(TokenType.FUNCTION, "HasTrailingSlash"));
+    assertThatThrownBy(() -> parser.parse(tokenList)).isInstanceOf(ConditionParserError.class);
   }
 
   @Test
