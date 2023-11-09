@@ -223,8 +223,8 @@ public class DelphiPreprocessor {
         String path = includeFile.toAbsolutePath().normalize().toString();
 
         if (path.equals(lexer.getSourceName())) {
-          throw new RuntimeException(
-              "Self-referencing include file <" + includeFile.toAbsolutePath() + ">");
+          throw new SelfReferencingIncludeFileException(
+              "Include file <" + includeFile.toAbsolutePath() + "> references itself");
         }
 
         DelphiFileStream fileStream = new DelphiFileStream(path, config.getEncoding());
@@ -317,5 +317,11 @@ public class DelphiPreprocessor {
 
   public TypeFactory getTypeFactory() {
     return config.getTypeFactory();
+  }
+
+  static class SelfReferencingIncludeFileException extends RuntimeException {
+    SelfReferencingIncludeFileException(String message) {
+      super(message);
+    }
   }
 }

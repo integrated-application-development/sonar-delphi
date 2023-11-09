@@ -111,7 +111,7 @@ class DelphiScopeImplTest {
     scope.addDeclaration(createVariable("Foo"));
 
     assertThatThrownBy(() -> scope.addDeclaration(createClassType("Foo")))
-        .isInstanceOf(RuntimeException.class);
+        .isInstanceOf(DuplicatedDeclarationException.class);
   }
 
   @Test
@@ -119,7 +119,7 @@ class DelphiScopeImplTest {
     scope.addDeclaration(createType("Bar"));
 
     assertThatThrownBy(() -> scope.addDeclaration(createClassType("Bar")))
-        .isInstanceOf(RuntimeException.class);
+        .isInstanceOf(DuplicatedDeclarationException.class);
   }
 
   @Test
