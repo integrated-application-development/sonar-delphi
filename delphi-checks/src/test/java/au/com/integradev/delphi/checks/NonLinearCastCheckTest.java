@@ -132,6 +132,54 @@ class NonLinearCastCheckTest {
   }
 
   @Test
+  void testCastOfInstanceCreatedFromFunctionCallShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new NonLinearCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class of TMyType;")
+                .appendDecl("  TMyType = class abstract(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    class function GetResultClass(const Str: string): TMyClass;")
+                .appendDecl("  end;")
+                .appendDecl("  TOtherType = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TOtherType.Bar;")
+                .appendImpl("var")
+                .appendImpl("  MyObj: TMyType;")
+                .appendImpl("begin")
+                .appendImpl("  MyObj := TMyType.GetResultClass('abc').Create as TMyType;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testCastOfInstanceCreatedFromArrayAccessShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new NonLinearCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TMyClass = class of TMyType;")
+                .appendDecl("  TMyType = class abstract(TObject)")
+                .appendDecl("  end;")
+                .appendDecl("  TOtherType = class(TObject)")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TOtherType.Bar;")
+                .appendImpl("const")
+                .appendImpl("  C_Classes: array of TMyClass = (TMyType);")
+                .appendImpl("var")
+                .appendImpl("  MyObj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  MyObj := C_Classes[0].Create as TMyType;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testCastToSiblingClassShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new NonLinearCastCheck())
