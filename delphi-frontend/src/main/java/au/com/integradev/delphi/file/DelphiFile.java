@@ -84,6 +84,12 @@ public interface DelphiFile {
     }
   }
 
+  class EmptyDelphiFileException extends RuntimeException {
+    EmptyDelphiFileException(String message) {
+      super(message);
+    }
+  }
+
   static DelphiFileConfig createConfig(
       String encoding,
       DelphiPreprocessorFactory preprocessorFactory,
@@ -125,7 +131,7 @@ public interface DelphiFile {
       delphiFile.setSourceCodeLines(readLines(sourceFile, config.getEncoding()));
       delphiFile.setTokens(createTokenList(delphiFile, preprocessor.getTokenStream()));
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
-    } catch (IOException | RecognitionException | RuntimeException e) {
+    } catch (IOException | RecognitionException | EmptyDelphiFileException e) {
       throw new DelphiFileConstructionException(e);
     }
   }
@@ -154,7 +160,7 @@ public interface DelphiFile {
                     token.getChannel() == Token.HIDDEN_CHANNEL || token.getType() == Token.EOF);
 
     if (isEmptyFile) {
-      throw new RuntimeException("Empty files are not allowed.");
+      throw new EmptyDelphiFileException("Empty files are not allowed.");
     }
 
     DelphiParser parser = new DelphiParser(tokenStream);

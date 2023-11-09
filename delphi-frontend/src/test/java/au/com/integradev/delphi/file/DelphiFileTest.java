@@ -21,6 +21,7 @@ package au.com.integradev.delphi.file;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
+import au.com.integradev.delphi.file.DelphiFile.EmptyDelphiFileException;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import java.io.File;
@@ -34,6 +35,6 @@ class DelphiFileTest {
 
     assertThatThrownBy(() -> DelphiFile.from(sourceFile, config))
         .isInstanceOf(DelphiFileConstructionException.class)
-        .hasCauseInstanceOf(RuntimeException.class);
+        .hasCauseInstanceOf(EmptyDelphiFileException.class);
   }
 }
