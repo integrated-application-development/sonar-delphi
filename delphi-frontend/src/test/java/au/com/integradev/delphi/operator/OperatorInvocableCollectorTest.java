@@ -31,6 +31,7 @@ import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.operator.Operator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class OperatorInvocableCollectorTest {
@@ -38,7 +39,8 @@ class OperatorInvocableCollectorTest {
   void testUnhandledOperatorShouldThrow() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThatThrownBy(() -> collector.collect(TypeFactory.unknownType(), mock(Operator.class)))
+    Type unknownType = TypeFactory.unknownType();
+    assertThatThrownBy(() -> collector.collect(unknownType, mock(Operator.class)))
         .withFailMessage("Unhandled Operator")
         .isInstanceOf(AssertionError.class);
   }

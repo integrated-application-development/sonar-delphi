@@ -21,12 +21,14 @@ package au.com.integradev.delphi.symbol;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class QualifiedNameTest {
   @Test
   void testEmptyQualifiedNameShouldThrow() {
-    assertThatThrownBy(() -> new QualifiedNameImpl(Collections.emptyList()))
+    List<String> emptyList = Collections.emptyList();
+    assertThatThrownBy(() -> new QualifiedNameImpl(emptyList))
         .isInstanceOf(IllegalArgumentException.class);
     assertThatThrownBy(QualifiedNameImpl::of).isInstanceOf(IllegalArgumentException.class);
   }

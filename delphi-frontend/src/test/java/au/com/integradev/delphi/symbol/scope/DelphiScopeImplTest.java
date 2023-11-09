@@ -110,7 +110,8 @@ class DelphiScopeImplTest {
   void testVariableAndTypeWithSameNameAreDuplicates() {
     scope.addDeclaration(createVariable("Foo"));
 
-    assertThatThrownBy(() -> scope.addDeclaration(createClassType("Foo")))
+    TypeNameDeclaration classType = createClassType("Foo");
+    assertThatThrownBy(() -> scope.addDeclaration(classType))
         .isInstanceOf(DuplicatedDeclarationException.class);
   }
 
@@ -118,7 +119,8 @@ class DelphiScopeImplTest {
   void testTypesWithDifferentKindAndSameNameAreDuplicates() {
     scope.addDeclaration(createType("Bar"));
 
-    assertThatThrownBy(() -> scope.addDeclaration(createClassType("Bar")))
+    TypeNameDeclaration classType = createClassType("Bar");
+    assertThatThrownBy(() -> scope.addDeclaration(classType))
         .isInstanceOf(DuplicatedDeclarationException.class);
   }
 
