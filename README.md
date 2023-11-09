@@ -1,5 +1,6 @@
 # ![SonarDelphi](docs/images/sonar-delphi-title-gh.png)
 
+[![quality gate](https://sonarcloud.io/api/project_badges/measure?project=integrated-application-development_sonar-delphi&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=integrated-application-development_sonar-delphi)
 [![format](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/format.yml/badge.svg?branch=master&event=push)](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/format.yml)
 [![build](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/build.yml/badge.svg?branch=master&event=push)](https://github.com/integrated-application-development/sonar-delphi/actions/workflows/build.yml)
 
