@@ -20,6 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import static java.util.regex.Pattern.compile;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -173,7 +174,7 @@ public class CommentedOutCodeCheck extends DelphiCheck {
     return context;
   }
 
-  private static List<Integer> handleComment(DelphiToken comment) {
+  private List<Integer> handleComment(DelphiToken comment) {
     List<Integer> commentedOutCodeLines = new ArrayList<>();
     String commentString = extractCommentString(comment);
     List<String> lines = Splitter.on(NEW_LINE_DELIMITER).splitToList(commentString);
@@ -201,9 +202,8 @@ public class CommentedOutCodeCheck extends DelphiCheck {
     }
   }
 
-  private static boolean isLineOfCode(String line) {
-    long deadline = System.currentTimeMillis() + REGEX_TIMEOUT_PER_LINE_MILLIS;
-    CharSequence input = new RegexTimeoutCharSequence(line, deadline);
+  private boolean isLineOfCode(String line) {
+    CharSequence input = createRegexInput(line);
     try {
       for (Pattern pattern : CODE_PATTERNS) {
         if (pattern.matcher(input).find()) {
@@ -218,7 +218,14 @@ public class CommentedOutCodeCheck extends DelphiCheck {
     return false;
   }
 
-  private static class RegexTimeoutCharSequence implements CharSequence {
+  @VisibleForTesting
+  CharSequence createRegexInput(CharSequence sequence) {
+    long deadline = System.currentTimeMillis() + REGEX_TIMEOUT_PER_LINE_MILLIS;
+    return new RegexTimeoutCharSequence(sequence, deadline);
+  }
+
+  @VisibleForTesting
+  static class RegexTimeoutCharSequence implements CharSequence {
     private final CharSequence sequence;
     private final long deadline;
 

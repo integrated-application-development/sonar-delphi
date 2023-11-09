@@ -18,7 +18,14 @@
  */
 package au.com.integradev.delphi.checks;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.checks.CommentedOutCodeCheck.RegexTimeoutCharSequence;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 
@@ -285,5 +292,46 @@ class CommentedOutCodeCheckTest {
                 .appendImpl("  *)")
                 .appendImpl("end;"))
         .verifyIssues();
+  }
+
+  @Test
+  void testTimeoutShouldNotAddIssue() {
+    CommentedOutCodeCheck check = spy();
+    when(check.createRegexInput(anyString()))
+        .thenAnswer(invocation -> new RegexTimeoutCharSequence(invocation.getArgument(0), 0));
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("// type")
+                .appendDecl("//   MyInterface = interface;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testStackOverflowShouldNotAddIssue() {
+    CharSequence regexInput =
+        mock(
+            invocation -> {
+              throw new StackOverflowError();
+            });
+
+    CommentedOutCodeCheck check = spy();
+    when(check.createRegexInput(anyString())).thenReturn(regexInput);
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("// type")
+                .appendDecl("//   MyInterface = interface;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testRegexTimeoutCharSequenceSubsequence() {
+    CharSequence charSequence = new RegexTimeoutCharSequence("Hello, World!", 0);
+    assertThat(charSequence.subSequence(0, 5)).asString().isEqualTo("Hello");
   }
 }
