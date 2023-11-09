@@ -97,6 +97,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.min.version>3.3.9</maven.min.version>
     <jdk.min.version>11</jdk.min.version>
+    <!-- SonarCloud scan -->
+    <sonar.organization>integrated-application-development</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <!-- Exclude generated files. -->
     <sonar.issue.ignore.allfile>r1</sonar.issue.ignore.allfile>
     <sonar.issue.ignore.allfile.r1.fileRegexp>@(javax\\.annotation\\.)?Generated</sonar.issue.ignore.allfile.r1.fileRegexp>
