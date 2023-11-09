@@ -16,9 +16,6 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    env:
-      HTTP_PROXY_SERVER: ''
-      HTTP_PROXY_PORT: ''
     steps:
       - uses: actions/checkout@v4
         with:

@@ -14,6 +14,11 @@
 
   <name>SonarDelphi :: ITs</name>
 
+  <properties>
+    <proxyHost/>
+    <proxyPort/>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -59,9 +64,34 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>@{argLine} -Dhttps.proxyHost=${env.HTTP_PROXY_SERVER} -Dhttps.proxyPort=${env.HTTP_PROXY_PORT}</argLine>
+          <argLine>@{argLine} -Dhttps.proxyHost=${proxyHost} -Dhttps.proxyPort=${proxyPort}</argLine>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>proxy-host-defined</id>
+      <activation>
+        <property>
+          <name>env.HTTP_PROXY_SERVER</name>
+        </property>
+      </activation>
+      <properties>
+        <proxyHost>${env.HTTP_PROXY_SERVER}</proxyHost>
+      </properties>
+    </profile>
+    <profile>
+      <id>proxy-port-defined</id>
+      <activation>
+        <property>
+          <name>env.HTTP_PROXY_PORT</name>
+        </property>
+      </activation>
+      <properties>
+        <proxyPort>${env.HTTP_PROXY_PORT}</proxyPort>
+      </properties>
+    </profile>
+  </profiles>
 </project>
