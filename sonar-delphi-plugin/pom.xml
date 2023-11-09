@@ -16,15 +16,6 @@
   <name>SonarDelphi :: Plugin</name>
   <description>Code Analyzer for Delphi</description>
   <url>https://github.com/integrated-application-development/sonar-delphi</url>
-  <scm>
-    <connection>scm:git:git@github.com:integrated-application-development/sonar-delphi.git
-    </connection>
-    <developerConnection>
-      scm:git:git@github.com:integrated-application-development/sonar-delphi.git
-    </developerConnection>
-    <url>https://github.com/integrated-application-development/sonar-delphi</url>
-    <tag>HEAD</tag>
-  </scm>
 
   <dependencies>
     <dependency>

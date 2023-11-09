@@ -24,6 +24,13 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  
+  <scm>
+    <connection>scm:git:git@github.com:integrated-application-development/sonar-delphi.git</connection>
+    <developerConnection>scm:git:git@github.com:integrated-application-development/sonar-delphi.git</developerConnection>
+    <url>https://github.com/integrated-application-development/sonar-delphi</url>
+    <tag>HEAD</tag>
+  </scm>
 
   <developers>
     <developer>
