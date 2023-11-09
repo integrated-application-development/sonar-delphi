@@ -1030,7 +1030,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Copy/paste detection. (CPD)
 - Syntax highlighting.
 
-## [0.1.0] - 2019-07-29
+## 0.1.0 - 2019-07-29
 
 ### Added
 
@@ -1117,4 +1117,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/integrated-application-development/sonar-delphi/releases/tag/v0.1.0
