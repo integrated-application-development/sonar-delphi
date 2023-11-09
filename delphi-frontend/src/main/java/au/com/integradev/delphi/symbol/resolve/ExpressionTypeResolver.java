@@ -99,7 +99,7 @@ public final class ExpressionTypeResolver {
 
     for (DelphiNode child : expression.getChildren()) {
       if (child instanceof Typed) {
-        type = handleTyped((Typed) child);
+        type = handleTyped((Typed) child, type.isUnknown() ? null : type);
       } else if (child instanceof ArgumentListNode) {
         List<ExpressionNode> arguments = ((ArgumentListNode) child).getArguments();
         if (classReference) {
@@ -230,15 +230,15 @@ public final class ExpressionTypeResolver {
     return type;
   }
 
-  private Type handleTyped(Typed typed) {
+  private Type handleTyped(Typed typed, Type parentType) {
     if (typed instanceof NameReferenceNode) {
-      return handleNameReference((NameReferenceNode) typed);
+      return handleNameReference((NameReferenceNode) typed, parentType);
     }
     return typed.getType();
   }
 
-  private Type handleNameReference(NameReferenceNode reference) {
-    Type type = null;
+  private Type handleNameReference(NameReferenceNode reference, Type parentType) {
+    Type type = parentType;
 
     for (NameReferenceNode name : reference.flatten()) {
       NameOccurrence occurrence = name.getNameOccurrence();
