@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -37,8 +39,11 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @DeprecatedRuleKey(ruleKey = "CommentedOutCodeRule", repositoryKey = "delph")
 @Rule(key = "CommentedOutCode")
 public class CommentedOutCodeCheck extends DelphiCheck {
+  private static final Logger LOG = LoggerFactory.getLogger(CommentedOutCodeCheck.class);
   private static final String MESSAGE =
       "This block of commented-out lines of code should be removed.";
+
+  private static final long REGEX_TIMEOUT_PER_LINE_MILLIS = 250;
 
   private static final String IDENTIFIER = "[A-Z_][A-Z0-9_]*";
   private static final String PRIMARY_EXPRESSION =
@@ -197,11 +202,55 @@ public class CommentedOutCodeCheck extends DelphiCheck {
   }
 
   private static boolean isLineOfCode(String line) {
-    for (Pattern pattern : CODE_PATTERNS) {
-      if (pattern.matcher(line).find()) {
-        return true;
+    long deadline = System.currentTimeMillis() + REGEX_TIMEOUT_PER_LINE_MILLIS;
+    CharSequence input = new RegexTimeoutCharSequence(line, deadline);
+    try {
+      for (Pattern pattern : CODE_PATTERNS) {
+        if (pattern.matcher(input).find()) {
+          return true;
+        }
       }
+    } catch (RegexTimeoutException e) {
+      LOG.warn("Regex timed out after {}ms on input: {}", REGEX_TIMEOUT_PER_LINE_MILLIS, line, e);
+    } catch (StackOverflowError e) {
+      LOG.warn("Stack overflow on input: {}", line, e);
     }
     return false;
   }
+
+  private static class RegexTimeoutCharSequence implements CharSequence {
+    private final CharSequence sequence;
+    private final long deadline;
+
+    public RegexTimeoutCharSequence(CharSequence sequence, long deadline) {
+      super();
+      this.sequence = sequence;
+      this.deadline = deadline;
+    }
+
+    @Override
+    public char charAt(int index) {
+      if (System.currentTimeMillis() > deadline) {
+        throw new RegexTimeoutException();
+      }
+      return sequence.charAt(index);
+    }
+
+    @Override
+    public int length() {
+      return sequence.length();
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+      return new RegexTimeoutCharSequence(sequence.subSequence(start, end), deadline);
+    }
+
+    @Override
+    public String toString() {
+      return sequence.toString();
+    }
+  }
+
+  private static class RegexTimeoutException extends RuntimeException {}
 }
