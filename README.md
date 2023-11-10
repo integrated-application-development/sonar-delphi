@@ -107,7 +107,7 @@ read the [contributing guide](docs/CONTRIBUTING.md).
 
 SonarDelphi can be built with JDK 17+ using [Maven](https://maven.apache.org/).
 
-To build the project and run all tests, execute the following command from the project's root directory:
+To build the project and run unit tests, execute the following command from the project's root directory:
 
 ```bash
 mvn clean install

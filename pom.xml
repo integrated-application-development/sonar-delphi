@@ -104,6 +104,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.min.version>3.3.9</maven.min.version>
     <jdk.min.version>11</jdk.min.version>
+    <skipITs>true</skipITs>
     <!-- SonarCloud scan -->
     <sonar.organization>integrated-application-development</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -483,6 +484,7 @@
       <id>ci</id>
       <properties>
         <license.failIfMissing>true</license.failIfMissing>
+        <skipITs>false</skipITs>
       </properties>
     </profile>
 

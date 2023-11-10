@@ -15,6 +15,7 @@
   <name>SonarDelphi :: ITs</name>
 
   <properties>
+    <skipTests>${skipITs}</skipTests>
     <proxyHost/>
     <proxyPort/>
   </properties>
