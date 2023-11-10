@@ -51,7 +51,7 @@ class GrammarTest {
     fileConfig = DelphiFileUtils.mockConfig();
   }
 
-  private void parseFile(String fileName) {
+  private void assertParsed(String fileName) {
     try {
       String path = BASE_DIR + fileName;
       LOG.info("Parsing file: " + path);
@@ -63,147 +63,147 @@ class GrammarTest {
 
   @Test
   void testEmptyBeginStatement() {
-    parseFile("EmptyProcs.pas");
+    assertParsed("EmptyProcs.pas");
   }
 
   @Test
   void testParseMultipleAttributes() {
-    parseFile("MultipleAttributes.pas");
+    assertParsed("MultipleAttributes.pas");
   }
 
   @Test
   void testParseRecordInitialization() {
-    parseFile("RecordInitialization.pas");
+    assertParsed("RecordInitialization.pas");
   }
 
   @Test
   void testParseRecordConstructor() {
-    parseFile("RecordConstructor.pas");
+    assertParsed("RecordConstructor.pas");
   }
 
   @Test
   void testParseLabel() {
-    parseFile("LabelUsage.pas");
+    assertParsed("LabelUsage.pas");
   }
 
   @Test
   void testParseDUnitX() {
-    parseFile("DUnitX.pas");
+    assertParsed("DUnitX.pas");
   }
 
   @Test
   void testParseUTF8FileWithBOM() {
-    parseFile("UTF8WithBOM.pas");
+    assertParsed("UTF8WithBOM.pas");
   }
 
   @Test
   void testParseAnonymousMethods() {
-    parseFile("AnonymousMethods.pas");
+    assertParsed("AnonymousMethods.pas");
   }
 
   @Test
   void testParseGenerics() {
-    parseFile("Generics.pas");
+    assertParsed("Generics.pas");
   }
 
   @Test
   void testParseKeyWordsAsIdentifier() {
-    parseFile("KeyWordsAsIdentifier.pas");
+    assertParsed("KeyWordsAsIdentifier.pas");
   }
 
   @Test
   void testParseListUtils() {
-    parseFile("ListUtils.pas");
+    assertParsed("ListUtils.pas");
   }
 
   @Test
   void testParseEmptyNestedType() {
-    parseFile("EmptyNestedType.pas");
+    assertParsed("EmptyNestedType.pas");
   }
 
   @Test
   void testParseEmptyClassDeclarations() {
-    parseFile("EmptyClassDeclarations.pas");
+    assertParsed("EmptyClassDeclarations.pas");
   }
 
   @Test
   void testSubRangeTypes() {
-    parseFile("SubRangeTypes.pas");
+    assertParsed("SubRangeTypes.pas");
   }
 
   @Test
   void testMethodProcDirectives() {
-    parseFile("MethodProcDirectives.pas");
+    assertParsed("MethodProcDirectives.pas");
   }
 
   @Test
   void testOptionalFunctionReturnType() {
-    parseFile("OptionalFunctionReturnType.pas");
+    assertParsed("OptionalFunctionReturnType.pas");
   }
 
   @Test
   void testConstExpressionAmbiguity() {
-    parseFile("ConstExpressionAmbiguity.pas");
+    assertParsed("ConstExpressionAmbiguity.pas");
   }
 
   @Test
   void testVariantRecord() {
-    parseFile("VariantRecord.pas");
+    assertParsed("VariantRecord.pas");
   }
 
   @Test
   void testEmptyCaseItem() {
-    parseFile("EmptyCaseItem.pas");
+    assertParsed("EmptyCaseItem.pas");
   }
 
   @Test
   void testArrayWithAnonymousMethods() {
-    parseFile("ArrayWithAnonymousMethods.pas");
+    assertParsed("ArrayWithAnonymousMethods.pas");
   }
 
   @Test
   void testRecordHelperConstants() {
-    parseFile("RecordHelperConstants.pas");
+    assertParsed("RecordHelperConstants.pas");
   }
 
   @Test
   void testGenericSubTypeDecl() {
-    parseFile("GenericSubTypeDecl.pas");
+    assertParsed("GenericSubTypeDecl.pas");
   }
 
   @Test
   void testArrayIndices() {
-    parseFile("ArrayIndices.pas");
+    assertParsed("ArrayIndices.pas");
   }
 
   @Test
   void testNumberNotConsumedByIdentifiers() {
-    parseFile("NumberNotConsumedByIdentifiers.pas");
+    assertParsed("NumberNotConsumedByIdentifiers.pas");
   }
 
   @Test
   void testRaiseCastedException() {
-    parseFile("RaiseCastedException.pas");
+    assertParsed("RaiseCastedException.pas");
   }
 
   @Test
   void testQualifiedKeywordIdentifier() {
-    parseFile("QualifiedKeywordIdentifier.pas");
+    assertParsed("QualifiedKeywordIdentifier.pas");
   }
 
   @Test
   void testInlineVars() {
-    parseFile("InlineVars.pas");
+    assertParsed("InlineVars.pas");
   }
 
   @Test
   void testUnusualBrackets() {
-    parseFile("UnusualBrackets.pas");
+    assertParsed("UnusualBrackets.pas");
   }
 
   @Test
   void testDoubleAmpersands() {
-    parseFile("DoubleAmpersands.pas");
+    assertParsed("DoubleAmpersands.pas");
   }
 
   @Test
@@ -215,17 +215,27 @@ class GrammarTest {
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             Set.of("Defined"));
-    parseFile("UndefinedInaccessibleNestedIfDef.pas");
+    assertParsed("UndefinedInaccessibleNestedIfDef.pas");
   }
 
   @Test
   void testSuperfluousSemicolons() {
-    parseFile("SuperfluousSemicolons.pas");
+    assertParsed("SuperfluousSemicolons.pas");
   }
 
   @Test
   void testClassOperators() {
-    parseFile("ClassOperators.pas");
+    assertParsed("ClassOperators.pas");
+  }
+
+  @Test
+  void testUnusualWhitespace() {
+    assertParsed("UnusualWhitespace.pas");
+  }
+
+  @Test
+  void testUnusualIntegerLiterals() {
+    assertParsed("UnusualIntegerLiterals.pas");
   }
 
   @Test
@@ -236,15 +246,5 @@ class GrammarTest {
                     DelphiUtils.getResource(BASE_DIR + "EmptyFile.pas"),
                     DelphiFileUtils.mockConfig()))
         .isInstanceOf(DelphiFileConstructionException.class);
-  }
-
-  @Test
-  void testUnusualWhitespace() {
-    parseFile("UnusualWhitespace.pas");
-  }
-
-  @Test
-  void testUnusualIntegerLiterals() {
-    parseFile("UnusualIntegerLiterals.pas");
   }
 }
