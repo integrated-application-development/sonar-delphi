@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.visitors;
 
 import static au.com.integradev.delphi.antlr.ast.DelphiNodeUtils.implType;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -72,12 +73,9 @@ class DelphiParserVisitorTest {
             .map(Class::getSimpleName)
             .collect(Collectors.toSet());
 
-    if (!unhandledTypes.isEmpty()) {
-      throw new AssertionError(
-          String.format(
-              "Expected the following types to be handled by DelphiParserVisitor: %s",
-              unhandledTypes));
-    }
+    assertThat(unhandledTypes)
+        .overridingErrorMessage("Node types unhandled by DelphiParserVisitor: " + unhandledTypes)
+        .isEmpty();
   }
 
   private static Set<Class<?>> getTypesHandledByParserVisitor() {

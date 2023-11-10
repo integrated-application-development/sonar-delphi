@@ -20,6 +20,7 @@ package au.com.integradev.delphi.preprocessor;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiFileStream;
@@ -46,57 +47,66 @@ class DelphiPreprocessorTest {
 
   @Test
   void testUndefineDirectives() {
-    executeWithDefines("UndefineDirectives.pas", "FAIL_IF_DEFINED");
+    assertThatCode(() -> executeWithDefines("UndefineDirectives.pas", "FAIL_IF_DEFINED"))
+        .doesNotThrowAnyException();
   }
 
   @Test
   void testNestedDirectives() {
-    executeWithDefines("NestedDirectives.pas", "FAIL_IF_DEFINED", "NESTED");
+    assertThatCode(() -> executeWithDefines("NestedDirectives.pas", "FAIL_IF_DEFINED", "NESTED"))
+        .doesNotThrowAnyException();
   }
 
   @Test
   void testSizeOfIntrinsic() {
-    execute("SizeOfIntrinsic.pas");
+    assertThatCode(() -> execute("SizeOfIntrinsic.pas")).doesNotThrowAnyException();
   }
 
   @Test
   void testSameFolderIncludeDirectives() {
-    execute("includeTest/SameFolder.pas");
+    assertThatCode(() -> execute("includeTest/SameFolder.pas")).doesNotThrowAnyException();
   }
 
   @Test
   void testBacktrackIncludeDirectives() {
-    execute("includeTest/Backtrack.pas");
+    assertThatCode(() -> execute("includeTest/Backtrack.pas")).doesNotThrowAnyException();
   }
 
   @Test
   void testSearchPathIncludeDirectives() {
-    executeWithSearchPath("includeTest/SearchPath.pas", "includes");
+    assertThatCode(() -> executeWithSearchPath("includeTest/SearchPath.pas", "includes"))
+        .doesNotThrowAnyException();
   }
 
   @Test
   void testNestedIncludeDirectives() {
-    executeWithSearchPath("includeTest/NestedSearchPath.pas", "includes", "nestedIncludes");
+    assertThatCode(
+            () ->
+                executeWithSearchPath(
+                    "includeTest/NestedSearchPath.pas", "includes", "nestedIncludes"))
+        .doesNotThrowAnyException();
   }
 
   @Test
   void testSameNameBacktrackIncludeDirectives() {
-    execute("includeTest/SameNameBacktrack.pas");
+    assertThatCode(() -> execute("includeTest/SameNameBacktrack.pas")).doesNotThrowAnyException();
   }
 
   @Test
   void testBadIncludeTokenShouldNotThrowException() {
-    execute("includeTest/BadIncludeToken.pas");
+    assertThatCode(() -> execute("includeTest/BadIncludeToken.pas")).doesNotThrowAnyException();
   }
 
   @Test
   void testNonexistentIncludeShouldNotThrowException() {
-    executeWithSearchPath("includeTest/IncludeDoesNotExist.pas", "includes");
+    assertThatCode(() -> executeWithSearchPath("includeTest/IncludeDoesNotExist.pas", "includes"))
+        .doesNotThrowAnyException();
   }
 
   @Test
   void testSelfReferencingIncludeShouldNotThrowException() {
-    execute("includeTest/SelfReferencingInclude.pas");
+    assertThatCode(() -> execute("includeTest/SelfReferencingInclude.pas"))
+        .doesNotThrowAnyException();
   }
 
   @Test

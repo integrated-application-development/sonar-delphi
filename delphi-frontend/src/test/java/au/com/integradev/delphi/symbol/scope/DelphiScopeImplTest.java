@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.symbol.scope;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
@@ -97,13 +98,17 @@ class DelphiScopeImplTest {
   @Test
   void testVariablesWithDifferentNamesAreNotDuplicates() {
     scope.addDeclaration(createVariable("Foo"));
-    scope.addDeclaration(createVariable("Bar"));
+
+    VariableNameDeclaration bar = createVariable("Bar");
+    assertThatCode(() -> scope.addDeclaration(bar)).doesNotThrowAnyException();
   }
 
   @Test
   void testTypesWithDifferentKindAndDifferentNamesAreNotDuplicates() {
     scope.addDeclaration(createType("Foo"));
-    scope.addDeclaration(createType("Bar"));
+
+    TypeNameDeclaration bar = createType("Bar");
+    assertThatCode(() -> scope.addDeclaration(bar)).doesNotThrowAnyException();
   }
 
   @Test
@@ -127,32 +132,43 @@ class DelphiScopeImplTest {
   @Test
   void testForwardDeclarationsAreNotDuplicates() {
     scope.addDeclaration(createClassType("Baz"));
-    scope.addDeclaration(createClassType("Baz"));
+
+    TypeNameDeclaration baz = createClassType("Baz");
+    assertThatCode(() -> scope.addDeclaration(baz)).doesNotThrowAnyException();
   }
 
   @Test
   void testGenericTypesWithSameNumberofTypeParametersAreNotDuplicates() {
     scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
-    scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
+    assertThatCode(() -> scope.addDeclaration(createClassType("Foo", List.of(createType("Bar")))))
+        .doesNotThrowAnyException();
   }
 
   @Test
   void testGenericTypesWithDifferentNumberOfTypeParametersAreNotDuplicates() {
     scope.addDeclaration(createClassType("Foo"));
     scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
-    scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"), createType("Baz"))));
+
+    TypeNameDeclaration foo = createClassType("Foo", List.of(createType("Bar"), createType("Baz")));
+    assertThatCode(() -> scope.addDeclaration(foo)).doesNotThrowAnyException();
 
     scope.addDeclaration(createClassType("Bar", List.of(createType("Baz"), createType("Flarp"))));
     scope.addDeclaration(createClassType("Bar", List.of(createType("Baz"))));
-    scope.addDeclaration(createClassType("Bar"));
+
+    TypeNameDeclaration bar = createClassType("Bar");
+    assertThatCode(() -> scope.addDeclaration(bar)).doesNotThrowAnyException();
   }
 
   @Test
   void testGenericTypesWithVariablesAreNotDuplicates() {
     scope.addDeclaration(createVariable("Foo"));
-    scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
+
+    TypeNameDeclaration foo = createClassType("Foo", List.of(createType("Bar")));
+    assertThatCode(() -> scope.addDeclaration(foo)).doesNotThrowAnyException();
 
     scope.addDeclaration(createClassType("Bar", List.of(createType("Baz"))));
-    scope.addDeclaration(createVariable("Bar"));
+
+    VariableNameDeclaration bar = createVariable("Bar");
+    assertThatCode(() -> scope.addDeclaration(bar)).doesNotThrowAnyException();
   }
 }
