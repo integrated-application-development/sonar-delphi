@@ -25,9 +25,10 @@ body:
         Supply the area of SonarDelphi that the improvement affects.
       options:
         - Delphi language support
+        - Rules API
         - Rule execution
-        - Testing
         - Metrics calculation
+        - Testing
         - Other
       default: 0
     validations:
