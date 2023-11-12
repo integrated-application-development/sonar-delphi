@@ -20,6 +20,7 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
 import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
@@ -155,7 +156,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
   private static void handleTypeAliases(@Nullable NameDeclaration declaration, Data data) {
     if (declaration instanceof TypeNameDeclaration) {
-      addDependenciesForDeclaration(((TypeNameDeclaration) declaration).getAliased(), data);
+      addDependenciesForDeclaration(((TypeNameDeclarationImpl) declaration).getAliased(), data);
     }
   }
 
