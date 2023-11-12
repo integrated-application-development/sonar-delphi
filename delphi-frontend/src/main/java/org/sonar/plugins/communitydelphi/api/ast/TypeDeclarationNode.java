@@ -59,7 +59,7 @@ public interface TypeDeclarationNode extends DelphiNode, Typed, Qualifiable {
 
   boolean isNestedType();
 
-  boolean isTypeAlias();
+  boolean isWeakAlias();
 
   boolean isStrongAlias();
 

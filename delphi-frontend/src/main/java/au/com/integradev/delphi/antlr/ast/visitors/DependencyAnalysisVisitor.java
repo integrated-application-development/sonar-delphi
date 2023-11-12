@@ -136,8 +136,8 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     // Explicit references to an import indicates a dependency on the unit being imported
     handleExplicitImportReferences(declaration, data);
 
-    // Type alias references indicate a dependency on the aliased type declaration
-    handleTypeAliases(declaration, data);
+    // Weak alias references indicate a dependency on the aliased type declaration
+    handleWeakAliases(declaration, data);
 
     // Inline method dependencies should be included in the call site's dependencies
     // Inline methods cannot be expanded by the compiler unless these dependencies are present
@@ -154,7 +154,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     }
   }
 
-  private static void handleTypeAliases(@Nullable NameDeclaration declaration, Data data) {
+  private static void handleWeakAliases(@Nullable NameDeclaration declaration, Data data) {
     if (declaration instanceof TypeNameDeclaration) {
       addDependenciesForDeclaration(((TypeNameDeclarationImpl) declaration).getAliased(), data);
     }

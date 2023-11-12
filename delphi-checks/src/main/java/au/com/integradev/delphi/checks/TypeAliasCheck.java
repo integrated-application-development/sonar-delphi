@@ -31,7 +31,7 @@ public class TypeAliasCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(TypeDeclarationNode typeDeclaration, DelphiCheckContext data) {
-    if (typeDeclaration.isTypeAlias() || typeDeclaration.isStrongAlias()) {
+    if (typeDeclaration.isWeakAlias() || typeDeclaration.isStrongAlias()) {
       reportIssue(data, typeDeclaration, MESSAGE);
     }
     return super.visit(typeDeclaration, data);

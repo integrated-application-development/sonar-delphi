@@ -1,4 +1,4 @@
-unit TypeAliasParameter;
+unit WeakAliasParameter;
 
 interface
 

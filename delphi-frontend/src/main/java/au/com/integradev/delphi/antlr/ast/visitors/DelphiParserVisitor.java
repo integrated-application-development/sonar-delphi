@@ -137,7 +137,6 @@ import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SubRangeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.TryStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeOfTypeNode;
@@ -153,6 +152,7 @@ import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.WeakAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
@@ -508,15 +508,15 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
-  default T visit(TypeAliasNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
   default T visit(TypeOfTypeNode node, T data) {
     return visit((TypeNode) node, data);
   }
 
   default T visit(TypeReferenceNode node, T data) {
+    return visit((TypeNode) node, data);
+  }
+
+  default T visit(WeakAliasTypeNode node, T data) {
     return visit((TypeNode) node, data);
   }
 

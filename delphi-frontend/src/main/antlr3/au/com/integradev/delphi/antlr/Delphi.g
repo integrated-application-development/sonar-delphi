@@ -263,7 +263,7 @@ typeDecl                     : arrayType
                              | subRangeType
                              | typeOfType
                              | strongAliasType
-                             | typeAlias
+                             | weakAliasType
                              | enumType
                              | 'packed' typeDecl^
                              ;
@@ -326,7 +326,7 @@ strongAliasType              : 'type'<StrongAliasTypeNodeImpl>^ typeReference co
                              ;
 codePageExpression           : '('! expression ')'!
                              ;
-typeAlias                    : typeReference -> ^(TkTypeAlias<TypeAliasNodeImpl> typeReference)
+weakAliasType                : typeReference -> ^(TkWeakAlias<WeakAliasTypeNodeImpl> typeReference)
                              ;
 subRangeType                 : expression '..'<SubRangeTypeNodeImpl>^ expression
                              ;
@@ -1129,7 +1129,7 @@ TkGenericDefinition     : 'GENERIC_DEFINITION'
                         ;
 TkGenericArguments      : 'GENERIC_ARGUMENTS'
                         ;
-TkTypeAlias             : 'TYPE_ALIAS'
+TkWeakAlias             : 'WEAK_ALIAS'
                         ;
 TkTypeReference         : 'TYPE_REFERENCE'
                         ;

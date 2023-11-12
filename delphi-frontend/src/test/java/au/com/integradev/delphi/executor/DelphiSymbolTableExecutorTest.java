@@ -182,8 +182,8 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testTypeAliasParameter() {
-    execute("TypeAliasParameter.pas");
+  void testWeakAliasParameter() {
+    execute("WeakAliasParameter.pas");
     verifyUsages(6, 2, reference(9, 14), reference(13, 25));
     verifyUsages(9, 2, reference(18, 31));
     verifyUsages(11, 2, reference(18, 10));

@@ -189,7 +189,7 @@ public class TypeFactoryImpl implements TypeFactory {
     intrinsicTypes.put(intrinsic, new VariantTypeImpl(intrinsic.fullyQualifiedName(), size, kind));
   }
 
-  private void addAlias(IntrinsicType alias, IntrinsicType concrete) {
+  private void addWeakAlias(IntrinsicType alias, IntrinsicType concrete) {
     intrinsicTypes.put(alias, getIntrinsic(concrete));
   }
 
@@ -207,9 +207,9 @@ public class TypeFactoryImpl implements TypeFactory {
     addReal(IntrinsicType.EXTENDED, extendedSize());
 
     if (isReal48Bit()) {
-      addAlias(IntrinsicType.REAL, IntrinsicType.REAL48);
+      addWeakAlias(IntrinsicType.REAL, IntrinsicType.REAL48);
     } else {
-      addAlias(IntrinsicType.REAL, IntrinsicType.DOUBLE);
+      addWeakAlias(IntrinsicType.REAL, IntrinsicType.DOUBLE);
     }
 
     addInteger(IntrinsicType.SHORTINT, 1, true);
@@ -222,11 +222,11 @@ public class TypeFactoryImpl implements TypeFactory {
     addInteger(IntrinsicType.UINT64, 8, false);
 
     if (isLong64Bit()) {
-      addAlias(IntrinsicType.LONGINT, IntrinsicType.INT64);
-      addAlias(IntrinsicType.LONGWORD, IntrinsicType.UINT64);
+      addWeakAlias(IntrinsicType.LONGINT, IntrinsicType.INT64);
+      addWeakAlias(IntrinsicType.LONGWORD, IntrinsicType.UINT64);
     } else {
-      addAlias(IntrinsicType.LONGINT, IntrinsicType.INTEGER);
-      addAlias(IntrinsicType.LONGWORD, IntrinsicType.CARDINAL);
+      addWeakAlias(IntrinsicType.LONGINT, IntrinsicType.INTEGER);
+      addWeakAlias(IntrinsicType.LONGWORD, IntrinsicType.CARDINAL);
     }
 
     addInteger(IntrinsicType.NATIVEINT, nativeIntegerSize(), true);
@@ -245,11 +245,11 @@ public class TypeFactoryImpl implements TypeFactory {
     addString(IntrinsicType.SHORTSTRING, 256, IntrinsicType.ANSICHAR);
 
     if (isStringUnicode()) {
-      addAlias(IntrinsicType.STRING, IntrinsicType.UNICODESTRING);
-      addAlias(IntrinsicType.CHAR, IntrinsicType.WIDECHAR);
+      addWeakAlias(IntrinsicType.STRING, IntrinsicType.UNICODESTRING);
+      addWeakAlias(IntrinsicType.CHAR, IntrinsicType.WIDECHAR);
     } else {
-      addAlias(IntrinsicType.STRING, IntrinsicType.ANSISTRING);
-      addAlias(IntrinsicType.CHAR, IntrinsicType.ANSICHAR);
+      addWeakAlias(IntrinsicType.STRING, IntrinsicType.ANSISTRING);
+      addWeakAlias(IntrinsicType.CHAR, IntrinsicType.ANSICHAR);
     }
 
     addPointer(IntrinsicType.POINTER, TypeFactory.untypedType(), pointerSize(), false);
@@ -257,9 +257,9 @@ public class TypeFactoryImpl implements TypeFactory {
     addPointer(IntrinsicType.PANSICHAR, getIntrinsic(IntrinsicType.ANSICHAR), pointerSize(), true);
 
     if (isStringUnicode()) {
-      addAlias(IntrinsicType.PCHAR, IntrinsicType.PWIDECHAR);
+      addWeakAlias(IntrinsicType.PCHAR, IntrinsicType.PWIDECHAR);
     } else {
-      addAlias(IntrinsicType.PCHAR, IntrinsicType.PANSICHAR);
+      addWeakAlias(IntrinsicType.PCHAR, IntrinsicType.PANSICHAR);
     }
 
     int variantSize = sizeByArchitecture(16, 24);
@@ -274,7 +274,7 @@ public class TypeFactoryImpl implements TypeFactory {
             return IntrinsicType.TEXT.fullyQualifiedName();
           }
         });
-    addAlias(IntrinsicType.TEXTFILE, IntrinsicType.TEXT);
+    addWeakAlias(IntrinsicType.TEXTFILE, IntrinsicType.TEXT);
   }
 
   private static List<ImagePart> createImageParts(TypeDeclarationNode declaration) {

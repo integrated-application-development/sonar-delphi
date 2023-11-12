@@ -28,10 +28,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.WeakAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
@@ -89,8 +89,8 @@ public final class TypeNameDeclarationImpl extends NameDeclarationImpl
 
   private static TypeNameDeclaration extractAliasedTypeDeclaration(TypeDeclarationNode node) {
     TypeNode typeNode = node.getTypeNode();
-    if (typeNode instanceof TypeAliasNode) {
-      TypeReferenceNode original = ((TypeAliasNode) typeNode).getAliasedTypeNode();
+    if (typeNode instanceof WeakAliasTypeNode) {
+      TypeReferenceNode original = ((WeakAliasTypeNode) typeNode).getAliasedTypeNode();
       NameDeclaration originalDeclaration = original.getTypeDeclaration();
       if (originalDeclaration instanceof TypeNameDeclaration) {
         return (TypeNameDeclaration) originalDeclaration;
@@ -115,7 +115,6 @@ public final class TypeNameDeclarationImpl extends NameDeclarationImpl
     return typeParameters;
   }
 
-  @Override
   @Nullable
   public TypeNameDeclaration getAliased() {
     return aliased;
