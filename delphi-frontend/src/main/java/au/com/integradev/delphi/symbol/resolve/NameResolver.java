@@ -35,6 +35,7 @@ import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
+import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
@@ -101,7 +102,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public class NameResolver {

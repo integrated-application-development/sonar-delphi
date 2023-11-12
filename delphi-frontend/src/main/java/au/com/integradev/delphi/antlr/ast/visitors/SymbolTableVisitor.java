@@ -49,6 +49,7 @@ import au.com.integradev.delphi.symbol.scope.SystemScopeImpl;
 import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
 import au.com.integradev.delphi.symbol.scope.UnitScopeImpl;
 import au.com.integradev.delphi.symbol.scope.WithScopeImpl;
+import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.factory.ClassReferenceTypeImpl;
 import au.com.integradev.delphi.type.factory.PointerTypeImpl;
 import com.google.common.base.Preconditions;
@@ -133,7 +134,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 
 /**
  * Visitor for symbol table creation.

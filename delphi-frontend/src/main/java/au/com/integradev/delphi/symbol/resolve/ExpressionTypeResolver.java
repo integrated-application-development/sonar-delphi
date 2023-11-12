@@ -21,6 +21,7 @@ package au.com.integradev.delphi.symbol.resolve;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
+import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
 import com.google.common.collect.Iterables;
 import java.util.List;
@@ -58,7 +59,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class ExpressionTypeResolver {

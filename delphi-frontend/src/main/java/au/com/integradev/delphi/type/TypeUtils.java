@@ -16,8 +16,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.type;
+package au.com.integradev.delphi.type;
 
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;

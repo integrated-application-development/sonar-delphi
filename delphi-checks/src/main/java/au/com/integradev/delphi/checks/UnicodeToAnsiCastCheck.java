@@ -22,7 +22,6 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "UnicodeToAnsiCastRule", repositoryKey = "delph")
@@ -47,7 +46,6 @@ public class UnicodeToAnsiCastCheck extends AbstractCastCheck {
   }
 
   private static int characterSize(Type type) {
-    type = TypeUtils.findBaseType(type);
     if (type.isString()) {
       type = ((StringType) type).characterType();
     }

@@ -63,7 +63,6 @@ import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -674,7 +673,6 @@ public class VariableInitializationCheck extends DelphiCheck {
     InitializationState copy();
 
     static InitializationState from(Type type) {
-      type = TypeUtils.findBaseType(type);
       if (type.isRecord()) {
         return new RecordInitializationState((StructType) type);
       } else {

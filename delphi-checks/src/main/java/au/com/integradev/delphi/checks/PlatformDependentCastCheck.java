@@ -35,7 +35,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "PlatformDependentCastRule", repositoryKey = "delph")
@@ -51,8 +50,8 @@ public class PlatformDependentCastCheck extends DelphiCheck {
       ExpressionNode expression = arguments.get(0);
       if (!ExpressionNodeUtils.isNilLiteral(expression)
           && !ExpressionNodeUtils.isIntegerLiteral(expression)) {
-        Type originalType = TypeUtils.findBaseType(getOriginalType(expression));
-        Type castedType = TypeUtils.findBaseType(getHardCastedType(argumentList, context));
+        Type originalType = getOriginalType(expression);
+        Type castedType = getHardCastedType(argumentList, context);
 
         if (isPlatformDependentCast(originalType, castedType)) {
           reportIssue(context, argumentList, MESSAGE);
@@ -96,8 +95,8 @@ public class PlatformDependentCastCheck extends DelphiCheck {
 
   private static boolean isPlatformDependentType(Type type) {
     return isPointerBasedType(type)
-        || type.is(IntrinsicType.NATIVEINT)
-        || type.is(IntrinsicType.NATIVEUINT);
+        || isTypeOrAlias(type, IntrinsicType.NATIVEINT)
+        || isTypeOrAlias(type, IntrinsicType.NATIVEUINT);
   }
 
   private static boolean isPointerBasedType(Type type) {
@@ -115,6 +114,21 @@ public class PlatformDependentCastCheck extends DelphiCheck {
       }
     }
 
+    return false;
+  }
+
+  private static boolean isTypeOrAlias(Type type, IntrinsicType intrinsicType) {
+    while (true) {
+      if (type.is(intrinsicType)) {
+        return true;
+      }
+
+      if (type.isAlias()) {
+        type = ((Type.AliasType) type).aliasedType();
+      } else {
+        break;
+      }
+    }
     return false;
   }
 }

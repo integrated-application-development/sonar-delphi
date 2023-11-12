@@ -20,7 +20,6 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "CharacterToCharacterPointerCastRule", repositoryKey = "delph")
@@ -33,8 +32,8 @@ public class CharacterToCharacterPointerCastCheck extends AbstractCastCheck {
 
   @Override
   protected boolean isViolation(Type originalType, Type castType) {
-    return TypeUtils.findBaseType(originalType).isChar()
-        && TypeUtils.findBaseType(castType).isPointer()
-        && TypeUtils.findBaseType(TypeUtils.dereference(castType)).isChar();
+    return originalType.isChar()
+        && castType.isPointer()
+        && ((Type.PointerType) castType).dereferencedType().isChar();
   }
 }

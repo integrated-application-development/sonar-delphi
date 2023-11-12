@@ -33,7 +33,6 @@ import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import org.sonar.plugins.communitydelphi.api.type.TypeUtils;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "PlatformDependentTruncationRule", repositoryKey = "delph")
@@ -85,9 +84,6 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
   }
 
   private static boolean isViolation(Type from, Type to) {
-    from = TypeUtils.findBaseType(from);
-    to = TypeUtils.findBaseType(to);
-
     if (!from.isInteger() || !to.isInteger()) {
       return false;
     }
@@ -100,6 +96,17 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
   }
 
   private static boolean isNativeInteger(Type type) {
-    return type.is(IntrinsicType.NATIVEINT) || type.is(IntrinsicType.NATIVEUINT);
+    while (true) {
+      if (type.is(IntrinsicType.NATIVEINT) || type.is(IntrinsicType.NATIVEUINT)) {
+        return true;
+      }
+
+      if (type.isAlias()) {
+        type = ((Type.AliasType) type).aliasedType();
+      } else {
+        break;
+      }
+    }
+    return false;
   }
 }
