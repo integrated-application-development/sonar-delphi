@@ -52,6 +52,7 @@ import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CharacterType;
@@ -64,7 +65,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
-import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
@@ -80,6 +80,7 @@ public class TypeFactoryImpl implements TypeFactory {
   private final Toolchain toolchain;
   private final CompilerVersion compilerVersion;
 
+  private final TypeAliasGenerator typeAliasGenerator;
   private final EnumMap<IntrinsicType, Type> intrinsicTypes;
   private final PointerType nilPointer;
   private final FileType untypedFile;
@@ -88,6 +89,7 @@ public class TypeFactoryImpl implements TypeFactory {
   public TypeFactoryImpl(Toolchain toolchain, CompilerVersion compilerVersion) {
     this.toolchain = toolchain;
     this.compilerVersion = compilerVersion;
+    this.typeAliasGenerator = new TypeAliasGenerator();
     this.intrinsicTypes = new EnumMap<>(IntrinsicType.class);
     this.nilPointer = pointerTo("nil", TypeFactory.voidType());
     this.untypedFile = fileOf(TypeFactory.untypedType());
@@ -464,8 +466,13 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   @Override
-  public StrongAliasType strongAlias(String image, Type aliased) {
-    return new StrongAliasTypeImpl(image, aliased);
+  public AliasType strongAlias(String image, Type aliased) {
+    return typeAliasGenerator.generate(image, aliased, true);
+  }
+
+  @Override
+  public AliasType weakAlias(String image, Type aliased) {
+    return typeAliasGenerator.generate(image, aliased, false);
   }
 
   public StructType struct(TypeNode node) {

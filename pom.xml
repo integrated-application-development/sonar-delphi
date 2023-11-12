@@ -124,6 +124,7 @@
     <guava.version>32.1.3-jre</guava.version>
     <commons-lang.version>3.12.0</commons-lang.version>
     <commons-io.version>2.11.0</commons-io.version>
+    <byte-buddy.version>1.14.9</byte-buddy.version>
     <junit.version>5.9.0</junit.version>
     <junit-platform-suite-engine.version>1.9.0-M1</junit-platform-suite-engine.version>
     <assertj.version>3.23.1</assertj.version>
@@ -207,6 +208,11 @@
         <groupId>com.googlecode.json-simple</groupId>
         <artifactId>json-simple</artifactId>
         <version>${json-simple.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy</artifactId>
+        <version>${byte-buddy.version}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sonarqube</groupId>

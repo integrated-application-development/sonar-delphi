@@ -39,6 +39,7 @@ import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.BooleanType;
@@ -49,7 +50,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
-import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
@@ -73,12 +73,12 @@ final class TypeComparer {
       return EXACT;
     }
 
-    while (from.isStrongAlias()) {
-      from = ((StrongAliasType) from).aliasedType();
+    while (from.isAlias()) {
+      from = ((AliasType) from).aliasedType();
     }
 
-    while (to.isStrongAlias()) {
-      to = ((StrongAliasType) to).aliasedType();
+    while (to.isAlias()) {
+      to = ((AliasType) to).aliasedType();
     }
 
     EqualityType result;

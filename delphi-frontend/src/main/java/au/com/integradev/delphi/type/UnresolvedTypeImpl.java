@@ -19,8 +19,9 @@
 package au.com.integradev.delphi.type;
 
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.UnresolvedType;
 
-public final class UnresolvedTypeImpl extends TypeImpl {
+public final class UnresolvedTypeImpl extends TypeImpl implements UnresolvedType {
   private final String image;
 
   private UnresolvedTypeImpl(String image) {

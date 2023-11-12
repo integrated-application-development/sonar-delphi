@@ -21,6 +21,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.WeakAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -47,6 +48,11 @@ public final class WeakAliasTypeNodeImpl extends TypeNodeImpl implements WeakAli
   @Nonnull
   @Override
   protected Type createType() {
-    return getAliasedTypeNode().getType();
+    TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) getParent();
+
+    String typeName = typeDeclaration.fullyQualifiedName();
+    Type aliasedType = getAliasedTypeNode().getType();
+
+    return getTypeFactory().weakAlias(typeName, aliasedType);
   }
 }

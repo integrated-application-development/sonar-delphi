@@ -20,8 +20,9 @@ package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.UnknownType;
 
-public final class UnknownTypeImpl extends TypeImpl {
+public final class UnknownTypeImpl extends TypeImpl implements UnknownType {
   private static final UnknownTypeImpl INSTANCE = new UnknownTypeImpl();
 
   private UnknownTypeImpl() {

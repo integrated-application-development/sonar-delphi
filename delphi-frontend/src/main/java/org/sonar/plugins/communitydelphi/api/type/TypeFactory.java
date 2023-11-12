@@ -24,6 +24,7 @@ import au.com.integradev.delphi.type.factory.VoidTypeImpl;
 import java.math.BigInteger;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
@@ -31,7 +32,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
-import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 
 public interface TypeFactory {
@@ -72,7 +72,9 @@ public interface TypeFactory {
 
   ClassReferenceType classOf(@Nullable String image, Type type);
 
-  StrongAliasType strongAlias(String image, Type aliased);
+  AliasType strongAlias(String image, Type aliased);
+
+  AliasType weakAlias(String image, Type aliased);
 
   IntegerType integerFromLiteralValue(BigInteger value);
 }

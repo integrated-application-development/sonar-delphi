@@ -58,7 +58,7 @@ public final class DelphiNodeUtils {
         private final Class<?>[] ACCEPT_PARAMETERS = {DelphiParserVisitor.class, Object.class};
 
         @Override
-        public boolean apply(JavaClass javaClass) {
+        public boolean test(JavaClass javaClass) {
           return javaClass.getMethods().stream().anyMatch(this::isAcceptMethodImplementation);
         }
 

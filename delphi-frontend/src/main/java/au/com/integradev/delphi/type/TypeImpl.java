@@ -207,6 +207,16 @@ public abstract class TypeImpl implements Type {
   }
 
   @Override
+  public boolean isAlias() {
+    return false;
+  }
+
+  @Override
+  public boolean isWeakAlias() {
+    return false;
+  }
+
+  @Override
   public boolean isStrongAlias() {
     return false;
   }

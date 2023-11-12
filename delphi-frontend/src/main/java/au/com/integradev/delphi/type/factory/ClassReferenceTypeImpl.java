@@ -26,10 +26,8 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
-public final class ClassReferenceTypeImpl extends TypeImpl
-    implements ClassReferenceType, ScopedType {
+public final class ClassReferenceTypeImpl extends TypeImpl implements ClassReferenceType {
   private final String image;
   private Type classType;
   private final int size;

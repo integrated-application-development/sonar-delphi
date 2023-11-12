@@ -58,6 +58,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
@@ -66,7 +67,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
-import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -701,11 +701,11 @@ class TypeComparerTest {
     return FACTORY.emptySet();
   }
 
-  private static StrongAliasType strongAlias(String image, IntrinsicType intrinsic) {
+  private static AliasType strongAlias(String image, IntrinsicType intrinsic) {
     return FACTORY.strongAlias(image, toType(intrinsic));
   }
 
-  private static StrongAliasType strongAlias(String image, Type type) {
+  private static AliasType strongAlias(String image, Type type) {
     return FACTORY.strongAlias(image, type);
   }
 

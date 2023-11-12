@@ -317,6 +317,20 @@ public interface Type {
   boolean isVariant();
 
   /**
+   * Check if this type is an alias
+   *
+   * @return true if the type is an alias
+   */
+  boolean isAlias();
+
+  /**
+   * Check if this type is a weak alias
+   *
+   * @return true if the type is a weak alias
+   */
+  boolean isWeakAlias();
+
+  /**
    * Check if this type is a strong alias
    *
    * @return true if the type is a strong alias
@@ -524,7 +538,7 @@ public interface Type {
     Type hostType();
   }
 
-  interface ClassReferenceType extends Type {
+  interface ClassReferenceType extends ScopedType {
     /**
      * The class type that this references
      *
@@ -535,14 +549,23 @@ public interface Type {
 
   interface AliasType extends Type {
     /**
+     * The type image of the alias type itself
+     *
+     * <p>For a strong alias type, {@link Type#getImage} will return this image.
+     *
+     * <p>For a weak alias type, {@link Type#getImage} will return the image of the aliased type.
+     *
+     * @return type image of the alias type
+     */
+    String aliasImage();
+
+    /**
      * The type that this type is aliased to
      *
      * @return Aliased type
      */
     Type aliasedType();
   }
-
-  interface StrongAliasType extends AliasType {}
 
   interface TypeParameterType extends Type {
 
@@ -623,7 +646,7 @@ public interface Type {
     CharacterType characterType();
   }
 
-  interface AnsiStringType extends Type {
+  interface AnsiStringType extends StringType {
     /**
      * The ansi code page used by this AnsiString
      *
@@ -632,7 +655,7 @@ public interface Type {
     int codePage();
   }
 
-  interface VariantType {
+  interface VariantType extends Type {
     enum VariantKind {
       OLE_VARIANT,
       NORMAL_VARIANT
@@ -645,4 +668,12 @@ public interface Type {
      */
     VariantKind kind();
   }
+
+  interface UnknownType extends Type {}
+
+  interface UnresolvedType extends Type {}
+
+  interface UntypedType extends Type {}
+
+  interface VoidType extends Type {}
 }

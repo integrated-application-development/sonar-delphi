@@ -18,9 +18,9 @@
  */
 package org.sonar.plugins.communitydelphi.api.type;
 
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
-import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 
 public final class TypeUtils {
@@ -29,8 +29,8 @@ public final class TypeUtils {
   }
 
   public static Type findBaseType(Type type) {
-    while (type.isStrongAlias()) {
-      type = ((StrongAliasType) type).aliasedType();
+    while (type.isAlias()) {
+      type = ((AliasType) type).aliasedType();
     }
 
     if (type.isSubrange()) {

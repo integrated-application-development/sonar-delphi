@@ -18,24 +18,69 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
+import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-abstract class AliasTypeImpl extends TypeImpl implements AliasType {
-  private final Type originalType;
+public abstract class AliasTypeImpl<T extends Type> implements AliasType {
+  private final String aliasImage;
+  private final T aliasedType;
+  private final boolean strong;
 
-  protected AliasTypeImpl(Type originalType) {
-    this.originalType = originalType;
+  protected AliasTypeImpl(String aliasImage, T aliasedType, boolean strong) {
+    this.aliasImage = aliasImage;
+    this.aliasedType = aliasedType;
+    this.strong = strong;
   }
 
   @Override
-  public int size() {
-    return originalType.size();
+  public String aliasImage() {
+    return aliasImage;
   }
 
   @Override
-  public Type aliasedType() {
-    return originalType;
+  public T aliasedType() {
+    return aliasedType;
+  }
+
+  @Override
+  public String getImage() {
+    return strong ? aliasImage : aliasedType.getImage();
+  }
+
+  @Override
+  public boolean is(String image) {
+    return aliasImage.equalsIgnoreCase(image) || (!strong && aliasedType.is(image));
+  }
+
+  @Override
+  public boolean is(Type type) {
+    return is(type.getImage());
+  }
+
+  @Override
+  public boolean is(IntrinsicType intrinsic) {
+    return is(intrinsic.fullyQualifiedName());
+  }
+
+  @Override
+  public boolean isAlias() {
+    return true;
+  }
+
+  @Override
+  public boolean isWeakAlias() {
+    return !strong;
+  }
+
+  @Override
+  public boolean isStrongAlias() {
+    return strong;
+  }
+
+  @Override
+  public Type specialize(TypeSpecializationContext context) {
+    return this;
   }
 }

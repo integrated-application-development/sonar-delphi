@@ -20,8 +20,9 @@ package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.VoidType;
 
-public final class VoidTypeImpl extends TypeImpl {
+public final class VoidTypeImpl extends TypeImpl implements VoidType {
   private static final VoidTypeImpl INSTANCE = new VoidTypeImpl();
 
   private VoidTypeImpl() {

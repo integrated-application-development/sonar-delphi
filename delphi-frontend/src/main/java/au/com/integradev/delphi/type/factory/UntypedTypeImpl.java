@@ -20,8 +20,9 @@ package au.com.integradev.delphi.type.factory;
 
 import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.UntypedType;
 
-public final class UntypedTypeImpl extends TypeImpl {
+public final class UntypedTypeImpl extends TypeImpl implements UntypedType {
   private static final UntypedTypeImpl INSTANCE = new UntypedTypeImpl();
 
   private UntypedTypeImpl() {

@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
+import au.com.integradev.delphi.type.factory.HelperTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
@@ -41,11 +42,23 @@ public final class TypeMocker {
   }
 
   public static StructType struct(String image, StructKind kind, Type superType) {
-    StructType type = mock(StructTypeImpl.class);
+    StructType type;
+
+    switch (kind) {
+      case CLASS_HELPER:
+      case RECORD_HELPER:
+        type = mock(HelperTypeImpl.class);
+        break;
+      default:
+        type = mock(StructTypeImpl.class);
+    }
+
     when(type.typeScope()).thenReturn(unknownScope());
     when(type.isStruct()).thenReturn(true);
     when(type.isInterface()).thenReturn(kind == StructKind.INTERFACE);
     when(type.isRecord()).thenReturn(kind == StructKind.RECORD);
+    when(type.isHelper())
+        .thenReturn(kind == StructKind.RECORD_HELPER || kind == StructKind.CLASS_HELPER);
     when(type.getImage()).thenReturn(image);
     when(type.is(anyString()))
         .thenAnswer(invocation -> image.equalsIgnoreCase(invocation.getArgument(0)));
@@ -61,6 +74,7 @@ public final class TypeMocker {
                 isImageOrSuperType(
                     ((Type) invocation.getArgument(0)).getImage(), image, superType));
     when(type.superType()).thenReturn(superType);
+
     return type;
   }
 
