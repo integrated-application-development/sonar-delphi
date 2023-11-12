@@ -318,7 +318,7 @@ class PlatformDependentCastCheckTest {
   }
 
   @Test
-  void testTypeTypeCastsShouldAddIssue() {
+  void testStrongAliasCastsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
         .onFile(

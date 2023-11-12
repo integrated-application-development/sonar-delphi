@@ -49,8 +49,8 @@ import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
 
@@ -73,12 +73,12 @@ final class TypeComparer {
       return EXACT;
     }
 
-    while (from.isTypeType()) {
-      from = ((TypeType) from).originalType();
+    while (from.isStrongAlias()) {
+      from = ((StrongAliasType) from).aliasedType();
     }
 
-    while (to.isTypeType()) {
-      to = ((TypeType) to).originalType();
+    while (to.isStrongAlias()) {
+      to = ((StrongAliasType) to).aliasedType();
     }
 
     EqualityType result;

@@ -35,8 +35,8 @@ class TypeUtilsTest {
     Type baseType = FACTORY.getIntrinsic(IntrinsicType.INTEGER);
     assertThat(TypeUtils.findBaseType(baseType)).isEqualTo(baseType);
 
-    Type typeType = FACTORY.typeType("String_", baseType);
-    assertThat(TypeUtils.findBaseType(typeType)).isEqualTo(baseType);
+    Type strongAliasType = FACTORY.strongAlias("String_", baseType);
+    assertThat(TypeUtils.findBaseType(strongAliasType)).isEqualTo(baseType);
 
     Type subrangeType = FACTORY.subRange("IntegerSubrange", baseType);
     assertThat(TypeUtils.findBaseType(subrangeType)).isEqualTo(baseType);

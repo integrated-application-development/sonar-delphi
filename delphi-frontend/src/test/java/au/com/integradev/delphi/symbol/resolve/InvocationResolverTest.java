@@ -162,7 +162,7 @@ class InvocationResolverTest {
     assertResolved(type(INTEGER), type(WORD), type(BYTE));
     assertResolved(type(SHORTINT), type(NATIVEINT), type(NATIVEUINT));
 
-    Type HWND = FACTORY.typeType("HWND", type(NATIVEUINT));
+    Type HWND = FACTORY.strongAlias("HWND", type(NATIVEUINT));
     assertResolved(
         List.of(HWND, type(NATIVEUINT), type(SHORTINT), type(SHORTINT)),
         List.of(HWND, type(NATIVEUINT), type(NATIVEINT), type(NATIVEINT)),
@@ -170,8 +170,8 @@ class InvocationResolverTest {
 
     assertResolved(type(BYTE), type(INTEGER), type(DOUBLE));
 
-    assertResolved(FACTORY.typeType("MyWord", type(LONGWORD)), type(INTEGER), type(INT64));
-    assertResolved(type(LONGWORD), FACTORY.typeType("MyInt", type(INTEGER)), type(INT64));
+    assertResolved(FACTORY.strongAlias("MyWord", type(LONGWORD)), type(INTEGER), type(INT64));
+    assertResolved(type(LONGWORD), FACTORY.strongAlias("MyInt", type(INTEGER)), type(INT64));
   }
 
   @Test
@@ -217,9 +217,13 @@ class InvocationResolverTest {
   @Test
   void testTextTypes() {
     assertResolved(
-        FACTORY.typeType("MyString", type(UNICODESTRING)), type(UNICODESTRING), type(SHORTSTRING));
+        FACTORY.strongAlias("MyString", type(UNICODESTRING)),
+        type(UNICODESTRING),
+        type(SHORTSTRING));
     assertResolved(
-        type(UNICODESTRING), FACTORY.typeType("MyString", type(UNICODESTRING)), type(SHORTSTRING));
+        type(UNICODESTRING),
+        FACTORY.strongAlias("MyString", type(UNICODESTRING)),
+        type(SHORTSTRING));
   }
 
   @Test

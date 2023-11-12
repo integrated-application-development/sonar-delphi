@@ -23,16 +23,16 @@ import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.StrongAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode {
-  public TypeTypeNodeImpl(Token token) {
+public final class StrongAliasTypeNodeImpl extends TypeNodeImpl implements StrongAliasTypeNode {
+  public StrongAliasTypeNodeImpl(Token token) {
     super(token);
   }
 
@@ -42,7 +42,7 @@ public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode
   }
 
   @Override
-  public TypeNode getOriginalTypeNode() {
+  public TypeNode getAliasedTypeNode() {
     return (TypeNode) getChild(0);
   }
 
@@ -57,15 +57,15 @@ public final class TypeTypeNodeImpl extends TypeNodeImpl implements TypeTypeNode
     TypeDeclarationNode typeDeclaration = (TypeDeclarationNode) getParent();
     String typeName = typeDeclaration.fullyQualifiedName();
 
-    Type originalType = getOriginalTypeNode().getType();
+    Type aliasedType = getAliasedTypeNode().getType();
     ExpressionNode codePageExpression = getCodePageExpression();
 
-    if (originalType.is(IntrinsicType.ANSISTRING) && codePageExpression != null) {
+    if (aliasedType.is(IntrinsicType.ANSISTRING) && codePageExpression != null) {
       int codePage = extractCodePage(codePageExpression);
-      originalType = getTypeFactory().ansiString(codePage);
+      aliasedType = getTypeFactory().ansiString(codePage);
     }
 
-    return getTypeFactory().typeType(typeName, originalType);
+    return getTypeFactory().strongAlias(typeName, aliasedType);
   }
 
   private static int extractCodePage(ExpressionNode expression) {

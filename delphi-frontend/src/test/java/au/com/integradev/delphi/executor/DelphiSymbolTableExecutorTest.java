@@ -829,8 +829,8 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testTypeTypeOverloads() {
-    execute("overloads/TypeType.pas");
+  void testStrongAliasOverloads() {
+    execute("overloads/StrongAlias.pas");
     verifyUsages(6, 2, reference(15, 19), reference(23, 10));
     verifyUsages(10, 10, reference(25, 2));
     verifyUsages(15, 10, reference(26, 2));

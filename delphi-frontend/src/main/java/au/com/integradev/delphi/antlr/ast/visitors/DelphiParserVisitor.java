@@ -132,6 +132,7 @@ import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StringTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.StrongAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SubRangeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
@@ -143,7 +144,6 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeOfTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
@@ -500,6 +500,10 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
+  default T visit(StrongAliasTypeNode node, T data) {
+    return visit((TypeNode) node, data);
+  }
+
   default T visit(SubRangeTypeNode node, T data) {
     return visit((TypeNode) node, data);
   }
@@ -513,10 +517,6 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(TypeReferenceNode node, T data) {
-    return visit((TypeNode) node, data);
-  }
-
-  default T visit(TypeTypeNode node, T data) {
     return visit((TypeNode) node, data);
   }
 

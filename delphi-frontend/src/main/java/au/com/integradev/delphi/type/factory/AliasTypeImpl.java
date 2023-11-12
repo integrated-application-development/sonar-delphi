@@ -16,13 +16,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.ast;
+package au.com.integradev.delphi.type.factory;
 
-import javax.annotation.Nullable;
+import au.com.integradev.delphi.type.TypeImpl;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 
-public interface TypeTypeNode extends TypeNode {
-  TypeNode getOriginalTypeNode();
+abstract class AliasTypeImpl extends TypeImpl implements AliasType {
+  private final Type originalType;
 
-  @Nullable
-  ExpressionNode getCodePageExpression();
+  protected AliasTypeImpl(Type originalType) {
+    this.originalType = originalType;
+  }
+
+  @Override
+  public int size() {
+    return originalType.size();
+  }
+
+  @Override
+  public Type aliasedType() {
+    return originalType;
+  }
 }

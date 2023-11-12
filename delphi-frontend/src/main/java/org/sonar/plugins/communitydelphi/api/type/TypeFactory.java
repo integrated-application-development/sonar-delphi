@@ -31,8 +31,8 @@ import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 
 public interface TypeFactory {
 
@@ -72,7 +72,7 @@ public interface TypeFactory {
 
   ClassReferenceType classOf(@Nullable String image, Type type);
 
-  TypeType typeType(String image, Type type);
+  StrongAliasType strongAlias(String image, Type aliased);
 
   IntegerType integerFromLiteralValue(BigInteger value);
 }

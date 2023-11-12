@@ -64,9 +64,9 @@ import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
+import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
@@ -464,8 +464,8 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   @Override
-  public TypeType typeType(String image, Type type) {
-    return new TypeTypeImpl(image, type);
+  public StrongAliasType strongAlias(String image, Type aliased) {
+    return new StrongAliasTypeImpl(image, aliased);
   }
 
   public StructType struct(TypeNode node) {

@@ -18,18 +18,16 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
-public final class TypeTypeImpl extends TypeImpl implements TypeType {
+public final class StrongAliasTypeImpl extends AliasTypeImpl implements StrongAliasType {
   private final String image;
-  private final Type originalType;
 
-  TypeTypeImpl(String image, Type originalType) {
+  StrongAliasTypeImpl(String image, Type aliasedType) {
+    super(aliasedType);
     this.image = image;
-    this.originalType = originalType;
   }
 
   @Override
@@ -38,24 +36,14 @@ public final class TypeTypeImpl extends TypeImpl implements TypeType {
   }
 
   @Override
-  public int size() {
-    return originalType.size();
-  }
-
-  @Override
-  public Type originalType() {
-    return originalType;
-  }
-
-  @Override
-  public boolean isTypeType() {
+  public boolean isStrongAlias() {
     return true;
   }
 
   @Override
   public Type specialize(TypeSpecializationContext context) {
-    if (originalType.isTypeParameter()) {
-      return new TypeTypeImpl(getImage(), originalType.specialize(context));
+    if (aliasedType().isTypeParameter()) {
+      return new StrongAliasTypeImpl(getImage(), aliasedType().specialize(context));
     }
     return this;
   }

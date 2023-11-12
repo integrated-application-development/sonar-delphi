@@ -1,4 +1,4 @@
-unit TypeType;
+unit StrongAlias;
 
 interface
 

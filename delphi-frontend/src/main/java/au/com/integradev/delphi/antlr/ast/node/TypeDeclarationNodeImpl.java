@@ -36,10 +36,10 @@ import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.StrongAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeAliasNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -198,8 +198,8 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements Typ
   }
 
   @Override
-  public boolean isTypeType() {
-    return getTypeNode() instanceof TypeTypeNode;
+  public boolean isStrongAlias() {
+    return getTypeNode() instanceof StrongAliasTypeNode;
   }
 
   @Override

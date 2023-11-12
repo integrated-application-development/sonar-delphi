@@ -113,7 +113,7 @@ public interface Type {
    * Check whether a type is a subtype of another.
    *
    * @param superType instance of a potential superType.
-   * @return true if the specified type type is a superType of this type
+   * @return true if the specified type is a superType of this type
    */
   boolean isSubTypeOf(Type superType);
 
@@ -317,11 +317,11 @@ public interface Type {
   boolean isVariant();
 
   /**
-   * Check if this type is a 'type type'
+   * Check if this type is a strong alias
    *
-   * @return true if the type is a 'type type'
+   * @return true if the type is a strong alias
    */
-  boolean isTypeType();
+  boolean isStrongAlias();
 
   /**
    * Check if this type is an array constructor
@@ -533,14 +533,16 @@ public interface Type {
     Type classType();
   }
 
-  interface TypeType extends Type {
+  interface AliasType extends Type {
     /**
-     * The type that this type is based off of
+     * The type that this type is aliased to
      *
-     * @return Original type
+     * @return Aliased type
      */
-    Type originalType();
+    Type aliasedType();
   }
+
+  interface StrongAliasType extends AliasType {}
 
   interface TypeParameterType extends Type {
 

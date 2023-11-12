@@ -61,7 +61,7 @@ public interface TypeDeclarationNode extends DelphiNode, Typed, Qualifiable {
 
   boolean isTypeAlias();
 
-  boolean isTypeType();
+  boolean isStrongAlias();
 
   boolean isForwardDeclaration();
 }

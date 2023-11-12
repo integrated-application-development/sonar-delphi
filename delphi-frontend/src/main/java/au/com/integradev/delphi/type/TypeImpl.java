@@ -207,7 +207,7 @@ public abstract class TypeImpl implements Type {
   }
 
   @Override
-  public boolean isTypeType() {
+  public boolean isStrongAlias() {
     return false;
   }
 

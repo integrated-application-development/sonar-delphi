@@ -66,9 +66,9 @@ import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StrongAliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class TypeComparerTest {
@@ -135,7 +135,7 @@ class TypeComparerTest {
 
   @Test
   void testRealToReal() {
-    compare(IntrinsicType.SINGLE, typeType("Single_", IntrinsicType.SINGLE), EQUAL);
+    compare(IntrinsicType.SINGLE, strongAlias("Single_", IntrinsicType.SINGLE), EQUAL);
     compare(IntrinsicType.SINGLE, IntrinsicType.REAL48, CONVERT_LEVEL_1);
     compare(IntrinsicType.SINGLE, IntrinsicType.DOUBLE, CONVERT_LEVEL_2);
     compare(IntrinsicType.SINGLE, IntrinsicType.EXTENDED, CONVERT_LEVEL_3);
@@ -199,10 +199,10 @@ class TypeComparerTest {
     compare(IntrinsicType.SHORTSTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_3);
     compare(IntrinsicType.SHORTSTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
-    compare(IntrinsicType.ANSISTRING, typeType("_", IntrinsicType.ANSISTRING), EQUAL);
-    compare(typeType("_", IntrinsicType.ANSISTRING), IntrinsicType.ANSISTRING, EQUAL);
+    compare(IntrinsicType.ANSISTRING, strongAlias("_", IntrinsicType.ANSISTRING), EQUAL);
+    compare(strongAlias("_", IntrinsicType.ANSISTRING), IntrinsicType.ANSISTRING, EQUAL);
     compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_NONE), EQUAL);
-    compare(ansiString(CodePages.CP_NONE), typeType("_", ansiString(CodePages.CP_NONE)), EQUAL);
+    compare(ansiString(CodePages.CP_NONE), strongAlias("_", ansiString(CodePages.CP_NONE)), EQUAL);
     compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_UTF8), CONVERT_LEVEL_1);
     compare(ansiString(CodePages.CP_1252), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
     compare(ansiString(CodePages.CP_NONE), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
@@ -212,7 +212,7 @@ class TypeComparerTest {
     compare(IntrinsicType.ANSISTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_6);
     compare(IntrinsicType.ANSISTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
-    compare(typeType("Test", IntrinsicType.UNICODESTRING), IntrinsicType.UNICODESTRING, EQUAL);
+    compare(strongAlias("Test", IntrinsicType.UNICODESTRING), IntrinsicType.UNICODESTRING, EQUAL);
 
     Type unknown = unknownType();
     Type unicodeString = toType(IntrinsicType.UNICODESTRING);
@@ -282,8 +282,9 @@ class TypeComparerTest {
 
   @Test
   void testCharToChar() {
-    compare(IntrinsicType.ANSICHAR, typeType("_AnsiChar", IntrinsicType.ANSICHAR), CONVERT_LEVEL_1);
-    compare(IntrinsicType.CHAR, typeType("_WideChar", IntrinsicType.WIDECHAR), CONVERT_LEVEL_1);
+    compare(
+        IntrinsicType.ANSICHAR, strongAlias("_AnsiChar", IntrinsicType.ANSICHAR), CONVERT_LEVEL_1);
+    compare(IntrinsicType.CHAR, strongAlias("_WideChar", IntrinsicType.WIDECHAR), CONVERT_LEVEL_1);
     compare(IntrinsicType.WIDECHAR, IntrinsicType.ANSICHAR, CONVERT_LEVEL_2);
     assertThat(TypeComparer.compareWideCharToChar(unknownType())).isEqualTo(INCOMPATIBLE_TYPES);
 
@@ -321,7 +322,7 @@ class TypeComparerTest {
     SubrangeType subrangeOfInteger = subRange("5..High(Integer)", IntrinsicType.INTEGER);
     SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum"));
 
-    compare(subrangeOfShortInt, typeType("Foo", subrangeOfShortInt), CONVERT_LEVEL_1);
+    compare(subrangeOfShortInt, strongAlias("Foo", subrangeOfShortInt), CONVERT_LEVEL_1);
     compare(IntrinsicType.VARIANT, subrangeOfShortInt, CONVERT_LEVEL_1);
     compare(subrangeOfShortInt, subrangeOfInteger, CONVERT_LEVEL_1);
     compare(subrangeOfInteger, subrangeOfShortInt, CONVERT_LEVEL_3);
@@ -700,12 +701,12 @@ class TypeComparerTest {
     return FACTORY.emptySet();
   }
 
-  private static TypeType typeType(String image, IntrinsicType intrinsic) {
-    return FACTORY.typeType(image, toType(intrinsic));
+  private static StrongAliasType strongAlias(String image, IntrinsicType intrinsic) {
+    return FACTORY.strongAlias(image, toType(intrinsic));
   }
 
-  private static TypeType typeType(String image, Type type) {
-    return FACTORY.typeType(image, type);
+  private static StrongAliasType strongAlias(String image, Type type) {
+    return FACTORY.strongAlias(image, type);
   }
 
   private static EnumType enumeration(String image) {

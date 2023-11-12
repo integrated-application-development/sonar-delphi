@@ -262,7 +262,7 @@ typeDecl                     : arrayType
                              | procedureType
                              | subRangeType
                              | typeOfType
-                             | typeType
+                             | strongAliasType
                              | typeAlias
                              | enumType
                              | 'packed' typeDecl^
@@ -322,7 +322,7 @@ procedureTypeHeading         : 'function'<ProcedureTypeHeadingNodeImpl>^ methodP
                              ;
 typeOfType                   : 'type'<TypeOfTypeNodeImpl>^ 'of' typeDecl
                              ;
-typeType                     : 'type'<TypeTypeNodeImpl>^ typeReference codePageExpression?
+strongAliasType              : 'type'<StrongAliasTypeNodeImpl>^ typeReference codePageExpression?
                              ;
 codePageExpression           : '('! expression ')'!
                              ;
