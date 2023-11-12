@@ -335,23 +335,6 @@
           <groupId>com.diffplug.spotless</groupId>
           <artifactId>spotless-maven-plugin</artifactId>
           <version>${spotless-plugin.version}</version>
-          <executions>
-            <execution>
-              <phase>process-sources</phase>
-              <goals>
-                <goal>apply</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <java>
-              <googleJavaFormat>
-                <version>1.15.0</version>
-                <style>GOOGLE</style>
-                <reflowLongStrings>true</reflowLongStrings>
-              </googleJavaFormat>
-            </java>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -463,7 +446,6 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>${spotless-plugin.version}</version>
         <executions>
           <execution>
             <phase>process-sources</phase>
@@ -475,7 +457,7 @@
         <configuration>
           <java>
             <googleJavaFormat>
-              <version>1.15.0</version>
+              <version>1.18.1</version>
               <style>GOOGLE</style>
               <reflowLongStrings>true</reflowLongStrings>
             </googleJavaFormat>
