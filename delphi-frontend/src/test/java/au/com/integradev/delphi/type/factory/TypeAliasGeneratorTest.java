@@ -243,9 +243,6 @@ class TypeAliasGeneratorTest {
 
     if (aliased instanceof StructType) {
       assertDelegated(StructType::kind, alias, aliased);
-      assertDelegated(StructType::isForwardType, alias, aliased);
-      assertDelegated(StructType::typesWithImplicitConversionsFromThis, alias, aliased);
-      assertDelegated(StructType::typesWithImplicitConversionsToThis, alias, aliased);
       assertDelegated(StructType::attributeTypes, alias, aliased);
     }
 

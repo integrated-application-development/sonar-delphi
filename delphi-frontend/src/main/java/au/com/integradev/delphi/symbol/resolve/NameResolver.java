@@ -781,7 +781,7 @@ public class NameResolver {
     }
 
     if (type.isStruct()) {
-      StructType structType = (StructType) type;
+      StructType structType = (StructType) TypeUtils.findBaseType(type);
       var defaultArrayProperties = ((StructTypeImpl) structType).findDefaultArrayProperties();
       if (!defaultArrayProperties.isEmpty()) {
         NameResolver propertyResolver = new NameResolver(this);

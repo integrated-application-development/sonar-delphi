@@ -29,8 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -47,10 +45,7 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private Set<Type> parents;
   private StructKind kind;
   private Type superType;
-  private Set<Type> typesWithImplicitConversionsToThis;
-  private Set<Type> typesWithImplicitConversionsFromThis;
   private List<Type> attributeTypes;
-  private boolean isForwardType;
 
   StructTypeImpl(
       List<ImagePart> imageParts,
@@ -141,14 +136,8 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
     return kind;
   }
 
-  @Override
-  public boolean isForwardType() {
-    return isForwardType;
-  }
-
   /**
-   * Adds the full type declaration's information. Also marks this StructType instance as a forward
-   * type.
+   * Adds the full type declaration's information.
    *
    * @param fullType Type representing the full type declaration
    */
@@ -157,46 +146,6 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
     this.parents = ImmutableSet.copyOf(fullType.parents());
     this.kind = fullType.kind();
     this.superType = fullType.superType();
-    this.isForwardType = true;
-  }
-
-  @Override
-  public Set<Type> typesWithImplicitConversionsFromThis() {
-    if (typesWithImplicitConversionsFromThis == null) {
-      indexImplicitConversions();
-    }
-
-    return typesWithImplicitConversionsFromThis;
-  }
-
-  @Override
-  public Set<Type> typesWithImplicitConversionsToThis() {
-    if (typesWithImplicitConversionsToThis == null) {
-      indexImplicitConversions();
-    }
-    return typesWithImplicitConversionsToThis;
-  }
-
-  private void indexImplicitConversions() {
-    ImmutableSet.Builder<Type> fromBuilder = ImmutableSet.builder();
-    ImmutableSet.Builder<Type> toBuilder = ImmutableSet.builder();
-
-    for (MethodNameDeclaration method : scope.getMethodDeclarations()) {
-      if (method.getMethodKind() == MethodKind.OPERATOR
-          && method.getName().equalsIgnoreCase("Implicit")
-          && method.getParametersCount() == 1) {
-        Type returnType = method.getReturnType();
-        Type parameterType = method.getParameter(0).getType();
-        if (returnType.is(this)) {
-          toBuilder.add(parameterType);
-        } else if (parameterType.is(this)) {
-          fromBuilder.add(returnType);
-        }
-      }
-    }
-
-    typesWithImplicitConversionsToThis = toBuilder.build();
-    typesWithImplicitConversionsFromThis = fromBuilder.build();
   }
 
   @Override

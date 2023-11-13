@@ -403,27 +403,6 @@ public interface Type {
      */
     StructKind kind();
 
-    /**
-     * Whether this is a forward type
-     *
-     * @return true if this is a forward type
-     */
-    boolean isForwardType();
-
-    /**
-     * Returns a set of types that this type defines implicit conversion to
-     *
-     * @return set of types that this type defines implicit conversion to
-     */
-    Set<Type> typesWithImplicitConversionsFromThis();
-
-    /**
-     * Returns a set of types that this type defines implicit conversion from
-     *
-     * @return set of types that this type defines implicit conversion from
-     */
-    Set<Type> typesWithImplicitConversionsToThis();
-
     List<Type> attributeTypes();
   }
 

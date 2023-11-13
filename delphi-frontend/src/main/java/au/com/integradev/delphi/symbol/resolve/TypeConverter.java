@@ -22,6 +22,11 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_
 
 import au.com.integradev.delphi.symbol.resolve.TypeConverter.TypeConversion.Source;
 import java.util.Set;
+import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 
@@ -35,7 +40,7 @@ public final class TypeConverter {
 
     EqualityType fromConversionEquality = INCOMPATIBLE_TYPES;
     if (from.isStruct()) {
-      Set<Type> implicit = ((StructType) from).typesWithImplicitConversionsFromThis();
+      Set<Type> implicit = indexImplicitConversionsFromThis((StructType) from);
       for (Type implicitConversion : implicit) {
         EqualityType convertEquality = TypeComparer.compare(implicitConversion, to);
         if (convertEquality.ordinal() > fromConversionEquality.ordinal()) {
@@ -48,7 +53,7 @@ public final class TypeConverter {
     Type toConversionType = null;
     EqualityType toConversionEquality = INCOMPATIBLE_TYPES;
     if (to.isStruct()) {
-      Set<Type> implicit = ((StructType) to).typesWithImplicitConversionsToThis();
+      Set<Type> implicit = indexImplicitConversionsToThis((StructType) to);
       for (Type implicitConversion : implicit) {
         EqualityType convertEquality = TypeComparer.compare(from, implicitConversion);
         if (convertEquality.ordinal() > toConversionEquality.ordinal()) {
@@ -72,6 +77,29 @@ public final class TypeConverter {
     }
 
     return new TypeConversion(from, to, equality, source);
+  }
+
+  private static Set<Type> indexImplicitConversionsFromThis(StructType type) {
+    return type.typeScope().getMethodDeclarations().stream()
+        .filter(TypeConverter::isImplicitOperator)
+        .filter(method -> method.getParameter(0).getType().is(type))
+        .map(Invocable::getReturnType)
+        .collect(Collectors.toUnmodifiableSet());
+  }
+
+  private static Set<Type> indexImplicitConversionsToThis(StructType type) {
+    return type.typeScope().getMethodDeclarations().stream()
+        .filter(TypeConverter::isImplicitOperator)
+        .filter(method -> method.getReturnType().is(type))
+        .map(method -> method.getParameter(0))
+        .map(Parameter::getType)
+        .collect(Collectors.toUnmodifiableSet());
+  }
+
+  private static boolean isImplicitOperator(MethodNameDeclaration method) {
+    return method.getMethodKind() == MethodKind.OPERATOR
+        && method.getName().equalsIgnoreCase("Implicit")
+        && method.getParametersCount() == 1;
   }
 
   public static final class TypeConversion {

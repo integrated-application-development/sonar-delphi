@@ -46,11 +46,6 @@ public final class HelperTypeImpl extends StructTypeImpl implements HelperType {
   }
 
   @Override
-  public boolean isForwardType() {
-    return false;
-  }
-
-  @Override
   public boolean isHelper() {
     return true;
   }
