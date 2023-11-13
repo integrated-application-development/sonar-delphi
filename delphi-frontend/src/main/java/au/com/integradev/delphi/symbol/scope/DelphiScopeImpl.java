@@ -318,6 +318,7 @@ public class DelphiScopeImpl implements DelphiScope {
 
     Set<NameDeclaration> found = declarationsByName.get(occurrence.getImage());
     if (occurrence.isAttributeReference()) {
+      found = new HashSet<>(found);
       found.addAll(declarationsByName.get(occurrence.getImage() + "Attribute"));
     }
 
