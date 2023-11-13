@@ -33,22 +33,22 @@ public interface Type {
   String getImage();
 
   /**
-   * Returns the type that this inherits from.
+   * Returns the type that this descends from.
    *
-   * <p>For an interface type, this will return the parent interface.
+   * <p>For an interface type: this will return the parent interface.
    *
-   * <p>For any other type, this will return a concrete parent type, and never an interface.
+   * <p>For any other type: this will return a concrete parent type, and never an interface.
    *
-   * @return The type this inherits from. UnknownType if there is no such type.
+   * @return the type this inherits from, or {@code UnknownType} if there is no such type
    */
-  Type superType();
+  Type parent();
 
   /**
-   * Returns all types from the ancestor list. (This will also return interfaces.)
+   * Returns all types from the ancestor list. (This will also return interfaces)
    *
-   * @return The types that this inherits from.
+   * @return all types from the ancestor list
    */
-  Set<Type> parents();
+  Set<Type> ancestorList();
 
   /**
    * The size of this type
@@ -102,20 +102,20 @@ public interface Type {
   boolean is(IntrinsicType intrinsic);
 
   /**
-   * Check whether a type is a subtype of another.
+   * Check whether a type is a descendant of another.
    *
-   * @param image Type image of a potential superType
-   * @return true if the specified type image is a superType of this type
+   * @param image Type image of a potential ancestor type
+   * @return true if the specified type image is an ancestor of this type
    */
-  boolean isSubTypeOf(String image);
+  boolean isDescendantOf(String image);
 
   /**
-   * Check whether a type is a subtype of another.
+   * Check whether a type is an ancestor of another.
    *
-   * @param superType instance of a potential superType.
-   * @return true if the specified type is a superType of this type
+   * @param ancestor instance of a potential ancestor type.
+   * @return true if the specified type is an ancestor of this type
    */
-  boolean isSubTypeOf(Type superType);
+  boolean isDescendantOf(Type ancestor);
 
   /**
    * Check if this type is untyped.

@@ -64,7 +64,7 @@ public class MethodNameCheck extends DelphiCheck {
 
   private static boolean hasOverriddenMethodDeclarationInAncestor(
       Type type, MethodNameDeclaration method) {
-    return type.parents().stream()
+    return type.ancestorList().stream()
         .anyMatch(
             parent ->
                 hasOverriddenMethodDeclaration(parent, method)

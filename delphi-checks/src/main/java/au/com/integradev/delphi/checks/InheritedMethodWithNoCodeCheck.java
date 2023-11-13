@@ -96,7 +96,7 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
   }
 
   private static Stream<Type> concreteParentTypesStream(Type type) {
-    return type.parents().stream()
+    return type.ancestorList().stream()
         .filter(Type::isClass)
         .findFirst()
         .map(value -> Stream.concat(Stream.of(value), concreteParentTypesStream(value)))

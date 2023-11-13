@@ -27,12 +27,12 @@ import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public abstract class TypeImpl implements Type {
   @Override
-  public Type superType() {
+  public Type parent() {
     return TypeFactory.unknownType();
   }
 
   @Override
-  public Set<Type> parents() {
+  public Set<Type> ancestorList() {
     return Collections.emptySet();
   }
 
@@ -62,13 +62,13 @@ public abstract class TypeImpl implements Type {
   }
 
   @Override
-  public boolean isSubTypeOf(String image) {
+  public boolean isDescendantOf(String image) {
     return false;
   }
 
   @Override
-  public boolean isSubTypeOf(Type type) {
-    return isSubTypeOf(type.getImage());
+  public boolean isDescendantOf(Type type) {
+    return isDescendantOf(type.getImage());
   }
 
   @Override

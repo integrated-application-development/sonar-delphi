@@ -353,7 +353,7 @@ public class NameResolver {
       declarations = currentScope.findDeclaration(occurrence);
 
       if (declarations.isEmpty() && currentScope instanceof TypeScope) {
-        currentScope = ((TypeScope) currentScope).getSuperTypeScope();
+        currentScope = ((TypeScope) currentScope).getParentTypeScope();
         searchForDeclaration(occurrence);
       }
 
@@ -391,19 +391,19 @@ public class NameResolver {
     TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
     if (typeDeclaration != null) {
       Type type = typeDeclaration.getType();
-      Type newType = type.superType();
+      Type newType = type.parent();
 
       // Rules for inherited statements in helper methods are a bit unintuitive.
       // Inheritance in helpers doesn't work in the same way as classes. It's more like aggregation.
       //
       // For starters, we ignore any helper ancestors and go straight into the extended type.
       // If this is a bare inherited call with no specified method signature, then we even skip the
-      // extended type and move into its supertype.
+      // extended type and move into its parent.
       // See: https://wiki.freepascal.org/Helper_types#Inherited_with_function_name
       if (type.isHelper()) {
         newType = ((HelperType) type).extendedType();
         if (ExpressionNodeUtils.isBareInherited(node)) {
-          newType = newType.superType();
+          newType = newType.parent();
         }
       }
 
@@ -1189,7 +1189,7 @@ public class NameResolver {
   private static int compareTypeSpecificity(Type typeA, Type typeB) {
     if (typeA.is(typeB)) {
       return 0;
-    } else if (typeA.isSubTypeOf(typeB) || hasHelperRelationship(typeA, typeB)) {
+    } else if (typeA.isDescendantOf(typeB) || hasHelperRelationship(typeA, typeB)) {
       return 1;
     } else {
       return -1;
@@ -1199,7 +1199,7 @@ public class NameResolver {
   private static boolean hasHelperRelationship(Type typeA, Type typeB) {
     if (typeA.isHelper()) {
       Type extended = ((HelperType) typeA).extendedType();
-      return extended.is(typeB) || extended.isSubTypeOf(typeB);
+      return extended.is(typeB) || extended.isDescendantOf(typeB);
     }
     return false;
   }
@@ -1265,8 +1265,8 @@ public class NameResolver {
     if (!fromType.isUnknown() && !toType.isUnknown()) {
       if (fromType.is(toType)) {
         return true;
-      } else if (fromType.isSubTypeOf(toType)) {
-        return isSuperTypeMethodVisible(method, isSameUnit);
+      } else if (fromType.isDescendantOf(toType)) {
+        return isParentTypeMethodVisible(method, isSameUnit);
       } else if (isHelperTypeAccessingExtendedType(fromType, toType)) {
         return !method.isPrivate();
       }
@@ -1277,12 +1277,12 @@ public class NameResolver {
   private static boolean isHelperTypeAccessingExtendedType(Type fromType, Type toType) {
     if (fromType.isHelper()) {
       Type extendedType = ((HelperType) fromType).extendedType();
-      return extendedType.is(toType) || extendedType.isSubTypeOf(toType);
+      return extendedType.is(toType) || extendedType.isDescendantOf(toType);
     }
     return false;
   }
 
-  private static boolean isSuperTypeMethodVisible(MethodNameDeclaration method, boolean sameUnit) {
+  private static boolean isParentTypeMethodVisible(MethodNameDeclaration method, boolean sameUnit) {
     return !(sameUnit ? method.isStrictPrivate() : method.isPrivate());
   }
 

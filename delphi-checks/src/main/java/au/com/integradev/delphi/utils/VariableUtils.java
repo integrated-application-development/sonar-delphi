@@ -46,6 +46,6 @@ public final class VariableUtils {
       return false;
     }
 
-    return varDecl.getType().isSubTypeOf("System.Classes.TComponent");
+    return varDecl.getType().isDescendantOf("System.Classes.TComponent");
   }
 }

@@ -45,7 +45,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclarat
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements TypeDeclarationNode {
-  private Boolean isSubType;
+  private Boolean isNestedType;
   private QualifiedName qualifiedName;
   private String qualifiedNameExcludingUnit;
 
@@ -186,10 +186,10 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements Typ
 
   @Override
   public boolean isNestedType() {
-    if (isSubType == null) {
-      isSubType = getFirstParentOfType(TypeDeclarationNode.class) != null;
+    if (isNestedType == null) {
+      isNestedType = getFirstParentOfType(TypeDeclarationNode.class) != null;
     }
-    return isSubType;
+    return isNestedType;
   }
 
   @Override

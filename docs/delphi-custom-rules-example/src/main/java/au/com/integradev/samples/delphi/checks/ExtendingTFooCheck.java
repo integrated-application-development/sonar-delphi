@@ -28,7 +28,7 @@ public class ExtendingTFooCheck extends DelphiCheck {
     // Code located before the call to the overridden method is executed before visiting the node
 
     Type type = node.getType();
-    if (type.isSubTypeOf(TFOO)) {
+    if (type.isDescendantOf(TFOO)) {
       reportIssue(context, node.getTypeNameNode(), "Extending 'Foos.TFoo' is forbidden.");
     }
 

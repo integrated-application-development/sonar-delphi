@@ -188,7 +188,7 @@ public class NameResolutionHelper {
 
                   if (leftType.is(rightType)) {
                     return left.getNode().getBeginLine() - right.getNode().getBeginLine();
-                  } else if (leftType.isSubTypeOf(rightType)) {
+                  } else if (leftType.isDescendantOf(rightType)) {
                     return 1;
                   } else {
                     return -1;

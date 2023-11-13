@@ -40,7 +40,7 @@ public class NonLinearCastCheck extends AbstractCastCheck {
     if (!from.isClass() || !to.isClass()) {
       return true;
     } else {
-      return from.is(to) || from.isSubTypeOf(to) || to.isSubTypeOf(from);
+      return from.is(to) || from.isDescendantOf(to) || to.isDescendantOf(from);
     }
   }
 

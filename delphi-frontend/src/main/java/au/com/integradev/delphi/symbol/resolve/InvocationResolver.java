@@ -299,9 +299,9 @@ public class InvocationResolver {
 
   private static int calculateStructDistance(Type from, Type to) {
     int result = 0;
-    while (from.isSubTypeOf(to)) {
+    while (from.isDescendantOf(to)) {
       ++result;
-      from = from.superType();
+      from = from.parent();
     }
     return result;
   }

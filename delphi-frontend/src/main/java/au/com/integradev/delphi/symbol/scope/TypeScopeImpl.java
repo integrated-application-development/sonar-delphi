@@ -35,20 +35,20 @@ import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public class TypeScopeImpl extends DelphiScopeImpl implements TypeScope {
   private Type type = unknownType();
-  private DelphiScope superTypeScope = unknownScope();
+  private DelphiScope parentTypeScope = unknownScope();
 
   public void setType(Type type) {
     this.type = type;
 
-    Type superType = type.superType();
-    if (superType instanceof ScopedType) {
-      this.superTypeScope = ((ScopedType) superType).typeScope();
+    Type parent = type.parent();
+    if (parent instanceof ScopedType) {
+      this.parentTypeScope = ((ScopedType) parent).typeScope();
     }
   }
 
   @Override
-  public DelphiScope getSuperTypeScope() {
-    return superTypeScope;
+  public DelphiScope getParentTypeScope() {
+    return parentTypeScope;
   }
 
   @Override
@@ -70,7 +70,7 @@ public class TypeScopeImpl extends DelphiScopeImpl implements TypeScope {
       }
       return null;
     }
-    return superTypeScope;
+    return parentTypeScope;
   }
 
   @Override

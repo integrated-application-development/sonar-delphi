@@ -22,12 +22,12 @@ type
   TMyType = class(TObject)
   public
     type
-      TMySubType = class(TObject);
+      TMyDescendant = class(TObject);
       end;
   private
-    procedure DoSecretThing(Obj: TMySubType);
+    procedure DoSecretThing(Obj: TMyDescendant);
   public
-    procedure DoPublicThing(Obj: TMySubType);
+    procedure DoPublicThing(Obj: TMyDescendant);
   end;
 </pre>
 <h2>How to fix it</h2>

@@ -67,7 +67,7 @@ public class InheritedTypeNameCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(TypeDeclarationNode type, DelphiCheckContext context) {
     if (namePattern != null
-        && type.getType().isSubTypeOf(parentTypeName)
+        && type.getType().isDescendantOf(parentTypeName)
         && !namePattern.matcher(type.simpleName()).matches()) {
       reportIssue(context, type.getTypeNameNode(), message);
     }

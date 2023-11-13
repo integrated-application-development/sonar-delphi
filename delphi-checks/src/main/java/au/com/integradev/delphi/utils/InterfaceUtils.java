@@ -45,7 +45,7 @@ public final class InterfaceUtils {
     Set<MethodNameDeclaration> implementedMethods = new HashSet<>();
 
     var interfaces =
-        typeDeclaration.getType().parents().stream()
+        typeDeclaration.getType().ancestorList().stream()
             .filter(Type::isInterface)
             .map(ScopedType.class::cast)
             .collect(Collectors.toUnmodifiableList());
@@ -67,7 +67,7 @@ public final class InterfaceUtils {
       return true;
     }
 
-    return type.parents().stream()
+    return type.ancestorList().stream()
         .anyMatch(parentType -> hasMatchingInterfaceMethod(parentType, method));
   }
 

@@ -59,7 +59,7 @@ public class TestCodeDetector {
   }
 
   private boolean isTestTypeByAncestry(Type type) {
-    return type.is(testTypeName) || type.isSubTypeOf(testTypeName);
+    return type.is(testTypeName) || type.isDescendantOf(testTypeName);
   }
 
   private boolean isTestTypeByAttribute(Type type) {

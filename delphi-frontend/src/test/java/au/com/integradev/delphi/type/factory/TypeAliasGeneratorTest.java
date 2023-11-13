@@ -193,8 +193,8 @@ class TypeAliasGeneratorTest {
   }
 
   private static void assertAliasImplementsTypeThroughDelegation(Type alias, Type aliased) {
-    assertDelegated(Type::superType, alias, aliased);
-    assertDelegated(Type::parents, alias, aliased);
+    assertDelegated(Type::parent, alias, aliased);
+    assertDelegated(Type::ancestorList, alias, aliased);
     assertDelegated(Type::size, alias, aliased);
     assertDelegated(Type::isUnresolved, alias, aliased);
     assertDelegated(Type::isUntyped, alias, aliased);

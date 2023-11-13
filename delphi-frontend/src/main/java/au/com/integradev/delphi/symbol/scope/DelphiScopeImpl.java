@@ -268,7 +268,7 @@ public class DelphiScopeImpl implements DelphiScope {
 
   private static boolean isOverrideForOverloadedMethod(MethodNameDeclaration method) {
     if (method.hasDirective(MethodDirective.OVERRIDE)) {
-      DelphiScope scope = method.getScope().getEnclosingScope(TypeScope.class).getSuperTypeScope();
+      DelphiScope scope = method.getScope().getEnclosingScope(TypeScope.class).getParentTypeScope();
 
       while (scope instanceof TypeScope) {
         MethodNameDeclaration overridden =
@@ -283,7 +283,7 @@ public class DelphiScopeImpl implements DelphiScope {
               || overridden.hasDirective(MethodDirective.DYNAMIC);
         }
 
-        scope = ((TypeScope) scope).getSuperTypeScope();
+        scope = ((TypeScope) scope).getParentTypeScope();
       }
     }
     return false;

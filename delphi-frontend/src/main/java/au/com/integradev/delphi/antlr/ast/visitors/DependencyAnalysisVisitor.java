@@ -214,7 +214,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
           .getVariableDeclarations()
           .forEach(declaration -> addDependenciesForComponentTypeField(declaration, data));
 
-      addDependenciesForComponentTypeDeclaration(type.superType(), data);
+      addDependenciesForComponentTypeDeclaration(type.parent(), data);
     }
   }
 
@@ -228,7 +228,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     Type type = field.getType();
     if (field.isPublished() && isComponent(type)) {
       while (addDependenciesDeclaringType(type, data)) {
-        type = type.superType();
+        type = type.parent();
       }
     }
   }
@@ -249,7 +249,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   }
 
   private static boolean isComponent(Type type) {
-    return type.isSubTypeOf(TCOMPONENT) || type.is(TCOMPONENT);
+    return type.isDescendantOf(TCOMPONENT) || type.is(TCOMPONENT);
   }
 
   private static boolean isNameStart(NameReferenceNode nameNode) {

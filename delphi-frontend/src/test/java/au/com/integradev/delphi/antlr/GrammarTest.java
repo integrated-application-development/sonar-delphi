@@ -168,8 +168,8 @@ class GrammarTest {
   }
 
   @Test
-  void testGenericSubTypeDecl() {
-    assertParsed("GenericSubTypeDecl.pas");
+  void testGenericDescendantDecl() {
+    assertParsed("GenericDescendantDecl.pas");
   }
 
   @Test

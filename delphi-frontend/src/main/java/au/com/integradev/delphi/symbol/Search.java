@@ -233,7 +233,7 @@ public class Search {
     }
 
     if (result.isEmpty()) {
-      DelphiScope ancestorType = scope.getSuperTypeScope();
+      DelphiScope ancestorType = scope.getParentTypeScope();
       if (ancestorType instanceof TypeScope) {
         if (TRACE) {
           LOG.info(" moving up from type scope {} to type scope {}", scope, ancestorType);
@@ -301,7 +301,7 @@ public class Search {
           LOG.info(" checking helper scope {} for name occurrence {}", helperScope, occurrence);
         }
         result = helperScope.findDeclaration(occurrence);
-        helperType = helperType.superType();
+        helperType = helperType.parent();
       }
     }
 

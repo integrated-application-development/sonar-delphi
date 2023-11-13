@@ -41,7 +41,7 @@ public final class TypeMocker {
     return struct(image, kind, unknownType());
   }
 
-  public static StructType struct(String image, StructKind kind, Type superType) {
+  public static StructType struct(String image, StructKind kind, Type parent) {
     StructType type;
 
     switch (kind) {
@@ -66,14 +66,13 @@ public final class TypeMocker {
         .thenAnswer(
             arguments -> image.equalsIgnoreCase(((Type) arguments.getArgument(0)).getImage()));
     when(type.kind()).thenReturn(kind);
-    when(type.isSubTypeOf(anyString()))
-        .thenAnswer(invocation -> isImageOrSuperType(invocation.getArgument(0), image, superType));
-    when(type.isSubTypeOf(any(Type.class)))
+    when(type.isDescendantOf(anyString()))
+        .thenAnswer(invocation -> isImageOrParentType(invocation.getArgument(0), image, parent));
+    when(type.isDescendantOf(any(Type.class)))
         .thenAnswer(
             invocation ->
-                isImageOrSuperType(
-                    ((Type) invocation.getArgument(0)).getImage(), image, superType));
-    when(type.superType()).thenReturn(superType);
+                isImageOrParentType(((Type) invocation.getArgument(0)).getImage(), image, parent));
+    when(type.parent()).thenReturn(parent);
 
     return type;
   }
@@ -85,7 +84,7 @@ public final class TypeMocker {
     return parameter;
   }
 
-  private static boolean isImageOrSuperType(String typeToCheck, String image, Type superType) {
-    return image.equalsIgnoreCase(typeToCheck) || superType.is(typeToCheck);
+  private static boolean isImageOrParentType(String typeToCheck, String image, Type parent) {
+    return image.equalsIgnoreCase(typeToCheck) || parent.is(typeToCheck);
   }
 }

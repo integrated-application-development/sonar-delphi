@@ -748,7 +748,7 @@ final class TypeComparer {
   }
 
   private static EqualityType compareObject(Type from, Type to) {
-    if (from.isStruct() && from.isSubTypeOf(to)) {
+    if (from.isStruct() && from.isDescendantOf(to)) {
       return CONVERT_LEVEL_1;
     } else if (from.isPointer() && !to.isRecord()) {
       PointerType fromPointer = (PointerType) from;
@@ -777,7 +777,7 @@ final class TypeComparer {
       Type toReference = ((ClassReferenceType) to).classType();
       if (fromReference.is(toReference)) {
         return EQUAL;
-      } else if (fromReference.isSubTypeOf(toReference)) {
+      } else if (fromReference.isDescendantOf(toReference)) {
         return CONVERT_LEVEL_1;
       }
     } else if (from.isPointer()) {
@@ -828,7 +828,7 @@ final class TypeComparer {
   private static EqualityType comparePointerToPointer(PointerType from, PointerType to) {
     if (equals(from.dereferencedType(), to.dereferencedType())) {
       return EQUAL;
-    } else if (from.dereferencedType().isSubTypeOf(to.dereferencedType())) {
+    } else if (from.dereferencedType().isDescendantOf(to.dereferencedType())) {
       return CONVERT_LEVEL_1;
     } else if (to.isUntypedPointer()) {
       // All pointers can be assigned to untyped pointer

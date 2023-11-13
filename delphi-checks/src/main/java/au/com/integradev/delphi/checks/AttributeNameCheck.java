@@ -41,7 +41,7 @@ public class AttributeNameCheck extends DelphiCheck {
   }
 
   private static boolean isAttributeClass(Type type) {
-    return type.isClass() && type.isSubTypeOf("System.TCustomAttribute");
+    return type.isClass() && type.isDescendantOf("System.TCustomAttribute");
   }
 
   private static boolean isViolation(TypeDeclarationNode type) {

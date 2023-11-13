@@ -42,16 +42,16 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private final List<ImagePart> imageParts;
   private final int size;
   private DelphiScope scope;
-  private Set<Type> parents;
+  private Set<Type> ancestorList;
   private StructKind kind;
-  private Type superType;
+  private Type parent;
   private List<Type> attributeTypes;
 
   StructTypeImpl(
       List<ImagePart> imageParts,
       int size,
       DelphiScope scope,
-      Set<Type> parents,
+      Set<Type> ancestorList,
       StructKind kind,
       List<Type> attributeTypes) {
     this.imageParts = imageParts;
@@ -59,16 +59,16 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
     this.scope = scope;
     this.kind = kind;
     this.attributeTypes = attributeTypes;
-    setParents(parents);
+    setAncestors(ancestorList);
   }
 
-  private void setParents(Set<Type> parents) {
-    this.parents = Set.copyOf(parents);
+  private void setAncestors(Set<Type> ancestorList) {
+    this.ancestorList = Set.copyOf(ancestorList);
     if (isInterface()) {
-      this.superType = Iterables.getFirst(parents, TypeFactory.unknownType());
+      this.parent = Iterables.getFirst(ancestorList, TypeFactory.unknownType());
     } else {
-      this.superType =
-          this.parents.stream()
+      this.parent =
+          this.ancestorList.stream()
               .filter(StructTypeImpl.class::isInstance)
               .filter(not(Type::isInterface))
               .findFirst()
@@ -87,9 +87,9 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   }
 
   @Override
-  public boolean isSubTypeOf(String image) {
-    for (Type parent : parents) {
-      if (parent.is(image) || parent.isSubTypeOf(image)) {
+  public boolean isDescendantOf(String image) {
+    for (Type ancestor : ancestorList) {
+      if (ancestor.is(image) || ancestor.isDescendantOf(image)) {
         return true;
       }
     }
@@ -97,13 +97,13 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   }
 
   @Override
-  public Type superType() {
-    return superType;
+  public Type parent() {
+    return parent;
   }
 
   @Override
-  public Set<Type> parents() {
-    return parents;
+  public Set<Type> ancestorList() {
+    return ancestorList;
   }
 
   @Override
@@ -143,9 +143,9 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
    */
   public void setFullType(StructType fullType) {
     this.scope = fullType.typeScope();
-    this.parents = ImmutableSet.copyOf(fullType.parents());
+    this.ancestorList = ImmutableSet.copyOf(fullType.ancestorList());
     this.kind = fullType.kind();
-    this.superType = fullType.superType();
+    this.parent = fullType.parent();
   }
 
   @Override
@@ -167,10 +167,10 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
       }
     }
 
-    return parents.stream()
+    return ancestorList.stream()
         .filter(StructTypeImpl.class::isInstance)
         .map(StructTypeImpl.class::cast)
-        .anyMatch(parent -> parent.canBeSpecialized(context));
+        .anyMatch(ancestor -> ancestor.canBeSpecialized(context));
   }
 
   @Override
@@ -181,16 +181,16 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
             .collect(Collectors.toUnmodifiableList()),
         size,
         scope,
-        parents,
+        ancestorList,
         kind,
         attributeTypes);
   }
 
   @Override
   protected final void doAfterSpecialization(TypeSpecializationContext context) {
-    this.setParents(
-        parents.stream()
-            .map(parent -> parent.specialize(context))
+    this.setAncestors(
+        ancestorList.stream()
+            .map(ancestor -> ancestor.specialize(context))
             .collect(Collectors.toUnmodifiableSet()));
     this.scope = TypeScopeImpl.specializedScope(scope, this, context);
   }
@@ -217,9 +217,9 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
                     .noneMatch(property -> property.hasSameParameterTypes(declaration)))
         .forEach(result::add);
 
-    Type superType = type.superType();
-    if (superType.isStruct()) {
-      findDefaultArrayProperties((StructType) superType, result);
+    Type parent = type.parent();
+    if (parent.isStruct()) {
+      findDefaultArrayProperties((StructType) parent, result);
     }
   }
 

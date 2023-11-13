@@ -1,9 +1,9 @@
-unit GenericSubTypeDecl;
+unit GenericDescendantDecl;
 
 interface
 
 type
-  GenericSubTypeDeclTest = class
+  GenericDescendantDeclTest = class
     private
       KeyEnumerator: TDictionary<String, Double>.TKeyEnumerator;
   end;

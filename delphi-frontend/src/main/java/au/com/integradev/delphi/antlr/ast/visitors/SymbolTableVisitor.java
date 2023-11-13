@@ -501,7 +501,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     var occurrence = new NameOccurrenceImpl(imaginaryLocation);
 
     while (result == null && scope instanceof TypeScope) {
-      scope = ((TypeScope) scope).getSuperTypeScope();
+      scope = ((TypeScope) scope).getParentTypeScope();
       if (scope != null) {
         NameDeclaration declaration = Iterables.getFirst(scope.findDeclaration(occurrence), null);
         if (declaration instanceof PropertyNameDeclaration) {

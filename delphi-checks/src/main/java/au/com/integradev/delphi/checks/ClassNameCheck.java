@@ -58,7 +58,7 @@ public class ClassNameCheck extends DelphiCheck {
 
   private boolean isViolation(TypeDeclarationNode type) {
     return type.isClass()
-        && !type.getType().isSubTypeOf("System.TCustomAttribute")
+        && !type.getType().isDescendantOf("System.TCustomAttribute")
         && !NameConventionUtils.compliesWithPrefix(type.simpleName(), prefixesList);
   }
 }
