@@ -403,7 +403,7 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   public EnumType enumeration(String image, DelphiScope scope) {
-    return new EnumerationTypeImpl(image, scope);
+    return new EnumTypeImpl(image, scope);
   }
 
   @Override

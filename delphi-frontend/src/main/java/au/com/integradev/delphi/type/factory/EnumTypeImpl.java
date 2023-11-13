@@ -22,11 +22,11 @@ import au.com.integradev.delphi.type.TypeImpl;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 
-public final class EnumerationTypeImpl extends TypeImpl implements EnumType {
+public final class EnumTypeImpl extends TypeImpl implements EnumType {
   private final String image;
   private final DelphiScope scope;
 
-  EnumerationTypeImpl(String image, DelphiScope scope) {
+  EnumTypeImpl(String image, DelphiScope scope) {
     this.image = image;
     this.scope = scope;
   }
