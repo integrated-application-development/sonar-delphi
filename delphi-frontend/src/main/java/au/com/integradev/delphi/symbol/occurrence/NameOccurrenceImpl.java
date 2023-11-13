@@ -32,7 +32,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
   private NameDeclaration declaration;
   private String image;
   private boolean isExplicitInvocation;
-  private boolean isRoutineReference;
   private boolean isGeneric;
   private List<Type> typeParameters = Collections.emptyList();
 
@@ -80,15 +79,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
     return isExplicitInvocation;
   }
 
-  public void setIsRoutineReference() {
-    this.isRoutineReference = true;
-  }
-
-  @Override
-  public boolean isRoutineReference() {
-    return isRoutineReference;
-  }
-
   public void setIsGeneric() {
     this.isGeneric = true;
   }
@@ -123,7 +113,6 @@ public class NameOccurrenceImpl implements NameOccurrence {
     }
     NameOccurrenceImpl that = (NameOccurrenceImpl) o;
     return isExplicitInvocation == that.isExplicitInvocation
-        && isRoutineReference == that.isRoutineReference
         && isGeneric == that.isGeneric
         && location.equals(that.location)
         && Objects.equals(declaration, that.declaration)
@@ -133,13 +122,7 @@ public class NameOccurrenceImpl implements NameOccurrence {
   @Override
   public int hashCode() {
     return Objects.hash(
-        location,
-        declaration,
-        image,
-        isExplicitInvocation,
-        isRoutineReference,
-        isGeneric,
-        typeParameters);
+        location, declaration, image, isExplicitInvocation, isGeneric, typeParameters);
   }
 
   @Override

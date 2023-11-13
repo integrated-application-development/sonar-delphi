@@ -31,18 +31,6 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class NameOccurrenceImplTest {
   @Test
-  void testIsRoutineReference() {
-    SymbolicNode symbolicNode = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
-    NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
-
-    assertThat(occurrence.isRoutineReference()).isFalse();
-
-    occurrence.setIsRoutineReference();
-
-    assertThat(occurrence.isRoutineReference()).isTrue();
-  }
-
-  @Test
   void testIsGeneric() {
     SymbolicNode symbolicNode = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
@@ -81,20 +69,16 @@ class NameOccurrenceImplTest {
     assertThat(occurrenceA).isNotEqualTo(occurrenceD);
 
     NameOccurrenceImpl occurrenceE = new NameOccurrenceImpl(foo);
-    occurrenceE.setIsRoutineReference();
+    occurrenceE.setIsGeneric();
     assertThat(occurrenceA).isNotEqualTo(occurrenceE);
 
     NameOccurrenceImpl occurrenceF = new NameOccurrenceImpl(foo);
-    occurrenceF.setIsGeneric();
+    occurrenceF.setNameDeclaration(mock(NameDeclaration.class));
     assertThat(occurrenceA).isNotEqualTo(occurrenceF);
 
     NameOccurrenceImpl occurrenceG = new NameOccurrenceImpl(foo);
-    occurrenceG.setNameDeclaration(mock(NameDeclaration.class));
+    occurrenceG.setTypeArguments(List.of(TypeFactory.unknownType()));
     assertThat(occurrenceA).isNotEqualTo(occurrenceG);
-
-    NameOccurrenceImpl occurrenceI = new NameOccurrenceImpl(foo);
-    occurrenceI.setTypeArguments(List.of(TypeFactory.unknownType()));
-    assertThat(occurrenceA).isNotEqualTo(occurrenceI);
   }
 
   @Test

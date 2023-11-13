@@ -1025,7 +1025,6 @@ public class NameResolver {
 
     if (bestDeclaration != null) {
       declarations.add(bestDeclaration);
-      Iterables.getLast(names).setIsRoutineReference();
     }
   }
 
@@ -1037,7 +1036,6 @@ public class NameResolver {
     if (first != null) {
       declarations.clear();
       declarations.add(first);
-      Iterables.getLast(names).setIsRoutineReference();
     }
   }
 
