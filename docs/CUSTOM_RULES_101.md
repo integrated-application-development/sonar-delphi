@@ -49,13 +49,11 @@ A custom plugin is a Maven project, and before diving into code, it is important
 relevant lines related to the configuration of your soon-to-be-released custom plugin.
 The root of a Maven project is a file named `pom.xml`.
 
-Tags such as `<groupId>`, `<artifactId>`, `<version>`, `<name>`, and `<description>` can be freely
-modified.
+Tags such as `<groupId>`, `<artifactId>`, `<name>`, and `<description>` can be freely modified.
 
 ```xml
 <groupId>au.com.integradev.samples</groupId>
 <artifactId>delphi-custom-rules-example</artifactId>
-<version>1.0.0-SNAPSHOT</version>
 <name>SonarDelphi :: Documentation :: Custom Rules Example</name>
 <description>Delphi Custom Rules Example for SonarQube</description>
 ```
@@ -635,7 +633,7 @@ $ mvn clean install
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ------------------------------------------------------------------------
-[INFO] Building SonarDelphi :: Documentation :: Custom Rules Example 1.0.0-SNAPSHOT
+[INFO] Building SonarDelphi :: Documentation :: Custom Rules Example 1.0.0
 [INFO] ------------------------------------------------------------------------
 
 ...
@@ -648,8 +646,8 @@ $ mvn clean install
 [INFO] ------------------------------------------------------------------------
 ```
 
-Then, grab the jar file `delphi-custom-rules-example-1.0.0-SNAPSHOT.jar` from the `target` folder of
-the project.
+Then, grab the jar file `delphi-custom-rules-example-1.0.0.jar` from the `target` folder of the
+project.
 
 Move it to the extensions folder of your SonarQube instance, which will be located
 at `$SONAR_HOME/extensions/plugins`.
