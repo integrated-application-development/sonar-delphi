@@ -603,32 +603,6 @@ public interface Type {
      * @return true if the type is signed
      */
     boolean isSigned();
-
-    /**
-     * Returns whether another integer type is capable of holding this type's value without losing
-     * data. (Disregards signing.)
-     *
-     * @param other Other type
-     * @return true if the other integer type has a larger size than this
-     */
-    boolean isWithinLimit(IntegerType other);
-
-    /**
-     * Returns whether another integer type has the same value range as this
-     *
-     * @param other Other type
-     * @return true if the other integer type has the same size and signing as this
-     */
-    boolean isSameRange(IntegerType other);
-
-    /**
-     * The difference in size between another integer type and this, expressed as the distance
-     * between their value ranges.
-     *
-     * @param other Other type
-     * @return Ordinal distance between another type and this
-     */
-    double ordinalDistance(IntegerType other);
   }
 
   interface RealType extends Type {}

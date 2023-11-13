@@ -69,23 +69,6 @@ public final class IntegerTypeImpl extends TypeImpl implements IntegerType {
   }
 
   @Override
-  public boolean isWithinLimit(IntegerType other) {
-    return size <= other.size();
-  }
-
-  @Override
-  public boolean isSameRange(IntegerType other) {
-    return min.equals(other.min()) && max.equals(other.max());
-  }
-
-  @Override
-  public double ordinalDistance(IntegerType other) {
-    BigInteger minDistance = min.subtract(other.min()).abs();
-    BigInteger maxDistance = max.subtract(other.max()).abs();
-    return minDistance.add(maxDistance).doubleValue();
-  }
-
-  @Override
   public boolean isInteger() {
     return true;
   }

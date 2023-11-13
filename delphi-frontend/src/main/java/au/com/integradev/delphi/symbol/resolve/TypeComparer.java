@@ -140,9 +140,11 @@ final class TypeComparer {
     if (from.isInteger()) {
       IntegerType fromInteger = (IntegerType) from;
       IntegerType toInteger = (IntegerType) to;
-      if (fromInteger.isSameRange(toInteger)) {
+      if (fromInteger.size() == toInteger.size()
+          && fromInteger.min().equals(toInteger.min())
+          && fromInteger.max().equals(toInteger.max())) {
         return EQUAL;
-      } else if (fromInteger.isWithinLimit(toInteger)) {
+      } else if (fromInteger.size() <= toInteger.size()) {
         return CONVERT_LEVEL_1;
       } else {
         // Penalty for bad type conversion

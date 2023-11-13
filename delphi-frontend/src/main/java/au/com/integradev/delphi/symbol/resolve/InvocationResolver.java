@@ -50,6 +50,7 @@ import au.com.integradev.delphi.symbol.resolve.TypeConverter.TypeConversion;
 import au.com.integradev.delphi.type.TypeUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ComparisonChain;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -247,12 +248,18 @@ public class InvocationResolver {
       IntegerType argInteger = (IntegerType) argumentType;
       IntegerType paramInteger = (IntegerType) parameterType;
 
-      candidate.increaseOrdinalDistance(argInteger.ordinalDistance(paramInteger));
+      candidate.increaseOrdinalDistance(ordinalDistance(argInteger, paramInteger));
 
       if (argInteger.isSigned() != paramInteger.isSigned()) {
         candidate.incrementSignMismatchCount();
       }
     }
+  }
+
+  private static double ordinalDistance(IntegerType a, IntegerType b) {
+    BigInteger minDistance = a.min().subtract(b.min()).abs();
+    BigInteger maxDistance = a.max().subtract(b.max()).abs();
+    return minDistance.add(maxDistance).doubleValue();
   }
 
   private static void checkRealDistance(
