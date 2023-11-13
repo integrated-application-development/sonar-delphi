@@ -1382,8 +1382,6 @@ public class NameResolver {
         type = ((ProceduralType) type).returnType();
       } else if (type instanceof PointerType) {
         type = ((PointerType) type).dereferencedType();
-      } else if (type instanceof ClassReferenceType) {
-        type = ((ClassReferenceType) type).classType();
       } else {
         break;
       }
