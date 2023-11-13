@@ -75,6 +75,11 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   }
 
   @Override
+  public boolean isProcedure() {
+    return getRoutineKind() == RoutineKind.PROCEDURE;
+  }
+
+  @Override
   public String getImage() {
     if (image == null) {
       image = getToken().getImage() + getParameterSignature() + getReturnTypeSignature();

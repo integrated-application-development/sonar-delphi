@@ -31,4 +31,6 @@ public interface AnonymousMethodNode extends ExpressionNode {
   RoutineKind getRoutineKind();
 
   boolean isFunction();
+
+  boolean isProcedure();
 }
