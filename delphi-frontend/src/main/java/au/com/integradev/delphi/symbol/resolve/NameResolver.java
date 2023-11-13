@@ -54,7 +54,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
@@ -105,6 +106,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public class NameResolver {
+  private static final Logger LOG = LoggerFactory.getLogger(NameResolver.class);
   private final TypeFactory typeFactory;
   private final List<NameOccurrenceImpl> names = new ArrayList<>();
   private final List<NameDeclaration> resolvedDeclarations = new ArrayList<>();
@@ -196,7 +198,12 @@ public class NameResolver {
 
   public void checkAmbiguity() {
     if (declarations.size() > 1) {
-      throw new DisambiguationException(declarations, Iterables.getLast(names));
+      LOG.warn(
+          "Ambiguous declarations could not be resolved\n[Occurrence] {}{}",
+          Iterables.getLast(names),
+          declarations.stream().map(declaration -> "\n[Declaration] " + declaration));
+
+      declarations.clear();
     }
   }
 
@@ -1388,15 +1395,5 @@ public class NameResolver {
   private static void registerOccurrence(NameOccurrenceImpl occurrence) {
     FileScope scope = occurrence.getLocation().getScope().getEnclosingScope(FileScope.class);
     ((FileScopeImpl) scope).registerOccurrence(occurrence.getLocation(), occurrence);
-  }
-
-  private static class DisambiguationException extends RuntimeException {
-    DisambiguationException(Set<NameDeclaration> declarations, NameOccurrence occurrence) {
-      super(
-          "Ambiguous declarations could not be resolved\n[Occurrence]  "
-              + occurrence
-              + "\n[Declaration] "
-              + StringUtils.join(declarations, "\n[Declaration] "));
-    }
   }
 }
