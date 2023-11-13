@@ -386,7 +386,7 @@ interfaceItem                : methodInterface
                              | property
                              ;
 objectType                   : 'object'<ObjectTypeNodeImpl>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
-                             ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
+                             ;                                                                     // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
 recordType                   : 'record'<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? 'end' ('align' constExpression)?
                              ;
 recordVariantSection         : 'case'<RecordVariantSectionNodeImpl>^ recordVariantTag 'of' recordVariant+
@@ -424,7 +424,7 @@ visibility                   : STRICT? 'protected'<VisibilityNodeImpl>^
                              | 'public'<VisibilityNodeImpl>
                              | 'published'<VisibilityNodeImpl>
                              | 'automated'<VisibilityNodeImpl> // Obselete directive used for RTTI.
-                             ;                             // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re24.html
+                             ;                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re24.html
 
 //----------------------------------------------------------------------------
 // Generics
@@ -792,14 +792,14 @@ forwardDirectiveSection      : (';'? implDirective)* ';'? 'forward' (';'? implDi
 implDirective                : 'overload'
                              | 'reintroduce'
                              | bindingDirective
-                             | abstractDirective // virtual;
-                             | inlineDirective   // niet virtual or dynamic
+                             | abstractDirective
+                             | inlineDirective
                              | callConvention
-                             | portabilityDirective  // (niet abstract)
+                             | portabilityDirective
                              | oldCallConventionDirective
                              | dispIDDirective
-                             | 'varargs'  // Only permitted for cdecl calling convention
-                             | 'unsafe'  // .net?
+                             | 'varargs' // Only permitted for cdecl calling convention
+                             | 'unsafe' // .net?
                              ;
 interfaceDirective           : 'forward'
                              | externalDirective
@@ -817,16 +817,16 @@ abstractDirective            : 'abstract'
 inlineDirective              : 'inline'
                              | 'assembler' // deprecated
                              ;
-callConvention               : 'cdecl'    //
-                             | 'pascal'   //
-                             | 'register' //
-                             | 'safecall' //
-                             | 'stdcall'  //
-                             | 'export'   // deprecated
+callConvention               : 'cdecl'
+                             | 'pascal'
+                             | 'register'
+                             | 'safecall'
+                             | 'stdcall'
+                             | 'export' // deprecated
                              ;
-oldCallConventionDirective   : 'far'      // deprecated
-                             | 'local'    // deprecated. Introduced in the Kylix Linux compiler, makes function non-exportable. (No effect in Windows)
-                             | 'near'     // deprecated
+oldCallConventionDirective   : 'far' // deprecated
+                             | 'local' // deprecated. Introduced in the Kylix Linux compiler, makes function non-exportable. (No effect in Windows)
+                             | 'near' // deprecated
                              ;
 portabilityDirective         : 'deprecated'^ textLiteral?
                              | 'experimental'
@@ -838,8 +838,8 @@ externalDirective            : 'external'^ dllName? externalSpecifier*
 dllName                      : {!input.LT(1).getText().equals("name")}? expression
                              ;
 externalSpecifier            : 'name'^ constExpression
-                             | 'index'^ constExpression   // specific to a platform
-                             | 'delayed' // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Libraries_and_Packages_(Delphi))
+                             | 'index'^ constExpression // specific to a platform
+                             | 'delayed' // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/en/Libraries_and_Packages_(Delphi))
                              ;
 dispIDDirective              : 'dispid' expression
                              ;
