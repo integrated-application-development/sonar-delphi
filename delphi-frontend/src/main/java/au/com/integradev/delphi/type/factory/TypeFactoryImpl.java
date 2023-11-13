@@ -67,7 +67,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
@@ -187,8 +186,8 @@ public class TypeFactoryImpl implements TypeFactory {
         new PointerTypeImpl(intrinsic.fullyQualifiedName(), dereferenced, size, pointerMath));
   }
 
-  private void addVariant(IntrinsicType intrinsic, int size, VariantKind kind) {
-    intrinsicTypes.put(intrinsic, new VariantTypeImpl(intrinsic.fullyQualifiedName(), size, kind));
+  private void addVariant(IntrinsicType intrinsic, int size, boolean ole) {
+    intrinsicTypes.put(intrinsic, new VariantTypeImpl(intrinsic.fullyQualifiedName(), size, ole));
   }
 
   private void addWeakAlias(IntrinsicType alias, IntrinsicType concrete) {
@@ -265,8 +264,8 @@ public class TypeFactoryImpl implements TypeFactory {
     }
 
     int variantSize = sizeByArchitecture(16, 24);
-    addVariant(IntrinsicType.VARIANT, variantSize, VariantKind.NORMAL_VARIANT);
-    addVariant(IntrinsicType.OLEVARIANT, variantSize, VariantKind.OLE_VARIANT);
+    addVariant(IntrinsicType.VARIANT, variantSize, false);
+    addVariant(IntrinsicType.OLEVARIANT, variantSize, true);
 
     intrinsicTypes.put(
         IntrinsicType.TEXT,

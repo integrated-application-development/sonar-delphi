@@ -317,6 +317,13 @@ public interface Type {
   boolean isVariant();
 
   /**
+   * Check if this type is an OLE-compatible variant
+   *
+   * @return true if the type is an OLE-compatible variant
+   */
+  boolean isOleVariant();
+
+  /**
    * Check if this type is an alias
    *
    * @return true if the type is an alias
@@ -608,19 +615,7 @@ public interface Type {
     int codePage();
   }
 
-  interface VariantType extends Type {
-    enum VariantKind {
-      OLE_VARIANT,
-      NORMAL_VARIANT
-    }
-
-    /**
-     * The kind of variant that this type is
-     *
-     * @return Variant kind
-     */
-    VariantKind kind();
-  }
+  interface VariantType extends Type {}
 
   interface UnknownType extends Type {}
 

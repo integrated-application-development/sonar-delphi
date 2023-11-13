@@ -51,8 +51,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
-import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
-import org.sonar.plugins.communitydelphi.api.type.Type.VariantType.VariantKind;
 
 final class TypeComparer {
   private TypeComparer() {
@@ -884,12 +882,9 @@ final class TypeComparer {
   }
 
   private static EqualityType compareVariant(Type from) {
-    boolean oleVariant = from.isVariant() && ((VariantType) from).kind() == VariantKind.OLE_VARIANT;
-
-    if (oleVariant || isConvertibleToVariant(from)) {
+    if (from.isOleVariant() || isConvertibleToVariant(from)) {
       return CONVERT_LEVEL_1;
     }
-
     return INCOMPATIBLE_TYPES;
   }
 

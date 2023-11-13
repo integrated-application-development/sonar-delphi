@@ -24,12 +24,12 @@ import org.sonar.plugins.communitydelphi.api.type.Type.VariantType;
 public final class VariantTypeImpl extends TypeImpl implements VariantType {
   private final String image;
   private final int size;
-  private final VariantKind kind;
+  private final boolean ole;
 
-  VariantTypeImpl(String image, int size, VariantKind kind) {
+  VariantTypeImpl(String image, int size, boolean ole) {
     this.image = image;
     this.size = size;
-    this.kind = kind;
+    this.ole = ole;
   }
 
   @Override
@@ -48,7 +48,7 @@ public final class VariantTypeImpl extends TypeImpl implements VariantType {
   }
 
   @Override
-  public VariantKind kind() {
-    return kind;
+  public boolean isOleVariant() {
+    return ole;
   }
 }

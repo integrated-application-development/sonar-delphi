@@ -207,6 +207,11 @@ public abstract class TypeImpl implements Type {
   }
 
   @Override
+  public boolean isOleVariant() {
+    return false;
+  }
+
+  @Override
   public boolean isAlias() {
     return false;
   }

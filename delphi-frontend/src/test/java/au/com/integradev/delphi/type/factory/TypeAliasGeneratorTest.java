@@ -293,10 +293,6 @@ class TypeAliasGeneratorTest {
     if (aliased instanceof AnsiStringType) {
       assertDelegated(AnsiStringType::codePage, alias, aliased);
     }
-
-    if (aliased instanceof VariantType) {
-      assertDelegated(VariantType::kind, alias, aliased);
-    }
   }
 
   @SuppressWarnings("unchecked")
