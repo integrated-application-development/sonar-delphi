@@ -52,6 +52,7 @@
     <sonar.delphi.version>0.40.0</sonar.delphi.version>
     <sonar.plugin.api.version>10.1.0.809</sonar.plugin.api.version>
     <sonar.analyzer.commons.version>2.7.0.1482</sonar.analyzer.commons.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <junit.version>5.9.0</junit.version>
     <assertj.version>3.23.1</assertj.version>
     <mockito.version>5.4.0</mockito.version>
@@ -72,19 +73,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${slf4j.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>au.com.integradev.delphi</groupId>
       <artifactId>sonar-delphi-plugin</artifactId>
       <type>sonar-plugin</type>
@@ -102,6 +90,18 @@
       <groupId>au.com.integradev.delphi</groupId>
       <artifactId>delphi-checks-testkit</artifactId>
       <version>${sonar.delphi.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
