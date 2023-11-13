@@ -49,7 +49,7 @@ public class MixedNamesCheck extends DelphiCheck {
     NameDeclaration declaration = reference.getNameDeclaration();
     NameOccurrence occurrence = reference.getNameOccurrence();
 
-    if (occurrence != null) {
+    if (declaration != null) {
       if (declaration instanceof UnitImportNameDeclaration) {
         // Checks the occurrence against the original unit declaration instead of the import
         // declaration
