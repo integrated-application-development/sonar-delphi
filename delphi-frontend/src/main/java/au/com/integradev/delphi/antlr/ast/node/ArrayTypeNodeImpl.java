@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConstArraySubTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstArrayElementTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
@@ -79,7 +79,7 @@ public final class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNo
       options.add(ArrayOption.DYNAMIC);
     }
 
-    if (getElementTypeNode() instanceof ConstArraySubTypeNode) {
+    if (getElementTypeNode() instanceof ConstArrayElementTypeNode) {
       options.add(ArrayOption.ARRAY_OF_CONST);
     }
 

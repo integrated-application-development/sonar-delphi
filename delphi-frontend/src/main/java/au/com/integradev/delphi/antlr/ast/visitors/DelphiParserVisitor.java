@@ -44,7 +44,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConstArraySubTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstArrayElementTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
@@ -199,7 +199,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(ConstArraySubTypeNode node, T data) {
+  default T visit(ConstArrayElementTypeNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

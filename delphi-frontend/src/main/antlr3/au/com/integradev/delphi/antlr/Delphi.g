@@ -284,8 +284,8 @@ parameterType                : stringType
                              | typeReference
                              | 'packed' parameterType^
                              ;
-arrayType                    :  'array' arrayIndices? 'of' arraySubType
-                             -> ^('array'<ArrayTypeNodeImpl> 'of' arraySubType arrayIndices? )
+arrayType                    :  'array' arrayIndices? 'of' arrayElementType
+                             -> ^('array'<ArrayTypeNodeImpl> 'of' arrayElementType arrayIndices? )
                              ;
 lbrack                       : '['
                              | '(.'
@@ -296,7 +296,7 @@ rbrack                       : ']'
 arrayIndices                 : lbrack (varType ','?)+ rbrack
                              -> ^(TkArrayIndices<ArrayIndicesNodeImpl> lbrack (varType ','?)+ rbrack)
                              ;
-arraySubType                 : 'const'<ConstArraySubTypeNodeImpl>
+arrayElementType             : 'const'<ConstArrayElementTypeNodeImpl>
                              | varType
                              ;
 setType                      : 'set'<SetTypeNodeImpl>^ 'of' varType
