@@ -36,6 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
@@ -43,6 +44,7 @@ import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -68,7 +70,6 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.Procedural
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public class TypeFactoryImpl implements TypeFactory {
   private static final CompilerVersion VERSION_4 = CompilerVersion.fromVersionSymbol("VER120");
@@ -505,10 +506,21 @@ public class TypeFactoryImpl implements TypeFactory {
     }
 
     return attributeList.getAttributes().stream()
-        .map(attribute -> attribute.getTypeNameOccurrence().getNameDeclaration())
-        .map(TypeNameDeclaration.class::cast)
-        .map(Typed::getType)
-        .collect(Collectors.toList());
+        .map(AttributeNode::getTypeNameOccurrence)
+        .map(
+            occurrence -> {
+              if (occurrence == null) {
+                return TypeFactory.unknownType();
+              }
+
+              NameDeclaration declaration = occurrence.getNameDeclaration();
+              if (!(declaration instanceof TypeNameDeclaration)) {
+                return TypeFactory.unknownType();
+              }
+
+              return ((TypeNameDeclaration) declaration).getType();
+            })
+        .collect(Collectors.toUnmodifiableList());
   }
 
   public HelperType helper(HelperTypeNode node) {

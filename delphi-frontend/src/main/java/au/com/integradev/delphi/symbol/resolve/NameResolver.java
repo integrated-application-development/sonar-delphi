@@ -548,11 +548,15 @@ public class NameResolver {
     List<NameReferenceNode> references = node.getNameReference().flatten();
     NameReferenceNode lastReference = references.get(references.size() - 1);
 
+    var attributeNameOccurrence = (AttributeNameOccurrenceImpl) lastReference.getNameOccurrence();
+    if (attributeNameOccurrence == null) {
+      return;
+    }
+
     // Attributes are a shorthand for an invocation of a constructor named 'Create'
     SymbolicNode imaginaryConstructor = SymbolicNode.imaginary("Create", node.getScope());
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(imaginaryConstructor);
-    ((AttributeNameOccurrenceImpl) lastReference.getNameOccurrence())
-        .setImplicitConstructorNameOccurrence(occurrence);
+    attributeNameOccurrence.setImplicitConstructorNameOccurrence(occurrence);
 
     resolveNameReferenceOccurrence(occurrence, true);
 

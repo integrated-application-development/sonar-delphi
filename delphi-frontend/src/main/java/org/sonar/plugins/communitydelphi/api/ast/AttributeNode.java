@@ -18,14 +18,18 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 
 public interface AttributeNode extends DelphiNode {
   NameReferenceNode getNameReference();
 
+  @Nullable
   NameOccurrence getTypeNameOccurrence();
 
+  @Nullable
   NameOccurrence getConstructorNameOccurrence();
 
+  @Nullable
   ArgumentListNode getArgumentList();
 }

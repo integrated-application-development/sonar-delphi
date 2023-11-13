@@ -29,6 +29,7 @@ import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
+import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -70,10 +71,13 @@ public class ForbiddenRoutineCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(AttributeNode attribute, DelphiCheckContext context) {
-    NameDeclaration declaration = attribute.getConstructorNameOccurrence().getNameDeclaration();
-    if (declaration instanceof RoutineNameDeclaration
-        && routinesSet.contains(((RoutineNameDeclaration) declaration).fullyQualifiedName())) {
-      reportIssue(context, attribute.getNameReference().getIdentifier(), message);
+    NameOccurrence occurrence = attribute.getConstructorNameOccurrence();
+    if (occurrence != null) {
+      NameDeclaration declaration = occurrence.getNameDeclaration();
+      if (declaration instanceof RoutineNameDeclaration
+          && routinesSet.contains(((RoutineNameDeclaration) declaration).fullyQualifiedName())) {
+        reportIssue(context, attribute.getNameReference().getIdentifier(), message);
+      }
     }
     return super.visit(attribute, context);
   }
