@@ -26,6 +26,4 @@ public interface ProcedureTypeHeadingNode extends DelphiNode {
 
   @Nullable
   RoutineReturnTypeNode getRoutineReturnTypeNode();
-
-  boolean hasRoutineParametersNode();
 }

@@ -61,8 +61,7 @@ public final class ProcedureTypeHeadingNodeImpl extends DelphiNodeImpl
     return (node instanceof RoutineReturnTypeNode) ? (RoutineReturnTypeNode) node : null;
   }
 
-  @Override
-  public boolean hasRoutineParametersNode() {
+  private boolean hasRoutineParametersNode() {
     return getRoutineParametersNode() != null;
   }
 }
