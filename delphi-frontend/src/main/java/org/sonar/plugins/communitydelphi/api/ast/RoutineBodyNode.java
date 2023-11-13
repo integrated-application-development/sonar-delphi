@@ -21,7 +21,7 @@ package org.sonar.plugins.communitydelphi.api.ast;
 public interface RoutineBodyNode extends DelphiNode {
   boolean hasDeclarationSection();
 
-  BlockDeclarationSectionNode getDeclarationSection();
+  LocalDeclarationSectionNode getDeclarationSection();
 
   boolean hasStatementBlock();
 

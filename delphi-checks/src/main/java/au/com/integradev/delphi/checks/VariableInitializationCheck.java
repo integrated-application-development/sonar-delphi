@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
@@ -38,6 +37,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
@@ -94,7 +94,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private void collectNestedRoutines(RoutineImplementationNode routine) {
-    BlockDeclarationSectionNode declarationSection = routine.getDeclarationSection();
+    LocalDeclarationSectionNode declarationSection = routine.getDeclarationSection();
     if (declarationSection == null) {
       return;
     }
@@ -105,7 +105,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private void collectDeclarationsFromVarSections(RoutineImplementationNode routine) {
-    BlockDeclarationSectionNode declarationSection = routine.getDeclarationSection();
+    LocalDeclarationSectionNode declarationSection = routine.getDeclarationSection();
     if (declarationSection == null) {
       return;
     }

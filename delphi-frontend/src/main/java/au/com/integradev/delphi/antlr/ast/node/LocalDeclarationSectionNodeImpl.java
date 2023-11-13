@@ -20,15 +20,15 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 
-public final class BlockDeclarationSectionNodeImpl extends DelphiNodeImpl
-    implements BlockDeclarationSectionNode {
-  public BlockDeclarationSectionNodeImpl(Token token) {
+public final class LocalDeclarationSectionNodeImpl extends DelphiNodeImpl
+    implements LocalDeclarationSectionNode {
+  public LocalDeclarationSectionNodeImpl(Token token) {
     super(token);
   }
 
-  public BlockDeclarationSectionNodeImpl(int tokenType) {
+  public LocalDeclarationSectionNodeImpl(int tokenType) {
     super(tokenType);
   }
 

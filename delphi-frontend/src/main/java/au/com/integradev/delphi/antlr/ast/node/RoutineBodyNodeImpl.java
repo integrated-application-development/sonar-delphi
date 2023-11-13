@@ -21,13 +21,13 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AsmStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
 
 public final class RoutineBodyNodeImpl extends DelphiNodeImpl implements RoutineBodyNode {
-  private BlockDeclarationSectionNode declarationSection;
+  private LocalDeclarationSectionNode declarationSection;
   private DelphiNode block;
   private CompoundStatementNode statementBlock;
   private AsmStatementNode asmBlock;
@@ -47,13 +47,13 @@ public final class RoutineBodyNodeImpl extends DelphiNodeImpl implements Routine
 
   @Override
   public boolean hasDeclarationSection() {
-    return getChild(0) instanceof BlockDeclarationSectionNode;
+    return getChild(0) instanceof LocalDeclarationSectionNode;
   }
 
   @Override
-  public BlockDeclarationSectionNode getDeclarationSection() {
+  public LocalDeclarationSectionNode getDeclarationSection() {
     if (declarationSection == null && hasDeclarationSection()) {
-      declarationSection = (BlockDeclarationSectionNode) getChild(0);
+      declarationSection = (LocalDeclarationSectionNode) getChild(0);
     }
     return declarationSection;
   }

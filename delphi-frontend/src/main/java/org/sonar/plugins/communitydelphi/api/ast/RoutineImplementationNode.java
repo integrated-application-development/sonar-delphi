@@ -25,7 +25,7 @@ public interface RoutineImplementationNode extends RoutineNode {
   RoutineBodyNode getRoutineBody();
 
   @Nullable
-  BlockDeclarationSectionNode getDeclarationSection();
+  LocalDeclarationSectionNode getDeclarationSection();
 
   @Nullable
   DelphiNode getBlock();

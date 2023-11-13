@@ -194,9 +194,9 @@ unitInFileImport             : qualifiedNameDeclaration ('in' textLiteral)?
 //----------------------------------------------------------------------------
 // Declarations
 //----------------------------------------------------------------------------
-block                        : blockDeclSection? blockBody
+block                        : localDeclSection? blockBody
                              ;
-blockDeclSection             : declSection+ -> ^(TkBlockDeclSection<BlockDeclarationSectionNodeImpl> declSection+)
+localDeclSection             : declSection+ -> ^(TkLocalDeclarations<LocalDeclarationSectionNodeImpl> declSection+)
                              ;
 blockBody                    : compoundStatement
                              | assemblerStatement
@@ -1105,7 +1105,7 @@ TkGuid                  : 'INTERFACE_GUID'
                         ;
 TkClassParents          : 'CLASS_PARENTS'
                         ;
-TkBlockDeclSection      : 'BLOCK_DECL_SECTION'
+TkLocalDeclarations     : 'LOCAL_DECLARATIONS'
                         ;
 TkCaseItem              : 'CASE_ITEM'
                         ;

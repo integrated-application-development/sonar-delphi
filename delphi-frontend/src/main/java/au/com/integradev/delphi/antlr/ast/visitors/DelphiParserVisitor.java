@@ -36,7 +36,6 @@ import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
@@ -87,6 +86,7 @@ import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.LibraryDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
@@ -191,7 +191,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(BlockDeclarationSectionNode node, T data) {
+  default T visit(LocalDeclarationSectionNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

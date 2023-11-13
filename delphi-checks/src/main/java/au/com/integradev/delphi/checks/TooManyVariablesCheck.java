@@ -21,7 +21,7 @@ package au.com.integradev.delphi.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
@@ -55,7 +55,7 @@ public class TooManyVariablesCheck extends DelphiCheck {
 
   private static int countVariableDeclarations(RoutineImplementationNode routine) {
     int count = 0;
-    BlockDeclarationSectionNode declSection = routine.getDeclarationSection();
+    LocalDeclarationSectionNode declSection = routine.getDeclarationSection();
     if (declSection != null) {
       List<VarSectionNode> varSections = declSection.findChildrenOfType(VarSectionNode.class);
       for (VarSectionNode varSection : varSections) {
