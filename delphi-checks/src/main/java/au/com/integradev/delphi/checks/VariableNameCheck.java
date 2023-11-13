@@ -33,13 +33,13 @@ import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.UnitScope;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -101,11 +101,10 @@ public class VariableNameCheck extends DelphiCheck {
             .map(FormalParameterData::getNode)
             .collect(Collectors.toUnmodifiableList());
 
-    var methodDeclarationNode = parameterListNode.getFirstParentOfType(MethodDeclarationNode.class);
-    var methodDeclaration =
-        methodDeclarationNode == null ? null : methodDeclarationNode.getMethodNameDeclaration();
+    var routineNode = parameterListNode.getFirstParentOfType(RoutineDeclarationNode.class);
+    var routineDeclaration = routineNode == null ? null : routineNode.getRoutineNameDeclaration();
 
-    getParametersToCheck(methodDeclaration, parameterNodes).stream()
+    getParametersToCheck(routineDeclaration, parameterNodes).stream()
         .filter(parameter -> isViolation(parameter, false))
         .forEach(parameter -> reportIssue(context, parameter, MESSAGE));
 
@@ -113,8 +112,8 @@ public class VariableNameCheck extends DelphiCheck {
   }
 
   private static List<NameDeclarationNode> getParametersToCheck(
-      MethodNameDeclaration methodDeclaration, List<NameDeclarationNode> parameterNodes) {
-    if (methodDeclaration == null) {
+      RoutineNameDeclaration routineDeclaration, List<NameDeclarationNode> parameterNodes) {
+    if (routineDeclaration == null) {
       return parameterNodes;
     }
 
@@ -123,8 +122,8 @@ public class VariableNameCheck extends DelphiCheck {
             .map(x -> new HashSet<String>())
             .collect(Collectors.toUnmodifiableList());
 
-    InterfaceUtils.findImplementedInterfaceMethodDeclarations(methodDeclaration).stream()
-        .map(MethodNameDeclaration::getParameters)
+    InterfaceUtils.findImplementedInterfaceMethodDeclarations(routineDeclaration).stream()
+        .map(RoutineNameDeclaration::getParameters)
         .forEach(
             params -> {
               assert (params.size() == paramNamesFromInterfaces.size());

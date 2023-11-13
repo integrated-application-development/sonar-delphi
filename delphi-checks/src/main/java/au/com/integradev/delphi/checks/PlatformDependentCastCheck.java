@@ -63,7 +63,7 @@ public class PlatformDependentCastCheck extends DelphiCheck {
 
   private static Type getOriginalType(ExpressionNode expression) {
     Type result = expression.getType();
-    if (result.isMethod()) {
+    if (result.isRoutine()) {
       result = ((ProceduralType) result).returnType();
     }
     return result;

@@ -24,7 +24,7 @@ import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.symbol.SearchMode;
 import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
 import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
-import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
+import au.com.integradev.delphi.symbol.scope.RoutineScopeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +43,7 @@ import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -56,6 +51,11 @@ import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SubRangeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
@@ -66,13 +66,13 @@ import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
@@ -159,7 +159,7 @@ public class NameResolutionHelper {
     NameResolver resolver = createNameResolver();
     resolver.readPrimaryExpression(expression);
 
-    if (handleMethodReference(expression, resolver)
+    if (handleRoutineReference(expression, resolver)
         || handleAddressOf(expression, resolver)
         || handlePascalReturn(expression, resolver)) {
       return;
@@ -175,10 +175,10 @@ public class NameResolutionHelper {
   public void resolve(MethodResolutionClauseNode resolutionClause) {
     NameResolver interfaceMethodResolver = createNameResolver();
     interfaceMethodResolver.readNameReference(resolutionClause.getInterfaceMethodNameNode());
-    List<MethodNameDeclaration> interfaceMethods =
+    List<RoutineNameDeclaration> interfaceMethods =
         interfaceMethodResolver.getDeclarations().stream()
-            .filter(MethodNameDeclaration.class::isInstance)
-            .map(MethodNameDeclaration.class::cast)
+            .filter(RoutineNameDeclaration.class::isInstance)
+            .map(RoutineNameDeclaration.class::cast)
             .filter(method -> method.getTypeDeclaration() != null)
             .sorted(
                 (left, right) -> {
@@ -198,10 +198,10 @@ public class NameResolutionHelper {
 
     NameResolver concreteMethodResolver = createNameResolver();
     concreteMethodResolver.readNameReference(resolutionClause.getImplementationMethodNameNode());
-    List<MethodNameDeclaration> implementationMethods =
+    List<RoutineNameDeclaration> implementationMethods =
         concreteMethodResolver.getDeclarations().stream()
-            .filter(MethodNameDeclaration.class::isInstance)
-            .map(MethodNameDeclaration.class::cast)
+            .filter(RoutineNameDeclaration.class::isInstance)
+            .map(RoutineNameDeclaration.class::cast)
             .collect(Collectors.toList());
 
     Set<NameDeclaration> interfaceDeclarations = interfaceMethodResolver.getDeclarations();
@@ -210,10 +210,10 @@ public class NameResolutionHelper {
     interfaceDeclarations.clear();
     concreteDeclarations.clear();
 
-    for (MethodNameDeclaration interfaceCandidate : interfaceMethods) {
+    for (RoutineNameDeclaration interfaceCandidate : interfaceMethods) {
       boolean matched = false;
 
-      for (MethodNameDeclaration concreteCandidate : implementationMethods) {
+      for (RoutineNameDeclaration concreteCandidate : implementationMethods) {
         if (interfaceCandidate.getParameters().equals(concreteCandidate.getParameters())) {
           interfaceDeclarations.add(interfaceCandidate);
           concreteDeclarations.add(concreteCandidate);
@@ -258,55 +258,56 @@ public class NameResolutionHelper {
     }
   }
 
-  public void resolve(MethodDeclarationNode method) {
-    resolveMethod(method);
+  public void resolve(RoutineDeclarationNode routine) {
+    resolveRoutine(routine);
   }
 
-  public void resolve(MethodImplementationNode method) {
+  public void resolve(RoutineImplementationNode routine) {
     NameResolver resolver = createNameResolver();
-    resolver.readMethodNameInterfaceReference(method.getNameReferenceNode());
+    resolver.readRoutineNameInterfaceReference(routine.getNameReferenceNode());
 
-    MethodScope methodScope = method.getScope().getEnclosingScope(MethodScope.class);
-    ((MethodScopeImpl) methodScope).setTypeScope(findTypeScope(resolver));
-    resolveMethod(method);
+    RoutineScope routineScope = routine.getScope().getEnclosingScope(RoutineScope.class);
+    ((RoutineScopeImpl) routineScope).setTypeScope(findTypeScope(resolver));
+    resolveRoutine(routine);
 
-    if (!isBareInterfaceMethodReference(method, resolver)) {
-      resolver.disambiguateParameters(method.getParameterTypes());
+    if (!isBareInterfaceRoutineReference(routine, resolver)) {
+      resolver.disambiguateParameters(routine.getParameterTypes());
     }
 
-    if (method.isOperator()) {
-      resolver.disambiguateReturnType(method.getReturnType());
+    if (routine.isOperator()) {
+      resolver.disambiguateReturnType(routine.getReturnType());
     }
 
-    resolver.disambiguateIsClassInvocable(method.isClassMethod());
+    resolver.disambiguateIsClassInvocable(routine.isClassMethod());
     resolver.addToSymbolTable();
 
-    completeTypeParameterReferences(method);
+    completeTypeParameterReferences(routine);
   }
 
-  private static boolean isBareInterfaceMethodReference(MethodNode method, NameResolver resolver) {
-    return method.getMethodHeading().getMethodParametersNode() == null
+  private static boolean isBareInterfaceRoutineReference(
+      RoutineNode routine, NameResolver resolver) {
+    return routine.getRoutineHeading().getRoutineParametersNode() == null
         && resolver.getDeclarations().size() == 1;
   }
 
-  private void resolveMethod(MethodNode method) {
+  private void resolveRoutine(RoutineNode routine) {
     SearchMode previousSearchMode = searchMode;
     try {
-      searchMode = SearchMode.METHOD_HEADING;
-      resolve(method.getMethodHeading().getMethodParametersNode());
-      resolve(method.getMethodHeading().getMethodReturnType());
+      searchMode = SearchMode.ROUTINE_HEADING;
+      resolve(routine.getRoutineHeading().getRoutineParametersNode());
+      resolve(routine.getRoutineHeading().getRoutineReturnType());
     } finally {
       searchMode = previousSearchMode;
     }
   }
 
-  public void resolve(@Nullable MethodParametersNode parameters) {
+  public void resolve(@Nullable RoutineParametersNode parameters) {
     if (parameters != null) {
       resolve(parameters.getFormalParametersList());
     }
   }
 
-  public void resolve(@Nullable MethodReturnTypeNode returnType) {
+  public void resolve(@Nullable RoutineReturnTypeNode returnType) {
     if (returnType != null) {
       resolve(returnType.getTypeNode());
     }
@@ -326,9 +327,9 @@ public class NameResolutionHelper {
     }
   }
 
-  public MethodNameDeclaration findMethodMember(
+  public RoutineNameDeclaration findMethodMember(
       DelphiNode node, Type type, String name, List<Type> parameters) {
-    return findInvocableMember(node, type, name, parameters, MethodNameDeclaration.class);
+    return findInvocableMember(node, type, name, parameters, RoutineNameDeclaration.class);
   }
 
   public PropertyNameDeclaration findPropertyMember(
@@ -394,9 +395,9 @@ public class NameResolutionHelper {
     if (parent instanceof UnaryExpressionNode) {
       UnaryExpressionNode unary = (UnaryExpressionNode) parent;
       if (unary.getOperator() == UnaryOperator.ADDRESS) {
-        if (!resolver.isExplicitInvocation() && resolver.getApproximateType().isMethod()) {
+        if (!resolver.isExplicitInvocation() && resolver.getApproximateType().isRoutine()) {
           NameResolver clone = new NameResolver(resolver);
-          clone.disambiguateAddressOfMethodReference();
+          clone.disambiguateAddressOfRoutineReference();
           clone.addToSymbolTable();
         } else {
           resolver.addToSymbolTable();
@@ -408,7 +409,7 @@ public class NameResolutionHelper {
     return false;
   }
 
-  private static boolean handleMethodReference(
+  private static boolean handleRoutineReference(
       PrimaryExpressionNode expression, NameResolver resolver) {
     DelphiNode parent = expression.getParent();
 
@@ -427,7 +428,7 @@ public class NameResolutionHelper {
 
       if (assignee.getType().isProcedural()) {
         NameResolver clone = new NameResolver(resolver);
-        clone.disambiguateMethodReference((ProceduralType) assignee.getType());
+        clone.disambiguateRoutineReference((ProceduralType) assignee.getType());
         if (!clone.getDeclarations().isEmpty()) {
           clone.addToSymbolTable();
           return true;
@@ -447,7 +448,7 @@ public class NameResolutionHelper {
       return false;
     }
 
-    if (!resolver.getDeclarations().stream().allMatch(MethodNameDeclaration.class::isInstance)) {
+    if (!resolver.getDeclarations().stream().allMatch(RoutineNameDeclaration.class::isInstance)) {
       return false;
     }
 
@@ -471,14 +472,14 @@ public class NameResolutionHelper {
       return false;
     }
 
-    String methodReference = reference.getImage();
+    String routineReference = reference.getImage();
     DelphiNode node = expression;
 
-    while ((node = node.getFirstParentOfType(MethodImplementationNode.class)) != null) {
-      MethodNode method = (MethodNode) node;
-      if (method.simpleName().equalsIgnoreCase(methodReference)) {
-        MethodNameDeclaration methodDeclaration = method.getMethodNameDeclaration();
-        resolver.getDeclarations().removeIf(declaration -> declaration != methodDeclaration);
+    while ((node = node.getFirstParentOfType(RoutineImplementationNode.class)) != null) {
+      RoutineNode routine = (RoutineNode) node;
+      if (routine.simpleName().equalsIgnoreCase(routineReference)) {
+        RoutineNameDeclaration routineDeclaration = routine.getRoutineNameDeclaration();
+        resolver.getDeclarations().removeIf(declaration -> declaration != routineDeclaration);
         resolver.addToSymbolTable();
         return true;
       }
@@ -487,8 +488,8 @@ public class NameResolutionHelper {
     return false;
   }
 
-  private static void completeTypeParameterReferences(MethodImplementationNode method) {
-    NameReferenceNode reference = method.getNameReferenceNode().getLastName();
+  private static void completeTypeParameterReferences(RoutineImplementationNode routine) {
+    NameReferenceNode reference = routine.getNameReferenceNode().getLastName();
     NameDeclaration declaration = reference.getNameDeclaration();
     if (!(declaration instanceof GenerifiableDeclaration)) {
       return;

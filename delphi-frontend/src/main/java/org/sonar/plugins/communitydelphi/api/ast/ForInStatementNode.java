@@ -19,15 +19,15 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import javax.annotation.Nullable;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 
 public interface ForInStatementNode extends ForStatementNode {
   @Nullable
-  MethodNameDeclaration getGetEnumeratorDeclaration();
+  RoutineNameDeclaration getGetEnumeratorDeclaration();
 
   @Nullable
-  MethodNameDeclaration getMoveNextDeclaration();
+  RoutineNameDeclaration getMoveNextDeclaration();
 
   @Nullable
   PropertyNameDeclaration getCurrentDeclaration();

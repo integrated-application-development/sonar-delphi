@@ -92,7 +92,7 @@ class TypeAliasGeneratorTest {
               ((TypeFactoryImpl) FACTORY).ofObject(List.of(TypeMocker.parameter(BYTE)), BYTE),
               ProceduralType.class),
           Arguments.of(
-              ((TypeFactoryImpl) FACTORY).method(List.of(TypeMocker.parameter(BYTE)), BYTE),
+              ((TypeFactoryImpl) FACTORY).routine(List.of(TypeMocker.parameter(BYTE)), BYTE),
               ProceduralType.class),
           Arguments.of(
               ((TypeFactoryImpl) FACTORY).anonymous(List.of(TypeMocker.parameter(BYTE)), BYTE),
@@ -221,7 +221,7 @@ class TypeAliasGeneratorTest {
     assertDelegated(Type::isPointer, alias, aliased);
     assertDelegated(Type::isSet, alias, aliased);
     assertDelegated(Type::isProcedural, alias, aliased);
-    assertDelegated(Type::isMethod, alias, aliased);
+    assertDelegated(Type::isRoutine, alias, aliased);
     assertDelegated(Type::isClassReference, alias, aliased);
     assertDelegated(Type::isVariant, alias, aliased);
     assertDelegated(Type::isArrayConstructor, alias, aliased);

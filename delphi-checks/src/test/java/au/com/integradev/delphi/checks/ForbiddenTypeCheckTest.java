@@ -81,7 +81,7 @@ class ForbiddenTypeCheckTest {
   }
 
   @Test
-  void testMethodImplementationShouldNotAddIssue() {
+  void testRoutineImplementationShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(

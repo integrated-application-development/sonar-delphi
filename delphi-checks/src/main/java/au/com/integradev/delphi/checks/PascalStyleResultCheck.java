@@ -23,13 +23,13 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "PascalStyleResultRule", repositoryKey = "delph")
@@ -38,10 +38,10 @@ public class PascalStyleResultCheck extends DelphiCheck {
   private static final String MESSAGE = "Assign to the Result variable instead.";
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    MethodNameDeclaration methodNameDeclaration = method.getMethodNameDeclaration();
-    if (methodNameDeclaration != null) {
-      method.findDescendantsOfType(StatementNode.class).stream()
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    RoutineNameDeclaration routineNameDeclaration = routine.getRoutineNameDeclaration();
+    if (routineNameDeclaration != null) {
+      routine.findDescendantsOfType(StatementNode.class).stream()
           .filter(AssignmentStatementNode.class::isInstance)
           .map(AssignmentStatementNode.class::cast)
           .map(AssignmentStatementNode::getAssignee)
@@ -49,12 +49,12 @@ public class PascalStyleResultCheck extends DelphiCheck {
           .filter(Objects::nonNull)
           .forEach(
               assignee -> {
-                if (assignee.getNameDeclaration() == methodNameDeclaration) {
+                if (assignee.getNameDeclaration() == routineNameDeclaration) {
                   reportIssue(context, assignee, MESSAGE);
                 }
               });
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
   private static NameReferenceNode extractSimpleNameReference(ExpressionNode node) {

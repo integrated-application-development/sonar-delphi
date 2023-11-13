@@ -35,7 +35,7 @@ public final class SimpleNameDeclarationNodeImpl extends NameDeclarationNodeImpl
           EnumElementNodeImpl.class, DeclarationKind.ENUM_ELEMENT,
           ExceptItemNodeImpl.class, DeclarationKind.EXCEPT_ITEM,
           ForLoopVarDeclarationNodeImpl.class, DeclarationKind.LOOP_VAR,
-          MethodNameNodeImpl.class, DeclarationKind.METHOD,
+          RoutineNameNodeImpl.class, DeclarationKind.ROUTINE,
           PropertyNodeImpl.class, DeclarationKind.PROPERTY,
           RecordVariantTagNodeImpl.class, DeclarationKind.RECORD_VARIANT_TAG,
           TypeDeclarationNodeImpl.class, DeclarationKind.TYPE,

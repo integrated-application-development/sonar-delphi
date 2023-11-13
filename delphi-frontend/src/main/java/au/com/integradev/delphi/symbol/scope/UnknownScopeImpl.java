@@ -59,7 +59,7 @@ public final class UnknownScopeImpl extends DelphiScopeImpl implements UnknownSc
   }
 
   @Override
-  public void findMethodOverloads(NameOccurrence occurrence, Set<NameDeclaration> result) {
+  public void findRoutineOverloads(NameOccurrence occurrence, Set<NameDeclaration> result) {
     // Do nothing
   }
 

@@ -344,7 +344,7 @@ class MissingSemicolonCheckTest {
   }
 
   @Test
-  void testMethodDeclarationsWithSemicolonsShouldNotAddIssue() {
+  void testRoutineDeclarationsWithSemicolonsShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new MissingSemicolonCheck())
         .onFile(
@@ -361,7 +361,7 @@ class MissingSemicolonCheckTest {
   }
 
   @Test
-  void testMethodDeclarationsWithoutSemicolonsShouldAddIssue() {
+  void testRoutineDeclarationsWithoutSemicolonsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new MissingSemicolonCheck())
         .onFile(

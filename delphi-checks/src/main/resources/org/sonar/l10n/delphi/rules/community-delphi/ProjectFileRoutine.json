@@ -1,0 +1,19 @@
+{
+  "title": "Project files should not have routines",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "15min"
+  },
+  "code": {
+    "attribute": "MODULAR",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["bad-practice"],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

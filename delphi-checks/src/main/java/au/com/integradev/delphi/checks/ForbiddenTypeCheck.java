@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableSortedSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.RuleTemplate;
@@ -60,8 +60,8 @@ public class ForbiddenTypeCheck extends DelphiCheck {
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
     NameDeclaration declaration = reference.getNameDeclaration();
     if (declaration instanceof TypeNameDeclaration) {
-      String fullyQualifiedMethodName = ((TypeNameDeclaration) declaration).fullyQualifiedName();
-      if (typesSet.contains(fullyQualifiedMethodName)) {
+      String fullyQualifiedTypeName = ((TypeNameDeclaration) declaration).fullyQualifiedName();
+      if (typesSet.contains(fullyQualifiedTypeName)) {
         reportIssue(context, reference.getIdentifier(), message);
       }
     }
@@ -69,7 +69,7 @@ public class ForbiddenTypeCheck extends DelphiCheck {
   }
 
   @Override
-  public DelphiCheckContext visit(MethodNameNode methodName, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RoutineNameNode routineName, DelphiCheckContext context) {
     // It would be rude to flag a type's method implementations just for existing.
     return context;
   }

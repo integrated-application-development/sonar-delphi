@@ -137,8 +137,8 @@ public class InvocationResolver {
 
     // If the parameter expects a procedural type then we need to find the overload that the
     // argument is referring to.
-    if (argument.isMethodReference(parameterType)) {
-      argumentType = argument.findMethodReferenceType(parameterType);
+    if (argument.isRoutineReference(parameterType)) {
+      argumentType = argument.findRoutineReferenceType(parameterType);
     }
 
     EqualityType equality = TypeComparer.compare(argumentType, parameterType);

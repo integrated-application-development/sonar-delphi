@@ -22,7 +22,7 @@ import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.BlockDeclarationSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -41,21 +41,21 @@ public class TooManyVariablesCheck extends DelphiCheck {
   public int max = DEFAULT_MAXIMUM;
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    int count = countVariableDeclarations(method);
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    int count = countVariableDeclarations(routine);
     if (count > max) {
       reportIssue(
           context,
-          method.getMethodNameNode(),
+          routine.getRoutineNameNode(),
           String.format(
-              "Method has %d variables, which is greater than %d authorized.", count, max));
+              "Routine has %d variables, which is greater than %d authorized.", count, max));
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
-  private static int countVariableDeclarations(MethodImplementationNode method) {
+  private static int countVariableDeclarations(RoutineImplementationNode routine) {
     int count = 0;
-    BlockDeclarationSectionNode declSection = method.getDeclarationSection();
+    BlockDeclarationSectionNode declSection = routine.getDeclarationSection();
     if (declSection != null) {
       List<VarSectionNode> varSections = declSection.findChildrenOfType(VarSectionNode.class);
       for (VarSectionNode varSection : varSections) {

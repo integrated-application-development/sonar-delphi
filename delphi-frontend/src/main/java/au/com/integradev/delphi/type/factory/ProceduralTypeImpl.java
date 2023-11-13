@@ -128,8 +128,8 @@ public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements Pr
   }
 
   @Override
-  public boolean isMethod() {
-    return kind == ProceduralKind.METHOD;
+  public boolean isRoutine() {
+    return kind == ProceduralKind.ROUTINE;
   }
 
   @Override

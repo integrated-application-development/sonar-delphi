@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "GroupedParameterDeclarationRule", repositoryKey = "delph")
@@ -33,6 +33,6 @@ public class GroupedParameterDeclarationCheck extends AbstractGroupedDeclaration
 
   @Override
   protected boolean isRelevantDeclarationList(NameDeclarationListNode declarationList) {
-    return declarationList.getFirstParentOfType(MethodParametersNode.class) != null;
+    return declarationList.getFirstParentOfType(RoutineParametersNode.class) != null;
   }
 }

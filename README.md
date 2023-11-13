@@ -40,7 +40,7 @@ SonarDelphi understands what your code *means*, paving the way for powerful rule
    * Your own custom rules to [enforce a naming convention for descendants of specific types](delphi-checks/src/main/java/au/com/integradev/delphi/checks/InheritedTypeNameCheck.java)
    * Your own custom rules to forbid usage of
      [types](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenTypeCheck.java),
-     [methods](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenMethodCheck.java),
+     [routines](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenRoutineCheck.java),
      [properties](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenPropertyCheck.java),
      [identifiers](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenIdentifierCheck.java),
      [constants](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenConstantCheck.java),
@@ -52,7 +52,7 @@ SonarDelphi understands what your code *means*, paving the way for powerful rule
 Using semantic analysis, SonarDelphi can identify unused code in your project, including:
    * [Unused imports](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedImportCheck.java)
    * [Unused types](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedTypeCheck.java)
-   * [Unused methods](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedMethodCheck.java)
+   * [Unused routines](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedRoutineCheck.java)
    * [Unused properties](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedPropertyCheck.java)
    * [Unused fields](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedFieldCheck.java)
    * [Unused local variables](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnusedLocalVariableCheck.java)

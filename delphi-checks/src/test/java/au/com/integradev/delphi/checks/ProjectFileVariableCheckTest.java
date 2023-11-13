@@ -49,7 +49,7 @@ class ProjectFileVariableCheckTest {
   }
 
   @Test
-  void testVariablesWithinMethodsShouldNotAddIssue() {
+  void testVariablesWithinRoutinesShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ProjectFileVariableCheck())
         .onFile(

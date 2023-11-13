@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.sonar.api.config.Configuration;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
@@ -91,11 +91,11 @@ public class TestCodeDetector {
       return typeDeclarationNode.get().getType();
     }
 
-    Optional<MethodImplementationNode> methodImplementationNode =
-        findNodeEnclosingFilePosition(ast, filePosition, MethodImplementationNode.class);
+    Optional<RoutineImplementationNode> routine =
+        findNodeEnclosingFilePosition(ast, filePosition, RoutineImplementationNode.class);
 
-    if (methodImplementationNode.isPresent()) {
-      TypeNameDeclaration typeDeclaration = methodImplementationNode.get().getTypeDeclaration();
+    if (routine.isPresent()) {
+      TypeNameDeclaration typeDeclaration = routine.get().getTypeDeclaration();
       if (typeDeclaration != null) {
         return typeDeclaration.getType();
       }

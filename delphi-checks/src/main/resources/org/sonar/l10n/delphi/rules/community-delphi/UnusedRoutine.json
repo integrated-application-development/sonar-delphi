@@ -1,0 +1,19 @@
+{
+  "title": "Unused routines should be removed",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["unused"],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

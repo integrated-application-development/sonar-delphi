@@ -34,20 +34,20 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.operator.Operator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -267,9 +267,9 @@ public final class ExpressionTypeResolver {
   }
 
   private static Type findCurrentType(DelphiNode node) {
-    MethodNode method = node.getFirstParentOfType(MethodNode.class);
-    if (method != null) {
-      TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    RoutineNode routine = node.getFirstParentOfType(RoutineNode.class);
+    if (routine != null) {
+      TypeNameDeclaration typeDeclaration = routine.getTypeDeclaration();
       if (typeDeclaration != null) {
         return typeDeclaration.getType();
       }
@@ -279,8 +279,8 @@ public final class ExpressionTypeResolver {
 
   private static boolean isConstructor(NameOccurrence occurrence) {
     NameDeclaration declaration = occurrence.getNameDeclaration();
-    return declaration instanceof MethodNameDeclaration
-        && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
+    return declaration instanceof RoutineNameDeclaration
+        && ((RoutineNameDeclaration) declaration).getRoutineKind() == RoutineKind.CONSTRUCTOR;
   }
 
   private Type handleNameOccurrence(NameOccurrence occurrence) {

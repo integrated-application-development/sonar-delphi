@@ -1,0 +1,19 @@
+{
+  "title": "Routines should not contain too many nested routines",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "30min"
+  },
+  "code": {
+    "attribute": "FOCUSED",
+    "impacts": {
+      "MAINTAINABILITY": "HIGH"
+    }
+  },
+  "tags": ["confusing"],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

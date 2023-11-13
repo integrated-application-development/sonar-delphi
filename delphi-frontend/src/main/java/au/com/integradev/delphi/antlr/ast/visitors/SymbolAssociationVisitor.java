@@ -27,9 +27,9 @@ import com.google.common.base.Preconditions;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 /**
@@ -95,7 +95,7 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(MethodNameNode node, Data data) {
+  public Data visit(RoutineNameNode node, Data data) {
     data.fileScope.attach(node);
     return DelphiParserVisitor.super.visit(node, data);
   }

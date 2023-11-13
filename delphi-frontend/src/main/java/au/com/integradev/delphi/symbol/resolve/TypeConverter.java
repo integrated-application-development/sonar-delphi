@@ -24,8 +24,8 @@ import au.com.integradev.delphi.symbol.resolve.TypeConverter.TypeConversion.Sour
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
@@ -80,7 +80,7 @@ public final class TypeConverter {
   }
 
   private static Set<Type> indexImplicitConversionsFromThis(StructType type) {
-    return type.typeScope().getMethodDeclarations().stream()
+    return type.typeScope().getRoutineDeclarations().stream()
         .filter(TypeConverter::isImplicitOperator)
         .filter(method -> method.getParameter(0).getType().is(type))
         .map(Invocable::getReturnType)
@@ -88,7 +88,7 @@ public final class TypeConverter {
   }
 
   private static Set<Type> indexImplicitConversionsToThis(StructType type) {
-    return type.typeScope().getMethodDeclarations().stream()
+    return type.typeScope().getRoutineDeclarations().stream()
         .filter(TypeConverter::isImplicitOperator)
         .filter(method -> method.getReturnType().is(type))
         .map(method -> method.getParameter(0))
@@ -96,8 +96,8 @@ public final class TypeConverter {
         .collect(Collectors.toUnmodifiableSet());
   }
 
-  private static boolean isImplicitOperator(MethodNameDeclaration method) {
-    return method.getMethodKind() == MethodKind.OPERATOR
+  private static boolean isImplicitOperator(RoutineNameDeclaration method) {
+    return method.getRoutineKind() == RoutineKind.OPERATOR
         && method.getName().equalsIgnoreCase("Implicit")
         && method.getParametersCount() == 1;
   }

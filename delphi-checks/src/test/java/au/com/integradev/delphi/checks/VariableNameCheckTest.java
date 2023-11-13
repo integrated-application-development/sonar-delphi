@@ -57,7 +57,7 @@ class VariableNameCheckTest {
   }
 
   @Test
-  void testValidNameInMethodShouldNotAddIssue() {
+  void testValidNameInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(
@@ -72,7 +72,7 @@ class VariableNameCheckTest {
   }
 
   @Test
-  void testBadPascalCaseInMethodShouldAddIssue() {
+  void testBadPascalCaseInRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(
@@ -182,7 +182,7 @@ class VariableNameCheckTest {
   }
 
   @Test
-  void testBadPascalCaseInMethodImplementingGoodPascalCaseInterfaceShouldAddIssue() {
+  void testBadPascalCaseInRoutineImplementingGoodPascalCaseInterfaceShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(
@@ -201,7 +201,7 @@ class VariableNameCheckTest {
   }
 
   @Test
-  void testBadPascalCaseInMethodImplementingBadPascalCaseInterfaceShouldNotAddIssue() {
+  void testBadPascalCaseInRoutineImplementingBadPascalCaseInterfaceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(

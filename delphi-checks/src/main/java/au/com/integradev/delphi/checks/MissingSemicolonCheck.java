@@ -28,9 +28,9 @@ import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.RecordVariantItemNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -55,10 +55,10 @@ public class MissingSemicolonCheck extends DelphiCheck {
   }
 
   @Override
-  public DelphiCheckContext visit(MethodHeadingNode heading, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RoutineHeadingNode heading, DelphiCheckContext context) {
     DelphiNode lastChild = Iterables.getLast(heading.getChildren());
     if (lastChild.getTokenType() != DelphiTokenType.SEMICOLON) {
-      reportIssue(context, heading, "Terminate this method heading with a semicolon.");
+      reportIssue(context, heading, "Terminate this routine heading with a semicolon.");
     }
     return super.visit(heading, context);
   }

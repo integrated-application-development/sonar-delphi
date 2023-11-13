@@ -1,0 +1,20 @@
+{
+  "title": "Routines should not be empty",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "COMPLETE",
+    "impacts": {
+      "MAINTAINABILITY": "LOW",
+      "RELIABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["unused"],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

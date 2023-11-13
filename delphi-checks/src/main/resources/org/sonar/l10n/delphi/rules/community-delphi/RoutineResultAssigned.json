@@ -1,0 +1,19 @@
+{
+  "title": "Routine results should be assigned a value",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
+  "tags": ["unpredictable", "suspicious"],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

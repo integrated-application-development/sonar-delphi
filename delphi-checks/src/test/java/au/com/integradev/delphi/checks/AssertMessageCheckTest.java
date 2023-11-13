@@ -50,7 +50,7 @@ class AssertMessageCheckTest {
   }
 
   @Test
-  void testAssertMethodReferenceShouldNotAddIssue() {
+  void testAssertRoutineReferenceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new AssertMessageCheck())
         .onFile(

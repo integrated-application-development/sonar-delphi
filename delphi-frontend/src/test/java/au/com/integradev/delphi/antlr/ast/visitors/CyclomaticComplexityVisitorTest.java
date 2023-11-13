@@ -43,7 +43,7 @@ class CyclomaticComplexityVisitorTest {
   }
 
   @Test
-  void testEmptyMethod() {
+  void testEmptyRoutine() {
     assertThat(
             getComplexity(
                 "function Foo: Integer;\n" // 1
@@ -53,7 +53,7 @@ class CyclomaticComplexityVisitorTest {
   }
 
   @Test
-  void testSimpleMethod() {
+  void testSimpleRoutine() {
     assertThat(
             getComplexity(
                 "function Foo: Integer;\n" // 1
@@ -66,7 +66,7 @@ class CyclomaticComplexityVisitorTest {
   }
 
   @Test
-  void testComplexMethod() {
+  void testComplexRoutine() {
     assertThat(
             getComplexity(
                 "function Foo: Integer;\n" // 1

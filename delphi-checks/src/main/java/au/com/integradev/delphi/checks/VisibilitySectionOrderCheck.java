@@ -32,9 +32,9 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
@@ -139,8 +139,8 @@ public class VisibilitySectionOrderCheck extends DelphiCheck {
   }
 
   private static List<NameOccurrence> getVisibilitySectionItemUsages(DelphiNode node) {
-    if (node instanceof MethodDeclarationNode) {
-      return ((MethodDeclarationNode) node).getMethodNameNode().getUsages();
+    if (node instanceof RoutineDeclarationNode) {
+      return ((RoutineDeclarationNode) node).getRoutineNameNode().getUsages();
     } else if (node instanceof FieldSectionNode) {
       return ((FieldSectionNode) node)
           .getDeclarations().stream()

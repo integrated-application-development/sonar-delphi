@@ -456,12 +456,12 @@ public class TypeFactoryImpl implements TypeFactory {
     return createProcedural(ProceduralKind.ANONYMOUS, parameters, returnType);
   }
 
-  public ProceduralType method(List<Parameter> parameters, Type returnType) {
-    return createProcedural(ProceduralKind.METHOD, parameters, returnType);
+  public ProceduralType routine(List<Parameter> parameters, Type returnType) {
+    return createProcedural(ProceduralKind.ROUTINE, parameters, returnType);
   }
 
-  public ProceduralType method(List<Parameter> parameters, Type returnType, boolean variadic) {
-    return createProcedural(ProceduralKind.METHOD, parameters, returnType, variadic);
+  public ProceduralType routine(List<Parameter> parameters, Type returnType, boolean variadic) {
+    return createProcedural(ProceduralKind.ROUTINE, parameters, returnType, variadic);
   }
 
   @Override

@@ -1,0 +1,19 @@
+{
+  "title": "Routines should not be nested too deeply",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "10min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["confusing"],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

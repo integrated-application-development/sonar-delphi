@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class EmptyArgumentListCheckTest {
 
   @Test
-  void testMethodParametersEmptyBracketsShouldAddIssue() {
+  void testRoutineParametersEmptyBracketsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyArgumentListCheck())
         .onFile(
@@ -38,7 +38,7 @@ class EmptyArgumentListCheckTest {
   }
 
   @Test
-  void testInvocationOfUnknownMethodShouldAddIssue() {
+  void testInvocationOfUnknownRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyArgumentListCheck())
         .onFile(
@@ -51,7 +51,7 @@ class EmptyArgumentListCheckTest {
   }
 
   @Test
-  void testInvocationOfKnownMethodShouldAddIssue() {
+  void testInvocationOfKnownRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyArgumentListCheck())
         .onFile(

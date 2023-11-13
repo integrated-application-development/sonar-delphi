@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -27,13 +27,13 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @DeprecatedRuleKey(ruleKey = "NoFunctionReturnTypeRule", repositoryKey = "delph")
 @Rule(key = "UnspecifiedReturnType")
 public class UnspecifiedReturnTypeCheck extends DelphiCheck {
-  private static final String MESSAGE = "Specify a return type on this method.";
+  private static final String MESSAGE = "Specify a return type on this routine.";
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    if (method.isFunction() && method.getMethodHeading().getMethodReturnType() == null) {
-      reportIssue(context, method.getMethodNameNode(), MESSAGE);
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    if (routine.isFunction() && routine.getRoutineHeading().getRoutineReturnType() == null) {
+      reportIssue(context, routine.getRoutineNameNode(), MESSAGE);
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 }

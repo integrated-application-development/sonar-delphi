@@ -20,8 +20,8 @@ package au.com.integradev.delphi.type.intrinsic;
 
 import au.com.integradev.delphi.type.TypeImpl;
 import java.util.List;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -97,10 +97,10 @@ public abstract class IntrinsicReturnType extends TypeImpl {
       Type type = arguments.get(0);
       if (type.isRecord()) {
         return ((ScopedType) type)
-            .typeScope().getMethodDeclarations().stream()
-                .filter(method -> method.getMethodKind() == MethodKind.OPERATOR)
-                .filter(method -> method.getImage().equalsIgnoreCase(name))
-                .map(MethodNameDeclaration::getReturnType)
+            .typeScope().getRoutineDeclarations().stream()
+                .filter(routine -> routine.getRoutineKind() == RoutineKind.OPERATOR)
+                .filter(routine -> routine.getImage().equalsIgnoreCase(name))
+                .map(RoutineNameDeclaration::getReturnType)
                 .findFirst()
                 .orElseGet(TypeFactory::unknownType);
       }

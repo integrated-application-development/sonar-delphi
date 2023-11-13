@@ -83,7 +83,7 @@ class UnusedTypeCheckTest {
   }
 
   @Test
-  void testUsedInMethodParametersShouldNotAddIssue() {
+  void testUsedInRoutineParametersShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedTypeCheck())
         .onFile(
@@ -99,7 +99,7 @@ class UnusedTypeCheckTest {
   }
 
   @Test
-  void testUsedInMethodShouldNotAddIssue() {
+  void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedTypeCheck())
         .onFile(

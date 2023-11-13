@@ -51,8 +51,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -288,7 +288,7 @@ public class SymbolTableBuilder {
 
       if (resolutionLevel == ResolutionLevel.COMPLETE) {
         runSymbolTableVisitor(unit, delphiFile, ResolutionLevel.COMPLETE);
-        processImportsWithInlineMethods(unit);
+        processImportsWithInlineRoutines(unit);
         runDependencyAnalysisVisitor(unit, delphiFile, ResolutionLevel.COMPLETE);
       }
     } catch (DelphiFileConstructionException e) {
@@ -349,12 +349,12 @@ public class SymbolTableBuilder {
     }
   }
 
-  private void processImportsWithInlineMethods(UnitData unit) {
+  private void processImportsWithInlineRoutines(UnitData unit) {
     Set<UnitData> imports =
         unit.unitDeclaration.getScope().getImportDeclarations().stream()
             .map(UnitImportNameDeclaration::getOriginalDeclaration)
             .filter(Objects::nonNull)
-            .filter(SymbolTableBuilder::hasInlineMethods)
+            .filter(SymbolTableBuilder::hasInlineRoutines)
             .map(UnitNameDeclaration::getName)
             .map(name -> findImportByName(unit.unitDeclaration, name))
             .filter(Objects::nonNull)
@@ -370,13 +370,13 @@ public class SymbolTableBuilder {
     }
   }
 
-  private static boolean hasInlineMethods(UnitNameDeclaration unit) {
-    return hasInlineMethods(unit.getFileScope());
+  private static boolean hasInlineRoutines(UnitNameDeclaration unit) {
+    return hasInlineRoutines(unit.getFileScope());
   }
 
-  private static boolean hasInlineMethods(DelphiScope scope) {
-    if (scope.getMethodDeclarations().stream()
-        .anyMatch(method -> method.hasDirective(MethodDirective.INLINE))) {
+  private static boolean hasInlineRoutines(DelphiScope scope) {
+    if (scope.getRoutineDeclarations().stream()
+        .anyMatch(routine -> routine.hasDirective(RoutineDirective.INLINE))) {
       return true;
     }
 
@@ -385,7 +385,7 @@ public class SymbolTableBuilder {
         .filter(ScopedType.class::isInstance)
         .map(ScopedType.class::cast)
         .map(ScopedType::typeScope)
-        .anyMatch(SymbolTableBuilder::hasInlineMethods);
+        .anyMatch(SymbolTableBuilder::hasInlineRoutines);
   }
 
   private void indexUnit(UnitData unit, ResolutionLevel resolutionLevel) {

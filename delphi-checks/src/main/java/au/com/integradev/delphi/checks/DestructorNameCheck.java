@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -30,20 +30,20 @@ public class DestructorNameCheck extends DelphiCheck {
   private static final String MESSAGE = "Change this destructor to override 'TObject.Destroy'";
 
   @Override
-  public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
-    if (isViolation(method)) {
-      reportIssue(context, method.getMethodNameNode(), MESSAGE);
+  public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+    if (isViolation(routine)) {
+      reportIssue(context, routine.getRoutineNameNode(), MESSAGE);
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
-  private static boolean isViolation(MethodDeclarationNode method) {
-    if (!method.isDestructor() || method.isClassMethod()) {
+  private static boolean isViolation(RoutineDeclarationNode routine) {
+    if (!routine.isDestructor() || routine.isClassMethod()) {
       return false;
     }
 
-    return !(method.simpleName().equalsIgnoreCase("Destroy")
-        && method.getParameters().isEmpty()
-        && method.isOverride());
+    return !(routine.simpleName().equalsIgnoreCase("Destroy")
+        && routine.getParameters().isEmpty()
+        && routine.isOverride());
   }
 }

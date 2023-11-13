@@ -22,10 +22,10 @@ import javax.annotation.Nullable;
 
 public interface ProcedureTypeHeadingNode extends DelphiNode {
   @Nullable
-  MethodParametersNode getMethodParametersNode();
+  RoutineParametersNode getRoutineParametersNode();
 
   @Nullable
-  MethodReturnTypeNode getMethodReturnTypeNode();
+  RoutineReturnTypeNode getRoutineReturnTypeNode();
 
-  boolean hasMethodParametersNode();
+  boolean hasRoutineParametersNode();
 }

@@ -23,10 +23,10 @@ import com.google.common.collect.ImmutableSortedSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "DestructorWithoutInheritedStatementRule", repositoryKey = "delph")
@@ -54,23 +54,23 @@ public class DestructorWithoutInheritedCheck extends AbstractWithoutInheritedChe
   }
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    if (isDestructorLike(method)) {
-      checkViolation(method, context);
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    if (isDestructorLike(routine)) {
+      checkViolation(routine, context);
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
-  private boolean isDestructorLike(MethodImplementationNode method) {
-    if (method.isDestructor()) {
+  private boolean isDestructorLike(RoutineImplementationNode routine) {
+    if (routine.isDestructor()) {
       return true;
     }
 
-    MethodNameDeclaration declaration = method.getMethodNameDeclaration();
+    RoutineNameDeclaration declaration = routine.getRoutineNameDeclaration();
     if (declaration != null) {
       String name = declaration.getName();
 
-      return declaration.hasDirective(MethodDirective.OVERRIDE)
+      return declaration.hasDirective(RoutineDirective.OVERRIDE)
           && destructorLikesSet.contains(name);
     }
 

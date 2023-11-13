@@ -47,14 +47,14 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDESTRIN
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WORD;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
@@ -63,20 +63,20 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class IntrinsicsInjector {
   private final TypeFactory typeFactory;
-  private final List<IntrinsicMethod.Builder> methods;
+  private final List<IntrinsicRoutine.Builder> routines;
   private DelphiScopeImpl scope;
 
   public IntrinsicsInjector(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
-    this.methods = new ArrayList<>();
+    this.routines = new ArrayList<>();
 
-    buildMethods();
+    buildRoutines();
   }
 
   public void inject(DelphiScope scope) {
     this.scope = (DelphiScopeImpl) scope;
     injectTypes();
-    injectMethods();
+    injectRoutines();
     injectConstants();
   }
 
@@ -84,220 +84,224 @@ public final class IntrinsicsInjector {
     return typeFactory.getIntrinsic(type);
   }
 
-  private void buildMethods() {
-    method("Abs").param(type(REAL)).returns(type(REAL));
-    method("Abs").param(type(INTEGER)).returns(type(INTEGER));
-    method("Abs").param(type(INT64)).returns(type(INT64));
-    method("Addr").varParam(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
-    method("Append").varParam(type(TEXT)).returns(type(INTEGER));
-    method("Assert").varParam(type(BOOLEAN)).param(type(UNICODESTRING)).required(1);
-    method("Assign")
+  private void buildRoutines() {
+    routine("Abs").param(type(REAL)).returns(type(REAL));
+    routine("Abs").param(type(INTEGER)).returns(type(INTEGER));
+    routine("Abs").param(type(INT64)).returns(type(INT64));
+    routine("Addr").varParam(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
+    routine("Append").varParam(type(TEXT)).returns(type(INTEGER));
+    routine("Assert").varParam(type(BOOLEAN)).param(type(UNICODESTRING)).required(1);
+    routine("Assign")
         .varParam(typeFactory.untypedFile())
         .param(type(UNICODESTRING))
         .param(type(WORD))
         .required(2);
-    method("Assigned").varParam(TypeFactory.untypedType()).returns(type(BOOLEAN));
-    method("AssignFile")
+    routine("Assigned").varParam(TypeFactory.untypedType()).returns(type(BOOLEAN));
+    routine("AssignFile")
         .varParam(typeFactory.untypedFile())
         .param(type(UNICODESTRING))
         .param(type(WORD))
         .required(2);
-    method("AtomicCmpExchange")
+    routine("AtomicCmpExchange")
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .param(type(INTEGER))
         .outParam(type(BOOLEAN))
         .required(3)
         .returns(type(INTEGER));
-    method("AtomicCmpExchange")
+    routine("AtomicCmpExchange")
         .varParam(TypeFactory.untypedType())
         .param(TypeFactory.untypedType())
         .param(TypeFactory.untypedType())
         .outParam(type(BOOLEAN))
         .required(3)
         .returns(typeFactory.untypedPointer());
-    method("AtomicDecrement")
+    routine("AtomicDecrement")
         .varParam(TypeFactory.untypedType())
         .param(TypeFactory.untypedType())
         .required(1)
         .returns(type(INTEGER));
-    method("AtomicExchange")
+    routine("AtomicExchange")
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .returns(type(INTEGER));
-    method("AtomicExchange")
+    routine("AtomicExchange")
         .varParam(TypeFactory.untypedType())
         .param(typeFactory.untypedPointer())
         .returns(typeFactory.untypedPointer());
-    method("AtomicIncrement")
+    routine("AtomicIncrement")
         .varParam(TypeFactory.untypedType())
         .param(TypeFactory.untypedType())
         .required(1)
         .returns(type(INTEGER));
-    method("BlockRead")
+    routine("BlockRead")
         .varParam(typeFactory.untypedFile())
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .varParam(type(INTEGER))
         .required(3)
         .returns(type(INTEGER));
-    method("BlockWrite")
+    routine("BlockWrite")
         .varParam(typeFactory.untypedFile())
         .constParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .varParam(type(INTEGER))
         .required(3)
         .returns(type(INTEGER));
-    method("Break");
-    method("BuiltInArcTan").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInArcTan2").param(type(REAL)).param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInCos").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInLn").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInLnXPlus1").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInLog10").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInLog2").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInSin").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInSqrt").param(type(REAL)).returns(type(EXTENDED));
-    method("BuiltInTan").param(type(REAL)).returns(type(EXTENDED));
-    method("Chr").param(type(BYTE)).returns(type(CHAR));
-    method("Close").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
-    method("CloseFile").varParam(typeFactory.untypedFile());
-    method("Concat")
+    routine("Break");
+    routine("BuiltInArcTan").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInArcTan2").param(type(REAL)).param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInCos").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInLn").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInLnXPlus1").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInLog10").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInLog2").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInSin").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInSqrt").param(type(REAL)).returns(type(EXTENDED));
+    routine("BuiltInTan").param(type(REAL)).returns(type(EXTENDED));
+    routine("Chr").param(type(BYTE)).returns(type(CHAR));
+    routine("Close").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
+    routine("CloseFile").varParam(typeFactory.untypedFile());
+    routine("Concat")
         .param(type(UNICODESTRING))
         .param(type(UNICODESTRING))
         .variadic(type(UNICODESTRING))
         .returns(type(UNICODESTRING));
-    method("Concat")
+    routine("Concat")
         .param(ANY_DYNAMIC_ARRAY)
         .param(ANY_DYNAMIC_ARRAY)
         .variadic(ANY_DYNAMIC_ARRAY)
         .returns(ANY_DYNAMIC_ARRAY);
-    method("Continue");
-    method("Copy")
+    routine("Continue");
+    routine("Copy")
         .param(type(UNICODESTRING))
         .param(type(INTEGER))
         .param(type(INTEGER))
         .returns(type(UNICODESTRING));
-    method("Copy")
+    routine("Copy")
         .param(ANY_DYNAMIC_ARRAY)
         .param(type(INTEGER))
         .param(type(INTEGER))
         .required(1)
         .returns(type(UNICODESTRING));
-    method("Dec").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1).returns(type(INTEGER));
-    method("Default").param(ANY_CLASS_REFERENCE).returns(IntrinsicReturnType.classReferenceValue());
-    method("Delete").varParam(type(UNICODESTRING)).param(type(INTEGER)).param(type(INTEGER));
-    method("Delete").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).param(type(INTEGER));
-    method("Dispose").varParam(typeFactory.untypedPointer());
-    method("Eof").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
-    method("Eoln").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
-    method("Erase").varParam(typeFactory.untypedFile());
-    method("Exclude").varParam(ANY_SET).param(ANY_ORDINAL);
-    method("Exit").varParam(TypeFactory.untypedType()).required(0);
-    method("Fail");
-    method("FilePos").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
-    method("FileSize").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
-    method("FillChar").varParam(TypeFactory.untypedType()).param(type(INTEGER)).param(ANY_ORDINAL);
-    method("Finalize").varParam(TypeFactory.untypedType()).param(type(NATIVEUINT)).required(1);
-    method("FreeMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER)).required(1);
-    method("GetDir").param(type(BYTE)).varParam(type(UNICODESTRING));
-    method("GetMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
-    method("Halt").param(type(INTEGER)).required(0);
-    method("HasWeakRef").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
-    method("Hi").param(type(INTEGER)).returns(type(BYTE));
-    method("High")
+    routine("Dec").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1).returns(type(INTEGER));
+    routine("Default")
+        .param(ANY_CLASS_REFERENCE)
+        .returns(IntrinsicReturnType.classReferenceValue());
+    routine("Delete").varParam(type(UNICODESTRING)).param(type(INTEGER)).param(type(INTEGER));
+    routine("Delete").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).param(type(INTEGER));
+    routine("Dispose").varParam(typeFactory.untypedPointer());
+    routine("Eof").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
+    routine("Eoln").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
+    routine("Erase").varParam(typeFactory.untypedFile());
+    routine("Exclude").varParam(ANY_SET).param(ANY_ORDINAL);
+    routine("Exit").varParam(TypeFactory.untypedType()).required(0);
+    routine("Fail");
+    routine("FilePos").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
+    routine("FileSize").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
+    routine("FillChar").varParam(TypeFactory.untypedType()).param(type(INTEGER)).param(ANY_ORDINAL);
+    routine("Finalize").varParam(TypeFactory.untypedType()).param(type(NATIVEUINT)).required(1);
+    routine("FreeMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER)).required(1);
+    routine("GetDir").param(type(BYTE)).varParam(type(UNICODESTRING));
+    routine("GetMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
+    routine("Halt").param(type(INTEGER)).required(0);
+    routine("HasWeakRef").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
+    routine("Hi").param(type(INTEGER)).returns(type(BYTE));
+    routine("High")
         .varParam(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.high(typeFactory));
-    method("Inc").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
-    method("Include").varParam(ANY_SET).param(ANY_ORDINAL);
-    method("Initialize").varParam(TypeFactory.untypedType()).param(type(NATIVEINT)).required(1);
-    method("Insert").param(type(UNICODESTRING)).varParam(type(UNICODESTRING)).param(type(INTEGER));
-    method("Insert").param(ANY_DYNAMIC_ARRAY).varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER));
-    method("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
-    method("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
-    method("Length").param(type(UNICODESTRING)).returns(type(INTEGER));
-    method("Length").param(ANY_ARRAY).returns(type(INTEGER));
-    method("Lo").param(type(INTEGER)).returns(type(BYTE));
-    method("Low").varParam(TypeFactory.untypedType()).returns(IntrinsicReturnType.low(typeFactory));
-    method("MemoryBarrier");
-    method("MulDivInt64")
+    routine("Inc").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
+    routine("Include").varParam(ANY_SET).param(ANY_ORDINAL);
+    routine("Initialize").varParam(TypeFactory.untypedType()).param(type(NATIVEINT)).required(1);
+    routine("Insert").param(type(UNICODESTRING)).varParam(type(UNICODESTRING)).param(type(INTEGER));
+    routine("Insert").param(ANY_DYNAMIC_ARRAY).varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER));
+    routine("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
+    routine("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
+    routine("Length").param(type(UNICODESTRING)).returns(type(INTEGER));
+    routine("Length").param(ANY_ARRAY).returns(type(INTEGER));
+    routine("Lo").param(type(INTEGER)).returns(type(BYTE));
+    routine("Low")
+        .varParam(TypeFactory.untypedType())
+        .returns(IntrinsicReturnType.low(typeFactory));
+    routine("MemoryBarrier");
+    routine("MulDivInt64")
         .param(type(INT64))
         .param(type(INT64))
         .param(type(INT64))
         .outParam(type(INT64))
         .required(3)
         .returns(type(INT64));
-    method("New").varParam(typeFactory.untypedPointer());
-    method("Odd").param(type(INTEGER)).returns(type(BOOLEAN));
-    method("Ord").param(ANY_ORDINAL).returns(type(BYTE));
-    method("Pi").returns(type(EXTENDED));
-    method("Pred").param(ANY_ORDINAL).returns(type(INTEGER));
-    method("Ptr").param(type(INTEGER)).returns(typeFactory.untypedPointer());
-    method("Read")
+    routine("New").varParam(typeFactory.untypedPointer());
+    routine("Odd").param(type(INTEGER)).returns(type(BOOLEAN));
+    routine("Ord").param(ANY_ORDINAL).returns(type(BYTE));
+    routine("Pi").returns(type(EXTENDED));
+    routine("Pred").param(ANY_ORDINAL).returns(type(INTEGER));
+    routine("Ptr").param(type(INTEGER)).returns(typeFactory.untypedPointer());
+    routine("Read")
         .varParam(typeFactory.untypedFile())
         .param(TypeFactory.untypedType())
         .variadic(TypeFactory.untypedType());
-    method("ReadLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
-    method("ReallocMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
-    method("Rename").varParam(typeFactory.untypedFile()).param(type(UNICODESTRING));
-    method("Reset").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
-    method("Rewrite").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
-    method("Round")
+    routine("ReadLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
+    routine("ReallocMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
+    routine("Rename").varParam(typeFactory.untypedFile()).param(type(UNICODESTRING));
+    routine("Reset").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
+    routine("Rewrite").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
+    routine("Round")
         .param(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.round(typeFactory));
-    method("RunError").param(type(BYTE)).required(0);
-    method("Seek").varParam(typeFactory.untypedFile()).param(type(INTEGER));
-    method("SeekEof").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
-    method("SeekEoln").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
-    method("SetLength").varParam(type(UNICODESTRING)).param(type(INTEGER));
-    method("SetLength").varParam(type(ANSISTRING)).param(type(INTEGER));
-    method("SetLength").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
-    method("SetString").varParam(type(SHORTSTRING)).param(type(PANSICHAR)).param(type(INTEGER));
-    method("SetString").varParam(type(ANSISTRING)).param(type(PANSICHAR)).param(type(INTEGER));
-    method("SetString").varParam(type(WIDESTRING)).param(type(PCHAR)).param(type(INTEGER));
-    method("SetString").varParam(type(UNICODESTRING)).param(type(PCHAR)).param(type(INTEGER));
-    method("SetTextBuf")
+    routine("RunError").param(type(BYTE)).required(0);
+    routine("Seek").varParam(typeFactory.untypedFile()).param(type(INTEGER));
+    routine("SeekEof").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
+    routine("SeekEoln").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
+    routine("SetLength").varParam(type(UNICODESTRING)).param(type(INTEGER));
+    routine("SetLength").varParam(type(ANSISTRING)).param(type(INTEGER));
+    routine("SetLength").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
+    routine("SetString").varParam(type(SHORTSTRING)).param(type(PANSICHAR)).param(type(INTEGER));
+    routine("SetString").varParam(type(ANSISTRING)).param(type(PANSICHAR)).param(type(INTEGER));
+    routine("SetString").varParam(type(WIDESTRING)).param(type(PCHAR)).param(type(INTEGER));
+    routine("SetString").varParam(type(UNICODESTRING)).param(type(PCHAR)).param(type(INTEGER));
+    routine("SetTextBuf")
         .varParam(type(TEXT))
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .required(2);
-    method("SizeOf").param(TypeFactory.untypedType()).returns(type(INTEGER));
-    method("Slice").varParam(ANY_ARRAY).param(type(INTEGER)).returns(typeFactory.untypedPointer());
-    method("Sqr").param(type(EXTENDED)).returns(type(EXTENDED));
-    method("Sqr").param(type(INTEGER)).returns(type(INTEGER));
-    method("Sqr").param(type(REAL)).returns(type(INT64));
-    method("Str").constParam(TypeFactory.untypedType()).varParam(type(UNICODESTRING));
-    method("Succ").param(ANY_ORDINAL).returns(type(INTEGER));
-    method("Swap").param(type(INTEGER)).returns(type(INTEGER));
-    method("Trunc")
+    routine("SizeOf").param(TypeFactory.untypedType()).returns(type(INTEGER));
+    routine("Slice").varParam(ANY_ARRAY).param(type(INTEGER)).returns(typeFactory.untypedPointer());
+    routine("Sqr").param(type(EXTENDED)).returns(type(EXTENDED));
+    routine("Sqr").param(type(INTEGER)).returns(type(INTEGER));
+    routine("Sqr").param(type(REAL)).returns(type(INT64));
+    routine("Str").constParam(TypeFactory.untypedType()).varParam(type(UNICODESTRING));
+    routine("Succ").param(ANY_ORDINAL).returns(type(INTEGER));
+    routine("Swap").param(type(INTEGER)).returns(type(INTEGER));
+    routine("Trunc")
         .param(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.trunc(typeFactory));
-    method("Truncate").varParam(typeFactory.untypedFile());
-    method("TypeHandle").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
-    method("TypeInfo").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
-    method("TypeOf").param(ANY_OBJECT).returns(typeFactory.untypedPointer());
-    method("Val")
+    routine("Truncate").varParam(typeFactory.untypedFile());
+    routine("TypeHandle").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
+    routine("TypeInfo").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
+    routine("TypeOf").param(ANY_OBJECT).returns(typeFactory.untypedPointer());
+    routine("Val")
         .param(type(UNICODESTRING))
         .varParam(TypeFactory.untypedType())
         .varParam(type(INTEGER));
-    method("VarArrayRedim").varParam(type(VARIANT)).param(type(INTEGER));
-    method("VarArrayRedim").varParam(type(OLEVARIANT)).param(type(INTEGER));
-    method("VarCast").varParam(type(VARIANT)).param(type(VARIANT)).param(type(INTEGER));
-    method("VarClear").varParam(type(VARIANT));
-    method("VarClear").varParam(type(OLEVARIANT));
-    method("VarCopy").varParam(type(VARIANT)).param(type(VARIANT));
-    method("Write")
+    routine("VarArrayRedim").varParam(type(VARIANT)).param(type(INTEGER));
+    routine("VarArrayRedim").varParam(type(OLEVARIANT)).param(type(INTEGER));
+    routine("VarCast").varParam(type(VARIANT)).param(type(VARIANT)).param(type(INTEGER));
+    routine("VarClear").varParam(type(VARIANT));
+    routine("VarClear").varParam(type(OLEVARIANT));
+    routine("VarCopy").varParam(type(VARIANT)).param(type(VARIANT));
+    routine("Write")
         .varParam(typeFactory.untypedFile())
         .param(TypeFactory.untypedType())
         .variadic(TypeFactory.untypedType());
-    method("Write").varParam(TypeFactory.untypedType()).variadic(TypeFactory.untypedType());
-    method("WriteLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
-    method("WriteLn").variadic(TypeFactory.untypedType());
+    routine("Write").varParam(TypeFactory.untypedType()).variadic(TypeFactory.untypedType());
+    routine("WriteLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
+    routine("WriteLn").variadic(TypeFactory.untypedType());
   }
 
-  private IntrinsicMethod.Builder method(String name) {
-    IntrinsicMethod.Builder builder = IntrinsicMethod.builder(name);
-    methods.add(builder);
+  private IntrinsicRoutine.Builder routine(String name) {
+    IntrinsicRoutine.Builder builder = IntrinsicRoutine.builder(name);
+    routines.add(builder);
     return builder;
   }
 
@@ -314,14 +318,15 @@ public final class IntrinsicsInjector {
     scope.addDeclaration(declaration);
   }
 
-  private void injectMethods() {
-    methods.forEach(this::injectMethod);
+  private void injectRoutines() {
+    routines.forEach(this::injectRoutine);
   }
 
-  private void injectMethod(IntrinsicMethod.Builder builder) {
-    IntrinsicMethod method = builder.build();
-    SymbolicNode node = SymbolicNode.imaginary(method.simpleName(), scope);
-    MethodNameDeclaration declaration = MethodNameDeclarationImpl.create(node, method, typeFactory);
+  private void injectRoutine(IntrinsicRoutine.Builder builder) {
+    IntrinsicRoutine routine = builder.build();
+    SymbolicNode node = SymbolicNode.imaginary(routine.simpleName(), scope);
+    RoutineNameDeclaration declaration =
+        RoutineNameDeclarationImpl.create(node, routine, typeFactory);
 
     scope.addDeclaration(declaration);
   }

@@ -36,10 +36,10 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -58,7 +58,7 @@ public class DelphiScopeImpl implements DelphiScope {
   private final Set<UnitImportNameDeclaration> importDeclarations;
   private final Set<TypeNameDeclaration> typeDeclarations;
   private final Set<PropertyNameDeclaration> propertyDeclarations;
-  private final Set<MethodNameDeclaration> methodDeclarations;
+  private final Set<RoutineNameDeclaration> routineDeclarations;
   private final Set<VariableNameDeclaration> variableDeclarations;
   private final Map<Type, HelperType> helpersByType;
 
@@ -72,7 +72,7 @@ public class DelphiScopeImpl implements DelphiScope {
     importDeclarations = new HashSet<>();
     typeDeclarations = new HashSet<>();
     propertyDeclarations = new HashSet<>();
-    methodDeclarations = new HashSet<>();
+    routineDeclarations = new HashSet<>();
     variableDeclarations = new HashSet<>();
     helpersByType = new HashMap<>();
   }
@@ -95,8 +95,8 @@ public class DelphiScopeImpl implements DelphiScope {
   private void addDeclarationByClass(NameDeclaration declaration) {
     if (declaration instanceof VariableNameDeclaration) {
       variableDeclarations.add((VariableNameDeclaration) declaration);
-    } else if (declaration instanceof MethodNameDeclaration) {
-      methodDeclarations.add((MethodNameDeclaration) declaration);
+    } else if (declaration instanceof RoutineNameDeclaration) {
+      routineDeclarations.add((RoutineNameDeclaration) declaration);
     } else if (declaration instanceof PropertyNameDeclaration) {
       propertyDeclarations.add((PropertyNameDeclaration) declaration);
     } else if (declaration instanceof UnitImportNameDeclaration) {
@@ -213,7 +213,7 @@ public class DelphiScopeImpl implements DelphiScope {
     int typeArgumentCount = occurrence.getTypeArguments().size();
     result.removeIf(
         declaration -> {
-          if (typeArgumentCount == 0 && declaration instanceof MethodNameDeclaration) {
+          if (typeArgumentCount == 0 && declaration instanceof RoutineNameDeclaration) {
             // Could be an implicit specialization
             return false;
           }
@@ -228,26 +228,26 @@ public class DelphiScopeImpl implements DelphiScope {
   }
 
   /**
-   * If the result set is populated with only Method declarations that are marked as overloads, then
-   * additional overloads will be searched for and populated into the result set.
+   * If the result set is populated with only routine declarations that are marked as overloads,
+   * then additional overloads will be searched for and populated into the result set.
    *
    * @param occurrence The name occurrence that we're accumulating declarations for
    * @param result The set of declarations that overloads will be added to, if applicable
    */
-  public void findMethodOverloads(NameOccurrence occurrence, Set<NameDeclaration> result) {
+  public void findRoutineOverloads(NameOccurrence occurrence, Set<NameDeclaration> result) {
     if (result.isEmpty() || !result.stream().allMatch(DelphiScopeImpl::canBeOverloaded)) {
       return;
     }
 
-    for (MethodNameDeclaration declaration : this.getMethodDeclarations()) {
-      if (isMethodOverload(declaration, occurrence, result, overloadsRequireOverloadDirective())) {
+    for (RoutineNameDeclaration declaration : this.getRoutineDeclarations()) {
+      if (isRoutineOverload(declaration, occurrence, result, overloadsRequireOverloadDirective())) {
         result.add(declaration);
       }
     }
 
     DelphiScope searchScope = overloadSearchScope();
     if (searchScope != null) {
-      ((DelphiScopeImpl) searchScope).findMethodOverloads(occurrence, result);
+      ((DelphiScopeImpl) searchScope).findRoutineOverloads(occurrence, result);
     }
   }
 
@@ -257,30 +257,30 @@ public class DelphiScopeImpl implements DelphiScope {
   }
 
   private static boolean canBeOverloaded(NameDeclaration declaration) {
-    if (declaration instanceof MethodNameDeclaration) {
-      MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) declaration;
-      return !methodDeclaration.isCallable()
-          || methodDeclaration.hasDirective(MethodDirective.OVERLOAD)
-          || isOverrideForOverloadedMethod(methodDeclaration);
+    if (declaration instanceof RoutineNameDeclaration) {
+      RoutineNameDeclaration routineDeclaration = (RoutineNameDeclaration) declaration;
+      return !routineDeclaration.isCallable()
+          || routineDeclaration.hasDirective(RoutineDirective.OVERLOAD)
+          || isOverrideForOverloadedMethod(routineDeclaration);
     }
     return false;
   }
 
-  private static boolean isOverrideForOverloadedMethod(MethodNameDeclaration method) {
-    if (method.hasDirective(MethodDirective.OVERRIDE)) {
+  private static boolean isOverrideForOverloadedMethod(RoutineNameDeclaration method) {
+    if (method.hasDirective(RoutineDirective.OVERRIDE)) {
       DelphiScope scope = method.getScope().getEnclosingScope(TypeScope.class).getParentTypeScope();
 
       while (scope instanceof TypeScope) {
-        MethodNameDeclaration overridden =
-            scope.getMethodDeclarations().stream()
+        RoutineNameDeclaration overridden =
+            scope.getRoutineDeclarations().stream()
                 .filter(ancestor -> ancestor.getImage().equalsIgnoreCase(method.getName()))
                 .filter(ancestor -> overridesMethodSignature(ancestor, method))
                 .findFirst()
                 .orElse(null);
 
         if (overridden != null) {
-          return overridden.hasDirective(MethodDirective.VIRTUAL)
-              || overridden.hasDirective(MethodDirective.DYNAMIC);
+          return overridden.hasDirective(RoutineDirective.VIRTUAL)
+              || overridden.hasDirective(RoutineDirective.DYNAMIC);
         }
 
         scope = ((TypeScope) scope).getParentTypeScope();
@@ -289,15 +289,15 @@ public class DelphiScopeImpl implements DelphiScope {
     return false;
   }
 
-  private static boolean isMethodOverload(
-      MethodNameDeclaration declaration,
+  private static boolean isRoutineOverload(
+      RoutineNameDeclaration declaration,
       NameOccurrence occurrence,
-      Set<NameDeclaration> matchedMethods,
+      Set<NameDeclaration> matchedRoutines,
       boolean requireOverloadDirective) {
-    return (!requireOverloadDirective || declaration.hasDirective(MethodDirective.OVERLOAD))
+    return (!requireOverloadDirective || declaration.hasDirective(RoutineDirective.OVERLOAD))
         && declaration.getImage().equalsIgnoreCase(occurrence.getImage())
-        && matchedMethods.stream()
-            .map(MethodNameDeclaration.class::cast)
+        && matchedRoutines.stream()
+            .map(RoutineNameDeclaration.class::cast)
             .noneMatch(matched -> overridesMethodSignature(matched, declaration));
   }
 
@@ -306,7 +306,7 @@ public class DelphiScopeImpl implements DelphiScope {
   }
 
   private static boolean overridesMethodSignature(
-      MethodNameDeclaration declaration, MethodNameDeclaration overridden) {
+      RoutineNameDeclaration declaration, RoutineNameDeclaration overridden) {
     return declaration.isCallable()
         && overridden.isCallable()
         && declaration.hasSameParameterTypes(overridden);
@@ -323,7 +323,7 @@ public class DelphiScopeImpl implements DelphiScope {
 
     if (!found.isEmpty()) {
       result = new HashSet<>(found);
-      findMethodOverloads(occurrence, result);
+      findRoutineOverloads(occurrence, result);
       handleGenerics(occurrence, result);
     }
 
@@ -393,8 +393,8 @@ public class DelphiScopeImpl implements DelphiScope {
   }
 
   @Override
-  public Set<MethodNameDeclaration> getMethodDeclarations() {
-    return Collections.unmodifiableSet(methodDeclarations);
+  public Set<RoutineNameDeclaration> getRoutineDeclarations() {
+    return Collections.unmodifiableSet(routineDeclarations);
   }
 
   @Override

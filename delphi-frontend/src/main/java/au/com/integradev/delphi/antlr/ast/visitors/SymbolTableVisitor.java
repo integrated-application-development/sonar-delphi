@@ -21,18 +21,18 @@ package au.com.integradev.delphi.antlr.ast.visitors;
 import static au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl.parameter;
 
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.RoutineNameNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.WithStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.symbol.ImportResolutionHandler;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.EnumElementNameDeclarationImpl;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeParameterNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
@@ -43,7 +43,7 @@ import au.com.integradev.delphi.symbol.scope.DeclarationScopeImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import au.com.integradev.delphi.symbol.scope.LocalScopeImpl;
-import au.com.integradev.delphi.symbol.scope.MethodScopeImpl;
+import au.com.integradev.delphi.symbol.scope.RoutineScopeImpl;
 import au.com.integradev.delphi.symbol.scope.SysInitScopeImpl;
 import au.com.integradev.delphi.symbol.scope.SystemScopeImpl;
 import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
@@ -86,12 +86,6 @@ import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParam
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -102,6 +96,12 @@ import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordVariantTagNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.TryStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
@@ -114,10 +114,10 @@ import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -125,7 +125,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDecl
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DeclarationScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SysInitScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
@@ -219,10 +219,10 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       addDeclarationToCurrentScope(declaration);
     }
 
-    protected void addDeclaration(MethodNameDeclaration declaration, MethodNameNode node) {
+    protected void addDeclaration(RoutineNameDeclaration declaration, RoutineNameNode node) {
       handleImplementationDeclaration(declaration, node);
       registerDeclaration(declaration, node);
-      ((MethodNameNodeImpl) node).setMethodNameDeclaration(declaration);
+      ((RoutineNameNodeImpl) node).setRoutineNameDeclaration(declaration);
       addDeclarationToCurrentScope(declaration);
     }
 
@@ -314,7 +314,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     if (!data.switchRegistry.isActiveSwitch(SwitchKind.SCOPEDENUMS, node.getTokenIndex())) {
       DelphiScope currentScope = data.currentScope();
 
-      DelphiScope scope = currentScope.getEnclosingScope(MethodScope.class);
+      DelphiScope scope = currentScope.getEnclosingScope(RoutineScope.class);
       if (scope == null) {
         scope = currentScope.getEnclosingScope(FileScope.class);
       }
@@ -329,9 +329,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(CompoundStatementNode node, Data data) {
-    // top-level blocks for methods should have the same scope as parameters, just skip them
+    // top-level blocks for routines should have the same scope as parameters, just skip them
     // same applies to catch statements defining exceptions + the catch block, and for-blocks
-    if (node.getParent() instanceof MethodBodyNode
+    if (node.getParent() instanceof RoutineBodyNode
         || node.getParent() instanceof ExceptItemNode
         || node.getParent() instanceof ForStatementNode) {
       return DelphiParserVisitor.super.visit(node, data);
@@ -347,20 +347,20 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(MethodDeclarationNode node, Data data) {
+  public Data visit(RoutineDeclarationNode node, Data data) {
     DeclarationScope scope = new DeclarationScopeImpl();
     data.addScope(scope);
     ((MutableDelphiNode) node).setScope(scope);
 
-    NameDeclarationNode nameNode = node.getMethodNameNode().getNameDeclarationNode();
+    NameDeclarationNode nameNode = node.getRoutineNameNode().getNameDeclarationNode();
     createTypeParameterDeclarations(nameNode.getGenericDefinition(), data);
     data.nameResolutionHelper.resolve(node);
 
     visitScope(node, data);
     ((MutableDelphiNode) node).setScope(null);
 
-    MethodNameDeclaration declaration = MethodNameDeclarationImpl.create(node, data.typeFactory);
-    data.addDeclaration(declaration, node.getMethodNameNode().getNameDeclarationNode());
+    RoutineNameDeclaration declaration = RoutineNameDeclarationImpl.create(node, data.typeFactory);
+    data.addDeclaration(declaration, node.getRoutineNameNode().getNameDeclarationNode());
     return data;
   }
 
@@ -380,52 +380,52 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(MethodImplementationNode node, Data data) {
-    MethodScopeImpl scope = new MethodScopeImpl();
+  public Data visit(RoutineImplementationNode node, Data data) {
+    RoutineScopeImpl scope = new RoutineScopeImpl();
     scope.setParent(data.currentScope());
     ((MutableDelphiNode) node).setScope(scope);
 
     data.nameResolutionHelper.resolve(node);
 
-    NameReferenceNode methodReference = node.getNameReferenceNode();
-    NameDeclaration declaration = methodReference.getLastName().getNameDeclaration();
+    NameReferenceNode routineReference = node.getNameReferenceNode();
+    NameDeclaration declaration = routineReference.getLastName().getNameDeclaration();
 
-    MethodNameDeclaration methodDeclaration = null;
+    RoutineNameDeclaration routineDeclaration = null;
     boolean foundInterfaceDeclaration = false;
-    boolean qualifiedMethodName = methodReference.flatten().size() > 1;
+    boolean qualifiedRoutineName = routineReference.flatten().size() > 1;
 
-    if (declaration instanceof MethodNameDeclaration) {
+    if (declaration instanceof RoutineNameDeclaration) {
       foundInterfaceDeclaration = true;
-      methodDeclaration = (MethodNameDeclaration) declaration;
+      routineDeclaration = (RoutineNameDeclaration) declaration;
     }
 
-    if (!foundInterfaceDeclaration && !qualifiedMethodName) {
-      methodDeclaration = MethodNameDeclarationImpl.create(node, data.typeFactory);
-      MethodNameNode nameNode = node.getMethodHeading().getMethodNameNode();
-      data.addDeclaration(methodDeclaration, nameNode);
+    if (!foundInterfaceDeclaration && !qualifiedRoutineName) {
+      routineDeclaration = RoutineNameDeclarationImpl.create(node, data.typeFactory);
+      RoutineNameNode nameNode = node.getRoutineHeading().getRoutineNameNode();
+      data.addDeclaration(routineDeclaration, nameNode);
     }
 
-    scope.setMethodNameDeclaration(methodDeclaration);
+    scope.setRoutineNameDeclaration(routineDeclaration);
 
     data.addScope(scope, node);
 
     if (foundInterfaceDeclaration
-        && node.getMethodHeading().getMethodParametersNode() == null
-        && !node.hasDirective(MethodDirective.EXTERNAL)) {
-      methodDeclaration.getParameters().stream()
+        && node.getRoutineHeading().getRoutineParametersNode() == null
+        && !node.hasDirective(RoutineDirective.EXTERNAL)) {
+      routineDeclaration.getParameters().stream()
           .map(parameter -> parameter(parameter.getImage(), parameter.getType(), scope))
           .forEach(data::addDeclarationToCurrentScope);
     }
 
     if (node.isFunction() || node.isOperator()) {
-      Type resultType = findResultType(node, methodDeclaration);
+      Type resultType = findResultType(node, routineDeclaration);
       NameDeclaration result = VariableNameDeclarationImpl.result(resultType, scope);
       data.addDeclarationToCurrentScope(result);
     }
 
     boolean hasSelfParameter = false;
 
-    MethodParametersNode parametersNode = node.getMethodHeading().getMethodParametersNode();
+    RoutineParametersNode parametersNode = node.getRoutineHeading().getRoutineParametersNode();
     if (parametersNode != null) {
       hasSelfParameter =
           parametersNode.getParameters().stream()
@@ -434,7 +434,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     if (!hasSelfParameter) {
-      Type selfType = findSelfType(node, methodDeclaration, data);
+      Type selfType = findSelfType(node, routineDeclaration, data);
       if (selfType != null) {
         NameDeclaration self = VariableNameDeclarationImpl.self(selfType, scope);
         data.addDeclarationToCurrentScope(self);
@@ -444,7 +444,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     return visitScope(node, data);
   }
 
-  private static Type findResultType(MethodNode node, @Nullable MethodNameDeclaration declaration) {
+  private static Type findResultType(
+      RoutineNode node, @Nullable RoutineNameDeclaration declaration) {
     if (declaration == null) {
       return node.getReturnType();
     } else {
@@ -453,17 +454,17 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   }
 
   private static Type findSelfType(
-      MethodNode node, @Nullable MethodNameDeclaration declaration, Data data) {
+      RoutineNode node, @Nullable RoutineNameDeclaration declaration, Data data) {
     Type selfType = null;
-    TypeNameDeclaration methodType = node.getTypeDeclaration();
-    if (methodType != null) {
-      selfType = methodType.getType();
+    TypeNameDeclaration routineType = node.getTypeDeclaration();
+    if (routineType != null) {
+      selfType = routineType.getType();
       if (selfType.isHelper()) {
         selfType = ((HelperType) selfType).extendedType();
       }
       if (node.isClassMethod()) {
         selfType = data.typeFactory.classOf(null, selfType);
-        if (declaration != null && declaration.hasDirective(MethodDirective.STATIC)) {
+        if (declaration != null && declaration.hasDirective(RoutineDirective.STATIC)) {
           selfType = null;
         }
       }
@@ -520,9 +521,9 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(AnonymousMethodNode node, Data data) {
-    MethodScope scope = new MethodScopeImpl();
+    RoutineScope scope = new RoutineScopeImpl();
     data.addScope(scope, node);
-    data.nameResolutionHelper.resolve(node.getMethodParametersNode());
+    data.nameResolutionHelper.resolve(node.getRoutineParametersNode());
     data.nameResolutionHelper.resolve(node.getReturnTypeNode());
     if (node.isFunction()) {
       NameDeclaration result = VariableNameDeclarationImpl.result(node.getReturnType(), scope);

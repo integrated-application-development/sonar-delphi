@@ -22,7 +22,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
@@ -48,7 +48,7 @@ public class EmptyFileCheck extends DelphiCheck {
   }
 
   private static boolean hasDeclarations(DelphiNode node) {
-    return node.hasDescendantOfType(MethodNode.class)
+    return node.hasDescendantOfType(RoutineNode.class)
         || node.hasDescendantOfType(VarDeclarationNode.class)
         || node.hasDescendantOfType(ConstDeclarationNode.class)
         || node.hasDescendantOfType(TypeDeclarationNode.class);

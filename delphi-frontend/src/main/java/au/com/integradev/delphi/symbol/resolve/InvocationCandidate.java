@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
@@ -176,18 +176,18 @@ public final class InvocationCandidate {
 
   public static InvocationCandidate implicitSpecialization(
       Invocable invocable, List<Type> argumentTypes) {
-    if (!(invocable instanceof MethodNameDeclaration)) {
+    if (!(invocable instanceof RoutineNameDeclaration)) {
       return null;
     }
 
-    MethodNameDeclaration methodDeclaration = (MethodNameDeclaration) invocable;
-    if (!methodDeclaration.isGeneric()) {
+    RoutineNameDeclaration routineDeclaration = (RoutineNameDeclaration) invocable;
+    if (!routineDeclaration.isGeneric()) {
       return null;
     }
 
     Map<Type, Type> argumentsByTypeParameters = new HashMap<>();
     for (int i = 0; i < argumentTypes.size(); ++i) {
-      Type parameterType = methodDeclaration.getParameter(i).getType();
+      Type parameterType = routineDeclaration.getParameter(i).getType();
       if (!parameterType.isTypeParameter()) {
         continue;
       }
@@ -203,20 +203,20 @@ public final class InvocationCandidate {
       argumentsByTypeParameters.put(parameterType, argumentType);
     }
 
-    if (argumentsByTypeParameters.size() != methodDeclaration.getTypeParameters().size()) {
+    if (argumentsByTypeParameters.size() != routineDeclaration.getTypeParameters().size()) {
       return null;
     }
 
     List<Type> typeArguments;
 
     typeArguments =
-        methodDeclaration.getTypeParameters().stream()
+        routineDeclaration.getTypeParameters().stream()
             .map(TypedDeclaration::getType)
             .map(argumentsByTypeParameters::get)
             .collect(Collectors.toUnmodifiableList());
 
-    var context = new TypeSpecializationContextImpl(methodDeclaration, typeArguments);
-    Invocable specialized = (Invocable) methodDeclaration.specialize(context);
+    var context = new TypeSpecializationContextImpl(routineDeclaration, typeArguments);
+    Invocable specialized = (Invocable) routineDeclaration.specialize(context);
 
     return new InvocationCandidate(specialized);
   }

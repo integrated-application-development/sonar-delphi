@@ -192,7 +192,7 @@ public abstract class TypeImpl implements Type {
   }
 
   @Override
-  public boolean isMethod() {
+  public boolean isRoutine() {
     return false;
   }
 

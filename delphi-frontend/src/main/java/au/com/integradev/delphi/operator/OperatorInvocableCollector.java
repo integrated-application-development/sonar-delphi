@@ -34,7 +34,7 @@ import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.operator.Operator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
@@ -149,8 +149,8 @@ public class OperatorInvocableCollector {
   }
 
   private static Set<Invocable> collectOperatorOverloads(StructType type, Operator operator) {
-    return type.typeScope().getMethodDeclarations().stream()
-        .filter(method -> method.getMethodKind() == MethodKind.OPERATOR)
+    return type.typeScope().getRoutineDeclarations().stream()
+        .filter(method -> method.getRoutineKind() == RoutineKind.OPERATOR)
         .filter(method -> operator.getNames().contains(method.getImage()))
         .collect(Collectors.toSet());
   }

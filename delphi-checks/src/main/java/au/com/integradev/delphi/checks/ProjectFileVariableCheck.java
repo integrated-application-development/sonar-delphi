@@ -23,7 +23,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -35,7 +35,7 @@ public class ProjectFileVariableCheck extends AbstractDprCheck {
 
   @Override
   public DelphiCheckContext visit(VarDeclarationNode varDeclaration, DelphiCheckContext context) {
-    if (varDeclaration.getParentsOfType(MethodImplementationNode.class).isEmpty()) {
+    if (varDeclaration.getParentsOfType(RoutineImplementationNode.class).isEmpty()) {
       reportIssue(context, varDeclaration, MESSAGE);
     }
     return super.visit(varDeclaration, context);

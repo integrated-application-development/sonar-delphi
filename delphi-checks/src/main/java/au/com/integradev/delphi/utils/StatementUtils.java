@@ -28,15 +28,15 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 
 public final class StatementUtils {
   private StatementUtils() {
     // Utility class
   }
 
-  public static boolean isMethodInvocation(
+  public static boolean isRoutineInvocation(
       StatementNode statement,
       String fullyQualifiedName,
       Predicate<List<ExpressionNode>> argumentListPredicate) {
@@ -56,8 +56,8 @@ public final class StatementUtils {
 
     NameDeclaration declaration = ((NameReferenceNode) name).getLastName().getNameDeclaration();
     List<ExpressionNode> arguments = extractArguments(expression.getChild(1));
-    return declaration instanceof MethodNameDeclaration
-        && ((MethodNameDeclaration) declaration).fullyQualifiedName().equals(fullyQualifiedName)
+    return declaration instanceof RoutineNameDeclaration
+        && ((RoutineNameDeclaration) declaration).fullyQualifiedName().equals(fullyQualifiedName)
         && argumentListPredicate.test(arguments);
   }
 

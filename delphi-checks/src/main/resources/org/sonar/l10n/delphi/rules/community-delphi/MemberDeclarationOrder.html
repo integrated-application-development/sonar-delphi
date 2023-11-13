@@ -5,15 +5,15 @@
 </p>
 <ol>
   <li>Field declarations</li>
-  <li>Method declarations</li>
+  <li>Routine declarations</li>
   <li>Property declarations</li>
 </ol>
 <p>
-  The Delphi compiler also forbids field declarations from appearing after method or property
+  The Delphi compiler also forbids field declarations from appearing after routine or property
   declarations in the same visibility section.
 </p>
 <h2>How to fix it</h2>
-<p>Reorder the offending visibility section into fields, then methods, then properties:</p>
+<p>Reorder the offending visibility section into fields, then routines, then properties:</p>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 type
   TMyType = class(TObject)

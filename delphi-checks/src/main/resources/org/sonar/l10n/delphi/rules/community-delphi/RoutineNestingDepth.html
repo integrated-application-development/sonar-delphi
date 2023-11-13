@@ -1,0 +1,38 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Deeply nested routines make for code that is difficult to navigate and understand.
+  While nested routines can be helpful for small units of work specific to a particular routine,
+  their ambiguous syntax and non-linear control flow make them confusing when containing large
+  amounts of functionality.
+</p>
+<h2>How to fix it</h2>
+<p>Extract the nested routines out into one or more top-level routines:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure DoThing;
+  procedure DoSubThing;
+    procedure DoSubSubThing;
+    begin
+      // ...
+    end;
+  begin
+    // ...
+  end;
+begin
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure DoSubThing;
+  procedure DoSubSubThing;
+  begin
+    // ...
+  end;
+begin
+  // ...
+end;
+
+procedure DoThing;
+begin
+  // ...
+end;
+</pre>

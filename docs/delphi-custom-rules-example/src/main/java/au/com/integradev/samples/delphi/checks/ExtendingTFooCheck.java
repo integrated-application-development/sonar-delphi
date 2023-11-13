@@ -21,7 +21,7 @@ public class ExtendingTFooCheck extends DelphiCheck {
   /**
    * Overriding the visitor method to implement the logic of the rule.
    *
-   * @param node AST node of the visited method
+   * @param node AST node of the visited type declaration
    */
   @Override
   public DelphiCheckContext visit(TypeDeclarationNode node, DelphiCheckContext context) {

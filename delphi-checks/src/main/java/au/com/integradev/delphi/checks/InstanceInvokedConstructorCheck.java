@@ -23,9 +23,9 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -46,8 +46,8 @@ public class InstanceInvokedConstructorCheck extends DelphiCheck {
 
   private static boolean isConstructor(NameReferenceNode reference) {
     NameDeclaration declaration = reference.getNameDeclaration();
-    return declaration instanceof MethodNameDeclaration
-        && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
+    return declaration instanceof RoutineNameDeclaration
+        && ((RoutineNameDeclaration) declaration).getRoutineKind() == RoutineKind.CONSTRUCTOR;
   }
 
   private static boolean isInvokedOnObject(NameReferenceNode reference) {

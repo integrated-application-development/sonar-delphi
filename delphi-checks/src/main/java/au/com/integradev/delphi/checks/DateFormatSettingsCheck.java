@@ -24,18 +24,18 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "DateFormatSettingsRule", repositoryKey = "delph")
 @Rule(key = "DateFormatSettings")
 public class DateFormatSettingsCheck extends DelphiCheck {
-  private static final String MESSAGE = "Pass a 'TFormatSettings' argument into this method.";
+  private static final String MESSAGE = "Pass a 'TFormatSettings' argument into this routine.";
 
   private static final String TFORMATSETTINGS = "System.SysUtils.TFormatSettings";
-  private static final Set<String> METHOD_SIGNATURES =
+  private static final Set<String> ROUTINE_SIGNATURES =
       Set.of(
           "System.SysUtils.DateToStr",
           "System.SysUtils.DateTimeToStr",
@@ -49,10 +49,10 @@ public class DateFormatSettingsCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
     NameDeclaration declaration = reference.getNameDeclaration();
-    if (declaration instanceof MethodNameDeclaration) {
-      MethodNameDeclaration method = (MethodNameDeclaration) declaration;
-      if (METHOD_SIGNATURES.contains(method.fullyQualifiedName())) {
-        Parameter lastParameter = Iterables.getLast(method.getParameters());
+    if (declaration instanceof RoutineNameDeclaration) {
+      RoutineNameDeclaration routine = (RoutineNameDeclaration) declaration;
+      if (ROUTINE_SIGNATURES.contains(routine.fullyQualifiedName())) {
+        Parameter lastParameter = Iterables.getLast(routine.getParameters());
         if (!lastParameter.getType().is(TFORMATSETTINGS)) {
           reportIssue(context, reference, MESSAGE);
         }

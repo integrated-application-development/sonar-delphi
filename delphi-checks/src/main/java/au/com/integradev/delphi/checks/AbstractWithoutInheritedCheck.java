@@ -24,8 +24,8 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -34,13 +34,14 @@ public abstract class AbstractWithoutInheritedCheck extends DelphiCheck {
 
   protected abstract String getIssueMessage();
 
-  protected final void checkViolation(MethodImplementationNode method, DelphiCheckContext context) {
-    CompoundStatementNode body = method.getStatementBlock();
-    if (body == null || method.isClassMethod() || hasInheritedStatement(body)) {
+  protected final void checkViolation(
+      RoutineImplementationNode routine, DelphiCheckContext context) {
+    CompoundStatementNode body = routine.getStatementBlock();
+    if (body == null || routine.isClassMethod() || hasInheritedStatement(body)) {
       return;
     }
 
-    reportIssue(context, method.getMethodNameNode(), getIssueMessage());
+    reportIssue(context, routine.getRoutineNameNode(), getIssueMessage());
   }
 
   private static boolean hasInheritedStatement(CompoundStatementNode body) {

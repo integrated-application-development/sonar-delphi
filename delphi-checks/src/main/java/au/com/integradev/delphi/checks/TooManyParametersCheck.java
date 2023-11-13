@@ -20,7 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -43,17 +43,17 @@ public class TooManyParametersCheck extends DelphiCheck {
   public int constructorMax = DEFAULT_MAXIMUM;
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    int count = method.getParameters().size();
-    int limit = method.isConstructor() ? constructorMax : max;
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    int count = routine.getParameters().size();
+    int limit = routine.isConstructor() ? constructorMax : max;
     if (count > limit) {
       reportIssue(
           context,
-          method.getMethodNameNode(),
+          routine.getRoutineNameNode(),
           String.format(
               "%s has %d parameters, which is greater than %d authorized.",
-              method.isConstructor() ? "Constructor" : "Method", count, limit));
+              routine.isConstructor() ? "Constructor" : "Routine", count, limit));
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 }

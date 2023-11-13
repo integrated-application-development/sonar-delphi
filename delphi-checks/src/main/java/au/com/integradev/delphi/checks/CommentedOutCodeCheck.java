@@ -76,7 +76,7 @@ public class CommentedOutCodeCheck extends DelphiCheck {
   private static final String PROPERTY_DECLARATION_REGEX =
       "(?i)^\\s*property\\s*" + IDENTIFIER + "\\s*:\\s*" + IDENTIFIER;
 
-  private static final String METHOD_HEADER_REGEX =
+  private static final String ROUTINE_HEADER_REGEX =
       "(?i)^\\s*(function|procedure|constructor|destructor)\\s*"
           + IDENTIFIER
           + "((\\."
@@ -132,7 +132,7 @@ public class CommentedOutCodeCheck extends DelphiCheck {
       Set.of(
           compile(PRIMARY_EXPRESSION_STATEMENT_REGEX),
           compile(ASSIGN_STATEMENT_REGEX),
-          compile(METHOD_HEADER_REGEX),
+          compile(ROUTINE_HEADER_REGEX),
           compile(BEGIN_END_REGEX),
           compile(TYPE_DECLARATION_REGEX),
           compile(VAR_DECLARATION_REGEX),

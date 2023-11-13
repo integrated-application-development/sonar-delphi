@@ -33,7 +33,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNam
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.WithScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -175,7 +175,7 @@ public class Search {
       scope = ((WithScope) scope).getTargetScope();
     }
 
-    if (mode != SearchMode.METHOD_HEADING && scope instanceof TypeScope) {
+    if (mode != SearchMode.ROUTINE_HEADING && scope instanceof TypeScope) {
       return searchTypeScope((TypeScope) scope);
     }
 
@@ -185,8 +185,8 @@ public class Search {
       result = filterTypeScopeResults(result);
     }
 
-    if (result.isEmpty() && scope instanceof MethodScope) {
-      DelphiScope typeScope = ((MethodScope) scope).getTypeScope();
+    if (result.isEmpty() && scope instanceof RoutineScope) {
+      DelphiScope typeScope = ((RoutineScope) scope).getTypeScope();
       if (typeScope instanceof TypeScope) {
         result = searchTypeScope((TypeScope) typeScope);
         if (result.isEmpty()) {
@@ -198,7 +198,7 @@ public class Search {
   }
 
   private Set<NameDeclaration> filterTypeScopeResults(Set<NameDeclaration> result) {
-    if (mode == SearchMode.METHOD_HEADING) {
+    if (mode == SearchMode.ROUTINE_HEADING) {
       result =
           result.stream()
               .filter(

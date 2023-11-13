@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
 import org.sonar.api.batch.sensor.symbol.NewSymbol;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -97,8 +97,8 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
   }
 
   @Override
-  public NewSymbolTable visit(MethodNameNode name, NewSymbolTable data) {
-    createSymbol(name.getMethodNameDeclaration(), name.getUsages(), data);
+  public NewSymbolTable visit(RoutineNameNode name, NewSymbolTable data) {
+    createSymbol(name.getRoutineNameDeclaration(), name.getUsages(), data);
     return DelphiParserVisitor.super.visit(name, data);
   }
 }

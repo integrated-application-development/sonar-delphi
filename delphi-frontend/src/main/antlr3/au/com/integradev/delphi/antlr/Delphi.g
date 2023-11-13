@@ -205,14 +205,14 @@ declSection                  : labelDeclSection
                              | constSection
                              | typeSection
                              | varSection
-                             | methodImplementation
+                             | routineImplementation
                              | exportsSection
                              ;
 interfaceDecl                : constSection
                              | typeSection
                              | varSection
                              | exportsSection
-                             | methodInterface
+                             | routineInterface
                              ;
 labelDeclSection             : 'label' (label (','!)?)+ ';'
                              ;
@@ -307,18 +307,18 @@ pointerType                  : '^'<PointerTypeNodeImpl>^ varType
                              ;
 stringType                   : 'string'<StringTypeNodeImpl>^ (lbrack! expression rbrack!)?
                              ;
-procedureType                : methodType
+procedureType                : procedureOfObject
                              | procedureReference
                              | simpleProcedureType
                              ;
-methodType                   : procedureTypeHeading 'of' 'object'<MethodTypeNodeImpl>^ ((';')? interfaceDirective)*
+procedureOfObject            : procedureTypeHeading 'of' 'object'<ProcedureOfObjectTypeNodeImpl>^ ((';')? interfaceDirective)*
                              ;
 procedureReference           : 'reference'<ProcedureReferenceTypeNodeImpl>^ 'to'! procedureTypeHeading
                              ;
 simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<ProcedureTypeNodeImpl> procedureTypeHeading)
                              ;
-procedureTypeHeading         : 'function'<ProcedureTypeHeadingNodeImpl>^ methodParameters? methodReturnType? ((';')? interfaceDirective)*
-                             | 'procedure'<ProcedureTypeHeadingNodeImpl>^ methodParameters? ((';')? interfaceDirective)*
+procedureTypeHeading         : 'function'<ProcedureTypeHeadingNodeImpl>^ routineParameters? routineReturnType? ((';')? interfaceDirective)*
+                             | 'procedure'<ProcedureTypeHeadingNodeImpl>^ routineParameters? ((';')? interfaceDirective)*
                              ;
 typeOfType                   : 'type'<TypeOfTypeNodeImpl>^ 'of' typeDecl
                              ;
@@ -359,7 +359,7 @@ visibilitySection_           : visibility visibilitySectionItem*
                              | visibilitySectionItem+
                              ;
 visibilitySectionItem        : fieldSection
-                             | methodInterface
+                             | routineInterface
                              | methodResolutionClause
                              | property
                              | constSection
@@ -382,7 +382,7 @@ interfaceGuid                : lbrack expression rbrack -> ^(TkGuid<InterfaceGui
                              ;
 interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNodeImpl> interfaceItem+)
                              ;
-interfaceItem                : methodInterface
+interfaceItem                : routineInterface
                              | property
                              ;
 objectType                   : 'object'<ObjectTypeNodeImpl>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
@@ -449,102 +449,102 @@ genericArguments             : '<' typeReference (',' typeReference)* '>'
                              ;
 
 //----------------------------------------------------------------------------
-// Methods
+// Routines
 //----------------------------------------------------------------------------
 methodResolutionClause       : key=('function' | 'procedure') interfaceMethod=nameReference '=' implemented=nameReference ';'
                              -> ^(TkMethodResolveClause<MethodResolutionClauseNodeImpl>
                                     $key $interfaceMethod $implemented
                                  )
                              ;
-methodInterface              : methodInterfaceHeading
-                             -> ^(TkMethodDeclaration<MethodDeclarationNodeImpl>
-                                    methodInterfaceHeading
+routineInterface             : routineInterfaceHeading
+                             -> ^(TkRoutineDeclaration<RoutineDeclarationNodeImpl>
+                                    routineInterfaceHeading
                                  )
                              ;
-methodImplementation         : fullMethodImplementation
-                             | externalMethod
-                             | forwardMethod
+routineImplementation        : fullRoutineImplementation
+                             | externalRoutine
+                             | forwardRoutine
                              ;
-fullMethodImplementation     : methodImplementationHeading methodBody
-                             -> ^(TkMethodImplementation<MethodImplementationNodeImpl>
-                                    methodImplementationHeading
-                                    methodBody
+fullRoutineImplementation    : routineImplementationHeading routineBody
+                             -> ^(TkRoutineImplementation<RoutineImplementationNodeImpl>
+                                    routineImplementationHeading
+                                    routineBody
                                  )
                              ;
-externalMethod               : externalMethodHeading
-                             -> ^(TkMethodImplementation<MethodImplementationNodeImpl>
-                                    externalMethodHeading
+externalRoutine              : externalRoutineHeading
+                             -> ^(TkRoutineImplementation<RoutineImplementationNodeImpl>
+                                    externalRoutineHeading
                                  )
                              ;
-forwardMethod                : forwardMethodHeading
-                             -> ^(TkMethodDeclaration<MethodDeclarationNodeImpl>
-                                    forwardMethodHeading
+forwardRoutine               : forwardRoutineHeading
+                             -> ^(TkRoutineDeclaration<RoutineDeclarationNodeImpl>
+                                    forwardRoutineHeading
                                  )
                              ;
-methodInterfaceHeading       : attributeList? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? interfaceDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
-                                    methodKey
-                                    methodDeclarationName
-                                    methodParameters?
-                                    methodReturnType?
+routineInterfaceHeading      : attributeList? 'class'? routineKey routineDeclarationName routineParameters? routineReturnType? interfaceDirectiveSection
+                             -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
+                                    routineKey
+                                    routineDeclarationName
+                                    routineParameters?
+                                    routineReturnType?
                                     attributeList?
                                     'class'?
                                     interfaceDirectiveSection
                                  )
                              ;
-methodImplementationHeading  : attributeList? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? implDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
-                                    methodKey
-                                    methodImplementationName
-                                    methodParameters?
-                                    methodReturnType?
+routineImplementationHeading : attributeList? 'class'? routineKey routineImplementationName routineParameters? routineReturnType? implDirectiveSection
+                             -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
+                                    routineKey
+                                    routineImplementationName
+                                    routineParameters?
+                                    routineReturnType?
                                     attributeList?
                                     'class'?
                                     implDirectiveSection
                                  )
                              ;
-externalMethodHeading        : attributeList? 'class'? methodKey methodImplementationName methodParameters? methodReturnType? externalDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
-                                    methodKey
-                                    methodImplementationName
-                                    methodParameters?
-                                    methodReturnType?
+externalRoutineHeading       : attributeList? 'class'? routineKey routineImplementationName routineParameters? routineReturnType? externalDirectiveSection
+                             -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
+                                    routineKey
+                                    routineImplementationName
+                                    routineParameters?
+                                    routineReturnType?
                                     attributeList?
                                     'class'?
                                     externalDirectiveSection
                                  )
                              ;
-forwardMethodHeading         : attributeList? 'class'? methodKey methodDeclarationName methodParameters? methodReturnType? forwardDirectiveSection
-                             -> ^(TkMethodHeading<MethodHeadingNodeImpl>
-                                    methodKey
-                                    methodDeclarationName
-                                    methodParameters?
-                                    methodReturnType?
+forwardRoutineHeading        : attributeList? 'class'? routineKey routineDeclarationName routineParameters? routineReturnType? forwardDirectiveSection
+                             -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
+                                    routineKey
+                                    routineDeclarationName
+                                    routineParameters?
+                                    routineReturnType?
                                     attributeList?
                                     'class'?
                                     forwardDirectiveSection
                                  )
                              ;
-methodDeclarationName        : (
+routineDeclarationName       : (
                                  decl=genericNameDeclaration
                                | decl=specialOpNameDeclaration
                              )
-                             -> ^(TkMethodName<MethodNameNodeImpl> $decl)
+                             -> ^(TkRoutineName<RoutineNameNodeImpl> $decl)
                              ;
-methodImplementationName     : nameReference -> ^(TkMethodName<MethodNameNodeImpl> nameReference)
+routineImplementationName    : nameReference -> ^(TkRoutineName<RoutineNameNodeImpl> nameReference)
                              ;
-methodKey                    : 'procedure'
+routineKey                   : 'procedure'
                              | 'constructor'
                              | 'destructor'
                              | 'function'
                              | 'operator'
                              ;
-methodReturnType             : ':' attributeList? returnType -> ^(TkMethodReturn<MethodReturnTypeNodeImpl> returnType attributeList?)
+routineReturnType            : ':' attributeList? returnType -> ^(TkRoutineReturn<RoutineReturnTypeNodeImpl> returnType attributeList?)
                              ;
 returnType                   : stringType
                              | typeReference
                              ;
-methodParameters             : '(' formalParameterList? ')' -> ^(TkMethodParameters<MethodParametersNodeImpl> '(' formalParameterList? ')')
+routineParameters            : '(' formalParameterList? ')' -> ^(TkRoutineParameters<RoutineParametersNodeImpl> '(' formalParameterList? ')')
                              ;
 formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFormalParameterList<FormalParameterListNodeImpl> formalParameter formalParameter*)
                              ;
@@ -555,7 +555,7 @@ paramSpecifier               : 'const'
                              | 'var'
                              | 'out'
                              ;
-methodBody                   : block ';' -> ^(TkMethodBody<MethodBodyNodeImpl> block)
+routineBody                  : block ';' -> ^(TkRoutineBody<RoutineBodyNodeImpl> block)
                              ;
 
 //----------------------------------------------------------------------------
@@ -625,8 +625,8 @@ argument                     : anonymousMethod
                              ;                                                  // of compiler hackery for intrinsic procedures like Str and WriteLn
                                                                                 // See: http://www.delphibasics.co.uk/RTL.asp?Name=str
                                                                                 // See: https://stackoverflow.com/questions/617654/how-does-writeln-really-work
-anonymousMethod              : 'procedure'<AnonymousMethodNodeImpl>^ methodParameters? block
-                             | 'function'<AnonymousMethodNodeImpl>^ methodParameters? methodReturnType block
+anonymousMethod              : 'procedure'<AnonymousMethodNodeImpl>^ routineParameters? block
+                             | 'function'<AnonymousMethodNodeImpl>^ routineParameters? routineReturnType block
                              ;
 expressionOrRange            : expression ('..'<RangeExpressionNodeImpl>^ expression)?
                              ;
@@ -1083,9 +1083,9 @@ AMPERSAND            : '&'  ;
 //****************************
 TkRootNode              : 'ROOT_NODE'
                         ;
-TkMethodParameters      : 'METHOD_PARAMETERS'
+TkRoutineParameters     : 'ROUTINE_PARAMETERS'
                         ;
-TkMethodReturn          : 'METHOD_RETURN'
+TkRoutineReturn         : 'ROUTINE_RETURN'
                         ;
 TkAttributeList         : 'ATTRIBUTE_LIST'
                         ;
@@ -1115,15 +1115,15 @@ TkLabelStatement        : 'LABEL_STATEMENT'
                         ;
 TkStatementList         : 'STATEMENT_LIST'
                         ;
-TkMethodName            : 'METHOD_NAME'
+TkRoutineName           : 'ROUTINE_NAME'
                         ;
-TkMethodHeading         : 'METHOD_HEADING'
+TkRoutineHeading        : 'ROUTINE_HEADING'
                         ;
-TkMethodDeclaration     : 'METHOD_DECLARATION'
+TkRoutineDeclaration    : 'ROUTINE_DECLARATION'
                         ;
-TkMethodImplementation  : 'METHOD_IMPLEMENTATION'
+TkRoutineImplementation : 'ROUTINE_IMPLEMENTATION'
                         ;
-TkMethodBody            : 'METHOD_BODY'
+TkRoutineBody           : 'ROUTINE_BODY'
                         ;
 TkGenericDefinition     : 'GENERIC_DEFINITION'
                         ;

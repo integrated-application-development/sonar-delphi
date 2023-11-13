@@ -37,7 +37,7 @@ class UnusedFieldCheckTest {
   }
 
   @Test
-  void testUsedInMethodShouldNotAddIssue() {
+  void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedFieldCheck())
         .onFile(

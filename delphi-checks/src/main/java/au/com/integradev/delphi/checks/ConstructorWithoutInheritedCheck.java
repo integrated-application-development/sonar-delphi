@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -33,15 +33,15 @@ public class ConstructorWithoutInheritedCheck extends AbstractWithoutInheritedCh
   }
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    if (method.isConstructor() && !isExcluded(method)) {
-      checkViolation(method, context);
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    if (routine.isConstructor() && !isExcluded(routine)) {
+      checkViolation(routine, context);
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
-  private static boolean isExcluded(MethodImplementationNode method) {
-    TypeNameDeclaration declaration = method.getTypeDeclaration();
-    return method.isClassMethod() || (declaration != null && declaration.getType().isRecord());
+  private static boolean isExcluded(RoutineImplementationNode routine) {
+    TypeNameDeclaration declaration = routine.getTypeDeclaration();
+    return routine.isClassMethod() || (declaration != null && declaration.getType().isRecord());
   }
 }

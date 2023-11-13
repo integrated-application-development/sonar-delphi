@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class UnusedConstantCheckTest {
   @Test
-  void testUsedInMethodShouldNotAddIssue() {
+  void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedConstantCheck())
         .onFile(
@@ -39,7 +39,7 @@ class UnusedConstantCheckTest {
   }
 
   @Test
-  void testUnusedInMethodShouldAddIssue() {
+  void testUnusedInRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedConstantCheck())
         .onFile(

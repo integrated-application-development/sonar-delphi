@@ -47,7 +47,7 @@ public class DelphiMetricsExecutor implements Executor {
     Data metrics = VISITOR.visit(file.getAst(), new Data());
 
     saveMetricOnFile(CoreMetrics.CLASSES, metrics.getClasses());
-    saveMetricOnFile(CoreMetrics.FUNCTIONS, metrics.getMethods());
+    saveMetricOnFile(CoreMetrics.FUNCTIONS, metrics.getRoutines());
     saveMetricOnFile(CoreMetrics.COMPLEXITY, metrics.getComplexity());
     saveMetricOnFile(CoreMetrics.COMMENT_LINES, metrics.getCommentLines());
     saveMetricOnFile(CoreMetrics.STATEMENTS, metrics.getStatements());

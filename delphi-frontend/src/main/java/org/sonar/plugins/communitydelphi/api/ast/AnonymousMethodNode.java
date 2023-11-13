@@ -18,17 +18,17 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface AnonymousMethodNode extends ExpressionNode {
-  MethodParametersNode getMethodParametersNode();
+  RoutineParametersNode getRoutineParametersNode();
 
-  MethodReturnTypeNode getReturnTypeNode();
+  RoutineReturnTypeNode getReturnTypeNode();
 
   Type getReturnType();
 
-  MethodKind getMethodKind();
+  RoutineKind getRoutineKind();
 
   boolean isFunction();
 }

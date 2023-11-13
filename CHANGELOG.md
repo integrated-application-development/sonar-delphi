@@ -49,8 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude dpr and dpk files in `UnusedImport`.
 - Exclude dpr and dpk files in `ImportSpecificity`.
 - Exclude uses clauses of dpr and dpk files in `LineTooLong`.
-- Include methods in `UnitLevelKeywordIndentation`.
-- Include implicit attribute constructor calls in `ForbiddenMethod`.
+- Include routines in `UnitLevelKeywordIndentation`.
+- Include implicit attribute constructor calls in `ForbiddenRoutine`.
 - Always enforce the `Attribute` suffix in `AttributeName`.
 - Allow the `Attribute` suffix to be omitted for attribute references in `MixedNames`.
 - Allow the extended type name to be anywhere in the helper name (rather than requiring it at the

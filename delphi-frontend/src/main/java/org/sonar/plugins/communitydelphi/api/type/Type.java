@@ -296,11 +296,11 @@ public interface Type {
   boolean isProcedural();
 
   /**
-   * Check if this type is a method type
+   * Check if this type is a routine type
    *
-   * @return true if the type is a method type
+   * @return true if the type is a routine type
    */
-  boolean isMethod();
+  boolean isRoutine();
 
   /**
    * Check if this type is a class reference
@@ -361,8 +361,8 @@ public interface Type {
   /**
    * Check if this type is a type parameter type
    *
-   * <p>This isn't a "real" type. It's an intermediary type that exists before a generic type/method
-   * has been specialized.
+   * <p>This isn't a "real" type. It's an intermediary type that exists before a generic
+   * type/routine has been specialized.
    *
    * @return true if this is a type parameter type
    */
@@ -464,18 +464,18 @@ public interface Type {
       PROCEDURE_OF_OBJECT,
       REFERENCE,
       ANONYMOUS,
-      METHOD
+      ROUTINE
     }
 
     /**
-     * The type that this method returns
+     * The type that this procedural returns
      *
      * @return Return type
      */
     Type returnType();
 
     /**
-     * The parameters that this method expects
+     * The parameters that this procedural expects
      *
      * @return Expected parameters
      */

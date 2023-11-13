@@ -142,7 +142,7 @@ class EmptyBlockCheckTest {
   }
 
   @Test
-  void testEmptyMethodShouldNotAddIssue() {
+  void testEmptyRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyBlockCheck())
         .onFile(

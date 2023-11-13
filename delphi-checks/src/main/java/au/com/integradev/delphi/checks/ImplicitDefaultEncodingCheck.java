@@ -28,14 +28,14 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 @Rule(key = "ImplicitDefaultEncoding")
 public class ImplicitDefaultEncodingCheck extends DelphiCheck {
-  private static final String MESSAGE = "Explicitly pass the encoding to this method.";
+  private static final String MESSAGE = "Explicitly pass the encoding to this routine.";
 
   private static final Map<String, Signature> FORBIDDEN_SIGNATURES =
       createSignatures(
@@ -72,19 +72,19 @@ public class ImplicitDefaultEncodingCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
     NameDeclaration declaration = reference.getNameDeclaration();
-    if (declaration instanceof MethodNameDeclaration
-        && isForbiddenOverload((MethodNameDeclaration) declaration)) {
+    if (declaration instanceof RoutineNameDeclaration
+        && isForbiddenOverload((RoutineNameDeclaration) declaration)) {
       reportIssue(context, reference.getIdentifier(), MESSAGE);
     }
 
     return super.visit(reference, context);
   }
 
-  private static boolean isForbiddenOverload(MethodNameDeclaration method) {
-    Signature signature = FORBIDDEN_SIGNATURES.get(method.fullyQualifiedName());
+  private static boolean isForbiddenOverload(RoutineNameDeclaration routine) {
+    Signature signature = FORBIDDEN_SIGNATURES.get(routine.fullyQualifiedName());
     return signature != null
         && signature.hasParameterTypes(
-            method.getParameters().stream()
+            routine.getParameters().stream()
                 .map(Parameter::getType)
                 .collect(Collectors.toUnmodifiableList()));
   }

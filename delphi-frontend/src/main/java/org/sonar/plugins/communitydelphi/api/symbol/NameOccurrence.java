@@ -33,7 +33,7 @@ public interface NameOccurrence {
 
   boolean isExplicitInvocation();
 
-  boolean isMethodReference();
+  boolean isRoutineReference();
 
   boolean isAttributeReference();
 

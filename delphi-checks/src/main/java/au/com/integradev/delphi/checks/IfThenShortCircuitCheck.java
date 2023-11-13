@@ -35,8 +35,8 @@ import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "IfThenShortCircuitRule", repositoryKey = "delph")
@@ -103,8 +103,8 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
       if (nameReference instanceof NameReferenceNode && argumentList instanceof ArgumentListNode) {
         NameDeclaration declaration =
             ((NameReferenceNode) nameReference).getLastName().getNameDeclaration();
-        if (declaration instanceof MethodNameDeclaration
-            && ((MethodNameDeclaration) declaration)
+        if (declaration instanceof RoutineNameDeclaration
+            && ((RoutineNameDeclaration) declaration)
                 .fullyQualifiedName()
                 .equals("System.Assigned")) {
           ExpressionNode argument = ((ArgumentListNode) argumentList).getArguments().get(0);

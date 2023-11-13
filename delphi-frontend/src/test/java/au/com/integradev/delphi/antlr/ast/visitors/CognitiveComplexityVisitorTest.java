@@ -43,7 +43,7 @@ class CognitiveComplexityVisitorTest {
   }
 
   @Test
-  void testSimpleMethod() {
+  void testSimpleRoutine() {
     assertThat(
             getComplexity(
                 "function Foo: Integer;\n"
@@ -54,7 +54,7 @@ class CognitiveComplexityVisitorTest {
   }
 
   @Test
-  void testTooComplexMethod() {
+  void testTooComplexRoutine() {
     assertThat(
             getComplexity(
                 "function Foo: Integer;\n"

@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.visitors;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DependencyAnalysisVisitor.Data;
-import au.com.integradev.delphi.symbol.declaration.MethodNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.UnitNameDeclarationImpl;
 import javax.annotation.Nullable;
@@ -30,16 +30,16 @@ import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -54,7 +54,7 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
   public static class Data {
     private final UnitNameDeclaration unitDeclaration;
-    private MethodNameDeclaration method;
+    private RoutineNameDeclaration routine;
     private boolean implementation;
 
     public Data(UnitNameDeclaration unitDeclaration) {
@@ -62,8 +62,8 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     }
 
     private void addDependency(UnitNameDeclaration dependency) {
-      if (method != null) {
-        ((MethodNameDeclarationImpl) method).addDependency(dependency);
+      if (routine != null) {
+        ((RoutineNameDeclarationImpl) routine).addDependency(dependency);
       }
 
       if (implementation) {
@@ -117,11 +117,11 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   }
 
   @Override
-  public Data visit(MethodImplementationNode methodNode, Data data) {
-    MethodNameDeclaration previousMethod = data.method;
-    data.method = methodNode.getMethodNameDeclaration();
-    DelphiParserVisitor.super.visit(methodNode, data);
-    data.method = previousMethod;
+  public Data visit(RoutineImplementationNode routineNode, Data data) {
+    RoutineNameDeclaration previousRoutine = data.routine;
+    data.routine = routineNode.getRoutineNameDeclaration();
+    DelphiParserVisitor.super.visit(routineNode, data);
+    data.routine = previousRoutine;
     return data;
   }
 
@@ -139,9 +139,9 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     // Weak alias references indicate a dependency on the aliased type declaration
     handleWeakAliases(declaration, data);
 
-    // Inline method dependencies should be included in the call site's dependencies
-    // Inline methods cannot be expanded by the compiler unless these dependencies are present
-    handleInlineMethods(declaration, data);
+    // Inline routine dependencies should be included in the call site's dependencies
+    // Inline routines cannot be expanded by the compiler unless these dependencies are present
+    handleInlineRoutines(declaration, data);
 
     return DelphiParserVisitor.super.visit(nameNode, data);
   }
@@ -160,16 +160,16 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     }
   }
 
-  private static void handleInlineMethods(@Nullable NameDeclaration declaration, Data data) {
-    if (isInlineMethodReference(declaration)) {
-      addDependenciesRequiredByMethod(declaration, data);
+  private static void handleInlineRoutines(@Nullable NameDeclaration declaration, Data data) {
+    if (isInlineRoutineReference(declaration)) {
+      addDependenciesRequiredByRoutine(declaration, data);
     }
 
-    // Inline methods are also expanded via property references
+    // Inline routines are also expanded via property references
     if (declaration instanceof PropertyNameDeclaration) {
       PropertyNameDeclaration property = (PropertyNameDeclaration) declaration;
-      handleInlineMethods(property.getReadDeclaration(), data);
-      handleInlineMethods(property.getWriteDeclaration(), data);
+      handleInlineRoutines(property.getReadDeclaration(), data);
+      handleInlineRoutines(property.getWriteDeclaration(), data);
     }
   }
 
@@ -177,24 +177,24 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
   public Data visit(ArrayAccessorNode accessorNode, Data data) {
     NameOccurrence implicitOccurrence = accessorNode.getImplicitNameOccurrence();
     if (implicitOccurrence != null) {
-      handleInlineMethods(implicitOccurrence.getNameDeclaration(), data);
+      handleInlineRoutines(implicitOccurrence.getNameDeclaration(), data);
     }
     return DelphiParserVisitor.super.visit(accessorNode, data);
   }
 
   @Override
   public Data visit(ForInStatementNode forInStatementNode, Data data) {
-    MethodNameDeclaration enumerator = forInStatementNode.getGetEnumeratorDeclaration();
+    RoutineNameDeclaration enumerator = forInStatementNode.getGetEnumeratorDeclaration();
     addDependenciesForDeclaration(enumerator, data);
-    handleInlineMethods(enumerator, data);
+    handleInlineRoutines(enumerator, data);
 
-    MethodNameDeclaration moveNext = forInStatementNode.getMoveNextDeclaration();
+    RoutineNameDeclaration moveNext = forInStatementNode.getMoveNextDeclaration();
     addDependenciesForDeclaration(moveNext, data);
-    handleInlineMethods(moveNext, data);
+    handleInlineRoutines(moveNext, data);
 
     PropertyNameDeclaration current = forInStatementNode.getCurrentDeclaration();
     addDependenciesForDeclaration(current, data);
-    handleInlineMethods(current, data);
+    handleInlineRoutines(current, data);
 
     return DelphiParserVisitor.super.visit(forInStatementNode, data);
   }
@@ -218,8 +218,8 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     }
   }
 
-  private static void addDependenciesRequiredByMethod(NameDeclaration declaration, Data data) {
-    ((MethodNameDeclarationImpl) declaration).getDependencies().forEach(data::addDependency);
+  private static void addDependenciesRequiredByRoutine(NameDeclaration declaration, Data data) {
+    ((RoutineNameDeclarationImpl) declaration).getDependencies().forEach(data::addDependency);
     addDependenciesForDeclaration(declaration, data);
   }
 
@@ -288,9 +288,9 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
     return null;
   }
 
-  private static boolean isInlineMethodReference(NameDeclaration declaration) {
-    if (declaration instanceof MethodNameDeclaration) {
-      return ((MethodNameDeclaration) declaration).hasDirective(MethodDirective.INLINE);
+  private static boolean isInlineRoutineReference(NameDeclaration declaration) {
+    if (declaration instanceof RoutineNameDeclaration) {
+      return ((RoutineNameDeclaration) declaration).hasDirective(RoutineDirective.INLINE);
     }
     return false;
   }

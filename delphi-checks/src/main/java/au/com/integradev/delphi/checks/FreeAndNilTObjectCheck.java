@@ -25,8 +25,8 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "FreeAndNilTObjectRule", repositoryKey = "delph")
@@ -60,9 +60,9 @@ public class FreeAndNilTObjectCheck extends DelphiCheck {
     }
 
     NameDeclaration declaration = reference.getNameDeclaration();
-    if (declaration instanceof MethodNameDeclaration) {
-      MethodNameDeclaration method = (MethodNameDeclaration) declaration;
-      if (method.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")) {
+    if (declaration instanceof RoutineNameDeclaration) {
+      RoutineNameDeclaration routine = (RoutineNameDeclaration) declaration;
+      if (routine.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")) {
         ArgumentListNode argumentList = (ArgumentListNode) expression.getChild(1);
         ExpressionNode argument = argumentList.getArguments().get(0);
         return !argument.getType().isUnresolved()

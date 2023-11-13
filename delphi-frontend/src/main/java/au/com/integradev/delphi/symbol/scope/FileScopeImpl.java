@@ -21,10 +21,10 @@ package au.com.integradev.delphi.symbol.scope;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.MethodNameNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.RoutineNameNodeImpl;
 import com.google.common.collect.Iterables;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -33,13 +33,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -65,7 +65,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
       if (result.isEmpty()) {
         result = importScope.shallowFindDeclaration(occurrence);
       } else {
-        ((DelphiScopeImpl) importScope).findMethodOverloads(occurrence, result);
+        ((DelphiScopeImpl) importScope).findRoutineOverloads(occurrence, result);
       }
     }
     return result;
@@ -173,13 +173,13 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
   }
 
   /**
-   * Attaches symbol declaration information to a method name node
+   * Attaches symbol declaration information to a routine name node
    *
    * @param node The node which we want to attach symbol information to
    */
-  public void attach(MethodNameNode node) {
-    var declaration = (MethodNameDeclaration) registeredDeclarations.get(node.getTokenIndex());
-    ((MethodNameNodeImpl) node).setMethodNameDeclaration(declaration);
+  public void attach(RoutineNameNode node) {
+    var declaration = (RoutineNameDeclaration) registeredDeclarations.get(node.getTokenIndex());
+    ((RoutineNameNodeImpl) node).setRoutineNameDeclaration(declaration);
   }
 
   /** Removes all scope registrations */

@@ -1,16 +1,16 @@
-<p>Too many variables can indicate that a method is doing too many things.</p>
+<p>Too many variables can indicate that a routine is doing too many things.</p>
 <h2>Why is this an issue?</h2>
 <p>
-  Using many variables in a method can be an indicator that the method is doing too many things.
+  Using many variables in a routine can be an indicator that the routine is doing too many things.
 
-  A method should be a single logical task, not a number of disconnected tasks.
+  A routine should be a single logical task, not a number of disconnected tasks.
 </p>
 <p>
   Using a large number of redundant variables in a short span of code can also adversely affect
   readability.
 </p>
 <h2>How to fix it</h2>
-<p>Consider breaking the method up into multiple methods with different responsibilities:</p>
+<p>Consider breaking the routine up into multiple routines with different responsibilities:</p>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 procedure TMyObject.DoThing;
 var

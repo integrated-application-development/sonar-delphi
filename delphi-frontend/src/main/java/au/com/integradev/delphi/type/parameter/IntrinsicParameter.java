@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.type.parameter;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicMethod.IntrinsicParameterData;
+import au.com.integradev.delphi.type.intrinsic.IntrinsicRoutine.IntrinsicParameterData;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 

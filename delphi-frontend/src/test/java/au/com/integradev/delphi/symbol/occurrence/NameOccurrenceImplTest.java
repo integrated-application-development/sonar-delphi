@@ -31,15 +31,15 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class NameOccurrenceImplTest {
   @Test
-  void testIsMethodReference() {
+  void testIsRoutineReference() {
     SymbolicNode symbolicNode = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
 
-    assertThat(occurrence.isMethodReference()).isFalse();
+    assertThat(occurrence.isRoutineReference()).isFalse();
 
-    occurrence.setIsMethodReference();
+    occurrence.setIsRoutineReference();
 
-    assertThat(occurrence.isMethodReference()).isTrue();
+    assertThat(occurrence.isRoutineReference()).isTrue();
   }
 
   @Test
@@ -81,7 +81,7 @@ class NameOccurrenceImplTest {
     assertThat(occurrenceA).isNotEqualTo(occurrenceD);
 
     NameOccurrenceImpl occurrenceE = new NameOccurrenceImpl(foo);
-    occurrenceE.setIsMethodReference();
+    occurrenceE.setIsRoutineReference();
     assertThat(occurrenceA).isNotEqualTo(occurrenceE);
 
     NameOccurrenceImpl occurrenceF = new NameOccurrenceImpl(foo);

@@ -21,7 +21,7 @@ package au.com.integradev.delphi.utils;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
@@ -30,19 +30,20 @@ public final class InterfaceUtils {
     // Utility class
   }
 
-  public static boolean implementsMethodOnInterface(MethodNameDeclaration method) {
-    var typeDeclaration = method.getTypeDeclaration();
-    return typeDeclaration != null && hasMatchingInterfaceMethod(typeDeclaration.getType(), method);
+  public static boolean implementsMethodOnInterface(RoutineNameDeclaration routine) {
+    var typeDeclaration = routine.getTypeDeclaration();
+    return typeDeclaration != null
+        && hasMatchingInterfaceMethod(typeDeclaration.getType(), routine);
   }
 
-  public static Set<MethodNameDeclaration> findImplementedInterfaceMethodDeclarations(
-      MethodNameDeclaration method) {
-    var typeDeclaration = method.getTypeDeclaration();
+  public static Set<RoutineNameDeclaration> findImplementedInterfaceMethodDeclarations(
+      RoutineNameDeclaration routine) {
+    var typeDeclaration = routine.getTypeDeclaration();
     if (typeDeclaration == null) {
       return new HashSet<>();
     }
 
-    Set<MethodNameDeclaration> implementedMethods = new HashSet<>();
+    Set<RoutineNameDeclaration> implementedMethods = new HashSet<>();
 
     var interfaces =
         typeDeclaration.getType().ancestorList().stream()
@@ -51,29 +52,29 @@ public final class InterfaceUtils {
             .collect(Collectors.toUnmodifiableList());
 
     for (var interfaceType : interfaces) {
-      interfaceType.typeScope().getMethodDeclarations().stream()
-          .filter(interfaceMethod -> hasSameMethodSignature(method, interfaceMethod))
+      interfaceType.typeScope().getRoutineDeclarations().stream()
+          .filter(interfaceMethod -> hasSameSignature(routine, interfaceMethod))
           .forEach(implementedMethods::add);
     }
 
     return implementedMethods;
   }
 
-  private static boolean hasMatchingInterfaceMethod(Type type, MethodNameDeclaration method) {
+  private static boolean hasMatchingInterfaceMethod(Type type, RoutineNameDeclaration routine) {
     if (type.isInterface()
         && ((ScopedType) type)
-            .typeScope().getMethodDeclarations().stream()
-                .anyMatch(interfaceMethod -> hasSameMethodSignature(method, interfaceMethod))) {
+            .typeScope().getRoutineDeclarations().stream()
+                .anyMatch(interfaceMethod -> hasSameSignature(routine, interfaceMethod))) {
       return true;
     }
 
     return type.ancestorList().stream()
-        .anyMatch(parentType -> hasMatchingInterfaceMethod(parentType, method));
+        .anyMatch(parentType -> hasMatchingInterfaceMethod(parentType, routine));
   }
 
-  private static boolean hasSameMethodSignature(
-      MethodNameDeclaration thisMethod, MethodNameDeclaration overriddenMethod) {
-    return thisMethod.getName().equalsIgnoreCase(overriddenMethod.getName())
-        && thisMethod.hasSameParameterTypes(overriddenMethod);
+  private static boolean hasSameSignature(
+      RoutineNameDeclaration method, RoutineNameDeclaration overriddenMethod) {
+    return method.getName().equalsIgnoreCase(overriddenMethod.getName())
+        && method.hasSameParameterTypes(overriddenMethod);
   }
 }

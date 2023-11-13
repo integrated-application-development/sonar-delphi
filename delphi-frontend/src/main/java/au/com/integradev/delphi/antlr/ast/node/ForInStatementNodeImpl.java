@@ -29,8 +29,8 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -39,14 +39,14 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
   private final Supplier<NameResolutionHelper> nameResolutionHelper =
       Suppliers.memoize(() -> new NameResolutionHelper(getAst().getDelphiFile().getTypeFactory()));
 
-  private final Supplier<MethodNameDeclaration> getEnumeratorDeclaration =
+  private final Supplier<RoutineNameDeclaration> getEnumeratorDeclaration =
       Suppliers.memoize(
           () ->
               nameResolutionHelper
                   .get()
                   .findMethodMember(this, getEnumerable().getType(), "GetEnumerator", emptyList()));
 
-  private final Supplier<MethodNameDeclaration> moveNextDeclaration =
+  private final Supplier<RoutineNameDeclaration> moveNextDeclaration =
       Suppliers.memoize(
           () ->
               nameResolutionHelper
@@ -71,13 +71,13 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
 
   @Override
   @Nullable
-  public MethodNameDeclaration getGetEnumeratorDeclaration() {
+  public RoutineNameDeclaration getGetEnumeratorDeclaration() {
     return getEnumeratorDeclaration.get();
   }
 
   @Override
   @Nullable
-  public MethodNameDeclaration getMoveNextDeclaration() {
+  public RoutineNameDeclaration getMoveNextDeclaration() {
     return moveNextDeclaration.get();
   }
 
@@ -88,7 +88,7 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
   }
 
   private Type getEnumeratorType() {
-    MethodNameDeclaration enumerator = getGetEnumeratorDeclaration();
+    RoutineNameDeclaration enumerator = getGetEnumeratorDeclaration();
     if (enumerator != null) {
       return enumerator.getReturnType();
     }

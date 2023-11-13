@@ -54,8 +54,8 @@ public class InvocationArgument implements Typed {
 
   void resolve(Type parameterType) {
     if (resolver != null) {
-      if (isMethodReference(parameterType)) {
-        disambiguateMethodReference(resolver, parameterType);
+      if (isRoutineReference(parameterType)) {
+        disambiguateRoutineReference(resolver, parameterType);
       } else if (!resolver.isExplicitInvocation()) {
         resolver.disambiguateImplicitEmptyArgumentList();
       }
@@ -70,9 +70,9 @@ public class InvocationArgument implements Typed {
         && resolver.getApproximateType().isProcedural();
   }
 
-  boolean isMethodReference(Type parameterType) {
+  boolean isRoutineReference(Type parameterType) {
     return looksLikeProceduralReference()
-        && Objects.requireNonNull(resolver).getApproximateType().isMethod()
+        && Objects.requireNonNull(resolver).getApproximateType().isRoutine()
         && parameterType.isProcedural();
   }
 
@@ -87,17 +87,17 @@ public class InvocationArgument implements Typed {
         && literal.getValue().equals(BigInteger.ZERO);
   }
 
-  Type findMethodReferenceType(Type parameterType) {
+  Type findRoutineReferenceType(Type parameterType) {
     Preconditions.checkArgument(parameterType instanceof ProceduralType);
     Preconditions.checkNotNull(resolver);
 
     NameResolver clone = new NameResolver(resolver);
-    disambiguateMethodReference(clone, parameterType);
+    disambiguateRoutineReference(clone, parameterType);
     return clone.getApproximateType();
   }
 
-  private static void disambiguateMethodReference(NameResolver resolver, Type parameterType) {
-    resolver.disambiguateMethodReference((ProceduralType) parameterType);
+  private static void disambiguateRoutineReference(NameResolver resolver, Type parameterType) {
+    resolver.disambiguateRoutineReference((ProceduralType) parameterType);
     resolver.checkAmbiguity();
   }
 

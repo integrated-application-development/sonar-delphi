@@ -62,22 +62,22 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.QualifiedNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
@@ -86,7 +86,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.UnknownScope;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
@@ -252,20 +252,20 @@ public class NameResolver {
 
   private static Type findCurrentType(DelphiScope scope) {
     scope = Objects.requireNonNullElse(scope, unknownScope());
-    MethodScope methodScope = scope.getEnclosingScope(MethodScope.class);
-    if (methodScope != null) {
-      DelphiScope typeScope = methodScope.getTypeScope();
+    RoutineScope routineScope = scope.getEnclosingScope(RoutineScope.class);
+    if (routineScope != null) {
+      DelphiScope typeScope = routineScope.getTypeScope();
       if (typeScope instanceof TypeScope) {
         return ((TypeScope) typeScope).getType();
       }
-      return findCurrentType(methodScope.getParent());
+      return findCurrentType(routineScope.getParent());
     }
     return unknownType();
   }
 
   private static boolean isConstructor(NameDeclaration declaration) {
-    return declaration instanceof MethodNameDeclaration
-        && ((MethodNameDeclaration) declaration).getMethodKind() == MethodKind.CONSTRUCTOR;
+    return declaration instanceof RoutineNameDeclaration
+        && ((RoutineNameDeclaration) declaration).getRoutineKind() == RoutineKind.CONSTRUCTOR;
   }
 
   void readPrimaryExpression(PrimaryExpressionNode node) {
@@ -334,20 +334,21 @@ public class NameResolver {
     moveToInheritedScope(node);
 
     if (ExpressionNodeUtils.isBareInherited(node)) {
-      MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
+      RoutineImplementationNode routine =
+          node.getFirstParentOfType(RoutineImplementationNode.class);
       DelphiNode inheritedNode = node.getChild(0);
 
-      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(inheritedNode, method.simpleName());
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(inheritedNode, routine.simpleName());
       occurrence.setIsExplicitInvocation(true);
       addName(occurrence);
       searchForDeclaration(occurrence);
       disambiguateIsCallable();
       disambiguateVisibility();
-      disambiguateParameters(method.getParameterTypes());
+      disambiguateParameters(routine.getParameterTypes());
       addResolvedDeclaration();
     } else {
-      NameReferenceNode methodName = (NameReferenceNode) node.getChild(1);
-      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(methodName.getIdentifier());
+      NameReferenceNode routineName = (NameReferenceNode) node.getChild(1);
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(routineName.getIdentifier());
       addName(occurrence);
 
       declarations = currentScope.findDeclaration(occurrence);
@@ -360,9 +361,9 @@ public class NameResolver {
       disambiguateIsCallable();
       disambiguateVisibility();
 
-      NameReferenceNode nextName = methodName.nextName();
+      NameReferenceNode nextName = routineName.nextName();
       if (!declarations.isEmpty()) {
-        ((NameReferenceNodeImpl) methodName).setNameOccurrence(occurrence);
+        ((NameReferenceNodeImpl) routineName).setNameOccurrence(occurrence);
         if (nextName != null) {
           disambiguateImplicitEmptyArgumentList();
           addResolvedDeclaration();
@@ -383,12 +384,12 @@ public class NameResolver {
   }
 
   private void moveToInheritedScope(PrimaryExpressionNode node) {
-    MethodImplementationNode method = node.getFirstParentOfType(MethodImplementationNode.class);
-    Preconditions.checkNotNull(method);
+    RoutineImplementationNode routine = node.getFirstParentOfType(RoutineImplementationNode.class);
+    Preconditions.checkNotNull(routine);
 
     currentScope = node.getScope();
 
-    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    TypeNameDeclaration typeDeclaration = routine.getTypeDeclaration();
     if (typeDeclaration != null) {
       Type type = typeDeclaration.getType();
       Type newType = type.parent();
@@ -415,7 +416,7 @@ public class NameResolver {
     }
   }
 
-  void readMethodNameInterfaceReference(NameReferenceNode node) {
+  void readRoutineNameInterfaceReference(NameReferenceNode node) {
     currentScope = node.getScope().getParent();
 
     for (NameReferenceNode reference : node.flatten()) {
@@ -442,7 +443,7 @@ public class NameResolver {
 
       addName(occurrence);
 
-      // Method name interface references should be resolved quite literally.
+      // Routine name interface references should be resolved quite literally.
       // If we allow it to go through the more general name resolution steps and scope traversals,
       // we could end up inside a class helper or parent type or something.
       declarations = currentScope.findDeclaration(occurrence);
@@ -455,14 +456,14 @@ public class NameResolver {
           // declarations on that type reference
           handleTypeParameterReferences(typeArguments);
         } else {
-          // If we're on the last name, then it's the method reference.
-          // It's impossible for us to know which method we're referring to before parameter
+          // If we're on the last name, then it's the routine reference.
+          // It's impossible for us to know which routine we're referring to before parameter
           // resolution occurs.
-          // Instead, we create temporary type parameter declarations that will live in the method
+          // Instead, we create temporary type parameter declarations that will live in the routine
           // scope as "forward" declarations. Once parameter resolution has occurred, we can come
           // back and complete the type parameter declaration/type.
-          MethodScope methodScope = node.getScope().getEnclosingScope(MethodScope.class);
-          handleTypeParameterForwardReferences(methodScope, typeArguments);
+          RoutineScope routineScope = node.getScope().getEnclosingScope(RoutineScope.class);
+          handleTypeParameterForwardReferences(routineScope, typeArguments);
         }
 
         occurrence.setTypeArguments(
@@ -514,12 +515,12 @@ public class NameResolver {
   }
 
   private void handleTypeParameterForwardReferences(
-      MethodScope methodScope, List<TypeReferenceNode> typeReferences) {
+      RoutineScope routineScope, List<TypeReferenceNode> typeReferences) {
     for (TypeReferenceNode typeNode : typeReferences) {
       NameReferenceNode typeReference = typeNode.getNameNode();
       TypeParameterType type = TypeParameterTypeImpl.create(typeReference.getImage());
       NameDeclaration declaration = new TypeParameterNameDeclarationImpl(typeReference, type);
-      ((DelphiScopeImpl) methodScope).addDeclaration(declaration);
+      ((DelphiScopeImpl) routineScope).addDeclaration(declaration);
 
       NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference);
       occurrence.setNameDeclaration(declaration);
@@ -814,7 +815,7 @@ public class NameResolver {
   }
 
   void disambiguateImplicitEmptyArgumentList() {
-    if (declarations.stream().noneMatch(MethodNameDeclaration.class::isInstance)) {
+    if (declarations.stream().noneMatch(RoutineNameDeclaration.class::isInstance)) {
       return;
     }
     disambiguateArguments(Collections.emptyList(), false);
@@ -928,7 +929,7 @@ public class NameResolver {
             .collect(Collectors.toSet());
 
     disambiguateDistanceFromCallSite();
-    disambiguateRegularMethodOverImplicitSpecializations();
+    disambiguateRegularRoutineOverImplicitSpecializations();
 
     if (!names.isEmpty()) {
       Iterables.getLast(names).setIsExplicitInvocation(explicit);
@@ -1003,7 +1004,7 @@ public class NameResolver {
     return type;
   }
 
-  void disambiguateMethodReference(ProceduralType procedure) {
+  void disambiguateRoutineReference(ProceduralType procedure) {
     disambiguateInvocable();
     disambiguateIsCallable();
 
@@ -1024,11 +1025,11 @@ public class NameResolver {
 
     if (bestDeclaration != null) {
       declarations.add(bestDeclaration);
-      Iterables.getLast(names).setIsMethodReference();
+      Iterables.getLast(names).setIsRoutineReference();
     }
   }
 
-  void disambiguateAddressOfMethodReference() {
+  void disambiguateAddressOfRoutineReference() {
     disambiguateInvocable();
     disambiguateIsCallable();
 
@@ -1036,7 +1037,7 @@ public class NameResolver {
     if (first != null) {
       declarations.clear();
       declarations.add(first);
-      Iterables.getLast(names).setIsMethodReference();
+      Iterables.getLast(names).setIsRoutineReference();
     }
   }
 
@@ -1115,13 +1116,13 @@ public class NameResolver {
    * @see <a href="bit.ly/overloads-type-compatibility-generics">Overloads and Type Compatibility in
    *     Generics</a>
    */
-  private void disambiguateRegularMethodOverImplicitSpecializations() {
+  private void disambiguateRegularRoutineOverImplicitSpecializations() {
     if (declarations.size() > 1
-        && declarations.stream().allMatch(MethodNameDeclaration.class::isInstance)) {
+        && declarations.stream().allMatch(RoutineNameDeclaration.class::isInstance)) {
       Set<NameDeclaration> nonGenericDeclarations =
           declarations.stream()
-              .map(MethodNameDeclaration.class::cast)
-              .filter(not(MethodNameDeclaration::isGeneric))
+              .map(RoutineNameDeclaration.class::cast)
+              .filter(not(RoutineNameDeclaration::isGeneric))
               .collect(Collectors.toSet());
 
       if (nonGenericDeclarations.size() == 1) {
@@ -1132,12 +1133,12 @@ public class NameResolver {
 
   private void disambiguateDistanceFromCallSite() {
     if (declarations.size() > 1
-        && declarations.stream().allMatch(MethodNameDeclaration.class::isInstance)) {
+        && declarations.stream().allMatch(RoutineNameDeclaration.class::isInstance)) {
 
       Set<TypeNameDeclaration> methodTypes =
           declarations.stream()
-              .map(MethodNameDeclaration.class::cast)
-              .map(MethodNameDeclaration::getTypeDeclaration)
+              .map(RoutineNameDeclaration.class::cast)
+              .map(RoutineNameDeclaration::getTypeDeclaration)
               .collect(Collectors.toSet());
 
       if (methodTypes.contains(null)) {
@@ -1150,34 +1151,34 @@ public class NameResolver {
 
   private void disambiguateDistanceFromUnit() {
     String currentUnit = Iterables.getLast(names).getLocation().getUnitName();
-    Set<MethodNameDeclaration> methodDeclarations =
-        declarations.stream().map(MethodNameDeclaration.class::cast).collect(Collectors.toSet());
+    Set<RoutineNameDeclaration> routineDeclarations =
+        declarations.stream().map(RoutineNameDeclaration.class::cast).collect(Collectors.toSet());
 
-    if (methodDeclarations.stream()
+    if (routineDeclarations.stream()
         .map(NameDeclaration::getNode)
         .map(Node::getUnitName)
         .anyMatch(currentUnit::equals)) {
       declarations =
-          methodDeclarations.stream()
+          routineDeclarations.stream()
               .filter(declaration -> declaration.getNode().getUnitName().equals(currentUnit))
               .collect(Collectors.toSet());
     }
   }
 
   private void disambiguateDistanceFromType() {
-    Set<MethodNameDeclaration> methodDeclarations =
-        declarations.stream().map(MethodNameDeclaration.class::cast).collect(Collectors.toSet());
+    Set<RoutineNameDeclaration> routineDeclarations =
+        declarations.stream().map(RoutineNameDeclaration.class::cast).collect(Collectors.toSet());
 
     Type closestType =
-        methodDeclarations.stream()
-            .map(MethodNameDeclaration::getTypeDeclaration)
+        routineDeclarations.stream()
+            .map(RoutineNameDeclaration::getTypeDeclaration)
             .filter(Objects::nonNull)
             .map(TypeNameDeclaration::getType)
             .max(NameResolver::compareTypeSpecificity)
             .orElseThrow();
 
     declarations =
-        methodDeclarations.stream()
+        routineDeclarations.stream()
             .filter(
                 declaration -> {
                   TypeNameDeclaration typeDeclaration = declaration.getTypeDeclaration();
@@ -1209,31 +1210,31 @@ public class NameResolver {
   }
 
   private boolean isVisibleDeclaration(NameDeclaration declaration) {
-    if (declaration instanceof MethodNameDeclaration) {
+    if (declaration instanceof RoutineNameDeclaration) {
       NameOccurrence name = Iterables.getLast(names);
-      MethodScope fromScope = name.getLocation().getScope().getEnclosingScope(MethodScope.class);
+      RoutineScope fromScope = name.getLocation().getScope().getEnclosingScope(RoutineScope.class);
       if (fromScope != null) {
-        MethodNameDeclaration method = (MethodNameDeclaration) declaration;
+        RoutineNameDeclaration routine = (RoutineNameDeclaration) declaration;
         Type fromType = extractType(fromScope);
-        Type toType = extractType(method);
+        Type toType = extractType(routine);
         FileScope currentFile = fromScope.getEnclosingScope(FileScope.class);
-        FileScope methodFile = method.getScope().getEnclosingScope(FileScope.class);
+        FileScope routineFile = routine.getScope().getEnclosingScope(FileScope.class);
         FileScope typeFile = extractFileScope(currentType);
-        boolean isSameUnit = currentFile == methodFile || currentFile == typeFile;
+        boolean isSameUnit = currentFile == routineFile || currentFile == typeFile;
 
-        return isMethodVisibleFrom(fromType, toType, method, isSameUnit);
+        return isRoutineVisibleFrom(fromType, toType, routine, isSameUnit);
       }
     }
     return true;
   }
 
-  private static Type extractType(MethodScope scope) {
-    DelphiScope methodScope = scope;
+  private static Type extractType(RoutineScope scope) {
+    DelphiScope routineScope = scope;
     DelphiScope typeScope = scope.getTypeScope();
 
-    while (!(typeScope instanceof TypeScope) && methodScope instanceof MethodScope) {
-      typeScope = ((MethodScope) methodScope).getTypeScope();
-      methodScope = methodScope.getParent();
+    while (!(typeScope instanceof TypeScope) && routineScope instanceof RoutineScope) {
+      typeScope = ((RoutineScope) routineScope).getTypeScope();
+      routineScope = routineScope.getParent();
     }
 
     if (typeScope instanceof TypeScope) {
@@ -1243,8 +1244,8 @@ public class NameResolver {
     return unknownType();
   }
 
-  private static Type extractType(MethodNameDeclaration method) {
-    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+  private static Type extractType(RoutineNameDeclaration routine) {
+    TypeNameDeclaration typeDeclaration = routine.getTypeDeclaration();
     if (typeDeclaration == null) {
       return unknownType();
     }
@@ -1260,18 +1261,18 @@ public class NameResolver {
     return null;
   }
 
-  private static boolean isMethodVisibleFrom(
-      Type fromType, Type toType, MethodNameDeclaration method, boolean isSameUnit) {
+  private static boolean isRoutineVisibleFrom(
+      Type fromType, Type toType, RoutineNameDeclaration routine, boolean isSameUnit) {
     if (!fromType.isUnknown() && !toType.isUnknown()) {
       if (fromType.is(toType)) {
         return true;
       } else if (fromType.isDescendantOf(toType)) {
-        return isParentTypeMethodVisible(method, isSameUnit);
+        return isParentTypeMethodVisible(routine, isSameUnit);
       } else if (isHelperTypeAccessingExtendedType(fromType, toType)) {
-        return !method.isPrivate();
+        return !routine.isPrivate();
       }
     }
-    return isOtherTypeMethodVisible(method, isSameUnit);
+    return isOtherTypeMethodVisible(routine, isSameUnit);
   }
 
   private static boolean isHelperTypeAccessingExtendedType(Type fromType, Type toType) {
@@ -1282,11 +1283,12 @@ public class NameResolver {
     return false;
   }
 
-  private static boolean isParentTypeMethodVisible(MethodNameDeclaration method, boolean sameUnit) {
+  private static boolean isParentTypeMethodVisible(
+      RoutineNameDeclaration method, boolean sameUnit) {
     return !(sameUnit ? method.isStrictPrivate() : method.isPrivate());
   }
 
-  private static boolean isOtherTypeMethodVisible(MethodNameDeclaration method, boolean sameUnit) {
+  private static boolean isOtherTypeMethodVisible(RoutineNameDeclaration method, boolean sameUnit) {
     if (sameUnit) {
       return !method.isStrictPrivate() && !method.isStrictProtected();
     } else {

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class UnusedLocalVariableCheckTest {
   @Test
-  void testUsedInMethodShouldNotAddIssue() {
+  void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedLocalVariableCheck())
         .onFile(
@@ -40,7 +40,7 @@ class UnusedLocalVariableCheckTest {
   }
 
   @Test
-  void testUnusedAssignedInMethodShouldAddIssue() {
+  void testUnusedAssignedInRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedLocalVariableCheck())
         .onFile(
@@ -55,7 +55,7 @@ class UnusedLocalVariableCheckTest {
   }
 
   @Test
-  void testUsedAssignedInMethodShouldNotAddIssue() {
+  void testUsedAssignedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedLocalVariableCheck())
         .onFile(
@@ -72,7 +72,7 @@ class UnusedLocalVariableCheckTest {
   }
 
   @Test
-  void testUnusedInMethodShouldAddIssue() {
+  void testUnusedInRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedLocalVariableCheck())
         .onFile(

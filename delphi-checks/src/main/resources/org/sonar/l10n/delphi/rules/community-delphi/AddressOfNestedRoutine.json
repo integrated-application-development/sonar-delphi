@@ -1,0 +1,19 @@
+{
+  "title": "Nested routines must not be used as procedural values",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
+  "tags": ["unpredictable", "suspicious"],
+  "defaultSeverity": "Blocker",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

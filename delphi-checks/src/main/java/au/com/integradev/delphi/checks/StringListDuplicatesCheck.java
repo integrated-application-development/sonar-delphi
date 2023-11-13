@@ -22,8 +22,8 @@ import static java.util.function.Predicate.not;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -37,9 +37,9 @@ public class StringListDuplicatesCheck extends DelphiCheck {
       "Sort this 'TStringList' when setting the 'Duplicates' property.";
 
   @Override
-  public DelphiCheckContext visit(MethodBodyNode methodBody, DelphiCheckContext context) {
-    if (methodBody.hasStatementBlock()) {
-      methodBody
+  public DelphiCheckContext visit(RoutineBodyNode routineBody, DelphiCheckContext context) {
+    if (routineBody.hasStatementBlock()) {
+      routineBody
           .getStatementBlock()
           .descendantStatementStream()
           .filter(AssignmentStatementNode.class::isInstance)
@@ -48,7 +48,7 @@ public class StringListDuplicatesCheck extends DelphiCheck {
           .filter(not(StringListDuplicatesCheck::isSortedInSameBlock))
           .forEach(statement -> reportIssue(context, statement, MESSAGE));
     }
-    return super.visit(methodBody, context);
+    return super.visit(routineBody, context);
   }
 
   private static boolean isDuplicatesStatement(AssignmentStatementNode duplicates) {

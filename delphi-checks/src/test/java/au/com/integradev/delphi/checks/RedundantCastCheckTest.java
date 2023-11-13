@@ -135,7 +135,7 @@ class RedundantCastCheckTest {
   }
 
   @Test
-  void testRedundantCastWithAmbiguousMethodCallShouldAddIssue() {
+  void testRedundantCastWithAmbiguousRoutineCallShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantCastCheck())
         .onFile(

@@ -38,12 +38,12 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
@@ -52,9 +52,9 @@ import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
@@ -73,39 +73,39 @@ public class VariableInitializationCheck extends DelphiCheck {
 
   private final IdentityHashMap<NameDeclaration, InitializationState> initializationStateMap =
       new IdentityHashMap<>();
-  private final IdentityHashMap<NameDeclaration, MethodImplementationNode> subroutines =
+  private final IdentityHashMap<NameDeclaration, RoutineImplementationNode> nestedRoutines =
       new IdentityHashMap<>();
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
     initializationStateMap.clear();
-    subroutines.clear();
-    visitMethod(method, context);
+    nestedRoutines.clear();
+    visitRoutine(routine, context);
     return context;
   }
 
-  private void visitMethod(MethodImplementationNode method, DelphiCheckContext context) {
-    CompoundStatementNode block = method.getStatementBlock();
+  private void visitRoutine(RoutineImplementationNode routine, DelphiCheckContext context) {
+    CompoundStatementNode block = routine.getStatementBlock();
     if (block != null) {
-      collectSubroutines(method);
-      collectDeclarationsFromVarSections(method);
+      collectNestedRoutines(routine);
+      collectDeclarationsFromVarSections(routine);
       visitStatements(block, context);
     }
   }
 
-  private void collectSubroutines(MethodImplementationNode method) {
-    BlockDeclarationSectionNode declarationSection = method.getDeclarationSection();
+  private void collectNestedRoutines(RoutineImplementationNode routine) {
+    BlockDeclarationSectionNode declarationSection = routine.getDeclarationSection();
     if (declarationSection == null) {
       return;
     }
 
     declarationSection
-        .findChildrenOfType(MethodImplementationNode.class)
-        .forEach(subroutine -> subroutines.put(subroutine.getMethodNameDeclaration(), subroutine));
+        .findChildrenOfType(RoutineImplementationNode.class)
+        .forEach(nested -> nestedRoutines.put(nested.getRoutineNameDeclaration(), nested));
   }
 
-  private void collectDeclarationsFromVarSections(MethodImplementationNode method) {
-    BlockDeclarationSectionNode declarationSection = method.getDeclarationSection();
+  private void collectDeclarationsFromVarSections(RoutineImplementationNode routine) {
+    BlockDeclarationSectionNode declarationSection = routine.getDeclarationSection();
     if (declarationSection == null) {
       return;
     }
@@ -151,7 +151,7 @@ public class VariableInitializationCheck extends DelphiCheck {
       searchForInitializationsByOutArgument(statement);
       searchForInitializationsByAddressOfHeuristic(statement);
       searchForInitializationsByRecordInvocationHeuristic(statement);
-      handleSubroutineInvocations(statement, context);
+      handleNestedRoutineInvocations(statement, context);
       handleAssignment(statement);
       handleVarStatement(statement);
       handleConstStatement(statement);
@@ -160,17 +160,17 @@ public class VariableInitializationCheck extends DelphiCheck {
     }
   }
 
-  private void handleSubroutineInvocations(StatementNode statement, DelphiCheckContext context) {
+  private void handleNestedRoutineInvocations(StatementNode statement, DelphiCheckContext context) {
     for (NameReferenceNode name : findNameReferences(statement)) {
       for (NameReferenceNode namePart : name.flatten()) {
         NameDeclaration declaration = namePart.getNameDeclaration();
-        if (!subroutines.containsKey(declaration)) {
+        if (!nestedRoutines.containsKey(declaration)) {
           continue;
         }
-        MethodImplementationNode subroutine = subroutines.get(declaration);
-        subroutines.remove(declaration);
-        visitMethod(subroutine, context);
-        subroutines.put(declaration, subroutine);
+        RoutineImplementationNode nestedRoutine = nestedRoutines.get(declaration);
+        nestedRoutines.remove(declaration);
+        visitRoutine(nestedRoutine, context);
+        nestedRoutines.put(declaration, nestedRoutine);
       }
     }
   }
@@ -225,7 +225,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     }
 
     NameDeclaration nextDeclaration = next.getNameDeclaration();
-    return nextDeclaration instanceof MethodNameDeclaration
+    return nextDeclaration instanceof RoutineNameDeclaration
         || nextDeclaration instanceof PropertyNameDeclaration;
   }
 
@@ -302,12 +302,12 @@ public class VariableInitializationCheck extends DelphiCheck {
     }
 
     ArgumentListNode argumentList = (ArgumentListNode) argument.getParent();
-    MethodNameDeclaration method = getMethodDeclaration(argumentList);
-    if (method == null) {
+    RoutineNameDeclaration routine = getRoutineDeclaration(argumentList);
+    if (routine == null) {
       return false;
     }
 
-    return method.fullyQualifiedName().equals("System.SizeOf");
+    return routine.fullyQualifiedName().equals("System.SizeOf");
   }
 
   private static ExpressionNode getArgumentExpression(NameReferenceNode name) {
@@ -380,7 +380,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     return (ProceduralType) type;
   }
 
-  private static MethodNameDeclaration getMethodDeclaration(ArgumentListNode argumentList) {
+  private static RoutineNameDeclaration getRoutineDeclaration(ArgumentListNode argumentList) {
     Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
     if (!(previous instanceof NameReferenceNode)) {
       return null;
@@ -388,21 +388,21 @@ public class VariableInitializationCheck extends DelphiCheck {
 
     NameReferenceNode proceduralReference = ((NameReferenceNode) previous).getLastName();
     NameDeclaration declaration = proceduralReference.getNameDeclaration();
-    if (!(declaration instanceof MethodNameDeclaration)) {
+    if (!(declaration instanceof RoutineNameDeclaration)) {
       return null;
     }
 
-    return (MethodNameDeclaration) declaration;
+    return (RoutineNameDeclaration) declaration;
   }
 
   private static boolean isOutArgumentExclusion(ArgumentListNode argumentList) {
-    MethodNameDeclaration method = getMethodDeclaration(argumentList);
-    if (method == null) {
+    RoutineNameDeclaration routine = getRoutineDeclaration(argumentList);
+    if (routine == null) {
       return false;
     }
 
-    return method.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")
-        || method.fullyQualifiedName().equals("System.Assigned");
+    return routine.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")
+        || routine.fullyQualifiedName().equals("System.Assigned");
   }
 
   private void searchForViolations(StatementNode statement, DelphiCheckContext context) {

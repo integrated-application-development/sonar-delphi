@@ -39,7 +39,7 @@ class UnusedPropertyCheckTest {
   }
 
   @Test
-  void testUsedInMethodShouldNotAddIssue() {
+  void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedPropertyCheck())
         .onFile(

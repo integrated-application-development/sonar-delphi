@@ -22,10 +22,10 @@ import java.util.Collections;
 import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProceduralTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -44,13 +44,13 @@ public abstract class ProceduralTypeNodeImpl extends TypeNodeImpl implements Pro
 
   @Override
   public Type getReturnType() {
-    MethodReturnTypeNode returnTypeNode = getHeading().getMethodReturnTypeNode();
+    RoutineReturnTypeNode returnTypeNode = getHeading().getRoutineReturnTypeNode();
     return returnTypeNode == null ? TypeFactory.voidType() : returnTypeNode.getTypeNode().getType();
   }
 
   @Override
   public List<FormalParameterData> getParameters() {
-    MethodParametersNode parametersNode = getHeading().getMethodParametersNode();
+    RoutineParametersNode parametersNode = getHeading().getRoutineParametersNode();
     return parametersNode == null ? Collections.emptyList() : parametersNode.getParameters();
   }
 }

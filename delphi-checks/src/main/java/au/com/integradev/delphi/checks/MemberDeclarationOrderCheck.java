@@ -24,8 +24,8 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -36,7 +36,7 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class MemberDeclarationOrderCheck extends DelphiCheck {
   private enum BodySegment {
     FIELDS,
-    METHODS,
+    ROUTINES,
     PROPERTIES
   }
 
@@ -63,16 +63,16 @@ public class MemberDeclarationOrderCheck extends DelphiCheck {
     for (DelphiNode itemNode : sectionNode.getChildren()) {
       if (itemNode instanceof FieldSectionNode && currentSegment != BodySegment.FIELDS) {
         outOfOrderDeclarations.addAll(itemNode.findChildrenOfType(FieldDeclarationNode.class));
-      } else if (itemNode instanceof MethodDeclarationNode
-          && currentSegment != BodySegment.METHODS) {
+      } else if (itemNode instanceof RoutineDeclarationNode
+          && currentSegment != BodySegment.ROUTINES) {
         if (currentSegment == BodySegment.FIELDS) {
-          currentSegment = BodySegment.METHODS;
+          currentSegment = BodySegment.ROUTINES;
         } else {
           outOfOrderDeclarations.add(itemNode);
         }
       } else if (itemNode instanceof PropertyNode) {
         // A property declaration has no restrictions on it, but it invalidates any later fields
-        // or methods.
+        // or routines.
         currentSegment = BodySegment.PROPERTIES;
       }
     }

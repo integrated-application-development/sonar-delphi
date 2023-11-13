@@ -87,16 +87,7 @@ import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.LibraryDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodHeadingNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNameNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -107,6 +98,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProceduralTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ProcedureOfObjectTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeNode;
@@ -127,6 +119,14 @@ import org.sonar.plugins.communitydelphi.api.ast.RecordVariantSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordVariantTagNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RequiresClauseNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineHeadingNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SetTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
@@ -307,19 +307,19 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodBodyNode node, T data) {
+  default T visit(RoutineBodyNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodHeadingNode node, T data) {
+  default T visit(RoutineHeadingNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodNameNode node, T data) {
+  default T visit(RoutineNameNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodParametersNode node, T data) {
+  default T visit(RoutineParametersNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -331,7 +331,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodReturnTypeNode node, T data) {
+  default T visit(RoutineReturnTypeNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -433,17 +433,17 @@ public interface DelphiParserVisitor<T> {
     return visit((NameDeclarationNode) node, data);
   }
 
-  /* Methods */
-  default T visit(MethodNode node, T data) {
+  /* Routines */
+  default T visit(RoutineNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
-  default T visit(MethodDeclarationNode node, T data) {
-    return visit((MethodNode) node, data);
+  default T visit(RoutineDeclarationNode node, T data) {
+    return visit((RoutineNode) node, data);
   }
 
-  default T visit(MethodImplementationNode node, T data) {
-    return visit((MethodNode) node, data);
+  default T visit(RoutineImplementationNode node, T data) {
+    return visit((RoutineNode) node, data);
   }
 
   /* File headers */
@@ -525,7 +525,7 @@ public interface DelphiParserVisitor<T> {
     return visit((TypeNode) node, data);
   }
 
-  default T visit(MethodTypeNode node, T data) {
+  default T visit(ProcedureOfObjectTypeNode node, T data) {
     return visit((ProceduralTypeNode) node, data);
   }
 

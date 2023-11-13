@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
-import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
@@ -35,7 +35,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
 
   public static class Data {
     private int classes;
-    private int methods;
+    private int routines;
     private int complexity;
     private int cognitiveComplexity;
     private final Set<Integer> codeLines = new HashSet<>();
@@ -46,8 +46,8 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
       return classes;
     }
 
-    public int getMethods() {
-      return methods;
+    public int getRoutines() {
+      return routines;
     }
 
     public int getComplexity() {
@@ -101,9 +101,9 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(MethodImplementationNode method, Data data) {
-    ++data.methods;
-    return DelphiParserVisitor.super.visit(method, data);
+  public Data visit(RoutineImplementationNode routine, Data data) {
+    ++data.routines;
+    return DelphiParserVisitor.super.visit(routine, data);
   }
 
   @Override
@@ -114,7 +114,7 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(StatementNode statement, Data data) {
-    if (!(statement.getParent() instanceof MethodBodyNode)) {
+    if (!(statement.getParent() instanceof RoutineBodyNode)) {
       ++data.statements;
     }
     return DelphiParserVisitor.super.visit(statement, data);

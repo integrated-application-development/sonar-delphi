@@ -1,0 +1,19 @@
+{
+  "title": "Cyclomatic complexity of routines should not be too high",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "30min"
+  },
+  "code": {
+    "attribute": "FOCUSED",
+    "impacts": {
+      "MAINTAINABILITY": "HIGH"
+    }
+  },
+  "tags": ["design", "brain-overload"],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

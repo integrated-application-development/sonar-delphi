@@ -25,8 +25,8 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "AssertMessageRule", repositoryKey = "delph")
@@ -44,8 +44,8 @@ public class AssertMessageCheck extends DelphiCheck {
 
   private static boolean isAssert(NameReferenceNode nameNode) {
     NameDeclaration nameDeclaration = nameNode.getNameDeclaration();
-    return nameDeclaration instanceof MethodNameDeclaration
-        && ((MethodNameDeclaration) nameDeclaration).fullyQualifiedName().equals("System.Assert");
+    return nameDeclaration instanceof RoutineNameDeclaration
+        && ((RoutineNameDeclaration) nameDeclaration).fullyQualifiedName().equals("System.Assert");
   }
 
   private static boolean isMissingErrorMessage(NameReferenceNode nameNode) {

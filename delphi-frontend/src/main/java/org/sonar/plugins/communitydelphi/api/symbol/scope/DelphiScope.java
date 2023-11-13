@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -68,7 +68,7 @@ public interface DelphiScope {
 
   Set<PropertyNameDeclaration> getPropertyDeclarations();
 
-  Set<MethodNameDeclaration> getMethodDeclarations();
+  Set<RoutineNameDeclaration> getRoutineDeclarations();
 
   Set<VariableNameDeclaration> getVariableDeclarations();
 

@@ -21,13 +21,13 @@ package au.com.integradev.delphi.checks;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -39,7 +39,7 @@ public class EmptyArgumentListCheck extends DelphiCheck {
   private static final String SYSTEM_ASSIGNED_IMAGE = "System.Assigned";
 
   @Override
-  public DelphiCheckContext visit(MethodParametersNode parameters, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RoutineParametersNode parameters, DelphiCheckContext context) {
     if (parameters.isEmpty()) {
       reportIssue(context, parameters, MESSAGE);
     }
@@ -70,7 +70,7 @@ public class EmptyArgumentListCheck extends DelphiCheck {
     Node previous = arguments.getParent().getChild(arguments.getChildIndex() - 1);
     if (previous instanceof Typed) {
       Type type = ((Typed) previous).getType();
-      return type.isProcedural() && !type.isMethod();
+      return type.isProcedural() && !type.isRoutine();
     }
     return true;
   }
@@ -83,8 +83,8 @@ public class EmptyArgumentListCheck extends DelphiCheck {
         DelphiNode prev = grandparent.getParent().getChild(grandparent.getChildIndex() - 1);
         if (prev instanceof NameReferenceNode) {
           var declaration = ((NameReferenceNode) prev).getLastName().getNameDeclaration();
-          return declaration instanceof MethodNameDeclaration
-              && ((MethodNameDeclaration) declaration)
+          return declaration instanceof RoutineNameDeclaration
+              && ((RoutineNameDeclaration) declaration)
                   .fullyQualifiedName()
                   .equals(SYSTEM_ASSIGNED_IMAGE);
         }

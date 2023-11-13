@@ -26,7 +26,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
-import org.sonar.plugins.communitydelphi.api.symbol.scope.MethodScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
@@ -58,8 +58,8 @@ public class UnusedTypeCheck extends DelphiCheck {
     DelphiScope scope = occurrence.getLocation().getScope();
     while (scope != null) {
       DelphiScope typeScope = DelphiScope.unknownScope();
-      if (scope instanceof MethodScope) {
-        typeScope = ((MethodScope) scope).getTypeScope();
+      if (scope instanceof RoutineScope) {
+        typeScope = ((RoutineScope) scope).getTypeScope();
       } else if (scope instanceof TypeScope) {
         typeScope = scope;
       }

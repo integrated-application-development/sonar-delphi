@@ -23,8 +23,8 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -90,16 +90,16 @@ public class MathFunctionSingleOverloadCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
     NameDeclaration declaration = reference.getNameDeclaration();
-    if (declaration instanceof MethodNameDeclaration
-        && isMathFunctionSingleOverload((MethodNameDeclaration) declaration)) {
+    if (declaration instanceof RoutineNameDeclaration
+        && isMathFunctionSingleOverload((RoutineNameDeclaration) declaration)) {
       reportIssue(context, reference.getIdentifier(), MESSAGE);
     }
     return super.visit(reference, context);
   }
 
-  private static boolean isMathFunctionSingleOverload(MethodNameDeclaration method) {
-    return MATH_FUNCTIONS.contains(method.fullyQualifiedName())
-        && method.getParameters().stream()
+  private static boolean isMathFunctionSingleOverload(RoutineNameDeclaration routine) {
+    return MATH_FUNCTIONS.contains(routine.fullyQualifiedName())
+        && routine.getParameters().stream()
             .anyMatch(parameter -> parameter.getType().is(IntrinsicType.SINGLE));
   }
 }

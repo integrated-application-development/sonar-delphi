@@ -50,7 +50,7 @@ class EmptyFileCheckTest {
   }
 
   @Test
-  void testMethodDeclarationShouldNotAddIssue() {
+  void testRoutineDeclarationShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyFileCheck())
         .onFile(new DelphiTestUnitBuilder().appendDecl("procedure Foo;"))
@@ -58,7 +58,7 @@ class EmptyFileCheckTest {
   }
 
   @Test
-  void testMethodImplementationShouldNotAddIssue() {
+  void testRoutineImplementationShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyFileCheck())
         .onFile(

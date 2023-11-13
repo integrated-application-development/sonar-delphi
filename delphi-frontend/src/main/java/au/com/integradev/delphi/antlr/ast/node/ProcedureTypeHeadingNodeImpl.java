@@ -22,9 +22,9 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 
 public final class ProcedureTypeHeadingNodeImpl extends DelphiNodeImpl
     implements ProcedureTypeHeadingNode {
@@ -43,26 +43,26 @@ public final class ProcedureTypeHeadingNodeImpl extends DelphiNodeImpl
   }
 
   private String getParameterSignature() {
-    MethodParametersNode parameters = getMethodParametersNode();
+    RoutineParametersNode parameters = getRoutineParametersNode();
     return parameters != null ? parameters.getImage() : "";
   }
 
   @Override
   @Nullable
-  public MethodParametersNode getMethodParametersNode() {
+  public RoutineParametersNode getRoutineParametersNode() {
     DelphiNode node = getChild(0);
-    return (node instanceof MethodParametersNode) ? (MethodParametersNode) node : null;
+    return (node instanceof RoutineParametersNode) ? (RoutineParametersNode) node : null;
   }
 
   @Override
   @Nullable
-  public MethodReturnTypeNode getMethodReturnTypeNode() {
-    DelphiNode node = getChild(hasMethodParametersNode() ? 1 : 0);
-    return (node instanceof MethodReturnTypeNode) ? (MethodReturnTypeNode) node : null;
+  public RoutineReturnTypeNode getRoutineReturnTypeNode() {
+    DelphiNode node = getChild(hasRoutineParametersNode() ? 1 : 0);
+    return (node instanceof RoutineReturnTypeNode) ? (RoutineReturnTypeNode) node : null;
   }
 
   @Override
-  public boolean hasMethodParametersNode() {
-    return getMethodParametersNode() != null;
+  public boolean hasRoutineParametersNode() {
+    return getRoutineParametersNode() != null;
   }
 }

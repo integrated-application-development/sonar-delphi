@@ -20,7 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.utils.NameConventionUtils;
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -33,19 +33,19 @@ public class ConstructorNameCheck extends DelphiCheck {
   private static final String PREFIX = "Create";
 
   @Override
-  public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
-    if (isViolation(method)) {
-      reportIssue(context, method.getMethodNameNode(), MESSAGE);
+  public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+    if (isViolation(routine)) {
+      reportIssue(context, routine.getRoutineNameNode(), MESSAGE);
     }
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
-  private static boolean isViolation(MethodDeclarationNode method) {
-    if (!method.isConstructor() || method.isClassMethod()) {
+  private static boolean isViolation(RoutineDeclarationNode routine) {
+    if (!routine.isConstructor() || routine.isClassMethod()) {
       return false;
     }
 
-    return !PREFIX.equals(method.simpleName())
-        && !NameConventionUtils.compliesWithPrefix(method.simpleName(), PREFIX);
+    return !PREFIX.equals(routine.simpleName())
+        && !NameConventionUtils.compliesWithPrefix(routine.simpleName(), PREFIX);
   }
 }

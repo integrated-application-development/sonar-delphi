@@ -153,7 +153,7 @@ specification of our custom rule, as it is of course absolutely correct and inco
 >
 > **Gandalf - Why Program When Magic Rulez (WPWMR, p.42)**
 >
-> *“For a method having a single parameter, the types of its return value and its parameter should
+> *“For a routine having a single parameter, the types of its return value and its parameter should
 never be the same.”*
 >
 
@@ -262,7 +262,7 @@ are going to implement:
 * A procedure
 * A function returning the same type as its parameter, which will be noncompliant
 * A function with a single parameter, but a different return type
-* A method with more than 1 parameter
+* A function with more than 1 parameter
 
 To do so, it relies on the usage of the `CheckVerifier` class, provided by the SonarDelphi
 rule-testing API.
@@ -290,40 +290,40 @@ Before we start with the implementation of the rule itself, a little background 
 Prior to running any rule, SonarDelphi parses a given Delphi code file and produces an
 equivalent data structure: the **Abstract Syntax Tree**.
 Each construction of the Delphi language can be represented with a specific kind of AST node.
-For instance, the node associated with the declaration of a method is defined by
-the `org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode` interface.
+For instance, the node associated with the declaration of a routine is defined by
+the `org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode` interface.
 
 When creating a new rule class, we extend the `DelphiCheck` class from the API.
 The `DelphiCheck` class exposes a `visit` method for every node that can appear in the AST.
 
 Now it's finally time to jump into the implementation of our first rule!
-Go back to the `MyFirstCustomCheck` class, and override the `visit` method
-for `MethodDeclarationNode`.
+Go back to the `MyFirstCustomCheck` class, and override the `visit` method for
+`RoutineDeclarationNode`.
 
 ```java
 @Override
-public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
+public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
 
 }
 ```
 
-Now, let's narrow the focus of the rule by checking that the method has a single parameter. We'll
+Now, let's narrow the focus of the rule by checking that the routine has a single parameter. We'll
 raise an issue in that case.
 
 ```java
 @Override
-public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
-  if (method.getParameters().size() == 1) {
-    reportIssue(context, method.getMethodNameNode(), "Never do that!");
+public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+  if (routine.getParameters().size() == 1) {
+    reportIssue(context, routine.getRoutineNameNode(), "Never do that!");
   }
-  return super.visit(method, context);
+  return super.visit(routine, context);
 }
 ```
 
 The method `reportIssue(DelphiCheckContext context, DelphiNode node, String message)`
 from `DelphiCheck` allows reporting an issue on a given node with a specific message.
 In this case, we chose to report the issue at a precise location, which will be the name of the
-method.
+routine.
 
 Now, let's test our implementation by executing our tests again.
 
@@ -339,7 +339,7 @@ The `CheckVerifier` reported that line 7 raised an unexpected issue, as visible 
 above.
 
 By looking back at our test case, it's easy to figure out that raising an issue here is wrong
-because the method has no return type, meaning it cannot match the parameter type.
+because the routine has no return type, meaning it cannot match the parameter type.
 Raising these issues is correct according to our implementation, as we didn't check for the types of
 the parameter and return type.
 
@@ -354,37 +354,37 @@ resulted from the parsing of the code.
 However, SonarDelphi provides a lot more regarding the code being analyzed, because it
 also constructs a ***semantic model*** of the code.
 This semantic model provides information related to each ***symbol*** being manipulated.
-For a method, for instance, the semantic API will provide useful data such as a method's declaring
+For a routine, for instance, the semantic API will provide useful data such as a routine's declaring
 type, its usages, the types of its parameters and its return type, etc.
 
 But now, let's go back to our implementation and take advantage of the semantics.
 
-Once we know that our method has a single parameter, let's start by getting the type of the method's
-first parameter using `MethodDeclarationNode::getParameterTypes`. (You may have to
-import `org.sonar.plugins.communitydelphi.api.type.Type`)
+Once we know that our routine has a single parameter, let's start by getting the type of the
+routine's first parameter using `RoutineDeclarationNode::getParameterTypes`. (You may have to import
+`org.sonar.plugins.communitydelphi.api.type.Type`)
 
 ```java
 @Override
-public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
-  if (method.getParameters().size() == 1) {
-    Type parameterType = method.getParameterTypes().get(0);
-    reportIssue(context, method.getMethodNameNode(), "Never do that!");
+public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+  if (routine.getParameters().size() == 1) {
+    Type parameterType = routine.getParameterTypes().get(0);
+    reportIssue(context, routine.getRoutineNameNode(), "Never do that!");
   }
-  return super.visit(method, context);
+  return super.visit(routine, context);
 }
 ```
 
-Next, let's get the return type of the method using `MethodDeclarationNode::getReturnType`.
+Next, let's get the return type of the routine using `RoutineDeclarationNode::getReturnType`.
 
 ```java
 @Override
-public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
-  if (method.getParameters().size() == 1) {
-    Type parameterType = method.getParameterTypes().get(0);
-    Type returnType = method.getReturnType();
-    reportIssue(context, method.getMethodNameNode(), "Never do that!");
+public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+  if (routine.getParameters().size() == 1) {
+    Type parameterType = routine.getParameterTypes().get(0);
+    Type returnType = routine.getReturnType();
+    reportIssue(context, routine.getRoutineNameNode(), "Never do that!");
   }
-  return super.visit(method, context);
+  return super.visit(routine, context);
 }
 ```
 
@@ -394,15 +394,15 @@ method, before raising the issue.
 
 ```java
 @Override
-public DelphiCheckContext visit(MethodDeclarationNode method, DelphiCheckContext context) {
-  if (method.getParameters().size() == 1) {
-    Type parameterType = method.getParameterTypes().get(0);
-    Type returnType = method.getReturnType();
+public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+  if (routine.getParameters().size() == 1) {
+    Type parameterType = routine.getParameterTypes().get(0);
+    Type returnType = routine.getReturnType();
     if (parameterType.is(returnType)) {
-      reportIssue(context, method.getMethodNameNode(), "Never do that!");
+      reportIssue(context, routine.getRoutineNameNode(), "Never do that!");
     }
   }
-  return super.visit(method, context);
+  return super.visit(routine, context);
 }
 ```
 
@@ -468,7 +468,7 @@ issue.
 
 ```html
 <h2>Why is this an issue?</h2>
-<p>For a method having a single parameter, the types of its return value and its parameter should
+<p>For a routine having a single parameter, the types of its return value and its parameter should
   never be the same.</p>
 
 <h3>Noncompliant Code Example</h3>
@@ -494,7 +494,7 @@ to `src/main/resources/org/sonar/l10n/delphi/rules/mycompany-delphi/MyFirstCusto
 
 ```json
 {
-  "title": "Return type and parameter of a method should not be the same",
+  "title": "Return type and parameter of a routine should not be the same",
   "type": "BUG",
   "status": "ready",
   "remediation": {
@@ -665,7 +665,7 @@ Once activated
 (see [Quality profiles](https://docs.sonarqube.org/latest/instance-administration/quality-profiles/)),
 the only step remaining is to analyze one of your projects!
 
-When encountering a method returning the same type as its parameter, the custom rule will now raise
+When encountering a routine returning the same type as its parameter, the custom rule will now raise
 an issue.
 
 ### How to define rule parameters
@@ -673,7 +673,7 @@ an issue.
 You have to add a `@RuleProperty` to your Rule.
 
 Check this
-example: [StringInMethodNameCheck.java](https://github.com/integrated-application-development/sonar-delphi/tree/master/docs/delphi-custom-rules-example/src/main/java/au/com/integradev/samples/delphi/checks/StringInMethodNameCheck.java)
+example: [StringInRoutineNameCheck.java](https://github.com/integrated-application-development/sonar-delphi/tree/master/docs/delphi-custom-rules-example/src/main/java/au/com/integradev/samples/delphi/checks/StringInRoutineNameCheck.java)
 
 ## References
 

@@ -29,10 +29,10 @@ import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.LibraryDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
@@ -158,26 +158,25 @@ public class UnitLevelKeywordIndentationCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(
-      MethodDeclarationNode methodDeclarationNode, DelphiCheckContext context) {
-    if (methodDeclarationNode.getParent() instanceof InterfaceSectionNode) {
-      checkNodeIndentation(methodDeclarationNode, context);
+      RoutineDeclarationNode routineDeclarationNode, DelphiCheckContext context) {
+    if (routineDeclarationNode.getParent() instanceof InterfaceSectionNode) {
+      checkNodeIndentation(routineDeclarationNode, context);
     }
-    return super.visit(methodDeclarationNode, context);
+    return super.visit(routineDeclarationNode, context);
   }
 
   @Override
-  public DelphiCheckContext visit(
-      MethodImplementationNode methodImplementationNode, DelphiCheckContext context) {
-    checkNodeIndentation(methodImplementationNode, context);
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    checkNodeIndentation(routine, context);
 
-    DelphiNode block = methodImplementationNode.getBlock();
+    DelphiNode block = routine.getBlock();
 
     if (block != null) {
       checkNodeIndentation(block, context);
       checkNodeIndentation(getEnd(block), context);
     }
 
-    // Exclude nested methods
+    // Exclude nested routines
     return context;
   }
 

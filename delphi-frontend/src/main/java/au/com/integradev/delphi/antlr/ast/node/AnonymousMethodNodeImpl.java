@@ -26,16 +26,16 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodParametersNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodReturnTypeNode;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodKind;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {
   private String image;
-  private MethodKind methodKind;
+  private RoutineKind routineKind;
 
   public AnonymousMethodNodeImpl(Token token) {
     super(token);
@@ -47,13 +47,13 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   }
 
   @Override
-  public MethodParametersNode getMethodParametersNode() {
-    return getFirstChildOfType(MethodParametersNode.class);
+  public RoutineParametersNode getRoutineParametersNode() {
+    return getFirstChildOfType(RoutineParametersNode.class);
   }
 
   @Override
-  public MethodReturnTypeNode getReturnTypeNode() {
-    return getFirstChildOfType(MethodReturnTypeNode.class);
+  public RoutineReturnTypeNode getReturnTypeNode() {
+    return getFirstChildOfType(RoutineReturnTypeNode.class);
   }
 
   @Override
@@ -62,16 +62,16 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   }
 
   @Override
-  public MethodKind getMethodKind() {
-    if (methodKind == null) {
-      methodKind = MethodKind.fromTokenType(getTokenType());
+  public RoutineKind getRoutineKind() {
+    if (routineKind == null) {
+      routineKind = RoutineKind.fromTokenType(getTokenType());
     }
-    return methodKind;
+    return routineKind;
   }
 
   @Override
   public boolean isFunction() {
-    return getMethodKind() == MethodKind.FUNCTION;
+    return getRoutineKind() == RoutineKind.FUNCTION;
   }
 
   @Override
@@ -83,20 +83,20 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   }
 
   private String getParameterSignature() {
-    MethodParametersNode parameters = getMethodParametersNode();
-    return parameters != null ? getMethodParametersNode().getImage() : "";
+    RoutineParametersNode parameters = getRoutineParametersNode();
+    return parameters != null ? getRoutineParametersNode().getImage() : "";
   }
 
   private String getReturnTypeSignature() {
-    MethodReturnTypeNode returnType = getReturnTypeNode();
+    RoutineReturnTypeNode returnType = getReturnTypeNode();
     return returnType != null ? (" : " + getReturnTypeNode().getTypeNode().getImage()) : "";
   }
 
   @Override
   @Nonnull
   protected Type createType() {
-    MethodParametersNode parameters = getMethodParametersNode();
-    MethodReturnTypeNode returnTypeNode = getReturnTypeNode();
+    RoutineParametersNode parameters = getRoutineParametersNode();
+    RoutineReturnTypeNode returnTypeNode = getReturnTypeNode();
 
     return ((TypeFactoryImpl) getTypeFactory())
         .anonymous(

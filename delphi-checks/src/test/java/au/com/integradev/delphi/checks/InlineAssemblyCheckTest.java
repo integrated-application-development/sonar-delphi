@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class InlineAssemblyCheckTest {
   @Test
-  void testOrdinaryMethodShouldNotAddIssue() {
+  void testOrdinaryRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new InlineAssemblyCheck())
         .onFile(
@@ -37,7 +37,7 @@ class InlineAssemblyCheckTest {
   }
 
   @Test
-  void testAsmMethodShouldAddIssue() {
+  void testAsmRoutineShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new InlineAssemblyCheck())
         .onFile(

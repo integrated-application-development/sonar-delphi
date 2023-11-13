@@ -25,11 +25,11 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -43,9 +43,9 @@ public class UnusedLocalVariableCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused local variable.";
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
     Set<NameOccurrence> excludedOccurrences = new HashSet<>();
-    for (var assignment : method.findDescendantsOfType(AssignmentStatementNode.class)) {
+    for (var assignment : routine.findDescendantsOfType(AssignmentStatementNode.class)) {
       ExpressionNode assigneee = assignment.getAssignee();
       if (assigneee instanceof PrimaryExpressionNode
           && assigneee.getChildren().size() == 1
@@ -59,11 +59,11 @@ public class UnusedLocalVariableCheck extends DelphiCheck {
     }
 
     List<NameDeclarationNode> declarations = new ArrayList<>();
-    method.findDescendantsOfType(VarDeclarationNode.class).stream()
+    routine.findDescendantsOfType(VarDeclarationNode.class).stream()
         .map(VarDeclarationNode::getNameDeclarationList)
         .map(NameDeclarationListNode::getDeclarations)
         .forEach(declarations::addAll);
-    method.findDescendantsOfType(VarStatementNode.class).stream()
+    routine.findDescendantsOfType(VarStatementNode.class).stream()
         .map(VarStatementNode::getNameDeclarationList)
         .map(NameDeclarationListNode::getDeclarations)
         .forEach(declarations::addAll);

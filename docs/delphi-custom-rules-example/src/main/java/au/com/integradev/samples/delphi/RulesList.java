@@ -5,15 +5,15 @@
 package au.com.integradev.samples.delphi;
 
 import au.com.integradev.samples.delphi.checks.ExtendingTFooCheck;
-import au.com.integradev.samples.delphi.checks.MethodDeclarationCheck;
-import au.com.integradev.samples.delphi.checks.StringInMethodNameCheck;
+import au.com.integradev.samples.delphi.checks.RoutineDeclarationCheck;
+import au.com.integradev.samples.delphi.checks.StringInRoutineNameCheck;
 import java.util.List;
 
 public final class RulesList {
   private static final List<Class<?>> ALL_CHECKS =
       List.of(
           // Listed alphabetically
-          ExtendingTFooCheck.class, MethodDeclarationCheck.class, StringInMethodNameCheck.class);
+          ExtendingTFooCheck.class, RoutineDeclarationCheck.class, StringInRoutineNameCheck.class);
 
   private RulesList() {
     // Utility class

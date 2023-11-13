@@ -125,7 +125,7 @@ class CommentedOutCodeCheckTest {
   }
 
   @Test
-  void testCommentedOutMethodsShouldAddIssue() {
+  void testCommentedOutRoutinesShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new CommentedOutCodeCheck())
         .onFile(

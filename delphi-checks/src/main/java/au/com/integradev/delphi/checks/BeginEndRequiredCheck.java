@@ -24,8 +24,8 @@ import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -59,7 +59,7 @@ public class BeginEndRequiredCheck extends DelphiCheck {
   }
 
   private static boolean isMissingBeginEnd(StatementNode statement) {
-    if (statement.getParent() instanceof MethodBodyNode) {
+    if (statement.getParent() instanceof RoutineBodyNode) {
       return false;
     }
 

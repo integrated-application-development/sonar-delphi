@@ -26,7 +26,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodBodyNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -49,8 +49,8 @@ public class EmptyBlockCheck extends DelphiCheck {
   private static boolean shouldAddViolation(CompoundStatementNode block) {
     DelphiNode parent = block.getParent();
 
-    if (parent instanceof MethodBodyNode) {
-      // Handled by EmptyMethodRule
+    if (parent instanceof RoutineBodyNode) {
+      // Handled by EmptyRoutineRule
       return false;
     }
 

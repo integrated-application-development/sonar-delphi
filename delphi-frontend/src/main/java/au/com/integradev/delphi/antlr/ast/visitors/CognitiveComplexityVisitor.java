@@ -140,9 +140,9 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(AnonymousMethodNode method, Data data) {
+  public Data visit(AnonymousMethodNode anonymous, Data data) {
     ++data.nesting;
-    DelphiParserVisitor.super.visit(method, data);
+    DelphiParserVisitor.super.visit(anonymous, data);
     --data.nesting;
     return data;
   }

@@ -79,9 +79,9 @@ class UnknownScopeImplTest {
   }
 
   @Test
-  void testFindMethodOverloads() {
+  void testFindRoutineOverloads() {
     Set<NameDeclaration> result = new HashSet<>();
-    unknownScope.findMethodOverloads(makeNameOccurrence(), result);
+    unknownScope.findRoutineOverloads(makeNameOccurrence(), result);
     assertThat(result).isEmpty();
   }
 
@@ -117,8 +117,8 @@ class UnknownScopeImplTest {
   }
 
   @Test
-  void testGetMethodDeclarations() {
-    assertThat(unknownScope.getMethodDeclarations()).isEmpty();
+  void testGetRoutineDeclarations() {
+    assertThat(unknownScope.getRoutineDeclarations()).isEmpty();
   }
 
   @Test

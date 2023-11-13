@@ -165,8 +165,8 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testNestedMethods() {
-    execute("NestedMethods.pas");
+  void testNestedRoutines() {
+    execute("NestedRoutines.pas");
     verifyUsages(6, 9);
     verifyUsages(8, 11, reference(27, 12));
     verifyUsages(8, 15, reference(10, 7));

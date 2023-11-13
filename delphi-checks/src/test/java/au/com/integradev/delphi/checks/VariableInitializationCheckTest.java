@@ -952,7 +952,7 @@ class VariableInitializationCheckTest {
   }
 
   @Test
-  void testUnknownMethodArgumentShouldNotAddIssue() {
+  void testUnknownRoutineArgumentShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VariableInitializationCheck())
         .onFile(
@@ -961,7 +961,7 @@ class VariableInitializationCheckTest {
                 .appendImpl("var")
                 .appendImpl("  I: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  UnknownMethod(Foo(I));")
+                .appendImpl("  UnknownRoutine(Foo(I));")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -1047,7 +1047,7 @@ class VariableInitializationCheckTest {
   }
 
   @Test
-  void testRecordAfterAnyMethodCalledShouldNotAddIssue() {
+  void testRecordAfterAnyRoutineCalledShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VariableInitializationCheck())
         .onFile(

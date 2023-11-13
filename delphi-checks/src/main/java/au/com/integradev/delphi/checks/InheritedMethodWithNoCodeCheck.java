@@ -32,17 +32,17 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
-import org.sonar.plugins.communitydelphi.api.ast.MethodImplementationNode;
-import org.sonar.plugins.communitydelphi.api.ast.MethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodDirective;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.MethodNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
@@ -54,17 +54,17 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this useless method override.";
 
   @Override
-  public DelphiCheckContext visit(MethodImplementationNode method, DelphiCheckContext context) {
-    DelphiNode violationNode = findViolation(method);
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    DelphiNode violationNode = findViolation(routine);
     if (violationNode != null) {
       reportIssue(context, violationNode, MESSAGE);
     }
 
-    return super.visit(method, context);
+    return super.visit(routine, context);
   }
 
-  private static DelphiNode findViolation(MethodImplementationNode method) {
-    CompoundStatementNode block = method.getStatementBlock();
+  private static DelphiNode findViolation(RoutineImplementationNode routine) {
+    CompoundStatementNode block = routine.getStatementBlock();
     if (block == null) {
       return null;
     }
@@ -86,9 +86,9 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
       }
     }
 
-    if (isInheritedCall(method, expr)
-        && !isVisibilityChanged(method)
-        && !isAddingMeaningfulDirectives(method)) {
+    if (isInheritedCall(routine, expr)
+        && !isVisibilityChanged(routine)
+        && !isAddingMeaningfulDirectives(routine)) {
       return statement;
     }
 
@@ -103,48 +103,48 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
         .orElseGet(Stream::empty);
   }
 
-  private static List<MethodNameDeclaration> getParentMethodDeclarations(
-      MethodImplementationNode method) {
+  private static List<RoutineNameDeclaration> getParentMethodDeclarations(
+      RoutineImplementationNode method) {
     TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
-    MethodNameDeclaration nameDeclaration = method.getMethodNameDeclaration();
+    RoutineNameDeclaration nameDeclaration = method.getRoutineNameDeclaration();
     if (typeDeclaration == null || nameDeclaration == null) {
       return Collections.emptyList();
     }
 
     return concreteParentTypesStream(typeDeclaration.getType())
         .map(ScopedType.class::cast)
-        .flatMap(type -> type.typeScope().getMethodDeclarations().stream())
+        .flatMap(type -> type.typeScope().getRoutineDeclarations().stream())
         .filter(methodDeclaration -> isOverriddenMethod(methodDeclaration, nameDeclaration))
         .collect(Collectors.toUnmodifiableList());
   }
 
-  private static boolean isVisibilityChanged(MethodImplementationNode method) {
-    List<MethodNameDeclaration> parentMethods = getParentMethodDeclarations(method);
-    if (parentMethods.isEmpty() || method.getMethodNameDeclaration() == null) {
+  private static boolean isVisibilityChanged(RoutineImplementationNode method) {
+    List<RoutineNameDeclaration> parentMethods = getParentMethodDeclarations(method);
+    if (parentMethods.isEmpty() || method.getRoutineNameDeclaration() == null) {
       return true;
     }
 
-    MethodNameDeclaration parentMethod = parentMethods.get(0);
+    RoutineNameDeclaration parentMethod = parentMethods.get(0);
     return parentMethod.getVisibility().ordinal()
-        != method.getMethodNameDeclaration().getVisibility().ordinal();
+        != method.getRoutineNameDeclaration().getVisibility().ordinal();
   }
 
-  private static boolean isAddingMeaningfulDirectives(MethodImplementationNode method) {
-    List<MethodNameDeclaration> parentMethods = getParentMethodDeclarations(method);
-    if (parentMethods.isEmpty() || method.getMethodNameDeclaration() == null) {
+  private static boolean isAddingMeaningfulDirectives(RoutineImplementationNode method) {
+    List<RoutineNameDeclaration> parentMethods = getParentMethodDeclarations(method);
+    if (parentMethods.isEmpty() || method.getRoutineNameDeclaration() == null) {
       return false;
     }
 
-    MethodNameDeclaration parentMethod = parentMethods.get(0);
-    Set<MethodDirective> newDirectives =
-        method.getMethodNameDeclaration().getDirectives().stream()
+    RoutineNameDeclaration parentMethod = parentMethods.get(0);
+    Set<RoutineDirective> newDirectives =
+        method.getRoutineNameDeclaration().getDirectives().stream()
             .filter(Predicate.not(parentMethod.getDirectives()::contains))
             .collect(Collectors.toSet());
-    return newDirectives.contains(MethodDirective.REINTRODUCE)
-        || newDirectives.contains(MethodDirective.VIRTUAL);
+    return newDirectives.contains(RoutineDirective.REINTRODUCE)
+        || newDirectives.contains(RoutineDirective.VIRTUAL);
   }
 
-  private static boolean isInheritedCall(MethodImplementationNode method, ExpressionNode expr) {
+  private static boolean isInheritedCall(RoutineImplementationNode method, ExpressionNode expr) {
     if (!(expr instanceof PrimaryExpressionNode)) {
       return false;
     }
@@ -173,8 +173,9 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
     return argumentSignaturesMatch(method, (ArgumentListNode) argumentList);
   }
 
-  private static boolean argumentSignaturesMatch(MethodNode method, ArgumentListNode argumentList) {
-    List<FormalParameterData> parameters = method.getParameters();
+  private static boolean argumentSignaturesMatch(
+      RoutineNode routine, ArgumentListNode argumentList) {
+    List<FormalParameterData> parameters = routine.getParameters();
     List<ExpressionNode> arguments =
         (argumentList == null) ? Collections.emptyList() : argumentList.getArguments();
 
@@ -192,7 +193,7 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
   }
 
   private static boolean isOverriddenMethod(
-      MethodNameDeclaration parent, MethodNameDeclaration child) {
+      RoutineNameDeclaration parent, RoutineNameDeclaration child) {
     return parent.getName().equalsIgnoreCase(child.getName())
         && parent.getParameters().equals(child.getParameters());
   }
