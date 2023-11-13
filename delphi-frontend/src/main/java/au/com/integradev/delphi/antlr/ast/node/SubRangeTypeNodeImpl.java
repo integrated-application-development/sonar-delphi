@@ -62,6 +62,6 @@ public final class SubRangeTypeNodeImpl extends TypeNodeImpl implements SubRange
       baseType = high.getType();
     }
 
-    return getTypeFactory().subRange(low.getImage() + ".." + high.getImage(), baseType);
+    return getTypeFactory().subrange(low.getImage() + ".." + high.getImage(), baseType);
   }
 }

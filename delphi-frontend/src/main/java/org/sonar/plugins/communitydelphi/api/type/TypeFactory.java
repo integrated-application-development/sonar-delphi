@@ -58,7 +58,7 @@ public interface TypeFactory {
 
   CollectionType emptySet();
 
-  SubrangeType subRange(String image, Type type);
+  SubrangeType subrange(String image, Type type);
 
   PointerType pointerTo(@Nullable String image, Type type);
 

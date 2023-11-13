@@ -102,7 +102,7 @@ class TypeAliasGeneratorTest {
           Arguments.of(
               ((TypeFactoryImpl) FACTORY).enumeration(ALIASED_NAME, DelphiScope.unknownScope()),
               EnumType.class),
-          Arguments.of(FACTORY.subRange(ALIASED_NAME, BYTE), SubrangeType.class),
+          Arguments.of(FACTORY.subrange(ALIASED_NAME, BYTE), SubrangeType.class),
           Arguments.of(FACTORY.classOf(ALIASED_NAME, BYTE), ClassReferenceType.class),
           Arguments.of(
               TypeParameterTypeImpl.create(ALIASED_NAME, List.of(BYTE)), TypeParameterType.class),

@@ -714,7 +714,7 @@ class TypeComparerTest {
   }
 
   private static SubrangeType subRange(String image, Type type) {
-    return FACTORY.subRange(image, type);
+    return FACTORY.subrange(image, type);
   }
 
   private static SubrangeType subRange(String image, IntrinsicType intrinsic) {

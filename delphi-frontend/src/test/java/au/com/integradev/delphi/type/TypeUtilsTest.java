@@ -37,7 +37,7 @@ class TypeUtilsTest {
     Type strongAliasType = FACTORY.strongAlias("String_", baseType);
     assertThat(TypeUtils.findBaseType(strongAliasType)).isEqualTo(baseType);
 
-    Type subrangeType = FACTORY.subRange("IntegerSubrange", baseType);
+    Type subrangeType = FACTORY.subrange("IntegerSubrange", baseType);
     assertThat(TypeUtils.findBaseType(subrangeType)).isEqualTo(baseType);
   }
 

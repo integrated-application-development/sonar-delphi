@@ -407,7 +407,7 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   @Override
-  public SubrangeType subRange(String image, Type type) {
+  public SubrangeType subrange(String image, Type type) {
     return new SubrangeTypeImpl(image, type);
   }
 
