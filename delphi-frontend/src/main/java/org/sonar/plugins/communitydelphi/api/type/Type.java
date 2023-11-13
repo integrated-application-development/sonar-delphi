@@ -53,7 +53,7 @@ public interface Type {
   /**
    * The size of this type
    *
-   * @return Size
+   * @return size of this type
    */
   int size();
 
