@@ -74,6 +74,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
@@ -517,7 +518,12 @@ public class NameResolutionHelper {
 
       TypeParameterType parameterType = (TypeParameterType) parameterDeclaration.getType();
       Type argumentType = parameterReference.getType();
-      if (argumentType.isTypeParameter()) {
+
+      while (argumentType.isWeakAlias()) {
+        argumentType = ((AliasType) argumentType).aliasedType();
+      }
+
+      if (!argumentType.isAlias() && argumentType.isTypeParameter()) {
         ((TypeParameterTypeImpl) argumentType).setFullType(parameterType);
       }
     }

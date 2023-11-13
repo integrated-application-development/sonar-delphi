@@ -759,7 +759,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     Type type = declaration.getType();
     typeScope.setType(type);
 
-    if (!node.isWeakAlias()
+    if (!type.isAlias()
         && type.isPointer()
         && data.switchRegistry.isActiveSwitch(SwitchKind.POINTERMATH, node.getTokenIndex())) {
       ((PointerTypeImpl) type).setAllowsPointerMath();
