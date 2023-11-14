@@ -6,7 +6,7 @@ on:
       - 'master'
 
 jobs:
-  verify:
+  scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
