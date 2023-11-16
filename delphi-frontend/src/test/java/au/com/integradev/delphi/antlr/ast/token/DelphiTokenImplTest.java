@@ -16,45 +16,55 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.antlr.ast;
+package au.com.integradev.delphi.antlr.ast.token;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
-import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DelphiTokenTest {
+class DelphiTokenImplTest {
   private DelphiTokenImpl commentToken;
+  private DelphiTokenImpl directiveToken;
 
   @BeforeEach
   void setup() {
-    CommonToken commonToken = new CommonToken(DelphiLexer.COMMENT);
-    commonToken.setText("{ This is my multiline comment.\n As you can see, it's 3 whole lines.\n}");
-    commonToken.setLine(5);
-    commonToken.setCharPositionInLine(12);
-    commentToken = new DelphiTokenImpl(commonToken);
+    CommonToken antlrComment = new CommonToken(DelphiLexer.COMMENT);
+    antlrComment.setText(
+        "{ This is my multiline comment.\n As you can see, it's 3 whole lines.\n}");
+    antlrComment.setLine(5);
+    antlrComment.setCharPositionInLine(12);
+    commentToken = new DelphiTokenImpl(antlrComment);
+
+    CommonToken antlrDirective = new CommonToken(DelphiLexer.TkCompilerDirective);
+    antlrDirective.setText(
+        "{$I *.inc This is my multiline directive.\n As you can see, it's 3 whole lines.\n}");
+    antlrDirective.setLine(5);
+    antlrDirective.setCharPositionInLine(12);
+    directiveToken = new DelphiTokenImpl(antlrDirective);
   }
 
   @Test
   void testGetBeginLine() {
-    assertThat(commentToken.getBeginLine()).isEqualTo(5);
+    assertThat(commentToken.getBeginLine()).isEqualTo(directiveToken.getBeginLine()).isEqualTo(5);
   }
 
   @Test
   void testGetBeginColumn() {
-    assertThat(commentToken.getBeginColumn()).isEqualTo(12);
+    assertThat(commentToken.getBeginColumn())
+        .isEqualTo(directiveToken.getBeginColumn())
+        .isEqualTo(12);
   }
 
   @Test
   void testGetEndLine() {
-    assertThat(commentToken.getEndLine()).isEqualTo(7);
+    assertThat(commentToken.getEndLine()).isEqualTo(directiveToken.getEndLine()).isEqualTo(7);
   }
 
   @Test
   void testGetEndColumn() {
-    assertThat(commentToken.getEndColumn()).isEqualTo(1);
+    assertThat(commentToken.getEndColumn()).isEqualTo(directiveToken.getEndColumn()).isEqualTo(1);
   }
 }
