@@ -25,7 +25,6 @@ package au.com.integradev.delphi.msbuild;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.nio.file.Files;
@@ -35,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -108,8 +108,7 @@ final class DelphiProjectParser {
   }
 
   private static Map<String, String> createUnitAliases(ProjectProperties properties) {
-    ImmutableMap.Builder<String, String> builder =
-        ImmutableSortedMap.orderedBy(String.CASE_INSENSITIVE_ORDER);
+    Map<String, String> result = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     propertyList(properties.get("DCC_UnitAlias"))
         .forEach(
             item -> {
@@ -120,9 +119,9 @@ final class DelphiProjectParser {
               int equalIndex = item.indexOf('=');
               String unitAlias = item.substring(0, equalIndex);
               String unitName = item.substring(equalIndex + 1);
-              builder.put(unitAlias, unitName);
+              result.put(unitAlias, unitName);
             });
-    return builder.build();
+    return Collections.unmodifiableMap(result);
   }
 
   private static List<String> propertyList(String value) {

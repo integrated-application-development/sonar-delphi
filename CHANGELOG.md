@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Stack overflow on class reference types that reference their containing type.
+- Scan failures on redundant unit aliases in .dproj files.
 
 ## [1.0.0] - 2023-11-14
 
