@@ -42,6 +42,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -59,6 +60,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SysInitScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonarsource.analyzer.commons.ProgressReport;
@@ -382,6 +384,7 @@ public class SymbolTableBuilder {
 
     return scope.getTypeDeclarations().stream()
         .map(TypeNameDeclaration::getType)
+        .filter(Predicate.not(Type::isClassReference))
         .filter(ScopedType.class::isInstance)
         .map(ScopedType.class::cast)
         .map(ScopedType::typeScope)
