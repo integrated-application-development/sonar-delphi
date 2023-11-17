@@ -12,7 +12,7 @@ Copyright (C) 2016 Sandro Luck
 Author(s):
 Sandro Luck(sandro.luck@gmx.ch)
 
-Copyright (C) 2019-2022 Integrated Application Development
+Copyright (C) 2019 Integrated Application Development
 Author(s):
 Jonah Jeleniewski (jjeleniewski@integradev.com.au)
 
