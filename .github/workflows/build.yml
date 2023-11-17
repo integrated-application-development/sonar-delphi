@@ -28,3 +28,8 @@ jobs:
           cache: maven
       - name: Maven Install
         run: mvn clean install -Pci --batch-mode --no-transfer-progress
+      - name: Upload plugin jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: sonar-delphi-plugin-jar
+          path: sonar-delphi-plugin/target/sonar-delphi-plugin-*.jar
