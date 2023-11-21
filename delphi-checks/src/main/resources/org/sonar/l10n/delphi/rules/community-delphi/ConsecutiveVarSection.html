@@ -1,0 +1,23 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Having consecutive <code>var</code> sections is useless and negatively impacts readability.
+  Combining the sections into one larger section is more concise and easier to understand.
+</p>
+<p>
+  This rule also picks up consecutive <code>threadvar</code> sections.
+</p>
+<h2>How to fix it</h2>
+<p>Combine the <code>var</code> or <code>threadvar</code> sections together:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+var
+  Foo: Integer;
+  Bar: string;
+var
+  Baz: Double;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+var
+  Foo: Integer;
+  Bar: string;
+  Baz: Double;
+</pre>
