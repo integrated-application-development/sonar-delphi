@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `ConsecutiveVarSection` analysis rule, which flags consecutive `var` sections that can be merged.
+- `ConsecutiveTypeSection` analysis rule, which flags consecutive `type` sections that can be
+  merged.
 - `VarSectionNode::isThreadVarSection` API method.
 - `ConstSectionNode::isResourceStringSection` API method.
 

@@ -44,6 +44,7 @@ public final class CheckList {
           CommentedOutCodeCheck.class,
           CompilerHintsCheck.class,
           CompilerWarningsCheck.class,
+          ConsecutiveTypeSectionCheck.class,
           ConsecutiveVarSectionCheck.class,
           ConstantNameCheck.class,
           ConstructorNameCheck.class,
