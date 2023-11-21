@@ -1,0 +1,24 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Having consecutive <code>type</code> sections is useless and negatively impacts readability.
+  Combining the sections into one larger section is more concise and easier to understand.
+</p>
+<h2>How to fix it</h2>
+<p>Combine the <code>type</code> sections together:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TFoo = class(TObject)
+    // ...
+  end;
+
+type
+  TBar = string;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TFoo = class(TObject)
+    // ...
+  end;
+
+  TBar = string;
+</pre>
