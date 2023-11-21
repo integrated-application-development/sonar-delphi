@@ -23,6 +23,7 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class VarSectionNodeImpl extends DelphiNodeImpl implements VarSectionNode {
   public VarSectionNodeImpl(Token token) {
@@ -37,5 +38,10 @@ public final class VarSectionNodeImpl extends DelphiNodeImpl implements VarSecti
   @Override
   public List<VarDeclarationNode> getDeclarations() {
     return findChildrenOfType(VarDeclarationNode.class);
+  }
+
+  @Override
+  public boolean isThreadVarSection() {
+    return getTokenType() == DelphiTokenType.THREADVAR;
   }
 }

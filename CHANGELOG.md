@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `VarSectionNode::isThreadVarSection` API method.
+
 ### Fixed
 
 - Stack overflow on class reference types that reference their containing type.

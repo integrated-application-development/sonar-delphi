@@ -22,4 +22,6 @@ import java.util.List;
 
 public interface VarSectionNode extends DelphiNode {
   List<VarDeclarationNode> getDeclarations();
+
+  boolean isThreadVarSection();
 }
