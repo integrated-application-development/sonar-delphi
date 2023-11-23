@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ConsecutiveVarSection` analysis rule, which flags consecutive `var` sections that can be merged.
 - `ConsecutiveTypeSection` analysis rule, which flags consecutive `type` sections that can be
   merged.
+- `ConsecutiveVisibilitySection` analysis rule, which flags consecutive visibility sections that can
+  be merged.
 - `VarSectionNode::isThreadVarSection` API method.
 - `ConstSectionNode::isResourceStringSection` API method.
 

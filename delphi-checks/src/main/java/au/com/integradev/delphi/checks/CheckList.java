@@ -46,6 +46,7 @@ public final class CheckList {
           CompilerWarningsCheck.class,
           ConsecutiveTypeSectionCheck.class,
           ConsecutiveVarSectionCheck.class,
+          ConsecutiveVisibilitySectionCheck.class,
           ConstantNameCheck.class,
           ConstructorNameCheck.class,
           ConstructorWithoutInheritedCheck.class,
