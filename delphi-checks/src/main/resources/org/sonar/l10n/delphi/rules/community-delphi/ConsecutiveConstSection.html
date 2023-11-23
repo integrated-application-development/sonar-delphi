@@ -1,0 +1,23 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Having consecutive <code>const</code> sections is useless and negatively impacts readability.
+  Combining the sections into one larger section is more concise and easier to understand.
+</p>
+<p>
+  This rule also picks up consecutive <code>resourcestring</code> sections.
+</p>
+<h2>How to fix it</h2>
+<p>Combine the <code>const</code> or <code>resourcestring</code> sections together:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+const
+  CFoo = 5;
+  CBar = 'abc';
+const
+  CBaz = 24.4;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+const
+  CFoo = 5;
+  CBar = 'abc';
+  CBaz = 24.4;
+</pre>
