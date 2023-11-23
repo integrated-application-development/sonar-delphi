@@ -1,0 +1,42 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Having consecutive visibility sections with the same visibility is useless and negatively
+  impacts readability.
+  Combining the sections into one larger section is more concise and easier to understand.
+</p>
+<h3>Exceptions</h3>
+<p>
+  This rule does <b>not</b> apply for visibility sections with only one <code>const</code> or
+  <code>type</code> section, such as in the example below:
+</p>
+<pre>
+type
+  TFoo = class(TObject)
+  private type
+    TBar = Double;
+    TBaz = Integer;
+  private const
+    CMyStr = 'abc';
+  private
+    FMyInt: Integer;
+  end;
+</pre>
+<h2>How to fix it</h2>
+<p>Combine the consecutive visibility sections together:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TFoo = class(TObject)
+  private
+    FMyInt: Integer;
+  private
+    procedure Bar;
+  end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TFoo = class(TObject)
+  private
+    FMyInt: Integer;
+    procedure Bar;
+  end;
+</pre>

@@ -1,0 +1,19 @@
+{
+  "title": "Consecutive visibility sections of the same level should be combined",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "DISTINCT",
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    }
+  },
+  "tags": ["confusing"],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}
