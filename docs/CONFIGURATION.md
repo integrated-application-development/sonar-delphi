@@ -29,6 +29,11 @@ force their analysis (not recommended).
 
 ### Project Options
 
+> [!NOTE]
+> Project options are indexed from project (**.dproj**) files.
+>
+> These properties allow you to add or remove values from those indexed options.
+
 | Key                                 | Value                                                                                                                                  | Default Value |
 |-------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | `sonar.delphi.searchPath`           | List of directories to search for include files and unit imports. Each path may be absolute or relative to the project base directory. | -             |
