@@ -23,6 +23,7 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class ConstSectionNodeImpl extends DelphiNodeImpl implements ConstSectionNode {
   public ConstSectionNodeImpl(Token token) {
@@ -41,5 +42,10 @@ public final class ConstSectionNodeImpl extends DelphiNodeImpl implements ConstS
       return ((VisibilitySectionNode) parent).getVisibility();
     }
     return VisibilityType.PUBLIC;
+  }
+
+  @Override
+  public boolean isResourceStringSection() {
+    return getTokenType() == DelphiTokenType.RESOURCESTRING;
   }
 }
