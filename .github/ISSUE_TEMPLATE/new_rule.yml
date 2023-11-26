@@ -1,7 +1,6 @@
 name: New Rule
 description: Propose a new rule
-title: "[New Rule]: "
-labels: ["enhancement", "triage"]
+labels: ["rule", "feature", "triage"]
 body:
   - type: markdown
     attributes:

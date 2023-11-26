@@ -1,7 +1,6 @@
 name: Engine Improvement
 description: Suggest an engine improvement
-title: "[Engine Improvement]: "
-labels: ["enhancement", "triage"]
+labels: ["engine", "enhancement", "triage"]
 body:
   - type: markdown
     attributes:
