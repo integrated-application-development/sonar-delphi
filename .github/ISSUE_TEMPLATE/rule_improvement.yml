@@ -1,7 +1,6 @@
 name: Rule Improvement
 description: Suggest a rule improvement
-title: "[Rule Improvement]: "
-labels: ["enhancement", "triage"]
+labels: ["rule", "enhancement", "triage"]
 body:
   - type: markdown
     attributes:

@@ -1,6 +1,5 @@
 name: Inquiry
 description: Ask a question
-title: "[Inquiry]: "
 labels: ["question", "triage"]
 body:
   - type: markdown
