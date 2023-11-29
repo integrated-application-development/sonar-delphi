@@ -67,7 +67,7 @@ class OperatorInvocableCollectorTest {
   void testSetShouldCollectAddOperators() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(collector.collect(typeFactory.emptySet(), BinaryOperator.ADD)).hasSize(9);
+    assertThat(collector.collect(typeFactory.emptySet(), BinaryOperator.ADD)).hasSize(13);
   }
 
   @Test

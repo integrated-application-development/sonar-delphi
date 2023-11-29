@@ -138,14 +138,16 @@ final class TypeComparer {
     if (from.isInteger()) {
       IntegerType fromInteger = (IntegerType) from;
       IntegerType toInteger = (IntegerType) to;
+
       if (fromInteger.size() == toInteger.size()
-          && fromInteger.min().equals(toInteger.min())
-          && fromInteger.max().equals(toInteger.max())) {
+          && fromInteger.isSigned() == toInteger.isSigned()) {
         return EQUAL;
-      } else if (fromInteger.size() <= toInteger.size()) {
+      } else if (!(fromInteger.isSigned() && !toInteger.isSigned())
+          && fromInteger.max().compareTo(toInteger.max()) <= 0) {
         return CONVERT_LEVEL_1;
+      } else if (!fromInteger.isSigned() && to.is(IntrinsicType.INT64)) {
+        return CONVERT_LEVEL_2;
       } else {
-        // Penalty for bad type conversion
         return CONVERT_LEVEL_3;
       }
     }
@@ -578,9 +580,17 @@ final class TypeComparer {
       return CONVERT_LEVEL_2;
     }
 
+    EqualityType subEquality;
+    Type fromElementType = getLargestType(from.elementTypes());
+
+    if (isConvertibleToSetElementType(fromElementType, to.elementType())) {
+      subEquality = EQUAL;
+    } else {
+      subEquality = compare(fromElementType, to.elementType());
+    }
+
     // this should lose to the array constructor -> open array conversions,
     // but it might happen that the end of the convert levels is reached
-    var subEquality = compare(getLargestType(from.elementTypes()), to.elementType());
     if (subEquality.ordinal() >= EQUAL.ordinal()) {
       return CONVERT_LEVEL_2;
     } else if (subEquality.ordinal() > CONVERT_LEVEL_6.ordinal()) {
@@ -594,6 +604,39 @@ final class TypeComparer {
     } else {
       return subEquality;
     }
+  }
+
+  private static boolean isConvertibleToSetElementType(Type from, Type to) {
+    // HACK:
+    //  Special-case equality check for ShortInt and Char to (imperfectly) emulate the much more
+    //  comprehensive behavior that the compiler does.
+    //
+    //  The compiler checks literal values and pure constant (!) values for bounds violations on
+    //  Byte or AnsiChar when doing an array constructor -> set conversion.
+    //
+    //  This allows it to disambiguate:
+    //    [1, 2, 3]       -> set of Byte
+    //    [-1]            -> dynamic array of ShortInt
+    //    ['a', 'b', 'c'] -> set of AnsiChar
+    //    ['😋']          -> dynamic array of WideChar
+    //
+    //  This is confusing to the analyzer because:
+    //    - 1, 2, 3, and -1 are all resolved to type ShortInt.
+    //    - 'a'. 'b', 'c', and '😋' are all resolved to type WideChar.
+    //
+    //  To handle this accurately, we need to:
+    //    1. model constant expressions
+    //    2. persist pure constant values as constant expressions in the symbol table
+    //    3. persist array construct values as constant expressions in the type system
+    //       (OR)
+    //       have a higher-level check in the InvocationResolver, where we have access to the
+    //       ArrayConstructorNode.
+    //
+    //  For more information, see:
+    //    https://github.com/integrated-application-development/sonar-delphi/issues/116
+    //
+    return (from.is(IntrinsicType.CHAR) && to.is(IntrinsicType.ANSICHAR))
+        || (from.is(IntrinsicType.SHORTINT) && to.is(IntrinsicType.BYTE));
   }
 
   private static EqualityType compareArrayConstructorToOpenArray(
