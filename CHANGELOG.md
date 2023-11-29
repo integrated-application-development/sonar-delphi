@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `VarSectionNode::isThreadVarSection` API method.
 - `ConstSectionNode::isResourceStringSection` API method.
 
+### Changed
+
+- Improve type resolution on binary expressions where the operands are integer types.
+- Improve type comparisons between signed and unsigned integer types.
+
 ### Fixed
 
 - Stack overflow on class reference types that reference their containing type.

@@ -188,4 +188,21 @@ class RedundantCastCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  // See: https://github.com/integrated-application-development/sonar-delphi/issues/105
+  @Test
+  void testIssue105ShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantCastCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Test: Integer;")
+                .appendImpl("var")
+                .appendImpl("  C: Cardinal;")
+                .appendImpl("  I: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Integer(C xor C) and not I;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
 }

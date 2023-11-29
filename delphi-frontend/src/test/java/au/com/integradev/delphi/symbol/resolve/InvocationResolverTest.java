@@ -170,8 +170,8 @@ class InvocationResolverTest {
 
     assertResolved(type(BYTE), type(INTEGER), type(DOUBLE));
 
-    assertResolved(FACTORY.strongAlias("MyWord", type(LONGWORD)), type(INTEGER), type(INT64));
-    assertResolved(type(LONGWORD), FACTORY.strongAlias("MyInt", type(INTEGER)), type(INT64));
+    assertResolved(FACTORY.strongAlias("MyWord", type(LONGWORD)), type(INT64), type(INTEGER));
+    assertResolved(type(LONGWORD), FACTORY.strongAlias("MyInt64", type(INT64)), type(INTEGER));
   }
 
   @Test

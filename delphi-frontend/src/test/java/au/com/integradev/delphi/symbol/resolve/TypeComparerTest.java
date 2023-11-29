@@ -102,10 +102,14 @@ class TypeComparerTest {
   @Test
   void testToInteger() {
     compare(IntrinsicType.SMALLINT, IntrinsicType.INTEGER, CONVERT_LEVEL_1);
+    compare(IntrinsicType.CARDINAL, IntrinsicType.INT64, CONVERT_LEVEL_1);
+    compare(IntrinsicType.UINT64, IntrinsicType.INT64, CONVERT_LEVEL_2);
+    compare(IntrinsicType.INT64, IntrinsicType.UINT64, CONVERT_LEVEL_3);
+    compare(IntrinsicType.CARDINAL, IntrinsicType.INTEGER, CONVERT_LEVEL_3);
     compare(IntrinsicType.INTEGER, IntrinsicType.SMALLINT, CONVERT_LEVEL_3);
     compare(IntrinsicType.VARIANT, IntrinsicType.INTEGER, CONVERT_LEVEL_7);
     compare(subRange("0..5", IntrinsicType.SHORTINT), IntrinsicType.SHORTINT, EQUAL);
-    compare(subRange("-100..100", IntrinsicType.BYTE), IntrinsicType.SHORTINT, CONVERT_LEVEL_1);
+    compare(subRange("-100..100", IntrinsicType.BYTE), IntrinsicType.SHORTINT, CONVERT_LEVEL_3);
     compare(IntrinsicType.CURRENCY, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
     compare(IntrinsicType.UNICODESTRING, IntrinsicType.INTEGER, INCOMPATIBLE_TYPES);
   }
