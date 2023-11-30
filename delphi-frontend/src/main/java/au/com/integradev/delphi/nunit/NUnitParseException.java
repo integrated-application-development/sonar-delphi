@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2023 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,26 +18,8 @@
  */
 package au.com.integradev.delphi.nunit;
 
-public class TestResult {
-  public enum Status {
-    PASSED,
-    FAILED,
-    SKIPPED
-  }
-
-  private final Status status;
-  private final double duration;
-
-  public TestResult(Status status, double duration) {
-    this.status = status;
-    this.duration = duration;
-  }
-
-  public Status getStatus() {
-    return this.status;
-  }
-
-  public double getDuration() {
-    return this.duration;
+public class NUnitParseException extends Exception {
+  public NUnitParseException(String message) {
+    super(message);
   }
 }

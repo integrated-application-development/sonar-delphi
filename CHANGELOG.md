@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for the NUnit 2.0 test results format (in addition to existing 3.0 support).
 - `ConsecutiveVarSection` analysis rule, which flags consecutive `var` sections that can be merged.
 - `ConsecutiveConstSection` analysis rule, which flags consecutive `const` sections that can be
   merged.

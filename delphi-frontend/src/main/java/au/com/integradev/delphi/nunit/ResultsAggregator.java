@@ -18,12 +18,9 @@
  */
 package au.com.integradev.delphi.nunit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import au.com.integradev.delphi.nunit.TestResult.Status;
 
 public final class ResultsAggregator {
-  private static final Logger LOG = LoggerFactory.getLogger(ResultsAggregator.class);
-
   private int failures;
   private int skipped;
   private int tests;
@@ -31,22 +28,12 @@ public final class ResultsAggregator {
 
   public ResultsAggregator add(TestResult result) {
     this.tests++;
-    this.durationSeconds += result.getDurationSeconds();
-    switch (result.getStatus()) {
-      case SKIPPED:
-      case INCONCLUSIVE:
-        this.skipped++;
-        break;
-      case FAILED:
-        this.failures++;
-        break;
-      case PASSED:
-        break;
-      default:
-        LOG.warn(
-            "Unexpected test result status: '{}'. Treating as Failure.", result.getRawStatus());
-        this.failures++;
-        break;
+    this.durationSeconds += result.getDuration();
+
+    if (result.getStatus() == Status.SKIPPED) {
+      this.skipped++;
+    } else if (result.getStatus() == Status.FAILED) {
+      this.failures++;
     }
 
     return this;

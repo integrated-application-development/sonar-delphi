@@ -20,10 +20,8 @@ package au.com.integradev.delphi.nunit;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Locale;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,11 +31,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.utils.ParsingUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /** Parses NUnit test reports from XML files. */
@@ -69,33 +63,16 @@ public final class DelphiNUnitParser {
         dir, FileFilterUtils.suffixFileFilter(".xml"), TrueFileFilter.INSTANCE);
   }
 
-  private static double getTimeAttributeInSeconds(String value) {
-    try {
-      double time = ParsingUtils.parseNumber(value, Locale.ENGLISH);
-      return !Double.isNaN(time) ? time : 0;
-    } catch (ParseException e) {
-      LOG.warn("Couldn't parse time attribute: {}", value);
-      return 0;
-    }
-  }
+  private static NUnitFileParser getParserForFile(Document doc) {
+    String rootElementName = doc.getDocumentElement().getNodeName();
 
-  private static String getNodeTextOrExcept(NamedNodeMap map, String nodeName)
-      throws MissingNodeException {
-    Node node = map.getNamedItem(nodeName);
-    if (node == null) {
-      throw new MissingNodeException(String.format("Node '%s' was missing.", nodeName));
+    if (rootElementName.equals("test-run")) {
+      return new NUnit3FileParser();
+    } else if (rootElementName.equals("test-results")) {
+      return new NUnit2FileParser();
     } else {
-      return node.getTextContent();
+      return null;
     }
-  }
-
-  private static TestResult parseTestResult(NamedNodeMap testCase) throws MissingNodeException {
-    String status = getNodeTextOrExcept(testCase, "result");
-    Node duration = testCase.getNamedItem("duration");
-    double durationSeconds =
-        getTimeAttributeInSeconds(duration == null ? "" : duration.getTextContent());
-
-    return new TestResult().setDurationSeconds(durationSeconds).setStatus(status);
   }
 
   private static void parse(File reportFile, ResultsAggregator results) {
@@ -110,20 +87,14 @@ public final class DelphiNUnitParser {
 
       doc.getDocumentElement().normalize();
 
-      parseTestCases(results, doc.getElementsByTagName("test-case"));
+      NUnitFileParser parser = getParserForFile(doc);
+      if (parser != null) {
+        parser.parse(doc, results);
+      } else {
+        LOG.error("Report '{}' is not a recognised NUnit format, skipping.", reportFile);
+      }
     } catch (SAXException | ParserConfigurationException | IOException e) {
       LOG.error("Error while parsing report '{}':", reportFile, e);
-    }
-  }
-
-  private static void parseTestCases(ResultsAggregator results, NodeList testCases) {
-    for (int i = 0; i < testCases.getLength(); i++) {
-      Node testCase = testCases.item(i);
-      try {
-        results.add(parseTestResult(testCase.getAttributes()));
-      } catch (MissingNodeException e) {
-        LOG.warn("Skipping test case because of exception while parsing:", e);
-      }
     }
   }
 
@@ -131,11 +102,5 @@ public final class DelphiNUnitParser {
     ResultsAggregator results = new ResultsAggregator();
     reports.forEach(report -> parse(report, results));
     return results;
-  }
-
-  private static final class MissingNodeException extends RuntimeException {
-    private MissingNodeException(String msg) {
-      super(msg);
-    }
   }
 }
