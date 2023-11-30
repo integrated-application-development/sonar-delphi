@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<test-results name="path\to\executable.exe" total="5" errors="1" failures="1" ignored="1" inconclusive="0" not-run="1" skipped="0" invalid="0" date="2023-11-30" time="0.017">
+  <culture-info current-culture="en" current-uiculture="en" />
+  <test-suite type="Assembly" name="executable.exe" executed="true" result="Success" success="True" time="0.017" asserts="0">
+    <results>
+      <test-suite type="Fixture" name="PassingSuite" executed="True" result="Success" success="True" time="0.012" >
+        <results>
+          <test-case name="MissingTime." executed="True" result="Success" success="True" asserts="0" />
+          <test-case name="InvalidTime." executed="True" result="Success" success="True" time="not-a-number" asserts="0" />
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

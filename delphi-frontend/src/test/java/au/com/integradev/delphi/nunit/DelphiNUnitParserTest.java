@@ -24,12 +24,10 @@ import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class DelphiNUnitParserTest {
-  private ResultsAggregator getResults(String path) {
-    return DelphiNUnitParser.collect(DelphiUtils.getResource(path));
-  }
-
   @Test
   void testCollectNonExistentDirectory() {
     ResultsAggregator results = DelphiNUnitParser.collect(new File(UUID.randomUUID().toString()));
@@ -44,15 +42,27 @@ class DelphiNUnitParserTest {
 
   @Test
   void testCollectFromParentDir() {
-    ResultsAggregator results = getResults("/au/com/integradev/delphi/nunit/reports/");
+    ResultsAggregator results = getResults(getPath("v3"));
 
     assertThat(results).isNotNull();
     assertThat(results.getTestsRun()).isEqualTo(12);
   }
 
-  @Test
-  void testCollectMalformedReport() {
-    ResultsAggregator results = getResults("/au/com/integradev/delphi/nunit/reports/malformedXml");
+  @ParameterizedTest
+  @ValueSource(strings = {"v2", "v3"})
+  void testParseReport(String version) {
+    ResultsAggregator results = getResults(getPath(version) + "/normal");
+
+    assertThat(results).isNotNull();
+    assertThat(results.getTestsRun()).isEqualTo(8);
+    assertThat(results.getSkipped()).isEqualTo(1);
+    assertThat(results.getFailures()).isEqualTo(3);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"v2", "v3"})
+  void testCollectMalformedReport(String version) {
+    ResultsAggregator results = getResults(getPath(version) + "/malformedXml");
 
     // malformed XML should be ignored (the directory also includes a single well-formed test-case)
     assertThat(results).isNotNull();
@@ -62,10 +72,10 @@ class DelphiNUnitParserTest {
     assertThat(results.getDurationSeconds()).isEqualTo(0.704);
   }
 
-  @Test
-  void testCollectReportWithBadResultAttributes() {
-    ResultsAggregator results =
-        getResults("/au/com/integradev/delphi/nunit/reports/badResultAttributes");
+  @ParameterizedTest
+  @ValueSource(strings = {"v2", "v3"})
+  void testCollectReportWithBadResultAttributes(String version) {
+    ResultsAggregator results = getResults(getPath(version) + "/badResultAttributes");
 
     // test-case missing a 'result' attribute should be ignored.
     // test-case with invalid 'result' attribute should be treated as a failure.
@@ -76,10 +86,10 @@ class DelphiNUnitParserTest {
     assertThat(results.getDurationSeconds()).isEqualTo(0.002);
   }
 
-  @Test
-  void testCollectReportWithBadDurationAttributes() {
-    ResultsAggregator results =
-        getResults("/au/com/integradev/delphi/nunit/reports/badDurationAttributes");
+  @ParameterizedTest
+  @ValueSource(strings = {"v2", "v3"})
+  void testCollectReportWithBadDurationAttributes(String version) {
+    ResultsAggregator results = getResults(getPath(version) + "/badDurationAttributes");
 
     // missing or invalid duration should be treated as zero
     assertThat(results).isNotNull();
@@ -87,5 +97,13 @@ class DelphiNUnitParserTest {
     assertThat(results.getFailures()).isZero();
     assertThat(results.getSkipped()).isZero();
     assertThat(results.getDurationSeconds()).isZero();
+  }
+
+  private static ResultsAggregator getResults(String path) {
+    return DelphiNUnitParser.collect(DelphiUtils.getResource(path));
+  }
+
+  private static String getPath(String versionText) {
+    return String.format("/au/com/integradev/delphi/nunit/reports/%s", versionText);
   }
 }
