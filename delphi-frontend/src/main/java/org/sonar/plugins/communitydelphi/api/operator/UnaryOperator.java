@@ -27,7 +27,7 @@ import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public enum UnaryOperator implements Operator {
-  NOT(DelphiTokenType.NOT, "BitwiseNot", "LogicalNot"),
+  NOT(DelphiTokenType.NOT, "OnesComplement", "LogicalNot"),
   PLUS(DelphiTokenType.PLUS, "Positive"),
   NEGATE(DelphiTokenType.MINUS, "Negative"),
   ADDRESS(DelphiTokenType.ADDRESS);

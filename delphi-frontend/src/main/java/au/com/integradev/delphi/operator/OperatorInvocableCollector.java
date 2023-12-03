@@ -426,7 +426,8 @@ public class OperatorInvocableCollector {
   private Set<Invocable> createNot() {
     Type bool = typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
     return addAll(
-        createIntegerUnary("BitwiseNot"), new OperatorIntrinsic("LogicalNot", List.of(bool), bool));
+        createIntegerUnary("OnesComplement"),
+        new OperatorIntrinsic("LogicalNot", List.of(bool), bool));
   }
 
   private Set<Invocable> createArithmeticUnary(String name) {
