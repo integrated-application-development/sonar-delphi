@@ -36,7 +36,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
-import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
@@ -44,8 +43,6 @@ import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
@@ -505,22 +502,7 @@ public class TypeFactoryImpl implements TypeFactory {
       return Collections.emptyList();
     }
 
-    return attributeList.getAttributes().stream()
-        .map(AttributeNode::getTypeNameOccurrence)
-        .map(
-            occurrence -> {
-              if (occurrence == null) {
-                return TypeFactory.unknownType();
-              }
-
-              NameDeclaration declaration = occurrence.getNameDeclaration();
-              if (!(declaration instanceof TypeNameDeclaration)) {
-                return TypeFactory.unknownType();
-              }
-
-              return ((TypeNameDeclaration) declaration).getType();
-            })
-        .collect(Collectors.toUnmodifiableList());
+    return attributeList.getAttributeTypes();
   }
 
   public HelperType helper(HelperTypeNode node) {
