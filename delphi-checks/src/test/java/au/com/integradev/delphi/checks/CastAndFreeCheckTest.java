@@ -37,6 +37,25 @@ class CastAndFreeCheckTest {
   }
 
   @Test
+  void testMethodCallShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CastAndFreeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.SysUtils;")
+                .appendImpl("function Flarp(Bar: TObject): TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Bar;")
+                .appendImpl("end;")
+                .appendImpl("procedure Foo(Bar: TObject);")
+                .appendImpl("begin")
+                .appendImpl("  FreeAndNil(Flarp(Bar));")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testPointerToObjectCastShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new CastAndFreeCheck())
@@ -128,9 +147,12 @@ class CastAndFreeCheckTest {
         .withCheck(new CastAndFreeCheck())
         .onFile(
             new DelphiTestUnitBuilder()
-                .appendImpl("procedure Foo(Bar: Baz);")
+                .appendDecl("type")
+                .appendDecl("  TBaz = class(TObject)")
+                .appendDecl("  end;")
+                .appendImpl("procedure Foo(Bar: TObject);")
                 .appendImpl("begin")
-                .appendImpl("  (Bar as Xyzzy).Free; // Noncompliant")
+                .appendImpl("  (Bar as TBaz).Free; // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
   }
@@ -201,9 +223,12 @@ class CastAndFreeCheckTest {
         .withCheck(new CastAndFreeCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Flarp = class(TObject)")
+                .appendDecl("  end;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  ((Xyzzy(Bar))).Free; // Noncompliant")
+                .appendImpl("  ((Flarp(Bar))).Free; // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
   }
@@ -231,11 +256,14 @@ class CastAndFreeCheckTest {
         .withSearchPathUnit(createSysUtils())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  Flarp = class(TObject)")
+                .appendDecl("  end;")
                 .appendImpl("uses")
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("procedure Foo(Bar: Baz);")
                 .appendImpl("begin")
-                .appendImpl("  FreeAndNil(((Xyzzy(Bar)))); // Noncompliant")
+                .appendImpl("  FreeAndNil(((Flarp(Bar)))); // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
   }
