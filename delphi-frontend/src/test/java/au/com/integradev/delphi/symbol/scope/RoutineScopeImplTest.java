@@ -50,6 +50,7 @@ class RoutineScopeImplTest {
             mock(ProceduralType.class),
             null,
             VisibilityType.PUBLIC,
+            Collections.emptyList(),
             Collections.emptyList()));
 
     assertThat(routineScope).hasToString("Foo <RoutineScope>");
