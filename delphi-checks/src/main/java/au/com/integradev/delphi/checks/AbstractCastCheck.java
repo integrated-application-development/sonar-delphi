@@ -18,21 +18,14 @@
  */
 package au.com.integradev.delphi.checks;
 
-import java.util.List;
-import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import au.com.integradev.delphi.utils.CastUtils;
+import au.com.integradev.delphi.utils.CastUtils.DelphiCast;
+import java.util.Optional;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
-import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
-import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 
 public abstract class AbstractCastCheck extends DelphiCheck {
   protected abstract boolean isViolation(Type originalType, Type castType);
@@ -42,9 +35,11 @@ public abstract class AbstractCastCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(
       BinaryExpressionNode binaryExpression, DelphiCheckContext context) {
-    if (binaryExpression.getOperator() == BinaryOperator.AS) {
-      Type originalType = getOriginalType(binaryExpression.getLeft());
-      Type castedType = getSoftCastedType(binaryExpression.getRight());
+    Optional<DelphiCast> cast = CastUtils.readSoftCast(binaryExpression);
+
+    if (cast.isPresent()) {
+      Type originalType = cast.get().originalType();
+      Type castedType = cast.get().castedType();
 
       if (isViolation(originalType, castedType)
           && !originalType.isUnknown()
@@ -52,55 +47,24 @@ public abstract class AbstractCastCheck extends DelphiCheck {
         reportIssue(context, binaryExpression, getIssueMessage());
       }
     }
+
     return super.visit(binaryExpression, context);
   }
 
   @Override
-  public DelphiCheckContext visit(ArgumentListNode argumentList, DelphiCheckContext context) {
-    List<ExpressionNode> arguments = argumentList.getArguments();
-    if (arguments.size() == 1) {
-      Type originalType = getOriginalType(arguments.get(0));
-      Type castedType = getHardCastedType(argumentList, context);
+  public DelphiCheckContext visit(
+      PrimaryExpressionNode primaryExpression, DelphiCheckContext context) {
+    Optional<DelphiCast> cast = CastUtils.readHardCast(primaryExpression, context.getTypeFactory());
+
+    if (cast.isPresent()) {
+      Type originalType = cast.get().originalType();
+      Type castedType = cast.get().castedType();
+
       if (castedType != null && isViolation(originalType, castedType)) {
-        reportIssue(context, argumentList, getIssueMessage());
-      }
-    }
-    return super.visit(argumentList, context);
-  }
-
-  private static Type getOriginalType(ExpressionNode expression) {
-    Type result = expression.getType();
-    if (result.isRoutine()) {
-      result = ((ProceduralType) result).returnType();
-    }
-    return result;
-  }
-
-  private static Type getSoftCastedType(ExpressionNode expression) {
-    Type result = expression.getType();
-    if (result.isClassReference()) {
-      result = ((ClassReferenceType) result).classType();
-    }
-    return result;
-  }
-
-  private static Type getHardCastedType(ArgumentListNode argumentList, DelphiCheckContext context) {
-    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
-    if (previous instanceof NameReferenceNode) {
-      NameReferenceNode nameReference = ((NameReferenceNode) previous);
-      NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
-      if (declaration instanceof TypeNameDeclaration) {
-        return ((TypeNameDeclaration) declaration).getType();
+        reportIssue(context, primaryExpression, getIssueMessage());
       }
     }
 
-    switch (previous.getTokenType()) {
-      case STRING:
-        return context.getTypeFactory().getIntrinsic(IntrinsicType.STRING);
-      case FILE:
-        return context.getTypeFactory().untypedFile();
-      default:
-        return null;
-    }
+    return super.visit(primaryExpression, context);
   }
 }
