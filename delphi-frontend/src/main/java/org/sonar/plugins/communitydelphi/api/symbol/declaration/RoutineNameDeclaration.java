@@ -18,10 +18,12 @@
  */
 package org.sonar.plugins.communitydelphi.api.symbol.declaration;
 
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface RoutineNameDeclaration
     extends GenerifiableDeclaration, TypedDeclaration, Invocable, Visibility {
@@ -35,4 +37,6 @@ public interface RoutineNameDeclaration
 
   @Nullable
   TypeNameDeclaration getTypeDeclaration();
+
+  List<Type> getAttributeTypes();
 }

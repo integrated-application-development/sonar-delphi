@@ -34,9 +34,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
@@ -65,6 +67,7 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
   private final TypeNameDeclaration typeDeclaration;
   private final VisibilityType visibility;
   private final List<TypedDeclaration> typeParameters;
+  private final List<Type> attributeTypes;
 
   private final Set<UnitNameDeclaration> dependencies;
   private int hashCode;
@@ -81,7 +84,8 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
       ProceduralType routineType,
       @Nullable TypeNameDeclaration typeDeclaration,
       VisibilityType visibility,
-      List<TypedDeclaration> typeParameters) {
+      List<TypedDeclaration> typeParameters,
+      List<Type> attributeTypes) {
     super(location);
     this.fullyQualifiedName = fullyQualifiedName;
     this.returnType = returnType;
@@ -93,6 +97,7 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
     this.typeDeclaration = typeDeclaration;
     this.visibility = visibility;
     this.typeParameters = typeParameters;
+    this.attributeTypes = attributeTypes;
     this.dependencies = new HashSet<>();
   }
 
@@ -110,6 +115,7 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
             .routine(createParameters(data), data.getReturnType(), data.isVariadic()),
         null,
         VisibilityType.PUBLIC,
+        Collections.emptyList(),
         Collections.emptyList());
   }
 
@@ -124,6 +130,15 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
                 || routine.getRoutineKind() == RoutineKind.OPERATOR)
             && routine.isClassMethod());
 
+    List<Type> attributeTypes;
+    RoutineHeadingNode routineHeading = routine.getRoutineHeading();
+    AttributeListNode attributeList = routineHeading.getAttributeList();
+    if (attributeList != null) {
+      attributeTypes = attributeList.getAttributeTypes();
+    } else {
+      attributeTypes = Collections.emptyList();
+    }
+
     return new RoutineNameDeclarationImpl(
         new SymbolicNode(location),
         routine.fullyQualifiedName(),
@@ -135,7 +150,8 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
         ((TypeFactoryImpl) typeFactory).routine(createParameters(routine), routine.getReturnType()),
         routine.getTypeDeclaration(),
         routine.getVisibility(),
-        extractGenericTypeParameters(routine));
+        extractGenericTypeParameters(routine),
+        attributeTypes);
   }
 
   private static List<Parameter> createParameters(RoutineNode routine) {
@@ -234,6 +250,11 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
     return typeParameters;
   }
 
+  @Override
+  public List<Type> getAttributeTypes() {
+    return attributeTypes;
+  }
+
   public void addDependency(UnitNameDeclaration dependency) {
     dependencies.add(dependency);
   }
@@ -258,7 +279,8 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
         typeParameters.stream()
             .map(parameter -> parameter.specialize(context))
             .map(TypedDeclaration.class::cast)
-            .collect(Collectors.toUnmodifiableList()));
+            .collect(Collectors.toUnmodifiableList()),
+        attributeTypes);
   }
 
   @Override
@@ -271,7 +293,8 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
           && directives.equals(that.directives)
           && isCallable == that.isCallable
           && isClassInvocable == that.isClassInvocable
-          && typeParameters.equals(that.typeParameters);
+          && typeParameters.equals(that.typeParameters)
+          && attributeTypes.equals(that.attributeTypes);
     }
     return false;
   }
@@ -288,7 +311,8 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
               directives,
               isCallable,
               isClassInvocable,
-              typeParameters);
+              typeParameters,
+              attributeTypes);
     }
     return hashCode;
   }

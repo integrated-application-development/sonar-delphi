@@ -61,6 +61,8 @@ class RoutineNameDeclarationTest {
   private static final List<TypedDeclaration> TYPE_PARAMETERS =
       List.of(mock(TypedDeclaration.class));
 
+  private static final List<Type> ATTRIBUTE_TYPES = Collections.emptyList();
+
   private static final RoutineNameDeclaration ROUTINE =
       new RoutineNameDeclarationImpl(
           LOCATION,
@@ -73,7 +75,8 @@ class RoutineNameDeclarationTest {
           ROUTINE_TYPE,
           TYPE_NAME_DECLARATION,
           VISIBILITY,
-          TYPE_PARAMETERS);
+          TYPE_PARAMETERS,
+          ATTRIBUTE_TYPES);
 
   @Test
   void testEquals() {
@@ -89,7 +92,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclarationImpl forwardDeclaration =
         new RoutineNameDeclarationImpl(
@@ -103,7 +107,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
     forwardDeclaration.setIsForwardDeclaration();
 
     RoutineNameDeclarationImpl implementationDeclaration =
@@ -118,7 +123,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
     implementationDeclaration.setIsImplementationDeclaration();
 
     RoutineNameDeclaration differentLocation =
@@ -133,7 +139,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentFullyQualifiedName =
         new RoutineNameDeclarationImpl(
@@ -147,7 +154,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentReturnType =
         new RoutineNameDeclarationImpl(
@@ -161,7 +169,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentDirectives =
         new RoutineNameDeclarationImpl(
@@ -175,7 +184,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentIsClassInvocable =
         new RoutineNameDeclarationImpl(
@@ -189,7 +199,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentIsCallable =
         new RoutineNameDeclarationImpl(
@@ -203,7 +214,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentRoutineType =
         new RoutineNameDeclarationImpl(
@@ -217,7 +229,8 @@ class RoutineNameDeclarationTest {
             ((TypeFactoryImpl) FACTORY).routine(Collections.emptyList(), TypeFactory.untypedType()),
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            TYPE_PARAMETERS);
+            TYPE_PARAMETERS,
+            ATTRIBUTE_TYPES);
 
     RoutineNameDeclaration differentTypeParameters =
         new RoutineNameDeclarationImpl(
@@ -231,7 +244,8 @@ class RoutineNameDeclarationTest {
             ROUTINE_TYPE,
             TYPE_NAME_DECLARATION,
             VISIBILITY,
-            Collections.emptyList());
+            Collections.emptyList(),
+            ATTRIBUTE_TYPES);
 
     assertThat(ROUTINE)
         .isEqualTo(ROUTINE)
