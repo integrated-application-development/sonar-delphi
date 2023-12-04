@@ -352,9 +352,9 @@ public class DelphiProjectHelper {
     return referencedFiles;
   }
 
-  public Iterable<InputFile> mainFiles() {
+  public Iterable<InputFile> inputFiles() {
     FilePredicates p = fs.predicates();
-    return fs.inputFiles(p.and(p.hasLanguage(Delphi.KEY), p.hasType(InputFile.Type.MAIN)));
+    return fs.inputFiles(p.and(p.hasLanguage(Delphi.KEY)));
   }
 
   public boolean shouldExecuteOnProject() {
