@@ -90,7 +90,7 @@ class DelphiSensorTest {
     InputFile inputFile = mock(InputFile.class);
     when(inputFile.uri()).thenReturn(sourceFilePath.toUri());
 
-    when(delphiProjectHelper.mainFiles()).thenReturn(List.of(inputFile));
+    when(delphiProjectHelper.inputFiles()).thenReturn(List.of(inputFile));
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
     when(delphiProjectHelper.standardLibraryPath()).thenReturn(standardLibraryPath);
   }

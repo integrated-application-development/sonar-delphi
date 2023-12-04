@@ -96,7 +96,7 @@ public class DelphiSensor implements Sensor {
 
     var preprocessorFactory = new DelphiPreprocessorFactory(toolchain.platform);
     var typeFactory = new TypeFactoryImpl(toolchain, compilerVersion);
-    Iterable<InputFile> inputFiles = delphiProjectHelper.mainFiles();
+    Iterable<InputFile> inputFiles = delphiProjectHelper.inputFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
     List<Path> referencedFiles = delphiProjectHelper.getReferencedFiles();
     List<Path> searchPathDirectories = new ArrayList<>();

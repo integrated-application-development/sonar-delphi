@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Test sources were erroneously excluded from analysis.
 - Stack overflow on class reference types that reference their containing type.
 - Scan failures on redundant unit aliases in .dproj files.
 - Incorrect file position calculation for multiline compiler directives.
