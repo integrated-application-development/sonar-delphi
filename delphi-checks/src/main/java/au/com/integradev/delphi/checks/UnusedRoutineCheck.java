@@ -89,6 +89,11 @@ public class UnusedRoutineCheck extends DelphiCheck {
       return false;
     }
 
+    if (routineDeclaration.getTypeDeclaration() != null
+        && !routineDeclaration.getAttributeTypes().isEmpty()) {
+      return false;
+    }
+
     if (routineDeclaration.getName().equalsIgnoreCase("Register")
         && routineDeclaration.getScope() instanceof UnitScope) {
       return false;

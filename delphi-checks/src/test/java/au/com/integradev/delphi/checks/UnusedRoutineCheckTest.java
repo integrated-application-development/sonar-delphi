@@ -50,6 +50,21 @@ class UnusedRoutineCheckTest {
   }
 
   @Test
+  void testUnusedRoutineWithAttributeShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedRoutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("[Bar]")
+                .appendDecl("procedure Foo; // Noncompliant")
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
   void testUsedRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedRoutineCheck())
@@ -108,6 +123,25 @@ class UnusedRoutineCheckTest {
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
         .verifyIssues();
+  }
+
+  @Test
+  void testUnusedMemberRoutineWithAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedRoutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  public")
+                .appendDecl("    [MyAttr]")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 
   @Test
