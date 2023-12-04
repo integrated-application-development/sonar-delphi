@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   be merged.
 - `VarSectionNode::isThreadVarSection` API method.
 - `ConstSectionNode::isResourceStringSection` API method.
+- `AttributeListNode::getAttributeTypes` API method.
 
 ### Changed
 

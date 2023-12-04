@@ -19,9 +19,12 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface AttributeListNode extends DelphiNode {
   List<AttributeGroupNode> getAttributeGroups();
 
   List<AttributeNode> getAttributes();
+
+  List<Type> getAttributeTypes();
 }
