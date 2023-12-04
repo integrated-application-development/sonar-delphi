@@ -22,7 +22,10 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.utils.CastUtils;
+import au.com.integradev.delphi.utils.CastUtils.DelphiCast;
 import com.google.common.collect.Iterables;
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
@@ -33,7 +36,8 @@ import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -44,35 +48,29 @@ public class CastAndFreeCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this redundant cast.";
 
   @Override
-  public DelphiCheckContext visit(ExpressionNode expression, DelphiCheckContext context) {
-    if (isCastExpression(expression) && isFreed(expression) && !isAcceptableCast(expression)) {
-      reportIssue(context, expression, MESSAGE);
+  public DelphiCheckContext visit(
+      PrimaryExpressionNode primaryExpression, DelphiCheckContext context) {
+    Optional<DelphiCast> cast = CastUtils.readHardCast(primaryExpression, context.getTypeFactory());
+
+    if (cast.isPresent() && isFreed(primaryExpression) && !isCastFromUntyped(cast.get())) {
+      reportIssue(context, primaryExpression, MESSAGE);
     }
-    return super.visit(expression, context);
+    return super.visit(primaryExpression, context);
   }
 
-  private static boolean isCastExpression(ExpressionNode expr) {
-    return isSoftCast(expr) || isHardCast(expr);
-  }
+  @Override
+  public DelphiCheckContext visit(
+      BinaryExpressionNode binaryExpression, DelphiCheckContext context) {
+    Optional<DelphiCast> cast = CastUtils.readSoftCast(binaryExpression);
 
-  private static boolean isSoftCast(ExpressionNode expr) {
-    return expr instanceof BinaryExpressionNode
-        && ((BinaryExpressionNode) expr).getOperator() == BinaryOperator.AS;
-  }
-
-  private static boolean isHardCast(ExpressionNode expr) {
-    return expr instanceof PrimaryExpressionNode
-        && expr.getChild(0) instanceof NameReferenceNode
-        && expr.getChild(1) instanceof ArgumentListNode
-        && expr.getChildren().size() < 6;
-  }
-
-  private static boolean isAcceptableCast(ExpressionNode expr) {
-    if (!isHardCast(expr)) {
-      return false;
+    if (cast.isPresent() && isFreed(binaryExpression)) {
+      reportIssue(context, binaryExpression, MESSAGE);
     }
+    return super.visit(binaryExpression, context);
+  }
 
-    Type type = ((ArgumentListNode) expr.getChild(1)).getArguments().get(0).getType();
+  private static boolean isCastFromUntyped(DelphiCast cast) {
+    Type type = cast.originalType();
     if (type.isPointer()) {
       type = ((PointerType) type).dereferencedType();
     }
@@ -81,32 +79,50 @@ public class CastAndFreeCheck extends DelphiCheck {
   }
 
   private static boolean isFreed(ExpressionNode expr) {
-    return isFree(expr) || isFreeAndNil(expr);
+    return freeCalledOnExpression(expr) || isArgumentToFreeAndNil(expr);
   }
 
-  private static boolean isFree(ExpressionNode node) {
-    boolean result =
-        (node instanceof PrimaryExpressionNode
-            && Iterables.getLast(node.getChildren()).getImage().equalsIgnoreCase("Free"));
+  private static boolean freeCalledOnExpression(ExpressionNode node) {
+    if (node instanceof PrimaryExpressionNode) {
+      DelphiNode lastNode = Iterables.getLast(node.getChildren());
 
-    if (!result) {
-      ExpressionNode parenthesized = node.findParentheses();
-
-      if (node != parenthesized) {
-        Node parent = parenthesized.getParent();
-        result = parent instanceof ExpressionNode && isFree((ExpressionNode) parent);
+      if (lastNode instanceof NameReferenceNode) {
+        NameDeclaration lastNameDeclaration = ((NameReferenceNode) lastNode).getNameDeclaration();
+        if (lastNameDeclaration instanceof RoutineNameDeclaration) {
+          return ((RoutineNameDeclaration) lastNameDeclaration)
+              .fullyQualifiedName()
+              .equalsIgnoreCase("System.TObject.Free");
+        }
       }
     }
 
-    return result;
+    ExpressionNode parenthesized = node.findParentheses();
+    if (node != parenthesized) {
+      Node parent = parenthesized.getParent();
+      return parent instanceof PrimaryExpressionNode
+          && freeCalledOnExpression((PrimaryExpressionNode) parent);
+    }
+
+    return false;
   }
 
-  private static boolean isFreeAndNil(ExpressionNode expr) {
+  private static boolean isArgumentToFreeAndNil(ExpressionNode expr) {
     DelphiNode argList = expr.findParentheses().getParent();
+    if (!(argList instanceof ArgumentListNode)) {
+      return false;
+    }
+
     DelphiNode freeAndNil = argList.getParent().getChild(argList.getChildIndex() - 1);
 
-    return argList instanceof ArgumentListNode
-        && freeAndNil instanceof NameReferenceNode
-        && freeAndNil.getImage().equalsIgnoreCase("FreeAndNil");
+    if (freeAndNil instanceof NameReferenceNode) {
+      NameDeclaration freeAndNilDecl = ((NameReferenceNode) freeAndNil).getNameDeclaration();
+      if (freeAndNilDecl instanceof RoutineNameDeclaration) {
+        return ((RoutineNameDeclaration) freeAndNilDecl)
+            .fullyQualifiedName()
+            .equalsIgnoreCase("System.SysUtils.FreeAndNil");
+      }
+    }
+
+    return false;
   }
 }
