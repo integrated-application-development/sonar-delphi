@@ -7,12 +7,17 @@
   Also, because the <code>Free</code> method is on <code>TObject</code>, it is present on
   all objects inheriting from <code>TObject</code> - no casting is needed to access it.
 </p>
+<h3>Exceptions</h3>
+<p>
+  This rule excludes cases in which the object being cast is untyped, as an untyped variable
+  would need to be cast to be used with <code>FreeAndNil</code> or <code>TObject.Free</code>.
+</p>
 <h3>Noncompliant Code Example</h3>
 <pre>
 TMyObject(MyVar).Free; // Noncompliant
-(MyVar <b>as</b> TMyObject).Free; // Noncompliant
+(MyVar as TMyObject).Free; // Noncompliant
 FreeAndNil(TMyObject(MyVar)); // Noncompliant
-FreeAndNil(MyVar <b>as</b> TMyObject); // Noncompliant
+FreeAndNil(MyVar as TMyObject); // Noncompliant
 
 MyVar.Free; // Compliant
 FreeAndNil(MyVar); // Compliant
