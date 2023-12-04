@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stack overflow on class reference types that reference their containing type.
 - Scan failures on redundant unit aliases in .dproj files.
 - Incorrect file position calculation for multiline compiler directives.
+- Incorrect detection of method calls as hard casts in `CastAndFree`.
 
 ## [1.0.0] - 2023-11-14
 
