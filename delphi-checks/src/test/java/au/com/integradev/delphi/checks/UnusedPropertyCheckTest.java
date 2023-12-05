@@ -39,6 +39,22 @@ class UnusedPropertyCheckTest {
   }
 
   @Test
+  void testUnusedPropertyWithAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("public")
+                .appendDecl("  [Flarp]")
+                .appendDecl("  property Bar: Integer read FBar;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedPropertyCheck())

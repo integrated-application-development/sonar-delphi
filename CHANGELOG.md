@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type resolution on binary expressions where the operands are integer types.
 - Improve type comparisons between signed and unsigned integer types.
 - Exclude routines annotated with attributes in `UnusedRoutine`.
+- Exclude properties annotated with attributes in `UnusedProperty`.
 
 ### Fixed
 
