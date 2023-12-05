@@ -372,7 +372,7 @@ fieldSection                 : 'class'? fieldSectionKey fieldDecl* -> ^(TkFieldS
                              | fieldDecl+ -> ^(TkFieldSection<FieldSectionNodeImpl> fieldDecl+)
                              ;
 fieldDecl                    : attributeList? nameDeclarationList ':' varType portabilityDirective* ';'?
-                             -> ^(TkFieldDeclaration<FieldDeclarationNodeImpl> nameDeclarationList varType portabilityDirective* ';'?)
+                             -> ^(TkFieldDeclaration<FieldDeclarationNodeImpl> nameDeclarationList varType portabilityDirective* attributeList? ';'?)
                              ;
 classHelperType              : 'class'<ClassHelperTypeNodeImpl>^ 'helper' classParent? 'for' typeReference visibilitySection* 'end'
                              ;
