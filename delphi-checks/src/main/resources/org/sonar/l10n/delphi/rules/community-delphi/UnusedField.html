@@ -3,9 +3,11 @@
   Having unused fields adversely affects code readability, as their presence is confusing. Code
   that is never used should be removed to keep codebases clean and maintainable.
 </p>
-<p>
-  Note that this rule excludes unused published fields, as these are often accessed via reflection
-  or used by the Delphi IDE for design-time configuration.
-</p>
+<h3>Exceptions</h3>
+<ul>
+  <li>Fields annotated with attributes, as these are often accessed via reflection.</li>
+  <li>Fields with <code>published</code> visibility, as these are often accessed via reflection or
+    used by the Delphi IDE for design-time configuration.</li>
+</ul>
 <h2>How to fix it</h2>
 <p>Remove the unused field.</p>

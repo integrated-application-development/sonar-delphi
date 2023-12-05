@@ -37,6 +37,34 @@ class UnusedFieldCheckTest {
   }
 
   @Test
+  void testUnusedPublicFieldWithAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("  [Baz]")
+                .appendDecl("  Bar: Integer;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedGroupedPublicFieldsWithAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("  [Flarp]")
+                .appendDecl("  Bar, Baz: Integer;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testUsedInRoutineShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedFieldCheck())
