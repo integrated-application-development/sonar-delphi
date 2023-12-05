@@ -40,7 +40,6 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
-import org.sonar.plugins.communitydelphi.api.operator.Operator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
@@ -78,7 +77,7 @@ public final class ExpressionTypeResolver {
       case IS:
         return typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
       default:
-        return resolveOperatorType(List.of(left, right), operator);
+        return resolveOperatorType(operator, left, right);
     }
   }
 
@@ -88,7 +87,7 @@ public final class ExpressionTypeResolver {
     if (operator == UnaryOperator.ADDRESS) {
       return typeFactory.untypedPointer();
     } else {
-      return resolveOperatorType(List.of(operand), operator);
+      return resolveOperatorType(operator, operand);
     }
   }
 
@@ -150,20 +149,36 @@ public final class ExpressionTypeResolver {
         || node.getTokenType() == DelphiTokenType.FILE;
   }
 
-  private Type resolveOperatorType(List<ExpressionNode> argumentNodes, Operator operator) {
+  private Type resolveOperatorType(
+      BinaryOperator operator, ExpressionNode leftExpression, ExpressionNode rightExpression) {
+    var left = new InvocationArgument(leftExpression);
+    var right = new InvocationArgument(rightExpression);
+
     InvocationResolver resolver = new InvocationResolver();
-    List<InvocationArgument> arguments =
-        argumentNodes.stream()
-            .map(InvocationArgument::new)
-            .collect(Collectors.toUnmodifiableList());
+    resolver.addArgument(left);
+    resolver.addArgument(right);
 
-    for (InvocationArgument argument : arguments) {
-      resolver.addArgument(argument);
-      createOperatorInvocables(argument.getType(), operator).stream()
-          .map(InvocationCandidate::new)
-          .forEach(resolver::addCandidate);
-    }
+    createOperatorInvocables(operator, left.getType(), right.getType()).stream()
+        .map(InvocationCandidate::new)
+        .forEach(resolver::addCandidate);
 
+    return resolveOperatorType(resolver);
+  }
+
+  private Type resolveOperatorType(UnaryOperator operator, ExpressionNode operandExpression) {
+    var operand = new InvocationArgument(operandExpression);
+
+    InvocationResolver resolver = new InvocationResolver();
+    resolver.addArgument(operand);
+
+    createOperatorInvocables(operator, operand.getType()).stream()
+        .map(InvocationCandidate::new)
+        .forEach(resolver::addCandidate);
+
+    return resolveOperatorType(resolver);
+  }
+
+  private Type resolveOperatorType(InvocationResolver resolver) {
     resolver.processCandidates();
     Set<InvocationCandidate> bestCandidate = resolver.chooseBest();
 
@@ -180,9 +195,14 @@ public final class ExpressionTypeResolver {
     return TypeFactory.unknownType();
   }
 
-  private Set<Invocable> createOperatorInvocables(Type type, Operator operator) {
+  private Set<Invocable> createOperatorInvocables(BinaryOperator operator, Type left, Type right) {
     OperatorInvocableCollector factory = new OperatorInvocableCollector(typeFactory);
-    return factory.collect(type, operator);
+    return factory.collect(operator, left, right);
+  }
+
+  private Set<Invocable> createOperatorInvocables(UnaryOperator operator, Type operand) {
+    OperatorInvocableCollector factory = new OperatorInvocableCollector(typeFactory);
+    return factory.collect(operator, operand);
   }
 
   private static Type handleHardCasts(Type type, List<ExpressionNode> arguments) {

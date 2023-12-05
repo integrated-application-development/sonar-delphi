@@ -131,22 +131,17 @@ final class TypeComparer {
   }
 
   private static EqualityType compareInteger(Type from, Type to) {
-    if (from.isSubrange()) {
-      from = ((SubrangeType) from).hostType();
-    }
-
     if (from.isInteger()) {
       IntegerType fromInteger = (IntegerType) from;
       IntegerType toInteger = (IntegerType) to;
 
       if (fromInteger.size() == toInteger.size()
-          && fromInteger.isSigned() == toInteger.isSigned()) {
+          && fromInteger.min().equals(toInteger.min())
+          && fromInteger.max().equals(toInteger.max())) {
         return EQUAL;
-      } else if (!(fromInteger.isSigned() && !toInteger.isSigned())
+      } else if (fromInteger.min().compareTo(toInteger.min()) >= 0
           && fromInteger.max().compareTo(toInteger.max()) <= 0) {
         return CONVERT_LEVEL_1;
-      } else if (!fromInteger.isSigned() && to.is(IntrinsicType.INT64)) {
-        return CONVERT_LEVEL_2;
       } else {
         return CONVERT_LEVEL_3;
       }

@@ -103,7 +103,7 @@ class TypeComparerTest {
   void testToInteger() {
     compare(IntrinsicType.SMALLINT, IntrinsicType.INTEGER, CONVERT_LEVEL_1);
     compare(IntrinsicType.CARDINAL, IntrinsicType.INT64, CONVERT_LEVEL_1);
-    compare(IntrinsicType.UINT64, IntrinsicType.INT64, CONVERT_LEVEL_2);
+    compare(IntrinsicType.UINT64, IntrinsicType.INT64, CONVERT_LEVEL_3);
     compare(IntrinsicType.INT64, IntrinsicType.UINT64, CONVERT_LEVEL_3);
     compare(IntrinsicType.CARDINAL, IntrinsicType.INTEGER, CONVERT_LEVEL_3);
     compare(IntrinsicType.INTEGER, IntrinsicType.SMALLINT, CONVERT_LEVEL_3);
