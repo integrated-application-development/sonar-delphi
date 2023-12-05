@@ -19,9 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   be merged.
 - `VarSectionNode::isThreadVarSection` API method.
 - `ConstSectionNode::isResourceStringSection` API method.
-- `AttributeListNode::getAttributeTypes` API method.
-- `RoutineNameDeclaration::getAttributeTypes` API method.
-- `PropertyNameDeclaration::getAttributeTypes` API method.
 
 ### Changed
 
@@ -29,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type comparisons between signed and unsigned integer types.
 - Exclude routines annotated with attributes in `UnusedRoutine`.
 - Exclude properties annotated with attributes in `UnusedProperty`.
+- Exclude fields annotated with attributes in `UnusedField`.
 
 ### Fixed
 

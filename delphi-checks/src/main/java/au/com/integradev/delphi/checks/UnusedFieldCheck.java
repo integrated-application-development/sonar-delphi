@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -34,9 +35,12 @@ public class UnusedFieldCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(FieldDeclarationNode field, DelphiCheckContext context) {
     if (!field.isPublished()) {
-      field.getDeclarationList().getDeclarations().stream()
-          .filter(node -> node.getUsages().isEmpty())
-          .forEach(node -> reportIssue(context, node, MESSAGE));
+      AttributeListNode attributeList = field.getAttributeList();
+      if (attributeList == null || attributeList.getAttributes().isEmpty()) {
+        field.getDeclarationList().getDeclarations().stream()
+            .filter(node -> node.getUsages().isEmpty())
+            .forEach(node -> reportIssue(context, node, MESSAGE));
+      }
     }
     return context;
   }
