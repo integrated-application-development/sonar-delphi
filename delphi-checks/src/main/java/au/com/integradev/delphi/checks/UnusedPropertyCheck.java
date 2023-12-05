@@ -45,6 +45,7 @@ public class UnusedPropertyCheck extends DelphiCheck {
 
   private static boolean isUnused(PropertyNameDeclaration declaration) {
     return !declaration.isPublished()
+        && declaration.getAttributeTypes().isEmpty()
         && declaration.getScope().getOccurrencesFor(declaration).isEmpty()
         && declaration.getRedeclarations().stream().allMatch(UnusedPropertyCheck::isUnused);
   }
