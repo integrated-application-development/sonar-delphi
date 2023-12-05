@@ -22,10 +22,12 @@ import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import com.google.common.collect.ComparisonChain;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -51,6 +53,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
   private final NameDeclaration writeDeclaration;
   private final VisibilityType visibility;
   private final List<PropertyNameDeclaration> redeclarations;
+  private final List<Type> attributeTypes;
   private int hashCode;
 
   public PropertyNameDeclarationImpl(
@@ -64,7 +67,8 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
         extractType(node, concreteDeclaration),
         extractReadDeclaration(node, concreteDeclaration),
         extractWriteDeclaration(node, concreteDeclaration),
-        node.getVisibility());
+        node.getVisibility(),
+        extractAttributeTypes(node));
   }
 
   private PropertyNameDeclarationImpl(
@@ -76,7 +80,8 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
       Type type,
       NameDeclaration readDeclaration,
       NameDeclaration writeDeclaration,
-      VisibilityType visibility) {
+      VisibilityType visibility,
+      List<Type> attributeTypes) {
     super(location);
     this.fullyQualifiedName = fullyQualifiedName;
     this.parameters = parameters;
@@ -86,6 +91,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     this.readDeclaration = readDeclaration;
     this.writeDeclaration = writeDeclaration;
     this.visibility = visibility;
+    this.attributeTypes = attributeTypes;
     this.redeclarations = new ArrayList<>();
   }
 
@@ -151,6 +157,15 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     return result;
   }
 
+  private static List<Type> extractAttributeTypes(PropertyNode node) {
+    AttributeListNode attributeList = node.getAttributeList();
+    if (attributeList != null) {
+      return node.getAttributeList().getAttributeTypes();
+    } else {
+      return Collections.emptyList();
+    }
+  }
+
   @Override
   public Type getType() {
     return type;
@@ -208,6 +223,11 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     return isDefaultProperty;
   }
 
+  @Override
+  public List<Type> getAttributeTypes() {
+    return attributeTypes;
+  }
+
   public void addRedeclaration(PropertyNameDeclaration declaration) {
     this.redeclarations.add(declaration);
   }
@@ -230,7 +250,8 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
         type.specialize(context),
         specializeIfNotNull(readDeclaration, context),
         specializeIfNotNull(writeDeclaration, context),
-        visibility);
+        visibility,
+        attributeTypes);
   }
 
   private static NameDeclaration specializeIfNotNull(

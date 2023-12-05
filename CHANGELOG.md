@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ConstSectionNode::isResourceStringSection` API method.
 - `AttributeListNode::getAttributeTypes` API method.
 - `RoutineNameDeclaration::getAttributeTypes` API method.
+- `PropertyNameDeclaration::getAttributeTypes` API method.
 
 ### Changed
 
