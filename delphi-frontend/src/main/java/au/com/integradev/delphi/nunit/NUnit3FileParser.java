@@ -37,8 +37,7 @@ public class NUnit3FileParser extends NUnitFileParser {
     return new TestResult(parseTestCaseStatus(status), duration);
   }
 
-  private static TestResult.Status parseTestCaseStatus(String statusText)
-      throws NUnitParseException {
+  private static TestResult.Status parseTestCaseStatus(String statusText) {
     switch (statusText) {
       case "Passed":
         return Status.PASSED;
