@@ -19,8 +19,6 @@
 package au.com.integradev.delphi.operator;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
@@ -28,7 +26,6 @@ import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
-import org.sonar.plugins.communitydelphi.api.operator.Operator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -36,68 +33,58 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class OperatorInvocableCollectorTest {
   @Test
-  void testUnhandledOperatorShouldThrow() {
-    TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
-    OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    Type unknownType = TypeFactory.unknownType();
-    assertThatThrownBy(() -> collector.collect(unknownType, mock(Operator.class)))
-        .withFailMessage("Unhandled Operator")
-        .isInstanceOf(AssertionError.class);
-  }
-
-  @Test
   void testPointerMathTypeWithInvalidOperatorShouldNotCollectPointerMathOperators() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    Type pchar = typeFactory.getIntrinsic(IntrinsicType.PCHAR);
+
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(
-            collector.collect(typeFactory.getIntrinsic(IntrinsicType.PCHAR), BinaryOperator.DIVIDE))
-        .isEmpty();
+    assertThat(collector.collect(BinaryOperator.DIVIDE, pchar, pchar)).isEmpty();
   }
 
   @Test
   void testVariantShouldCollectInOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    Type variant = typeFactory.getIntrinsic(IntrinsicType.VARIANT);
+
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(
-            collector.collect(typeFactory.getIntrinsic(IntrinsicType.VARIANT), BinaryOperator.IN))
-        .hasSize(1);
+    assertThat(collector.collect(BinaryOperator.IN, variant, variant)).hasSize(1);
   }
 
   @Test
   void testSetShouldCollectAddOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    Type set = typeFactory.emptySet();
+
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(collector.collect(typeFactory.emptySet(), BinaryOperator.ADD)).hasSize(1);
+    assertThat(collector.collect(BinaryOperator.ADD, set, set)).hasSize(1);
   }
 
   @Test
   void testVariantShouldNotCollectAsOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    Type variant = typeFactory.getIntrinsic(IntrinsicType.VARIANT);
+
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(
-            collector.collect(typeFactory.getIntrinsic(IntrinsicType.VARIANT), BinaryOperator.AS))
-        .isEmpty();
+    assertThat(collector.collect(BinaryOperator.AS, variant, variant)).isEmpty();
   }
 
   @Test
   void testDynamicArrayShouldNotCollectAsOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    Type array =
+        ((TypeFactoryImpl) typeFactory)
+            .array(
+                "Foo", typeFactory.getIntrinsic(IntrinsicType.STRING), Set.of(ArrayOption.DYNAMIC));
+
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(
-            collector.collect(
-                ((TypeFactoryImpl) typeFactory)
-                    .array(
-                        "Foo",
-                        typeFactory.getIntrinsic(IntrinsicType.STRING),
-                        Set.of(ArrayOption.DYNAMIC)),
-                BinaryOperator.AS))
-        .isEmpty();
+    assertThat(collector.collect(BinaryOperator.AS, array, array)).isEmpty();
   }
 
   @Test
   void testNothingShouldCollectAddressOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(collector.collect(TypeFactory.untypedType(), UnaryOperator.ADDRESS)).isEmpty();
+    assertThat(collector.collect(UnaryOperator.ADDRESS, TypeFactory.untypedType())).isEmpty();
   }
 }

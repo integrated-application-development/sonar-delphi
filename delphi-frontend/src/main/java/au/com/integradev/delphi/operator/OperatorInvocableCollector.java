@@ -23,6 +23,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
 
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Comparator;
@@ -37,29 +38,35 @@ import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class OperatorInvocableCollector {
   private final TypeFactory typeFactory;
+  private List<Type> operands;
 
   public OperatorInvocableCollector(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
   }
 
-  public Set<Invocable> collect(Type type, Operator operator) {
-    if (operator instanceof BinaryOperator) {
-      return collectBinary(type, (BinaryOperator) operator);
-    }
+  public Set<Invocable> collect(BinaryOperator operator, Type left, Type right) {
+    operands = List.of(left, right);
 
-    if (operator instanceof UnaryOperator) {
-      return collectUnary(type, (UnaryOperator) operator);
-    }
+    Set<Invocable> result = collectBinary(left, operator);
+    result.addAll(collectBinary(right, operator));
 
-    throw new AssertionError("Unhandled Operator");
+    return result;
+  }
+
+  public Set<Invocable> collect(UnaryOperator operator, Type operand) {
+    operands = List.of(operand);
+
+    return collectUnary(operand, operator);
   }
 
   private Set<Invocable> collectBinary(Type type, BinaryOperator operator) {
@@ -76,11 +83,11 @@ public class OperatorInvocableCollector {
     } else if (type.isDynamicArray()) {
       result.addAll(createDynamicArray((CollectionType) type, operator));
     } else if (type.isInteger()) {
-      result.addAll(createInteger(operator));
+      result.addAll(createIntegerBinary(operator));
     } else if (type.isReal()) {
-      result.addAll(createReal(operator));
+      result.addAll(createRealBinary(operator));
     } else if (type.isBoolean()) {
-      result.addAll(createBoolean(operator));
+      result.addAll(createBooleanBinary(operator));
     } else if (type.isString() || type.isChar()) {
       result.addAll(createString(operator));
     }
@@ -229,7 +236,7 @@ public class OperatorInvocableCollector {
     return result;
   }
 
-  private Set<Invocable> createInteger(BinaryOperator operator) {
+  private Set<Invocable> createIntegerBinary(BinaryOperator operator) {
     switch (operator) {
       case AND:
         return createBitwiseAnd();
@@ -238,17 +245,17 @@ public class OperatorInvocableCollector {
       case XOR:
         return createBitwiseOr("Xor");
       case ADD:
-        return createArithmeticBinary("Add");
+        return createIntegerArithmeticBinary("Add");
       case SUBTRACT:
-        return createArithmeticBinary("Subtract");
+        return createIntegerArithmeticBinary("Subtract");
       case MULTIPLY:
-        return createArithmeticBinary("Multiply");
+        return createIntegerArithmeticBinary("Multiply");
       case DIVIDE:
         return createDivide();
       case DIV:
-        return createIntegerBinary("IntDivide");
+        return createIntegerArithmeticBinary("IntDivide");
       case MOD:
-        return createIntegerBinary("Modulus");
+        return createIntegerArithmeticBinary("Modulus");
       case SHL:
         return createShift("Left");
       case SHR:
@@ -258,14 +265,14 @@ public class OperatorInvocableCollector {
     }
   }
 
-  private Set<Invocable> createReal(BinaryOperator operator) {
+  private Set<Invocable> createRealBinary(BinaryOperator operator) {
     switch (operator) {
       case ADD:
-        return createArithmeticBinary("Add");
+        return createRealArithmeticBinary("Add");
       case SUBTRACT:
-        return createArithmeticBinary("Subtract");
+        return createRealArithmeticBinary("Subtract");
       case MULTIPLY:
-        return createArithmeticBinary("Multiply");
+        return createRealArithmeticBinary("Multiply");
       case DIVIDE:
         return createDivide();
       default:
@@ -273,7 +280,7 @@ public class OperatorInvocableCollector {
     }
   }
 
-  private Set<Invocable> createBoolean(BinaryOperator operator) {
+  private Set<Invocable> createBooleanBinary(BinaryOperator operator) {
     switch (operator) {
       case AND:
         return createLogical("And");
@@ -296,9 +303,12 @@ public class OperatorInvocableCollector {
   }
 
   private Set<Invocable> createBitwiseAnd() {
-    Set<Invocable> result = new HashSet<>();
-
     final String NAME = "BitwiseAnd";
+
+    Set<Invocable> result = createNativeIntegerBinary(NAME);
+    if (!result.isEmpty()) {
+      return result;
+    }
 
     Type int8 = typeFactory.getIntrinsic(IntrinsicType.SHORTINT);
     Type int16 = typeFactory.getIntrinsic(IntrinsicType.SMALLINT);
@@ -310,12 +320,17 @@ public class OperatorInvocableCollector {
     Type uint32 = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
     Type uint64 = typeFactory.getIntrinsic(IntrinsicType.UINT64);
 
+    Type uint15 = ((TypeFactoryImpl) typeFactory).anonymousUInt15();
+    Type uint31 = ((TypeFactoryImpl) typeFactory).anonymousUInt31();
+
     addAll(
         result,
         new OperatorIntrinsic(NAME, List.of(int8, int8), int8),
         new OperatorIntrinsic(NAME, List.of(int16, int16), int16),
         new OperatorIntrinsic(NAME, List.of(uint8, uint8), uint8),
-        new OperatorIntrinsic(NAME, List.of(uint16, uint16), uint16));
+        new OperatorIntrinsic(NAME, List.of(uint15, uint15), uint15),
+        new OperatorIntrinsic(NAME, List.of(uint16, uint16), uint16),
+        new OperatorIntrinsic(NAME, List.of(uint31, uint31), uint31));
     addAll(result, createWithInterleavedTypes(NAME, int32, uint32));
     addAll(result, createWithInterleavedTypes(NAME, int64, uint64));
 
@@ -323,43 +338,111 @@ public class OperatorInvocableCollector {
   }
 
   private Set<Invocable> createBitwiseOr(String suffix) {
-    Set<Invocable> result;
     String name = "Bitwise" + suffix;
+
+    Set<Invocable> result = createNativeIntegerBinary(name);
+    if (!result.isEmpty()) {
+      return result;
+    }
 
     Type int8 = typeFactory.getIntrinsic(IntrinsicType.SHORTINT);
     Type int16 = typeFactory.getIntrinsic(IntrinsicType.SMALLINT);
     Type int32 = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
     Type int64 = typeFactory.getIntrinsic(IntrinsicType.INT64);
-    result = createWithInterleavedTypes(name, int8, int16, int32, int64);
 
     Type uint8 = typeFactory.getIntrinsic(IntrinsicType.BYTE);
     Type uint16 = typeFactory.getIntrinsic(IntrinsicType.WORD);
     Type uint32 = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
     Type uint64 = typeFactory.getIntrinsic(IntrinsicType.UINT64);
-    result.addAll(createWithInterleavedTypes(name, uint8, uint16, uint32, uint64));
+
+    Type uint15 = ((TypeFactoryImpl) typeFactory).anonymousUInt15();
+    Type uint31 = ((TypeFactoryImpl) typeFactory).anonymousUInt31();
+
+    addAll(
+        result,
+        new OperatorIntrinsic(name, List.of(int8, int8), int8),
+        new OperatorIntrinsic(name, List.of(int16, int16), int16),
+        new OperatorIntrinsic(name, List.of(uint8, uint8), uint8),
+        new OperatorIntrinsic(name, List.of(uint15, uint15), uint15),
+        new OperatorIntrinsic(name, List.of(uint16, uint16), uint16),
+        new OperatorIntrinsic(name, List.of(int32, int32), int32),
+        new OperatorIntrinsic(name, List.of(int32, int64), int64),
+        new OperatorIntrinsic(name, List.of(int64, int32), int64),
+        new OperatorIntrinsic(name, List.of(uint31, uint31), uint31),
+        new OperatorIntrinsic(name, List.of(uint32, uint31), uint32),
+        new OperatorIntrinsic(name, List.of(uint31, uint32), uint32),
+        new OperatorIntrinsic(name, List.of(uint32, uint32), uint32),
+        new OperatorIntrinsic(name, List.of(int64, int64), int64),
+        new OperatorIntrinsic(name, List.of(int64, uint64), uint64),
+        new OperatorIntrinsic(name, List.of(uint64, int64), uint64),
+        new OperatorIntrinsic(name, List.of(uint64, uint64), uint64));
 
     return result;
   }
 
-  private Set<Invocable> createArithmeticBinary(String name) {
-    Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
-    Type extended = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
+  private Set<Invocable> createNativeIntegerBinary(String name) {
+    Set<Invocable> result = Sets.newHashSet();
 
-    return addAll(
-        createIntegerArithmeticBinary(name),
-        new OperatorIntrinsic(name, List.of(extended, extended), extended),
-        new OperatorIntrinsic(name, List.of(integer, extended), extended),
-        new OperatorIntrinsic(name, List.of(extended, integer), extended));
+    Type nativeInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    Type nativeUInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT);
+
+    if (!nativeInt.isWeakAlias()) {
+      if (operands.stream().allMatch(o -> skipAlias(o).is(nativeInt))) {
+        result.add(new OperatorIntrinsic(name, List.of(nativeInt, nativeInt), nativeInt));
+      } else if (operands.stream().allMatch(o -> skipAlias(o).is(nativeUInt))) {
+        result.add(new OperatorIntrinsic(name, List.of(nativeUInt, nativeUInt), nativeUInt));
+      }
+    }
+
+    return result;
   }
 
   private Set<Invocable> createIntegerArithmeticBinary(String name) {
-    Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    Set<Invocable> result = createNativeIntegerBinary(name);
+    if (!result.isEmpty()) {
+      return result;
+    }
+
+    IntegerType integer = (IntegerType) typeFactory.getIntrinsic(IntrinsicType.INTEGER);
     Type int64 = typeFactory.getIntrinsic(IntrinsicType.INT64);
     Type cardinal = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
     Type uint64 = typeFactory.getIntrinsic(IntrinsicType.UINT64);
-    return addAll(
-        createWithInterleavedTypes(name, integer, int64),
-        createWithInterleavedTypes(name, cardinal, uint64));
+    Type uint31 = ((TypeFactoryImpl) typeFactory).anonymousUInt31();
+
+    addAll(
+        result,
+        new OperatorIntrinsic(name, List.of(integer, integer), integer),
+        new OperatorIntrinsic(name, List.of(integer, int64), int64),
+        new OperatorIntrinsic(name, List.of(int64, integer), int64),
+        new OperatorIntrinsic(name, List.of(uint31, uint31), uint31),
+        new OperatorIntrinsic(name, List.of(cardinal, uint31), cardinal),
+        new OperatorIntrinsic(name, List.of(uint31, cardinal), cardinal),
+        new OperatorIntrinsic(name, List.of(cardinal, cardinal), cardinal),
+        new OperatorIntrinsic(name, List.of(integer, cardinal), int64),
+        new OperatorIntrinsic(name, List.of(cardinal, integer), int64),
+        new OperatorIntrinsic(name, List.of(int64, int64), int64),
+        new OperatorIntrinsic(name, List.of(int64, uint64), uint64),
+        new OperatorIntrinsic(name, List.of(uint64, int64), uint64),
+        new OperatorIntrinsic(name, List.of(uint64, uint64), uint64));
+
+    return result;
+  }
+
+  private static Type skipAlias(Type type) {
+    while (type.isAlias()) {
+      type = ((AliasType) type).aliasedType();
+    }
+    return type;
+  }
+
+  private Set<Invocable> createRealArithmeticBinary(String name) {
+    Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    Type extended = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
+
+    return Sets.newHashSet(
+        new OperatorIntrinsic(name, List.of(extended, extended), extended),
+        new OperatorIntrinsic(name, List.of(integer, extended), extended),
+        new OperatorIntrinsic(name, List.of(extended, integer), extended));
   }
 
   private Set<Invocable> createWithInterleavedTypes(String name, Type... types) {
@@ -396,34 +479,29 @@ public class OperatorInvocableCollector {
     return new OperatorIntrinsic("In", List.of(ANY_ORDINAL, ANY_SET), bool);
   }
 
-  private Set<Invocable> createIntegerBinary(String name) {
-    Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
-    Type int64 = typeFactory.getIntrinsic(IntrinsicType.INT64);
-    Type cardinal = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
-    Type uint64 = typeFactory.getIntrinsic(IntrinsicType.UINT64);
-
-    return Sets.newHashSet(
-        new OperatorIntrinsic(name, List.of(integer, integer), integer),
-        new OperatorIntrinsic(name, List.of(int64, integer), int64),
-        new OperatorIntrinsic(name, List.of(integer, int64), int64),
-        new OperatorIntrinsic(name, List.of(int64, int64), int64),
-        new OperatorIntrinsic(name, List.of(cardinal, cardinal), cardinal),
-        new OperatorIntrinsic(name, List.of(cardinal, uint64), uint64),
-        new OperatorIntrinsic(name, List.of(uint64, cardinal), uint64),
-        new OperatorIntrinsic(name, List.of(uint64, uint64), uint64));
-  }
-
   private Set<Invocable> createShift(String prefix) {
     String name = prefix + "Shift";
 
     Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    Type nativeInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    Type nativeUInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT);
+
+    if (!nativeInt.isWeakAlias()) {
+      Type type = skipAlias(operands.get(0));
+      if (type.is(nativeInt) || type.is(nativeUInt)) {
+        return Sets.newHashSet(new OperatorIntrinsic(name, List.of(type, integer), type));
+      }
+    }
+
     Type int64 = typeFactory.getIntrinsic(IntrinsicType.INT64);
     Type cardinal = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
     Type uint64 = typeFactory.getIntrinsic(IntrinsicType.UINT64);
+    Type uint31 = ((TypeFactoryImpl) typeFactory).anonymousUInt31();
 
     return Sets.newHashSet(
         new OperatorIntrinsic(name, List.of(integer, integer), integer),
         new OperatorIntrinsic(name, List.of(cardinal, integer), cardinal),
+        new OperatorIntrinsic(name, List.of(uint31, integer), uint31),
         new OperatorIntrinsic(name, List.of(int64, integer), int64),
         new OperatorIntrinsic(name, List.of(uint64, integer), uint64));
   }
@@ -431,21 +509,33 @@ public class OperatorInvocableCollector {
   private Set<Invocable> collectUnary(Type type, UnaryOperator operator) {
     Set<Invocable> result = new HashSet<>();
 
-    if (type.isStruct()) {
-      result.addAll(collectOperatorOverloads((StructType) type, operator));
+    if (type.isInteger()) {
+      result.addAll(createIntegerUnary(operator));
+    } else if (type.isReal()) {
+      result.addAll(createRealUnary(operator));
+    } else if (type.isBoolean()) {
+      result.addAll(createBooleanUnary(operator));
     } else if (type.isVariant()) {
       result.add(createVariantUnary(operator));
+    } else if (type.isStruct()) {
+      result.addAll(collectOperatorOverloads((StructType) type, operator));
     }
 
+    return result;
+  }
+
+  private Set<Invocable> createIntegerUnary(UnaryOperator operator) {
+    Set<Invocable> result = Sets.newHashSet();
+
     switch (operator) {
-      case NOT:
-        result.addAll(createNot());
+      case NEGATE:
+        result.addAll(createNegative());
         break;
       case PLUS:
-        result.addAll(createArithmeticUnary("Positive"));
+        result.addAll(createPositive());
         break;
-      case NEGATE:
-        result.addAll(createArithmeticUnary("Negative"));
+      case NOT:
+        result.addAll(createBitwiseNot());
         break;
       default:
         // do nothing
@@ -454,25 +544,74 @@ public class OperatorInvocableCollector {
     return result;
   }
 
-  private Set<Invocable> createNot() {
-    Type bool = typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
-    return addAll(
-        createIntegerUnary("OnesComplement"),
-        new OperatorIntrinsic("LogicalNot", List.of(bool), bool));
-  }
+  private Set<Invocable> createNegative() {
+    final String NAME = "Negative";
 
-  private Set<Invocable> createArithmeticUnary(String name) {
-    Type extended = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
-    return addAll(
-        createIntegerUnary(name), new OperatorIntrinsic(name, List.of(extended), extended));
-  }
+    Type operand = operands.get(0);
 
-  private Set<Invocable> createIntegerUnary(String name) {
-    Type integer = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    if (operand.size() > 4) {
+      return Sets.newHashSet(new OperatorIntrinsic(NAME, List.of(operand), operand));
+    }
+
+    Type int32 = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    Type uint32 = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
     Type int64 = typeFactory.getIntrinsic(IntrinsicType.INT64);
+
     return Sets.newHashSet(
-        new OperatorIntrinsic(name, List.of(integer), integer),
-        new OperatorIntrinsic(name, List.of(int64), int64));
+        new OperatorIntrinsic(NAME, List.of(int32), int32),
+        new OperatorIntrinsic(NAME, List.of(uint32), int64));
+  }
+
+  private Set<Invocable> createPositive() {
+    final String NAME = "Positive";
+
+    Type operand = operands.get(0);
+
+    if (operand.size() >= 4) {
+      return Sets.newHashSet(new OperatorIntrinsic(NAME, List.of(operand), operand));
+    }
+
+    Type int32 = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    Type uint31 = ((TypeFactoryImpl) typeFactory).anonymousUInt31();
+
+    return Sets.newHashSet(
+        new OperatorIntrinsic(NAME, List.of(int32), int32),
+        new OperatorIntrinsic(NAME, List.of(uint31), uint31));
+  }
+
+  private Set<Invocable> createBitwiseNot() {
+    Type operand = operands.get(0);
+    return Sets.newHashSet(new OperatorIntrinsic("OnesComplement", List.of(operand), operand));
+  }
+
+  private Set<Invocable> createRealUnary(UnaryOperator operator) {
+    Set<Invocable> result = Sets.newHashSet();
+
+    Type extended = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
+
+    switch (operator) {
+      case PLUS:
+        result.add(new OperatorIntrinsic("Positive", List.of(extended), extended));
+        break;
+      case NEGATE:
+        result.add(new OperatorIntrinsic("Negative", List.of(extended), extended));
+        break;
+      default:
+        // do nothing
+    }
+
+    return result;
+  }
+
+  private Set<Invocable> createBooleanUnary(UnaryOperator operator) {
+    Set<Invocable> result = Sets.newHashSet();
+
+    if (operator == UnaryOperator.NOT) {
+      Type bool = typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
+      result.add(new OperatorIntrinsic("LogicalNot", List.of(bool), bool));
+    }
+
+    return result;
   }
 
   private Invocable createVariantUnary(UnaryOperator operator) {

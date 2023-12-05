@@ -80,6 +80,8 @@ public class TypeFactoryImpl implements TypeFactory {
 
   private final TypeAliasGenerator typeAliasGenerator;
   private final EnumMap<IntrinsicType, Type> intrinsicTypes;
+  private final IntegerSubrangeType anonymousUInt15;
+  private final IntegerSubrangeType anonymousUInt31;
   private final PointerType nilPointer;
   private final FileType untypedFile;
   private final CollectionType emptySet;
@@ -92,7 +94,20 @@ public class TypeFactoryImpl implements TypeFactory {
     this.nilPointer = pointerTo("nil", TypeFactory.voidType());
     this.untypedFile = fileOf(TypeFactory.untypedType());
     this.emptySet = new SetTypeImpl(TypeFactory.voidType());
+
     createIntrinsicTypes();
+
+    this.anonymousUInt15 =
+        subrange(
+            ":AnonymousUInt15",
+            BigInteger.ZERO,
+            ((IntegerType) getIntrinsic(IntrinsicType.SMALLINT)).max());
+
+    this.anonymousUInt31 =
+        subrange(
+            ":AnonymousUInt31",
+            BigInteger.ZERO,
+            ((IntegerType) getIntrinsic(IntrinsicType.INTEGER)).max());
   }
 
   private boolean isReal48Bit() {
@@ -540,6 +555,14 @@ public class TypeFactoryImpl implements TypeFactory {
         node.getFor().getType(),
         kind,
         getAttributeTypes(declaration));
+  }
+
+  public IntegerSubrangeType anonymousUInt15() {
+    return anonymousUInt15;
+  }
+
+  public IntegerSubrangeType anonymousUInt31() {
+    return anonymousUInt31;
   }
 
   @Override

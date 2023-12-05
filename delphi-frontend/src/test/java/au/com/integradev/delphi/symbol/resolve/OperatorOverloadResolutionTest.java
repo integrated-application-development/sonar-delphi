@@ -27,95 +27,58 @@ import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import com.google.common.collect.Iterables;
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigInteger;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.aggregator.ArgumentsAggregationException;
 import org.junit.jupiter.params.aggregator.ArgumentsAggregator;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
-import org.sonar.plugins.communitydelphi.api.operator.Operator;
+import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
+import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class OperatorOverloadResolutionTest {
   private static final TypeFactory TYPE_FACTORY =
       new TypeFactoryImpl(Toolchain.DCC64, DelphiProperties.COMPILER_VERSION_DEFAULT);
 
-  // For an explanation of this data (and reproduction steps):
-  // https://github.com/integrated-application-development/sonar-delphi/issues/107#issuecomment-1830841874
-  private static final String OVERLOAD_RESOLUTION_TABLE =
-      "ShortInt, ShortInt, Integer, ShortInt, ShortInt, Integer, Integer, Extended\n"
-          + "ShortInt, SmallInt, Integer, SmallInt, SmallInt, Integer, Integer, Extended\n"
-          + "ShortInt, Integer, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "ShortInt, Int64, Int64, Int64, Int64, Integer, Int64, Extended\n"
-          + "ShortInt, NativeInt, Int64, Int64, Int64, Integer, Int64, Extended\n"
-          + "ShortInt, Byte, Integer, SmallInt, SmallInt, Integer, Integer, Extended\n"
-          + "ShortInt, Word, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "ShortInt, Cardinal, Int64, Int64, Cardinal, Integer, Cardinal, Extended\n"
-          + "ShortInt, UInt64, Int64, Int64, UInt64, Integer, UInt64, Extended\n"
-          + "ShortInt, NativeUInt, Int64, Int64, UInt64, Integer, UInt64, Extended\n"
-          + "SmallInt, SmallInt, Integer, SmallInt, SmallInt, Integer, Integer, Extended\n"
-          + "SmallInt, Integer, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "SmallInt, Int64, Int64, Int64, Int64, Integer, Int64, Extended\n"
-          + "SmallInt, NativeInt, Int64, Int64, Int64, Integer, Int64, Extended\n"
-          + "SmallInt, Byte, Integer, SmallInt, SmallInt, Integer, Integer, Extended\n"
-          + "SmallInt, Word, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "SmallInt, Cardinal, Int64, Int64, Cardinal, Integer, Cardinal, Extended\n"
-          + "SmallInt, UInt64, Int64, Int64, UInt64, Integer, UInt64, Extended\n"
-          + "SmallInt, NativeUInt, Int64, Int64, UInt64, Integer, UInt64, Extended\n"
-          + "Integer, Integer, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "Integer, Int64, Int64, Int64, Int64, Integer, Int64, Extended\n"
-          + "Integer, NativeInt, Int64, Int64, Int64, Integer, Int64, Extended\n"
-          + "Integer, Byte, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "Integer, Word, Integer, Integer, Integer, Integer, Integer, Extended\n"
-          + "Integer, Cardinal, Int64, Int64, Cardinal, Integer, Cardinal, Extended\n"
-          + "Integer, UInt64, Int64, Int64, UInt64, Integer, UInt64, Extended\n"
-          + "Integer, NativeUInt, Int64, Int64, UInt64, Integer, UInt64, Extended\n"
-          + "Int64, Int64, Int64, Int64, Int64, Int64, Int64, Extended\n"
-          + "Int64, NativeInt, Int64, Int64, Int64, Int64, Int64, Extended\n"
-          + "Int64, Byte, Int64, Int64, Int64, Int64, Integer, Extended\n"
-          + "Int64, Word, Int64, Int64, Int64, Int64, Integer, Extended\n"
-          + "Int64, Cardinal, Int64, Int64, Int64, Int64, Cardinal, Extended\n"
-          + "Int64, UInt64, Int64, Int64, UInt64, Int64, UInt64, Extended\n"
-          + "Int64, NativeUInt, Int64, Int64, UInt64, Int64, UInt64, Extended\n"
-          + "NativeInt, NativeInt, Int64, Int64, Int64, Int64, Int64, Extended\n"
-          + "NativeInt, Byte, Int64, Int64, Int64, Int64, Integer, Extended\n"
-          + "NativeInt, Word, Int64, Int64, Int64, Int64, Integer, Extended\n"
-          + "NativeInt, Cardinal, Int64, Int64, Int64, Int64, Cardinal, Extended\n"
-          + "NativeInt, UInt64, Int64, Int64, UInt64, Int64, UInt64, Extended\n"
-          + "NativeInt, NativeUInt, Int64, Int64, UInt64, Int64, UInt64, Extended\n"
-          + "Byte, Byte, Integer, Byte, Byte, Integer, Integer, Extended\n"
-          + "Byte, Word, Integer, Word, Word, Integer, Integer, Extended\n"
-          + "Byte, Cardinal, Cardinal, Cardinal, Cardinal, Integer, Cardinal, Extended\n"
-          + "Byte, UInt64, UInt64, UInt64, UInt64, Integer, UInt64, Extended\n"
-          + "Byte, NativeUInt, UInt64, UInt64, UInt64, Integer, UInt64, Extended\n"
-          + "Word, Word, Integer, Word, Word, Integer, Integer, Extended\n"
-          + "Word, Cardinal, Cardinal, Cardinal, Cardinal, Integer, Cardinal, Extended\n"
-          + "Word, UInt64, UInt64, UInt64, UInt64, Integer, UInt64, Extended\n"
-          + "Word, NativeUInt, UInt64, UInt64, UInt64, Integer, UInt64, Extended\n"
-          + "Cardinal, Cardinal, Cardinal, Cardinal, Cardinal, Cardinal, Cardinal, Extended\n"
-          + "Cardinal, UInt64, UInt64, UInt64, UInt64, Cardinal, UInt64, Extended\n"
-          + "Cardinal, NativeUInt, UInt64, UInt64, UInt64, Cardinal, UInt64, Extended\n"
-          + "UInt64, UInt64, UInt64, UInt64, UInt64, UInt64, UInt64, Extended\n"
-          + "UInt64, NativeUInt, UInt64, UInt64, UInt64, UInt64, UInt64, Extended\n"
-          + "NativeUInt, NativeUInt, UInt64, UInt64, UInt64, UInt64, UInt64, Extended";
+  // For more information:
+  // https://github.com/integrated-application-development/sonar-delphi/issues/107#issuecomment-1841868071
+  private static final String BINARY_OVERLOADS = "binary-overload-resolution.csv";
+
+  // For more information:
+  // https://github.com/integrated-application-development/sonar-delphi/issues/107#issuecomment-1840094351
+  private static final String UNARY_OVERLOADS = "unary-overload-resolution.csv";
 
   static class ArithmeticDataAggregator implements ArgumentsAggregator {
     @Override
     public Object aggregateArguments(
         ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
         throws ArgumentsAggregationException {
-      return new ExpressionData(
+      return new BinaryExpressionData(
           argumentsAccessor.getString(0),
           argumentsAccessor.getString(1),
           argumentsAccessor.getString(2));
+    }
+  }
+
+  static class SubtractDataAggregator implements ArgumentsAggregator {
+    @Override
+    public Object aggregateArguments(
+        ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
+        throws ArgumentsAggregationException {
+      return new BinaryExpressionData(
+          argumentsAccessor.getString(0),
+          argumentsAccessor.getString(1),
+          argumentsAccessor.getString(3));
     }
   }
 
@@ -124,10 +87,10 @@ class OperatorOverloadResolutionTest {
     public Object aggregateArguments(
         ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
         throws ArgumentsAggregationException {
-      return new ExpressionData(
+      return new BinaryExpressionData(
           argumentsAccessor.getString(0),
           argumentsAccessor.getString(1),
-          argumentsAccessor.getString(3));
+          argumentsAccessor.getString(4));
     }
   }
 
@@ -136,10 +99,10 @@ class OperatorOverloadResolutionTest {
     public Object aggregateArguments(
         ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
         throws ArgumentsAggregationException {
-      return new ExpressionData(
+      return new BinaryExpressionData(
           argumentsAccessor.getString(0),
           argumentsAccessor.getString(1),
-          argumentsAccessor.getString(4));
+          argumentsAccessor.getString(5));
     }
   }
 
@@ -148,10 +111,10 @@ class OperatorOverloadResolutionTest {
     public Object aggregateArguments(
         ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
         throws ArgumentsAggregationException {
-      return new ExpressionData(
+      return new BinaryExpressionData(
           argumentsAccessor.getString(0),
           argumentsAccessor.getString(1),
-          argumentsAccessor.getString(5));
+          argumentsAccessor.getString(6));
     }
   }
 
@@ -160,10 +123,10 @@ class OperatorOverloadResolutionTest {
     public Object aggregateArguments(
         ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
         throws ArgumentsAggregationException {
-      return new ExpressionData(
+      return new BinaryExpressionData(
           argumentsAccessor.getString(1),
           argumentsAccessor.getString(0),
-          argumentsAccessor.getString(6));
+          argumentsAccessor.getString(7));
     }
   }
 
@@ -172,19 +135,49 @@ class OperatorOverloadResolutionTest {
     public Object aggregateArguments(
         ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
         throws ArgumentsAggregationException {
-      return new ExpressionData(
+      return new BinaryExpressionData(
           argumentsAccessor.getString(0),
           argumentsAccessor.getString(1),
-          argumentsAccessor.getString(7));
+          argumentsAccessor.getString(8));
     }
   }
 
-  static class ExpressionData {
+  static class NegativeDataAggregator implements ArgumentsAggregator {
+    @Override
+    public Object aggregateArguments(
+        ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
+        throws ArgumentsAggregationException {
+      return new UnaryExpressionData(
+          argumentsAccessor.getString(0), argumentsAccessor.getString(1));
+    }
+  }
+
+  static class PositiveDataAggregator implements ArgumentsAggregator {
+    @Override
+    public Object aggregateArguments(
+        ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
+        throws ArgumentsAggregationException {
+      return new UnaryExpressionData(
+          argumentsAccessor.getString(0), argumentsAccessor.getString(2));
+    }
+  }
+
+  static class NotDataAggregator implements ArgumentsAggregator {
+    @Override
+    public Object aggregateArguments(
+        ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext)
+        throws ArgumentsAggregationException {
+      return new UnaryExpressionData(
+          argumentsAccessor.getString(0), argumentsAccessor.getString(3));
+    }
+  }
+
+  static class BinaryExpressionData {
     private final String left;
     private final String right;
     private final String result;
 
-    ExpressionData(String left, String right, String result) {
+    BinaryExpressionData(String left, String right, String result) {
       this.left = left;
       this.right = right;
       this.result = result;
@@ -203,126 +196,179 @@ class OperatorOverloadResolutionTest {
     }
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
+  static class UnaryExpressionData {
+    private final String operand;
+    private final String result;
+
+    UnaryExpressionData(String operand, String result) {
+      this.operand = operand;
+      this.result = result;
+    }
+
+    public String getOperand() {
+      return operand;
+    }
+
+    public String getResult() {
+      return result;
+    }
+  }
+
+  @CsvFileSource(resources = BINARY_OVERLOADS)
   @ParameterizedTest(name = "{0} + {1} = {2}")
   void testAddOperatorOverloadResolution(
-      @AggregateWith(ArithmeticDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ArithmeticDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.ADD);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} - {1} = {2}")
-  void testSubtractOperatorOverloadResolution(
-      @AggregateWith(ArithmeticDataAggregator.class) ExpressionData expressionData) {
-    assertResolved(expressionData, BinaryOperator.SUBTRACT);
-  }
-
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
+  @CsvFileSource(resources = BINARY_OVERLOADS)
   @ParameterizedTest(name = "{0} * {1} = {2}")
   void testMultiplyOperatorOverloadResolution(
-      @AggregateWith(ArithmeticDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ArithmeticDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.MULTIPLY);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
+  @CsvFileSource(resources = BINARY_OVERLOADS)
   @ParameterizedTest(name = "{0} div {1} = {2}")
   void testDivOperatorOverloadResolution(
-      @AggregateWith(ArithmeticDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ArithmeticDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.DIV);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
+  @CsvFileSource(resources = BINARY_OVERLOADS)
   @ParameterizedTest(name = "{0} mod {1} = {2}")
   void testModOperatorOverloadResolution(
-      @AggregateWith(ArithmeticDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ArithmeticDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.MOD);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} or {1} = {3}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} - {1} = {3}")
+  void testSubtractOperatorOverloadResolution(
+      @AggregateWith(ArithmeticDataAggregator.class) BinaryExpressionData expressionData) {
+    assertResolved(expressionData, BinaryOperator.SUBTRACT);
+  }
+
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} or {1} = {4}")
   void testOrOperatorOverloadResolution(
-      @AggregateWith(BitwiseOrDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(BitwiseOrDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.OR);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} xor {1} = {3}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} xor {1} = {4}")
   void testXorOperatorOverloadResolution(
-      @AggregateWith(BitwiseOrDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(BitwiseOrDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.XOR);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} and {1} = {4}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} and {1} = {5}")
   void testAndOperatorOverloadResolution(
-      @AggregateWith(BitwiseAndDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(BitwiseAndDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.AND);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} shl {1} = {5}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} shl {1} = {6}")
   void testShlOperatorOverloadResolution(
-      @AggregateWith(ShiftDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ShiftDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.SHL);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} shr {1} = {5}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} shr {1} = {6}")
   void testShrOperatorOverloadResolution(
-      @AggregateWith(ShiftDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ShiftDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.SHR);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{1} shl {0} = {6}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{1} shl {0} = {7}")
   void testShlWithFlippedOperandsOperatorOverloadResolution(
-      @AggregateWith(ShiftWithFlippedOperandsDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ShiftWithFlippedOperandsDataAggregator.class)
+          BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.SHL);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{1} shr {0} = {6}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{1} shr {0} = {7}")
   void testShrWithFlippedOperandsOperatorOverloadResolution(
-      @AggregateWith(ShiftWithFlippedOperandsDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(ShiftWithFlippedOperandsDataAggregator.class)
+          BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.SHR);
   }
 
-  @CsvSource(textBlock = OVERLOAD_RESOLUTION_TABLE)
-  @ParameterizedTest(name = "{0} / {1} = {7}")
+  @CsvFileSource(resources = BINARY_OVERLOADS)
+  @ParameterizedTest(name = "{0} / {1} = {8}")
   void testDivideOperatorOverloadResolution(
-      @AggregateWith(DivideDataAggregator.class) ExpressionData expressionData) {
+      @AggregateWith(DivideDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.DIVIDE);
   }
 
-  private static void assertResolved(ExpressionData expressionData, Operator operator) {
+  @CsvFileSource(resources = UNARY_OVERLOADS)
+  @ParameterizedTest(name = "-{0} = {1}")
+  void testNegativeOperatorOverloadResolution(
+      @AggregateWith(NegativeDataAggregator.class) UnaryExpressionData expressionData) {
+    assertResolved(expressionData, UnaryOperator.NEGATE);
+  }
+
+  @CsvFileSource(resources = UNARY_OVERLOADS)
+  @ParameterizedTest(name = "+{0} = {2}")
+  void testPositiveOperatorOverloadResolution(
+      @AggregateWith(PositiveDataAggregator.class) UnaryExpressionData expressionData) {
+    assertResolved(expressionData, UnaryOperator.PLUS);
+  }
+
+  @CsvFileSource(resources = UNARY_OVERLOADS)
+  @ParameterizedTest(name = "not {0} = {3}")
+  void testNotOperatorOverloadResolution(
+      @AggregateWith(NotDataAggregator.class) UnaryExpressionData expressionData) {
+    assertResolved(expressionData, UnaryOperator.NOT);
+  }
+
+  private static void assertResolved(BinaryExpressionData expressionData, BinaryOperator operator) {
     String left = expressionData.getLeft();
     String right = expressionData.getRight();
     String result = expressionData.getResult();
 
-    assertThat(resolveOperatorOverload(left, right, operator))
-        .isEqualTo(intrinsicType(result).getImage());
+    assertThat(resolveOperatorOverload(operator, getType(left), getType(right)))
+        .isEqualTo(getType(result).getImage());
   }
 
-  private static String resolveOperatorOverload(String left, String right, Operator operator) {
-    Type leftType = intrinsicType(left);
-    Type rightType = intrinsicType(right);
+  private static void assertResolved(UnaryExpressionData expressionData, UnaryOperator operator) {
+    String operand = expressionData.getOperand();
+    String result = expressionData.getResult();
 
-    ExpressionNode leftExpr = mockExpressionNode(leftType);
-    ExpressionNode rightExpr = mockExpressionNode(rightType);
+    assertThat(resolveOperatorOverload(operator, getType(operand)))
+        .isEqualTo(getType(result).getImage());
+  }
 
+  private static String resolveOperatorOverload(BinaryOperator operator, Type left, Type right) {
     InvocationResolver resolver = new InvocationResolver();
+    resolver.addArgument(new InvocationArgument(mockExpressionNode(left)));
+    resolver.addArgument(new InvocationArgument(mockExpressionNode(right)));
 
-    OperatorInvocableCollector collector = new OperatorInvocableCollector(TYPE_FACTORY);
+    createOperatorInvocables(operator, left, right).stream()
+        .map(InvocationCandidate::new)
+        .forEach(resolver::addCandidate);
 
-    List.of(new InvocationArgument(leftExpr), new InvocationArgument(rightExpr))
-        .forEach(
-            argument -> {
-              resolver.addArgument(argument);
-              collector.collect(argument.getType(), operator).stream()
-                  .map(InvocationCandidate::new)
-                  .forEach(resolver::addCandidate);
-            });
+    return resolveOperatorOverload(resolver);
+  }
 
+  private static String resolveOperatorOverload(UnaryOperator operator, Type operand) {
+    InvocationResolver resolver = new InvocationResolver();
+    resolver.addArgument(new InvocationArgument(mockExpressionNode(operand)));
+
+    createOperatorInvocables(operator, operand).stream()
+        .map(InvocationCandidate::new)
+        .forEach(resolver::addCandidate);
+
+    return resolveOperatorOverload(resolver);
+  }
+
+  private static String resolveOperatorOverload(InvocationResolver resolver) {
     resolver.processCandidates();
 
     Set<InvocationCandidate> bestCandidate = resolver.chooseBest();
@@ -336,13 +382,69 @@ class OperatorOverloadResolutionTest {
     return Iterables.getLast(bestCandidate).getData().getReturnType().getImage();
   }
 
-  private static Type intrinsicType(String simpleName) {
-    IntrinsicType intrinsic =
-        Arrays.stream(IntrinsicType.values())
-            .filter(it -> it.simpleName().equals(simpleName))
-            .findFirst()
-            .orElseThrow();
-    return TYPE_FACTORY.getIntrinsic(intrinsic);
+  private static Set<Invocable> createOperatorInvocables(
+      BinaryOperator operator, Type left, Type right) {
+    OperatorInvocableCollector factory = new OperatorInvocableCollector(TYPE_FACTORY);
+    return factory.collect(operator, left, right);
+  }
+
+  private static Set<Invocable> createOperatorInvocables(UnaryOperator operator, Type operand) {
+    OperatorInvocableCollector factory = new OperatorInvocableCollector(TYPE_FACTORY);
+    return factory.collect(operator, operand);
+  }
+
+  private static Type getType(String name) {
+    switch (name) {
+      case "Int8":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.SHORTINT);
+      case "Int16":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.SMALLINT);
+      case "Int32":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.INTEGER);
+      case "Int64":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.INT64);
+      case "NativeInt":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.NATIVEINT);
+      case "UInt8":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.BYTE);
+      case "UInt16":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.WORD);
+      case "UInt32":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.CARDINAL);
+      case "UInt64":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.UINT64);
+      case "NativeUInt":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.NATIVEUINT);
+      case "UInt16_Subrange":
+        return ((TypeFactoryImpl) TYPE_FACTORY).anonymousUInt15();
+      case "UInt32_Subrange":
+        return ((TypeFactoryImpl) TYPE_FACTORY).anonymousUInt31();
+      case "Extended":
+        return TYPE_FACTORY.getIntrinsic(IntrinsicType.EXTENDED);
+    }
+
+    if (name.endsWith("_Subrange")) {
+      var hostType = (IntegerType) getType(StringUtils.removeEnd(name, "_Subrange"));
+      BigInteger min;
+      BigInteger max;
+
+      if (name.contains("UInt")) {
+        min = BigInteger.ZERO;
+        max = hostType.max().divide(BigInteger.TWO);
+      } else {
+        min = hostType.min();
+        max = BigInteger.ZERO;
+      }
+
+      return TYPE_FACTORY.subrange(name, min, max);
+    }
+
+    if (name.endsWith("_Alias")) {
+      Type aliasedType = getType(StringUtils.removeEnd(name, "_Alias"));
+      return TYPE_FACTORY.strongAlias(name, aliasedType);
+    }
+
+    throw new AssertionError("Unknown type: " + name);
   }
 
   private static ExpressionNode mockExpressionNode(Type type) {

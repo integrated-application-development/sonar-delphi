@@ -316,6 +316,8 @@ public class InvocationResolver {
   // Also invalidate candidates that would produce invalid variant conversions
   private static void checkVariantConversions(
       InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    argumentType = TypeUtils.findBaseType(argumentType);
+    parameterType = TypeUtils.findBaseType(parameterType);
     VariantConversionType variantConversionType = NO_CONVERSION_REQUIRED;
     if (argumentType.isVariant()) {
       variantConversionType = VariantConversionType.fromType(parameterType);
