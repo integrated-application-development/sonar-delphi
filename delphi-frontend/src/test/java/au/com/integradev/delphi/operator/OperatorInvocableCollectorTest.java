@@ -51,7 +51,7 @@ class OperatorInvocableCollectorTest {
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
     assertThat(
             collector.collect(typeFactory.getIntrinsic(IntrinsicType.PCHAR), BinaryOperator.DIVIDE))
-        .hasSize(1);
+        .isEmpty();
   }
 
   @Test
@@ -64,10 +64,10 @@ class OperatorInvocableCollectorTest {
   }
 
   @Test
-  void testSetShouldCollectAddOperators() {
+  void testSetShouldCollectAddOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
     OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
-    assertThat(collector.collect(typeFactory.emptySet(), BinaryOperator.ADD)).hasSize(13);
+    assertThat(collector.collect(typeFactory.emptySet(), BinaryOperator.ADD)).hasSize(1);
   }
 
   @Test

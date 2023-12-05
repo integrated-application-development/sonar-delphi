@@ -75,18 +75,17 @@ public class OperatorInvocableCollector {
       result.addAll(createSetLike(type, operator));
     } else if (type.isDynamicArray()) {
       result.addAll(createDynamicArray((CollectionType) type, operator));
+    } else if (type.isInteger()) {
+      result.addAll(createInteger(operator));
+    } else if (type.isReal()) {
+      result.addAll(createReal(operator));
+    } else if (type.isBoolean()) {
+      result.addAll(createBoolean(operator));
+    } else if (type.isString() || type.isChar()) {
+      result.addAll(createString(operator));
     }
 
     switch (operator) {
-      case AND:
-        result.addAll(createAnd());
-        break;
-      case OR:
-        result.addAll(createOr("Or"));
-        break;
-      case XOR:
-        result.addAll(createOr("Xor"));
-        break;
       case EQUAL:
         result.add(createComparison("Equal"));
         break;
@@ -107,30 +106,6 @@ public class OperatorInvocableCollector {
         break;
       case IN:
         result.add(createIn());
-        break;
-      case ADD:
-        result.addAll(createAdd());
-        break;
-      case SUBTRACT:
-        result.addAll(createArithmeticBinary("Subtract"));
-        break;
-      case MULTIPLY:
-        result.addAll(createArithmeticBinary("Multiply"));
-        break;
-      case DIVIDE:
-        result.add(createDivide());
-        break;
-      case DIV:
-        result.addAll(createIntegerBinary("IntDivide"));
-        break;
-      case MOD:
-        result.addAll(createIntegerBinary("Modulus"));
-        break;
-      case SHL:
-        result.addAll(createShift("Left"));
-        break;
-      case SHR:
-        result.addAll(createShift("Right"));
         break;
       default:
         // do nothing
@@ -254,11 +229,76 @@ public class OperatorInvocableCollector {
     return result;
   }
 
-  private Set<Invocable> createAnd() {
-    Set<Invocable> result = new HashSet<>();
-    result.add(createLogical("LogicalAnd"));
+  private Set<Invocable> createInteger(BinaryOperator operator) {
+    switch (operator) {
+      case AND:
+        return createBitwiseAnd();
+      case OR:
+        return createBitwiseOr("Or");
+      case XOR:
+        return createBitwiseOr("Xor");
+      case ADD:
+        return createArithmeticBinary("Add");
+      case SUBTRACT:
+        return createArithmeticBinary("Subtract");
+      case MULTIPLY:
+        return createArithmeticBinary("Multiply");
+      case DIVIDE:
+        return createDivide();
+      case DIV:
+        return createIntegerBinary("IntDivide");
+      case MOD:
+        return createIntegerBinary("Modulus");
+      case SHL:
+        return createShift("Left");
+      case SHR:
+        return createShift("Right");
+      default:
+        return Sets.newHashSet();
+    }
+  }
 
-    String bitwiseName = "BitwiseAnd";
+  private Set<Invocable> createReal(BinaryOperator operator) {
+    switch (operator) {
+      case ADD:
+        return createArithmeticBinary("Add");
+      case SUBTRACT:
+        return createArithmeticBinary("Subtract");
+      case MULTIPLY:
+        return createArithmeticBinary("Multiply");
+      case DIVIDE:
+        return createDivide();
+      default:
+        return Sets.newHashSet();
+    }
+  }
+
+  private Set<Invocable> createBoolean(BinaryOperator operator) {
+    switch (operator) {
+      case AND:
+        return createLogical("And");
+      case OR:
+        return createLogical("Or");
+      case XOR:
+        return createLogical("Xor");
+      default:
+        return Sets.newHashSet();
+    }
+  }
+
+  private Set<Invocable> createString(BinaryOperator operator) {
+    Set<Invocable> result = Sets.newHashSet();
+    if (operator == BinaryOperator.ADD) {
+      Type string = typeFactory.getIntrinsic(IntrinsicType.STRING);
+      result.add(new OperatorIntrinsic("Add", List.of(string, string), string));
+    }
+    return result;
+  }
+
+  private Set<Invocable> createBitwiseAnd() {
+    Set<Invocable> result = new HashSet<>();
+
+    final String NAME = "BitwiseAnd";
 
     Type int8 = typeFactory.getIntrinsic(IntrinsicType.SHORTINT);
     Type int16 = typeFactory.getIntrinsic(IntrinsicType.SMALLINT);
@@ -272,33 +312,31 @@ public class OperatorInvocableCollector {
 
     addAll(
         result,
-        new OperatorIntrinsic(bitwiseName, List.of(int8, int8), int8),
-        new OperatorIntrinsic(bitwiseName, List.of(int16, int16), int16),
-        new OperatorIntrinsic(bitwiseName, List.of(uint8, uint8), uint8),
-        new OperatorIntrinsic(bitwiseName, List.of(uint16, uint16), uint16));
-    addAll(result, createWithInterleavedTypes(bitwiseName, int32, uint32));
-    addAll(result, createWithInterleavedTypes(bitwiseName, int64, uint64));
+        new OperatorIntrinsic(NAME, List.of(int8, int8), int8),
+        new OperatorIntrinsic(NAME, List.of(int16, int16), int16),
+        new OperatorIntrinsic(NAME, List.of(uint8, uint8), uint8),
+        new OperatorIntrinsic(NAME, List.of(uint16, uint16), uint16));
+    addAll(result, createWithInterleavedTypes(NAME, int32, uint32));
+    addAll(result, createWithInterleavedTypes(NAME, int64, uint64));
 
     return result;
   }
 
-  private Set<Invocable> createOr(String suffix) {
-    Set<Invocable> result = new HashSet<>();
-    result.add(createLogical("Logical" + suffix));
-
-    String bitwiseName = "Bitwise" + suffix;
+  private Set<Invocable> createBitwiseOr(String suffix) {
+    Set<Invocable> result;
+    String name = "Bitwise" + suffix;
 
     Type int8 = typeFactory.getIntrinsic(IntrinsicType.SHORTINT);
     Type int16 = typeFactory.getIntrinsic(IntrinsicType.SMALLINT);
     Type int32 = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
     Type int64 = typeFactory.getIntrinsic(IntrinsicType.INT64);
-    result.addAll(createWithInterleavedTypes(bitwiseName, int8, int16, int32, int64));
+    result = createWithInterleavedTypes(name, int8, int16, int32, int64);
 
     Type uint8 = typeFactory.getIntrinsic(IntrinsicType.BYTE);
     Type uint16 = typeFactory.getIntrinsic(IntrinsicType.WORD);
     Type uint32 = typeFactory.getIntrinsic(IntrinsicType.CARDINAL);
     Type uint64 = typeFactory.getIntrinsic(IntrinsicType.UINT64);
-    result.addAll(createWithInterleavedTypes(bitwiseName, uint8, uint16, uint32, uint64));
+    result.addAll(createWithInterleavedTypes(name, uint8, uint16, uint32, uint64));
 
     return result;
   }
@@ -338,21 +376,14 @@ public class OperatorInvocableCollector {
     return result;
   }
 
-  private Set<Invocable> createAdd() {
-    final String NAME = "Add";
-    Type string = typeFactory.getIntrinsic(IntrinsicType.STRING);
-    return addAll(
-        createArithmeticBinary(NAME), new OperatorIntrinsic(NAME, List.of(string, string), string));
-  }
-
-  private Invocable createDivide() {
+  private Set<Invocable> createDivide() {
     Type extended = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
-    return new OperatorIntrinsic("Divide", List.of(extended, extended), extended);
+    return Sets.newHashSet(new OperatorIntrinsic("Divide", List.of(extended, extended), extended));
   }
 
-  private Invocable createLogical(String name) {
+  private Set<Invocable> createLogical(String suffix) {
     Type bool = typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
-    return new OperatorIntrinsic(name, List.of(bool, bool), bool);
+    return Sets.newHashSet(new OperatorIntrinsic("Logical" + suffix, List.of(bool, bool), bool));
   }
 
   private Invocable createComparison(String name) {
