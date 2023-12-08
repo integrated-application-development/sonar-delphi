@@ -494,8 +494,6 @@ final class TypeComparer {
 
     if (from.is(to) || from.isVariant()) {
       return CONVERT_LEVEL_1;
-    } else if (from.isInteger() && to.isInteger()) {
-      return compareInteger(from, to);
     } else {
       return INCOMPATIBLE_TYPES;
     }

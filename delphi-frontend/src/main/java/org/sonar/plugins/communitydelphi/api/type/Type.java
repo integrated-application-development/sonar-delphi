@@ -524,6 +524,8 @@ public interface Type {
     Type hostType();
   }
 
+  interface IntegerSubrangeType extends SubrangeType, IntegerType {}
+
   interface ClassReferenceType extends ScopedType {
     /**
      * The class type that this references

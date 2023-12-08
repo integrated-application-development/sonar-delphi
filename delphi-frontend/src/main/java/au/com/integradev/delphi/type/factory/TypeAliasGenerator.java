@@ -41,6 +41,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerSubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -62,8 +63,9 @@ final class TypeAliasGenerator {
           PointerType.class,
           ProceduralType.class,
           FileType.class,
-          EnumType.class,
+          IntegerSubrangeType.class,
           SubrangeType.class,
+          EnumType.class,
           ClassReferenceType.class,
           TypeParameterType.class,
           IntegerType.class,

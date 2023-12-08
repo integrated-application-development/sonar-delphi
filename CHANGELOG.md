@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude routines annotated with attributes in `UnusedRoutine`.
 - Exclude properties annotated with attributes in `UnusedProperty`.
 - Exclude fields annotated with attributes in `UnusedField`.
+- Improve type modeling around integer subranges.
 
 ### Fixed
 
