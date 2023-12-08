@@ -179,9 +179,6 @@ public class InvocationResolver {
         equality = INCOMPATIBLE_TYPES;
       }
 
-      argumentType = TypeUtils.findBaseType(argumentType);
-      parameterType = TypeUtils.findBaseType(parameterType);
-
       if (!equalTypeRequired(parameter)) {
         checkIntegerDistance(candidate, argumentType, parameterType);
         checkRealDistance(candidate, argumentType, parameterType);

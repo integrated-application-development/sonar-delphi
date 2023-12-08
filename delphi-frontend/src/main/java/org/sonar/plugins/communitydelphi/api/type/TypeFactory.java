@@ -30,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerSubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
@@ -59,6 +60,8 @@ public interface TypeFactory {
   CollectionType emptySet();
 
   SubrangeType subrange(String image, Type type);
+
+  IntegerSubrangeType subrange(String image, BigInteger min, BigInteger max);
 
   PointerType pointerTo(@Nullable String image, Type type);
 

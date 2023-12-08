@@ -60,6 +60,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerSubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -405,7 +406,29 @@ public class TypeFactoryImpl implements TypeFactory {
 
   @Override
   public SubrangeType subrange(String image, Type type) {
+    if (type.isInteger()) {
+      var integerType = (IntegerType) type;
+      return subrange(image, integerType.min(), integerType.max());
+    }
     return new SubrangeTypeImpl(image, type);
+  }
+
+  @Override
+  public IntegerSubrangeType subrange(String image, BigInteger min, BigInteger max) {
+    IntegerType lowType = integerFromLiteralValue(min);
+    IntegerType highType = integerFromLiteralValue(max);
+
+    IntegerType hostType;
+    if (highType.size() > lowType.size()) {
+      hostType = highType;
+      if (min.compareTo(BigInteger.ZERO) < 0 && !highType.isSigned()) {
+        hostType = integerFromLiteralValue(max.negate().subtract(BigInteger.ONE));
+      }
+    } else {
+      hostType = lowType;
+    }
+
+    return new IntegerSubrangeTypeImpl(image, hostType, min, max);
   }
 
   @Override

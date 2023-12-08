@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2023 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,36 +18,37 @@
  */
 package au.com.integradev.delphi.type.factory;
 
-import au.com.integradev.delphi.type.TypeImpl;
+import java.math.BigInteger;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerSubrangeType;
 
-public class SubrangeTypeImpl extends TypeImpl implements SubrangeType {
-  private final String image;
-  private final Type hostType;
+public class IntegerSubrangeTypeImpl extends SubrangeTypeImpl implements IntegerSubrangeType {
+  private final BigInteger min;
+  private final BigInteger max;
 
-  SubrangeTypeImpl(String image, Type hostType) {
-    this.image = image;
-    this.hostType = hostType;
+  IntegerSubrangeTypeImpl(String image, Type hostType, BigInteger min, BigInteger max) {
+    super(image, hostType);
+    this.min = min;
+    this.max = max;
   }
 
   @Override
-  public String getImage() {
-    return image;
+  public BigInteger min() {
+    return min;
   }
 
   @Override
-  public int size() {
-    return hostType.size();
+  public BigInteger max() {
+    return max;
   }
 
   @Override
-  public Type hostType() {
-    return hostType;
+  public boolean isSigned() {
+    return min.compareTo(BigInteger.ZERO) < 0;
   }
 
   @Override
-  public boolean isSubrange() {
+  public boolean isInteger() {
     return true;
   }
 }

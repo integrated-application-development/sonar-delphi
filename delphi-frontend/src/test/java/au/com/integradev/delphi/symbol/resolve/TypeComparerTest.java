@@ -326,8 +326,8 @@ class TypeComparerTest {
     SubrangeType subrangeOfInteger = subRange("5..High(Integer)", IntrinsicType.INTEGER);
     SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum"));
 
-    compare(subrangeOfShortInt, strongAlias("Foo", subrangeOfShortInt), CONVERT_LEVEL_1);
-    compare(IntrinsicType.VARIANT, subrangeOfShortInt, CONVERT_LEVEL_1);
+    compare(subrangeOfShortInt, strongAlias("Foo", subrangeOfShortInt), EQUAL);
+    compare(IntrinsicType.VARIANT, subrangeOfShortInt, CONVERT_LEVEL_8);
     compare(subrangeOfShortInt, subrangeOfInteger, CONVERT_LEVEL_1);
     compare(subrangeOfInteger, subrangeOfShortInt, CONVERT_LEVEL_3);
     compare(subrangeOfShortInt, subrangeOfEnum, INCOMPATIBLE_TYPES);
