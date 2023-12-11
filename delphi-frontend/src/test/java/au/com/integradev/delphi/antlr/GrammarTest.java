@@ -33,7 +33,6 @@ import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
@@ -52,11 +51,15 @@ class GrammarTest {
     fileConfig = DelphiFileUtils.mockConfig();
   }
 
+  private void parse(String fileName) {
+    String path = BASE_DIR + fileName;
+    LOG.info("Parsing file: " + path);
+    DelphiFile.from(DelphiUtils.getResource(path), fileConfig);
+  }
+
   private void assertParsed(String fileName) {
     try {
-      String path = BASE_DIR + fileName;
-      LOG.info("Parsing file: " + path);
-      DelphiFile.from(DelphiUtils.getResource(path), fileConfig);
+      parse(fileName);
     } catch (Exception e) {
       throw new AssertionError(e);
     }
@@ -241,10 +244,19 @@ class GrammarTest {
 
   @Test
   void testEmptyFileShouldThrow() {
-    File emptyFile = DelphiUtils.getResource(BASE_DIR + "EmptyFile.pas");
-    DelphiFileConfig config = DelphiFileUtils.mockConfig();
-
-    assertThatThrownBy(() -> DelphiFile.from(emptyFile, config))
+    assertThatThrownBy(() -> parse("EmptyFile.pas"))
         .isInstanceOf(DelphiFileConstructionException.class);
+  }
+
+  @Test
+  void testUnicodeIdentifiers() {
+    assertParsed("UnicodeIdentifiers.pas");
+  }
+
+  @Test
+  void testFullWidthNumeralAtStartOfIdentifierShouldThrow() {
+    assertThatThrownBy(() -> parse("FullWidthNumeralBeforeIdentifier.pas"))
+        .isInstanceOf(RuntimeException.class)
+        .hasMessage("line 6:2 mismatched input '０' expecting IMPLEMENTATION");
   }
 }

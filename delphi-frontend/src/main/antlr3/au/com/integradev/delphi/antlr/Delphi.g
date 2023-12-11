@@ -1189,7 +1189,7 @@ TkArrayIndices          : 'ARRAY_INDICES'
 //****************************
 // Tokens
 //****************************
-TkIdentifier            : (Alpha | '_') (Alpha | Digit | '_')*
+TkIdentifier            : (Alpha | '_') (Alpha | FullWidthNumeral | Digit | '_')*
                         ;
                         // We use a lookahead here to avoid lexer failures on range operations like '1..2'
                         // or record helper invocations on Integer literals
@@ -1227,7 +1227,18 @@ TkCharacterEscapeCode   : '#' ('_' | Digit)+
 fragment
 Alpha                   : 'a'..'z'
                         | 'A'..'Z'
-                        | ('\ud800'..'\udbff') ('\udc00'..'\udfff')  // unicode support
+                        // every non-ASCII character until the surrogate pair range (\u3000 is excluded as WHITESPACE)
+                        | '\u0080'..'\uD7FF'
+                        // everything after the surrogate range up to the start of the fullwidth numerals
+                        | '\uE000'..'\uFF0F'
+                        // after the fullwidth numerals up to the second last codepoint in the BMP
+                        //   \uFFFF is valid in Delphi identifiers but in antlr3 the lexer is broken when you include it
+                        | '\uFF1A'..'\uFFFE'
+                        // surrogate pairs
+                        | ('\uD800'..'\uDBFF') ('\uDC00'..'\uDFFF')
+                        ;
+fragment
+FullWidthNumeral        : '\uFF10'..'\uFF19'
                         ;
 fragment
 Digit                   : '0'..'9'
@@ -1281,8 +1292,6 @@ COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel
                         }
                         ;
 WHITESPACE              : ('\u0000'..'\u0020' | '\u3000')+ {$channel=HIDDEN;}
-                        ;
-UnicodeBOM              : '\uFEFF' {$channel=HIDDEN;}
                         ;
 //----------------------------------------------------------------------------
 // Any character
