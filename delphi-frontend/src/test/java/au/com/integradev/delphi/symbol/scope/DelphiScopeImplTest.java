@@ -31,8 +31,12 @@ import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
@@ -95,36 +99,74 @@ class DelphiScopeImplTest {
     assertThat(scope.findDeclaration(foo)).isEmpty();
   }
 
-  @Test
-  void testVariablesWithDifferentNamesAreNotDuplicates() {
-    scope.addDeclaration(createVariable("Foo"));
+  static Stream<Arguments> distinctIdentifiers() {
+    return Stream.of(Arguments.of("Foo", "Fob"), Arguments.of("ﬂ", "FL"));
+  }
 
-    VariableNameDeclaration bar = createVariable("Bar");
+  @ParameterizedTest
+  @MethodSource({"distinctIdentifiers", "distinctIdentifierShortcomings"})
+  void testVariablesWithDifferentNamesAreNotDuplicates(String first, String second) {
+    scope.addDeclaration(createVariable(first));
+
+    VariableNameDeclaration bar = createVariable(second);
     assertThatCode(() -> scope.addDeclaration(bar)).doesNotThrowAnyException();
   }
 
-  @Test
-  void testTypesWithDifferentKindAndDifferentNamesAreNotDuplicates() {
-    scope.addDeclaration(createType("Foo"));
+  @ParameterizedTest
+  @MethodSource({"distinctIdentifiers", "distinctIdentifierShortcomings"})
+  void testTypesWithDifferentKindAndDifferentNamesAreNotDuplicates(String first, String second) {
+    scope.addDeclaration(createType(first));
 
-    TypeNameDeclaration bar = createType("Bar");
+    TypeNameDeclaration bar = createType(second);
     assertThatCode(() -> scope.addDeclaration(bar)).doesNotThrowAnyException();
   }
 
-  @Test
-  void testVariableAndTypeWithSameNameAreDuplicates() {
-    scope.addDeclaration(createVariable("Foo"));
+  static Stream<Arguments> duplicateIdentifiers() {
+    return Stream.of(
+        Arguments.of("Foo", "Foo"),
+        Arguments.of("Foo", "foo"),
+        Arguments.of("Foo", "FOO"),
+        Arguments.of("À", "à"),
+        Arguments.of("Δ", "δ"),
+        Arguments.of("Ⅰ", "ⅰ"));
+  }
 
-    TypeNameDeclaration classType = createClassType("Foo");
+  // According to the Unicode standard, these should be considered as the same identifier since they
+  // are case-folded to the same string. However, the Delphi compiler considers them distinct. On
+  // the other hand, java's String::compareIgnoreCase knows that they are equivalent.
+  //
+  // We don't feel that it's worth accounting for obscure cases like these, because it would mean
+  // that the 'obvious' way of comparing case-insensitively in this codebase would be incorrect.
+  // Even if we did feel like it was worth it, we would still be guessing what the 'real' rules are,
+  // because there is no documentation from Embarcadero on exactly how the case-insensitive
+  // comparison is performed.
+  static Stream<Arguments> duplicateIdentifierShortcomings() {
+    return Stream.of(Arguments.of("ẞ", "ß"), Arguments.of("ſ", "s"));
+  }
+
+  // Delphi actually considers all these identifiers are duplicates. Certain WinAPI calls agree with
+  // this conclusion (e.g. CompareStringEx (any flags) and CompareStringW (some locales)).
+  // As above, we aren't going to account for these cases right now.
+  static Stream<Arguments> distinctIdentifierShortcomings() {
+    return Stream.of(Arguments.of("힢", "ퟂ"), Arguments.of("힢", "ퟢ"), Arguments.of("ퟂ", "ퟢ"));
+  }
+
+  @ParameterizedTest
+  @MethodSource({"duplicateIdentifiers", "duplicateIdentifierShortcomings"})
+  void testVariableAndTypeWithSameNameAreDuplicates(String first, String second) {
+    scope.addDeclaration(createVariable(first));
+
+    TypeNameDeclaration classType = createClassType(second);
     assertThatThrownBy(() -> scope.addDeclaration(classType))
         .isInstanceOf(DuplicatedDeclarationException.class);
   }
 
-  @Test
-  void testTypesWithDifferentKindAndSameNameAreDuplicates() {
-    scope.addDeclaration(createType("Bar"));
+  @ParameterizedTest
+  @MethodSource({"duplicateIdentifiers", "duplicateIdentifierShortcomings"})
+  void testTypesWithDifferentKindAndSameNameAreDuplicates(String first, String second) {
+    scope.addDeclaration(createType(first));
 
-    TypeNameDeclaration classType = createClassType("Bar");
+    TypeNameDeclaration classType = createClassType(second);
     assertThatThrownBy(() -> scope.addDeclaration(classType))
         .isInstanceOf(DuplicatedDeclarationException.class);
   }
