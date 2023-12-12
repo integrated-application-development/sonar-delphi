@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exclude properties annotated with attributes in `UnusedProperty`.
 - Exclude fields annotated with attributes in `UnusedField`.
 - Improve type modeling around integer subranges.
+- Issues raised on a hard cast expression now span the entire expression in `UnicodeToAnsiCast`,
+  `CharacterToCharacterPointerCast`, `NonLinearCast`, `RedundantCast`, and `PlatformDependentCast`.
 
 ### Fixed
 
