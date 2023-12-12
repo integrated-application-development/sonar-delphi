@@ -21,12 +21,14 @@ package au.com.integradev.delphi.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -54,7 +56,18 @@ public class PlatformDependentCastCheck extends DelphiCheck {
         Type castedType = getHardCastedType(argumentList, context);
 
         if (isPlatformDependentCast(originalType, castedType)) {
-          reportIssue(context, argumentList, MESSAGE);
+          DelphiNode name = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
+
+          context
+              .newIssue()
+              .onFilePosition(
+                  FilePosition.from(
+                      name.getBeginLine(),
+                      name.getBeginColumn(),
+                      argumentList.getEndLine(),
+                      argumentList.getEndColumn()))
+              .withMessage(MESSAGE)
+              .report();
         }
       }
     }
