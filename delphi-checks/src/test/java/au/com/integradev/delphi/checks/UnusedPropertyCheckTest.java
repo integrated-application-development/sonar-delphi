@@ -188,4 +188,59 @@ class UnusedPropertyCheckTest {
                 .appendImpl("end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testUnusedApiPropertyWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedPropertyCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("public")
+                .appendDecl("  property Bar: Integer read FBar;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedNonPublicPropertyWithExcludeApiShouldAddIssue() {
+    var check = new UnusedPropertyCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  FBar: Integer;")
+                .appendDecl("  property Bar: Integer read FBar; // Noncompliant")
+                .appendDecl("protected")
+                .appendDecl("  property Bar: Integer read FBar; // Noncompliant")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testUnusedImplementationPropertyWithExcludeApiShouldAddIssue() {
+    var check = new UnusedPropertyCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type TFoo = class")
+                .appendImpl("private")
+                .appendImpl("  FBar: Integer;")
+                .appendImpl("public")
+                .appendImpl("  property Bar: Integer read FBar; //Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }

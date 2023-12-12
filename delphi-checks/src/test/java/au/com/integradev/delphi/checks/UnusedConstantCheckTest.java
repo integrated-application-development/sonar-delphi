@@ -158,4 +158,64 @@ class UnusedConstantCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testUnusedApiConstantWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedConstantCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  CFoo = 'Foo';")
+                .appendDecl("")
+                .appendDecl("type TFoo = class")
+                .appendDecl("public const")
+                .appendDecl("  CBar = 'Bar';")
+                .appendDecl("published const")
+                .appendDecl("  CBaz = 'Baz';")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedNonPublicConstantWithExcludeApiShouldAddIssue() {
+    var check = new UnusedConstantCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private const")
+                .appendDecl("  CBar = 'Bar'; // Noncompliant")
+                .appendDecl("protected const")
+                .appendDecl("  CBaz = 'Baz'; // Noncompliant")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testUnusedImplementationConstantWithExcludeApiShouldAddIssue() {
+    var check = new UnusedConstantCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("const")
+                .appendImpl("  CFoo = 'Foo'; // Noncompliant")
+                .appendImpl("")
+                .appendImpl("type TFoo = class")
+                .appendImpl("public const")
+                .appendImpl("  CBar = 'Bar'; // Noncompliant")
+                .appendImpl("published const")
+                .appendImpl("  CBaz = 'Baz'; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }

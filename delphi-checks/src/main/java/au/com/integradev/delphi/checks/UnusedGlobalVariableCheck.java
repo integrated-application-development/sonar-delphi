@@ -21,6 +21,8 @@ package au.com.integradev.delphi.checks;
 import static au.com.integradev.delphi.utils.VariableUtils.isGeneratedFormVariable;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -34,14 +36,33 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class UnusedGlobalVariableCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused global variable.";
 
+  @RuleProperty(
+      key = "excludeApi",
+      description = "Exclude global variables declared in the interface section.")
+  public boolean excludeApi = false;
+
   @Override
   public DelphiCheckContext visit(VarDeclarationNode varDeclaration, DelphiCheckContext context) {
-    if (varDeclaration.getScope() instanceof FileScope
-        && !isGeneratedFormVariable(varDeclaration)) {
-      varDeclaration.getNameDeclarationList().getDeclarations().stream()
-          .filter(node -> node.getUsages().isEmpty())
-          .forEach(node -> reportIssue(context, node, MESSAGE));
+    if (isExcluded(varDeclaration)) {
+      return context;
     }
+
+    varDeclaration.getNameDeclarationList().getDeclarations().stream()
+        .filter(node -> node.getUsages().isEmpty())
+        .forEach(node -> reportIssue(context, node, MESSAGE));
+
     return context;
+  }
+
+  private boolean isExcluded(VarDeclarationNode varDeclaration) {
+    if (!(varDeclaration.getScope() instanceof FileScope)) {
+      return true;
+    }
+
+    if (excludeApi && varDeclaration.getFirstParentOfType(InterfaceSectionNode.class) != null) {
+      return true;
+    }
+
+    return isGeneratedFormVariable(varDeclaration);
   }
 }

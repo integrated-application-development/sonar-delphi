@@ -19,8 +19,10 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
@@ -32,16 +34,36 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class UnusedFieldCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused field.";
 
+  @RuleProperty(
+      key = "excludeApi",
+      description = "Exclude fields declared in the interface section with public visibility.")
+  public boolean excludeApi = false;
+
   @Override
   public DelphiCheckContext visit(FieldDeclarationNode field, DelphiCheckContext context) {
-    if (!field.isPublished()) {
-      AttributeListNode attributeList = field.getAttributeList();
-      if (attributeList == null || attributeList.getAttributes().isEmpty()) {
-        field.getDeclarationList().getDeclarations().stream()
-            .filter(node -> node.getUsages().isEmpty())
-            .forEach(node -> reportIssue(context, node, MESSAGE));
-      }
+    if (isExcluded(field)) {
+      return context;
     }
+
+    field.getDeclarationList().getDeclarations().stream()
+        .filter(node -> node.getUsages().isEmpty())
+        .forEach(node -> reportIssue(context, node, MESSAGE));
+
     return context;
+  }
+
+  private boolean isExcluded(FieldDeclarationNode field) {
+    if (field.isPublished()) {
+      return true;
+    }
+
+    AttributeListNode attributeList = field.getAttributeList();
+    if (attributeList != null && !attributeList.getAttributes().isEmpty()) {
+      return true;
+    }
+
+    return excludeApi
+        && field.isPublic()
+        && field.getFirstParentOfType(InterfaceSectionNode.class) != null;
   }
 }

@@ -29,6 +29,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ObjectTypeNode;
@@ -39,6 +40,7 @@ import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StrongAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.WeakAliasTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
@@ -206,6 +208,15 @@ public final class TypeDeclarationNodeImpl extends DelphiNodeImpl implements Typ
   public boolean isForwardDeclaration() {
     TypeNameDeclaration declaration = getTypeNameDeclaration();
     return declaration != null && declaration.isForwardDeclaration();
+  }
+
+  @Override
+  public VisibilityType getVisibility() {
+    DelphiNode parent = getParent();
+    if (parent instanceof TypeSectionNode) {
+      return ((TypeSectionNode) parent).getVisibility();
+    }
+    return VisibilityType.PUBLIC;
   }
 
   @Override

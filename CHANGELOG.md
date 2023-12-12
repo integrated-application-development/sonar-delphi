@@ -18,8 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   merged.
 - `ConsecutiveVisibilitySection` analysis rule, which flags consecutive visibility sections that can
   be merged.
-- `VarSectionNode::isThreadVarSection` API method.
-- `ConstSectionNode::isResourceStringSection` API method.
+- `excludeApi` rule property to most of the `Unused*` rules:
+  - Available for `UnusedConstant`, `UnusedField`, `UnusedGlobalVariable`, `UnusedProperty`,
+    `UnusedRoutine`, and `UnusedType`.
+  - Excludes public API (declared with public visibility in the interface section).
+- **API**: `VarSectionNode::isThreadVarSection` method.
+- **API**: `ConstSectionNode::isResourceStringSection` method.
 
 ### Changed
 
@@ -31,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type modeling around integer subranges.
 - Issues raised on a hard cast expression now span the entire expression in `UnicodeToAnsiCast`,
   `CharacterToCharacterPointerCast`, `NonLinearCast`, `RedundantCast`, and `PlatformDependentCast`.
+- **API:** `TypeSectionNode` now implements `Visibility`.
+- **API:** `TypeDeclarationNode` now implements `Visibility`.
 
 ### Fixed
 

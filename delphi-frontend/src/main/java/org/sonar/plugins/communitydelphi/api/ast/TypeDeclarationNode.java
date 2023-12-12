@@ -24,7 +24,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
-public interface TypeDeclarationNode extends DelphiNode, Typed, Qualifiable {
+public interface TypeDeclarationNode extends DelphiNode, Typed, Qualifiable, Visibility {
   SimpleNameDeclarationNode getTypeNameNode();
 
   TypeNode getTypeNode();

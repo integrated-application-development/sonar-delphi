@@ -21,8 +21,10 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
 public final class TypeSectionNodeImpl extends DelphiNodeImpl implements TypeSectionNode {
   public TypeSectionNodeImpl(Token token) {
@@ -37,5 +39,14 @@ public final class TypeSectionNodeImpl extends DelphiNodeImpl implements TypeSec
   @Override
   public List<TypeDeclarationNode> getDeclarations() {
     return findChildrenOfType(TypeDeclarationNode.class);
+  }
+
+  @Override
+  public VisibilityType getVisibility() {
+    DelphiNode parent = getParent();
+    if (parent instanceof VisibilitySectionNode) {
+      return ((VisibilitySectionNode) parent).getVisibility();
+    }
+    return VisibilityType.PUBLIC;
   }
 }

@@ -352,4 +352,61 @@ class UnusedRoutineCheckTest {
                 .appendDecl("  end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testUnusedApiPropertyWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedRoutineCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("  procedure Bar;")
+                .appendDecl("end;")
+                .appendDecl("")
+                .appendDecl("procedure Baz;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedNonPublicRoutineWithExcludeApiShouldAddIssue() {
+    var check = new UnusedRoutineCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  procedure Bar; // Noncompliant")
+                .appendDecl("protected")
+                .appendDecl("  procedure Baz; // Noncompliant")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testUnusedImplementationRoutineWithExcludeApiShouldAddIssue() {
+    var check = new UnusedRoutineCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type TFoo = class")
+                .appendImpl("public")
+                .appendImpl("  procedure Bar; // Noncompliant")
+                .appendImpl("end;")
+                .appendImpl("")
+                .appendImpl("procedure Baz; // Noncompliant")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }
