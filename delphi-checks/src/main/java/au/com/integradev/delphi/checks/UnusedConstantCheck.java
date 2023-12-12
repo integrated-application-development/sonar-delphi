@@ -19,8 +19,10 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -33,10 +35,20 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class UnusedConstantCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused constant.";
 
+  @RuleProperty(
+      key = "excludeApi",
+      description = "Exclude constants declared in the interface section with public visibility.")
+  public boolean excludeApi = false;
+
   @Override
-  public DelphiCheckContext visit(
-      ConstDeclarationNode constDeclaration, DelphiCheckContext context) {
-    NameDeclarationNode name = constDeclaration.getNameDeclarationNode();
+  public DelphiCheckContext visit(ConstDeclarationNode declaration, DelphiCheckContext context) {
+    if (excludeApi
+        && (declaration.isPublished() || declaration.isPublic())
+        && declaration.getFirstParentOfType(InterfaceSectionNode.class) != null) {
+      return context;
+    }
+
+    NameDeclarationNode name = declaration.getNameDeclarationNode();
     if (name.getUsages().isEmpty()) {
       reportIssue(context, name, MESSAGE);
     }
@@ -44,8 +56,8 @@ public class UnusedConstantCheck extends DelphiCheck {
   }
 
   @Override
-  public DelphiCheckContext visit(ConstStatementNode constStatement, DelphiCheckContext context) {
-    NameDeclarationNode name = constStatement.getNameDeclarationNode();
+  public DelphiCheckContext visit(ConstStatementNode statement, DelphiCheckContext context) {
+    NameDeclarationNode name = statement.getNameDeclarationNode();
     if (name.getUsages().isEmpty()) {
       reportIssue(context, name, MESSAGE);
     }

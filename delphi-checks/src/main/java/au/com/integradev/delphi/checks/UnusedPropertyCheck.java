@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -33,20 +34,35 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class UnusedPropertyCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused property.";
 
+  @RuleProperty(
+      key = "excludeApi",
+      description = "Exclude properties declared in the interface section with public visibility.")
+  public boolean excludeApi = false;
+
   @Override
   public DelphiCheckContext visit(PropertyNode property, DelphiCheckContext context) {
     NameDeclarationNode name = property.getPropertyName();
     PropertyNameDeclaration declaration = (PropertyNameDeclaration) name.getNameDeclaration();
-    if (isUnused(declaration)) {
+    if (isViolation(declaration)) {
       reportIssue(context, name, MESSAGE);
     }
     return context;
   }
 
-  private static boolean isUnused(PropertyNameDeclaration declaration) {
-    return !declaration.isPublished()
-        && declaration.getAttributeTypes().isEmpty()
-        && declaration.getScope().getOccurrencesFor(declaration).isEmpty()
-        && declaration.getRedeclarations().stream().allMatch(UnusedPropertyCheck::isUnused);
+  private boolean isViolation(PropertyNameDeclaration declaration) {
+    if (declaration.isPublished()) {
+      return false;
+    }
+
+    if (excludeApi && declaration.isPublic() && !declaration.isImplementationDeclaration()) {
+      return false;
+    }
+
+    if (!declaration.getAttributeTypes().isEmpty()) {
+      return false;
+    }
+
+    return declaration.getScope().getOccurrencesFor(declaration).isEmpty()
+        && declaration.getRedeclarations().stream().allMatch(this::isViolation);
   }
 }

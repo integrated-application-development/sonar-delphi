@@ -127,4 +127,76 @@ class UnusedTypeCheckTest {
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testUnusedApiTypeWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedTypeCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("type TFoo = class")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedNestedApiTypeWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedTypeCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("  public type")
+                .appendDecl("    TBar = class")
+                .appendDecl("    end;")
+                .appendDecl("  published type")
+                .appendDecl("    TBaz = class")
+                .appendDecl("    end;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedNonPublicTypeWithExcludeApiShouldAddIssue() {
+    var check = new UnusedTypeCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private type")
+                .appendDecl("  TBar = class end; // Noncompliant")
+                .appendDecl("protected type")
+                .appendDecl("  TBaz = class end; // Noncompliant")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testUnusedImplementationTypeWithExcludeApiShouldAddIssue() {
+    var check = new UnusedTypeCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type TFoo = class // Noncompliant")
+                .appendImpl("  public type")
+                .appendImpl("    TBar = class // Noncompliant")
+                .appendImpl("    end;")
+                .appendImpl("  published type")
+                .appendImpl("    TBaz = class // Noncompliant")
+                .appendImpl("    end;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }

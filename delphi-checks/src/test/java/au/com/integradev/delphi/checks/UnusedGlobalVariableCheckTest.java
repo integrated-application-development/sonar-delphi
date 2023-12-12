@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class UnusedGlobalVariableCheckTest {
   @Test
-  void testUsedGlobalConstantShouldNotAddIssue() {
+  void testUsedGlobalVariableShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedGlobalVariableCheck())
         .onFile(
@@ -39,7 +39,7 @@ class UnusedGlobalVariableCheckTest {
   }
 
   @Test
-  void testUnusedGlobalConstantShouldAddIssue() {
+  void testUnusedGlobalVariableShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new UnusedGlobalVariableCheck())
         .onFile(
@@ -74,5 +74,33 @@ class UnusedGlobalVariableCheckTest {
         .appendDecl("type")
         .appendDecl("TForm = class(TComponent)")
         .appendDecl("end;");
+  }
+
+  @Test
+  void testUnusedApiGlobalVariableWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedGlobalVariableCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendDecl("var")
+                .appendDecl("  Foo: Integer;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedImplementationGlobalVariableWithExcludeApiShouldAddIssue() {
+    var check = new UnusedGlobalVariableCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder() //
+                .appendImpl("var")
+                .appendImpl("  Foo: Integer; // Noncompliant"))
+        .verifyIssues();
   }
 }

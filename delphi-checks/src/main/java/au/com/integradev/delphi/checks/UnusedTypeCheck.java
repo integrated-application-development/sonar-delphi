@@ -19,7 +19,8 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.check.RuleProperty;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -39,19 +40,35 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class UnusedTypeCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused type.";
 
+  @RuleProperty(
+      key = "excludeApi",
+      description =
+          "Exclude types declared in the interface section, "
+              + "including any nested types with public visibility.")
+  public boolean excludeApi = false;
+
   @Override
   public DelphiCheckContext visit(TypeDeclarationNode type, DelphiCheckContext context) {
-    NameDeclarationNode name = type.getTypeNameNode();
-    if (canBeUnused(type.getType())
-        && name.getUsages().stream()
-            .allMatch(occurrence -> isWithinType(occurrence, type.getType()))) {
-      reportIssue(context, name, MESSAGE);
+    if (isViolation(type)) {
+      reportIssue(context, type.getTypeNameNode(), MESSAGE);
     }
     return super.visit(type, context);
   }
 
-  private static boolean canBeUnused(Type type) {
-    return !(type instanceof HelperType);
+  private boolean isViolation(TypeDeclarationNode node) {
+    Type type = node.getType();
+    if (type instanceof HelperType) {
+      return false;
+    }
+
+    if (excludeApi
+        && (node.isPublic() || node.isPublished())
+        && node.getFirstParentOfType(InterfaceSectionNode.class) != null) {
+      return false;
+    }
+
+    return node.getTypeNameNode().getUsages().stream()
+        .allMatch(occurrence -> isWithinType(occurrence, type));
   }
 
   private static boolean isWithinType(NameOccurrence occurrence, Type type) {

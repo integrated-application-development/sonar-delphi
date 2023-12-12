@@ -96,4 +96,54 @@ class UnusedFieldCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testUnusedApiFieldWithExcludeApiShouldNotAddIssue() {
+    var check = new UnusedFieldCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("public")
+                .appendDecl("  Bar: Integer;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedNonPublicFieldWithExcludeApiShouldAddIssue() {
+    var check = new UnusedFieldCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TFoo = class")
+                .appendDecl("private")
+                .appendDecl("  Bar: Integer; // Noncompliant")
+                .appendDecl("protected")
+                .appendDecl("  Baz: Integer; // Noncompliant")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testUnusedImplementationFieldWithExcludeApiShouldAddIssue() {
+    var check = new UnusedFieldCheck();
+    check.excludeApi = true;
+
+    CheckVerifier.newVerifier()
+        .withCheck(check)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("type TFoo = class")
+                .appendImpl("public")
+                .appendImpl("  Bar: Integer; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }

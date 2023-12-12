@@ -24,7 +24,9 @@ import au.com.integradev.delphi.utils.InterfaceUtils;
 import java.util.HashSet;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
@@ -45,6 +47,11 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "UnusedRoutine")
 public class UnusedRoutineCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused routine.";
+
+  @RuleProperty(
+      key = "excludeApi",
+      description = "Exclude routines declared in the interface section with public visibility.")
+  public boolean excludeApi = false;
 
   private final Set<RoutineNameDeclaration> seenRoutines = new HashSet<>();
 
@@ -67,8 +74,14 @@ public class UnusedRoutineCheck extends DelphiCheck {
     return super.visit(routine, context);
   }
 
-  private static boolean isViolation(RoutineNode routine) {
+  private boolean isViolation(RoutineNode routine) {
     if (routine.isPublished()) {
+      return false;
+    }
+
+    if (excludeApi
+        && routine.isPublic()
+        && routine.getFirstParentOfType(InterfaceSectionNode.class) != null) {
       return false;
     }
 
