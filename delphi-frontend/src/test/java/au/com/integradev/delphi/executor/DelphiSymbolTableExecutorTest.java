@@ -1251,6 +1251,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testWeakAliasHelpers() {
+    execute("helpers/WeakAliasHelper.pas");
+    verifyUsages(13, 14, reference(24, 21), reference(31, 6));
+  }
+
+  @Test
   void testDependencyReferencedImplicitly() {
     execute("dependencies/Implicit.pas");
     verifyDependencies("System.SysUtils");
