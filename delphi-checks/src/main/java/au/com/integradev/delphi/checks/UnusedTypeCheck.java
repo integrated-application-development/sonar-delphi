@@ -39,13 +39,15 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "UnusedType")
 public class UnusedTypeCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused type.";
+  private static final boolean EXCLUDE_API_DEFAULT = false;
 
   @RuleProperty(
       key = "excludeApi",
       description =
           "Exclude types declared in the interface section, "
-              + "including any nested types with public visibility.")
-  public boolean excludeApi = false;
+              + "including any nested types with public visibility.",
+      defaultValue = EXCLUDE_API_DEFAULT + "")
+  public boolean excludeApi = EXCLUDE_API_DEFAULT;
 
   @Override
   public DelphiCheckContext visit(TypeDeclarationNode type, DelphiCheckContext context) {

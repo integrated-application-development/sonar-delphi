@@ -33,11 +33,13 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "UnusedField")
 public class UnusedFieldCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused field.";
+  private static final boolean EXCLUDE_API_DEFAULT = false;
 
   @RuleProperty(
       key = "excludeApi",
-      description = "Exclude fields declared in the interface section with public visibility.")
-  public boolean excludeApi = false;
+      description = "Exclude fields declared in the interface section with public visibility.",
+      defaultValue = EXCLUDE_API_DEFAULT + "")
+  public boolean excludeApi = EXCLUDE_API_DEFAULT;
 
   @Override
   public DelphiCheckContext visit(FieldDeclarationNode field, DelphiCheckContext context) {

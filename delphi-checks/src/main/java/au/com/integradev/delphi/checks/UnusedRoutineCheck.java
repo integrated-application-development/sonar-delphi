@@ -47,11 +47,13 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "UnusedRoutine")
 public class UnusedRoutineCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused routine.";
+  private static final boolean EXCLUDE_API_DEFAULT = false;
 
   @RuleProperty(
       key = "excludeApi",
-      description = "Exclude routines declared in the interface section with public visibility.")
-  public boolean excludeApi = false;
+      description = "Exclude routines declared in the interface section with public visibility.",
+      defaultValue = EXCLUDE_API_DEFAULT + "")
+  public boolean excludeApi = EXCLUDE_API_DEFAULT;
 
   private final Set<RoutineNameDeclaration> seenRoutines = new HashSet<>();
 
