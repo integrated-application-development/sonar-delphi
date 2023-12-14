@@ -41,6 +41,14 @@ public final class IntrinsicArgumentMatcher extends TypeImpl {
           "<ordinal>",
           type -> type.isInteger() || type.isBoolean() || type.isEnum() || type.isChar());
 
+  public static final Type ANY_TYPED_POINTER =
+      new IntrinsicArgumentMatcher(
+          "<typed pointer>",
+          type ->
+              type.isPointer()
+                  && !((PointerType) type).dereferencedType().isUntyped()
+                  && !((PointerType) type).dereferencedType().isVoid());
+
   public static final Type ANY_CLASS_REFERENCE =
       new IntrinsicArgumentMatcher("<class reference>", Type::isClassReference);
 

@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect file position calculation for multiline compiler directives.
 - Incorrect detection of method calls as hard casts in `CastAndFree`.
 - Name resolution failures around helpers extending weak alias types.
+- Name resolution failures when `Inc`/`Dec` are invoked on pointer types.
 
 ## [1.0.0] - 2023-11-14
 

@@ -21,6 +21,8 @@ package au.com.integradev.delphi.checks;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class UnusedLocalVariableCheckTest {
   @Test
@@ -208,6 +210,26 @@ class UnusedLocalVariableCheckTest {
                 .appendImpl("procedure Test(Foo: Integer);")
                 .appendImpl("begin")
                 .appendImpl("  // Do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  // See: https://github.com/integrated-application-development/sonar-delphi/issues/141
+  @ParameterizedTest
+  @ValueSource(strings = {"Inc", "Dec"})
+  void testIssue141ShouldNotAddIssue(String routine) {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedLocalVariableCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  PByte = ^Byte;")
+                .appendImpl("procedure Test(P: PByte);")
+                .appendImpl("var")
+                .appendImpl("  I: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  I := 5;")
+                .appendImpl(String.format("  %s(P, I);", routine))
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
