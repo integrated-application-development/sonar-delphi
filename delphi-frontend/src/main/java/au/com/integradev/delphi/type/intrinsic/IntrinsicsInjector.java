@@ -24,6 +24,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BOOLEAN;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BYTE;
@@ -184,7 +185,8 @@ public final class IntrinsicsInjector {
         .param(type(INTEGER))
         .required(1)
         .returns(type(UNICODESTRING));
-    routine("Dec").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1).returns(type(INTEGER));
+    routine("Dec").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
+    routine("Dec").varParam(ANY_TYPED_POINTER).param(type(INTEGER)).required(1);
     routine("Default")
         .param(ANY_CLASS_REFERENCE)
         .returns(IntrinsicReturnType.classReferenceValue());
@@ -211,6 +213,7 @@ public final class IntrinsicsInjector {
         .varParam(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.high(typeFactory));
     routine("Inc").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
+    routine("Inc").varParam(ANY_TYPED_POINTER).param(type(INTEGER)).required(1);
     routine("Include").varParam(ANY_SET).param(ANY_ORDINAL);
     routine("Initialize").varParam(TypeFactory.untypedType()).param(type(NATIVEINT)).required(1);
     routine("Insert").param(type(UNICODESTRING)).varParam(type(UNICODESTRING)).param(type(INTEGER));
