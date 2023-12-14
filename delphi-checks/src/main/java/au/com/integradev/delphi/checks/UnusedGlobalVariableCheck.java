@@ -35,11 +35,13 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "UnusedGlobalVariable")
 public class UnusedGlobalVariableCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this unused global variable.";
+  private static final boolean EXCLUDE_API_DEFAULT = false;
 
   @RuleProperty(
       key = "excludeApi",
-      description = "Exclude global variables declared in the interface section.")
-  public boolean excludeApi = false;
+      description = "Exclude global variables declared in the interface section.",
+      defaultValue = EXCLUDE_API_DEFAULT + "")
+  public boolean excludeApi = EXCLUDE_API_DEFAULT;
 
   @Override
   public DelphiCheckContext visit(VarDeclarationNode varDeclaration, DelphiCheckContext context) {
