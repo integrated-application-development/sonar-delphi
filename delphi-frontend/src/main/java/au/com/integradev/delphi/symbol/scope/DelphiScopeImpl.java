@@ -26,11 +26,11 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.TreeMultimap;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
@@ -60,7 +60,7 @@ public class DelphiScopeImpl implements DelphiScope {
   private final Set<PropertyNameDeclaration> propertyDeclarations;
   private final Set<RoutineNameDeclaration> routineDeclarations;
   private final Set<VariableNameDeclaration> variableDeclarations;
-  private final Map<Type, HelperType> helpersByType;
+  private final Map<String, HelperType> helpersByType;
 
   private DelphiScope parent;
 
@@ -74,7 +74,7 @@ public class DelphiScopeImpl implements DelphiScope {
     propertyDeclarations = new HashSet<>();
     routineDeclarations = new HashSet<>();
     variableDeclarations = new HashSet<>();
-    helpersByType = new HashMap<>();
+    helpersByType = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   }
 
   public Set<NameDeclaration> addNameOccurrence(@Nonnull NameOccurrence occurrence) {
@@ -194,7 +194,7 @@ public class DelphiScopeImpl implements DelphiScope {
       Type type = typeDeclaration.getType();
       if (type.isHelper()) {
         HelperType helper = (HelperType) type;
-        helpersByType.put(helper.extendedType(), helper);
+        helpersByType.put(helper.extendedType().getImage(), helper);
       }
     }
   }
@@ -362,7 +362,7 @@ public class DelphiScopeImpl implements DelphiScope {
   }
 
   protected HelperType findHelper(Type type) {
-    return helpersByType.get(type);
+    return helpersByType.get(type.getImage());
   }
 
   private static NameDeclaration getDeclaration(NameDeclaration declaration) {
