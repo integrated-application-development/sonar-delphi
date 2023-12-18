@@ -73,12 +73,18 @@ package au.com.integradev.delphi.antlr;
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
     String msg = this.getErrorMessage(e, this.getTokenNames());
-    throw new RuntimeException(hdr + " " + msg, e);
+    throw new LexerException(hdr + " " + msg, e);
   }
 
   @Override
   public String getErrorHeader(RecognitionException e) {
     return "line " + e.line + ":" + e.charPositionInLine;
+  }
+
+  public static class LexerException extends RuntimeException {
+    public LexerException(String message, Throwable cause) {
+      super(message, cause);
+    }
   }
 }
 
@@ -100,7 +106,7 @@ package au.com.integradev.delphi.antlr;
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
     String msg = this.getErrorMessage(e, this.getTokenNames());
-    throw new RuntimeException(hdr + " " + msg, e);
+    throw new ParserException(hdr + " " + msg, e);
   }
 
   @Override
@@ -120,6 +126,12 @@ package au.com.integradev.delphi.antlr;
 
     resetBinaryExpressionTokens(binaryExpression.getLeft());
     resetBinaryExpressionTokens(binaryExpression.getRight());
+  }
+
+  public static class ParserException extends RuntimeException {
+    public ParserException(String message, Throwable cause) {
+      super(message, cause);
+    }
   }
 }
 

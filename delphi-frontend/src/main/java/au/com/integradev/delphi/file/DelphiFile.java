@@ -24,7 +24,9 @@ import static org.apache.commons.io.FileUtils.readLines;
 
 import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
+import au.com.integradev.delphi.antlr.DelphiLexer.LexerException;
 import au.com.integradev.delphi.antlr.DelphiParser;
+import au.com.integradev.delphi.antlr.DelphiParser.ParserException;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
@@ -121,7 +123,8 @@ public interface DelphiFile {
     return delphiFile;
   }
 
-  static void setupFile(DefaultDelphiFile delphiFile, File sourceFile, DelphiFileConfig config) {
+  private static void setupFile(
+      DefaultDelphiFile delphiFile, File sourceFile, DelphiFileConfig config) {
     try {
       delphiFile.setSourceCodeFile(sourceFile);
       delphiFile.setTypeFactory(config.getTypeFactory());
@@ -131,7 +134,11 @@ public interface DelphiFile {
       delphiFile.setSourceCodeLines(readLines(sourceFile, config.getEncoding()));
       delphiFile.setTokens(createTokenList(delphiFile, preprocessor.getTokenStream()));
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
-    } catch (IOException | RecognitionException | EmptyDelphiFileException e) {
+    } catch (IOException
+        | RecognitionException
+        | LexerException
+        | ParserException
+        | EmptyDelphiFileException e) {
       throw new DelphiFileConstructionException(e);
     }
   }

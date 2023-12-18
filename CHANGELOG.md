@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type modeling around integer subranges.
 - Issues raised on a hard cast expression now span the entire expression in `UnicodeToAnsiCast`,
   `CharacterToCharacterPointerCast`, `NonLinearCast`, `RedundantCast`, and `PlatformDependentCast`.
+- Parsing errors now consistently surface the file and line where they occurred.
+- Parsing errors now consistently skip the offending unit instead of crashing the scan.
 - **API:** `TypeSectionNode` now implements `Visibility`.
 - **API:** `TypeDeclarationNode` now implements `Visibility`.
 
