@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.symbol;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -39,6 +40,8 @@ import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentMatchers;
 
 class SymbolTableBuilderTest {
@@ -120,28 +123,7 @@ class SymbolTableBuilderTest {
   @Test
   void testStandardLibrarySearchPathShouldExcludeToolsUnits(
       @TempDir Path standardLibraryPath, @TempDir Path tempDir) throws IOException {
-    Files.writeString(
-        standardLibraryPath.resolve("SysInit.pas"),
-        "unit SysInit;\n" //
-            + "interface\n"
-            + "implementation\n"
-            + "end.");
-
-    Files.writeString(
-        standardLibraryPath.resolve("System.pas"),
-        "unit System;\n"
-            + "interface\n"
-            + "type\n"
-            + "  TObject = class\n"
-            + "  end;\n"
-            + "  IInterface = interface\n"
-            + "  end;\n"
-            + "  TClassHelperBase = class\n"
-            + "  end;\n"
-            + "  TVarRec = record\n"
-            + "  end;\n"
-            + "implementation\n"
-            + "end.");
+    createStandardLibrary(standardLibraryPath);
 
     Path toolsPath = standardLibraryPath.resolve("Tools");
     Files.createDirectories(toolsPath);
@@ -173,5 +155,64 @@ class SymbolTableBuilderTest {
             .build();
 
     assertThat(symbolTable.getUnitByPath(excludedPath.toString())).isNull();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"#$@", "unit ErrorUnit;"})
+  void testRecognitionErrorInImportShouldNotThrow(
+      String errorSource, @TempDir Path standardLibraryPath, @TempDir Path tempDir)
+      throws IOException {
+    createStandardLibrary(standardLibraryPath);
+
+    Path includePath = tempDir.resolve("include");
+    Files.createDirectories(includePath);
+
+    Path errorUnitPath = includePath.resolve("ErrorUnit.pas");
+    Files.writeString(errorUnitPath, errorSource);
+
+    Path sourceFilePath = tempDir.resolve("SourceFile.pas");
+    Files.writeString(
+        sourceFilePath,
+        "unit SourceFile;\n"
+            + "interface\n"
+            + "uses\n"
+            + "  ErrorUnit;"
+            + "implementation\n"
+            + "end.");
+
+    SymbolTableBuilder symbolTable =
+        SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
+            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .standardLibraryPath(standardLibraryPath)
+            .sourceFiles(List.of(sourceFilePath))
+            .searchPath(SearchPath.create(List.of(includePath)));
+
+    assertThatCode(symbolTable::build).doesNotThrowAnyException();
+  }
+
+  private static void createStandardLibrary(Path path) throws IOException {
+    Files.writeString(
+        path.resolve("SysInit.pas"),
+        "unit SysInit;\n" //
+            + "interface\n"
+            + "implementation\n"
+            + "end.");
+
+    Files.writeString(
+        path.resolve("System.pas"),
+        "unit System;\n"
+            + "interface\n"
+            + "type\n"
+            + "  TObject = class\n"
+            + "  end;\n"
+            + "  IInterface = interface\n"
+            + "  end;\n"
+            + "  TClassHelperBase = class\n"
+            + "  end;\n"
+            + "  TVarRec = record\n"
+            + "  end;\n"
+            + "implementation\n"
+            + "end.");
   }
 }
