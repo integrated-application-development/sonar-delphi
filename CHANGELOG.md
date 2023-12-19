@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve type resolution on binary and unary expressions.
 - Improve type comparisons between signed and unsigned integer types.
+- Improve type comparisons between text types.
 - Exclude routines annotated with attributes in `UnusedRoutine`.
 - Exclude properties annotated with attributes in `UnusedProperty`.
 - Exclude fields annotated with attributes in `UnusedField`.

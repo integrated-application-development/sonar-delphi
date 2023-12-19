@@ -54,6 +54,7 @@ public final class InvocationCandidate {
   private int numericMismatchCount;
   private int structMismatchCount;
   private int proceduralDistance;
+  private int codePageDistance;
   private final List<VariantConversionType> variantConversions;
   private boolean invalid;
 
@@ -145,6 +146,14 @@ public final class InvocationCandidate {
 
   public int getProceduralDistance() {
     return proceduralDistance;
+  }
+
+  public void increaseCodePageDistance(int codePageDistance) {
+    this.codePageDistance += codePageDistance;
+  }
+
+  public int getCodePageDistance() {
+    return codePageDistance;
   }
 
   public void addVariantConversion(VariantConversionType variantConversionType) {
