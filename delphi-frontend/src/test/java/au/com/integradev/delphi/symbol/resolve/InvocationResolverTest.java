@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSICHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BOOLEAN;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BYTE;
@@ -66,6 +67,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -224,6 +226,46 @@ class InvocationResolverTest {
         type(UNICODESTRING),
         FACTORY.strongAlias("MyString", type(UNICODESTRING)),
         type(SHORTSTRING));
+    assertResolved(
+        List.of(type(ANSICHAR), type(ANSICHAR)),
+        List.of(type(ANSISTRING), type(ANSISTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)));
+    assertResolved(
+        List.of(type(ANSISTRING), type(ANSISTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)));
+    assertResolved(
+        List.of(type(ANSICHAR), type(SHORTSTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)));
+    assertResolved(
+        List.of(type(ANSISTRING), type(SHORTSTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)));
+    assertResolved(
+        List.of(type(SHORTSTRING), type(SHORTSTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)));
+    assertResolved(
+        List.of(type(ANSICHAR), type(CHAR)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)));
+    assertResolved(
+        List.of(type(ANSISTRING), type(UNICODESTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)));
+    assertResolved(
+        List.of(type(SHORTSTRING), type(CHAR)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)));
+    assertResolved(
+        List.of(type(SHORTSTRING), type(UNICODESTRING)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)));
+    assertResolved(
+        List.of(type(CHAR), type(CHAR)),
+        List.of(type(UNICODESTRING), type(UNICODESTRING)),
+        List.of(type(ANSISTRING), type(ANSISTRING)));
   }
 
   @Test
@@ -233,6 +275,14 @@ class InvocationResolverTest {
         List.of(type(UNICODESTRING), variantIncompatibleType, type(BOOLEAN)),
         List.of(type(UNICODESTRING), variantIncompatibleType, type(VARIANT), type(BOOLEAN)),
         List.of(type(UNICODESTRING), type(VARIANT), type(BOOLEAN)));
+    assertResolved(type(UNICODESTRING), type(VARIANT), type(ANSISTRING));
+    assertResolved(type(UNICODESTRING), type(VARIANT), type(SHORTSTRING));
+    assertResolved(type(SHORTSTRING), type(ANSISTRING), type(VARIANT));
+    assertResolved(type(ANSISTRING), type(VARIANT), type(SHORTSTRING));
+    assertResolved(type(ANSISTRING), type(UNICODESTRING), type(VARIANT));
+    assertResolved(type(ANSISTRING), FACTORY.ansiString(CodePages.CP_UTF8), type(VARIANT));
+    assertResolved(type(ANSISTRING), FACTORY.ansiString(CodePages.CP_1252), type(VARIANT));
+    assertResolved(FACTORY.ansiString(1251), FACTORY.ansiString(1252), type(VARIANT));
     assertResolved(
         List.of(type(VARIANT), type(BYTE)),
         List.of(type(UNICODESTRING), type(INTEGER)),

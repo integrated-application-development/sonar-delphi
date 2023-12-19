@@ -189,13 +189,13 @@ class TypeComparerTest {
   @Test
   void testStringToString() {
     compare(IntrinsicType.WIDESTRING, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_1);
-    compare(IntrinsicType.WIDESTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
-    compare(IntrinsicType.WIDESTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.WIDESTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.WIDESTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_5);
     compare(IntrinsicType.WIDESTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
     compare(IntrinsicType.UNICODESTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_1);
-    compare(IntrinsicType.UNICODESTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
-    compare(IntrinsicType.UNICODESTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.UNICODESTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_5);
     compare(IntrinsicType.UNICODESTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
     compare(IntrinsicType.SHORTSTRING, IntrinsicType.ANSISTRING, CONVERT_LEVEL_1);
@@ -207,13 +207,13 @@ class TypeComparerTest {
     compare(strongAlias("_", IntrinsicType.ANSISTRING), IntrinsicType.ANSISTRING, EQUAL);
     compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_NONE), EQUAL);
     compare(ansiString(CodePages.CP_NONE), strongAlias("_", ansiString(CodePages.CP_NONE)), EQUAL);
-    compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_UTF8), CONVERT_LEVEL_1);
-    compare(ansiString(CodePages.CP_1252), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
-    compare(ansiString(CodePages.CP_NONE), IntrinsicType.ANSISTRING, CONVERT_LEVEL_2);
-    compare(ansiString(CodePages.CP_1252), ansiString(50937), CONVERT_LEVEL_3);
-    compare(IntrinsicType.ANSISTRING, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
-    compare(IntrinsicType.ANSISTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_5);
-    compare(IntrinsicType.ANSISTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_6);
+    compare(IntrinsicType.ANSISTRING, ansiString(CodePages.CP_UTF8), EQUAL);
+    compare(ansiString(CodePages.CP_1252), IntrinsicType.ANSISTRING, EQUAL);
+    compare(ansiString(CodePages.CP_NONE), IntrinsicType.ANSISTRING, EQUAL);
+    compare(ansiString(CodePages.CP_1252), ansiString(50937), EQUAL);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_1);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.WIDESTRING, CONVERT_LEVEL_2);
+    compare(IntrinsicType.ANSISTRING, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_3);
     compare(IntrinsicType.ANSISTRING, IntrinsicType.CHAR, INCOMPATIBLE_TYPES);
 
     compare(strongAlias("Test", IntrinsicType.UNICODESTRING), IntrinsicType.UNICODESTRING, EQUAL);

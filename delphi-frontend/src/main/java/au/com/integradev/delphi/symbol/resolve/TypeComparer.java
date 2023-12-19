@@ -35,12 +35,10 @@ import au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Comparator;
 import java.util.List;
-import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
-import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.BooleanType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
@@ -299,7 +297,7 @@ final class TypeComparer {
     } else if (from.is(IntrinsicType.SHORTSTRING)) {
       return compareShortStringToString(to);
     } else if (from.isAnsiString()) {
-      return compareAnsiStringToString((AnsiStringType) from, to);
+      return compareAnsiStringToString(to);
     }
 
     throw new AssertionError("Unhandled string type");
@@ -309,9 +307,9 @@ final class TypeComparer {
     if (to.is(IntrinsicType.UNICODESTRING)) {
       return CONVERT_LEVEL_1;
     } else if (to.isAnsiString()) {
-      return CONVERT_LEVEL_2;
+      return CONVERT_LEVEL_4;
     } else {
-      return CONVERT_LEVEL_3;
+      return CONVERT_LEVEL_5;
     }
   }
 
@@ -319,9 +317,9 @@ final class TypeComparer {
     if (to.is(IntrinsicType.WIDESTRING)) {
       return CONVERT_LEVEL_1;
     } else if (to.isAnsiString()) {
-      return CONVERT_LEVEL_2;
+      return CONVERT_LEVEL_4;
     } else {
-      return CONVERT_LEVEL_3;
+      return CONVERT_LEVEL_5;
     }
   }
 
@@ -335,25 +333,15 @@ final class TypeComparer {
     }
   }
 
-  private static EqualityType compareAnsiStringToString(AnsiStringType from, Type to) {
+  private static EqualityType compareAnsiStringToString(Type to) {
     if (to.isAnsiString()) {
-      AnsiStringType toAnsiString = (AnsiStringType) to;
-      if (from.codePage() == toAnsiString.codePage()
-          || toAnsiString.codePage() == CodePages.CP_NONE) {
-        return EQUAL;
-      } else if (toAnsiString.codePage() == CodePages.CP_UTF8) {
-        return CONVERT_LEVEL_1;
-      } else if (toAnsiString.codePage() == CodePages.CP_ACP) {
-        return CONVERT_LEVEL_2;
-      } else {
-        return CONVERT_LEVEL_3;
-      }
+      return EQUAL;
     } else if (to.is(IntrinsicType.UNICODESTRING)) {
-      return CONVERT_LEVEL_4;
+      return CONVERT_LEVEL_1;
     } else if (to.is(IntrinsicType.WIDESTRING)) {
-      return CONVERT_LEVEL_5;
+      return CONVERT_LEVEL_2;
     } else {
-      return CONVERT_LEVEL_6;
+      return CONVERT_LEVEL_3;
     }
   }
 

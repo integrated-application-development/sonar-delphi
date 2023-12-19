@@ -55,8 +55,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
@@ -188,6 +190,7 @@ public class InvocationResolver {
       }
     }
 
+    checkCodePageDistance(candidate, argumentType, parameterType);
     checkVariantConversions(candidate, argumentType, parameterType);
 
     // When an ambiguous procedural type was changed to an invocation, an exact match is
@@ -309,6 +312,31 @@ public class InvocationResolver {
 
     if (argumentType.isPointer() && parameterType.isProcedural()) {
       candidate.increaseProceduralDistance(((ProceduralType) parameterType).kind().ordinal());
+    }
+  }
+
+  private static void checkCodePageDistance(
+      InvocationCandidate candidate, Type argumentType, Type parameterType) {
+    if (!argumentType.isAnsiString() || !parameterType.isAnsiString()) {
+      return;
+    }
+
+    AnsiStringType from = (AnsiStringType) argumentType;
+    AnsiStringType to = (AnsiStringType) parameterType;
+    if (from.codePage() == to.codePage() || to.codePage() == CodePages.CP_NONE) {
+      return;
+    }
+
+    switch (to.codePage()) {
+      case CodePages.CP_UTF8:
+        candidate.increaseCodePageDistance(1);
+        break;
+      case CodePages.CP_ACP:
+        candidate.increaseCodePageDistance(2);
+        break;
+      default:
+        candidate.increaseCodePageDistance(3);
+        break;
     }
   }
 
@@ -479,6 +507,8 @@ public class InvocationResolver {
             .compare(bestCandidate.getStructMismatchCount(), candidate.getStructMismatchCount())
             // Smaller procedural distance?
             .compare(bestCandidate.getProceduralDistance(), candidate.getProceduralDistance())
+            // Smaller codePage distance?
+            .compare(bestCandidate.getCodePageDistance(), candidate.getCodePageDistance())
             // Less implicit conversions based on the parameter type?
             .compare(
                 bestCandidate.getImplicitConversionToCount(),
