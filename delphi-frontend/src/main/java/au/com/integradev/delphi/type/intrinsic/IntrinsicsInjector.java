@@ -38,8 +38,8 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEINT
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEUINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.OLEVARIANT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PANSICHAR;
-import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PCHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.POINTER;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PWIDECHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.REAL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTSTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.TEXT;
@@ -171,16 +171,21 @@ public final class IntrinsicsInjector {
         .returns(IntrinsicReturnType.concat(typeFactory));
     routine("Continue");
     routine("Copy")
-        .param(type(UNICODESTRING))
+        .param(type(PANSICHAR))
         .param(type(INTEGER))
         .param(type(INTEGER))
-        .returns(type(UNICODESTRING));
+        .returns(IntrinsicReturnType.copy(typeFactory));
     routine("Copy")
-        .param(ANY_DYNAMIC_ARRAY)
+        .param(type(PWIDECHAR))
+        .param(type(INTEGER))
+        .param(type(INTEGER))
+        .returns(IntrinsicReturnType.copy(typeFactory));
+    routine("Copy")
+        .param(LIKE_DYNAMIC_ARRAY)
         .param(type(INTEGER))
         .param(type(INTEGER))
         .required(1)
-        .returns(type(UNICODESTRING));
+        .returns(IntrinsicReturnType.copy(typeFactory));
     routine("Dec").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
     routine("Dec").varParam(ANY_TYPED_POINTER).param(type(INTEGER)).required(1);
     routine("Default")

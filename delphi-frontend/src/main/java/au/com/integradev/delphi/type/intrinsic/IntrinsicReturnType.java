@@ -67,6 +67,10 @@ public abstract class IntrinsicReturnType extends TypeImpl {
     return new ConcatReturnType(typeFactory);
   }
 
+  public static Type copy(TypeFactory typeFactory) {
+    return new CopyReturnType(typeFactory);
+  }
+
   public static Type classReferenceValue() {
     return new ClassReferenceValueType();
   }
@@ -180,6 +184,23 @@ public abstract class IntrinsicReturnType extends TypeImpl {
       }
 
       return currentType;
+    }
+  }
+
+  private static final class CopyReturnType extends IntrinsicReturnType {
+    private final TypeFactory typeFactory;
+
+    public CopyReturnType(TypeFactory typeFactory) {
+      this.typeFactory = typeFactory;
+    }
+
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      Type result = arguments.get(0);
+      if (result.isChar()) {
+        result = typeFactory.getIntrinsic(result.size() == 1 ? ANSISTRING : UNICODESTRING);
+      }
+      return result;
     }
   }
 }
