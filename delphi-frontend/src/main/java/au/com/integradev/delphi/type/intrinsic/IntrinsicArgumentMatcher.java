@@ -60,6 +60,8 @@ public final class IntrinsicArgumentMatcher extends TypeImpl {
       new IntrinsicArgumentMatcher(
           "<32-bit integer>", type -> type.isInteger() && type.size() == 4);
 
+  public static final Type ANY_POINTER = new IntrinsicArgumentMatcher("<pointer>", Type::isPointer);
+
   public static final Type ANY_TYPED_POINTER =
       new IntrinsicArgumentMatcher(
           "<typed pointer>",

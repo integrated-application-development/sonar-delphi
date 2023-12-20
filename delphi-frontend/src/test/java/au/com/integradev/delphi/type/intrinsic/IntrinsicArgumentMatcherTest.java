@@ -24,6 +24,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_POINTER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_STRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TEXT_FILE;
@@ -157,6 +158,15 @@ class IntrinsicArgumentMatcherTest {
     assertThat(matches(ANY_32_BIT_INTEGER, subrange32)).isTrue();
     assertThat(matches(ANY_32_BIT_INTEGER, subrange16)).isFalse();
     assertThat(matches(ANY_32_BIT_INTEGER, FACTORY.getIntrinsic(IntrinsicType.STRING))).isFalse();
+  }
+
+  @Test
+  void testAnyPointer() {
+    Type typedPointer = FACTORY.pointerTo("PInteger", FACTORY.getIntrinsic(IntrinsicType.INTEGER));
+    assertThat(matches(ANY_POINTER, typedPointer)).isTrue();
+    assertThat(matches(ANY_POINTER, FACTORY.untypedPointer())).isTrue();
+    assertThat(matches(ANY_POINTER, FACTORY.nilPointer())).isTrue();
+    assertThat(matches(ANY_POINTER, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
   }
 
   @Test

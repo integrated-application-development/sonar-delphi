@@ -64,6 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `BlockWrite`, `Close`, `CloseFile`, `Eof`, `Eoln`, `Erase`, `FilePos`, `FileSize`, `Read`,
   `ReadLn`, `Rename`, `Reset`, `Rewrite`, `Seek`, `Truncate`, `Write`, or `WriteLn`.
 - Strong aliases were not accepted as arguments to `Delete`, `Insert`, or `SetLength`.
+- Strong aliases and typed pointers were not accepted as arguments to `Dispose`, `FreeMem`,
+  `GetMem`, `New`, or `ReallocMem`.
 
 ## [1.0.0] - 2023-11-14
 
