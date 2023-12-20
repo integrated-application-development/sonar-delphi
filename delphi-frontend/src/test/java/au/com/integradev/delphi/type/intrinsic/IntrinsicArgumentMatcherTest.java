@@ -23,6 +23,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TEXT_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
@@ -106,6 +107,15 @@ class IntrinsicArgumentMatcherTest {
     assertThat(matches(ANY_ORDINAL, FACTORY.enumeration("TFoo", null))).isTrue();
     assertThat(matches(ANY_ORDINAL, FACTORY.getIntrinsic(IntrinsicType.CHAR))).isTrue();
     assertThat(matches(ANY_ORDINAL, FACTORY.getIntrinsic(IntrinsicType.STRING))).isFalse();
+  }
+
+  @Test
+  void testAnyTextFile() {
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.untypedFile())).isFalse();
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.TEXT))).isTrue();
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.fileOf(FACTORY.getIntrinsic(IntrinsicType.INTEGER))))
+        .isFalse();
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
   }
 
   @Test

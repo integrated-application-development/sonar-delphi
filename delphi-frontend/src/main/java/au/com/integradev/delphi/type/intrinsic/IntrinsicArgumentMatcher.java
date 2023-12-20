@@ -20,6 +20,7 @@ package au.com.integradev.delphi.type.intrinsic;
 
 import au.com.integradev.delphi.type.TypeImpl;
 import au.com.integradev.delphi.type.TypeUtils;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
@@ -35,6 +36,9 @@ public final class IntrinsicArgumentMatcher extends TypeImpl {
                   || type.isArrayConstructor()
                   || type.isString()
                   || type.isChar());
+
+  public static final Type ANY_TEXT_FILE =
+      new IntrinsicArgumentMatcher("<text file>", type -> type.is(IntrinsicType.TEXT));
 
   public static final Type ANY_ARRAY = new IntrinsicArgumentMatcher("<array>", Type::isArray);
 
