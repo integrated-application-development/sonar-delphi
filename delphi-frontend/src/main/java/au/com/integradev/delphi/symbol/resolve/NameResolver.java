@@ -198,11 +198,14 @@ public class NameResolver {
 
   public void checkAmbiguity() {
     if (declarations.size() > 1) {
-      LOG.warn(
-          "Ambiguous declarations could not be resolved\n[Occurrence] {}{}",
-          Iterables.getLast(names),
-          declarations.stream().map(declaration -> "\n[Declaration] " + declaration));
-
+      if (LOG.isWarnEnabled()) {
+        LOG.warn(
+            "Ambiguous declarations could not be resolved\n[Occurrence] {}\n{}",
+            Iterables.getLast(names),
+            declarations.stream()
+                .map(declaration -> "[Declaration] " + declaration)
+                .collect(Collectors.joining("\n")));
+      }
       declarations.clear();
     }
   }
