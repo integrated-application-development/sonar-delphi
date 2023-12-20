@@ -410,11 +410,24 @@ final class TypeComparer {
   }
 
   private static EqualityType comparePointerToString(PointerType from, StringType to) {
-    if (from.dereferencedType().isChar()) {
-      if (from.dereferencedType().is(to.characterType())) {
+    if (from.is(IntrinsicType.PANSICHAR)) {
+      if (to.isAnsiString()) {
         return CONVERT_LEVEL_3;
-      } else {
+      } else if (to.is(IntrinsicType.UNICODESTRING)) {
         return CONVERT_LEVEL_4;
+      } else if (to.is(IntrinsicType.WIDESTRING)) {
+        return CONVERT_LEVEL_5;
+      } else if (to.is(IntrinsicType.SHORTSTRING)) {
+        return CONVERT_LEVEL_6;
+      }
+    } else if (from.is(IntrinsicType.PWIDECHAR)) {
+      if (to.is(IntrinsicType.UNICODESTRING)) {
+        return CONVERT_LEVEL_3;
+      } else if (to.is(IntrinsicType.WIDESTRING)) {
+        return CONVERT_LEVEL_4;
+      } else if (to.isAnsiString()) {
+        // Penalty for bad type conversion
+        return CONVERT_LEVEL_7;
       }
     }
     return INCOMPATIBLE_TYPES;

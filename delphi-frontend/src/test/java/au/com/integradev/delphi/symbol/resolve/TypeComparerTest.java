@@ -258,9 +258,15 @@ class TypeComparerTest {
   @Test
   void testPointerToString() {
     compare(IntrinsicType.PANSICHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_3);
-    compare(IntrinsicType.PCHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_3);
     compare(IntrinsicType.PANSICHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_4);
-    compare(IntrinsicType.PCHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.PANSICHAR, IntrinsicType.WIDESTRING, CONVERT_LEVEL_5);
+    compare(IntrinsicType.PANSICHAR, IntrinsicType.SHORTSTRING, CONVERT_LEVEL_6);
+
+    compare(IntrinsicType.PCHAR, IntrinsicType.UNICODESTRING, CONVERT_LEVEL_3);
+    compare(IntrinsicType.PCHAR, IntrinsicType.WIDESTRING, CONVERT_LEVEL_4);
+    compare(IntrinsicType.PCHAR, IntrinsicType.ANSISTRING, CONVERT_LEVEL_7);
+    compare(IntrinsicType.PCHAR, IntrinsicType.SHORTSTRING, INCOMPATIBLE_TYPES);
+
     compare(pointerTo(IntrinsicType.INTEGER), IntrinsicType.UNICODESTRING, INCOMPATIBLE_TYPES);
   }
 
