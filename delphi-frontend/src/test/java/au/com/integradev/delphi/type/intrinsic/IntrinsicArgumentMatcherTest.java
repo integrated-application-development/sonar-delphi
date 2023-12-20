@@ -19,8 +19,8 @@
 package au.com.integradev.delphi.type.intrinsic;
 
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_32_BIT_INTEGER;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
-import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
@@ -74,21 +74,6 @@ class IntrinsicArgumentMatcherTest {
   }
 
   @Test
-  void testAnyDynamicArray() {
-    assertThat(
-            matches(
-                ANY_DYNAMIC_ARRAY,
-                FACTORY.array("TFoo", TypeFactory.untypedType(), Set.of(ArrayOption.DYNAMIC))))
-        .isTrue();
-    assertThat(
-            matches(
-                ANY_DYNAMIC_ARRAY,
-                FACTORY.array("TBar", TypeFactory.untypedType(), Set.of(ArrayOption.FIXED))))
-        .isFalse();
-    assertThat(matches(ANY_DYNAMIC_ARRAY, FACTORY.set(TypeFactory.untypedType()))).isFalse();
-  }
-
-  @Test
   void testAnyString() {
     assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.ANSICHAR))).isTrue();
     assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.WIDECHAR))).isTrue();
@@ -119,14 +104,31 @@ class IntrinsicArgumentMatcherTest {
   }
 
   @Test
+  void testAnyArray() {
+    Type elementType = FACTORY.getIntrinsic(IntrinsicType.INTEGER);
+
+    Type fixedArray = FACTORY.array(null, elementType, Set.of(ArrayOption.FIXED));
+    Type dynamicArray = FACTORY.array(null, elementType, Set.of(ArrayOption.DYNAMIC));
+    Type openArray = FACTORY.array(null, elementType, Set.of(ArrayOption.OPEN));
+    Type arrayOfConst =
+        FACTORY.array(null, elementType, Set.of(ArrayOption.OPEN, ArrayOption.ARRAY_OF_CONST));
+
+    assertThat(matches(ANY_ARRAY, fixedArray)).isTrue();
+    assertThat(matches(ANY_ARRAY, dynamicArray)).isTrue();
+    assertThat(matches(ANY_ARRAY, openArray)).isTrue();
+    assertThat(matches(ANY_ARRAY, arrayOfConst)).isTrue();
+    assertThat(matches(ANY_ARRAY, FACTORY.emptySet())).isFalse();
+    assertThat(matches(ANY_ARRAY, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
+    assertThat(matches(ANY_ARRAY, FACTORY.getIntrinsic(IntrinsicType.ANSISTRING))).isFalse();
+  }
+
+  @Test
   void testAnySet() {
+    Type dynamicArray = FACTORY.array(null, TypeFactory.untypedType(), Set.of(ArrayOption.DYNAMIC));
+
     assertThat(matches(ANY_SET, FACTORY.emptySet())).isTrue();
     assertThat(matches(ANY_SET, FACTORY.arrayConstructor(Collections.emptyList()))).isTrue();
-    assertThat(
-            matches(
-                ANY_SET,
-                FACTORY.array("TFoo", TypeFactory.untypedType(), Set.of(ArrayOption.DYNAMIC))))
-        .isFalse();
+    assertThat(matches(ANY_SET, dynamicArray)).isFalse();
   }
 
   @Test

@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Strong aliases and typed files were not accepted as arguments to `Assign`, `BlockRead`,
   `BlockWrite`, `Close`, `CloseFile`, `Eof`, `Eoln`, `Erase`, `FilePos`, `FileSize`, `Read`,
   `ReadLn`, `Rename`, `Reset`, `Rewrite`, `Seek`, `Truncate`, `Write`, or `WriteLn`.
+- Strong aliases were not accepted as arguments to `Delete`, `Insert`, or `SetLength`.
 
 ## [1.0.0] - 2023-11-14
 
