@@ -98,11 +98,7 @@ public final class IntrinsicsInjector {
     routine("Assert").param(type(BOOLEAN)).param(ANY_STRING).required(1);
     routine("Assign").varParam(ANY_FILE).param(ANY_STRING).param(type(WORD)).required(2);
     routine("Assigned").varParam(TypeFactory.untypedType()).returns(type(BOOLEAN));
-    routine("AssignFile")
-        .varParam(typeFactory.untypedFile())
-        .param(type(UNICODESTRING))
-        .param(type(WORD))
-        .required(2);
+    routine("AssignFile").varParam(ANY_FILE).param(ANY_STRING).param(type(WORD)).required(2);
     routine("AtomicCmpExchange")
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
