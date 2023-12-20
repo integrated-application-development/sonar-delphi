@@ -66,6 +66,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Strong aliases were not accepted as arguments to `Delete`, `Insert`, or `SetLength`.
 - Strong aliases and typed pointers were not accepted as arguments to `Dispose`, `FreeMem`,
   `GetMem`, `New`, or `ReallocMem`.
+- Strong aliases and specialized string types were not accepted as arguments to `Str`, `GetDir`,
+  `SetString`, or `Val`.
 
 ## [1.0.0] - 2023-11-14
 
