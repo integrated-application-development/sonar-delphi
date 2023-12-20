@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return type of the array `Copy` intrinsic was not specified correctly.
 - Dynamic array literals were not accepted as arguments to `Copy`.
 - Implicit conversions to `Boolean` were not accepted as arguments to `Assert`.
+- Return type of the `Length` intrinsic was incorrect for `ShortString`.
 - Strong aliases were not accepted as arguments to `Append`, `SeekEof`, `SeekEoln`, or `SetTextBuf`.
 - Strong aliases and typed files were not accepted as arguments to `Assign`, `BlockRead`,
   `BlockWrite`, `Close`, `CloseFile`, `Eof`, `Eoln`, `Erase`, `FilePos`, `FileSize`, `Read`,
