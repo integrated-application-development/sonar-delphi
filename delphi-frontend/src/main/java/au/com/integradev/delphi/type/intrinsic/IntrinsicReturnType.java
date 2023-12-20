@@ -75,6 +75,10 @@ public abstract class IntrinsicReturnType extends TypeImpl {
     return new ClassReferenceValueType();
   }
 
+  public static Type argumentByIndex(int index) {
+    return new ArgumentByIndexReturnType(index);
+  }
+
   private static final class HighLowReturnType extends IntrinsicReturnType {
     private final Type integerType;
 
@@ -201,6 +205,19 @@ public abstract class IntrinsicReturnType extends TypeImpl {
         result = typeFactory.getIntrinsic(result.size() == 1 ? ANSISTRING : UNICODESTRING);
       }
       return result;
+    }
+  }
+
+  private static final class ArgumentByIndexReturnType extends IntrinsicReturnType {
+    private final int index;
+
+    private ArgumentByIndexReturnType(int index) {
+      this.index = index;
+    }
+
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      return arguments.get(index);
     }
   }
 }

@@ -71,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Strong aliases were not accepted as arguments to `VarArrayRedim`, `VarCast`, `VarClear`, or
   `VarCopy`.
 - Parameter of the `Int64` overload of `Sqr` was erroneously specified as `Real`.
+- Return type of the `Succ` intrinsic was not specified correctly.
 
 ## [1.0.0] - 2023-11-14
 
