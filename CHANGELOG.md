@@ -56,6 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect detection of method calls as hard casts in `CastAndFree`.
 - Name resolution failures around helpers extending weak alias types.
 - Name resolution failures when `Inc`/`Dec` are invoked on pointer types.
+- Return type of the array `Concat` intrinsic was not inferred correctly.
+- Dynamic array literals were not accepted as arguments to `Concat`.
 
 ## [1.0.0] - 2023-11-14
 

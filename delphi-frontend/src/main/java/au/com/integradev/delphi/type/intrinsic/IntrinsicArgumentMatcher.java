@@ -27,6 +27,15 @@ public final class IntrinsicArgumentMatcher extends TypeImpl {
   public static final Type ANY_DYNAMIC_ARRAY =
       new IntrinsicArgumentMatcher("<dynamic array>", Type::isDynamicArray);
 
+  public static final Type LIKE_DYNAMIC_ARRAY =
+      new IntrinsicArgumentMatcher(
+          "<dynamic array, array constructor, string, or char>",
+          type ->
+              type.isDynamicArray()
+                  || type.isArrayConstructor()
+                  || type.isString()
+                  || type.isChar());
+
   public static final Type ANY_ARRAY = new IntrinsicArgumentMatcher("<array>", Type::isArray);
 
   public static final Type ANY_SET =
