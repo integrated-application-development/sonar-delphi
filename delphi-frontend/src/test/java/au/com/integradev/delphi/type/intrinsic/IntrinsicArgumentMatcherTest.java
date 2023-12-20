@@ -24,6 +24,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +33,7 @@ import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
@@ -42,6 +44,28 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 class IntrinsicArgumentMatcherTest {
   private static final TypeFactoryImpl FACTORY =
       (TypeFactoryImpl) TypeFactoryUtils.defaultFactory();
+
+  @Test
+  void testLikeDynamicArray() {
+    Type dynamicArray =
+        FACTORY.array("TFoo", TypeFactory.untypedType(), Set.of(ArrayOption.DYNAMIC));
+    Type fixedArray = FACTORY.array("TBar", TypeFactory.untypedType(), Set.of(ArrayOption.FIXED));
+    Type arrayConstructor =
+        FACTORY.arrayConstructor(List.of(FACTORY.getIntrinsic(IntrinsicType.INTEGER)));
+
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, dynamicArray)).isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, arrayConstructor)).isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.ANSICHAR))).isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.WIDECHAR))).isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.SHORTSTRING)))
+        .isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.ANSISTRING)))
+        .isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING)))
+        .isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, fixedArray)).isFalse();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.emptySet())).isFalse();
+  }
 
   @Test
   void testAnyDynamicArray() {

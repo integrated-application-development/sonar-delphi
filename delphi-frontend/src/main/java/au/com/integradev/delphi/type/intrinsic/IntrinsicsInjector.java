@@ -25,6 +25,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BOOLEAN;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BYTE;
@@ -164,15 +165,10 @@ public final class IntrinsicsInjector {
     routine("Close").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
     routine("CloseFile").varParam(typeFactory.untypedFile());
     routine("Concat")
-        .param(type(UNICODESTRING))
-        .param(type(UNICODESTRING))
-        .variadic(type(UNICODESTRING))
-        .returns(type(UNICODESTRING));
-    routine("Concat")
-        .param(ANY_DYNAMIC_ARRAY)
-        .param(ANY_DYNAMIC_ARRAY)
-        .variadic(ANY_DYNAMIC_ARRAY)
-        .returns(ANY_DYNAMIC_ARRAY);
+        .param(LIKE_DYNAMIC_ARRAY)
+        .param(LIKE_DYNAMIC_ARRAY)
+        .variadic(LIKE_DYNAMIC_ARRAY)
+        .returns(IntrinsicReturnType.concat(typeFactory));
     routine("Continue");
     routine("Copy")
         .param(type(UNICODESTRING))

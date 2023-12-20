@@ -18,8 +18,15 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSICHAR;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODESTRING;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDECHAR;
+
 import au.com.integradev.delphi.type.TypeImpl;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
@@ -54,6 +61,10 @@ public abstract class IntrinsicReturnType extends TypeImpl {
 
   public static Type trunc(TypeFactory typeFactory) {
     return new RoundTruncReturnType("Trunc", typeFactory);
+  }
+
+  public static Type concat(TypeFactory typeFactory) {
+    return new ConcatReturnType(typeFactory);
   }
 
   public static Type classReferenceValue() {
@@ -116,6 +127,59 @@ public abstract class IntrinsicReturnType extends TypeImpl {
         return ((ClassReferenceType) type).classType();
       }
       return TypeFactory.unknownType();
+    }
+  }
+
+  private static final class ConcatReturnType extends IntrinsicReturnType {
+    private final TypeFactory typeFactory;
+
+    public ConcatReturnType(TypeFactory typeFactory) {
+      this.typeFactory = typeFactory;
+    }
+
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      Type result = null;
+      List<Type> elementTypes = new ArrayList<>();
+
+      for (Type argument : arguments) {
+        if (argument.isDynamicArray() || argument.isString() || argument.isVariant()) {
+          result = widenIfNeeded(argument, result);
+        } else if (argument.isArrayConstructor()) {
+          elementTypes.addAll(((ArrayConstructorType) argument).elementTypes());
+        }
+      }
+
+      if (result == null) {
+        result = typeFactory.arrayConstructor(elementTypes);
+      }
+
+      return result;
+    }
+
+    private Type widenIfNeeded(Type newType, @Nullable Type currentType) {
+      while (newType.isAlias()) {
+        newType = ((AliasType) newType).aliasedType();
+      }
+
+      if (newType.is(ANSICHAR)) {
+        newType = typeFactory.getIntrinsic(ANSISTRING);
+      } else if (newType.is(WIDECHAR)) {
+        newType = typeFactory.getIntrinsic(UNICODESTRING);
+      }
+
+      if (currentType == null) {
+        return newType;
+      }
+
+      if (newType.isString()
+          && currentType.isString()
+          && ((StringType) newType).characterType().size()
+              > ((StringType) currentType).characterType().size()) {
+        return newType;
+      }
+
+      return currentType;
     }
   }
 }
