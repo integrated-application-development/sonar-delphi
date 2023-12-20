@@ -29,6 +29,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_STRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TEXT_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_VARIANT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BOOLEAN;
@@ -40,14 +41,12 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.INTEGER;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.LONGINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEUINT;
-import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.OLEVARIANT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PANSICHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.POINTER;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PWIDECHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.REAL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTSTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODESTRING;
-import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.VARIANT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WORD;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
@@ -278,12 +277,10 @@ public final class IntrinsicsInjector {
         .param(ANY_STRING)
         .varParam(TypeFactory.untypedType())
         .varParam(ANY_32_BIT_INTEGER);
-    routine("VarArrayRedim").varParam(type(VARIANT)).param(type(INTEGER));
-    routine("VarArrayRedim").varParam(type(OLEVARIANT)).param(type(INTEGER));
-    routine("VarCast").varParam(type(VARIANT)).param(type(VARIANT)).param(type(INTEGER));
-    routine("VarClear").varParam(type(VARIANT));
-    routine("VarClear").varParam(type(OLEVARIANT));
-    routine("VarCopy").varParam(type(VARIANT)).param(type(VARIANT));
+    routine("VarArrayRedim").varParam(ANY_VARIANT).param(type(INTEGER));
+    routine("VarCast").varParam(ANY_VARIANT).param(ANY_VARIANT).param(type(INTEGER));
+    routine("VarClear").varParam(ANY_VARIANT);
+    routine("VarCopy").varParam(ANY_VARIANT).param(ANY_VARIANT);
     routine("Write")
         .varParam(ANY_FILE)
         .param(TypeFactory.untypedType())

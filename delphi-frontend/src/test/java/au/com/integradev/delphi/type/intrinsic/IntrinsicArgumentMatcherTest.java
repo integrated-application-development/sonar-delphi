@@ -29,6 +29,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_STRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TEXT_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_VARIANT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.POINTER_MATH_OPERAND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,6 +103,14 @@ class IntrinsicArgumentMatcherTest {
     assertThat(matches(ANY_TEXT_FILE, FACTORY.fileOf(FACTORY.getIntrinsic(IntrinsicType.INTEGER))))
         .isFalse();
     assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
+  }
+
+  @Test
+  void testAnyVariant() {
+    assertThat(matches(ANY_VARIANT, FACTORY.getIntrinsic(IntrinsicType.VARIANT))).isTrue();
+    assertThat(matches(ANY_VARIANT, FACTORY.getIntrinsic(IntrinsicType.OLEVARIANT))).isTrue();
+    assertThat(matches(ANY_VARIANT, FACTORY.getIntrinsic(IntrinsicType.ANSISTRING))).isFalse();
+    assertThat(matches(ANY_VARIANT, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
   }
 
   @Test

@@ -42,6 +42,8 @@ public final class IntrinsicArgumentMatcher extends TypeImpl {
   public static final Type ANY_TEXT_FILE =
       new IntrinsicArgumentMatcher("<text file>", type -> type.is(IntrinsicType.TEXT));
 
+  public static final Type ANY_VARIANT = new IntrinsicArgumentMatcher("<variant>", Type::isVariant);
+
   public static final Type ANY_ARRAY = new IntrinsicArgumentMatcher("<array>", Type::isArray);
 
   public static final Type ANY_SET =
