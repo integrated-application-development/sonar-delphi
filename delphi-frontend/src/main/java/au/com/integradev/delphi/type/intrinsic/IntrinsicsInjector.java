@@ -259,7 +259,10 @@ public final class IntrinsicsInjector {
         .param(type(INTEGER))
         .required(2);
     routine("SizeOf").param(TypeFactory.untypedType()).returns(type(INTEGER));
-    routine("Slice").varParam(ANY_ARRAY).param(type(INTEGER)).returns(typeFactory.untypedPointer());
+    routine("Slice")
+        .varParam(ANY_ARRAY)
+        .param(type(INTEGER))
+        .returns(IntrinsicReturnType.slice(typeFactory));
     routine("Sqr").param(type(EXTENDED)).returns(type(EXTENDED));
     routine("Sqr").param(type(INTEGER)).returns(type(INTEGER));
     routine("Sqr").param(type(INT64)).returns(type(INT64));

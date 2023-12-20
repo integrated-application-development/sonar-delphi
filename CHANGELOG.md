@@ -75,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `VarCopy`.
 - Parameter of the `Int64` overload of `Sqr` was erroneously specified as `Real`.
 - Return type of the `Succ` intrinsic was not specified correctly.
+- Return type of the `Slice` intrinsic was not inferred correctly.
 
 ## [1.0.0] - 2023-11-14
 
