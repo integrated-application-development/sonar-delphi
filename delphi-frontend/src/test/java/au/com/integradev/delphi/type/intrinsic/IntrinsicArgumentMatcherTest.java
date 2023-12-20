@@ -23,6 +23,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_STRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TEXT_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
@@ -81,6 +82,18 @@ class IntrinsicArgumentMatcherTest {
                 FACTORY.array("TBar", TypeFactory.untypedType(), Set.of(ArrayOption.FIXED))))
         .isFalse();
     assertThat(matches(ANY_DYNAMIC_ARRAY, FACTORY.set(TypeFactory.untypedType()))).isFalse();
+  }
+
+  @Test
+  void testAnyString() {
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.ANSICHAR))).isTrue();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.WIDECHAR))).isTrue();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.SHORTSTRING))).isTrue();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.ANSISTRING))).isTrue();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING))).isTrue();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.PANSICHAR))).isFalse();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.PCHAR))).isFalse();
+    assertThat(matches(ANY_STRING, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
   }
 
   @Test

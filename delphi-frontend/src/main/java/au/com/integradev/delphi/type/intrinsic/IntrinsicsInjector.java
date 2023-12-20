@@ -24,6 +24,7 @@ import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.A
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_STRING;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TEXT_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_TYPED_POINTER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
@@ -93,7 +94,7 @@ public final class IntrinsicsInjector {
     routine("Abs").param(type(INT64)).returns(type(INT64));
     routine("Addr").varParam(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
     routine("Append").varParam(ANY_TEXT_FILE).returns(type(INTEGER));
-    routine("Assert").varParam(type(BOOLEAN)).param(type(UNICODESTRING)).required(1);
+    routine("Assert").param(type(BOOLEAN)).param(ANY_STRING).required(1);
     routine("Assign")
         .varParam(typeFactory.untypedFile())
         .param(type(UNICODESTRING))

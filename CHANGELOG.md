@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return type of the array `Copy` intrinsic was not specified correctly.
 - Dynamic array literals were not accepted as arguments to `Copy`.
 - Strong aliases to `System.Text` were not accepted as arguments to `Append`.
+- Implicit conversions to `Boolean` were not accepted as arguments to `Assert`.
 
 ## [1.0.0] - 2023-11-14
 
