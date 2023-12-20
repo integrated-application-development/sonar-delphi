@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_32_BIT_INTEGER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
@@ -45,7 +46,6 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.POINTER;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PWIDECHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.REAL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTSTRING;
-import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.TEXT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODESTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.VARIANT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDESTRING;
@@ -132,17 +132,17 @@ public final class IntrinsicsInjector {
         .required(1)
         .returns(type(INTEGER));
     routine("BlockRead")
-        .varParam(typeFactory.untypedFile())
+        .varParam(ANY_FILE)
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
-        .varParam(type(INTEGER))
+        .varParam(ANY_32_BIT_INTEGER)
         .required(3)
         .returns(type(INTEGER));
     routine("BlockWrite")
-        .varParam(typeFactory.untypedFile())
+        .varParam(ANY_FILE)
         .constParam(TypeFactory.untypedType())
         .param(type(INTEGER))
-        .varParam(type(INTEGER))
+        .varParam(ANY_32_BIT_INTEGER)
         .required(3)
         .returns(type(INTEGER));
     routine("Break");
@@ -157,8 +157,8 @@ public final class IntrinsicsInjector {
     routine("BuiltInSqrt").param(type(REAL)).returns(type(EXTENDED));
     routine("BuiltInTan").param(type(REAL)).returns(type(EXTENDED));
     routine("Chr").param(type(BYTE)).returns(type(CHAR));
-    routine("Close").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
-    routine("CloseFile").varParam(typeFactory.untypedFile());
+    routine("Close").varParam(ANY_FILE).returns(type(INTEGER));
+    routine("CloseFile").varParam(ANY_FILE);
     routine("Concat")
         .param(LIKE_DYNAMIC_ARRAY)
         .param(LIKE_DYNAMIC_ARRAY)
@@ -189,14 +189,14 @@ public final class IntrinsicsInjector {
     routine("Delete").varParam(type(UNICODESTRING)).param(type(INTEGER)).param(type(INTEGER));
     routine("Delete").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).param(type(INTEGER));
     routine("Dispose").varParam(typeFactory.untypedPointer());
-    routine("Eof").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
-    routine("Eoln").varParam(typeFactory.untypedFile()).required(0).returns(type(BOOLEAN));
-    routine("Erase").varParam(typeFactory.untypedFile());
+    routine("Eof").varParam(ANY_FILE).required(0).returns(type(BOOLEAN));
+    routine("Eoln").varParam(ANY_FILE).required(0).returns(type(BOOLEAN));
+    routine("Erase").varParam(ANY_FILE);
     routine("Exclude").varParam(ANY_SET).param(ANY_ORDINAL);
     routine("Exit").varParam(TypeFactory.untypedType()).required(0);
     routine("Fail");
-    routine("FilePos").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
-    routine("FileSize").varParam(typeFactory.untypedFile()).returns(type(INTEGER));
+    routine("FilePos").varParam(ANY_FILE).returns(type(INTEGER));
+    routine("FileSize").varParam(ANY_FILE).returns(type(INTEGER));
     routine("FillChar").varParam(TypeFactory.untypedType()).param(type(INTEGER)).param(ANY_ORDINAL);
     routine("Finalize").varParam(TypeFactory.untypedType()).param(type(NATIVEUINT)).required(1);
     routine("FreeMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER)).required(1);
@@ -237,21 +237,21 @@ public final class IntrinsicsInjector {
     routine("Pred").param(ANY_ORDINAL).returns(type(INTEGER));
     routine("Ptr").param(type(INTEGER)).returns(typeFactory.untypedPointer());
     routine("Read")
-        .varParam(typeFactory.untypedFile())
+        .varParam(ANY_FILE)
         .param(TypeFactory.untypedType())
         .variadic(TypeFactory.untypedType());
-    routine("ReadLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
+    routine("ReadLn").varParam(ANY_FILE).variadic(TypeFactory.untypedType());
     routine("ReallocMem").varParam(typeFactory.untypedPointer()).param(type(INTEGER));
-    routine("Rename").varParam(typeFactory.untypedFile()).param(type(UNICODESTRING));
-    routine("Reset").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
-    routine("Rewrite").varParam(typeFactory.untypedFile()).param(type(INTEGER)).required(1);
+    routine("Rename").varParam(ANY_FILE).param(ANY_STRING);
+    routine("Reset").varParam(ANY_FILE).param(type(INTEGER)).required(1);
+    routine("Rewrite").varParam(ANY_FILE).param(type(INTEGER)).required(1);
     routine("Round")
         .param(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.round(typeFactory));
     routine("RunError").param(type(BYTE)).required(0);
-    routine("Seek").varParam(typeFactory.untypedFile()).param(type(INTEGER));
-    routine("SeekEof").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
-    routine("SeekEoln").varParam(type(TEXT)).required(0).returns(type(BOOLEAN));
+    routine("Seek").varParam(ANY_FILE).param(type(INTEGER));
+    routine("SeekEof").varParam(ANY_TEXT_FILE).required(0).returns(type(BOOLEAN));
+    routine("SeekEoln").varParam(ANY_TEXT_FILE).required(0).returns(type(BOOLEAN));
     routine("SetLength").varParam(type(UNICODESTRING)).param(type(INTEGER));
     routine("SetLength").varParam(type(ANSISTRING)).param(type(INTEGER));
     routine("SetLength").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
@@ -260,7 +260,7 @@ public final class IntrinsicsInjector {
     routine("SetString").varParam(type(WIDESTRING)).param(type(PCHAR)).param(type(INTEGER));
     routine("SetString").varParam(type(UNICODESTRING)).param(type(PCHAR)).param(type(INTEGER));
     routine("SetTextBuf")
-        .varParam(type(TEXT))
+        .varParam(ANY_TEXT_FILE)
         .varParam(TypeFactory.untypedType())
         .param(type(INTEGER))
         .required(2);
@@ -275,7 +275,7 @@ public final class IntrinsicsInjector {
     routine("Trunc")
         .param(TypeFactory.untypedType())
         .returns(IntrinsicReturnType.trunc(typeFactory));
-    routine("Truncate").varParam(typeFactory.untypedFile());
+    routine("Truncate").varParam(ANY_FILE);
     routine("TypeHandle").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
     routine("TypeInfo").param(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
     routine("TypeOf").param(ANY_OBJECT).returns(typeFactory.untypedPointer());
@@ -290,11 +290,11 @@ public final class IntrinsicsInjector {
     routine("VarClear").varParam(type(OLEVARIANT));
     routine("VarCopy").varParam(type(VARIANT)).param(type(VARIANT));
     routine("Write")
-        .varParam(typeFactory.untypedFile())
+        .varParam(ANY_FILE)
         .param(TypeFactory.untypedType())
         .variadic(TypeFactory.untypedType());
     routine("Write").varParam(TypeFactory.untypedType()).variadic(TypeFactory.untypedType());
-    routine("WriteLn").varParam(typeFactory.untypedFile()).variadic(TypeFactory.untypedType());
+    routine("WriteLn").varParam(ANY_FILE).variadic(TypeFactory.untypedType());
     routine("WriteLn").variadic(TypeFactory.untypedType());
   }
 
