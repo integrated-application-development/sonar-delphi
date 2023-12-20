@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.type.intrinsic;
 
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_32_BIT_INTEGER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_FILE;
@@ -35,6 +36,7 @@ import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +44,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class IntrinsicArgumentMatcherTest {
@@ -139,6 +142,19 @@ class IntrinsicArgumentMatcherTest {
     assertThat(matches(ANY_ORDINAL, FACTORY.enumeration("TFoo", null))).isTrue();
     assertThat(matches(ANY_ORDINAL, FACTORY.getIntrinsic(IntrinsicType.CHAR))).isTrue();
     assertThat(matches(ANY_ORDINAL, FACTORY.getIntrinsic(IntrinsicType.STRING))).isFalse();
+  }
+
+  @Test
+  void testAny32BitInteger() {
+    IntegerType u16 = ((IntegerType) FACTORY.getIntrinsic(IntrinsicType.WORD));
+    Type subrange16 = FACTORY.subrange("TFoo", BigInteger.ZERO, u16.max());
+    Type subrange32 = FACTORY.subrange("TFoo", BigInteger.ZERO, u16.max().add(BigInteger.ONE));
+
+    assertThat(matches(ANY_32_BIT_INTEGER, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isTrue();
+    assertThat(matches(ANY_32_BIT_INTEGER, FACTORY.getIntrinsic(IntrinsicType.CARDINAL))).isTrue();
+    assertThat(matches(ANY_32_BIT_INTEGER, subrange32)).isTrue();
+    assertThat(matches(ANY_32_BIT_INTEGER, subrange16)).isFalse();
+    assertThat(matches(ANY_32_BIT_INTEGER, FACTORY.getIntrinsic(IntrinsicType.STRING))).isFalse();
   }
 
   @Test
