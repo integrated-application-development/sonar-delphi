@@ -68,6 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `GetMem`, `New`, or `ReallocMem`.
 - Strong aliases and specialized string types were not accepted as arguments to `Str`, `GetDir`,
   `SetString`, or `Val`.
+- Strong aliases were not accepted as arguments to `VarArrayRedim`, `VarCast`, `VarClear`, or
+  `VarCopy`.
 
 ## [1.0.0] - 2023-11-14
 
