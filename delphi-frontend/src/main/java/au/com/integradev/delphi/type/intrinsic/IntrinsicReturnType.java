@@ -24,8 +24,11 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODEST
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDECHAR;
 
 import au.com.integradev.delphi.type.TypeImpl;
+import au.com.integradev.delphi.type.factory.ArrayOption;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
@@ -69,6 +72,10 @@ public abstract class IntrinsicReturnType extends TypeImpl {
 
   public static Type copy(TypeFactory typeFactory) {
     return new CopyReturnType(typeFactory);
+  }
+
+  public static Type slice(TypeFactory typeFactory) {
+    return new SliceReturnType(typeFactory);
   }
 
   public static Type classReferenceValue() {
@@ -205,6 +212,24 @@ public abstract class IntrinsicReturnType extends TypeImpl {
         result = typeFactory.getIntrinsic(result.size() == 1 ? ANSISTRING : UNICODESTRING);
       }
       return result;
+    }
+  }
+
+  private static final class SliceReturnType extends IntrinsicReturnType {
+    private final TypeFactory typeFactory;
+
+    public SliceReturnType(TypeFactory typeFactory) {
+      this.typeFactory = typeFactory;
+    }
+
+    @Override
+    public Type getReturnType(List<Type> arguments) {
+      Type array = arguments.get(0);
+      if (array.isArray()) {
+        Type elementType = ((CollectionType) array).elementType();
+        return ((TypeFactoryImpl) typeFactory).array(null, elementType, Set.of(ArrayOption.OPEN));
+      }
+      return TypeFactory.unknownType();
     }
   }
 
