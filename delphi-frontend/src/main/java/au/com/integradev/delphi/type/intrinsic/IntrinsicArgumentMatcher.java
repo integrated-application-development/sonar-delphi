@@ -40,6 +40,8 @@ public final class IntrinsicArgumentMatcher extends TypeImpl {
   public static final Type ANY_STRING =
       new IntrinsicArgumentMatcher("<string or char>", type -> type.isString() || type.isChar());
 
+  public static final Type ANY_FILE = new IntrinsicArgumentMatcher("<file>", Type::isFile);
+
   public static final Type ANY_TEXT_FILE =
       new IntrinsicArgumentMatcher("<text file>", type -> type.is(IntrinsicType.TEXT));
 

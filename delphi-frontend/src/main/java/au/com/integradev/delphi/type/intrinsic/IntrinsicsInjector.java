@@ -21,6 +21,7 @@ package au.com.integradev.delphi.type.intrinsic;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
@@ -95,11 +96,7 @@ public final class IntrinsicsInjector {
     routine("Addr").varParam(TypeFactory.untypedType()).returns(typeFactory.untypedPointer());
     routine("Append").varParam(ANY_TEXT_FILE).returns(type(INTEGER));
     routine("Assert").param(type(BOOLEAN)).param(ANY_STRING).required(1);
-    routine("Assign")
-        .varParam(typeFactory.untypedFile())
-        .param(type(UNICODESTRING))
-        .param(type(WORD))
-        .required(2);
+    routine("Assign").varParam(ANY_FILE).param(ANY_STRING).param(type(WORD)).required(2);
     routine("Assigned").varParam(TypeFactory.untypedType()).returns(type(BOOLEAN));
     routine("AssignFile")
         .varParam(typeFactory.untypedFile())

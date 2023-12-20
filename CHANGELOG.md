@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dynamic array literals were not accepted as arguments to `Copy`.
 - Strong aliases to `System.Text` were not accepted as arguments to `Append`.
 - Implicit conversions to `Boolean` were not accepted as arguments to `Assert`.
+- Strong aliases and typed files were not accepted as arguments to `Assign`.
 
 ## [1.0.0] - 2023-11-14
 

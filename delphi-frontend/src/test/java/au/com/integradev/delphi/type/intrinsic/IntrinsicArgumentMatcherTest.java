@@ -20,6 +20,7 @@ package au.com.integradev.delphi.type.intrinsic;
 
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
@@ -97,6 +98,24 @@ class IntrinsicArgumentMatcherTest {
   }
 
   @Test
+  void testAnyFile() {
+    assertThat(matches(ANY_FILE, FACTORY.untypedFile())).isTrue();
+    assertThat(matches(ANY_FILE, FACTORY.getIntrinsic(IntrinsicType.TEXT))).isTrue();
+    assertThat(matches(ANY_FILE, FACTORY.fileOf(FACTORY.getIntrinsic(IntrinsicType.INTEGER))))
+        .isTrue();
+    assertThat(matches(ANY_FILE, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
+  }
+
+  @Test
+  void testAnyTextFile() {
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.untypedFile())).isFalse();
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.TEXT))).isTrue();
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.fileOf(FACTORY.getIntrinsic(IntrinsicType.INTEGER))))
+        .isFalse();
+    assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
+  }
+
+  @Test
   void testAnySet() {
     assertThat(matches(ANY_SET, FACTORY.emptySet())).isTrue();
     assertThat(matches(ANY_SET, FACTORY.arrayConstructor(Collections.emptyList()))).isTrue();
@@ -120,15 +139,6 @@ class IntrinsicArgumentMatcherTest {
     assertThat(matches(ANY_ORDINAL, FACTORY.enumeration("TFoo", null))).isTrue();
     assertThat(matches(ANY_ORDINAL, FACTORY.getIntrinsic(IntrinsicType.CHAR))).isTrue();
     assertThat(matches(ANY_ORDINAL, FACTORY.getIntrinsic(IntrinsicType.STRING))).isFalse();
-  }
-
-  @Test
-  void testAnyTextFile() {
-    assertThat(matches(ANY_TEXT_FILE, FACTORY.untypedFile())).isFalse();
-    assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.TEXT))).isTrue();
-    assertThat(matches(ANY_TEXT_FILE, FACTORY.fileOf(FACTORY.getIntrinsic(IntrinsicType.INTEGER))))
-        .isFalse();
-    assertThat(matches(ANY_TEXT_FILE, FACTORY.getIntrinsic(IntrinsicType.INTEGER))).isFalse();
   }
 
   @Test
