@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AnsiStringType;
@@ -317,13 +318,24 @@ public class InvocationResolver {
 
   private static void checkCodePageDistance(
       InvocationCandidate candidate, Type argumentType, Type parameterType) {
-    if (!argumentType.isAnsiString() || !parameterType.isAnsiString()) {
+    if (!parameterType.isAnsiString()) {
       return;
     }
 
-    AnsiStringType from = (AnsiStringType) argumentType;
+    Integer codePage = null;
+
+    if (argumentType.isAnsiString()) {
+      codePage = ((AnsiStringType) argumentType).codePage();
+    } else if (TypeUtils.findBaseType(argumentType).is(IntrinsicType.PANSICHAR)) {
+      codePage = CodePages.CP_ACP;
+    }
+
+    if (codePage == null) {
+      return;
+    }
+
     AnsiStringType to = (AnsiStringType) parameterType;
-    if (from.codePage() == to.codePage() || to.codePage() == CodePages.CP_NONE) {
+    if (codePage == to.codePage() || to.codePage() == CodePages.CP_NONE) {
       return;
     }
 

@@ -37,6 +37,8 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.LONGINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.LONGWORD;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEUINT;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PANSICHAR;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PWIDECHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.REAL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTSTRING;
@@ -266,6 +268,16 @@ class InvocationResolverTest {
         List.of(type(CHAR), type(CHAR)),
         List.of(type(UNICODESTRING), type(UNICODESTRING)),
         List.of(type(ANSISTRING), type(ANSISTRING)));
+
+    assertResolved(type(PANSICHAR), type(ANSISTRING), FACTORY.ansiString(CodePages.CP_1252));
+    assertResolved(type(PANSICHAR), FACTORY.ansiString(CodePages.CP_1252), type(UNICODESTRING));
+    assertResolved(type(PANSICHAR), type(UNICODESTRING), type(WIDESTRING));
+    assertResolved(type(PANSICHAR), type(WIDESTRING), type(SHORTSTRING));
+
+    assertResolved(type(PWIDECHAR), type(UNICODESTRING), type(WIDESTRING));
+    assertResolved(type(PWIDECHAR), type(WIDESTRING), type(ANSISTRING));
+    assertResolved(type(PWIDECHAR), type(ANSISTRING), type(SHORTSTRING));
+    assertIncompatible(type(PWIDECHAR), type(SHORTSTRING));
   }
 
   @Test
