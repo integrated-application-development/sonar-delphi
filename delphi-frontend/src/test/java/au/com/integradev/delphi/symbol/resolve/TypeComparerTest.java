@@ -30,10 +30,10 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.EQUAL;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
-import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_SET;
+import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.LIKE_DYNAMIC_ARRAY;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -644,9 +644,9 @@ class TypeComparerTest {
     compare(dynamicArray, ANY_ARRAY, EQUAL);
     compare(openArray, ANY_ARRAY, EQUAL);
 
-    compare(fixedArray, ANY_DYNAMIC_ARRAY, INCOMPATIBLE_TYPES);
-    compare(dynamicArray, ANY_DYNAMIC_ARRAY, EQUAL);
-    compare(openArray, ANY_DYNAMIC_ARRAY, INCOMPATIBLE_TYPES);
+    compare(fixedArray, LIKE_DYNAMIC_ARRAY, INCOMPATIBLE_TYPES);
+    compare(dynamicArray, LIKE_DYNAMIC_ARRAY, EQUAL);
+    compare(openArray, LIKE_DYNAMIC_ARRAY, INCOMPATIBLE_TYPES);
 
     compare(set, ANY_SET, EQUAL);
 

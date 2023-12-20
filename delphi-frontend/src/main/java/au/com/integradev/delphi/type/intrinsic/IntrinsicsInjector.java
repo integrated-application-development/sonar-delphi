@@ -21,7 +21,6 @@ package au.com.integradev.delphi.type.intrinsic;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_32_BIT_INTEGER;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_CLASS_REFERENCE;
-import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_DYNAMIC_ARRAY;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_FILE;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_OBJECT;
 import static au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher.ANY_ORDINAL;
@@ -186,8 +185,7 @@ public final class IntrinsicsInjector {
     routine("Default")
         .param(ANY_CLASS_REFERENCE)
         .returns(IntrinsicReturnType.classReferenceValue());
-    routine("Delete").varParam(type(UNICODESTRING)).param(type(INTEGER)).param(type(INTEGER));
-    routine("Delete").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).param(type(INTEGER));
+    routine("Delete").varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER)).param(type(INTEGER));
     routine("Dispose").varParam(typeFactory.untypedPointer());
     routine("Eof").varParam(ANY_FILE).required(0).returns(type(BOOLEAN));
     routine("Eoln").varParam(ANY_FILE).required(0).returns(type(BOOLEAN));
@@ -212,8 +210,7 @@ public final class IntrinsicsInjector {
     routine("Inc").varParam(ANY_TYPED_POINTER).param(type(INTEGER)).required(1);
     routine("Include").varParam(ANY_SET).param(ANY_ORDINAL);
     routine("Initialize").varParam(TypeFactory.untypedType()).param(type(NATIVEINT)).required(1);
-    routine("Insert").param(type(UNICODESTRING)).varParam(type(UNICODESTRING)).param(type(INTEGER));
-    routine("Insert").param(ANY_DYNAMIC_ARRAY).varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER));
+    routine("Insert").param(LIKE_DYNAMIC_ARRAY).varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER));
     routine("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
     routine("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
     routine("Length").param(type(SHORTSTRING)).returns(type(BYTE));
@@ -254,9 +251,7 @@ public final class IntrinsicsInjector {
     routine("Seek").varParam(ANY_FILE).param(type(INTEGER));
     routine("SeekEof").varParam(ANY_TEXT_FILE).required(0).returns(type(BOOLEAN));
     routine("SeekEoln").varParam(ANY_TEXT_FILE).required(0).returns(type(BOOLEAN));
-    routine("SetLength").varParam(type(UNICODESTRING)).param(type(INTEGER));
-    routine("SetLength").varParam(type(ANSISTRING)).param(type(INTEGER));
-    routine("SetLength").varParam(ANY_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
+    routine("SetLength").varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
     routine("SetString").varParam(type(SHORTSTRING)).param(type(PANSICHAR)).param(type(INTEGER));
     routine("SetString").varParam(type(ANSISTRING)).param(type(PANSICHAR)).param(type(INTEGER));
     routine("SetString").varParam(type(WIDESTRING)).param(type(PCHAR)).param(type(INTEGER));
