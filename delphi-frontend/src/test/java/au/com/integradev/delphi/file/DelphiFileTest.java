@@ -18,16 +18,30 @@
  */
 package au.com.integradev.delphi.file;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
+import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFile.EmptyDelphiFileException;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
+import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
+import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
 class DelphiFileTest {
+  private static final File BASE_DIR = DelphiUtils.getResource("/au/com/integradev/delphi/file");
+
   @Test
   void testEmptyFileShouldThrowException() {
     File sourceFile = DelphiUtils.getResource("/au/com/integradev/delphi/file/Empty.pas");
@@ -36,5 +50,43 @@ class DelphiFileTest {
     assertThatThrownBy(() -> DelphiFile.from(sourceFile, config))
         .isInstanceOf(DelphiFileConstructionException.class)
         .hasCauseInstanceOf(EmptyDelphiFileException.class);
+  }
+
+  @Test
+  void testInputFileEncodingShouldOverrideProvidedEncoding() {
+    File file = DelphiUtils.getResource("/au/com/integradev/delphi/file/Windows1252.pas");
+
+    InputFile inputFile =
+        new TestInputFileBuilder("moduleKey", BASE_DIR, file)
+            .setLanguage(Delphi.KEY)
+            .setCharset(Charset.forName("windows-1252"))
+            .build();
+
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            StandardCharsets.UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            TypeFactoryUtils.defaultFactory(),
+            SearchPath.create(Collections.emptyList()),
+            Collections.emptySet());
+
+    DelphiFile delphiFile = DelphiInputFile.from(inputFile, config);
+    assertThat(delphiFile.getSourceCodeFilesLines().get(4)).isEqualTo("// €†šŸÀÿ");
+  }
+
+  @Test
+  void testByteOrderMarkShouldOverrideProvidedEncoding() {
+    File file = DelphiUtils.getResource("/au/com/integradev/delphi/file/Utf16.pas");
+
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            StandardCharsets.UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            TypeFactoryUtils.defaultFactory(),
+            SearchPath.create(Collections.emptyList()),
+            Collections.emptySet());
+
+    DelphiFile delphiFile = DelphiFile.from(file, config);
+    assertThat(delphiFile.getSourceCodeFilesLines().get(4)).hasSize(120);
   }
 }

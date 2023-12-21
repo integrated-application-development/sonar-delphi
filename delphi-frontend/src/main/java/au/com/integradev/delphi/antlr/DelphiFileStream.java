@@ -29,13 +29,14 @@ import org.apache.commons.io.input.BOMInputStream;
 
 public class DelphiFileStream extends ANTLRStringStream {
   private final String fileName;
+  private final String encoding;
 
   public DelphiFileStream(String fileName, String encoding) throws IOException {
     this.fileName = fileName;
-    this.load(fileName, encoding);
+    this.encoding = this.load(fileName, encoding);
   }
 
-  private void load(String fileName, String encoding) throws IOException {
+  private String load(String fileName, String encoding) throws IOException {
     if (fileName != null) {
       File f = new File(fileName);
       int size = (int) f.length();
@@ -48,8 +49,10 @@ public class DelphiFileStream extends ANTLRStringStream {
               ByteOrderMark.UTF_16BE,
               ByteOrderMark.UTF_32LE,
               ByteOrderMark.UTF_32BE)) {
-        if (encoding == null) {
-          encoding = input.getBOMCharsetName();
+
+        ByteOrderMark bom = input.getBOM();
+        if (bom != null) {
+          encoding = bom.getCharsetName();
         }
 
         if (encoding == null) {
@@ -62,11 +65,16 @@ public class DelphiFileStream extends ANTLRStringStream {
         }
       }
     }
+    return encoding;
   }
 
   @Override
   public String getSourceName() {
     return this.fileName;
+  }
+
+  public String getEncoding() {
+    return this.encoding;
   }
 
   @Override

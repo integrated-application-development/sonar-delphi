@@ -74,9 +74,24 @@ public interface DelphiFile {
     static DelphiInputFile from(InputFile inputFile, DelphiFileConfig config) {
       DefaultDelphiInputFile delphiFile = new DefaultDelphiInputFile();
       File sourceFile = new File(DelphiUtils.uriToAbsolutePath(inputFile.uri()));
-      setupFile(delphiFile, sourceFile, config);
+      setupFile(delphiFile, sourceFile, useInputFileEncoding(inputFile, config));
       delphiFile.setInputFile(inputFile);
       return delphiFile;
+    }
+
+    private static DelphiFileConfig useInputFileEncoding(
+        InputFile inputFile, DelphiFileConfig config) {
+      if (inputFile.charset() != null && !inputFile.charset().name().equals(config.getEncoding())) {
+        config =
+            DelphiFile.createConfig(
+                inputFile.charset().name(),
+                config.getPreprocessorFactory(),
+                config.getTypeFactory(),
+                config.getSearchPath(),
+                config.getDefinitions(),
+                config.shouldSkipImplementation());
+      }
+      return config;
     }
   }
 
@@ -126,12 +141,14 @@ public interface DelphiFile {
   private static void setupFile(
       DefaultDelphiFile delphiFile, File sourceFile, DelphiFileConfig config) {
     try {
+      String filePath = sourceFile.getAbsolutePath();
+      DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
+      DelphiPreprocessor preprocessor = preprocess(fileStream, config);
       delphiFile.setSourceCodeFile(sourceFile);
       delphiFile.setTypeFactory(config.getTypeFactory());
-      DelphiPreprocessor preprocessor = preprocess(delphiFile, config);
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
-      delphiFile.setSourceCodeLines(readLines(sourceFile, config.getEncoding()));
+      delphiFile.setSourceCodeLines(readLines(sourceFile, fileStream.getEncoding()));
       delphiFile.setTokens(createTokenList(delphiFile, preprocessor.getTokenStream()));
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
     } catch (IOException
@@ -143,11 +160,8 @@ public interface DelphiFile {
     }
   }
 
-  private static DelphiPreprocessor preprocess(DelphiFile delphiFile, DelphiFileConfig config)
-      throws IOException {
-    String filePath = delphiFile.getSourceCodeFile().getAbsolutePath();
-    DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
-
+  private static DelphiPreprocessor preprocess(
+      DelphiFileStream fileStream, DelphiFileConfig config) {
     DelphiLexer lexer = new DelphiLexer(fileStream, config.shouldSkipImplementation());
     DelphiPreprocessorFactory preprocessorFactory = config.getPreprocessorFactory();
     DelphiPreprocessor preprocessor = preprocessorFactory.createPreprocessor(lexer, config);
