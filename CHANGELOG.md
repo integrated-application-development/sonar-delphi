@@ -45,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The `sonar.sourceEncoding` option was used blindly in all cases, even when the correct encoding
+  could be detected.
 - Test sources were erroneously excluded from analysis.
 - Key information was missing from "ambiguous declarations" warnings.
 - Stack overflow on class reference types that reference their containing type.
