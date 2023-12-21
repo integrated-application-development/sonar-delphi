@@ -56,27 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incorrect file position calculation for multiline compiler directives.
 - Incorrect detection of method calls as hard casts in `CastAndFree`.
 - Name resolution failures around helpers extending weak alias types.
-- Name resolution failures when `Inc`/`Dec` are invoked on pointer types.
-- Return type of the array `Concat` intrinsic was not inferred correctly.
-- Dynamic array literals were not accepted as arguments to `Concat`.
-- Return type of the array `Copy` intrinsic was not specified correctly.
-- Dynamic array literals were not accepted as arguments to `Copy`.
-- Implicit conversions to `Boolean` were not accepted as arguments to `Assert`.
-- Return type of the `Length` intrinsic was incorrect for `ShortString`.
-- Strong aliases were not accepted as arguments to `Append`, `SeekEof`, `SeekEoln`, or `SetTextBuf`.
-- Strong aliases and typed files were not accepted as arguments to `Assign`, `BlockRead`,
-  `BlockWrite`, `Close`, `CloseFile`, `Eof`, `Eoln`, `Erase`, `FilePos`, `FileSize`, `Read`,
-  `ReadLn`, `Rename`, `Reset`, `Rewrite`, `Seek`, `Truncate`, `Write`, or `WriteLn`.
-- Strong aliases were not accepted as arguments to `Delete`, `Insert`, or `SetLength`.
-- Strong aliases and typed pointers were not accepted as arguments to `Dispose`, `FreeMem`,
-  `GetMem`, `New`, or `ReallocMem`.
-- Strong aliases and specialized string types were not accepted as arguments to `Str`, `GetDir`,
-  `SetString`, or `Val`.
-- Strong aliases were not accepted as arguments to `VarArrayRedim`, `VarCast`, `VarClear`, or
-  `VarCopy`.
-- Parameter of the `Int64` overload of `Sqr` was erroneously specified as `Real`.
-- Return type of the `Succ` intrinsic was not specified correctly.
-- Return type of the `Slice` intrinsic was not inferred correctly.
+- Various intrinsic routine signatures had incorrect return types.
+- Various intrinsic routine signatures had incorrect or overly-restrictive parameter types.
 
 ## [1.0.0] - 2023-11-14
 
