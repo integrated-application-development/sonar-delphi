@@ -43,6 +43,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -55,6 +56,8 @@ public class OperatorInvocableCollector {
   }
 
   public Set<Invocable> collect(BinaryOperator operator, Type left, Type right) {
+    left = invokeProcedural(left);
+    right = invokeProcedural(right);
     operands = List.of(left, right);
 
     Set<Invocable> result = collectBinary(left, operator);
@@ -64,9 +67,17 @@ public class OperatorInvocableCollector {
   }
 
   public Set<Invocable> collect(UnaryOperator operator, Type operand) {
+    operand = invokeProcedural(operand);
     operands = List.of(operand);
 
     return collectUnary(operand, operator);
+  }
+
+  private static Type invokeProcedural(Type type) {
+    if (type instanceof ProceduralType) {
+      return ((ProceduralType) type).returnType();
+    }
+    return type;
   }
 
   private Set<Invocable> collectBinary(Type type, BinaryOperator operator) {

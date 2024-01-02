@@ -118,4 +118,22 @@ begin
   ExpectSet([1, 2, 3, 4, 5] * [3, 4, 5]);
 end;
 
+function GetInteger: Integer;
+begin
+  Result := 1;
+end;
+
+function GetExtended: Extended;
+begin
+  Result := 1.0;
+end;
+
+procedure TestFunctionOperands;
+begin
+  ExpectNumber(GetInteger + 2);
+  ExpectNumber(GetExtended + 2);
+  ExpectNumber(GetInteger + 2.0);
+  ExpectNumber(GetExtended + 2.0);
+end;
+
 end.
