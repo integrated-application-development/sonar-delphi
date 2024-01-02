@@ -559,7 +559,8 @@ class DelphiSymbolTableExecutorTest {
         reference(78, 2),
         reference(79, 2),
         reference(80, 2),
-        reference(81, 2));
+        reference(81, 2),
+        reference(133, 2));
     verifyUsages(
         20,
         10,
@@ -600,7 +601,10 @@ class DelphiSymbolTableExecutorTest {
         reference(105, 2),
         reference(106, 2),
         reference(107, 2),
-        reference(108, 2));
+        reference(108, 2),
+        reference(134, 2),
+        reference(135, 2),
+        reference(136, 2));
     verifyUsages(30, 10, reference(111, 2), reference(112, 2));
     verifyUsages(35, 10, reference(116, 2), reference(117, 2), reference(118, 2));
   }
