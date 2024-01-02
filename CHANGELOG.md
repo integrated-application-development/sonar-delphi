@@ -22,11 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Available for `UnusedConstant`, `UnusedField`, `UnusedGlobalVariable`, `UnusedProperty`,
     `UnusedRoutine`, and `UnusedType`.
   - Excludes public API (declared with public visibility in the interface section).
-- **API**: `VarSectionNode::isThreadVarSection` method.
-- **API**: `ConstSectionNode::isResourceStringSection` method.
-- **API**: `AttributeListNode::getAttributeTypes` method.
-- **API**: `RoutineNameDeclaration::getAttributeTypes` method.
-- **API**: `PropertyNameDeclaration::getAttributeTypes` method.
+- **API:** `VarSectionNode::isThreadVarSection` method.
+- **API:** `ConstSectionNode::isResourceStringSection` method.
+- **API:** `AttributeListNode::getAttributeTypes` method.
+- **API:** `RoutineNameDeclaration::getAttributeTypes` method.
+- **API:** `PropertyNameDeclaration::getAttributeTypes` method.
 
 ### Changed
 
