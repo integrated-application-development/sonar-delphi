@@ -28,6 +28,9 @@ if [ $(git tag -l "$TAG") ]; then
 fi
 
 mvn versions:set -DnewVersion=$1 -DgenerateBackupPoms=false --non-recursive
+mvn versions:set-property \
+  -Dproperty=sonar.delphi.version -DnewVersion=$1 -DgenerateBackupPoms=false \
+  -f docs/delphi-custom-rules-example/
 mvn keepachangelog:release --non-recursive
 
 git add .
