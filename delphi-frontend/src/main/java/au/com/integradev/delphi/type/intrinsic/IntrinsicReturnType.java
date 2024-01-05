@@ -20,6 +20,9 @@ package au.com.integradev.delphi.type.intrinsic;
 
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSICHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PANSICHAR;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PWIDECHAR;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.STRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODESTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDECHAR;
 
@@ -208,8 +211,12 @@ public abstract class IntrinsicReturnType extends TypeImpl {
     @Override
     public Type getReturnType(List<Type> arguments) {
       Type result = arguments.get(0);
-      if (result.isChar()) {
-        result = typeFactory.getIntrinsic(result.size() == 1 ? ANSISTRING : UNICODESTRING);
+      if (result.isVariant()) {
+        result = typeFactory.getIntrinsic(STRING);
+      } else if (result.is(WIDECHAR) || result.is(PWIDECHAR)) {
+        result = typeFactory.getIntrinsic(UNICODESTRING);
+      } else if (result.is(ANSICHAR) || result.is(PANSICHAR)) {
+        result = typeFactory.getIntrinsic(ANSISTRING);
       }
       return result;
     }
