@@ -161,7 +161,10 @@ public abstract class IntrinsicReturnType extends TypeImpl {
       List<Type> elementTypes = new ArrayList<>();
 
       for (Type argument : arguments) {
-        if (argument.isDynamicArray() || argument.isString() || argument.isVariant()) {
+        if (argument.isDynamicArray()
+            || argument.isChar()
+            || argument.isString()
+            || argument.isVariant()) {
           result = widenIfNeeded(argument, result);
         } else if (argument.isArrayConstructor()) {
           elementTypes.addAll(((ArrayConstructorType) argument).elementTypes());

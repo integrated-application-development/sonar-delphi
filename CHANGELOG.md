@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The `Copy` intrinsic inferred an incorrect return type for `PChar`, `PAnsiChar`, and variants.
+- The `Concat` intrinsic inferred an incorrect return type for single-character string literals.
 
 ## [1.1.0] - 2024-01-02
 
