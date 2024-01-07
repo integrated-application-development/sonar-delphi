@@ -25,11 +25,13 @@ import static org.mockito.Mockito.mock;
 import au.com.integradev.delphi.check.MetadataResourcePathImpl;
 import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.utils.DelphiUtils;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,7 +39,6 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
@@ -99,17 +100,19 @@ class CheckMetadataTest {
   @Test
   void testRulesShouldHaveTags() throws Exception {
     for (String key : RULE_KEYS) {
-      Map<String, Object> metadata = getMetadataForRuleKey(key);
+      JsonObject metadata = getMetadataForRuleKey(key);
 
-      String status = ((String) metadata.get("status")).toUpperCase();
+      String status = metadata.get("status").getAsString().toUpperCase();
 
       if (status.equals("DEPRECATED")) {
         // deprecated rules shouldn't have tags
         continue;
       }
 
-      @SuppressWarnings("unchecked")
-      var tags = (List<String>) metadata.get("tags");
+      List<String> tags =
+          metadata.get("tags").getAsJsonArray().asList().stream()
+              .map(JsonElement::getAsString)
+              .collect(Collectors.toUnmodifiableList());
       assertThat(tags).as("Rule " + key + " has no tags.").isNotEmpty();
     }
   }
@@ -117,18 +120,20 @@ class CheckMetadataTest {
   @Test
   void testRulesShouldOnlyHaveAllowedTags() throws Exception {
     for (String key : RULE_KEYS) {
-      Map<String, Object> metadata = getMetadataForRuleKey(key);
+      JsonObject metadata = getMetadataForRuleKey(key);
 
-      String status = (String) metadata.get("status");
-      RuleStatus ruleStatus = EnumUtils.getEnumIgnoreCase(RuleStatus.class, status);
+      String status = metadata.get("status").getAsString().toUpperCase();
+      RuleStatus ruleStatus = RuleStatus.valueOf(status);
 
       if (ruleStatus == RuleStatus.DEPRECATED) {
         // deprecated rules shouldn't have tags
         continue;
       }
 
-      @SuppressWarnings("unchecked")
-      var tags = (List<String>) metadata.get("tags");
+      List<String> tags =
+          metadata.get("tags").getAsJsonArray().asList().stream()
+              .map(JsonElement::getAsString)
+              .collect(Collectors.toUnmodifiableList());
       var unknownTags =
           tags.stream().filter(tag -> !ALLOWED_TAGS.contains(tag)).collect(Collectors.toList());
 
@@ -141,9 +146,9 @@ class CheckMetadataTest {
   @Test
   void testRulesTargetingTestsShouldHaveTestsTag() throws Exception {
     for (String key : RULE_KEYS) {
-      Map<String, Object> metadata = getMetadataForRuleKey(key);
+      JsonObject metadata = getMetadataForRuleKey(key);
 
-      String status = (String) metadata.get("status");
+      String status = metadata.get("status").getAsString();
       RuleStatus ruleStatus = EnumUtils.getEnumIgnoreCase(RuleStatus.class, status);
 
       if (ruleStatus == RuleStatus.DEPRECATED) {
@@ -151,9 +156,11 @@ class CheckMetadataTest {
         continue;
       }
 
-      @SuppressWarnings("unchecked")
-      var tags = (List<String>) metadata.get("tags");
-      var scope = ((String) metadata.get("scope")).toUpperCase();
+      List<String> tags =
+          metadata.get("tags").getAsJsonArray().asList().stream()
+              .map(JsonElement::getAsString)
+              .collect(Collectors.toUnmodifiableList());
+      String scope = metadata.get("scope").getAsString().toUpperCase();
 
       if (Set.of("TEST", "TESTS").contains(scope)) {
         assertThat(tags)
@@ -236,32 +243,22 @@ class CheckMetadataTest {
         .collect(Collectors.toUnmodifiableList());
   }
 
-  private static Map<String, Object> getMetadataForRuleKey(String ruleKey) throws Exception {
+  private static JsonObject getMetadataForRuleKey(String ruleKey) throws Exception {
     Path metadataPath =
         listJsonMetadata().stream()
             .filter(path -> FilenameUtils.getBaseName(path.toString()).equals(ruleKey))
             .findFirst()
             .orElseThrow();
-
     String data = Files.readString(metadataPath);
-
-    @SuppressWarnings("unchecked")
-    var metadata = (Map<String, Object>) new JSONParser().parse(data);
-
-    return metadata;
+    return JsonParser.parseString(data).getAsJsonObject();
   }
 
   private static List<String> getSonarWayRuleKeys() throws Exception {
     Path sonarWayPath = sonarWayMetadata();
-
     String data = Files.readString(sonarWayPath);
-
-    @SuppressWarnings("unchecked")
-    var metadata = (Map<String, Object>) new JSONParser().parse(data);
-
-    @SuppressWarnings("unchecked")
-    var ruleKeys = (List<String>) metadata.get("ruleKeys");
-
-    return ruleKeys;
+    JsonObject metadata = JsonParser.parseString(data).getAsJsonObject();
+    return metadata.getAsJsonArray("ruleKeys").asList().stream()
+        .map(JsonElement::getAsString)
+        .collect(Collectors.toUnmodifiableList());
   }
 }

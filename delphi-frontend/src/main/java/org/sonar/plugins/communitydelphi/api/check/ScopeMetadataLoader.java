@@ -19,14 +19,16 @@
 package org.sonar.plugins.communitydelphi.api.check;
 
 import com.google.common.io.Resources;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 
@@ -48,20 +50,19 @@ public final class ScopeMetadataLoader {
 
     try {
       String data = Resources.toString(url, StandardCharsets.UTF_8);
-      JSONParser parser = new JSONParser();
-
-      @SuppressWarnings("unchecked")
-      Map<String, Object> metadata = (Map<String, Object>) parser.parse(data);
-
+      JsonObject metadata = JsonParser.parseString(data).getAsJsonObject();
       return Optional.ofNullable(metadata.get("scope"))
-          .filter(String.class::isInstance)
-          .map(value -> ((String) value).toUpperCase(Locale.ROOT))
+          .filter(JsonPrimitive.class::isInstance)
+          .map(JsonPrimitive.class::cast)
+          .filter(JsonPrimitive::isString)
+          .map(JsonElement::getAsString)
+          .map(value -> value.toUpperCase(Locale.ROOT))
           .map(scope -> "TESTS".equals(scope) ? "TEST" : scope)
           .map(RuleScope::valueOf)
           .orElse(RuleScope.MAIN);
     } catch (IOException e) {
       throw new IllegalArgumentException("Can't read resource: " + url, e);
-    } catch (ParseException e) {
+    } catch (JsonSyntaxException e) {
       throw new IllegalArgumentException("Could not parse JSON", e);
     }
   }
