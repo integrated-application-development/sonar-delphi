@@ -42,13 +42,17 @@ public final class ScopeMetadataLoader {
   }
 
   public RuleScope getScope(RuleKey engineKey) {
-    URL url = getMetadataURL(engineKey);
-
-    if (url == null) {
-      throw new IllegalArgumentException("Metadata is missing for check \"" + engineKey + "\"");
-    }
+    String resourcePath =
+        metadataResourcePath.forRepository(engineKey.repository())
+            + "/"
+            + engineKey.rule()
+            + ".json";
 
     try {
+      URL url = classLoader.getResource(resourcePath);
+      if (url == null) {
+        throw new IOException("Can't read resource: " + resourcePath);
+      }
       String data = Resources.toString(url, StandardCharsets.UTF_8);
       JsonObject metadata = JsonParser.parseString(data).getAsJsonObject();
       return Optional.ofNullable(metadata.get("scope"))
@@ -61,17 +65,9 @@ public final class ScopeMetadataLoader {
           .map(RuleScope::valueOf)
           .orElse(RuleScope.MAIN);
     } catch (IOException e) {
-      throw new IllegalArgumentException("Can't read resource: " + url, e);
+      throw new IllegalArgumentException("Metadata is missing for check \"" + engineKey + "\"", e);
     } catch (JsonSyntaxException e) {
       throw new IllegalArgumentException("Could not parse JSON", e);
     }
-  }
-
-  private URL getMetadataURL(RuleKey engineKey) {
-    return classLoader.getResource(
-        metadataResourcePath.forRepository(engineKey.repository())
-            + "/"
-            + engineKey.rule()
-            + ".json");
   }
 }
