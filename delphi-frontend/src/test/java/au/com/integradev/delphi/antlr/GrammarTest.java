@@ -256,7 +256,8 @@ class GrammarTest {
   @Test
   void testFullWidthNumeralAtStartOfIdentifierShouldThrow() {
     assertThatThrownBy(() -> parse("FullWidthNumeralBeforeIdentifier.pas"))
-        .isInstanceOf(RuntimeException.class)
-        .hasMessage("line 6:2 mismatched input '０' expecting IMPLEMENTATION");
+        .isInstanceOf(DelphiFileConstructionException.class)
+        .hasCauseInstanceOf(DelphiParser.ParserException.class)
+        .hasMessageContaining("line 6:2 mismatched input '０' expecting IMPLEMENTATION");
   }
 }
