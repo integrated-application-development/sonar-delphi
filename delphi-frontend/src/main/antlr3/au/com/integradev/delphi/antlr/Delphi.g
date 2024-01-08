@@ -1239,8 +1239,9 @@ TkCharacterEscapeCode   : '#' ('_' | Digit)+
 fragment
 Alpha                   : 'a'..'z'
                         | 'A'..'Z'
-                        // every non-ASCII character until the surrogate pair range (\u3000 is excluded as WHITESPACE)
-                        | '\u0080'..'\uD7FF'
+                        // every non-ASCII character until the surrogate pair range (except \u3000 which is whitespace)
+                        | '\u0080'..'\u2FFF'
+                        | '\u3001'..'\uD7FF'
                         // everything after the surrogate range up to the start of the fullwidth numerals
                         | '\uE000'..'\uFF0F'
                         // after the fullwidth numerals up to the second last codepoint in the BMP
