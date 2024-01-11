@@ -32,6 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -48,6 +50,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 
 public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope {
+  private static final Logger LOG = LoggerFactory.getLogger(FileScopeImpl.class);
   private final String name;
   private final Deque<FileScope> imports = new ArrayDeque<>();
   private Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
@@ -107,7 +110,17 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
         imports.addFirst(scope);
       }
     }
-    super.addDeclaration(declaration);
+
+    try {
+      super.addDeclaration(declaration);
+    } catch (DuplicatedDeclarationException e) {
+      if (declaration instanceof UnitImportNameDeclaration) {
+        // 'requires' clauses can have multiple occurrences of the same unit import
+        LOG.warn("Duplicate unit import found: {}", e.getMessage());
+      } else {
+        throw e;
+      }
+    }
   }
 
   @Override
