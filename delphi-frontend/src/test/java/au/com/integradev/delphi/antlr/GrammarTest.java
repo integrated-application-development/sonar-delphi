@@ -116,6 +116,26 @@ class GrammarTest {
   }
 
   @Test
+  void testParseExportsSection() {
+    assertParsed("ExportsSection.dpr");
+  }
+
+  @Test
+  void testParseEmptyProgram() {
+    assertParsed("EmptyProgram.dpr");
+  }
+
+  @Test
+  void testParseProgramWithEmptyBlock() {
+    assertParsed("ProgramWithEmptyBlock.dpr");
+  }
+
+  @Test
+  void testParseEnd() {
+    assertParsed("End.dpr");
+  }
+
+  @Test
   void testParseListUtils() {
     assertParsed("ListUtils.pas");
   }

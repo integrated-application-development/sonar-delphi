@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Parsing errors on `.dpr` files without a top-level `begin`.
 - The `Copy` intrinsic inferred an incorrect return type for `PChar`, `PAnsiChar`, and variants.
 - The `Concat` intrinsic inferred an incorrect return type for single-character string literals.
 - Ideographic space (U+3000) was erroneously accepted as a valid identifier character.

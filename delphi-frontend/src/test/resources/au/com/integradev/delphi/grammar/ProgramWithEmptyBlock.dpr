@@ -1,0 +1,4 @@
+program ProgramWithEmptyBlock;
+
+begin
+end.
