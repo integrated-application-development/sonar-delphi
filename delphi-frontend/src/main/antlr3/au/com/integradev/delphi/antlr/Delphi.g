@@ -147,13 +147,15 @@ fileWithoutImplementation    : program | library | unitWithoutImplementation | p
 // File head
 //----------------------------------------------------------------------------
 
-program                      : (programHead)? (usesFileClause)? block '.'
+program                      : programHead? usesFileClause? programBody '.'
                              ;
-programHead                  : 'program'<ProgramDeclarationNodeImpl>^ qualifiedNameDeclaration (programParmSeq)? ';'!
+programHead                  : 'program'<ProgramDeclarationNodeImpl>^ qualifiedNameDeclaration programParameters? ';'!
                              ;
-programParmSeq               : '(' (ident (',' ident)* )? ')'
+programParameters            : '(' (ident (',' ident)* )? ')' // Used in standard Pascal; Delphi ignores them.
                              ;
-library                      : libraryHead (usesFileClause)? block '.'
+programBody                  : localDeclSection? (compoundStatement | 'end')
+                             ;
+library                      : libraryHead usesFileClause? programBody '.'
                              ;
 libraryHead                  : 'library'<LibraryDeclarationNodeImpl>^ qualifiedNameDeclaration (portabilityDirective!)* ';'!
                              ;
@@ -253,7 +255,7 @@ varValueSpec                 : 'absolute' constExpression
                              ;
 exportsSection               : 'exports' ident exportItem (',' ident exportItem)* ';'
                              ;
-exportItem                   : ('(' formalParameterList ')')? (INDEX expression)? (NAME expression)? ('resident')?
+exportItem                   : ('(' formalParameterList ')')? ('index' expression)? ('name' expression)? ('resident')?
                              ;
 
 //----------------------------------------------------------------------------
