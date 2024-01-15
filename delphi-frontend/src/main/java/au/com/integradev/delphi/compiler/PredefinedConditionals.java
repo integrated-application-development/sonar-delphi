@@ -226,6 +226,10 @@ public final class PredefinedConditionals {
       result.add("WEAKINTFREF");
     }
 
+    if (checkToolchain(Toolchain.DCCIOSSIMARM64)) {
+      result.add("IOSSIMULATOR");
+    }
+
     return result;
   }
 
