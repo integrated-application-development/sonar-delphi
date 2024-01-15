@@ -22,6 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 class PredefinedConditionalsTest {
   private static final CompilerVersion VERSION_5 = CompilerVersion.fromVersionNumber("13.0");
@@ -31,6 +33,7 @@ class PredefinedConditionalsTest {
   private static final CompilerVersion VERSION_SYDNEY = CompilerVersion.fromVersionNumber("34.0");
   private static final CompilerVersion VERSION_ALEXANDRIA =
       CompilerVersion.fromVersionNumber("35.0");
+  private static final CompilerVersion VERSION_ATHENS = CompilerVersion.fromVersionNumber("36.0");
 
   private static final Set<String> NEXT_GEN_FEATURES =
       Set.of("NEXTGEN", "AUTOREFCOUNT", "WEAKINSTREF");
@@ -367,5 +370,39 @@ class PredefinedConditionalsTest {
 
     assertThat(PredefinedConditionals.getConditionalDefines(Toolchain.DCCLINUX64, VERSION_RIO))
         .doesNotContainAnyElementsOf(NEXT_GEN_FEATURES);
+  }
+
+  @ParameterizedTest
+  @EnumSource(
+      value = Toolchain.class,
+      names = {
+        "DCCOSX64",
+        "DCCOSXARM64",
+        "DCCIOSARM",
+        "DCCIOSARM64",
+        "DCCIOSSIMARM64",
+        "DCCAARM",
+        "DCCAARM64",
+        "DCCLINUX64"
+      })
+  void testLLVMToolchainsAfterDelphiAlexandriaShouldDefineLLVM(Toolchain toolchain) {
+    assertThat(PredefinedConditionals.getConditionalDefines(toolchain, VERSION_ATHENS))
+        .contains("LLVM");
+  }
+
+  @ParameterizedTest
+  @EnumSource(
+      value = Toolchain.class,
+      names = {"DCC32", "DCC64", "DCCOSX", "DCCIOS32"})
+  void testNonLLVMToolchainsAfterDelphiAlexandriaShouldNotDefineLLVM(Toolchain toolchain) {
+    assertThat(PredefinedConditionals.getConditionalDefines(toolchain, VERSION_ATHENS))
+        .doesNotContain("LLVM");
+  }
+
+  @ParameterizedTest
+  @EnumSource(value = Toolchain.class)
+  void testToolchainsBeforeDelphiAthensShouldNotDefineLLVM(Toolchain toolchain) {
+    assertThat(PredefinedConditionals.getConditionalDefines(toolchain, VERSION_ALEXANDRIA))
+        .doesNotContain("LLVM");
   }
 }

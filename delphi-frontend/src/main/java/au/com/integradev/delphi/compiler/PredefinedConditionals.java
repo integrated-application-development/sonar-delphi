@@ -30,6 +30,7 @@ public final class PredefinedConditionals {
   private static final CompilerVersion VERSION_2009 = CompilerVersion.fromVersionNumber("20.0");
   private static final CompilerVersion VERSION_TOKYO = CompilerVersion.fromVersionNumber("32.0");
   private static final CompilerVersion VERSION_SYDNEY = CompilerVersion.fromVersionNumber("34.0");
+  private static final CompilerVersion VERSION_ATHENS = CompilerVersion.fromVersionNumber("36.0");
 
   private final Toolchain toolchain;
   private final CompilerVersion compilerVersion;
@@ -177,7 +178,11 @@ public final class PredefinedConditionals {
             Toolchain.DCCLINUX64);
 
     if (basedOnLLVM) {
-      return Set.of("EXTERNALLINKER");
+      Set<String> result = Sets.newHashSet("EXTERNALLINKER");
+      if (compilerVersion.compareTo(VERSION_ATHENS) >= 0) {
+        result.add("LLVM");
+      }
+      return result;
     } else {
       return Set.of("ASSEMBLER");
     }

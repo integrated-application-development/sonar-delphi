@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for the `LLVM` symbol, which is defined on LLVM-based toolchains from Delphi 12 onward.
+
 ### Fixed
 
 - Parsing errors on `.dpr` files without a top-level `begin`.
