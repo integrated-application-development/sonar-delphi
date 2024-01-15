@@ -40,6 +40,7 @@ import org.sonar.plugins.communitydelphi.api.directive.IfnDefDirective;
 import org.sonar.plugins.communitydelphi.api.directive.IncludeDirective;
 import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective;
 import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective.ParameterKind;
+import org.sonar.plugins.communitydelphi.api.directive.ResourceDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.directive.UndefineDirective;
@@ -60,6 +61,31 @@ class CompilerDirectiveParserTest {
 
     directive = parse("{$I file.inc}");
     assertThat(directive).isInstanceOf(IncludeDirective.class);
+  }
+
+  @Test
+  void testCreateResourceDirective() {
+    CompilerDirective directive = parse("{$RESOURCE file.res}");
+    assertThat(directive).isInstanceOf(ResourceDirective.class);
+    assertThat(((ResourceDirective) directive).getResourceFile()).isEqualTo("file.res");
+    assertThat(((ResourceDirective) directive).getResourceScriptFile()).isNull();
+
+    directive = parse("{$R 'file.res' 'script.rc'}");
+    assertThat(directive).isInstanceOf(ResourceDirective.class);
+    assertThat(((ResourceDirective) directive).getResourceFile()).isEqualTo("file.res");
+    assertThat(((ResourceDirective) directive).getResourceScriptFile()).isEqualTo("script.rc");
+
+    directive = parse("{$R 'file.res' foo}");
+    assertThat(directive).isInstanceOf(ResourceDirective.class);
+    assertThat(((ResourceDirective) directive).getResourceFile()).isEqualTo("file.res");
+    assertThat(((ResourceDirective) directive).getResourceScriptFile()).isNull();
+    assertThat(((ResourceDirective) directive).getPredicates()).containsExactly("foo");
+
+    directive = parse("{$R 'file.res' foo bar}");
+    assertThat(directive).isInstanceOf(ResourceDirective.class);
+    assertThat(((ResourceDirective) directive).getResourceFile()).isEqualTo("file.res");
+    assertThat(((ResourceDirective) directive).getResourceScriptFile()).isNull();
+    assertThat(((ResourceDirective) directive).getPredicates()).containsExactly("foo", "bar");
   }
 
   @Test
