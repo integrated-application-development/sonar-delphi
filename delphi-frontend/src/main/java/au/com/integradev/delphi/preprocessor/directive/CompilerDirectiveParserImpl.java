@@ -27,12 +27,16 @@ import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexe
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective.ConditionalKind;
 import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective.ParameterKind;
+import org.sonar.plugins.communitydelphi.api.directive.ResourceDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.directive.WarnDirective;
 import org.sonar.plugins.communitydelphi.api.directive.WarnDirective.WarnParameterValue;
@@ -113,6 +117,8 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
           return new UndefineDirectiveImpl(token, readDirectiveParameter());
         case INCLUDE:
           return new IncludeDirectiveImpl(token, readDirectiveParameter());
+        case RESOURCE:
+          return createResourceDirective();
         case WARN:
           return createWarnDirective();
         default:
@@ -157,6 +163,31 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
     return switchKind == SwitchKind.MINENUMSIZE1
         || switchKind == SwitchKind.MINENUMSIZE2
         || switchKind == SwitchKind.MINENUMSIZE4;
+  }
+
+  private ResourceDirective createResourceDirective() {
+    String resourceFile = readDirectiveParameter();
+    String resourceScriptFile = null;
+    List<String> predicates = new ArrayList<>();
+
+    char character = currentChar();
+    while (Character.isWhitespace(character)) {
+      character = nextChar();
+    }
+
+    if (character == '\'') {
+      resourceScriptFile = StringUtils.stripToNull(readDirectiveParameter());
+    } else {
+      while (true) {
+        String predicate = StringUtils.stripToNull(readDirectiveParameter());
+        if (predicate == null) {
+          break;
+        }
+        predicates.add(predicate);
+      }
+    }
+
+    return new ResourceDirectiveImpl(token, resourceFile, resourceScriptFile, predicates);
   }
 
   private WarnDirective createWarnDirective() {
