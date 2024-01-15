@@ -236,7 +236,8 @@ class PredefinedConditionalsTest {
             "CONDITIONALEXPRESSIONS",
             "PIC",
             "WEAKREF",
-            "WEAKINTFREF");
+            "WEAKINTFREF",
+            "IOSSIMULATOR");
   }
 
   @Test
