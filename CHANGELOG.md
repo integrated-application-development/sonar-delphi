@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for the `LLVM` symbol, which is defined on LLVM-based toolchains from Delphi 12 onward.
 - Support for the `IOSSIMULATOR` symbol, which is defined on the `DCCIOSSIMARM64` toolchain.
 - `FormDfm` analysis rule, which flags VCL forms/frames that lack a `.dfm` resource.
+- `FormFmx` analysis rule, which flags FireMonkey forms/frames that lack a `.fmx` resource.
 - **API:** `CompilerDirectiveParser` now returns a new `ResourceDirective` type when parsing
   [resource directives](https://docwiki.embarcadero.com/RADStudio/en/Resource_file_(Delphi)).
 

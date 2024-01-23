@@ -1,0 +1,52 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Omitting the corresponding <code>.fmx</code> resource for a FireMonkey form or frame is typically
+  a programming error. While there are some cases that won't cause problems at runtime, it remains
+  unintuitive and confusing.
+</p>
+<p>
+  Additionally, a unit that doesn't contain a <code>.fmx</code> resource will lack design-time form
+  editing functionality.
+</p>
+<p>
+  This rule flags any <code>TForm</code> or <code>TFrame</code> descendant in a unit that doesn't
+  include a <code>.fmx</code> resource.
+</p>
+<h2>How to fix it</h2>
+<p>Add a <code>.fmx</code> resource to the unit:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+unit Foo;
+
+interface
+
+uses
+  FMX.Forms;
+
+type
+  TFoo = class(TForm)
+    // ...
+  end;
+
+implementation
+
+end.
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+unit Foo;
+
+interface
+
+uses
+  FMX.Forms;
+
+type
+  TFoo = class(TForm)
+    // ...
+  end;
+
+implementation
+
+{$R *.fmx}
+
+end.
+</pre>
