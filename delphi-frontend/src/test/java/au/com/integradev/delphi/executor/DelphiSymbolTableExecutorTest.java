@@ -1104,6 +1104,54 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testVarShadowingImport() {
+    execute("shadowedImports/VarShadowingImport.pas", "shadowedImports");
+    verifyUsages(10, 15, reference(19, 15));
+  }
+
+  @Test
+  void testTypeShadowingImport() {
+    execute("shadowedImports/TypeShadowingImport.pas", "shadowedImports");
+    verifyUsages(10, 21, reference(16, 15));
+  }
+
+  @Test
+  void testConstShadowingImport() {
+    execute("shadowedImports/ConstShadowingImport.pas", "shadowedImports");
+    verifyUsages(10, 15, reference(19, 15));
+  }
+
+  @Test
+  void testRoutineShadowingImport() {
+    execute("shadowedImports/RoutineShadowingImport.pas", "shadowedImports");
+    verifyUsages(10, 15, reference(23, 15));
+  }
+
+  @Test
+  void testShadowedImplementationImport() {
+    execute("shadowedImports/ShadowedImplementationImport.pas", "shadowedImports");
+    verifyUsages(12, 21, reference(16, 15));
+  }
+
+  @Test
+  void testUnshadowedImplementationImport() {
+    execute("shadowedImports/UnshadowedImplementationImport.pas", "shadowedImports");
+    verifyUsages(13, 6, reference(16, 2));
+  }
+
+  @Test
+  void testInterfaceImportShadowedLater() {
+    execute("shadowedImports/InterfaceImportShadowedLater.pas", "shadowedImports");
+    verifyUsages(5, 6, reference(7, 28));
+  }
+
+  @Test
+  void testInterfaceImportShadowedInImplementation() {
+    execute("shadowedImports/InterfaceImportShadowedInImplementation.pas", "shadowedImports");
+    verifyUsages(5, 6, reference(7, 28));
+  }
+
+  @Test
   void testImports() {
     execute("imports/source/Unit1.pas", "imports/", "imports/source/", "imports/ignored/");
     verifyUsages(1, 5, reference(23, 2), reference(26, 18));
