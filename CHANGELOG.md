@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Parsing errors on `.dpr` files without a top-level `begin`.
+- Symbol table errors on declarations that shared a name with a unit import.
 - The `Copy` intrinsic inferred an incorrect return type for `PChar`, `PAnsiChar`, and variants.
 - The `Concat` intrinsic inferred an incorrect return type for single-character string literals.
 - The `ReadLn` intrinsic was missing the standard input overload.
