@@ -170,6 +170,14 @@ public class DelphiScopeImpl implements DelphiScope {
 
     Set<NameDeclaration> duplicates = declarationsByName.get(declaration.getImage());
 
+    // Unit imports can clash with other declarations, except other imports
+    if (declaration instanceof UnitImportNameDeclaration) {
+      return duplicates.stream().noneMatch(UnitImportNameDeclaration.class::isInstance);
+    } else {
+      // Disregard unit imports when checking for duplicates
+      duplicates.removeIf(UnitImportNameDeclaration.class::isInstance);
+    }
+
     if (declaration instanceof GenerifiableDeclaration) {
       GenerifiableDeclaration generic = (GenerifiableDeclaration) declaration;
       if (generic.isGeneric()) {

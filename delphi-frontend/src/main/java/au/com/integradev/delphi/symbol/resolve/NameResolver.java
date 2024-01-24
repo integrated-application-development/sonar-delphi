@@ -605,6 +605,7 @@ public class NameResolver {
 
     disambiguateIsCallable();
     disambiguateVisibility();
+    disambiguateUnitImport();
 
     if (!isLastName) {
       disambiguateImplicitEmptyArgumentList();
@@ -1108,6 +1109,28 @@ public class NameResolver {
 
   private void disambiguateVisibility() {
     declarations.removeIf(not(this::isVisibleDeclaration));
+  }
+
+  private void disambiguateUnitImport() {
+    Set<UnitImportNameDeclaration> unitImports =
+        declarations.stream()
+            .filter(UnitImportNameDeclaration.class::isInstance)
+            .map(UnitImportNameDeclaration.class::cast)
+            .collect(Collectors.toSet());
+
+    if (unitImports.isEmpty()) {
+      return;
+    }
+
+    if (unitImports.stream().anyMatch(NameDeclaration::isImplementationDeclaration)) {
+      // The implementation unit import is chosen over anything in the interface
+      declarations.removeIf(not(NameDeclaration::isImplementationDeclaration));
+    }
+
+    if (unitImports.size() < declarations.size()) {
+      // The unit import is shadowed by anything below it
+      declarations.removeAll(unitImports);
+    }
   }
 
   private void disambiguateNotGeneric() {
