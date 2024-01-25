@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `CompilerDirectiveParser` now returns a new `ResourceDirective` type when parsing
   [resource directives](https://docwiki.embarcadero.com/RADStudio/en/Resource_file_(Delphi)).
 
+### Changed
+
+- Alternative casings `Writeln` and `Readln` are now allowed in `MixedNames`.
+
 ### Fixed
 
 - Parsing errors on `.dpr` files without a top-level `begin`.

@@ -34,6 +34,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
@@ -58,7 +59,7 @@ public class MixedNamesCheck extends DelphiCheck {
             context,
             occurrence.getImage(),
             (UnitImportNameDeclaration) declaration);
-      } else {
+      } else if (!isSpecialCase(declaration, occurrence)) {
         String actual = occurrence.getImage();
         String expected = declaration.getImage();
         if (!actual.equals(expected)) {
@@ -115,6 +116,21 @@ public class MixedNamesCheck extends DelphiCheck {
       return super.visit(argumentListNode, context);
     } else {
       return context;
+    }
+  }
+
+  private static boolean isSpecialCase(NameDeclaration declaration, NameOccurrence occurrence) {
+    if (!(declaration instanceof RoutineNameDeclaration)) {
+      return false;
+    }
+
+    switch (((RoutineNameDeclaration) declaration).fullyQualifiedName()) {
+      case "System.WriteLn":
+        return occurrence.getImage().equals("Writeln");
+      case "System.ReadLn":
+        return occurrence.getImage().equals("Readln");
+      default:
+        return false;
     }
   }
 
