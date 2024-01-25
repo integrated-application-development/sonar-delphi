@@ -1,0 +1,35 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Passing an invalid format string to <code>System.SysUtils.Format</code>
+  raises a runtime exception.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Modify the format string to be syntactically valid.
+</p>
+<p>
+  For example, if there are stray percent symbols, escape them with a second percent symbol:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Format('%s got 50%!', ['Bob']);
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Format('%s got 50%%!', ['Bob']);
+</pre>
+<p>
+  Or if there is a mangled format specifier, fix the syntax problems:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+Format('%s got %*:*f!', ['Bob', 2, 50.0]);
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+Format('%s got %.*f!', ['Bob', 2, 50.0]);
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.Format#Format_Strings">
+      RAD Studio API documentation: System.SysUtils.Format
+    </a>
+  </li>
+</ul>

@@ -81,6 +81,7 @@ public final class CheckList {
           FormFmxCheck.class,
           FormatArgumentCountCheck.class,
           FormatArgumentTypeCheck.class,
+          FormatStringValidCheck.class,
           FreeAndNilTObjectCheck.class,
           GotoStatementCheck.class,
           GroupedFieldDeclarationCheck.class,
