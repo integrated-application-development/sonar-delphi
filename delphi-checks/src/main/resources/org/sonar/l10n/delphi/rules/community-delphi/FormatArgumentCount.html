@@ -1,0 +1,29 @@
+ <h2>Why is this an issue?</h2>
+<p>
+  Passing the wrong number of arguments to a call to <code>System.SysUtils.Format</code>
+  raises a runtime exception.
+</p>
+<p>
+  Generally speaking, the number of arguments should exactly match the number of format specifiers
+  in the string. <code>Format</code> allows you to format the same argument multiple times using
+  index specifiers, in which case the number of arguments may be more difficult to determine.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Ensure that the arguments to the <code>Format</code> call match the specifiers in the format
+  string:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Format('%s (class %d) got %.*f percent on the test.', ['Bob', 74.599]);
+</pre>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Format('%s (class %d) got %.*f percent on the test.', ['Bob', 6, 2, 74.599]);
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.Format#Format_Strings">
+      RAD Studio API documentation: System.SysUtils.Format
+    </a>
+  </li>
+</ul>
