@@ -239,6 +239,7 @@ public final class IntrinsicsInjector {
         .param(TypeFactory.untypedType())
         .variadic(TypeFactory.untypedType());
     routine("ReadLn").varParam(ANY_FILE).variadic(TypeFactory.untypedType());
+    routine("ReadLn").variadic(TypeFactory.untypedType());
     routine("ReallocMem").varParam(ANY_POINTER).param(type(INTEGER));
     routine("Rename").varParam(ANY_FILE).param(ANY_STRING);
     routine("Reset").varParam(ANY_FILE).param(type(INTEGER)).required(1);
