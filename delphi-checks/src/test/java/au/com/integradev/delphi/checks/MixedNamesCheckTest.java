@@ -21,6 +21,8 @@ package au.com.integradev.delphi.checks;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class MixedNamesCheckTest {
   @Test
@@ -381,6 +383,28 @@ class MixedNamesCheckTest {
                 .appendDecl("  [foo.Bar] // Noncompliant")
                 .appendDecl("  TBar = class(TObject)")
                 .appendDecl("  end;"))
+        .verifyIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"WriteLn", "ReadLn", "Writeln", "Readln"})
+  void testRoutinesWithMultipleCanonicalCasesShouldNotAddIssue(String routineName) {
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder().appendImpl("initialization").appendImpl("  " + routineName))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"writeln", "readln"})
+  void testWrongCasingOfRoutinesWithMultipleCanonicalCasesShouldAddIssue(String routineName) {
+    CheckVerifier.newVerifier()
+        .withCheck(new MixedNamesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("initialization")
+                .appendImpl("  " + routineName + " // Noncompliant"))
         .verifyIssues();
   }
 

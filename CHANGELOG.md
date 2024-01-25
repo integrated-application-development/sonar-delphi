@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for the `LLVM` symbol, which is defined on LLVM-based toolchains from Delphi 12 onward.
 - Support for the `IOSSIMULATOR` symbol, which is defined on the `DCCIOSSIMARM64` toolchain.
 
+### Changed
+
+- Alternative casings `Writeln` and `Readln` are now allowed in `MixedNames`.
+
 ### Fixed
 
 - Parsing errors on `.dpr` files without a top-level `begin`.
