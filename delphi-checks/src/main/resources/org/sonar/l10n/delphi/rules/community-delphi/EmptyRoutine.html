@@ -1,27 +1,29 @@
 <h2>Why is this an issue?</h2>
 <p>
   Empty routines are usually superfluous, and should be removed to prevent unexpected behaviour.
+  In some cases, however, empty routines are necessary. In these cases they should be accompanied
+  by an explanatory comment in the body of the routine.
 </p>
-<p>Some valid empty routines could include:</p>
+<p>This rule ignores the following, when annotated with a comment:</p>
 <ul>
-  <li>A virtual method that is intended to be overridden</li>
-  <li>An override method of a non-empty virtual method</li>
-  <li>A method that exists only to implement an interface</li>
+  <li>Virtual methods (e.g. to provide a no-op default behaviour for child classes)</li>
+  <li>Override methods (e.g. to not run behaviour implemented in ancestor classes)</li>
+  <li>Methods that implement an interface</li>
 </ul>
-<p>
-  In these cases, a comment should be added to the routine body to explain why the routine is blank.
-</p>
 <h2>How to fix it</h2>
 <p>If the empty routine is an omission, remove it.</p>
-<p>If the routine should be empty, add a nested comment explaining why the routine is blank:</p>
+<p>
+  If the routine has a valid reason to be empty, add a nested comment explaining why the routine is
+  blank:
+</p>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-procedure TExample.MyEmptyMethod;
+procedure TExample.OverriddenMethod;
 begin
 end;
 </pre>
 <pre data-diff-id="1" data-diff-type="compliant">
-procedure TExample.MyEmptyMethod;
+procedure TExample.OverriddenMethod;
 begin
-  // Empty because I really want it to be!
+  // Overrides base class behaviour
 end;
 </pre>
