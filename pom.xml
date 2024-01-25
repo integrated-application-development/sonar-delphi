@@ -472,7 +472,8 @@
       <id>ci</id>
       <properties>
         <license.failIfMissing>true</license.failIfMissing>
-        <skipITs>false</skipITs>
+        <!-- Changes to upstream SonarSource servers have broken the integration tests.-->
+        <skipITs>true</skipITs>
       </properties>
     </profile>
 
