@@ -1,0 +1,19 @@
+{
+  "title": "Format argument types should match the corresponding format specifier",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "10min"
+  },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
+  "tags": ["suspicious"],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

@@ -1,0 +1,31 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Passing arguments of the wrong type to a call to <code>System.SysUtils.Format</code>
+  raises a runtime exception. In particular:
+</p>
+<ul>
+  <li><code>%d</code>, <code>%u</code>, and <code>%x</code> must be an integer value</li>
+  <li><code>%e</code>, <code>%f</code>, <code>%g</code>, <code>%n</code>, and <code>%m</code> must be a floating-point value</li>
+  <li><code>%p</code> must be a pointer value</li>
+  <li><code>%s</code> must be a string, character, or <code>PChar</code> value</li>
+  <li>Floating-point width and precision must be integer values</li>
+</ul>
+<h2>How to fix it</h2>
+<p>
+  Ensure that the arguments to the <code>Format</code> call match the specifiers in the format
+  string:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Format('%d got %.*f percent on the test.', ['Bob', 74.599]);
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+Format('%s got %.2f percent on the test.', ['Bob', 74.599]);
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="http://docwiki.embarcadero.com/Libraries/en/System.SysUtils.Format#Format_Strings">
+      RAD Studio API documentation: System.SysUtils.Format
+    </a>
+  </li>
+</ul>
