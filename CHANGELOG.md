@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `FormFmx` analysis rule, which flags FireMonkey forms/frames that lack a `.fmx` resource.
 - `FormatArgumentCount` analysis rule, which flags `Format` calls where the number of format
   arguments does not match the number of format specifiers.
+- `FormatArgumentType` analysis rule, which flags `Format` arguments with types that are
+  incompatible with their corresponding format specifiers.
 - **API:** `CompilerDirectiveParser` now returns a new `ResourceDirective` type when parsing
   [resource directives](https://docwiki.embarcadero.com/RADStudio/en/Resource_file_(Delphi)).
 
