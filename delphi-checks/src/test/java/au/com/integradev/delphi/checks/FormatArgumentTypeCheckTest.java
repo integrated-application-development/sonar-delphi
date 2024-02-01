@@ -241,4 +241,61 @@ class FormatArgumentTypeCheckTest {
                 .appendImpl("  ]);"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testCorrectProcedureResultShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("function GetName: string;")
+                .appendImpl("begin")
+                .appendImpl("  Result := 'Ted';")
+                .appendImpl("end;")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %s', [")
+                .appendImpl("    GetName")
+                .appendImpl("  ]);"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnfulfilledCorrectProcedureResultShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("function GetName(Last: Boolean): string;")
+                .appendImpl("begin")
+                .appendImpl("  Result := 'Ted';")
+                .appendImpl("end;")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %s', [")
+                .appendImpl("    GetName // Noncompliant")
+                .appendImpl("  ]);"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testIncorrectProcedureResultShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("function GetAge: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := 30;")
+                .appendImpl("end;")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %s', [")
+                .appendImpl("    GetAge // Noncompliant")
+                .appendImpl("  ]);"))
+        .verifyIssues();
+  }
 }
