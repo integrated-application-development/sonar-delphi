@@ -1,7 +1,9 @@
 <h2>Why is this an issue?</h2>
 <p>
   Passing an invalid format string to <code>System.SysUtils.Format</code>
-  raises a runtime exception.
+  can raise a runtime exception. In addition, even if an exception is not raised
+  <code>Format</code> stops processing the string after the first invalid
+  character, which will result in an unexpected value.
 </p>
 <h2>How to fix it</h2>
 <p>
