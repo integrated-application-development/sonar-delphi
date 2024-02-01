@@ -36,6 +36,7 @@ public final class SymbolicNode implements Node {
   private final int beginColumn;
   private final int endColumn;
   private final DelphiScope scope;
+  private final boolean isIncludedNode;
 
   public SymbolicNode(DelphiNode node) {
     this(node, node.getScope());
@@ -50,7 +51,8 @@ public final class SymbolicNode implements Node {
         node.getEndLine(),
         node.getBeginColumn(),
         node.getEndColumn(),
-        scope);
+        scope,
+        node.getFirstToken().isIncludedToken());
   }
 
   private SymbolicNode(
@@ -61,7 +63,8 @@ public final class SymbolicNode implements Node {
       int endLine,
       int beginColumn,
       int endColumn,
-      DelphiScope scope) {
+      DelphiScope scope,
+      boolean isIncludedNode) {
     this.tokenType = tokenType;
     this.tokenIndex = tokenIndex;
     this.image = image;
@@ -70,11 +73,20 @@ public final class SymbolicNode implements Node {
     this.beginColumn = beginColumn;
     this.endColumn = endColumn;
     this.scope = scope;
+    this.isIncludedNode = isIncludedNode;
   }
 
   public static SymbolicNode imaginary(String image, DelphiScope scope) {
     return new SymbolicNode(
-        DelphiTokenType.INVALID, IMAGINARY_TOKEN_INDEX.incrementAndGet(), image, 0, 0, 0, 0, scope);
+        DelphiTokenType.INVALID,
+        IMAGINARY_TOKEN_INDEX.incrementAndGet(),
+        image,
+        0,
+        0,
+        0,
+        0,
+        scope,
+        false);
   }
 
   public static SymbolicNode fromRange(String image, DelphiNode begin, DelphiNode end) {
@@ -86,7 +98,8 @@ public final class SymbolicNode implements Node {
         end.getEndLine(),
         begin.getBeginColumn(),
         end.getEndColumn(),
-        begin.getScope());
+        begin.getScope(),
+        begin.getFirstToken().isIncludedToken() || end.getFirstToken().isIncludedToken());
   }
 
   @Override
@@ -127,6 +140,10 @@ public final class SymbolicNode implements Node {
   @Override
   public DelphiScope getScope() {
     return scope;
+  }
+
+  public boolean isIncludedNode() {
+    return isIncludedNode;
   }
 
   @Override

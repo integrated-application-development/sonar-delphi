@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.visitors;
 
+import au.com.integradev.delphi.symbol.SymbolicNode;
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -43,6 +44,12 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
 
     Node location = declaration.getNode();
     String symbolUnit = location.getUnitName();
+
+    if (location instanceof SymbolicNode && ((SymbolicNode) location).isIncludedNode()) {
+      // Symbols from include files may overlap with both their own
+      // references and other symbols from the same file.
+      return;
+    }
 
     NewSymbol newSymbol =
         table.newSymbol(
