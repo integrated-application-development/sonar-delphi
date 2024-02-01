@@ -89,6 +89,7 @@ public class FormatArgumentTypeCheck extends AbstractFormatArgumentCheck {
       case STRING:
         return exprType.isString()
             || exprType.isChar()
+            || exprType.isVariant()
             || ((exprType instanceof PointerType)
                 && ((PointerType) exprType).dereferencedType().isChar());
       default:
