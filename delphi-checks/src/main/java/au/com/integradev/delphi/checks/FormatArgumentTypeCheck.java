@@ -30,6 +30,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 
 @Rule(key = "FormatArgumentType")
 public class FormatArgumentTypeCheck extends AbstractFormatArgumentCheck {
@@ -68,6 +69,10 @@ public class FormatArgumentTypeCheck extends AbstractFormatArgumentCheck {
   }
 
   private static boolean isAcceptedType(Type exprType, FormatSpecifierType specifierType) {
+    if (exprType instanceof ProceduralType) {
+      exprType = ((ProceduralType) exprType).returnType();
+    }
+
     switch (specifierType) {
       case DECIMAL:
       case UNSIGNED_DECIMAL:
