@@ -1017,6 +1017,13 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testIncludes() {
+    execute("includes/Includes.pas");
+    Collection<TextRange> references = context.referencesForSymbolAt(componentKey, 5, 0);
+    assertThat(references).isNull();
+  }
+
+  @Test
   void testSimpleAttribute() {
     execute("attributes/SimpleAttribute.pas");
     verifyUsages(6, 2, reference(9, 3));
