@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for on-demand plugin downloading, which is being
+  [introduced in SonarQube 10.4](https://community.sonarsource.com/t/the-sonarscanners-download-only-required-3rd-party-plugins/108156).
 - Support for the `LLVM` symbol, which is defined on LLVM-based toolchains from Delphi 12 onward.
 - Support for the `IOSSIMULATOR` symbol, which is defined on the `DCCIOSSIMARM64` toolchain.
 - `FormDfm` analysis rule, which flags VCL forms/frames that lack a `.dfm` resource.

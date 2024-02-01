@@ -62,6 +62,7 @@ In the code snippet below, there's a couple of important configuration propertie
 * `<pluginClass>` provides the **entry point of the plugin**. You must change this configuration if
 you rename or move the class implementing `org.sonar.api.Plugin`.
 * `<pluginApiMinVersion>` guarantees compatibility with the plugin API version you target.
+* `<requiredForLanguages>` indicates which language your custom plugin will be available.
 
 ```xml
 <plugin>
@@ -76,6 +77,7 @@ you rename or move the class implementing `org.sonar.api.Plugin`.
     <skipDependenciesPackaging>true</skipDependenciesPackaging>
     <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
     <requirePlugins>communitydelphi:${sonar.delphi.version}</requirePlugins>
+    <requiredForLanguages>delphi</requiredForLanguages>
   </configuration>
 </plugin>
 ```
