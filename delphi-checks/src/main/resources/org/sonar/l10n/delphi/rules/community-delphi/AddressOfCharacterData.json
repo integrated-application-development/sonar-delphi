@@ -1,5 +1,5 @@
 {
-  "title": "The first character in a string should not be addressed by index.",
+  "title": "The first character in a string should not be addressed by index",
   "type": "BUG",
   "status": "ready",
   "remediation": {
