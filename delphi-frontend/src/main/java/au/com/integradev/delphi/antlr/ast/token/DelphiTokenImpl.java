@@ -83,7 +83,7 @@ public class DelphiTokenImpl implements DelphiToken {
   }
 
   private void calculatePosition() {
-    if (isIncludeToken()) {
+    if (isIncludedToken()) {
       FilePosition insertionPosition = ((IncludeToken) token).getInsertionPosition();
       beginLine = insertionPosition.getBeginLine();
       beginColumn = insertionPosition.getBeginColumn();
@@ -134,7 +134,8 @@ public class DelphiTokenImpl implements DelphiToken {
     return DelphiKeywords.KEYWORDS.contains(tokenType);
   }
 
-  private boolean isIncludeToken() {
+  @Override
+  public boolean isIncludedToken() {
     return token instanceof IncludeToken;
   }
 

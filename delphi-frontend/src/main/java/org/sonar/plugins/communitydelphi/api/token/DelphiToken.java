@@ -46,4 +46,6 @@ public interface DelphiToken {
   int getIndex();
 
   DelphiTokenType getType();
+
+  boolean isIncludedToken();
 }

@@ -34,6 +34,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class UnknownScopeImplTest {
   private final UnknownScopeImpl unknownScope = UnknownScopeImpl.instance();
@@ -127,8 +128,13 @@ class UnknownScopeImplTest {
   }
 
   private static NameOccurrence makeNameOccurrence() {
+    DelphiToken token = mock(DelphiToken.class);
+    when(token.isIncludedToken()).thenReturn(false);
+
     DelphiNode location = mock(DelphiNode.class);
     when(location.getScope()).thenReturn(unknownScope());
+    when(location.getFirstToken()).thenReturn(token);
+
     return new NameOccurrenceImpl(location, "Image");
   }
 }
