@@ -1,5 +1,5 @@
 {
-  "title": "Character types should not be cast to Character Pointer types",
+  "title": "Character types should not be cast to character pointer types",
   "type": "BUG",
   "status": "ready",
   "remediation": {

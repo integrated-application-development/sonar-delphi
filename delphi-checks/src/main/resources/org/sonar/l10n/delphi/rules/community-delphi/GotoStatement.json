@@ -1,5 +1,5 @@
 {
-  "title": "\u0027goto\u0027 statements should not be used",
+  "title": "'goto' statements should not be used",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
