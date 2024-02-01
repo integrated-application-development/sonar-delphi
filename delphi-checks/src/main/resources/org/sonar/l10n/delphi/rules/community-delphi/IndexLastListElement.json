@@ -1,5 +1,5 @@
 {
-  "title": "The last element in a `TList` descendant should be retrieved with the `Last` method.",
+  "title": "The last element in a `TList` descendant should be retrieved with the `Last` method",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

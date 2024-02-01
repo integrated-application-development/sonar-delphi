@@ -7,9 +7,20 @@
 
 <h2>How to fix it</h2>
 <p>
-  Use <code>TList.Last</code> instead of indexing with <code>Count - 1</code>.
+  Use <code>TList.Last</code> instead of indexing with <code>Count - 1</code>:
 </p>
-
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure PrintMostRecent(MyList: TList<Integer>);
+begin
+  WriteLn(MyList[MyList.Count - 1]);
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure PrintMostRecent(MyList: TList<Integer>);
+begin
+  WriteLn(MyList.Last);
+end;
+</pre>
 <ul>
   <li>
     <a href="https://docwiki.embarcadero.com/Libraries/en/Special:Search/System.Generics.Collections.TList.Last">
