@@ -243,6 +243,43 @@ class FormatArgumentTypeCheckTest {
   }
 
   @Test
+  void testVariantForStringShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("var")
+                .appendImpl("  MyVariant: Variant;")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %s', [")
+                .appendImpl("    MyVariant")
+                .appendImpl("  ]);"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testVariantForNonStringShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("var")
+                .appendImpl("  MyVariant: Variant;")
+                .appendImpl("initialization")
+                .appendImpl("  Format('%d %n %x %p', [")
+                .appendImpl("    MyVariant, // Noncompliant")
+                .appendImpl("    MyVariant, // Noncompliant")
+                .appendImpl("    MyVariant, // Noncompliant")
+                .appendImpl("    MyVariant  // Noncompliant")
+                .appendImpl("  ]);"))
+        .verifyIssues();
+  }
+
+  @Test
   void testCorrectProcedureResultShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new FormatArgumentTypeCheck())
