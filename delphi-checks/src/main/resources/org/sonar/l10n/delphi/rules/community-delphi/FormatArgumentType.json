@@ -1,5 +1,5 @@
 {
-  "title": "Format argument types should match the corresponding format specifier",
+  "title": "'Format' calls should be supplied arguments of the correct type",
   "type": "BUG",
   "status": "ready",
   "remediation": {
