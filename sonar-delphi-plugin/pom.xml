@@ -98,6 +98,7 @@
           <pluginName>Delphi</pluginName>
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
           <pluginClass>au.com.integradev.delphi.DelphiPlugin</pluginClass>
+          <requiredForLanguages>delphi</requiredForLanguages>
           <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
           <jreMinVersion>11</jreMinVersion>
         </configuration>

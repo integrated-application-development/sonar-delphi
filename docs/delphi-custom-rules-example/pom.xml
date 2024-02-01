@@ -137,6 +137,7 @@
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
           <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
           <requirePlugins>communitydelphi:${sonar.delphi.version}</requirePlugins>
+          <requiredForLanguages>delphi</requiredForLanguages>
         </configuration>
       </plugin>
       <plugin>
