@@ -1,5 +1,5 @@
 {
-  "title": "Destructors should contain an \u0027inherited\u0027 statement",
+  "title": "Destructors should contain an 'inherited' statement",
   "type": "BUG",
   "status": "ready",
   "remediation": {

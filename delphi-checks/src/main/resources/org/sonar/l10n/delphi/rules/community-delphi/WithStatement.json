@@ -1,5 +1,5 @@
 {
-  "title": "\u0027with\u0027 statements should not be used",
+  "title": "'with' statements should not be used",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

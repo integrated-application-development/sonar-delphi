@@ -1,5 +1,5 @@
 {
-  "title": "IfThen should not be used like a short-circuit operator",
+  "title": "'IfThen' should not be used like a short-circuit operator",
   "type": "BUG",
   "status": "ready",
   "remediation": {

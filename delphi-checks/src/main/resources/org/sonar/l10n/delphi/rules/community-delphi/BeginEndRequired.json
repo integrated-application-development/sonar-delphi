@@ -1,5 +1,5 @@
 {
-  "title": "\u0027begin\u0027..\u0027end\u0027 should always be used",
+  "title": "'begin'..'end' should always be used",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

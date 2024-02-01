@@ -1,5 +1,5 @@
 {
-  "title": "\u0027finally\u0027 blocks should not be empty",
+  "title": "'finally' blocks should not be empty",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

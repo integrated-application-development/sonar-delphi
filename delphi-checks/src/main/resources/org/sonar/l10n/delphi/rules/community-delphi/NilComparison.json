@@ -1,5 +1,5 @@
 {
-  "title": "Nil checks should be performed with Assigned",
+  "title": "Nil checks should be performed with 'Assigned'",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
