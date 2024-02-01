@@ -4,10 +4,19 @@
   raises a runtime exception.
 </p>
 <p>
-  Generally speaking, the number of arguments should exactly match the number of format specifiers
-  in the string. <code>Format</code> allows you to format the same argument multiple times using
-  index specifiers, in which case the number of arguments may be more difficult to determine.
+  Typically, the number of arguments should exactly match the number of format specifiers
+  in the string. For some complex cases, a different number of arguments is required
 </p>
+<ul>
+  <li>
+    Width and precision wildcards in floating point format specifiers
+    (e.g. <code>%*.*f</code>) require corresponding arguments
+  </li>
+  <li>
+    Format specifiers with a specified index (e.g. <code>%1:s</code>)
+    can reuse existing arguments or require additional arguments
+  </li>
+</ul>
 <h2>How to fix it</h2>
 <p>
   Ensure that the arguments to the <code>Format</code> call match the specifiers in the format
@@ -16,7 +25,7 @@
 <pre data-diff-id="1" data-diff-type="noncompliant">
 Format('%s (class %d) got %.*f percent on the test.', ['Bob', 74.599]);
 </pre>
-<pre data-diff-id="1" data-diff-type="noncompliant">
+<pre data-diff-id="1" data-diff-type="compliant">
 Format('%s (class %d) got %.*f percent on the test.', ['Bob', 6, 2, 74.599]);
 </pre>
 <h2>Resources</h2>
