@@ -37,6 +37,7 @@ SonarDelphi understands what your code *means*, paving the way for powerful rule
    * [Redundant casts should not be used](delphi-checks/src/main/java/au/com/integradev/delphi/checks/RedundantCastCheck.java)
    * [Platform-dependent casts should not be used](delphi-checks/src/main/java/au/com/integradev/delphi/checks/PlatformDependentCastCheck.java)
    * [Unicode types should not be cast to ANSI types](delphi-checks/src/main/java/au/com/integradev/delphi/checks/UnicodeToAnsiCastCheck.java)
+   * ['Format' calls should be supplied arguments of the correct type](delphi-checks/src/main/java/au/com/integradev/delphi/checks/FormatArgumentTypeCheck.java)
    * Your own custom rules to [enforce a naming convention for descendants of specific types](delphi-checks/src/main/java/au/com/integradev/delphi/checks/InheritedTypeNameCheck.java)
    * Your own custom rules to forbid usage of
      [types](delphi-checks/src/main/java/au/com/integradev/delphi/checks/ForbiddenTypeCheck.java),
