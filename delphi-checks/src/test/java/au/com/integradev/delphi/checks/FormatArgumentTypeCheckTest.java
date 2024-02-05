@@ -243,6 +243,40 @@ class FormatArgumentTypeCheckTest {
   }
 
   @Test
+  void testStaticCharArrayForStringShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("var")
+                .appendImpl("  MyArr: array[0..4] of Char = ('a', 'b', 'c', 'd', #0);")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %s', [")
+                .appendImpl("    MyArr")
+                .appendImpl("  ]);"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testDynamicCharArrayForStringShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("var")
+                .appendImpl("  MyArr: array of Char = ['a', 'b', 'c', 'd', #0];")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %s', [")
+                .appendImpl("    MyArr // Noncompliant")
+                .appendImpl("  ]);"))
+        .verifyIssues();
+  }
+
+  @Test
   void testVariantForStringShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new FormatArgumentTypeCheck())
