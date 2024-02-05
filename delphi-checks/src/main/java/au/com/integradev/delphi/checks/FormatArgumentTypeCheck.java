@@ -29,6 +29,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 
@@ -87,11 +88,14 @@ public class FormatArgumentTypeCheck extends AbstractFormatArgumentCheck {
       case POINTER:
         return exprType.isPointer();
       case STRING:
-        return exprType.isString()
-            || exprType.isChar()
-            || exprType.isVariant()
-            || ((exprType instanceof PointerType)
-                && ((PointerType) exprType).dereferencedType().isChar());
+        if (exprType instanceof CollectionType) {
+          CollectionType collection = (CollectionType) exprType;
+          return collection.isFixedArray() && collection.elementType().isChar();
+        } else if (exprType instanceof PointerType) {
+          return ((PointerType) exprType).dereferencedType().isChar();
+        } else {
+          return exprType.isString() || exprType.isChar() || exprType.isVariant();
+        }
       default:
         throw new AssertionError("Unknown format specifier type");
     }

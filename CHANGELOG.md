@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Static char arrays weren't accepted for `'%s'` in `FormatArgumentType`.
+
 ## [1.2.0] - 2024-02-02
 
 ### Added
