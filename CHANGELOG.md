@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for numeric literals prefixed by ampersands.
+- Support for identifiers prefixed by more than 2 ampersands.
+
 ### Fixed
 
 - Static char arrays weren't accepted for `'%s'` in `FormatArgumentType`.

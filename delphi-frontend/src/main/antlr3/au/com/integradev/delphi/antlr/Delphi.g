@@ -862,8 +862,6 @@ dispIDDirective              : 'dispid' expression
 // General
 //----------------------------------------------------------------------------
 ident                        : TkIdentifier
-                             | '&'! identifierOrKeyword
-                             | '&' '&' identifierOrKeyword -> ^({combineLastNTokens(2)})
                              | keywordsUsedAsNames -> ^({changeTokenType(TkIdentifier)})
                              ;
 identifierOrKeyword          : TkIdentifier
@@ -1090,7 +1088,7 @@ DEREFERENCE          : '^'  ;
 ADDRESS              : '@'  ;
 DOT                  : '.'  ;
 DOT_DOT              : '..' ;
-AMPERSAND            : '&'  ;
+AMPERSAND            : '@AMPERSAND@'  ;
 
 //****************************
 // Imaginary tokens
@@ -1203,11 +1201,11 @@ TkArrayIndices          : 'ARRAY_INDICES'
 //****************************
 // Tokens
 //****************************
-TkIdentifier            : (Alpha | '_') (Alpha | FullWidthNumeral | Digit | '_')*
+TkIdentifier            : '&'* (Alpha | '_') (Alpha | FullWidthNumeral | Digit | '_')*
                         ;
                         // We use a lookahead here to avoid lexer failures on range operations like '1..2'
                         // or record helper invocations on Integer literals
-TkIntNumber             : DigitSeq (
+TkIntNumber             : '&'* DigitSeq (
                             {input.LA(1) != '.' || Character.isDigit(input.LA(2))}? =>
                               (
                                 '.' DigitSeq

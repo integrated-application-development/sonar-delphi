@@ -20,9 +20,12 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 
 public final class IdentifierNodeImpl extends DelphiNodeImpl implements IdentifierNode {
+  private String normalizedImage = null;
+
   public IdentifierNodeImpl(Token token) {
     super(token);
   }
@@ -30,5 +33,13 @@ public final class IdentifierNodeImpl extends DelphiNodeImpl implements Identifi
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public String getImage() {
+    if (normalizedImage == null) {
+      normalizedImage = StringUtils.removeStart(super.getImage(), "&");
+    }
+    return normalizedImage;
   }
 }
