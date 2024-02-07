@@ -36,6 +36,10 @@ class DigitGroupingCheckTest {
         "$ABC_DEF",
         "$ABC_DE_F",
         "%1_001_01",
+        "&1_000_00",
+        "&&&1_000_00",
+        "&10_00.00",
+        "&&&10_00.00",
       })
   void testNonStandardGroupingShouldAddIssue(String actual) {
     CheckVerifier.newVerifier()
@@ -62,6 +66,10 @@ class DigitGroupingCheckTest {
         "%1_01_01",
         "%10_101",
         "%10_1010",
+        "&100_000",
+        "&&&100_000",
+        "&1_000.0_0",
+        "&&&1_000.0_0",
       })
   void testStandardGroupingShouldNotAddIssue(String actual) {
     CheckVerifier.newVerifier()
