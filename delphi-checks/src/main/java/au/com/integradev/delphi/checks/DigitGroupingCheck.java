@@ -29,7 +29,8 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 @Rule(key = "DigitGrouping")
 public class DigitGroupingCheck extends DelphiCheck {
 
-  private static final Pattern VALID_DEC_UNDERSCORE_PATTERN = Pattern.compile("\\d{1,3}(_\\d{3})*");
+  private static final Pattern VALID_DEC_UNDERSCORE_PATTERN =
+      Pattern.compile("&*\\d{1,3}(_\\d{3})*");
   private static final Pattern VALID_DEC_FLOAT_UNDERSCORE_PATTERN =
       Pattern.compile(VALID_DEC_UNDERSCORE_PATTERN.pattern() + "\\..*");
 
