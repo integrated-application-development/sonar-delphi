@@ -263,6 +263,11 @@ class GrammarTest {
   }
 
   @Test
+  void testAmpersandNumericLiterals() {
+    assertParsed("AmpersandNumericLiterals.pas");
+  }
+
+  @Test
   void testEmptyFileShouldThrow() {
     assertThatThrownBy(() -> parse("EmptyFile.pas"))
         .isInstanceOf(DelphiFileConstructionException.class);
