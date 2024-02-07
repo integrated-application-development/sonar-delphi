@@ -38,11 +38,15 @@ public final class RealLiteralNodeImpl extends DelphiNodeImpl implements RealLit
 
   @Override
   public BigDecimal getValue() {
-    return new BigDecimal(StringUtils.remove(getImage(), '_'));
+    return new BigDecimal(getNormalizedImage());
   }
 
   @Override
   public Type getType() {
     return getTypeFactory().getIntrinsic(IntrinsicType.EXTENDED);
+  }
+
+  private String getNormalizedImage() {
+    return StringUtils.remove(StringUtils.stripStart(getImage(), "&"), "_");
   }
 }

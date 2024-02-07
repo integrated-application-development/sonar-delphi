@@ -56,7 +56,7 @@ public final class IntegerLiteralNodeImpl extends DelphiNodeImpl implements Inte
 
   @Override
   public String getDigits() {
-    String digits = getImage();
+    String digits = StringUtils.stripStart(getImage(), "&");
     digits = StringUtils.remove(digits, '_');
     switch (getTokenType()) {
       case HEX_NUMBER:
