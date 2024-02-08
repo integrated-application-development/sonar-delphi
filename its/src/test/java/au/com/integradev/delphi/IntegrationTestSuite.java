@@ -52,6 +52,7 @@ class IntegrationTestSuite {
       OrchestratorExtension.builderEnv()
           .useDefaultAdminCredentialsForBuilds(true)
           .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
+          .setOrchestratorProperty("orchestrator.artifactory.url", "https://repo1.maven.org/maven2")
           .addPlugin(PLUGIN_LOCATION)
           .build();
 
