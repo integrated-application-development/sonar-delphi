@@ -115,7 +115,7 @@
     <sonarqube.version>9.9.0.65466</sonarqube.version>
     <sonar-plugin-api.version>10.1.0.809</sonar-plugin-api.version>
     <sonar-analyzer-commons.version>2.7.0.1482</sonar-analyzer-commons.version>
-    <sonar-orchestrator.version>4.0.0.404</sonar-orchestrator.version>
+    <sonar-orchestrator.version>4.7.0.1861</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <commons-text.version>1.10.0</commons-text.version>
     <jdom.version>2.0.6.1</jdom.version>
@@ -472,8 +472,7 @@
       <id>ci</id>
       <properties>
         <license.failIfMissing>true</license.failIfMissing>
-        <!-- Changes to upstream SonarSource servers have broken the integration tests.-->
-        <skipITs>true</skipITs>
+        <skipITs>false</skipITs>
       </properties>
     </profile>
 
