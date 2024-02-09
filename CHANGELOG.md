@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - "Correct to (correct case)" quick fix for `LowercaseKeyword`.
+- Ability to create a control flow graph.
 - **API:** `PropertyNameDeclaration::getImplementedTypes` method.
 - **API:** `PropertyNode::getDefaultSpecifier` method.
 - **API:** `PropertyNode::getImplementsSpecifier` method.
