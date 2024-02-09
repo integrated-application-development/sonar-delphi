@@ -68,21 +68,21 @@ In addition to template rules, SonarDelphi can be extended with custom rules plu
 ## Usage
 
 1. Install the following:
-    - [SonarQube](https://docs.sonarqube.org/latest/setup/install-server/) (v9.9+)
-    - [SonarScanner](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/)
-    - [Delphi](https://www.embarcadero.com/products/delphi)
+    * [SonarQube](https://docs.sonarqube.org/latest/setup/install-server/) (v9.9+)
+    * [SonarScanner](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/scanners/sonarscanner/)
+    * [Delphi](https://www.embarcadero.com/products/delphi)
 
 2. Install the plugin:
-    1. Download the SonarDelphi plugin
+    * Download the SonarDelphi plugin
       from [Releases](https://github.com/integrated-application-development/sonar-delphi/releases).
-    2. [Install the plugin](https://docs.sonarqube.org/latest/setup/install-plugin/) on the SonarQube server.
+    * [Install the plugin](https://docs.sonarqube.org/latest/setup/install-plugin/) on the SonarQube server.
 
 3. Run analysis on your Delphi project:
-    - [Configure](#configuration) your `sonar.delphi.installationPath`.
-    - Execute `sonar-scanner` in your project's directory.
+    * [Configure](#configuration) your `sonar.delphi.installationPath`.
+    * Execute `sonar-scanner` in your project's directory.
 
 4. View analysis results:
-    - Visit the link provided at the end of the scan to view analysis results on SonarQube.
+    * Visit the link provided at the end of the scan to view analysis results on SonarQube.
 
 > [!WARNING]
 > Unfortunately, Delphi Community Edition is **not** supported.
