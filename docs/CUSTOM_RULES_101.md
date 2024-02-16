@@ -62,7 +62,7 @@ In the code snippet below, there's a couple of important configuration propertie
 * `<pluginClass>` provides the **entry point of the plugin**. You must change this configuration if
 you rename or move the class implementing `org.sonar.api.Plugin`.
 * `<pluginApiMinVersion>` guarantees compatibility with the plugin API version you target.
-* `<requiredForLanguages>` indicates which language your custom plugin will be available.
+* `<requiredForLanguages>` indicates which languages your custom plugin will be available for.
 
 ```xml
 <plugin>
