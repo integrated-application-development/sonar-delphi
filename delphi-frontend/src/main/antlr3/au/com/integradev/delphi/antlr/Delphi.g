@@ -1088,7 +1088,6 @@ DEREFERENCE          : '^'  ;
 ADDRESS              : '@'  ;
 DOT                  : '.'  ;
 DOT_DOT              : '..' ;
-AMPERSAND            : '@AMPERSAND@'  ;
 
 //****************************
 // Imaginary tokens
@@ -1312,3 +1311,7 @@ WHITESPACE              : ('\u0000'..'\u0020' | '\u3000')+ {$channel=HIDDEN;}
 TkAnyChar               : .
                         ;
 
+//----------------------------------------------------------------------------
+// Deprecated tokens
+//----------------------------------------------------------------------------
+AMPERSAND__deprecated   : '@AMPERSAND@';

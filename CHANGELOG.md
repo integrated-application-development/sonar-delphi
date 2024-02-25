@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for numeric literals prefixed by ampersands.
 - Support for identifiers prefixed by more than 2 ampersands.
 
+### Deprecated
+
+- `DelphiTokenType.AMPERSAND`, as `&` is now lexed directly into numeric literals and identifiers.
+
 ### Fixed
 
 - Static char arrays weren't accepted for `'%s'` in `FormatArgumentType`.
