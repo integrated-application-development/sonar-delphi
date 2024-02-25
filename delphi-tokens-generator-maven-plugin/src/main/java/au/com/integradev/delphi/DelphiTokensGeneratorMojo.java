@@ -45,6 +45,7 @@ import org.apache.maven.project.MavenProject;
 public class DelphiTokensGeneratorMojo extends AbstractMojo {
   private static final Pattern TOKENS_LINE_PATTERN =
       Pattern.compile("(?i)([a-z_]+[a-z_\\d])=(\\d+)");
+  private static final String DEPRECATED_SUFFIX = "__deprecated";
 
   /** The directory where the ({@code protocol.xml}) files are located. */
   @Parameter(defaultValue = "${project.build.directory}/generated-sources/antlr3/Delphi.tokens")
@@ -89,8 +90,8 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
   private List<TokenTypeRecord> readTokenTypes() throws IOException {
     ImmutableList.Builder<TokenTypeRecord> result = ImmutableList.builder();
 
-    result.add(new TokenTypeRecord("EOF", -1));
-    result.add(new TokenTypeRecord("INVALID", 0));
+    result.add(new TokenTypeRecord("EOF", -1, false));
+    result.add(new TokenTypeRecord("INVALID", 0, false));
 
     Files.readAllLines(tokensFile.toPath()).stream()
         .map(DelphiTokensGeneratorMojo::createTokenType)
@@ -110,8 +111,11 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
             .append("package org.sonar.plugins.communitydelphi.api.token;\n\n")
             .append("public enum DelphiTokenType {\n");
 
-    for (int i = 0; i < tokenTypes.size(); ++i) {
-      builder.append("  ").append(tokenTypes.get(i).getName()).append(",\n");
+    for (TokenTypeRecord tokenType : tokenTypes) {
+      if (tokenType.isDeprecated()) {
+        builder.append("  @Deprecated(forRemoval = true)\n");
+      }
+      builder.append("  ").append(tokenType.getName()).append(",\n");
     }
 
     builder.append("}\n");
@@ -132,6 +136,7 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
             .append("  private DelphiTokenTypeFactory() {\n")
             .append("    // utility class\n")
             .append("  }\n\n")
+            .append("  @SuppressWarnings(\"removal\")\n")
             .append("  public static DelphiTokenType createTokenType(int value) {\n")
             .append("    switch(value) {\n");
 
@@ -145,6 +150,7 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
         .append("        throw new IllegalArgumentException(\"Unknown value: \" + value);\n")
         .append("    }\n")
         .append("  }\n\n")
+        .append("  @SuppressWarnings(\"removal\")\n")
         .append("  public static int getValueFromTokenType(DelphiTokenType tokenType) {\n")
         .append("    switch(tokenType) {\n");
 
@@ -166,14 +172,19 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
   private static TokenTypeRecord createTokenType(String line) {
     Matcher matcher = TOKENS_LINE_PATTERN.matcher(line);
     if (matcher.matches()) {
+      String antlrName = matcher.group(1);
+      String value = matcher.group(2);
       return new TokenTypeRecord(
-          antlrNameToEnumName(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+          antlrNameToEnumName(antlrName),
+          Integer.parseInt(value),
+          antlrName.endsWith(DEPRECATED_SUFFIX));
     }
     return null;
   }
 
   private static String antlrNameToEnumName(String antlrName) {
     antlrName = StringUtils.removeStart(antlrName, "Tk");
+    antlrName = StringUtils.removeEnd(antlrName, DEPRECATED_SUFFIX);
 
     StringBuilder result = new StringBuilder();
     boolean nextCapitalIsNewWord = true;
@@ -199,10 +210,12 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
   private static class TokenTypeRecord {
     private final String name;
     private final int value;
+    private final boolean deprecated;
 
-    public TokenTypeRecord(String name, int value) {
+    public TokenTypeRecord(String name, int value, boolean deprecated) {
       this.name = name;
       this.value = value;
+      this.deprecated = deprecated;
     }
 
     public String getName() {
@@ -211,6 +224,10 @@ public class DelphiTokensGeneratorMojo extends AbstractMojo {
 
     public int getValue() {
       return value;
+    }
+
+    public boolean isDeprecated() {
+      return deprecated;
     }
   }
 }
