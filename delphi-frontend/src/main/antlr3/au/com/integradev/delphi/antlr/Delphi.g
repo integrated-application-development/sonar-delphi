@@ -1,9 +1,72 @@
 grammar Delphi;
 
 options {
-    backtrack=true;
-    memoize=true;
-    output=AST;
+  backtrack=true;
+  memoize=true;
+  output=AST;
+}
+
+tokens {
+  //----------------------------------------------------------------------------
+  // Deprecated tokens
+  //----------------------------------------------------------------------------
+  AMPERSAND__deprecated;
+
+  //----------------------------------------------------------------------------
+  // Imaginary tokens
+  //----------------------------------------------------------------------------
+  TkRootNode;
+  TkRoutineParameters;
+  TkRoutineReturn;
+  TkAttributeList;
+  TkAttributeGroup;
+  TkAttribute;
+  TkTypeDeclaration;
+  TkRecordVariantItem;
+  TkRecordVariantTag;
+  TkRecordExpressionItem;
+  TkGuid;
+  TkClassParents;
+  TkLocalDeclarations;
+  TkCaseItem;
+  TkExpressionStatement;
+  TkLabelStatement;
+  TkStatementList;
+  TkRoutineName;
+  TkRoutineHeading;
+  TkRoutineDeclaration;
+  TkRoutineImplementation;
+  TkRoutineBody;
+  TkGenericDefinition;
+  TkGenericArguments;
+  TkWeakAlias;
+  TkTypeReference;
+  TkProcedureType;
+  TkEnumElement;
+  TkVisibilitySection;
+  TkVisibility;
+  TkFieldSection;
+  TkFieldDeclaration;
+  TkFormalParameterList;
+  TkFormalParameter;
+  TkVarDeclaration;
+  TkNameDeclarationList;
+  TkConstDeclaration;
+  TkPrimaryExpression;
+  TkNestedExpression;
+  TkTextLiteral;
+  TkNameDeclaration;
+  TkNameReference;
+  TkUnitImport;
+  TkMethodResolveClause;
+  TkEscapedCharacter;
+  TkCompilerDirective;
+  TkRealNumber;
+  TkTypeParameter;
+  TkForLoopVar;
+  TkArrayAccessorNode;
+  TkArrayConstructor;
+  TkArrayIndices;
 }
 
 @header
@@ -1090,114 +1153,6 @@ DOT                  : '.'  ;
 DOT_DOT              : '..' ;
 
 //****************************
-// Imaginary tokens
-//****************************
-TkRootNode              : 'ROOT_NODE'
-                        ;
-TkRoutineParameters     : 'ROUTINE_PARAMETERS'
-                        ;
-TkRoutineReturn         : 'ROUTINE_RETURN'
-                        ;
-TkAttributeList         : 'ATTRIBUTE_LIST'
-                        ;
-TkAttributeGroup        : 'ATTRIBUTE_GROUP'
-                        ;
-TkAttribute             : 'ATTRIBUTE'
-                        ;
-TkTypeDeclaration       : 'TYPE_DECLARATION'
-                        ;
-TkRecordVariantItem     : 'RECORD_VARIANT_ITEM'
-                        ;
-TkRecordVariantTag      : 'RECORD_VARIANT_TAG'
-                        ;
-TkRecordExpressionItem  : 'RECORD_EXPRESSION_ITEM'
-                        ;
-TkGuid                  : 'INTERFACE_GUID'
-                        ;
-TkClassParents          : 'CLASS_PARENTS'
-                        ;
-TkLocalDeclarations     : 'LOCAL_DECLARATIONS'
-                        ;
-TkCaseItem              : 'CASE_ITEM'
-                        ;
-TkExpressionStatement   : 'EXPRESSION_STATEMENT'
-                        ;
-TkLabelStatement        : 'LABEL_STATEMENT'
-                        ;
-TkStatementList         : 'STATEMENT_LIST'
-                        ;
-TkRoutineName           : 'ROUTINE_NAME'
-                        ;
-TkRoutineHeading        : 'ROUTINE_HEADING'
-                        ;
-TkRoutineDeclaration    : 'ROUTINE_DECLARATION'
-                        ;
-TkRoutineImplementation : 'ROUTINE_IMPLEMENTATION'
-                        ;
-TkRoutineBody           : 'ROUTINE_BODY'
-                        ;
-TkGenericDefinition     : 'GENERIC_DEFINITION'
-                        ;
-TkGenericArguments      : 'GENERIC_ARGUMENTS'
-                        ;
-TkWeakAlias             : 'WEAK_ALIAS'
-                        ;
-TkTypeReference         : 'TYPE_REFERENCE'
-                        ;
-TkProcedureType         : 'PROCEDURE_TYPE'
-                        ;
-TkEnumElement           : 'ENUM_ELEMENT'
-                        ;
-TkVisibilitySection     : 'VISIBILITY_SECTION'
-                        ;
-TkVisibility            : 'VISIBILITY'
-                        ;
-TkFieldSection          : 'FIELD_SECTION'
-                        ;
-TkFieldDeclaration      : 'FIELD_DECLARATION'
-                        ;
-TkFormalParameterList   : 'FORMAL_PARAMETER_LIST'
-                        ;
-TkFormalParameter       : 'FORMAL_PARAMETER'
-                        ;
-TkVarDeclaration        : 'VAR_DECLARATION'
-                        ;
-TkNameDeclarationList   : 'NAME_DECLARATION_LIST'
-                        ;
-TkConstDeclaration      : 'CONST_DECLARATION'
-                        ;
-TkPrimaryExpression     : 'PRIMARY_EXPRESSION'
-                        ;
-TkNestedExpression      : 'NESTED_EXPRESSION'
-                        ;
-TkTextLiteral           : 'TEXT_LITERAL'
-                        ;
-TkNameDeclaration       : 'NAME_DECLARATION'
-                        ;
-TkNameReference         : 'NAME_REFERENCE'
-                        ;
-TkUnitImport            : 'UNIT_IMPORT'
-                        ;
-TkMethodResolveClause   : 'METHOD_RESOLUTION_CLAUSE'
-                        ;
-TkEscapedCharacter      : 'ESCAPED_CHARACTER'
-                        ;
-TkCompilerDirective     : 'COMPILER_DIRECTIVE'
-                        ;
-TkRealNumber            : 'REAL_NUMBER'
-                        ;
-TkTypeParameter         : 'TYPE_PARAMETER'
-                        ;
-TkForLoopVar            : 'FOR_LOOP_VAR'
-                        ;
-TkArrayAccessorNode     : 'ARRAY_ACCESSOR'
-                        ;
-TkArrayConstructor      : 'ARRAY_CONSTRUCTOR'
-                        ;
-TkArrayIndices          : 'ARRAY_INDICES'
-                        ;
-
-//****************************
 // Tokens
 //****************************
 TkIdentifier            : '&'* (Alpha | '_') (Alpha | FullWidthNumeral | Digit | '_')*
@@ -1310,8 +1265,3 @@ WHITESPACE              : ('\u0000'..'\u0020' | '\u3000')+ {$channel=HIDDEN;}
 //----------------------------------------------------------------------------
 TkAnyChar               : .
                         ;
-
-//----------------------------------------------------------------------------
-// Deprecated tokens
-//----------------------------------------------------------------------------
-AMPERSAND__deprecated   : '@AMPERSAND@';

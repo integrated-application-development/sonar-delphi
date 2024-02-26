@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Static char arrays weren't accepted for `'%s'` in `FormatArgumentType`.
+- Imaginary tokens could be erroneously matched by the lexer in valid source code.
 
 ## [1.2.0] - 2024-02-02
 
