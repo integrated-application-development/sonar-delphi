@@ -1,5 +1,4 @@
-Writing Custom Delphi Rules 101
-==========
+# Writing Custom Delphi Rules
 
 If you are using SonarQube along with SonarDelphi to analyze your projects, you might
 find that certain specific requirements of your company cannot be addressed by the existing rules.
@@ -11,22 +10,24 @@ rules that rely on the API provided by SonarDelphi.
 
 ## Content
 
-* [Getting Started](#getting-started)
-    * [Looking at the pom](#looking-at-the-pom)
-* [Writing a rule](#writing-a-rule)
-    * [Two files to forge a rule](#two-files-to-forge-a-rule)
-    * [A specification to make it right](#a-specification-to-make-it-right)
-    * [A test class to rule them all](#a-test-class-to-rule-them-all)
-    * [First version: Using AST Nodes and API basics](#first-version-using-ast-nodes-and-api-basics)
-    * [Second version: Using semantic API](#second-version-using-semantic-api)
-    * [What you can use, and what you can't](#what-you-can-use-and-what-you-cant)
-* [Registering the rule in the custom plugin](#registering-the-rule-in-the-custom-plugin)
-    * [Rule Metadata](#rule-metadata)
-    * [Rule Activation](#rule-activation)
-    * [Rule Registrar](#rule-registrar)
-* [Testing a custom plugin](#testing-a-custom-plugin)
-    * [How to define rule parameters](#how-to-define-rule-parameters)
-* [References](#references)
+- [Writing Custom Delphi Rules](#writing-custom-delphi-rules)
+  - [Getting started](#getting-started)
+    - [Looking at the POM](#looking-at-the-pom)
+  - [Writing a rule](#writing-a-rule)
+    - [Two files to forge a rule](#two-files-to-forge-a-rule)
+    - [A specification to make it right](#a-specification-to-make-it-right)
+    - [A test class to rule them all](#a-test-class-to-rule-them-all)
+    - [First version: Using AST Nodes and API basics](#first-version-using-ast-nodes-and-api-basics)
+    - [Second version: Using semantic API](#second-version-using-semantic-api)
+    - [What you can use, and what you can't](#what-you-can-use-and-what-you-cant)
+  - [Registering the rule in the custom plugin](#registering-the-rule-in-the-custom-plugin)
+    - [Rule Metadata](#rule-metadata)
+    - [Rule Activation](#rule-activation)
+    - [Rule Registrar](#rule-registrar)
+    - [Rules repository](#rules-repository)
+  - [Testing a custom plugin](#testing-a-custom-plugin)
+    - [How to define rule parameters](#how-to-define-rule-parameters)
+  - [References](#references)
 
 ## Getting started
 

@@ -1,6 +1,6 @@
 # Adding new rules to SonarDelphi
 
-*This page is about contributing to the core SonarDelphi plugin. For creating a custom rules plugin, see the [Custom Rules 101](CUSTOM_RULES_101.md).*
+*This page is about contributing to the core SonarDelphi plugin. For creating a custom rules plugin, see [Writing Custom Delphi Rules](CUSTOM_RULES.md).*
 
 To implement a new rule in SonarDelphi:
 

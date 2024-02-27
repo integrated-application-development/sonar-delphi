@@ -115,7 +115,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Custom rules plugin API:
-  - See: [Writing Custom Delphi Rules 101](docs/CUSTOM_RULES_101.md)
+  - See: [Writing Custom Delphi Rules](docs/CUSTOM_RULES.md)
 - Rule metadata for the new [Clean Code Taxonomy](https://docs.sonarsource.com/sonarqube/10.2/user-guide/clean-code/).
 - `sonar.delphi.file.suffixes` property to specify the file extensions that should be analyzed.
 - `sonar.delphi.exclusions` property to specify file path patterns to exclude from analysis of

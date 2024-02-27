@@ -63,9 +63,9 @@ Using semantic analysis, SonarDelphi can identify unused code in your project, i
 
 In addition to template rules, SonarDelphi can be extended with custom rules plugins:
   * Leverage the full power of the analysis engine with the SonarDelphi rules API.
-  * For more details, refer to [Custom Rules 101](docs/CUSTOM_RULES_101.md).
+  * For more details, see [Writing Custom Delphi Rules](docs/CUSTOM_RULES.md).
 
-## Usage
+## Quickstart
 
 1. Install the following:
     * [SonarQube](https://docs.sonarqube.org/latest/setup/install-server/) (v9.9+)
@@ -78,7 +78,7 @@ In addition to template rules, SonarDelphi can be extended with custom rules plu
     * [Install the plugin](https://docs.sonarqube.org/latest/setup/install-plugin/) on the SonarQube server.
 
 3. Run analysis on your Delphi project:
-    * [Configure](#configuration) your `sonar.delphi.installationPath`.
+    * [Configure](CONFIGURATION.md) your Sonar project, including `sonar.delphi.installationPath`.
     * Execute `sonar-scanner` in your project's directory.
 
 4. View analysis results:
@@ -89,15 +89,18 @@ In addition to template rules, SonarDelphi can be extended with custom rules plu
 >
 > SonarDelphi requires source code for all dependencies, including the standard library.
 
-## Configuration
+## Read the Manual
 
-You can configure SonarDelphi [analysis parameters](https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/analysis-parameters/)
-on the SonarQube server at **Administration > General Settings > Delphi**.
+The [SonarDelphi Manual](docs/MANUAL.md) provides a comprehensive guide to SonarDelphi and the Sonar ecosystem,
+including:
 
-For the full list, see [Language-specific properties](docs/CONFIGURATION.md#language-specific-properties).
+* An introduction to SonarQube
+* How to configure SonarDelphi projects and scans
+* How to customize analysis rules
 
-> [!IMPORTANT]
-> `sonar.delphi.installationPath` must point to a valid Delphi installation for the scan to succeed.
+> [!TIP]
+> It is strongly recommended that first-time SonarQube users read the "SonarQube from first principles"
+> section of the manual.
 
 ## Contributing
 

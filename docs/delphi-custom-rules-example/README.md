@@ -8,7 +8,7 @@ To build and test the project, run:
 mvn clean install
 ```
 
-For more details about how to write custom rules, please refer to the official tutorial, [Writing Custom Delphi Rules 101](../CUSTOM_RULES_101.md).
+For more details about how to write custom rules, please refer to the official tutorial, [Writing Custom Delphi Rules](../CUSTOM_RULES.md).
 
 ### License
 
