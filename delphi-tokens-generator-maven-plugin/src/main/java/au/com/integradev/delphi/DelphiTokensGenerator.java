@@ -83,6 +83,10 @@ public class DelphiTokensGenerator {
     StringBuilder builder =
         new StringBuilder()
             .append("package org.sonar.plugins.communitydelphi.api.token;\n\n")
+            .append("import javax.annotation.processing.Generated;\n\n")
+            .append("@Generated(\"")
+            .append(DelphiTokensGenerator.class.getName())
+            .append("\")\n")
             .append("public enum DelphiTokenType {\n");
 
     for (TokenTypeRecord tokenType : tokenTypes) {
@@ -105,6 +109,7 @@ public class DelphiTokensGenerator {
     var builder =
         new StringBuilder()
             .append("package au.com.integradev.delphi.antlr.ast.token;\n\n")
+            .append("import javax.annotation.processing.Generated;\n")
             .append("import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;\n\n");
 
     if (tokenTypes.stream().anyMatch(TokenTypeRecord::isDeprecated)) {
@@ -112,6 +117,9 @@ public class DelphiTokensGenerator {
     }
 
     builder
+        .append("@Generated(\"")
+        .append(DelphiTokensGenerator.class.getName())
+        .append("\")\n")
         .append("public final class DelphiTokenTypeFactory {\n")
         .append("  private DelphiTokenTypeFactory() {\n")
         .append("    // utility class\n")

@@ -48,8 +48,10 @@ class DelphiTokensGeneratorTest {
         .isEqualTo(
             "package au.com.integradev.delphi.antlr.ast.token;\n"
                 + "\n"
+                + "import javax.annotation.processing.Generated;\n"
                 + "import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;\n"
                 + "\n"
+                + "@Generated(\"au.com.integradev.delphi.DelphiTokensGenerator\")\n"
                 + "public final class DelphiTokenTypeFactory {\n"
                 + "  private DelphiTokenTypeFactory() {\n"
                 + "    // utility class\n"
@@ -94,6 +96,9 @@ class DelphiTokensGeneratorTest {
         .isEqualTo(
             "package org.sonar.plugins.communitydelphi.api.token;\n"
                 + "\n"
+                + "import javax.annotation.processing.Generated;\n"
+                + "\n"
+                + "@Generated(\"au.com.integradev.delphi.DelphiTokensGenerator\")\n"
                 + "public enum DelphiTokenType {\n"
                 + "  EOF,\n"
                 + "  INVALID,\n"
@@ -114,8 +119,10 @@ class DelphiTokensGeneratorTest {
         .isEqualTo(
             "package au.com.integradev.delphi.antlr.ast.token;\n"
                 + "\n"
+                + "import javax.annotation.processing.Generated;\n"
                 + "import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;\n"
                 + "\n"
+                + "@Generated(\"au.com.integradev.delphi.DelphiTokensGenerator\")\n"
                 + "public final class DelphiTokenTypeFactory {\n"
                 + "  private DelphiTokenTypeFactory() {\n"
                 + "    // utility class\n"
@@ -156,6 +163,9 @@ class DelphiTokensGeneratorTest {
         .isEqualTo(
             "package org.sonar.plugins.communitydelphi.api.token;\n"
                 + "\n"
+                + "import javax.annotation.processing.Generated;\n"
+                + "\n"
+                + "@Generated(\"au.com.integradev.delphi.DelphiTokensGenerator\")\n"
                 + "public enum DelphiTokenType {\n"
                 + "  EOF,\n"
                 + "  INVALID,\n"
@@ -177,9 +187,11 @@ class DelphiTokensGeneratorTest {
         .isEqualTo(
             "package au.com.integradev.delphi.antlr.ast.token;\n"
                 + "\n"
+                + "import javax.annotation.processing.Generated;\n"
                 + "import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;\n"
                 + "\n"
                 + "@SuppressWarnings(\"removal\")\n"
+                + "@Generated(\"au.com.integradev.delphi.DelphiTokensGenerator\")\n"
                 + "public final class DelphiTokenTypeFactory {\n"
                 + "  private DelphiTokenTypeFactory() {\n"
                 + "    // utility class\n"
@@ -220,6 +232,9 @@ class DelphiTokensGeneratorTest {
         .isEqualTo(
             "package org.sonar.plugins.communitydelphi.api.token;\n"
                 + "\n"
+                + "import javax.annotation.processing.Generated;\n"
+                + "\n"
+                + "@Generated(\"au.com.integradev.delphi.DelphiTokensGenerator\")\n"
                 + "public enum DelphiTokenType {\n"
                 + "  EOF,\n"
                 + "  INVALID,\n"
