@@ -32,6 +32,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLiteralNode {
   private String image;
+  private String value;
 
   public TextLiteralNodeImpl(Token token) {
     super(token);
@@ -49,7 +50,7 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
   @Override
   public Type getType() {
     IntrinsicType intrinsic =
-        (getImageWithoutQuotes().length() == 1) ? IntrinsicType.CHAR : IntrinsicType.STRING;
+        (getValue().length() == 1) ? IntrinsicType.CHAR : IntrinsicType.STRING;
 
     return getTypeFactory().getIntrinsic(intrinsic);
   }
@@ -57,25 +58,44 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
   @Override
   public String getImage() {
     if (image == null) {
-      image = createImage();
+      image =
+          getChildren().stream()
+              .map(
+                  child -> {
+                    String result = child.getImage();
+                    if (child.getTokenType() == DelphiTokenType.ESCAPED_CHARACTER) {
+                      result = '^' + result;
+                    }
+                    return result;
+                  })
+              .collect(Collectors.joining());
     }
     return image;
   }
 
   @Override
-  public CharSequence getImageWithoutQuotes() {
-    return getStringWithoutQuotes(getImage());
+  public String getValue() {
+    if (value == null) {
+      value = createValue();
+    }
+    return value;
   }
 
-  private String createImage() {
+  @SuppressWarnings("removal")
+  @Override
+  public CharSequence getImageWithoutQuotes() {
+    return getValue();
+  }
+
+  private String createValue() {
     if (isMultiline()) {
-      return createMultilineImage();
+      return createMultilineValue();
     } else {
-      return createSingleLineImage();
+      return createSingleLineValue();
     }
   }
 
-  private String createMultilineImage() {
+  private String createMultilineValue() {
     Deque<String> lines =
         getChild(0).getImage().lines().collect(Collectors.toCollection(ArrayDeque<String>::new));
 
@@ -102,14 +122,15 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     return result.toString();
   }
 
-  private String createSingleLineImage() {
-    StringBuilder imageBuilder = new StringBuilder("'");
+  private String createSingleLineValue() {
+    StringBuilder imageBuilder = new StringBuilder();
 
     for (DelphiNode child : getChildren()) {
       switch (child.getTokenType()) {
         case QUOTED_STRING:
-          String withoutQuotes = getStringWithoutQuotes(child.getImage());
-          String stringImage = withoutQuotes.replace("''", "'");
+          String stringImage = child.getImage();
+          stringImage = stringImage.substring(1, stringImage.length() - 1);
+          stringImage = stringImage.replace("''", "'");
           imageBuilder.append(stringImage);
           break;
 
@@ -129,17 +150,11 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
       }
     }
 
-    imageBuilder.append("'");
-
     return imageBuilder.toString();
   }
 
   @Override
   public boolean isMultiline() {
     return getChild(0).getTokenType() == DelphiTokenType.MULTILINE_STRING;
-  }
-
-  private static String getStringWithoutQuotes(String string) {
-    return StringUtils.strip(string, "'");
   }
 }
