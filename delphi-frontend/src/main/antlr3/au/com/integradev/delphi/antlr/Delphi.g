@@ -55,6 +55,7 @@ tokens {
   TkPrimaryExpression;
   TkNestedExpression;
   TkTextLiteral;
+  TkMultilineString;
   TkNameDeclaration;
   TkNameReference;
   TkUnitImport;
@@ -148,6 +149,43 @@ package au.com.integradev.delphi.antlr;
     public LexerException(String message, Throwable cause) {
       super(message, cause);
     }
+  }
+
+  private int lookaheadMultilineString() {
+    int startQuotes = lookaheadSingleQuotes(1);
+    if (startQuotes >= 3 && (startQuotes & 1) != 0 && isNewLine(input.LA(startQuotes + 1))) {
+      int i = startQuotes;
+      while (true) {
+        switch (input.LA(++i)) {
+          case '\'':
+            int quotes = Math.min(startQuotes, lookaheadSingleQuotes(i));
+            i += quotes;
+            if (quotes == startQuotes) {
+              return i;
+            }
+            break;
+
+          case EOF:
+            return 0;
+
+          default:
+            // do nothing
+        }
+      }
+    }
+    return 0;
+  }
+
+  private int lookaheadSingleQuotes(int i) {
+    int result = 0;
+    while (input.LA(i++) == '\'') {
+      ++result;
+    }
+    return result;
+  }
+
+  private static boolean isNewLine(int c) {
+    return c == '\r' || c == '\n';
   }
 }
 
@@ -719,10 +757,13 @@ expressionOrRangeList        : (expressionOrRange (','!)?)+
                              ;
 exprOrRangeOrAnonMethodList  : (exprOrRangeOrAnonMethod (','!)?)+
                              ;
-textLiteral                  : textLiteral_ -> ^(TkTextLiteral<TextLiteralNodeImpl> textLiteral_)
+textLiteral                  : singleLineTextLiteral -> ^(TkTextLiteral<TextLiteralNodeImpl> singleLineTextLiteral)
+                             | multilineTextLiteral -> ^(TkTextLiteral<TextLiteralNodeImpl> multilineTextLiteral)
                              ;
-textLiteral_                 : TkQuotedString (escapedCharacter+ TkQuotedString)* escapedCharacter*
+singleLineTextLiteral        : TkQuotedString (escapedCharacter+ TkQuotedString)* escapedCharacter*
                              | escapedCharacter+ (TkQuotedString escapedCharacter+)* TkQuotedString?
+                             ;
+multilineTextLiteral         : TkMultilineString
                              ;
 escapedCharacter             : TkCharacterEscapeCode
                              | '^' (TkIdentifier | TkIntNumber | TkAnyChar) -> ^({changeTokenType(TkEscapedCharacter)})
@@ -1179,7 +1220,16 @@ TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
                         ;
 TkAsmHexNum             : { asmMode }? => HexDigitSeq ('h'|'H')
                         ;
-TkQuotedString          : '\'' ('\'\'' | ~('\''))* '\''
+TkQuotedString          @init { int multilineStringRemaining = lookaheadMultilineString(); }
+                        : '\''
+                          ({ multilineStringRemaining != 0 }? => {
+                            int i = multilineStringRemaining - 1;
+                            while (--i > 0) {
+                              matchAny();
+                            }
+                            $type = TkMultilineString;
+                          })?
+                          ({ multilineStringRemaining == 0 }? => ('\'\'' | ~('\''))* '\'')?
                         ;
 TkAsmDoubleQuotedString : { asmMode }? => '"' (~('\"'))* '"'
                         ;

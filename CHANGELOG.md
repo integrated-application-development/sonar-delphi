@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for multiline string literals.
 - Support for numeric literals prefixed by ampersands.
 - Support for identifiers prefixed by more than 2 ampersands.
+- **API:** `TextLiteralNode::isMultiline` method.
 
 ### Deprecated
 

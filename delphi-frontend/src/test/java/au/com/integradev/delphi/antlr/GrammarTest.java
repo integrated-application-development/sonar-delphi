@@ -66,6 +66,21 @@ class GrammarTest {
   }
 
   @Test
+  void testMultilineStrings() {
+    assertParsed("MultilineStrings.pas");
+  }
+
+  @Test
+  void testMultilineLookalikeStrings() {
+    assertParsed("MultilineLookalikeStrings.pas");
+  }
+
+  @Test
+  void testMultilineInvalidButAcceptedStrings() {
+    assertParsed("MultilineInvalidButAcceptedStrings.pas");
+  }
+
+  @Test
   void testEmptyBeginStatement() {
     assertParsed("EmptyProcs.pas");
   }

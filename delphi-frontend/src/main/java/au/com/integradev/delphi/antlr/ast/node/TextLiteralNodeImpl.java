@@ -19,9 +19,14 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
@@ -52,32 +57,7 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
   @Override
   public String getImage() {
     if (image == null) {
-      StringBuilder imageBuilder = new StringBuilder("'");
-      for (DelphiNode child : getChildren()) {
-        switch (child.getTokenType()) {
-          case QUOTED_STRING:
-            String withoutQuotes = getStringWithoutQuotes(child.getImage()).toString();
-            String stringImage = withoutQuotes.replace("''", "'");
-            imageBuilder.append(stringImage);
-            break;
-
-          case CHARACTER_ESCAPE_CODE:
-            String escapedChar = child.getImage();
-            boolean isHex = escapedChar.startsWith("#$");
-            escapedChar = escapedChar.substring(isHex ? 2 : 1);
-            imageBuilder.append((char) Integer.parseInt(escapedChar, isHex ? 16 : 10));
-            break;
-
-          case ESCAPED_CHARACTER:
-            imageBuilder.append(child.getImage());
-            break;
-
-          default:
-            // Do nothing
-        }
-      }
-      imageBuilder.append("'");
-      image = imageBuilder.toString();
+      image = createImage();
     }
     return image;
   }
@@ -87,7 +67,79 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     return getStringWithoutQuotes(getImage());
   }
 
-  private static CharSequence getStringWithoutQuotes(String string) {
-    return string.subSequence(1, string.length() - 1);
+  private String createImage() {
+    if (isMultiline()) {
+      return createMultilineImage();
+    } else {
+      return createSingleLineImage();
+    }
+  }
+
+  private String createMultilineImage() {
+    Deque<String> lines =
+        getChild(0).getImage().lines().collect(Collectors.toCollection(ArrayDeque<String>::new));
+
+    lines.removeFirst();
+
+    String last = lines.removeLast();
+    String indentation = readLeadingWhitespace(last);
+
+    return lines.stream()
+        .map(line -> StringUtils.removeStart(line, indentation))
+        .collect(Collectors.joining("\n"));
+  }
+
+  private static String readLeadingWhitespace(String input) {
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < input.length(); ++i) {
+      char c = input.charAt(i);
+      if (c <= 0x20 || c == 0x3000) {
+        result.append(c);
+      } else {
+        break;
+      }
+    }
+    return result.toString();
+  }
+
+  private String createSingleLineImage() {
+    StringBuilder imageBuilder = new StringBuilder("'");
+
+    for (DelphiNode child : getChildren()) {
+      switch (child.getTokenType()) {
+        case QUOTED_STRING:
+          String withoutQuotes = getStringWithoutQuotes(child.getImage());
+          String stringImage = withoutQuotes.replace("''", "'");
+          imageBuilder.append(stringImage);
+          break;
+
+        case CHARACTER_ESCAPE_CODE:
+          String escapedChar = child.getImage();
+          boolean isHex = escapedChar.startsWith("#$");
+          escapedChar = escapedChar.substring(isHex ? 2 : 1);
+          imageBuilder.append((char) Integer.parseInt(escapedChar, isHex ? 16 : 10));
+          break;
+
+        case ESCAPED_CHARACTER:
+          imageBuilder.append(child.getImage());
+          break;
+
+        default:
+          // Do nothing
+      }
+    }
+
+    imageBuilder.append("'");
+
+    return imageBuilder.toString();
+  }
+
+  @Override
+  public boolean isMultiline() {
+    return getChild(0).getTokenType() == DelphiTokenType.MULTILINE_STRING;
+  }
+
+  private static String getStringWithoutQuotes(String string) {
+    return StringUtils.strip(string, "'");
   }
 }
