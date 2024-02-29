@@ -139,7 +139,7 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
           break;
 
         case ESCAPED_CHARACTER:
-          imageBuilder.append(child.getImage());
+          imageBuilder.append((char) ((child.getImage().charAt(0) + 64) % 128));
           break;
 
         default:
