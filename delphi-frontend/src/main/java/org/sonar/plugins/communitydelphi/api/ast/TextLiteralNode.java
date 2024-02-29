@@ -21,7 +21,26 @@ package org.sonar.plugins.communitydelphi.api.ast;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public interface TextLiteralNode extends DelphiNode, Typed {
+  /**
+   * Returns the evaluated value of the text literal.
+   *
+   * @return evaluated value of the text literal
+   * @deprecated Use {@link TextLiteralNode#getValue} instead.
+   */
+  @Deprecated(forRemoval = true)
   CharSequence getImageWithoutQuotes();
 
+  /**
+   * Returns the evaluated value of the text literal.
+   *
+   * @return evaluated value of the text literal
+   */
+  String getValue();
+
+  /**
+   * Returns whether this is a multiline text literal.
+   *
+   * @return true if this is a multiline text literal
+   */
   boolean isMultiline();
 }

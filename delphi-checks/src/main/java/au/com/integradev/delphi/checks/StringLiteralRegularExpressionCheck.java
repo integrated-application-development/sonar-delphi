@@ -59,7 +59,7 @@ public class StringLiteralRegularExpressionCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(TextLiteralNode string, DelphiCheckContext context) {
-    if (pattern != null && pattern.matcher(string.getImageWithoutQuotes()).matches()) {
+    if (pattern != null && pattern.matcher(string.getValue()).matches()) {
       reportIssue(context, string, message);
     }
     return super.visit(string, context);

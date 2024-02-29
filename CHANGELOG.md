@@ -13,9 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for numeric literals prefixed by ampersands.
 - Support for identifiers prefixed by more than 2 ampersands.
 - **API:** `TextLiteralNode::isMultiline` method.
+- **API:** `TextLiteralNode::getValue` method, which returns the effective contents of a text
+  literal.
+
+### Changed
+
+- `TextLiteralNode::getImage` now returns the text literal exactly as it appears in source code.
+- `TextLiteralNode::getImageWithoutQuotes` now simply calls the new `getValue` method.
 
 ### Deprecated
 
+- `TextLiteralNode::getImageWithoutQuotes`, use `getValue` instead.
 - `DelphiTokenType.AMPERSAND`, as `&` is now lexed directly into numeric literals and identifiers.
 
 ### Fixed

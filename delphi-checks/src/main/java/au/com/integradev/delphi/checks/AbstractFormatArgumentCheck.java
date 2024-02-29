@@ -73,7 +73,7 @@ public abstract class AbstractFormatArgumentCheck extends DelphiCheck {
       return;
     }
 
-    String rawFormatString = textLiteral.get().getImageWithoutQuotes().toString();
+    String rawFormatString = textLiteral.get().getValue();
     FormatStringParser parser = new FormatStringParser(rawFormatString);
     try {
       checkFormatStringViolation(parser.parse(), arrayConstructor.get(), context);
