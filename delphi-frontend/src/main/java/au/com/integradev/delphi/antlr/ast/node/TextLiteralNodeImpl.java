@@ -135,10 +135,7 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
           break;
 
         case CHARACTER_ESCAPE_CODE:
-          String escapedChar = child.getImage();
-          boolean isHex = escapedChar.startsWith("#$");
-          escapedChar = escapedChar.substring(isHex ? 2 : 1);
-          imageBuilder.append((char) Integer.parseInt(escapedChar, isHex ? 16 : 10));
+          imageBuilder.append(characterEscapeToChar(child.getImage()));
           break;
 
         case ESCAPED_CHARACTER:
@@ -151,6 +148,28 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     }
 
     return imageBuilder.toString();
+  }
+
+  private static char characterEscapeToChar(String image) {
+    image = image.substring(1);
+    int radix = 10;
+
+    switch (image.charAt(0)) {
+      case '$':
+        radix = 16;
+        image = image.substring(1);
+        break;
+      case '%':
+        radix = 2;
+        image = image.substring(1);
+        break;
+      default:
+        // do nothing
+    }
+
+    image = StringUtils.remove(image, '_');
+
+    return (char) Integer.parseInt(image, radix);
   }
 
   @Override
