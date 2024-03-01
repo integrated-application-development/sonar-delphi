@@ -968,9 +968,6 @@ dispIDDirective              : 'dispid' expression
 ident                        : TkIdentifier
                              | keywordsUsedAsNames -> ^({changeTokenType(TkIdentifier)})
                              ;
-identifierOrKeyword          : TkIdentifier
-                             | keywords -> ^({changeTokenType(TkIdentifier)})
-                             ;
 keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | AT | AUTOMATED | CDECL)
                              | (CONTAINS | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
