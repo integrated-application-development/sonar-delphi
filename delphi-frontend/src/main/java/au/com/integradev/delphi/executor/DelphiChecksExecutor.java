@@ -26,6 +26,8 @@ import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
 import java.util.Set;
 import java.util.function.Function;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
@@ -37,6 +39,8 @@ import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 
 public class DelphiChecksExecutor implements Executor {
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiChecksExecutor.class);
+
   private final DelphiProjectHelper delphiProjectHelper;
   private final MasterCheckRegistrar checkRegistrar;
   private final SonarRuntime sonarRuntime;
@@ -79,9 +83,18 @@ public class DelphiChecksExecutor implements Executor {
         .forEach(
             check -> {
               DelphiCheckContext context = createCheckContext.apply(check);
-              check.start(context);
-              check.visit(context.getAst(), context);
-              check.end(context);
+              try {
+                check.start(context);
+                check.visit(context.getAst(), context);
+                check.end(context);
+              } catch (Exception e) {
+                LOG.error(
+                    "Error occurred while running check {} on file: {}",
+                    check.getClass().getSimpleName(),
+                    context.getAst().getDelphiFile().getSourceCodeFile().getName(),
+                    e);
+                LOG.info("Continuing with next check.");
+              }
             });
   }
 
