@@ -77,4 +77,23 @@ class PublicFieldCheckTest {
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testPublicFieldsInNestedRecordsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new PublicFieldCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  MyRec: record")
+                .appendDecl("     FPublishedField: Integer;")
+                .appendDecl("    private")
+                .appendDecl("     FPrivateField: Integer;")
+                .appendDecl("    protected")
+                .appendDecl("     FProtectedField: String;")
+                .appendDecl("    public")
+                .appendDecl("     FPublicField: String;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
 }
