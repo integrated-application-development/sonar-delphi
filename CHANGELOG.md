@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `ReadLn` intrinsic was missing the standard input overload.
 - Ideographic space (U+3000) was erroneously accepted as a valid identifier character.
 - Duplicate imports in a `requires` clause now log a warning instead of throwing an exception.
+- NPE on anonymous records in `PublicField`.
 
 ## [1.1.0] - 2024-01-02
 

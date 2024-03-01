@@ -24,7 +24,7 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -43,6 +43,6 @@ public class PublicFieldCheck extends DelphiCheck {
   }
 
   private static boolean isRecordField(FieldDeclarationNode field) {
-    return field.getFirstParentOfType(TypeDeclarationNode.class).isRecord();
+    return field.getFirstParentOfType(TypeNode.class).getType().isRecord();
   }
 }
