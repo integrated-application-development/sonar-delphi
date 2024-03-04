@@ -501,7 +501,7 @@ interfaceItem                : routineInterface
                              | property
                              ;
 objectType                   : OBJECT<ObjectTypeNodeImpl>^ classParent? visibilitySection* END // Obselete, kept for backwards compatibility with Turbo Pascal
-                             ;                                                                     // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
+                             ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
 recordType                   : RECORD<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? END (ALIGN constExpression)?
                              ;
 recordVariantSection         : CASE<RecordVariantSectionNodeImpl>^ recordVariantTag OF recordVariant+
@@ -539,7 +539,7 @@ visibility                   : STRICT? PROTECTED<VisibilityNodeImpl>^
                              | PUBLIC<VisibilityNodeImpl>
                              | PUBLISHED<VisibilityNodeImpl>
                              | AUTOMATED<VisibilityNodeImpl> // Obselete directive used for RTTI.
-                             ;                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re24.html
+                             ;                               // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re24.html
 
 //----------------------------------------------------------------------------
 // Generics
@@ -1279,32 +1279,32 @@ BinaryDigitSeq		      : BinaryDigit (BinaryDigit | '_')*
 //----------------------------------------------------------------------------
 // Case-insensitivity fragments
 //----------------------------------------------------------------------------
-fragment A              : ('a'|'A');
-fragment B              : ('b'|'B');
-fragment C              : ('c'|'C');
-fragment D              : ('d'|'D');
-fragment E              : ('e'|'E');
-fragment F              : ('f'|'F');
-fragment G              : ('g'|'G');
-fragment H              : ('h'|'H');
-fragment I              : ('i'|'I');
-fragment J              : ('j'|'J');
-fragment K              : ('k'|'K');
-fragment L              : ('l'|'L');
-fragment M              : ('m'|'M');
-fragment N              : ('n'|'N');
-fragment O              : ('o'|'O');
-fragment P              : ('p'|'P');
-fragment Q              : ('q'|'Q');
-fragment R              : ('r'|'R');
-fragment S              : ('s'|'S');
-fragment T              : ('t'|'T');
-fragment U              : ('u'|'U');
-fragment V              : ('v'|'V');
-fragment W              : ('w'|'W');
-fragment X              : ('x'|'X');
-fragment Y              : ('y'|'Y');
-fragment Z              : ('z'|'Z');
+fragment A              : 'a' | 'A';
+fragment B              : 'b' | 'B';
+fragment C              : 'c' | 'C';
+fragment D              : 'd' | 'D';
+fragment E              : 'e' | 'E';
+fragment F              : 'f' | 'F';
+fragment G              : 'g' | 'G';
+fragment H              : 'h' | 'H';
+fragment I              : 'i' | 'I';
+fragment J              : 'j' | 'J';
+fragment K              : 'k' | 'K';
+fragment L              : 'l' | 'L';
+fragment M              : 'm' | 'M';
+fragment N              : 'n' | 'N';
+fragment O              : 'o' | 'O';
+fragment P              : 'p' | 'P';
+fragment Q              : 'q' | 'Q';
+fragment R              : 'r' | 'R';
+fragment S              : 's' | 'S';
+fragment T              : 't' | 'T';
+fragment U              : 'u' | 'U';
+fragment V              : 'v' | 'V';
+fragment W              : 'w' | 'W';
+fragment X              : 'x' | 'X';
+fragment Y              : 'y' | 'Y';
+fragment Z              : 'z' | 'Z';
 
 //----------------------------------------------------------------------------
 // Hidden channel

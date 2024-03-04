@@ -18,8 +18,6 @@
  */
 package au.com.integradev.delphi.file;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.function.Predicate.not;
 import static org.apache.commons.io.FileUtils.readLines;
 
 import au.com.integradev.delphi.antlr.DelphiFileStream;
@@ -27,11 +25,8 @@ import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiLexer.LexerException;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.DelphiParser.ParserException;
-import au.com.integradev.delphi.antlr.DelphiTokenStream;
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
-import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
-import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -149,7 +144,7 @@ public interface DelphiFile {
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
       delphiFile.setSourceCodeLines(readLines(sourceFile, fileStream.getEncoding()));
-      delphiFile.setTokens(createTokenList(delphiFile, preprocessor.getTokenStream()));
+      delphiFile.setTokens(preprocessor.getRawTokens());
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
     } catch (IOException
         | RecognitionException
@@ -195,46 +190,6 @@ public interface DelphiFile {
     }
 
     return new DelphiAstImpl(delphiFile, root);
-  }
-
-  private static List<DelphiToken> createTokenList(
-      DelphiFile delphiFile, DelphiTokenStream preprocessedTokenStream) throws IOException {
-    String filePath = delphiFile.getSourceCodeFile().getAbsolutePath();
-    DelphiLexer lexer = new DelphiLexer(new DelphiFileStream(filePath, UTF_8.name()));
-    DelphiTokenStream tokenStream = new DelphiTokenStream(lexer);
-    tokenStream.fill();
-
-    List<DelphiToken> tokenList =
-        tokenStream.getTokens().stream()
-            .map(CommonToken.class::cast)
-            .map(DelphiTokenImpl::new)
-            .filter(not(DelphiToken::isEof))
-            .collect(Collectors.toUnmodifiableList());
-
-    int startIndex = 0;
-    boolean include = false;
-
-    for (Token token : preprocessedTokenStream.getTokens()) {
-      if (token instanceof IncludeToken) {
-        if (!include) {
-          startIndex = token.getTokenIndex();
-        }
-        include = true;
-      } else if (include) {
-        offsetTokenIndices(tokenList, startIndex, token.getTokenIndex() - startIndex);
-        include = false;
-      }
-    }
-
-    return tokenList;
-  }
-
-  private static void offsetTokenIndices(List<DelphiToken> tokens, int startIndex, int offset) {
-    tokens.stream()
-        .map(DelphiTokenImpl.class::cast)
-        .map(DelphiTokenImpl::getAntlrToken)
-        .filter(token -> token.getTokenIndex() > startIndex)
-        .forEach(token -> token.setTokenIndex(token.getTokenIndex() + offset));
   }
 
   private static List<DelphiToken> extractComments(List<DelphiToken> tokenList) {
