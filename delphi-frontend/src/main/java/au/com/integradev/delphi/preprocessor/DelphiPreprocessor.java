@@ -71,6 +71,7 @@ public class DelphiPreprocessor {
 
   private DelphiTokenStream tokenStream;
   private Set<Token> tokens;
+  private List<Token> rawTokens;
   private int tokenIndex;
 
   DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config, Platform platform) {
@@ -119,6 +120,7 @@ public class DelphiPreprocessor {
 
     tokenStream.fill();
     tokens = extractTokens(tokenStream);
+    rawTokens = List.copyOf(tokens);
     tokens.forEach(this::processToken);
     directives.stream()
         .map(CompilerDirectiveImpl.class::cast)
@@ -317,6 +319,13 @@ public class DelphiPreprocessor {
 
   public TypeFactory getTypeFactory() {
     return config.getTypeFactory();
+  }
+
+  public List<DelphiToken> getRawTokens() {
+    return rawTokens.stream()
+        .filter(token -> token.getType() != Token.EOF)
+        .map(DelphiTokenImpl::new)
+        .collect(Collectors.toUnmodifiableList());
   }
 
   static class SelfReferencingIncludeFileException extends RuntimeException {
