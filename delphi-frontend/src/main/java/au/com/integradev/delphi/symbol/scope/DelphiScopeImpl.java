@@ -370,6 +370,9 @@ public class DelphiScopeImpl implements DelphiScope {
   }
 
   protected HelperType findHelper(Type type) {
+    if (helpersByType.isEmpty()) {
+      return null;
+    }
     return helpersByType.get(type.getImage());
   }
 
