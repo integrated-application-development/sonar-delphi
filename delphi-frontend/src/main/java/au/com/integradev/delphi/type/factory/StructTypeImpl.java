@@ -41,6 +41,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private final List<ImagePart> imageParts;
   private final int size;
+  private String image;
   private DelphiScope scope;
   private Set<Type> ancestorList;
   private StructKind kind;
@@ -78,7 +79,10 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
 
   @Override
   public String getImage() {
-    return imageParts.stream().map(ImagePart::toString).collect(Collectors.joining("."));
+    if (image == null) {
+      image = imageParts.stream().map(ImagePart::toString).collect(Collectors.joining("."));
+    }
+    return image;
   }
 
   @Override
