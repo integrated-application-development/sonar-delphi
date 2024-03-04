@@ -250,50 +250,50 @@ fileWithoutImplementation    : program | library | unitWithoutImplementation | p
 
 program                      : programHead? usesFileClause? programBody '.'
                              ;
-programHead                  : 'program'<ProgramDeclarationNodeImpl>^ qualifiedNameDeclaration programParameters? ';'!
+programHead                  : PROGRAM<ProgramDeclarationNodeImpl>^ qualifiedNameDeclaration programParameters? ';'!
                              ;
 programParameters            : '(' (ident (',' ident)* )? ')' // Used in standard Pascal; Delphi ignores them.
                              ;
-programBody                  : localDeclSection? (compoundStatement | 'end')
+programBody                  : localDeclSection? (compoundStatement | END)
                              ;
 library                      : libraryHead usesFileClause? programBody '.'
                              ;
-libraryHead                  : 'library'<LibraryDeclarationNodeImpl>^ qualifiedNameDeclaration (portabilityDirective!)* ';'!
+libraryHead                  : LIBRARY<LibraryDeclarationNodeImpl>^ qualifiedNameDeclaration (portabilityDirective!)* ';'!
                              ;
-package_                     : packageHead requiresClause? containsClause 'end' '.'
+package_                     : packageHead requiresClause? containsClause END '.'
                              ;
-packageHead                  : 'package'<PackageDeclarationNodeImpl>^ qualifiedNameDeclaration ';'!
+packageHead                  : PACKAGE<PackageDeclarationNodeImpl>^ qualifiedNameDeclaration ';'!
                              ;
 unit                         : unitHead unitInterface unitImplementation unitBlock '.'
                              ;
 unitWithoutImplementation    : unitHead unitInterface
                              ;
-unitHead                     : 'unit'<UnitDeclarationNodeImpl>^ qualifiedNameDeclaration portabilityDirective* ';'!
+unitHead                     : UNIT<UnitDeclarationNodeImpl>^ qualifiedNameDeclaration portabilityDirective* ';'!
                              ;
-unitInterface                : 'interface'<InterfaceSectionNodeImpl>^ usesClause? interfaceDecl*
+unitInterface                : INTERFACE<InterfaceSectionNodeImpl>^ usesClause? interfaceDecl*
                              ;
-unitImplementation           : 'implementation'<ImplementationSectionNodeImpl>^ usesClause? declSection*
+unitImplementation           : IMPLEMENTATION<ImplementationSectionNodeImpl>^ usesClause? declSection*
                              ;
-unitBlock                    : initializationFinalization? 'end'
+unitBlock                    : initializationFinalization? END
                              | compoundStatement
                              ;
 initializationFinalization   : initializationSection finalizationSection?
                              ;
-initializationSection        : 'initialization'<InitializationSectionNodeImpl>^ statementList
+initializationSection        : INITIALIZATION<InitializationSectionNodeImpl>^ statementList
                              ;
-finalizationSection          : 'finalization'<FinalizationSectionNodeImpl>^ statementList
+finalizationSection          : FINALIZATION<FinalizationSectionNodeImpl>^ statementList
                              ;
 
 //----------------------------------------------------------------------------
 // File usage
 //----------------------------------------------------------------------------
-containsClause               : 'contains'<ContainsClauseNodeImpl>^ unitInFileImportList
+containsClause               : CONTAINS<ContainsClauseNodeImpl>^ unitInFileImportList
                              ;
-requiresClause               : 'requires'<RequiresClauseNodeImpl>^ unitImportList
+requiresClause               : REQUIRES<RequiresClauseNodeImpl>^ unitImportList
                              ;
-usesClause                   : 'uses'<UsesClauseNodeImpl>^ unitImportList
+usesClause                   : USES<UsesClauseNodeImpl>^ unitImportList
                              ;
-usesFileClause               : 'uses'<UsesClauseNodeImpl>^ unitInFileImportList
+usesFileClause               : USES<UsesClauseNodeImpl>^ unitInFileImportList
                              ;
 unitInFileImportList         : unitInFileImport (','! unitInFileImport)* ';'!
                              ;
@@ -302,8 +302,8 @@ unitImportList               : unitImport (','! unitImport)* ';'!
 unitImport                   : qualifiedNameDeclaration
                              -> ^(TkUnitImport<UnitImportNodeImpl> qualifiedNameDeclaration)
                              ;
-unitInFileImport             : qualifiedNameDeclaration ('in' textLiteral)?
-                             -> ^(TkUnitImport<UnitImportNodeImpl> qualifiedNameDeclaration ('in' textLiteral)?)
+unitInFileImport             : qualifiedNameDeclaration (IN textLiteral)?
+                             -> ^(TkUnitImport<UnitImportNodeImpl> qualifiedNameDeclaration (IN textLiteral)?)
                              ;
 
 //----------------------------------------------------------------------------
@@ -329,9 +329,9 @@ interfaceDecl                : constSection
                              | exportsSection
                              | routineInterface
                              ;
-labelDeclSection             : 'label' (label (','!)?)+ ';'
+labelDeclSection             : LABEL (label (','!)?)+ ';'
                              ;
-constSection                 : ('const'<ConstSectionNodeImpl>^ | 'resourcestring'<ConstSectionNodeImpl>^) constDeclaration*
+constSection                 : (CONST<ConstSectionNodeImpl>^ | RESOURCESTRING<ConstSectionNodeImpl>^) constDeclaration*
                              // constSection was changed at some point from "constDeclaration+" to "constDeclaration*" to cater to invalid includes
                              // example: "const {$include versioninfo.inc}"
                              // Is this really the appropriate solution?
@@ -339,24 +339,24 @@ constSection                 : ('const'<ConstSectionNodeImpl>^ | 'resourcestring
 constDeclaration             : attributeList? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
                              -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration constExpression varType? attributeList? portabilityDirective*)
                              ;
-typeSection                  : 'type'<TypeSectionNodeImpl>^ typeDeclaration+
+typeSection                  : TYPE<TypeSectionNodeImpl>^ typeDeclaration+
                              ;
-innerTypeSection             : 'type'<TypeSectionNodeImpl>^ typeDeclaration*
+innerTypeSection             : TYPE<TypeSectionNodeImpl>^ typeDeclaration*
                              ;
 typeDeclaration              : attributeList? genericNameDeclaration '=' typeDecl portabilityDirective* ';'
                              -> ^(TkTypeDeclaration<TypeDeclarationNodeImpl> genericNameDeclaration typeDecl attributeList? portabilityDirective*)
                              ;
-varSection                   : ('var'<VarSectionNodeImpl>^ | 'threadvar'<VarSectionNodeImpl>^) varDeclaration varDeclaration*
+varSection                   : (VAR<VarSectionNodeImpl>^ | THREADVAR<VarSectionNodeImpl>^) varDeclaration varDeclaration*
                              ;
 varDeclaration               : attributeList? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
                              -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList varType varValueSpec? attributeList?)
                              ;
-varValueSpec                 : 'absolute' constExpression
+varValueSpec                 : ABSOLUTE constExpression
                              | '=' constExpression
                              ;
-exportsSection               : 'exports' ident exportItem (',' ident exportItem)* ';'
+exportsSection               : EXPORTS ident exportItem (',' ident exportItem)* ';'
                              ;
-exportItem                   : ('(' formalParameterList ')')? ('index' expression)? ('name' expression)? ('resident')?
+exportItem                   : ('(' formalParameterList ')')? (INDEX expression)? (NAME expression)? (RESIDENT)?
                              ;
 
 //----------------------------------------------------------------------------
@@ -380,7 +380,7 @@ typeDecl                     : arrayType
                              | strongAliasType
                              | weakAliasType
                              | enumType
-                             | 'packed' typeDecl^
+                             | PACKED typeDecl^
                              ;
 varType                      : arrayType
                              | setType
@@ -391,16 +391,16 @@ varType                      : arrayType
                              | subRangeType
                              | typeReference
                              | enumType
-                             | 'packed' varType^
+                             | PACKED varType^
                              ;
 parameterType                : stringType
                              | fileType
                              | arrayType
                              | typeReference
-                             | 'packed' parameterType^
+                             | PACKED parameterType^
                              ;
-arrayType                    :  'array' arrayIndices? 'of' arrayElementType
-                             -> ^('array'<ArrayTypeNodeImpl> 'of' arrayElementType arrayIndices? )
+arrayType                    :  ARRAY arrayIndices? OF arrayElementType
+                             -> ^(ARRAY<ArrayTypeNodeImpl> OF arrayElementType arrayIndices? )
                              ;
 lbrack                       : '['
                              | '(.'
@@ -411,33 +411,33 @@ rbrack                       : ']'
 arrayIndices                 : lbrack (varType ','?)+ rbrack
                              -> ^(TkArrayIndices<ArrayIndicesNodeImpl> lbrack (varType ','?)+ rbrack)
                              ;
-arrayElementType             : 'const'<ConstArrayElementTypeNodeImpl>
+arrayElementType             : CONST<ConstArrayElementTypeNodeImpl>
                              | varType
                              ;
-setType                      : 'set'<SetTypeNodeImpl>^ 'of' varType
+setType                      : SET<SetTypeNodeImpl>^ OF varType
                              ;
-fileType                     : 'file'<FileTypeNodeImpl>^ ('of' varType)?
+fileType                     : FILE<FileTypeNodeImpl>^ (OF varType)?
                              ;
 pointerType                  : '^'<PointerTypeNodeImpl>^ varType
                              ;
-stringType                   : 'string'<StringTypeNodeImpl>^ (lbrack! expression rbrack!)?
+stringType                   : STRING<StringTypeNodeImpl>^ (lbrack! expression rbrack!)?
                              ;
 procedureType                : procedureOfObject
                              | procedureReference
                              | simpleProcedureType
                              ;
-procedureOfObject            : procedureTypeHeading 'of' 'object'<ProcedureOfObjectTypeNodeImpl>^ ((';')? interfaceDirective)*
+procedureOfObject            : procedureTypeHeading OF OBJECT<ProcedureOfObjectTypeNodeImpl>^ ((';')? interfaceDirective)*
                              ;
-procedureReference           : 'reference'<ProcedureReferenceTypeNodeImpl>^ 'to'! procedureTypeHeading
+procedureReference           : REFERENCE<ProcedureReferenceTypeNodeImpl>^ TO! procedureTypeHeading
                              ;
 simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<ProcedureTypeNodeImpl> procedureTypeHeading)
                              ;
-procedureTypeHeading         : 'function'<ProcedureTypeHeadingNodeImpl>^ routineParameters? routineReturnType? ((';')? interfaceDirective)*
-                             | 'procedure'<ProcedureTypeHeadingNodeImpl>^ routineParameters? ((';')? interfaceDirective)*
+procedureTypeHeading         : FUNCTION<ProcedureTypeHeadingNodeImpl>^ routineParameters? routineReturnType? ((';')? interfaceDirective)*
+                             | PROCEDURE<ProcedureTypeHeadingNodeImpl>^ routineParameters? ((';')? interfaceDirective)*
                              ;
-typeOfType                   : 'type'<TypeOfTypeNodeImpl>^ 'of' typeDecl
+typeOfType                   : TYPE<TypeOfTypeNodeImpl>^ OF typeDecl
                              ;
-strongAliasType              : 'type'<StrongAliasTypeNodeImpl>^ typeReference codePageExpression?
+strongAliasType              : TYPE<StrongAliasTypeNodeImpl>^ typeReference codePageExpression?
                              ;
 codePageExpression           : '('! expression ')'!
                              ;
@@ -450,20 +450,20 @@ enumType                     : '('<EnumTypeNodeImpl>^ (enumTypeElement (',')?)* 
 enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNodeImpl> nameDeclaration expression?)
                              ;
 typeReference                : stringType
-                             | 'file'<FileTypeNodeImpl>^
+                             | FILE<FileTypeNodeImpl>^
                              | nameReference -> ^(TkTypeReference<TypeReferenceNodeImpl> nameReference)
                              ;
 
 //----------------------------------------------------------------------------
 // Struct Types
 //----------------------------------------------------------------------------
-classReferenceType           : 'class'<ClassReferenceTypeNodeImpl>^ 'of' typeReference
+classReferenceType           : CLASS<ClassReferenceTypeNodeImpl>^ OF typeReference
                              ;
-classType                    : 'class' classState? classParent? (visibilitySection* 'end')?
-                             -> ^('class'<ClassTypeNodeImpl> classParent? classState? (visibilitySection* 'end')?)
+classType                    : CLASS classState? classParent? (visibilitySection* END)?
+                             -> ^(CLASS<ClassTypeNodeImpl> classParent? classState? (visibilitySection* END)?)
                              ;
-classState                   : 'sealed'
-                             | 'abstract'
+classState                   : SEALED
+                             | ABSTRACT
                              ;
 classParent                  : '(' typeReference (',' typeReference)* ')'
                              -> ^(TkClassParents<AncestorListNodeImpl> typeReference typeReference*)
@@ -480,18 +480,18 @@ visibilitySectionItem        : fieldSection
                              | constSection
                              | innerTypeSection
                              ;
-fieldSectionKey              : 'var'
-                             | 'threadvar'
+fieldSectionKey              : VAR
+                             | THREADVAR
                              ;
-fieldSection                 : 'class'? fieldSectionKey fieldDecl* -> ^(TkFieldSection<FieldSectionNodeImpl> 'class'? fieldSectionKey fieldDecl*)
+fieldSection                 : CLASS? fieldSectionKey fieldDecl* -> ^(TkFieldSection<FieldSectionNodeImpl> CLASS? fieldSectionKey fieldDecl*)
                              | fieldDecl+ -> ^(TkFieldSection<FieldSectionNodeImpl> fieldDecl+)
                              ;
 fieldDecl                    : attributeList? nameDeclarationList ':' varType portabilityDirective* ';'?
                              -> ^(TkFieldDeclaration<FieldDeclarationNodeImpl> nameDeclarationList varType portabilityDirective* attributeList? ';'?)
                              ;
-classHelperType              : 'class'<ClassHelperTypeNodeImpl>^ 'helper' classParent? 'for' typeReference visibilitySection* 'end'
+classHelperType              : CLASS<ClassHelperTypeNodeImpl>^ HELPER classParent? FOR typeReference visibilitySection* END
                              ;
-interfaceType                : ('interface'<InterfaceTypeNodeImpl>^ | 'dispinterface'<InterfaceTypeNodeImpl>^) classParent? (interfaceGuid? interfaceItems? 'end')?
+interfaceType                : (INTERFACE<InterfaceTypeNodeImpl>^ | DISPINTERFACE<InterfaceTypeNodeImpl>^) classParent? (interfaceGuid? interfaceItems? END)?
                              ;
 interfaceGuid                : lbrack expression rbrack -> ^(TkGuid<InterfaceGuidNodeImpl> expression)
                              ;
@@ -500,11 +500,11 @@ interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<Visibilit
 interfaceItem                : routineInterface
                              | property
                              ;
-objectType                   : 'object'<ObjectTypeNodeImpl>^ classParent? visibilitySection* 'end' // Obselete, kept for backwards compatibility with Turbo Pascal
+objectType                   : OBJECT<ObjectTypeNodeImpl>^ classParent? visibilitySection* END // Obselete, kept for backwards compatibility with Turbo Pascal
                              ;                                                                     // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
-recordType                   : 'record'<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? 'end' ('align' constExpression)?
+recordType                   : RECORD<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? END (ALIGN constExpression)?
                              ;
-recordVariantSection         : 'case'<RecordVariantSectionNodeImpl>^ recordVariantTag 'of' recordVariant+
+recordVariantSection         : CASE<RecordVariantSectionNodeImpl>^ recordVariantTag OF recordVariant+
                              ;
 recordVariantTag             : (nameDeclaration ':')? typeReference
                              -> ^(TkRecordVariantTag<RecordVariantTagNodeImpl> nameDeclaration? typeReference)
@@ -512,33 +512,33 @@ recordVariantTag             : (nameDeclaration ':')? typeReference
 recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSection? ')' ';'?
                              -> ^(TkRecordVariantItem<RecordVariantItemNodeImpl> expressionList fieldDecl* recordVariantSection? ';'?)
                              ;
-recordHelperType             : 'record'<RecordHelperTypeNodeImpl>^ 'helper' 'for' typeReference visibilitySection* 'end'
+recordHelperType             : RECORD<RecordHelperTypeNodeImpl>^ HELPER FOR typeReference visibilitySection* END
                              ;
-property                     : attributeList? 'class'? 'property' nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
-                             -> ^('property'<PropertyNodeImpl> nameDeclaration propertyArray? varType? 'class'? attributeList? propertyDirective*)
+property                     : attributeList? CLASS? PROPERTY nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
+                             -> ^(PROPERTY<PropertyNodeImpl> nameDeclaration propertyArray? varType? CLASS? attributeList? propertyDirective*)
                              ;
 propertyArray                : lbrack! formalParameterList rbrack!
                              ;
-propertyDirective            : ';' 'default'
-                             | 'default' expression
+propertyDirective            : ';' DEFAULT
+                             | DEFAULT expression
                              | propertyReadWrite
                              | propertyDispInterface
                              | IMPLEMENTS typeReference (',' typeReference)*
-                             | 'index' expression
-                             | 'nodefault'
+                             | INDEX expression
+                             | NODEFAULT
                              | STORED expression
                              ;
-propertyReadWrite            : ('read'<PropertyReadSpecifierNodeImpl>^ | 'write'<PropertyWriteSpecifierNodeImpl>^) primaryExpression
+propertyReadWrite            : (READ<PropertyReadSpecifierNodeImpl>^ | WRITE<PropertyWriteSpecifierNodeImpl>^) primaryExpression
                              ;
-propertyDispInterface        : 'readonly'
-                             | 'writeonly'
+propertyDispInterface        : READONLY
+                             | WRITEONLY
                              | dispIDDirective
                              ;
-visibility                   : STRICT? 'protected'<VisibilityNodeImpl>^
-                             | STRICT? 'private'<VisibilityNodeImpl>^
-                             | 'public'<VisibilityNodeImpl>
-                             | 'published'<VisibilityNodeImpl>
-                             | 'automated'<VisibilityNodeImpl> // Obselete directive used for RTTI.
+visibility                   : STRICT? PROTECTED<VisibilityNodeImpl>^
+                             | STRICT? PRIVATE<VisibilityNodeImpl>^
+                             | PUBLIC<VisibilityNodeImpl>
+                             | PUBLISHED<VisibilityNodeImpl>
+                             | AUTOMATED<VisibilityNodeImpl> // Obselete directive used for RTTI.
                              ;                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re24.html
 
 //----------------------------------------------------------------------------
@@ -555,9 +555,9 @@ typeParameter                :  nameDeclaration (',' nameDeclaration)* (':' gene
                                  )
                              ;
 genericConstraint            : typeReference
-                             | 'record'
-                             | 'class'
-                             | 'constructor'
+                             | RECORD
+                             | CLASS
+                             | CONSTRUCTOR
                              ;
 genericArguments             : '<' typeReference (',' typeReference)* '>'
                              -> ^(TkGenericArguments<GenericArgumentsNodeImpl> typeReference typeReference*)
@@ -566,7 +566,7 @@ genericArguments             : '<' typeReference (',' typeReference)* '>'
 //----------------------------------------------------------------------------
 // Routines
 //----------------------------------------------------------------------------
-methodResolutionClause       : key=('function' | 'procedure') interfaceMethod=nameReference '=' implemented=nameReference ';'
+methodResolutionClause       : key=(FUNCTION | PROCEDURE) interfaceMethod=nameReference '=' implemented=nameReference ';'
                              -> ^(TkMethodResolveClause<MethodResolutionClauseNodeImpl>
                                     $key $interfaceMethod $implemented
                                  )
@@ -596,47 +596,47 @@ forwardRoutine               : forwardRoutineHeading
                                     forwardRoutineHeading
                                  )
                              ;
-routineInterfaceHeading      : attributeList? 'class'? routineKey routineDeclarationName routineParameters? routineReturnType? interfaceDirectiveSection
+routineInterfaceHeading      : attributeList? CLASS? routineKey routineDeclarationName routineParameters? routineReturnType? interfaceDirectiveSection
                              -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
                                     routineKey
                                     routineDeclarationName
                                     routineParameters?
                                     routineReturnType?
                                     attributeList?
-                                    'class'?
+                                    CLASS?
                                     interfaceDirectiveSection
                                  )
                              ;
-routineImplementationHeading : attributeList? 'class'? routineKey routineImplementationName routineParameters? routineReturnType? implDirectiveSection
+routineImplementationHeading : attributeList? CLASS? routineKey routineImplementationName routineParameters? routineReturnType? implDirectiveSection
                              -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
                                     routineKey
                                     routineImplementationName
                                     routineParameters?
                                     routineReturnType?
                                     attributeList?
-                                    'class'?
+                                    CLASS?
                                     implDirectiveSection
                                  )
                              ;
-externalRoutineHeading       : attributeList? 'class'? routineKey routineImplementationName routineParameters? routineReturnType? externalDirectiveSection
+externalRoutineHeading       : attributeList? CLASS? routineKey routineImplementationName routineParameters? routineReturnType? externalDirectiveSection
                              -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
                                     routineKey
                                     routineImplementationName
                                     routineParameters?
                                     routineReturnType?
                                     attributeList?
-                                    'class'?
+                                    CLASS?
                                     externalDirectiveSection
                                  )
                              ;
-forwardRoutineHeading        : attributeList? 'class'? routineKey routineDeclarationName routineParameters? routineReturnType? forwardDirectiveSection
+forwardRoutineHeading        : attributeList? CLASS? routineKey routineDeclarationName routineParameters? routineReturnType? forwardDirectiveSection
                              -> ^(TkRoutineHeading<RoutineHeadingNodeImpl>
                                     routineKey
                                     routineDeclarationName
                                     routineParameters?
                                     routineReturnType?
                                     attributeList?
-                                    'class'?
+                                    CLASS?
                                     forwardDirectiveSection
                                  )
                              ;
@@ -648,11 +648,11 @@ routineDeclarationName       : (
                              ;
 routineImplementationName    : nameReference -> ^(TkRoutineName<RoutineNameNodeImpl> nameReference)
                              ;
-routineKey                   : 'procedure'
-                             | 'constructor'
-                             | 'destructor'
-                             | 'function'
-                             | 'operator'
+routineKey                   : PROCEDURE
+                             | CONSTRUCTOR
+                             | DESTRUCTOR
+                             | FUNCTION
+                             | OPERATOR
                              ;
 routineReturnType            : ':' attributeList? returnType -> ^(TkRoutineReturn<RoutineReturnTypeNodeImpl> returnType attributeList?)
                              ;
@@ -666,9 +666,9 @@ formalParameterList          : formalParameter (';' formalParameter)* -> ^(TkFor
 formalParameter              : a1=attributeList? (paramSpecifier a2=attributeList?)? nameDeclarationList (':' parameterType)? ('=' expression)?
                              -> ^(TkFormalParameter<FormalParameterNodeImpl> nameDeclarationList parameterType? paramSpecifier? expression? $a1? $a2?)
                              ;
-paramSpecifier               : 'const'
-                             | 'var'
-                             | 'out'
+paramSpecifier               : CONST
+                             | VAR
+                             | OUT
                              ;
 routineBody                  : block ';' -> ^(TkRoutineBody<RoutineBodyNodeImpl> block)
                              ;
@@ -707,7 +707,7 @@ unaryExpression              : unaryOperator^ unaryExpression
                              ;
 primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNodeImpl> atom)
                              | parenthesizedExpression
-                             | 'inherited' (nameReference? particleItem*)? -> ^(TkPrimaryExpression<PrimaryExpressionNodeImpl> 'inherited' (nameReference? particleItem*)?)
+                             | INHERITED (nameReference? particleItem*)? -> ^(TkPrimaryExpression<PrimaryExpressionNodeImpl> INHERITED (nameReference? particleItem*)?)
                              ;
 parenthesizedExpression      : '(' expression ')' -> ^(TkNestedExpression<ParenthesizedExpressionNodeImpl> '(' expression ')')
                              ;
@@ -719,8 +719,8 @@ particle                     : intNum
                              | nilLiteral
                              | nameReference
                              | arrayConstructor
-                             | 'string'
-                             | 'file'
+                             | STRING
+                             | FILE
                              | parenthesizedExpression particleItem+
                              ; // parenthesizedExpressions are a special case.
                                // If they are followed by particleItems then we want to consider them as particles so a PrimaryExpressionNode is created to wrap it.
@@ -740,8 +740,8 @@ argument                     : anonymousMethod
                              ;                                                  // of compiler hackery for intrinsic procedures like Str and WriteLn
                                                                                 // See: http://www.delphibasics.co.uk/RTL.asp?Name=str
                                                                                 // See: https://stackoverflow.com/questions/617654/how-does-writeln-really-work
-anonymousMethod              : 'procedure'<AnonymousMethodNodeImpl>^ routineParameters? block
-                             | 'function'<AnonymousMethodNodeImpl>^ routineParameters? routineReturnType block
+anonymousMethod              : PROCEDURE<AnonymousMethodNodeImpl>^ routineParameters? block
+                             | FUNCTION<AnonymousMethodNodeImpl>^ routineParameters? routineReturnType block
                              ;
 expressionOrRange            : expression ('..'<RangeExpressionNodeImpl>^ expression)?
                              ;
@@ -768,26 +768,26 @@ multilineTextLiteral         : TkMultilineString
 escapedCharacter             : TkCharacterEscapeCode
                              | '^' (TkIdentifier | TkIntNumber | TkAnyChar) -> ^({changeTokenType(TkEscapedCharacter)})
                              ;
-nilLiteral                   : 'nil'<NilLiteralNodeImpl>
+nilLiteral                   : NIL<NilLiteralNodeImpl>
                              ;
 arrayConstructor             : lbrack exprOrRangeOrAnonMethodList? rbrack
                              -> ^(TkArrayConstructor<ArrayConstructorNodeImpl> lbrack exprOrRangeOrAnonMethodList? rbrack)
                              ;
 addOperator                  : '+'<BinaryExpressionNodeImpl>
                              | '-'<BinaryExpressionNodeImpl>
-                             | 'or'<BinaryExpressionNodeImpl>
-                             | 'xor'<BinaryExpressionNodeImpl>
+                             | OR<BinaryExpressionNodeImpl>
+                             | XOR<BinaryExpressionNodeImpl>
                              ;
 multOperator                 : '*'<BinaryExpressionNodeImpl>
                              | '/'<BinaryExpressionNodeImpl>
-                             | 'div'<BinaryExpressionNodeImpl>
-                             | 'mod'<BinaryExpressionNodeImpl>
-                             | 'and'<BinaryExpressionNodeImpl>
-                             | 'shl'<BinaryExpressionNodeImpl>
-                             | 'shr'<BinaryExpressionNodeImpl>
-                             | 'as'<BinaryExpressionNodeImpl>
+                             | DIV<BinaryExpressionNodeImpl>
+                             | MOD<BinaryExpressionNodeImpl>
+                             | AND<BinaryExpressionNodeImpl>
+                             | SHL<BinaryExpressionNodeImpl>
+                             | SHR<BinaryExpressionNodeImpl>
+                             | AS<BinaryExpressionNodeImpl>
                              ;
-unaryOperator                : 'not'<UnaryExpressionNodeImpl>
+unaryOperator                : NOT<UnaryExpressionNodeImpl>
                              | '+'<UnaryExpressionNodeImpl>
                              | '-'<UnaryExpressionNodeImpl>
                              | '@'<UnaryExpressionNodeImpl>
@@ -798,8 +798,8 @@ relationalOperator           : '='<BinaryExpressionNodeImpl>
                              | '<='<BinaryExpressionNodeImpl>
                              | '>='<BinaryExpressionNodeImpl>
                              | '<>'<BinaryExpressionNodeImpl>
-                             | 'in'<BinaryExpressionNodeImpl>
-                             | 'is'<BinaryExpressionNodeImpl>
+                             | IN<BinaryExpressionNodeImpl>
+                             | IS<BinaryExpressionNodeImpl>
                              ;
 constExpression              : expression
                              | recordExpression
@@ -833,34 +833,34 @@ statement                    : ifStatement
                              | expressionStatement
                              | gotoStatement
                              ;
-ifStatement                  : 'if'<IfStatementNodeImpl>^ expression 'then' statement? ('else' statement?)?
+ifStatement                  : IF<IfStatementNodeImpl>^ expression THEN statement? (ELSE statement?)?
                              ;
-varStatement                 : 'var' attributeList? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
-                             -> ^('var'<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? attributeList?)
+varStatement                 : VAR attributeList? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
+                             -> ^(VAR<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? attributeList?)
                              ;
-constStatement               : 'const' attributeList? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
-                             -> ^('const'<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod attributeList?)
+constStatement               : CONST attributeList? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
+                             -> ^(CONST<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod attributeList?)
                              ;
-caseStatement                : 'case'<CaseStatementNodeImpl>^ expression 'of' caseItem* elseBlock? 'end'
+caseStatement                : CASE<CaseStatementNodeImpl>^ expression OF caseItem* elseBlock? END
                              ;
-elseBlock                    : 'else'<ElseBlockNodeImpl>^ statementList
+elseBlock                    : ELSE<ElseBlockNodeImpl>^ statementList
                              ;
 caseItem                     : expressionOrRangeList ':' (statement)? (';')? -> ^(TkCaseItem<CaseItemStatementNodeImpl> expressionOrRangeList (statement)? (';')? )
                              ;
-repeatStatement              : 'repeat'<RepeatStatementNodeImpl>^ statementList 'until' expression
+repeatStatement              : REPEAT<RepeatStatementNodeImpl>^ statementList UNTIL expression
                              ;
-whileStatement               : 'while'<WhileStatementNodeImpl>^ expression 'do' statement?
+whileStatement               : WHILE<WhileStatementNodeImpl>^ expression DO statement?
                              ;
-forStatement                 : 'for'<ForToStatementNodeImpl>^ forVar ':=' expression 'to' expression 'do' statement?
-                             | 'for'<ForToStatementNodeImpl>^ forVar ':=' expression 'downto' expression 'do' statement?
-                             | 'for'<ForInStatementNodeImpl>^ forVar 'in' expression 'do' statement?
+forStatement                 : FOR<ForToStatementNodeImpl>^ forVar ':=' expression TO expression DO statement?
+                             | FOR<ForToStatementNodeImpl>^ forVar ':=' expression DOWNTO expression DO statement?
+                             | FOR<ForInStatementNodeImpl>^ forVar IN expression DO statement?
                              ;
-forVar                       : 'var' nameDeclaration (':' varType)? -> ^(TkForLoopVar<ForLoopVarDeclarationNodeImpl> nameDeclaration varType?)
+forVar                       : VAR nameDeclaration (':' varType)? -> ^(TkForLoopVar<ForLoopVarDeclarationNodeImpl> nameDeclaration varType?)
                              | simpleNameReference -> ^(TkForLoopVar<ForLoopVarReferenceNodeImpl> simpleNameReference)
                              ;
-withStatement                : 'with'<WithStatementNodeImpl>^ expressionList 'do' statement?
+withStatement                : WITH<WithStatementNodeImpl>^ expressionList DO statement?
                              ;
-compoundStatement            : 'begin'<CompoundStatementNodeImpl>^ statementList 'end'
+compoundStatement            : BEGIN<CompoundStatementNodeImpl>^ statementList END
                              ;
 statementList                : delimitedStatements? -> ^(TkStatementList<StatementListNodeImpl> delimitedStatements?)
                              ;
@@ -872,24 +872,24 @@ assignmentStatement          : expression ':='<AssignmentStatementNodeImpl>^ exp
                              ;
 expressionStatement          : expression -> ^(TkExpressionStatement<ExpressionStatementNodeImpl> expression)
                              ;
-gotoStatement                : 'goto'<GotoStatementNodeImpl>^ label
+gotoStatement                : GOTO<GotoStatementNodeImpl>^ label
                              ;
-tryStatement                 : 'try'<TryStatementNodeImpl>^ statementList (exceptBlock | finallyBlock) 'end'
+tryStatement                 : TRY<TryStatementNodeImpl>^ statementList (exceptBlock | finallyBlock) END
                              ;
-exceptBlock                  : 'except'<ExceptBlockNodeImpl>^ handlerList
+exceptBlock                  : EXCEPT<ExceptBlockNodeImpl>^ handlerList
                              ;
-finallyBlock                 : 'finally'<FinallyBlockNodeImpl>^ statementList
+finallyBlock                 : FINALLY<FinallyBlockNodeImpl>^ statementList
                              ;
 handlerList                  : handler+ elseBlock?
                              | statementList
                              ;
-handler                      : 'on'<ExceptItemNodeImpl>^ (nameDeclaration ':'!)? typeReference 'do' statement? (';')?
+handler                      : ON<ExceptItemNodeImpl>^ (nameDeclaration ':'!)? typeReference DO statement? (';')?
                              ;
-raiseStatement               : 'raise'<RaiseStatementNodeImpl>^ expression? (AT! expression)?
+raiseStatement               : RAISE<RaiseStatementNodeImpl>^ expression? (AT! expression)?
                              ;
-assemblerStatement           : 'asm'<AsmStatementNodeImpl>^ assemblerInstructions 'end'
+assemblerStatement           : ASM<AsmStatementNodeImpl>^ assemblerInstructions END
                              ;
-assemblerInstructions        : ~('end')* // Skip asm statements
+assemblerInstructions        : ~(END)* // Skip asm statements
                              ;
 
 //----------------------------------------------------------------------------
@@ -904,11 +904,11 @@ interfaceDirectiveSection    : (';'? interfaceDirective)* ';'
 externalDirectiveSection      : (';'? implDirective)* ';'? externalDirective (';'? implDirective)*';'
                              | (';' implDirective)* ';' externalDirective (';' implDirective)*
                              ;
-forwardDirectiveSection      : (';'? implDirective)* ';'? 'forward' (';'? implDirective)*';'
-                             | (';' implDirective)* ';' 'forward' (';' implDirective)*
+forwardDirectiveSection      : (';'? implDirective)* ';'? FORWARD (';'? implDirective)*';'
+                             | (';' implDirective)* ';' FORWARD (';' implDirective)*
                              ;
-implDirective                : 'overload'
-                             | 'reintroduce'
+implDirective                : OVERLOAD
+                             | REINTRODUCE
                              | bindingDirective
                              | abstractDirective
                              | inlineDirective
@@ -916,50 +916,50 @@ implDirective                : 'overload'
                              | portabilityDirective
                              | oldCallConventionDirective
                              | dispIDDirective
-                             | 'varargs' // Only permitted for cdecl calling convention
-                             | 'unsafe' // .net?
+                             | VARARGS // Only permitted for cdecl calling convention
+                             | UNSAFE // .net?
                              ;
-interfaceDirective           : 'forward'
+interfaceDirective           : FORWARD
                              | externalDirective
                              | implDirective
                              ;
-bindingDirective             : 'message' expression
-                             | 'static'
-                             | 'dynamic'
-                             | 'override'
-                             | 'virtual'
+bindingDirective             : MESSAGE expression
+                             | STATIC
+                             | DYNAMIC
+                             | OVERRIDE
+                             | VIRTUAL
                              ;
-abstractDirective            : 'abstract'
-                             | 'final'
+abstractDirective            : ABSTRACT
+                             | FINAL
                              ;
-inlineDirective              : 'inline'
-                             | 'assembler' // deprecated
+inlineDirective              : INLINE
+                             | ASSEMBLER // deprecated
                              ;
-callConvention               : 'cdecl'
-                             | 'pascal'
-                             | 'register'
-                             | 'safecall'
-                             | 'stdcall'
-                             | 'export' // deprecated
+callConvention               : CDECL
+                             | PASCAL
+                             | REGISTER
+                             | SAFECALL
+                             | STDCALL
+                             | EXPORT // deprecated
                              ;
-oldCallConventionDirective   : 'far' // deprecated
-                             | 'local' // deprecated. Introduced in the Kylix Linux compiler, makes function non-exportable. (No effect in Windows)
-                             | 'near' // deprecated
+oldCallConventionDirective   : FAR // deprecated
+                             | LOCAL // deprecated. Introduced in the Kylix Linux compiler, makes function non-exportable. (No effect in Windows)
+                             | NEAR // deprecated
                              ;
-portabilityDirective         : 'deprecated'^ textLiteral?
-                             | 'experimental'
-                             | 'platform'
-                             | 'library'
+portabilityDirective         : DEPRECATED^ textLiteral?
+                             | EXPERIMENTAL
+                             | PLATFORM
+                             | LIBRARY
                              ;
-externalDirective            : 'external'^ dllName? externalSpecifier*
+externalDirective            : EXTERNAL^ dllName? externalSpecifier*
                              ;
 dllName                      : {!input.LT(1).getText().equals("name")}? expression
                              ;
-externalSpecifier            : 'name'^ constExpression
-                             | 'index'^ constExpression // specific to a platform
-                             | 'delayed' // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/en/Libraries_and_Packages_(Delphi))
+externalSpecifier            : NAME^ constExpression
+                             | INDEX^ constExpression // specific to a platform
+                             | DELAYED // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/en/Libraries_and_Packages_(Delphi))
                              ;
-dispIDDirective              : 'dispid' expression
+dispIDDirective              : DISPID expression
                              ;
 
 //----------------------------------------------------------------------------
@@ -1006,7 +1006,7 @@ qualifiedNameDeclaration     : ident ('.' extendedIdent)*
 specialOpNameDeclaration     : specialOperatorName
                              -> ^(TkNameDeclaration<SimpleNameDeclarationNodeImpl> specialOperatorName)
                              ;
-specialOperatorName          : 'in' -> ^({changeTokenType(TkIdentifier)})
+specialOperatorName          : IN -> ^({changeTokenType(TkIdentifier)})
                              ;
 nameReference                : ident genericArguments? ('.' extendedNameReference)?
                              -> ^(TkNameReference<NameReferenceNodeImpl> ident genericArguments? ('.' extendedNameReference)?)
@@ -1033,52 +1033,52 @@ realNum                      : TkRealNumber<RealLiteralNodeImpl>
 //----------------------------------------------------------------------------
 // Keywords
 //----------------------------------------------------------------------------
-ABSOLUTE          : 'absolute'       	         ;
-ABSTRACT          : 'abstract'       	         ;
-ALIGN             : 'align'                    ;
-AND               : 'and'           	         ;
-ARRAY             : 'array'          	         ;
-AS                : 'as'             	         ;
-ASM               : 'asm' { asmMode = true; }  ;
-ASSEMBLER         : 'assembler'       	       ;
-AT                : 'at'             	         ;
-AUTOMATED         : 'automated'      	         ;
-BEGIN             : 'begin'          	         ;
-CASE              : 'case'           	         ;
-CDECL             : 'cdecl'          	         ;
-CLASS             : 'class'          	         ;
-CONST             : 'const'           	       ;
-CONSTRUCTOR       : 'constructor'              ;
-CONTAINS          : 'contains'                 ;
-DEFAULT           : 'default'                  ;
-DELAYED           : 'delayed'                  ;
-DEPRECATED        : 'deprecated'               ;
-DESTRUCTOR        : 'destructor'               ;
-DISPID            : 'dispid'                   ;
-DISPINTERFACE     : 'dispinterface'            ;
-DIV               : 'div'                      ;
-DO                : 'do'                       ;
-DOWNTO            : 'downto'                   ;
-DYNAMIC           : 'dynamic'        	         ;
-ELSE              : 'else'           	         ;
-END               : 'end' { asmMode = false; } ;
-EXCEPT            : 'except'                   ;
-EXPERIMENTAL      : 'experimental'             ;
-EXPORT            : 'export'                   ;
-EXPORTS           : 'exports'                  ;
-EXTERNAL          : 'external'                 ;
-FAR               : 'far'                      ;
-FILE              : 'file'                     ;
-FINAL             : 'final'                    ;
-FINALIZATION      : 'finalization'             ;
-FINALLY           : 'finally'                  ;
-FOR               : 'for'                      ;
-FORWARD           : 'forward'                  ;
-FUNCTION          : 'function'                 ;
-GOTO              : 'goto'                     ;
-HELPER            : 'helper'                   ;
-IF                : 'if'                       ;
-IMPLEMENTATION    : 'implementation' {
+ABSOLUTE          : A B S O L U T E             ;
+ABSTRACT          : A B S T R A C T             ;
+ALIGN             : A L I G N                   ;
+AND               : A N D                       ;
+ARRAY             : A R R A Y                   ;
+AS                : A S                         ;
+ASM               : A S M { asmMode = true; }   ;
+ASSEMBLER         : A S S E M B L E R           ;
+AT                : A T                         ;
+AUTOMATED         : A U T O M A T E D           ;
+BEGIN             : B E G I N                   ;
+CASE              : C A S E                     ;
+CDECL             : C D E C L                   ;
+CLASS             : C L A S S                   ;
+CONST             : C O N S T                   ;
+CONSTRUCTOR       : C O N S T R U C T O R       ;
+CONTAINS          : C O N T A I N S             ;
+DEFAULT           : D E F A U L T               ;
+DELAYED           : D E L A Y E D               ;
+DEPRECATED        : D E P R E C A T E D         ;
+DESTRUCTOR        : D E S T R U C T O R         ;
+DISPID            : D I S P I D                 ;
+DISPINTERFACE     : D I S P I N T E R F A C E   ;
+DIV               : D I V                       ;
+DO                : D O                         ;
+DOWNTO            : D O W N T O                 ;
+DYNAMIC           : D Y N A M I C               ;
+ELSE              : E L S E                     ;
+END               : E N D { asmMode = false; }  ;
+EXCEPT            : E X C E P T                 ;
+EXPERIMENTAL      : E X P E R I M E N T A L     ;
+EXPORT            : E X P O R T                 ;
+EXPORTS           : E X P O R T S               ;
+EXTERNAL          : E X T E R N A L             ;
+FAR               : F A R                       ;
+FILE              : F I L E                     ;
+FINAL             : F I N A L                   ;
+FINALIZATION      : F I N A L I Z A T I O N     ;
+FINALLY           : F I N A L L Y               ;
+FOR               : F O R                       ;
+FORWARD           : F O R W A R D               ;
+FUNCTION          : F U N C T I O N             ;
+GOTO              : G O T O                     ;
+HELPER            : H E L P E R                 ;
+IF                : I F                         ;
+IMPLEMENTATION    : I M P L E M E N T A T I O N {
                      if (shouldSkipImplementation && directiveNesting == 0) {
                        skip();
                        while (input.LA(1) != EOF) {
@@ -1086,81 +1086,81 @@ IMPLEMENTATION    : 'implementation' {
                        }
                      }
                   };
-IMPLEMENTS        : 'implements'               ;
-IN                : 'in'                       ;
-INDEX             : 'index'                    ;
-INHERITED         : 'inherited'                ;
-INITIALIZATION    : 'initialization'           ;
-INLINE            : 'inline'                   ;
-INTERFACE         : 'interface'                ;
-IS                : 'is'                       ;
-LABEL             : 'label'                    ;
-LIBRARY           : 'library'                  ;
-LOCAL             : 'local'                    ;
-MESSAGE           : 'message'                  ;
-MOD               : 'mod'                      ;
-NAME              : 'name'                     ;
-NEAR              : 'near'                     ;
-NIL               : 'nil'                      ;
-NODEFAULT         : 'nodefault'                ;
-NOT               : 'not'                      ;
-OBJECT            : 'object'                   ;
-OF                : 'of'                       ;
-ON                : 'on'                       ;
-OPERATOR          : 'operator'                 ;
-OR                : 'or'                       ;
-OUT               : 'out'                      ;
-OVERLOAD          : 'overload'                 ;
-OVERRIDE          : 'override'                 ;
-PACKAGE           : 'package'                  ;
-PACKED            : 'packed'                   ;
-PASCAL            : 'pascal'                   ;
-PLATFORM          : 'platform'                 ;
-PRIVATE           : 'private'                  ;
-PROCEDURE         : 'procedure'                ;
-PROGRAM           : 'program'                  ;
-PROPERTY          : 'property'                 ;
-PROTECTED         : 'protected'                ;
-PUBLIC            : 'public'                   ;
-PUBLISHED         : 'published'                ;
-RAISE             : 'raise'                    ;
-READ              : 'read'                     ;
-READONLY          : 'readonly'                 ;
-RECORD            : 'record'                   ;
-REFERENCE         : 'reference'                ;
-REGISTER          : 'register'                 ;
-REINTRODUCE       : 'reintroduce'              ;
-REPEAT            : 'repeat'                   ;
-REQUIRES          : 'requires'                 ;
-RESIDENT          : 'resident'                 ;
-RESOURCESTRING    : 'resourcestring'           ;
-SAFECALL          : 'safecall'                 ;
-SEALED            : 'sealed'                   ;
-SET               : 'set'                      ;
-SHL               : 'shl'                      ;
-SHR               : 'shr'                      ;
-STATIC            : 'static'                   ;
-STDCALL           : 'stdcall'                  ;
-STORED            : 'stored'                   ;
-STRICT            : 'strict'                   ;
-STRING            : 'string'                   ;
-THEN              : 'then'                     ;
-THREADVAR         : 'threadvar'                ;
-TO                : 'to'                       ;
-TRY               : 'try'                      ;
-TYPE              : 'type'                     ;
-UNIT              : 'unit'                     ;
-UNSAFE            : 'unsafe'                   ;
-UNTIL             : 'until'                    ;
-USES              : 'uses'                     ;
-VAR               : 'var'                      ;
-VARARGS           : 'varargs'                  ;
-VIRTUAL           : 'virtual'                  ;
-WHILE             : 'while'                    ;
-WITH              : 'with'                     ;
-WRITE             : 'write'                    ;
-WRITEONLY         : 'writeonly'                ;
-XOR               : 'xor'                      ;
+IMPLEMENTS        : I M P L E M E N T S         ;
+IN                : I N                         ;
+INDEX             : I N D E X                   ;
+INHERITED         : I N H E R I T E D           ;
+INITIALIZATION    : I N I T I A L I Z A T I O N ;
+INLINE            : I N L I N E                 ;
+INTERFACE         : I N T E R F A C E           ;
+IS                : I S                         ;
+LABEL             : L A B E L                   ;
+LIBRARY           : L I B R A R Y               ;
+LOCAL             : L O C A L                   ;
+MESSAGE           : M E S S A G E               ;
+MOD               : M O D                       ;
+NAME              : N A M E                     ;
+NEAR              : N E A R                     ;
+NIL               : N I L                       ;
+NODEFAULT         : N O D E F A U L T           ;
+NOT               : N O T                       ;
+OBJECT            : O B J E C T                 ;
+OF                : O F                         ;
+ON                : O N                         ;
+OPERATOR          : O P E R A T O R             ;
+OR                : O R                         ;
+OUT               : O U T                       ;
+OVERLOAD          : O V E R L O A D             ;
+OVERRIDE          : O V E R R I D E             ;
+PACKAGE           : P A C K A G E               ;
+PACKED            : P A C K E D                 ;
+PASCAL            : P A S C A L                 ;
+PLATFORM          : P L A T F O R M             ;
+PRIVATE           : P R I V A T E               ;
+PROCEDURE         : P R O C E D U R E           ;
+PROGRAM           : P R O G R A M               ;
+PROPERTY          : P R O P E R T Y             ;
+PROTECTED         : P R O T E C T E D           ;
+PUBLIC            : P U B L I C                 ;
+PUBLISHED         : P U B L I S H E D           ;
+RAISE             : R A I S E                   ;
+READ              : R E A D                     ;
+READONLY          : R E A D O N L Y             ;
+RECORD            : R E C O R D                 ;
+REFERENCE         : R E F E R E N C E           ;
+REGISTER          : R E G I S T E R             ;
+REINTRODUCE       : R E I N T R O D U C E       ;
+REPEAT            : R E P E A T                 ;
+REQUIRES          : R E Q U I R E S             ;
+RESIDENT          : R E S I D E N T             ;
+RESOURCESTRING    : R E S O U R C E S T R I N G ;
+SAFECALL          : S A F E C A L L             ;
+SEALED            : S E A L E D                 ;
+SET               : S E T                       ;
+SHL               : S H L                       ;
+SHR               : S H R                       ;
+STATIC            : S T A T I C                 ;
+STDCALL           : S T D C A L L               ;
+STORED            : S T O R E D                 ;
+STRICT            : S T R I C T                 ;
+STRING            : S T R I N G                 ;
+THEN              : T H E N                     ;
+THREADVAR         : T H R E A D V A R           ;
+TO                : T O                         ;
+TRY               : T R Y                       ;
+TYPE              : T Y P E                     ;
+UNIT              : U N I T                     ;
+UNSAFE            : U N S A F E                 ;
+UNTIL             : U N T I L                   ;
+USES              : U S E S                     ;
+VAR               : V A R                       ;
+VARARGS           : V A R A R G S               ;
+VIRTUAL           : V I R T U A L               ;
+WHILE             : W H I L E                   ;
+WITH              : W I T H                     ;
+WRITE             : W R I T E                   ;
+WRITEONLY         : W R I T E O N L Y           ;
+XOR               : X O R                       ;
 
 //----------------------------------------------------------------------------
 // Operators
@@ -1275,6 +1275,36 @@ BinaryDigit             : '0'..'1'
 fragment
 BinaryDigitSeq		      : BinaryDigit (BinaryDigit | '_')*
                         ;
+
+//----------------------------------------------------------------------------
+// Case-insensitivity fragments
+//----------------------------------------------------------------------------
+fragment A              : ('a'|'A');
+fragment B              : ('b'|'B');
+fragment C              : ('c'|'C');
+fragment D              : ('d'|'D');
+fragment E              : ('e'|'E');
+fragment F              : ('f'|'F');
+fragment G              : ('g'|'G');
+fragment H              : ('h'|'H');
+fragment I              : ('i'|'I');
+fragment J              : ('j'|'J');
+fragment K              : ('k'|'K');
+fragment L              : ('l'|'L');
+fragment M              : ('m'|'M');
+fragment N              : ('n'|'N');
+fragment O              : ('o'|'O');
+fragment P              : ('p'|'P');
+fragment Q              : ('q'|'Q');
+fragment R              : ('r'|'R');
+fragment S              : ('s'|'S');
+fragment T              : ('t'|'T');
+fragment U              : ('u'|'U');
+fragment V              : ('v'|'V');
+fragment W              : ('w'|'W');
+fragment X              : ('x'|'X');
+fragment Y              : ('y'|'Y');
+fragment Z              : ('z'|'Z');
 
 //----------------------------------------------------------------------------
 // Hidden channel

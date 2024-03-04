@@ -76,11 +76,4 @@ public class DelphiFileStream extends ANTLRStringStream {
   public String getEncoding() {
     return this.encoding;
   }
-
-  @Override
-  public int LA(int i) {
-    int la = super.LA(i);
-
-    return Character.toLowerCase(la);
-  }
 }
