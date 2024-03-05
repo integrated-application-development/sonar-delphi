@@ -322,4 +322,70 @@ class InheritedMethodWithNoCodeCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testInstanceRoutineOverridingVisibilityOfInheritedClassRoutineShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new InheritedMethodWithNoCodeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject)")
+                .appendDecl("  protected")
+                .appendDecl("    class procedure MyProcedure; virtual;")
+                .appendDecl("  end;")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("  public")
+                .appendDecl("    procedure MyProcedure;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TChild.MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  inherited;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testEmptyInstanceDestructorWithClassDestructorOfDifferentVisibilityShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new InheritedMethodWithNoCodeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject)")
+                .appendDecl("  protected")
+                .appendDecl("    class destructor Destroy;")
+                .appendDecl("  end;")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("  public")
+                .appendDecl("    destructor Destroy; override;")
+                .appendDecl("  end;")
+                .appendImpl("destructor TChild.Destroy;")
+                .appendImpl("begin")
+                .appendImpl("  inherited; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testEmptyInstanceConstructorWithClassConstructorOfDifferentVisibilityShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new InheritedMethodWithNoCodeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject)")
+                .appendDecl("  protected")
+                .appendDecl("    class constructor Create;")
+                .appendDecl("  end;")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create; override;")
+                .appendDecl("  end;")
+                .appendImpl("constructor TChild.Create;")
+                .appendImpl("begin")
+                .appendImpl("  inherited; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }
