@@ -42,6 +42,7 @@ import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -194,7 +195,24 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
 
   private static boolean isOverriddenMethod(
       RoutineNameDeclaration parent, RoutineNameDeclaration child) {
-    return parent.getName().equalsIgnoreCase(child.getName())
-        && parent.getParameters().equals(child.getParameters());
+    if (parent.getName().equalsIgnoreCase(child.getName())
+        && parent.getParameters().equals(child.getParameters())) {
+      if (parent.isClassInvocable()) {
+        if (parent.getRoutineKind() == RoutineKind.CONSTRUCTOR
+            || parent.getRoutineKind() == RoutineKind.DESTRUCTOR) {
+          // An instance constructor or destructor cannot inherit from a class constructor or
+          // destructor
+          return child.isClassInvocable();
+        } else {
+          // Any other type of invocable can inherit from a class invocable
+          return true;
+        }
+      } else {
+        // A class invocable cannot inherit from an instance invocable
+        return !child.isClassInvocable();
+      }
+    } else {
+      return false;
+    }
   }
 }
