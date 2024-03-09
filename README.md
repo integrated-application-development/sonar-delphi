@@ -78,7 +78,7 @@ In addition to template rules, SonarDelphi can be extended with custom rules plu
     * [Install the plugin](https://docs.sonarqube.org/latest/setup/install-plugin/) on the SonarQube server.
 
 3. Run analysis on your Delphi project:
-    * [Configure](CONFIGURATION.md) your Sonar project, including `sonar.delphi.installationPath`.
+    * [Configure](docs/CONFIGURATION.md) your Sonar project, including `sonar.delphi.installationPath`.
     * Execute `sonar-scanner` in your project's directory.
 
 4. View analysis results:
