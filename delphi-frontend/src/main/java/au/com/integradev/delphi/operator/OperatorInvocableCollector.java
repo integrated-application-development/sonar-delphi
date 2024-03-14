@@ -258,7 +258,7 @@ public class OperatorInvocableCollector {
       case ADD:
         return createIntegerArithmeticBinary("Add");
       case SUBTRACT:
-        return createIntegerArithmeticBinary("Subtract");
+        return createSubtract();
       case MULTIPLY:
         return createIntegerArithmeticBinary("Multiply");
       case DIVIDE:
@@ -409,6 +409,15 @@ public class OperatorInvocableCollector {
   }
 
   private Set<Invocable> createIntegerArithmeticBinary(String name) {
+    return createIntegerArithmeticBinary(name, ((TypeFactoryImpl) typeFactory).anonymousUInt31());
+  }
+
+  private Set<Invocable> createSubtract() {
+    return createIntegerArithmeticBinary(
+        "Subtract", typeFactory.getIntrinsic(IntrinsicType.INTEGER));
+  }
+
+  private Set<Invocable> createIntegerArithmeticBinary(String name, Type uint31ReturnType) {
     Set<Invocable> result = createNativeIntegerBinary(name);
     if (!result.isEmpty()) {
       return result;
@@ -425,7 +434,7 @@ public class OperatorInvocableCollector {
         new OperatorIntrinsic(name, List.of(integer, integer), integer),
         new OperatorIntrinsic(name, List.of(integer, int64), int64),
         new OperatorIntrinsic(name, List.of(int64, integer), int64),
-        new OperatorIntrinsic(name, List.of(uint31, uint31), uint31),
+        new OperatorIntrinsic(name, List.of(uint31, uint31), uint31ReturnType),
         new OperatorIntrinsic(name, List.of(cardinal, uint31), cardinal),
         new OperatorIntrinsic(name, List.of(uint31, cardinal), cardinal),
         new OperatorIntrinsic(name, List.of(cardinal, cardinal), cardinal),

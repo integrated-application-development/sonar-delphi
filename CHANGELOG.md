@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Type resolution inaccuracies around subtract expressions.
 - The wrong inherited method could be found in `InheritedMethodWithNoCode`, causing false negatives.
 
 ## [1.3.0] - 2024-03-01
