@@ -245,7 +245,7 @@ class OperatorOverloadResolutionTest {
   @CsvFileSource(resources = BINARY_OVERLOADS)
   @ParameterizedTest(name = "{0} - {1} = {3}")
   void testSubtractOperatorOverloadResolution(
-      @AggregateWith(ArithmeticDataAggregator.class) BinaryExpressionData expressionData) {
+      @AggregateWith(SubtractDataAggregator.class) BinaryExpressionData expressionData) {
     assertResolved(expressionData, BinaryOperator.SUBTRACT);
   }
 
