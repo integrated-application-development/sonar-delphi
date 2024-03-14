@@ -22,6 +22,7 @@ import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveP
 import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl.DirectiveBracketType.PAREN;
 
 import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
@@ -46,7 +47,6 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
   private static final ExpressionLexer EXPRESSION_LEXER = new ExpressionLexer();
-  private static final ExpressionParser EXPRESSION_PARSER = new ExpressionParser();
 
   private static final char END_OF_INPUT = '\0';
 
@@ -56,6 +56,7 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
   }
 
   private final Platform platform;
+  private final TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry;
 
   // Parser state
   private String data;
@@ -65,8 +66,10 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
   private DelphiToken token;
   private DirectiveBracketType directiveBracketType;
 
-  public CompilerDirectiveParserImpl(Platform platform) {
+  public CompilerDirectiveParserImpl(
+      Platform platform, TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry) {
     this.platform = platform;
+    this.textBlockLineEndingModeRegistry = textBlockLineEndingModeRegistry;
   }
 
   @Override
@@ -300,10 +303,15 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
 
     try {
       var tokens = EXPRESSION_LEXER.lex(input.toString());
-      return EXPRESSION_PARSER.parse(tokens);
+      return expressionParser().parse(tokens);
     } catch (ExpressionLexerError | ExpressionParserError e) {
       throw new CompilerDirectiveParserError(e, token);
     }
+  }
+
+  private ExpressionParser expressionParser() {
+    int index = token.getIndex();
+    return new ExpressionParser(textBlockLineEndingModeRegistry.getLineEndingMode(index));
   }
 
   private boolean isEndOfDirective(char character) {

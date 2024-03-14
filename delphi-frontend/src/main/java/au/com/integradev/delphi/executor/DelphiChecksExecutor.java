@@ -57,7 +57,8 @@ public class DelphiChecksExecutor implements Executor {
   @Override
   public void execute(Context context, DelphiInputFile delphiFile) {
     Platform platform = delphiProjectHelper.getToolchain().platform;
-    CompilerDirectiveParser compilerDirectiveParser = new CompilerDirectiveParserImpl(platform);
+    CompilerDirectiveParser compilerDirectiveParser =
+        new CompilerDirectiveParserImpl(platform, delphiFile.getTextBlockLineEndingModeRegistry());
     Function<DelphiCheck, DelphiCheckContext> createCheckContext =
         check ->
             new DelphiCheckContextImpl(

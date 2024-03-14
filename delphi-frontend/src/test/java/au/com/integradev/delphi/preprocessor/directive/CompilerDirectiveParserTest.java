@@ -20,6 +20,7 @@ package au.com.integradev.delphi.preprocessor.directive;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
@@ -53,7 +54,7 @@ class CompilerDirectiveParserTest {
 
   @BeforeEach
   void setup() {
-    parser = new CompilerDirectiveParserImpl(Platform.WINDOWS);
+    parser = new CompilerDirectiveParserImpl(Platform.WINDOWS, mock());
   }
 
   @Test

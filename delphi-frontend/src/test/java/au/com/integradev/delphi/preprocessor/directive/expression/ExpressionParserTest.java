@@ -21,6 +21,7 @@ package au.com.integradev.delphi.preprocessor.directive.expression;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expressions.BinaryExpression;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expressions.InvocationExpression;
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 class ExpressionParserTest {
   private static final ExpressionLexer LEXER = new ExpressionLexer();
-  private static final ExpressionParser PARSER = new ExpressionParser();
+  private static final ExpressionParser PARSER = new ExpressionParser(TextBlockLineEndingMode.CRLF);
 
   @Test
   void testRelational() {
@@ -61,6 +62,7 @@ class ExpressionParserTest {
   @Test
   void testLiterals() {
     assertThat(parse("'My string'")).isInstanceOf(LiteralExpression.class);
+    assertThat(parse("'''\nMy\nmultiline\nstring\n'''")).isInstanceOf(LiteralExpression.class);
     assertThat(parse("123")).isInstanceOf(LiteralExpression.class);
     assertThat(parse("123.45")).isInstanceOf(LiteralExpression.class);
   }
