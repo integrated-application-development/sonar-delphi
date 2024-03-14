@@ -43,6 +43,8 @@ import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective.Parame
 import org.sonar.plugins.communitydelphi.api.directive.ResourceDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
+import org.sonar.plugins.communitydelphi.api.directive.TextBlockDirective;
+import org.sonar.plugins.communitydelphi.api.directive.TextBlockDirective.LineEndingKind;
 import org.sonar.plugins.communitydelphi.api.directive.UndefineDirective;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
@@ -86,6 +88,29 @@ class CompilerDirectiveParserTest {
     assertThat(((ResourceDirective) directive).getResourceFile()).isEqualTo("file.res");
     assertThat(((ResourceDirective) directive).getResourceScriptFile()).isNull();
     assertThat(((ResourceDirective) directive).getPredicates()).containsExactly("foo", "bar");
+  }
+
+  @Test
+  void testCreateTextBlockDirective() {
+    CompilerDirective directive = parse("{$TEXTBLOCK NATIVE}");
+    assertThat(directive).isInstanceOf(TextBlockDirective.class);
+    assertThat(((TextBlockDirective) directive).getLineEndingKind())
+        .isEqualTo(LineEndingKind.NATIVE);
+
+    directive = parse("{$TEXTBLOCK CR}");
+    assertThat(directive).isInstanceOf(TextBlockDirective.class);
+    assertThat(((TextBlockDirective) directive).getLineEndingKind()).isEqualTo(LineEndingKind.CR);
+
+    directive = parse("{$TEXTBLOCK LF}");
+    assertThat(directive).isInstanceOf(TextBlockDirective.class);
+    assertThat(((TextBlockDirective) directive).getLineEndingKind()).isEqualTo(LineEndingKind.LF);
+
+    directive = parse("{$TEXTBLOCK CRLF}");
+    assertThat(directive).isInstanceOf(TextBlockDirective.class);
+    assertThat(((TextBlockDirective) directive).getLineEndingKind()).isEqualTo(LineEndingKind.CRLF);
+
+    directive = parse("{$TEXTBLOCK UNKNOWN}");
+    assertThat(directive).isNull();
   }
 
   @Test

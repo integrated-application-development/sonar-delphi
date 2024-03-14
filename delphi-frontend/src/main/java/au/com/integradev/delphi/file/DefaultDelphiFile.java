@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.file;
 
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import java.io.File;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -32,6 +33,7 @@ class DefaultDelphiFile implements DelphiFile {
   private List<DelphiToken> tokens;
   private List<DelphiToken> comments;
   private CompilerSwitchRegistry switchRegistry;
+  private TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry;
   private TypeFactory typeFactory;
 
   DefaultDelphiFile() {
@@ -69,6 +71,11 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
+  public TextBlockLineEndingModeRegistry getTextBlockLineEndingModeRegistry() {
+    return textBlockLineEndingModeRegistry;
+  }
+
+  @Override
   public TypeFactory getTypeFactory() {
     return typeFactory;
   }
@@ -95,6 +102,11 @@ class DefaultDelphiFile implements DelphiFile {
 
   void setCompilerSwitchRegistry(CompilerSwitchRegistry switchRegistry) {
     this.switchRegistry = switchRegistry;
+  }
+
+  void setTextBlockLineEndingModeRegistry(
+      TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry) {
+    this.textBlockLineEndingModeRegistry = textBlockLineEndingModeRegistry;
   }
 
   void setTypeFactory(TypeFactory typeFactory) {

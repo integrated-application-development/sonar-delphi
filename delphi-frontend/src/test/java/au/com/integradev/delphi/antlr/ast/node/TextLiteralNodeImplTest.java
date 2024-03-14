@@ -19,8 +19,15 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
+import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
+import au.com.integradev.delphi.file.DelphiFile;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -35,11 +42,20 @@ class TextLiteralNodeImplTest {
             + "      Baz\n"
             + "      '''";
 
+    TextBlockLineEndingModeRegistry registry = mock();
+    when(registry.getLineEndingMode(anyInt())).thenReturn(TextBlockLineEndingMode.CRLF);
+
+    DelphiFile delphiFile = mock();
+    when(delphiFile.getTextBlockLineEndingModeRegistry()).thenReturn(registry);
+
     TextLiteralNodeImpl node = new TextLiteralNodeImpl(DelphiLexer.TkTextLiteral);
+    node.setParent(new DelphiAstImpl(delphiFile, mock()));
     node.addChild(createNode(DelphiLexer.TkMultilineString, image));
 
     assertThat(node.getImage()).isEqualTo(image);
-    assertThat(node.getValue()).isEqualTo(node.getImageWithoutQuotes()).isEqualTo("Foo\nBar\nBaz");
+    assertThat(node.getValue())
+        .isEqualTo(node.getImageWithoutQuotes())
+        .isEqualTo("Foo\r\nBar\r\nBaz");
     assertThat(node.isMultiline()).isTrue();
   }
 
