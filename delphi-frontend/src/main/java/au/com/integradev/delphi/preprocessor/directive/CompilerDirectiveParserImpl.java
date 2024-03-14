@@ -38,6 +38,8 @@ import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective.Cond
 import org.sonar.plugins.communitydelphi.api.directive.ParameterDirective.ParameterKind;
 import org.sonar.plugins.communitydelphi.api.directive.ResourceDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
+import org.sonar.plugins.communitydelphi.api.directive.TextBlockDirective;
+import org.sonar.plugins.communitydelphi.api.directive.TextBlockDirective.LineEndingKind;
 import org.sonar.plugins.communitydelphi.api.directive.WarnDirective;
 import org.sonar.plugins.communitydelphi.api.directive.WarnDirective.WarnParameterValue;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
@@ -121,6 +123,8 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
           return createResourceDirective();
         case WARN:
           return createWarnDirective();
+        case TEXTBLOCK:
+          return createTextBlockDirective();
         default:
           return new ParameterDirectiveImpl(token, kind);
       }
@@ -198,6 +202,15 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
       return null;
     }
     return new WarnDirectiveImpl(token, identifier, value);
+  }
+
+  private TextBlockDirective createTextBlockDirective() {
+    String parameter = readDirectiveParameter();
+    LineEndingKind lineEndingKind = EnumUtils.getEnumIgnoreCase(LineEndingKind.class, parameter);
+    if (lineEndingKind == null) {
+      return null;
+    }
+    return new TextBlockDirectiveImpl(token, lineEndingKind);
   }
 
   private IfOptDirective createIfOptDirective() {

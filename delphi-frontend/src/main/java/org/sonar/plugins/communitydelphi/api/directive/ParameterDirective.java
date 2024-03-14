@@ -55,7 +55,8 @@ public interface ParameterDirective extends CompilerDirective {
     RESOURCE("resource", 'r'),
     RTTI("rtti"),
     UNDEF("undef"),
-    WARN("warn");
+    WARN("warn"),
+    TEXTBLOCK("textblock");
 
     private final String name;
     private final String shortName;

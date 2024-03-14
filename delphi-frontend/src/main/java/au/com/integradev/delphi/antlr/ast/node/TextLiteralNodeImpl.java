@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.stream.Collectors;
@@ -104,9 +105,24 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     String last = lines.removeLast();
     String indentation = readLeadingWhitespace(last);
 
+    var registry = getAst().getDelphiFile().getTextBlockLineEndingModeRegistry();
+    TextBlockLineEndingMode lineEndingMode = registry.getLineEndingMode(getTokenIndex());
+    String lineEnding;
+
+    switch (lineEndingMode) {
+      case CR:
+        lineEnding = "\r";
+        break;
+      case LF:
+        lineEnding = "\n";
+        break;
+      default:
+        lineEnding = "\r\n";
+    }
+
     return lines.stream()
         .map(line -> StringUtils.removeStart(line, indentation))
-        .collect(Collectors.joining("\n"));
+        .collect(Collectors.joining(lineEnding));
   }
 
   private static String readLeadingWhitespace(String input) {

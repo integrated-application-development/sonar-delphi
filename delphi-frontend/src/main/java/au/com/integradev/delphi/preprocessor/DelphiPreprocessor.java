@@ -54,6 +54,7 @@ import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
+import org.sonar.plugins.communitydelphi.api.directive.TextBlockDirective.LineEndingKind;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -67,6 +68,7 @@ public class DelphiPreprocessor {
   private final Deque<BranchingDirective> parentDirective;
   private final Map<SwitchKind, Integer> currentSwitches;
   private final CompilerSwitchRegistry switchRegistry;
+  private final TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry;
   private final boolean processingIncludeFile;
 
   private DelphiTokenStream tokenStream;
@@ -82,6 +84,10 @@ public class DelphiPreprocessor {
         caseInsensitiveSet(config.getDefinitions()),
         new EnumMap<>(SwitchKind.class),
         new CompilerSwitchRegistry(),
+        new TextBlockLineEndingModeRegistry(
+            platform == Platform.WINDOWS
+                ? TextBlockLineEndingMode.CRLF
+                : TextBlockLineEndingMode.LF),
         0,
         false);
   }
@@ -93,12 +99,14 @@ public class DelphiPreprocessor {
       Set<String> definitions,
       Map<SwitchKind, Integer> currentSwitches,
       CompilerSwitchRegistry switchRegistry,
+      TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry,
       int tokenIndexStart,
       boolean processingIncludeFile) {
     this.lexer = lexer;
     this.config = config;
     this.platform = platform;
     this.switchRegistry = switchRegistry;
+    this.textBlockLineEndingModeRegistry = textBlockLineEndingModeRegistry;
     this.definitions = definitions;
     this.directives = new ArrayList<>();
     this.parentDirective = new ArrayDeque<>();
@@ -239,6 +247,7 @@ public class DelphiPreprocessor {
                 definitions,
                 currentSwitches,
                 switchRegistry,
+                textBlockLineEndingModeRegistry,
                 location.getIndex(),
                 true);
 
@@ -309,12 +318,39 @@ public class DelphiPreprocessor {
     }
   }
 
+  public void handleTextBlock(LineEndingKind lineEndingKind, int tokenIndex) {
+    TextBlockLineEndingMode lineEndingMode;
+    switch (lineEndingKind) {
+      case CR:
+        lineEndingMode = TextBlockLineEndingMode.CR;
+        break;
+      case LF:
+        lineEndingMode = TextBlockLineEndingMode.LF;
+        break;
+      case CRLF:
+        lineEndingMode = TextBlockLineEndingMode.CRLF;
+        break;
+      default:
+        lineEndingMode = nativeLineEnding();
+        break;
+    }
+    textBlockLineEndingModeRegistry.registerLineEndingMode(lineEndingMode, tokenIndex);
+  }
+
+  private TextBlockLineEndingMode nativeLineEnding() {
+    return platform == Platform.WINDOWS ? TextBlockLineEndingMode.CRLF : TextBlockLineEndingMode.LF;
+  }
+
   public DelphiTokenStream getTokenStream() {
     return tokenStream;
   }
 
   public CompilerSwitchRegistry getCompilerSwitchRegistry() {
     return switchRegistry;
+  }
+
+  public TextBlockLineEndingModeRegistry getTextBlockLineEndingModeRegistry() {
+    return textBlockLineEndingModeRegistry;
   }
 
   public TypeFactory getTypeFactory() {

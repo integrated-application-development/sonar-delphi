@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for the `TEXTBLOCK` directive.
+- **API:** `CompilerDirectiveParser` can now return a new `TextBlockDirective` type.
+
 ### Changed
 
 - Performance improvements.

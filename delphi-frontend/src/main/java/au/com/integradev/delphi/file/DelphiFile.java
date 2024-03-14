@@ -30,6 +30,7 @@ import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
@@ -60,6 +61,8 @@ public interface DelphiFile {
   List<DelphiToken> getComments();
 
   CompilerSwitchRegistry getCompilerSwitchRegistry();
+
+  TextBlockLineEndingModeRegistry getTextBlockLineEndingModeRegistry();
 
   TypeFactory getTypeFactory();
 
@@ -143,6 +146,8 @@ public interface DelphiFile {
       delphiFile.setTypeFactory(config.getTypeFactory());
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
+      delphiFile.setTextBlockLineEndingModeRegistry(
+          preprocessor.getTextBlockLineEndingModeRegistry());
       delphiFile.setSourceCodeLines(readLines(sourceFile, fileStream.getEncoding()));
       delphiFile.setTokens(preprocessor.getRawTokens());
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
