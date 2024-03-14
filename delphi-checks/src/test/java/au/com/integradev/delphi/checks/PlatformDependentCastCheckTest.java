@@ -20,13 +20,20 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
-import org.junit.jupiter.api.Test;
+import au.com.integradev.delphi.compiler.CompilerVersion;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PlatformDependentCastCheckTest {
-  @Test
-  void testPointerIntegerCastsShouldAddIssue() {
+  private static final String VERSION_ALEXANDRIA = "VER350";
+  private static final String VERSION_ATHENS = "VER360";
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testPointerIntegerCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -40,10 +47,12 @@ class PlatformDependentCastCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testObjectIntegerCastsShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testObjectIntegerCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -57,10 +66,12 @@ class PlatformDependentCastCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testInterfaceIntegerCastsShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testInterfaceIntegerCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -74,10 +85,12 @@ class PlatformDependentCastCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntIntegerCastsShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntIntegerCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -91,10 +104,12 @@ class PlatformDependentCastCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntPointerCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntPointerCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -108,10 +123,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testNativeIntObjectCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntObjectCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -125,10 +142,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testNativeIntInterfaceCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntInterfaceCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -142,10 +161,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testIntegerLiteralCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerLiteralCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -159,10 +180,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testHexadecimalLiteralCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testHexadecimalLiteralCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -176,10 +199,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testBinaryLiteralCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testBinaryLiteralCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -193,10 +218,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testTObjectStringCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testTObjectStringCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -210,10 +237,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testTObjectRecordCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testTObjectRecordCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
@@ -230,10 +259,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testRecordIntegerCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testRecordIntegerCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
@@ -249,10 +280,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testIntegerStringCastsShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerStringCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -266,10 +299,12 @@ class PlatformDependentCastCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntStringCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntStringCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -283,10 +318,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testIntegerArrayCastsShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerArrayCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -300,10 +337,12 @@ class PlatformDependentCastCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntArrayCastsShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntArrayCastsShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -317,10 +356,12 @@ class PlatformDependentCastCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testStrongAliasCastsShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testStrongAliasCastsShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentCastCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")

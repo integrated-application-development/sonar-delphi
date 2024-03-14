@@ -20,13 +20,20 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
-import org.junit.jupiter.api.Test;
+import au.com.integradev.delphi.compiler.CompilerVersion;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PlatformDependentTruncationCheckTest {
-  @Test
-  void testIntegerToNativeIntAssignmentShouldNotAddIssue() {
+  private static final String VERSION_ALEXANDRIA = "VER350";
+  private static final String VERSION_ATHENS = "VER360";
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerToNativeIntAssignmentShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -39,10 +46,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testInt64ToNativeIntAssignmentShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testInt64ToNativeIntAssignmentShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -55,10 +64,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntToIntegerAssignmentShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToIntegerAssignmentShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -71,10 +82,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntToI64AssignmentShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToI64AssignmentShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -87,10 +100,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testNativeIntToNativeIntAssignmentShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToNativeIntAssignmentShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
@@ -103,10 +118,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testIntegerArgumentToNativeIntParameterShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerArgumentToNativeIntParameterShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("procedure Bar(Nat: NativeInt);")
@@ -119,10 +136,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testInt64ArgumentToNativeIntParameterShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testInt64ArgumentToNativeIntParameterShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("procedure Bar(Nat: NativeInt);")
@@ -135,10 +154,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntArgumentToIntegerParameterShouldAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntArgumentToIntegerParameterShouldAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("procedure Bar(Nat: NativeInt);")
@@ -151,10 +172,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyIssues();
   }
 
-  @Test
-  void testNativeIntArgumentToI64ParameterShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntArgumentToI64ParameterShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("procedure Bar(I64: Int64);")
@@ -167,10 +190,12 @@ class PlatformDependentTruncationCheckTest {
         .verifyNoIssues();
   }
 
-  @Test
-  void testNativeIntArgumentToNativeIntParameterShouldNotAddIssue() {
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntArgumentToNativeIntParameterShouldNotAddIssue(String versionSymbol) {
     CheckVerifier.newVerifier()
         .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("procedure Bar(Nat: NativeInt);")

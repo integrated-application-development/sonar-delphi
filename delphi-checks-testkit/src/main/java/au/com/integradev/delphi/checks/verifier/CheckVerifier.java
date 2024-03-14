@@ -20,6 +20,8 @@ package au.com.integradev.delphi.checks.verifier;
 
 import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import au.com.integradev.delphi.compiler.CompilerVersion;
+import au.com.integradev.delphi.compiler.Toolchain;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 public interface CheckVerifier {
@@ -28,6 +30,10 @@ public interface CheckVerifier {
   }
 
   CheckVerifier withCheck(DelphiCheck check);
+
+  CheckVerifier withCompilerVersion(CompilerVersion compilerVersion);
+
+  CheckVerifier withToolchain(Toolchain toolchain);
 
   CheckVerifier withUnitScopeName(String unitScope);
 
