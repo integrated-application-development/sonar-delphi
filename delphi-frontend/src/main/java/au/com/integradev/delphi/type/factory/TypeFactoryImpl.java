@@ -590,4 +590,8 @@ public class TypeFactoryImpl implements TypeFactory {
         .findFirst()
         .orElseThrow(IllegalStateException::new);
   }
+
+  public CompilerVersion getCompilerVersion() {
+    return compilerVersion;
+  }
 }

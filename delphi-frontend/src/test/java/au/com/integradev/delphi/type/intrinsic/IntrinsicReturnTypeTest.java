@@ -21,9 +21,10 @@ package au.com.integradev.delphi.type.intrinsic;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+import au.com.integradev.delphi.compiler.CompilerVersion;
+import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
-import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -34,23 +35,69 @@ import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class IntrinsicReturnTypeTest {
-  private static final TypeFactory TYPE_FACTORY = TypeFactoryUtils.defaultFactory();
+  private static final TypeFactory TYPE_FACTORY =
+      new TypeFactoryImpl(Toolchain.DCC64, CompilerVersion.fromVersionNumber("35.0"));
+  private static final TypeFactory TYPE_FACTORY_ATHENS =
+      new TypeFactoryImpl(Toolchain.DCC64, CompilerVersion.fromVersionNumber("36.0"));
+
+  @Test
+  void testLength() {
+    Type shortString = TYPE_FACTORY.getIntrinsic(IntrinsicType.SHORTSTRING);
+    Type ansiString = TYPE_FACTORY.getIntrinsic(IntrinsicType.ANSISTRING);
+    Type wideString = TYPE_FACTORY.getIntrinsic(IntrinsicType.WIDESTRING);
+    Type unicodeString = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
+    Type fixedArray =
+        ((TypeFactoryImpl) TYPE_FACTORY).array(null, ansiString, Set.of(ArrayOption.FIXED));
+    Type dynamicArray =
+        ((TypeFactoryImpl) TYPE_FACTORY).array(null, ansiString, Set.of(ArrayOption.DYNAMIC));
+    Type openArray =
+        ((TypeFactoryImpl) TYPE_FACTORY).array(null, ansiString, Set.of(ArrayOption.OPEN));
+
+    var length35 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY);
+    assertThat(length35.getReturnType(List.of(shortString)).is(IntrinsicType.BYTE)).isTrue();
+    assertThat(length35.getReturnType(List.of(ansiString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length35.getReturnType(List.of(wideString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length35.getReturnType(List.of(unicodeString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length35.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length35.getReturnType(List.of(dynamicArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length35.getReturnType(List.of(openArray)).is(IntrinsicType.INTEGER)).isTrue();
+
+    var length36 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY_ATHENS);
+    assertThat(length36.getReturnType(List.of(shortString)).is(IntrinsicType.BYTE)).isTrue();
+    assertThat(length36.getReturnType(List.of(ansiString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length36.getReturnType(List.of(wideString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length36.getReturnType(List.of(unicodeString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length36.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length36.getReturnType(List.of(dynamicArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(length36.getReturnType(List.of(openArray)).is(IntrinsicType.NATIVEINT)).isTrue();
+  }
 
   @Test
   void testHighLow() {
     Type smallInt = TYPE_FACTORY.getIntrinsic(IntrinsicType.SMALLINT);
     Type integer = TYPE_FACTORY.getIntrinsic(IntrinsicType.INTEGER);
+    Type nativeInt = TYPE_FACTORY.getIntrinsic(IntrinsicType.NATIVEINT);
     Type string = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
     Type array = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.DYNAMIC));
+    Type openArray = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.OPEN));
     Type classType = mock(StructType.class);
     Type classReference = TYPE_FACTORY.classOf("Foo", classType);
 
-    var high = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY);
-    assertThat(high.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
-    assertThat(high.getReturnType(List.of(integer)).is(integer)).isTrue();
-    assertThat(high.getReturnType(List.of(string)).is(integer)).isTrue();
-    assertThat(high.getReturnType(List.of(array)).is(integer)).isTrue();
-    assertThat(high.getReturnType(List.of(classReference))).isSameAs(classType);
+    var high35 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY);
+    assertThat(high35.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
+    assertThat(high35.getReturnType(List.of(integer)).is(integer)).isTrue();
+    assertThat(high35.getReturnType(List.of(string)).is(integer)).isTrue();
+    assertThat(high35.getReturnType(List.of(array)).is(integer)).isTrue();
+    assertThat(high35.getReturnType(List.of(openArray)).is(integer)).isTrue();
+    assertThat(high35.getReturnType(List.of(classReference))).isSameAs(classType);
+
+    var high36 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY_ATHENS);
+    assertThat(high36.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
+    assertThat(high36.getReturnType(List.of(integer)).is(integer)).isTrue();
+    assertThat(high36.getReturnType(List.of(string)).is(integer)).isTrue();
+    assertThat(high36.getReturnType(List.of(array)).is(integer)).isTrue();
+    assertThat(high36.getReturnType(List.of(openArray)).is(nativeInt)).isTrue();
+    assertThat(high36.getReturnType(List.of(classReference))).isSameAs(classType);
   }
 
   @Test

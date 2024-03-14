@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `NativeInt` and `NativeUInt` are now treated as weak aliases in Delphi 12+.
+- The length of open arrays is now modeled as `NativeInt` in Delphi 12+.
 - Performance improvements.
 
 ### Fixed
