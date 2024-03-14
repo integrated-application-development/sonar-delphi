@@ -279,7 +279,9 @@ public class CheckVerifierImpl implements CheckVerifier {
     var sensorContext = SensorContextTester.create(FileUtils.getTempDirectory());
     sensorContext.settings().setProperty(DelphiProperties.TEST_TYPE_KEY, "Test.TTestSuite");
 
-    var compilerDirectiveParser = new CompilerDirectiveParserImpl(Platform.WINDOWS);
+    var compilerDirectiveParser =
+        new CompilerDirectiveParserImpl(
+            Platform.WINDOWS, file.getTextBlockLineEndingModeRegistry());
 
     var checkRegistrar = mock(MasterCheckRegistrar.class);
     when(checkRegistrar.getRuleKey(check))

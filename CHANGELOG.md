@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for multiline string literals within compiler directives.
 - Support for the `TEXTBLOCK` directive.
 - **API:** `CompilerDirectiveParser` can now return a new `TextBlockDirective` type.
 - **API:** `CheckVerifier::withCompilerVersion` method.

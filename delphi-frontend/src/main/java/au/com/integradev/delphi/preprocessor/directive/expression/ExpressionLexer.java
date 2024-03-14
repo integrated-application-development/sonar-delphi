@@ -87,8 +87,12 @@ public class ExpressionLexer {
   }
 
   private char peekChar() {
-    if (position < data.length()) {
-      return data.charAt(position);
+    return peekChar(0);
+  }
+
+  private char peekChar(int offset) {
+    if (position + offset < data.length()) {
+      return data.charAt(position + offset);
     }
     return END_OF_INPUT;
   }
@@ -123,7 +127,7 @@ public class ExpressionLexer {
       } else if (SYNTAX_CHARACTERS.containsKey(character)) {
         return readSyntaxToken();
       } else if (character == '\'') {
-        return readSingleQuoteString();
+        return readString();
       } else {
         throw new ExpressionLexerError("Unexpected character: '" + character + "'");
       }
@@ -182,23 +186,81 @@ public class ExpressionLexer {
     return new Token(type, text);
   }
 
-  private Token readSingleQuoteString() {
-    getChar();
+  private Token readString() {
+    Token result = readMultilineString();
+    if (result == null) {
+      result = readSingleLineString();
+    }
+    return result;
+  }
+
+  private Token readSingleLineString() {
     StringBuilder value = new StringBuilder();
+    value.append(getChar());
+
     char character;
 
     while ((character = getChar()) != END_OF_INPUT) {
+      value.append(character);
       if (character == '\'') {
-        if (peekChar() != '\'') {
+        if (peekChar() == '\'') {
+          value.append(getChar());
+        } else {
           break;
         }
-        getChar();
-      } else {
-        value.append(character);
       }
     }
 
     return new Token(TokenType.STRING, value.toString());
+  }
+
+  private Token readMultilineString() {
+    int lookahead = lookaheadMultilineString();
+    if (lookahead == 0) {
+      return null;
+    }
+
+    String value = data.substring(position, position + lookahead);
+    position += lookahead;
+
+    return new Token(TokenType.MULTILINE_STRING, value);
+  }
+
+  private int lookaheadMultilineString() {
+    int startQuotes = lookaheadSingleQuotes(0);
+    if (startQuotes >= 3 && (startQuotes % 2 == 1) && isNewLine(peekChar(startQuotes))) {
+      int i = startQuotes;
+      while (true) {
+        switch (peekChar(++i)) {
+          case '\'':
+            int quotes = Math.min(startQuotes, lookaheadSingleQuotes(i));
+            i += quotes;
+            if (quotes == startQuotes) {
+              return i;
+            }
+            break;
+
+          case END_OF_INPUT:
+            return 0;
+
+          default:
+            // do nothing
+        }
+      }
+    }
+    return 0;
+  }
+
+  private int lookaheadSingleQuotes(int i) {
+    int result = 0;
+    while (peekChar(i++) == '\'') {
+      ++result;
+    }
+    return result;
+  }
+
+  private boolean isNewLine(int c) {
+    return c == '\r' || c == '\n';
   }
 
   private static boolean isHexDigit(char character) {

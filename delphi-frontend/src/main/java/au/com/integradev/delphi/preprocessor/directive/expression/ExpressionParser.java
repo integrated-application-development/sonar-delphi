@@ -39,14 +39,19 @@ import static au.com.integradev.delphi.preprocessor.directive.expression.Token.T
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.XOR;
 import static java.util.Objects.requireNonNullElse;
 
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 
 public class ExpressionParser {
   public static class ExpressionParserError extends RuntimeException {
@@ -70,9 +75,15 @@ public class ExpressionParser {
   private static final ImmutableSet<TokenType> UNARY_OPERATORS =
       Sets.immutableEnumSet(PLUS, MINUS, NOT);
 
+  private final TextBlockLineEndingMode textBlockLineEndingMode;
+
   // Parser state
   private List<Token> tokens;
   private int position;
+
+  public ExpressionParser(TextBlockLineEndingMode textBlockLineEndingMode) {
+    this.textBlockLineEndingMode = textBlockLineEndingMode;
+  }
 
   public Expression parse(List<Token> tokens) {
     this.tokens = tokens;
@@ -169,6 +180,7 @@ public class ExpressionParser {
     Token token = peekToken();
     switch (token.getType()) {
       case STRING:
+      case MULTILINE_STRING:
       case INTEGER:
       case REAL:
         return parseLiteral();
@@ -191,7 +203,64 @@ public class ExpressionParser {
 
   private Expression parseLiteral() {
     Token token = getToken();
-    return Expressions.literal(token.getType(), token.getText());
+
+    String text;
+    switch (token.getType()) {
+      case STRING:
+        text = evaluateString(token.getText());
+        break;
+      case MULTILINE_STRING:
+        text = evaluateMultilineString(token.getText(), textBlockLineEndingMode);
+        break;
+      default:
+        text = token.getText();
+    }
+
+    return Expressions.literal(token.getType(), text);
+  }
+
+  private static String evaluateString(String text) {
+    text = text.substring(1, text.length() - 1);
+    text = text.replace("''", "'");
+    return text;
+  }
+
+  private String evaluateMultilineString(String text, TextBlockLineEndingMode lineEndingMode) {
+    Deque<String> lines = text.lines().collect(Collectors.toCollection(ArrayDeque<String>::new));
+
+    lines.removeFirst();
+
+    String last = lines.removeLast();
+    String indentation = readLeadingWhitespace(last);
+
+    String lineEnding;
+    switch (lineEndingMode) {
+      case CR:
+        lineEnding = "\r";
+        break;
+      case LF:
+        lineEnding = "\n";
+        break;
+      default:
+        lineEnding = "\r\n";
+    }
+
+    return lines.stream()
+        .map(line -> StringUtils.removeStart(line, indentation))
+        .collect(Collectors.joining(lineEnding));
+  }
+
+  private static String readLeadingWhitespace(String input) {
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < input.length(); ++i) {
+      char c = input.charAt(i);
+      if (c <= 0x20 || c == 0x3000) {
+        result.append(c);
+      } else {
+        break;
+      }
+    }
+    return result.toString();
   }
 
   private Expression parseIdentifier() {

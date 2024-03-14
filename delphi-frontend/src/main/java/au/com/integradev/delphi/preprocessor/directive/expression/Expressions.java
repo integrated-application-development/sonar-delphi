@@ -186,6 +186,7 @@ public final class Expressions {
         case REAL:
           return createReal(doubleFromTextWithDigitSeparators(text));
         case STRING:
+        case MULTILINE_STRING:
           return createString(text);
         default:
           throw new AssertionError("Unhandled literal expression type: " + type.name());

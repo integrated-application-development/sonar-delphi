@@ -51,7 +51,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
-import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.directive.TextBlockDirective.LineEndingKind;
@@ -152,7 +151,7 @@ public class DelphiPreprocessor {
     tokenIndex++;
 
     if (token.getType() == DelphiLexer.TkCompilerDirective) {
-      CompilerDirectiveParser parser = new CompilerDirectiveParserImpl(platform);
+      var parser = new CompilerDirectiveParserImpl(platform, getTextBlockLineEndingModeRegistry());
       DelphiToken directiveToken = new DelphiTokenImpl(token);
       parser.parse(directiveToken).ifPresent(this::processDirective);
     } else if (!parentDirective.isEmpty()) {

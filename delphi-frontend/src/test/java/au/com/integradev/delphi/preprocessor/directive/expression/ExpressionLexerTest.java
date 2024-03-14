@@ -93,7 +93,9 @@ class ExpressionLexerTest {
     public Stream<Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
           Arguments.of("'My string'", TokenType.STRING),
-          Arguments.of("'Escaped '' single-quotes'", TokenType.STRING));
+          Arguments.of("'Escaped '' single-quotes'", TokenType.STRING),
+          Arguments.of("'''\nMy\nmultiline\nstring\n'''", TokenType.MULTILINE_STRING),
+          Arguments.of("'''''\nMy\nmultiline\nstring\n'''''", TokenType.MULTILINE_STRING));
     }
   }
 

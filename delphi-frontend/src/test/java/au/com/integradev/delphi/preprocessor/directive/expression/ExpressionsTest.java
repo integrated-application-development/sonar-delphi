@@ -29,6 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
 import au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
@@ -91,12 +92,23 @@ class ExpressionsTest {
     }
   }
 
+  static class StringArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("'My string'", "My string"),
+          Arguments.of("'Escaped '' single-quotes'", "Escaped ' single-quotes"),
+          Arguments.of("'''\nMy\nmultiline\nstring\n'''", "My\r\nmultiline\r\nstring"),
+          Arguments.of("'''''\nMy\nmultiline\nstring\n'''''", "My\r\nmultiline\r\nstring"));
+    }
+  }
+
   static class StringConcatenationArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
-          Arguments.of("'abc' + '123", "abc123"),
-          Arguments.of("'abc' + '", "abc"),
+          Arguments.of("'abc' + '123'", "abc123"),
+          Arguments.of("'abc' + ''", "abc"),
           Arguments.of("'abc' + 123", UNKNOWN));
     }
   }
@@ -285,6 +297,7 @@ class ExpressionsTest {
   @ArgumentsSource(NumericExpressionArgumentsProvider.class)
   @ArgumentsSource(IntegerMathArgumentsProvider.class)
   @ArgumentsSource(RealMathArgumentsProvider.class)
+  @ArgumentsSource(StringArgumentsProvider.class)
   @ArgumentsSource(StringConcatenationArgumentsProvider.class)
   @ArgumentsSource(EqualityArgumentsProvider.class)
   @ArgumentsSource(ComparisonArgumentsProvider.class)
@@ -325,7 +338,7 @@ class ExpressionsTest {
     ExpressionLexer lexer = new ExpressionLexer();
     List<Token> tokens = lexer.lex(data);
 
-    ExpressionParser parser = new ExpressionParser();
+    ExpressionParser parser = new ExpressionParser(TextBlockLineEndingMode.CRLF);
     Expression expression = parser.parse(tokens);
 
     ExpressionValue value = expression.evaluate(preprocessor);

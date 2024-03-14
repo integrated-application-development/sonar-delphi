@@ -25,6 +25,7 @@ public class Token {
     REAL,
     IDENTIFIER,
     STRING,
+    MULTILINE_STRING,
     EQUALS,
     NOT_EQUALS,
     LESS_THAN,
