@@ -11,9 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for the `TEXTBLOCK` directive.
 - **API:** `CompilerDirectiveParser` can now return a new `TextBlockDirective` type.
+- **API:** `CheckVerifier::withCompilerVersion` method.
+- **API:** `CheckVerifier::withToolchain` method.
 
 ### Changed
 
+- `NativeInt` and `NativeUInt` are now treated as weak aliases in Delphi 12+.
 - Performance improvements.
 
 ### Fixed

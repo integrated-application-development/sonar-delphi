@@ -27,7 +27,9 @@ import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
+import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
@@ -80,6 +82,8 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   private DelphiCheck check;
   private DelphiTestFile testFile;
+  private CompilerVersion compilerVersion = DelphiProperties.COMPILER_VERSION_DEFAULT;
+  private Toolchain toolchain = DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT;
   private final Set<String> unitScopeNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
   private final Map<String, String> unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   private final List<DelphiTestUnitBuilder> searchPathUnits = new ArrayList<>();
@@ -89,6 +93,18 @@ public class CheckVerifierImpl implements CheckVerifier {
   public CheckVerifier withCheck(DelphiCheck check) {
     requireUnassigned(this.check, "check");
     this.check = check;
+    return this;
+  }
+
+  @Override
+  public CheckVerifier withCompilerVersion(CompilerVersion compilerVersion) {
+    this.compilerVersion = compilerVersion;
+    return this;
+  }
+
+  @Override
+  public CheckVerifier withToolchain(Toolchain toolchain) {
+    this.toolchain = toolchain;
     return this;
   }
 
@@ -248,10 +264,7 @@ public class CheckVerifierImpl implements CheckVerifier {
     SymbolTable symbolTable =
         SymbolTable.builder()
             .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
-            .typeFactory(
-                new TypeFactoryImpl(
-                    DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT,
-                    DelphiProperties.COMPILER_VERSION_DEFAULT))
+            .typeFactory(new TypeFactoryImpl(toolchain, compilerVersion))
             .standardLibraryPath(standardLibraryPath)
             .sourceFiles(List.of(file.getSourceCodeFile().toPath()))
             .unitAliases(unitAliases)

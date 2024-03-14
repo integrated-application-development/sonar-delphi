@@ -25,12 +25,14 @@ import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class TypeFactoryTest {
@@ -40,6 +42,8 @@ class TypeFactoryTest {
   private static final String VERSION_2009 = "VER200";
   private static final String VERSION_XE7 = "VER280";
   private static final String VERSION_XE8 = "VER290";
+  private static final String VERSION_ALEXANDRIA = "VER350";
+  private static final String VERSION_ATHENS = "VER360";
 
   static class RealSizeArgumentsProvider implements ArgumentsProvider {
     @Override
@@ -118,8 +122,7 @@ class TypeFactoryTest {
   @ParameterizedTest(name = "Real should be {1} bytes in {0}")
   @ArgumentsSource(RealSizeArgumentsProvider.class)
   void testSizeOfReal(String versionSymbol, int size) {
-    TypeFactory typeFactory =
-        new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
+    TypeFactory typeFactory = typeFactory(Toolchain.DCC32, versionSymbol);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.REAL).size()).isEqualTo(size);
   }
 
@@ -134,8 +137,7 @@ class TypeFactoryTest {
   @ParameterizedTest(name = "LongInt and LongWord should be {2} bytes on {0} in {1}")
   @ArgumentsSource(LongSizeArgumentsProvider.class)
   void testSizeOfLongIntegers(Toolchain toolchain, String versionSymbol, int size) {
-    TypeFactory typeFactory =
-        new TypeFactoryImpl(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
+    TypeFactory typeFactory = typeFactory(toolchain, versionSymbol);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.LONGINT).size()).isEqualTo(size);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.LONGWORD).size()).isEqualTo(size);
   }
@@ -143,8 +145,7 @@ class TypeFactoryTest {
   @ParameterizedTest(name = "NativeInt and NativeUInt should be {2} bytes on {0} in {1}")
   @ArgumentsSource(NativeSizeArgumentsProvider.class)
   void testSizeOfNativeIntegers(Toolchain toolchain, String versionSymbol, int size) {
-    TypeFactory typeFactory =
-        new TypeFactoryImpl(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
+    TypeFactory typeFactory = typeFactory(toolchain, versionSymbol);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.NATIVEINT).size()).isEqualTo(size);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT).size()).isEqualTo(size);
   }
@@ -152,24 +153,65 @@ class TypeFactoryTest {
   @ParameterizedTest(name = "Pointers should be {1} bytes on {0}")
   @ArgumentsSource(PointerSizeArgumentsProvider.class)
   void testSizeOfPointers(Toolchain toolchain, int size) {
-    TypeFactory typeFactory =
-        new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
+    TypeFactory typeFactory = typeFactory(toolchain, VERSION_ALEXANDRIA);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.POINTER).size()).isEqualTo(size);
   }
 
   @ParameterizedTest(name = "String should be \"{1}\" in {0}")
   @ArgumentsSource(StringTypeArgumentsProvider.class)
   void testTypeOfString(String versionSymbol, String signature) {
-    TypeFactory typeFactory =
-        new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
+    TypeFactory typeFactory = typeFactory(Toolchain.DCC32, versionSymbol);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.STRING).getImage()).isEqualTo(signature);
   }
 
   @ParameterizedTest(name = "Char should be \"{1}\" in {0}")
   @ArgumentsSource(CharTypeArgumentsProvider.class)
   void testTypeOfChar(String versionSymbol, String signature) {
-    TypeFactory typeFactory =
-        new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionSymbol(versionSymbol));
+    TypeFactory typeFactory = typeFactory(Toolchain.DCC32, versionSymbol);
     assertThat(typeFactory.getIntrinsic(IntrinsicType.CHAR).getImage()).isEqualTo(signature);
+  }
+
+  @Test
+  void testNativeIntegersAreNotWeakAliasesOnAlexandria() {
+    TypeFactory typeFactory = typeFactory(Toolchain.DCC32, VERSION_ALEXANDRIA);
+    Type nativeInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    Type nativeUInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT);
+
+    assertThat(nativeInt.isWeakAlias()).isFalse();
+    assertThat(nativeUInt.isWeakAlias()).isFalse();
+
+    typeFactory = typeFactory(Toolchain.DCC64, VERSION_ALEXANDRIA);
+    nativeInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    nativeUInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT);
+
+    assertThat(nativeInt.isWeakAlias()).isFalse();
+    assertThat(nativeUInt.isWeakAlias()).isFalse();
+  }
+
+  @Test
+  void testNativeIntegersAreWeakAliasesOnAthens() {
+    TypeFactory typeFactory = typeFactory(Toolchain.DCC32, VERSION_ATHENS);
+    Type nativeInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    Type nativeUInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT);
+
+    assertThat(nativeInt.isWeakAlias()).isTrue();
+    assertThat(nativeInt.is(IntrinsicType.INTEGER)).isTrue();
+
+    assertThat(nativeUInt.isWeakAlias()).isTrue();
+    assertThat(nativeUInt.is(IntrinsicType.CARDINAL)).isTrue();
+
+    typeFactory = typeFactory(Toolchain.DCC64, VERSION_ATHENS);
+    nativeInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    nativeUInt = typeFactory.getIntrinsic(IntrinsicType.NATIVEUINT);
+
+    assertThat(nativeInt.isWeakAlias()).isTrue();
+    assertThat(nativeInt.is(IntrinsicType.INT64)).isTrue();
+
+    assertThat(nativeUInt.isWeakAlias()).isTrue();
+    assertThat(nativeUInt.is(IntrinsicType.UINT64)).isTrue();
+  }
+
+  private static TypeFactory typeFactory(Toolchain toolchain, String versionSymbol) {
+    return new TypeFactoryImpl(toolchain, CompilerVersion.fromVersionSymbol(versionSymbol));
   }
 }

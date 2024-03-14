@@ -73,6 +73,7 @@ public class TypeFactoryImpl implements TypeFactory {
   private static final CompilerVersion VERSION_4 = CompilerVersion.fromVersionSymbol("VER120");
   private static final CompilerVersion VERSION_2009 = CompilerVersion.fromVersionNumber("20.0");
   private static final CompilerVersion VERSION_XE8 = CompilerVersion.fromVersionNumber("29.0");
+  private static final CompilerVersion VERSION_ATHENS = CompilerVersion.fromVersionNumber("36.0");
   private static final AtomicLong ANONYMOUS_STRUCT_COUNTER = new AtomicLong();
 
   private final Toolchain toolchain;
@@ -120,6 +121,11 @@ public class TypeFactoryImpl implements TypeFactory {
     return compilerVersion.compareTo(VERSION_XE8) >= 0
         && toolchain.architecture == Architecture.X64
         && toolchain.platform != Platform.WINDOWS;
+  }
+
+  private boolean isNativeIntWeakAlias() {
+    // See: https://docwiki.embarcadero.com/Libraries/Athens/en/System.NativeInt
+    return compilerVersion.compareTo(VERSION_ATHENS) >= 0;
   }
 
   private boolean isStringUnicode() {
@@ -204,8 +210,8 @@ public class TypeFactoryImpl implements TypeFactory {
     intrinsicTypes.put(intrinsic, new VariantTypeImpl(intrinsic.fullyQualifiedName(), size, ole));
   }
 
-  private void addWeakAlias(IntrinsicType alias, IntrinsicType concrete) {
-    intrinsicTypes.put(alias, getIntrinsic(concrete));
+  private void addWeakAlias(IntrinsicType intrinsic, IntrinsicType aliased) {
+    intrinsicTypes.put(intrinsic, weakAlias(intrinsic.fullyQualifiedName(), getIntrinsic(aliased)));
   }
 
   private void createIntrinsicTypes() {
@@ -244,8 +250,18 @@ public class TypeFactoryImpl implements TypeFactory {
       addWeakAlias(IntrinsicType.LONGWORD, IntrinsicType.CARDINAL);
     }
 
-    addInteger(IntrinsicType.NATIVEINT, nativeIntegerSize(), true);
-    addInteger(IntrinsicType.NATIVEUINT, nativeIntegerSize(), false);
+    if (isNativeIntWeakAlias()) {
+      if (toolchain.architecture == Architecture.X64) {
+        addWeakAlias(IntrinsicType.NATIVEINT, IntrinsicType.INT64);
+        addWeakAlias(IntrinsicType.NATIVEUINT, IntrinsicType.UINT64);
+      } else {
+        addWeakAlias(IntrinsicType.NATIVEINT, IntrinsicType.INTEGER);
+        addWeakAlias(IntrinsicType.NATIVEUINT, IntrinsicType.CARDINAL);
+      }
+    } else {
+      addInteger(IntrinsicType.NATIVEINT, nativeIntegerSize(), true);
+      addInteger(IntrinsicType.NATIVEUINT, nativeIntegerSize(), false);
+    }
 
     addChar(IntrinsicType.ANSICHAR, 1);
     addChar(IntrinsicType.WIDECHAR, 2);

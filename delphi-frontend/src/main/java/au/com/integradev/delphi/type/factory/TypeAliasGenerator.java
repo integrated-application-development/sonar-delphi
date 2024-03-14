@@ -22,10 +22,12 @@ import static net.bytebuddy.description.type.TypeDescription.Generic.Builder.par
 import static net.bytebuddy.implementation.MethodCall.invoke;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
+import com.google.common.base.Suppliers;
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.dynamic.DynamicType;
@@ -78,16 +80,13 @@ final class TypeAliasGenerator {
           UnresolvedType.class,
           UnknownType.class);
 
-  private final Map<Class<? extends Type>, Class<? extends AliasType>> cache;
-
-  public TypeAliasGenerator() {
-    this.cache = new HashMap<>();
-  }
+  private static final Supplier<Map<Class<? extends Type>, Class<? extends AliasType>>> cache =
+      Suppliers.memoize(TypeAliasGenerator::generateCache);
 
   public AliasType generate(String aliasImage, Type aliased, boolean strong) {
     for (Class<? extends Type> typeInterface : TYPE_INTERFACES) {
       if (typeInterface.isAssignableFrom(aliased.getClass())) {
-        var clazz = cache.computeIfAbsent(typeInterface, TypeAliasGenerator::generateAliasClass);
+        var clazz = cache.get().get(typeInterface);
         try {
           Constructor<? extends AliasType> constructor =
               clazz.getDeclaredConstructor(String.class, typeInterface, boolean.class);
@@ -98,6 +97,13 @@ final class TypeAliasGenerator {
       }
     }
     throw new AssertionError("Unhandled class could not be aliased: " + aliased.getClass());
+  }
+
+  private static Map<Class<? extends Type>, Class<? extends AliasType>> generateCache() {
+    return TYPE_INTERFACES.stream()
+        .collect(
+            Collectors.toUnmodifiableMap(
+                interfaceType -> interfaceType, TypeAliasGenerator::generateAliasClass));
   }
 
   @SuppressWarnings("unchecked")
