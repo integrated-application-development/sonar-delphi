@@ -212,10 +212,10 @@ public final class IntrinsicsInjector {
     routine("Insert").param(LIKE_DYNAMIC_ARRAY).varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER));
     routine("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
     routine("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
-    routine("Length").param(type(SHORTSTRING)).returns(type(BYTE));
-    routine("Length").param(type(ANSISTRING)).returns(type(INTEGER));
-    routine("Length").param(type(UNICODESTRING)).returns(type(INTEGER));
-    routine("Length").param(ANY_ARRAY).returns(type(INTEGER));
+    routine("Length").param(type(SHORTSTRING)).returns(IntrinsicReturnType.length(typeFactory));
+    routine("Length").param(type(ANSISTRING)).returns(IntrinsicReturnType.length(typeFactory));
+    routine("Length").param(type(UNICODESTRING)).returns(IntrinsicReturnType.length(typeFactory));
+    routine("Length").param(ANY_ARRAY).returns(IntrinsicReturnType.length(typeFactory));
     routine("Lo").param(type(INTEGER)).returns(type(BYTE));
     routine("Low")
         .varParam(TypeFactory.untypedType())
