@@ -265,7 +265,7 @@ library                      : libraryHead usesFileClause? programBody '.'
                              ;
 libraryHead                  : LIBRARY<LibraryDeclarationNodeImpl>^ qualifiedNameDeclaration (portabilityDirective!)* ';'!
                              ;
-package_                     : packageHead requiresClause? containsClause END '.'
+package_                     : packageHead requiresClause? containsClause? attributeList* END '.'
                              ;
 packageHead                  : PACKAGE<PackageDeclarationNodeImpl>^ qualifiedNameDeclaration ';'!
                              ;
@@ -327,12 +327,14 @@ declSection                  : labelDeclSection
                              | varSection
                              | routineImplementation
                              | exportsSection
+                             | attributeList
                              ;
 interfaceDecl                : constSection
                              | typeSection
                              | varSection
                              | exportsSection
                              | routineInterface
+                             | attributeList
                              ;
 labelDeclSection             : LABEL (label (','!)?)+ ';'
                              ;
@@ -687,8 +689,8 @@ attributeList                : attributeGroup+
 attributeGroup               : lbrack (attribute ','?)+ rbrack
                              -> ^(TkAttributeGroup<AttributeGroupNodeImpl> attribute+)
                              ;
-attribute                    : nameReference argumentList?
-                             -> ^(TkAttribute<AttributeNodeImpl> nameReference argumentList?)
+attribute                    : (ASSEMBLY ':')? nameReference argumentList? (':' nameReference argumentList?)*
+                             -> ^(TkAttribute<AttributeNodeImpl> ASSEMBLY? nameReference argumentList? (':' nameReference argumentList?)*)
                              ;
 
 //----------------------------------------------------------------------------
@@ -979,7 +981,7 @@ dispIDDirective              : DISPID expression
 ident                        : TkIdentifier
                              | keywordsUsedAsNames -> ^({changeTokenType(TkIdentifier)})
                              ;
-keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | AT | AUTOMATED | CDECL)
+keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | CDECL)
                              | (CONTAINS | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
                              | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
@@ -987,7 +989,7 @@ keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | AT | A
                              | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
                              | (VARARGS | VIRTUAL | WRITE | WRITEONLY)
                              ;
-keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS | ASM | ASSEMBLER)
+keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY)
                              | (AT | AUTOMATED | BEGIN | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS| DEFAULT)
                              | (DELAYED | DEPRECATED | DESTRUCTOR | DISPID | DISPINTERFACE | DIV | DO | DOWNTO | DYNAMIC)
                              | (ELSE | END | EXCEPT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL)
@@ -1052,6 +1054,7 @@ ARRAY             : A R R A Y                   ;
 AS                : A S                         ;
 ASM               : A S M { asmMode = true; }   ;
 ASSEMBLER         : A S S E M B L E R           ;
+ASSEMBLY          : A S S E M B L Y             ;
 AT                : A T                         ;
 AUTOMATED         : A U T O M A T E D           ;
 BEGIN             : B E G I N                   ;

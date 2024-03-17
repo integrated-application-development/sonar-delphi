@@ -12,12 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for multiline string literals within compiler directives.
 - Support for the `TEXTBLOCK` directive.
 - Support for named arguments.
+- Support for `assembly` attributes.
 - **API:** `CompilerDirectiveParser` can now return a new `TextBlockDirective` type.
 - **API:** `CheckVerifier::withCompilerVersion` method.
 - **API:** `CheckVerifier::withToolchain` method.
 - **API:** `DelphiTokenType.ARGUMENT` token type.
+- **API:** `DelphiTokenType.ASSEMBLY` token type.
 - **API:** `ArgumentNode` node type.
 - **API:** `ArgumentListNode::getArgumentNodes` method.
+- **API:** `AttributeNode::isAssembly` method.
 
 ### Changed
 

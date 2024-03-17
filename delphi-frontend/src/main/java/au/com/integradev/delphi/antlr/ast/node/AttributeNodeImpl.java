@@ -23,8 +23,10 @@ import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class AttributeNodeImpl extends DelphiNodeImpl implements AttributeNode {
   public AttributeNodeImpl(Token token) {
@@ -36,8 +38,13 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
   }
 
   @Override
+  public boolean isAssembly() {
+    return getChild(0).getTokenType() == DelphiTokenType.ASSEMBLY;
+  }
+
+  @Override
   public NameReferenceNode getNameReference() {
-    return (NameReferenceNode) getChild(0);
+    return (NameReferenceNode) getChild(isAssembly() ? 1 : 0);
   }
 
   @Override
@@ -56,7 +63,11 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
 
   @Override
   public ArgumentListNode getArgumentList() {
-    return (ArgumentListNode) getChild(1);
+    DelphiNode node = getChild(isAssembly() ? 2 : 1);
+    if (node instanceof ArgumentListNode) {
+      return (ArgumentListNode) node;
+    }
+    return null;
   }
 
   @Override

@@ -1,0 +1,12 @@
+package AttributesPackage;
+
+requires
+  Foo,
+  Bar;
+
+contains
+  AmpersandNumericLiterals in 'AmpersandNumericLiterals.pas';
+
+[assembly: xyz]
+
+end.
