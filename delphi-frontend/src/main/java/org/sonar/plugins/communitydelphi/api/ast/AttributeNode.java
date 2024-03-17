@@ -22,6 +22,16 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 
 public interface AttributeNode extends DelphiNode {
+
+  /**
+   * Returns whether this is an {@code assembly} attribute.
+   *
+   * @return true if this is an {@code assembly} attribute
+   * @see <a href="https://learn.microsoft.com/en-us/dotnet/standard/assembly/set-attributes">Set
+   *     assembly attributes in code</a>
+   */
+  boolean isAssembly();
+
   NameReferenceNode getNameReference();
 
   @Nullable

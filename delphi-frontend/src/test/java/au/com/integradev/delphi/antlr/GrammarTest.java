@@ -86,6 +86,26 @@ class GrammarTest {
   }
 
   @Test
+  void testAttributesUnit() {
+    assertParsed("AttributesUnit.pas");
+  }
+
+  @Test
+  void testAttributesProgram() {
+    assertParsed("AttributesProgram.dpr");
+  }
+
+  @Test
+  void testAttributesLibrary() {
+    assertParsed("AttributesLibrary.dpr");
+  }
+
+  @Test
+  void testAttributesPackage() {
+    assertParsed("AttributesPackage.dpk");
+  }
+
+  @Test
   void testParseMultipleAttributes() {
     assertParsed("MultipleAttributes.pas");
   }
