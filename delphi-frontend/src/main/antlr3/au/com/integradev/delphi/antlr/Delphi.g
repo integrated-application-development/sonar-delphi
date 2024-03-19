@@ -749,7 +749,7 @@ expressionOrAnonymousMethod  : anonymousMethod
                              | expression
                              ;
 exprOrRangeOrAnonMethod      : anonymousMethod
-                             | expression ('..'<RangeExpressionNodeImpl>^ expression)?
+                             | expressionOrRange
                              ;
 expressionList               : (expression (','!)?)+
                              ;
