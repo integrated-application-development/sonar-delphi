@@ -23,7 +23,6 @@
 package au.com.integradev.delphi.utils;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,14 +78,6 @@ public final class DelphiUtils {
     }
 
     return file;
-  }
-
-  public static String uriToAbsolutePath(URI uri) {
-    String path = uri.getPath();
-    if (":".equals(path.substring(2, 3))) {
-      path = path.substring(1);
-    }
-    return path;
   }
 
   public static List<Path> inputFilesToPaths(Iterable<InputFile> inputFiles) {

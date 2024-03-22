@@ -68,7 +68,7 @@ public interface DelphiFile {
 
     static DelphiInputFile from(InputFile inputFile, DelphiFileConfig config) {
       DefaultDelphiInputFile delphiFile = new DefaultDelphiInputFile();
-      File sourceFile = new File(DelphiUtils.uriToAbsolutePath(inputFile.uri()));
+      File sourceFile = DelphiUtils.inputFileToPath(inputFile).toFile();
       setupFile(delphiFile, sourceFile, useInputFileEncoding(inputFile, config));
       delphiFile.setInputFile(inputFile);
       return delphiFile;

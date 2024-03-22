@@ -1411,7 +1411,7 @@ class DelphiSymbolTableExecutorTest {
     when(fileConfig.getDefinitions()).thenReturn(Collections.emptySet());
 
     mainFile = DelphiInputFile.from(inputFile, fileConfig);
-    List<Path> sourceFiles = List.of(Path.of(mainFile.getInputFile().uri()));
+    List<Path> sourceFiles = List.of(DelphiUtils.inputFileToPath(inputFile));
     SearchPath searchPath =
         SearchPath.create(
             Arrays.stream(searchPaths)
