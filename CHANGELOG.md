@@ -11,15 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for multiline string literals within compiler directives.
 - Support for the `TEXTBLOCK` directive.
+- Support for named arguments.
 - **API:** `CompilerDirectiveParser` can now return a new `TextBlockDirective` type.
 - **API:** `CheckVerifier::withCompilerVersion` method.
 - **API:** `CheckVerifier::withToolchain` method.
+- **API:** `DelphiTokenType.ARGUMENT` token type.
+- **API:** `ArgumentNode` node type.
+- **API:** `ArgumentListNode::getArgumentNodes` method.
 
 ### Changed
 
 - `NativeInt` and `NativeUInt` are now treated as weak aliases in Delphi 12+.
 - The length of open arrays is now modeled as `NativeInt` in Delphi 12+.
 - Performance improvements.
+
+### Deprecated
+
+- **API:** `ArgumentListNode::getArguments` method, use `getArgumentNodes` instead.
 
 ### Fixed
 

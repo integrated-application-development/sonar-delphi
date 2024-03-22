@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,30 +18,17 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
-public interface ArgumentListNode extends DelphiNode {
+public interface ArgumentNode extends DelphiNode {
+  @Nullable
+  IdentifierNode getName();
 
-  /**
-   * Returns a list of argument expressions.
-   *
-   * @return list of argument expressions
-   * @deprecated Use {@link ArgumentListNode#getArgumentNodes} instead.
-   */
-  @Deprecated(forRemoval = true)
-  List<ExpressionNode> getArguments();
+  ExpressionNode getExpression();
 
-  /**
-   * Returns a list of arguments.
-   *
-   * @return list of arguments
-   */
-  List<ArgumentNode> getArgumentNodes();
+  @Nullable
+  ExpressionNode getWidth();
 
-  /**
-   * Returns whether the argument list is empty.
-   *
-   * @return true if the argument list is empty
-   */
-  boolean isEmpty();
+  @Nullable
+  ExpressionNode getDecimals();
 }
