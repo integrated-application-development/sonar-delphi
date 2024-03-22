@@ -27,7 +27,7 @@ import au.com.integradev.delphi.utils.CastUtils.DelphiCast;
 import com.google.common.collect.Iterables;
 import java.util.Optional;
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
@@ -107,12 +107,13 @@ public class CastAndFreeCheck extends DelphiCheck {
   }
 
   private static boolean isArgumentToFreeAndNil(ExpressionNode expr) {
-    DelphiNode argList = expr.findParentheses().getParent();
-    if (!(argList instanceof ArgumentListNode)) {
+    DelphiNode argument = expr.findParentheses().getParent();
+    if (!(argument instanceof ArgumentNode)) {
       return false;
     }
 
-    DelphiNode freeAndNil = argList.getParent().getChild(argList.getChildIndex() - 1);
+    DelphiNode argumentList = argument.getParent();
+    DelphiNode freeAndNil = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
 
     if (freeAndNil instanceof NameReferenceNode) {
       NameDeclaration freeAndNilDecl = ((NameReferenceNode) freeAndNil).getNameDeclaration();

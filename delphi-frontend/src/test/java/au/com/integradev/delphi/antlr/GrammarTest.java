@@ -300,4 +300,9 @@ class GrammarTest {
         .hasCauseInstanceOf(DelphiParser.ParserException.class)
         .hasMessageContaining("line 6:2 mismatched input '０' expecting IMPLEMENTATION");
   }
+
+  @Test
+  void testNamedArguments() {
+    assertParsed("NamedArguments.pas");
+  }
 }

@@ -68,6 +68,7 @@ tokens {
   TkArrayAccessorNode;
   TkArrayConstructor;
   TkArrayIndices;
+  TkArgument;
 }
 
 @header
@@ -191,7 +192,11 @@ package au.com.integradev.delphi.antlr;
 
 @parser::members {
   private Token changeTokenType(int type) {
-    CommonToken t = new CommonToken(input.LT(-1));
+    return changeTokenType(type, -1);
+  }
+
+  private Token changeTokenType(int type, int offset) {
+    CommonToken t = new CommonToken(input.LT(offset));
     t.setType(type);
     return t;
   }
@@ -733,13 +738,19 @@ particleItem                 : '.' extendedNameReference
 arrayAccessor                : lbrack expressionList rbrack
                              -> ^(TkArrayAccessorNode<ArrayAccessorNodeImpl> expressionList)
                              ;
-argumentList                 : '('<ArgumentListNodeImpl>^ (argument ','?)* ')'
+argumentList                 : '('<ArgumentListNodeImpl>^ (argument (',' argument)* ','?)? ')'
                              ;
-argument                     : anonymousMethod
-                             | expression (':' expression! (':' expression!)?)? // This strange colon construct at the end is the result
-                             ;                                                  // of compiler hackery for intrinsic procedures like Str and WriteLn
-                                                                                // See: http://www.delphibasics.co.uk/RTL.asp?Name=str
-                                                                                // See: https://stackoverflow.com/questions/617654/how-does-writeln-really-work
+argument                     : argumentName? argumentExpression
+                             -> ^(TkArgument<ArgumentNodeImpl> argumentName? argumentExpression)
+                             ;
+argumentName                 : ident ':='!
+                             | keywords ':=' -> ^({changeTokenType(TkIdentifier, -2)})
+                             ;
+argumentExpression           : anonymousMethod
+                             | expression writeArguments?
+                             ;
+writeArguments               : ':'! expression (':'! expression)? // See: https://docwiki.embarcadero.com/Libraries/en/System.Write
+                             ;
 anonymousMethod              : PROCEDURE<AnonymousMethodNodeImpl>^ routineParameters? block
                              | FUNCTION<AnonymousMethodNodeImpl>^ routineParameters? routineReturnType block
                              ;

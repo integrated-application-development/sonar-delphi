@@ -20,14 +20,16 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
 public final class ArgumentListNodeImpl extends DelphiNodeImpl implements ArgumentListNode {
   private String image;
-  private List<ExpressionNode> arguments;
+  private List<ArgumentNode> arguments;
 
   public ArgumentListNodeImpl(Token token) {
     super(token);
@@ -38,17 +40,25 @@ public final class ArgumentListNodeImpl extends DelphiNodeImpl implements Argume
     return visitor.visit(this, data);
   }
 
+  @SuppressWarnings("removal")
   @Override
   public List<ExpressionNode> getArguments() {
+    return getArgumentNodes().stream()
+        .map(ArgumentNode::getExpression)
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  @Override
+  public List<ArgumentNode> getArgumentNodes() {
     if (arguments == null) {
-      arguments = findChildrenOfType(ExpressionNode.class);
+      arguments = findChildrenOfType(ArgumentNode.class);
     }
     return arguments;
   }
 
   @Override
   public boolean isEmpty() {
-    return getArguments().isEmpty();
+    return getArgumentNodes().isEmpty();
   }
 
   @Override

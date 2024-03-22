@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
@@ -278,7 +279,7 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private static boolean isOutArgument(NameReferenceNode name) {
-    ExpressionNode argument = getArgumentExpression(name);
+    ArgumentNode argument = getArgument(name);
     if (argument == null) {
       return false;
     }
@@ -289,14 +290,14 @@ public class VariableInitializationCheck extends DelphiCheck {
       return false;
     }
 
-    int argumentIndex = argumentList.getArguments().indexOf(argument);
+    int argumentIndex = argumentList.getArgumentNodes().indexOf(argument);
     Parameter parameter = procedural.getParameter(argumentIndex);
 
     return (parameter.isOut() || parameter.isVar()) && !isOutArgumentExclusion(argumentList);
   }
 
   private static boolean isSizeOfArgument(NameReferenceNode name) {
-    ExpressionNode argument = getArgumentExpression(name);
+    ArgumentNode argument = getArgument(name);
     if (argument == null) {
       return false;
     }
@@ -310,7 +311,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     return routine.fullyQualifiedName().equals("System.SizeOf");
   }
 
-  private static ExpressionNode getArgumentExpression(NameReferenceNode name) {
+  private static ArgumentNode getArgument(NameReferenceNode name) {
     if (!(name.getParent() instanceof PrimaryExpressionNode)) {
       return null;
     }
@@ -319,21 +320,22 @@ public class VariableInitializationCheck extends DelphiCheck {
       return null;
     }
 
-    ExpressionNode expression = null;
+    ArgumentNode argument = null;
     ArgumentListNode argumentList;
     Node current = name.getParent();
 
     while (current instanceof PrimaryExpressionNode) {
-      expression = ((ExpressionNode) current).skipParentheses();
-      if (!(expression.getParent() instanceof ArgumentListNode)) {
+      ExpressionNode expression = ((ExpressionNode) current).skipParentheses();
+      if (!(expression.getParent() instanceof ArgumentNode)) {
         return null;
       }
 
-      argumentList = (ArgumentListNode) expression.getParent();
+      argument = (ArgumentNode) expression.getParent();
+      argumentList = (ArgumentListNode) expression.getNthParent(2);
       current = findHardCast(argumentList);
     }
 
-    return expression;
+    return argument;
   }
 
   private static Node findHardCast(ArgumentListNode argumentList) {
@@ -349,19 +351,21 @@ public class VariableInitializationCheck extends DelphiCheck {
       if (argumentList == null || !isHardCast(argumentList)) {
         return expression;
       }
-      expression = (ExpressionNode) argumentList.getChildren().get(0);
+      expression = argumentList.getArgumentNodes().get(0).getExpression();
     }
   }
 
   private static boolean isHardCast(ArgumentListNode argumentList) {
-    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
-    if (previous instanceof NameReferenceNode) {
-      NameReferenceNode nameReference = ((NameReferenceNode) previous);
-      NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
-      return declaration instanceof TypeNameDeclaration;
-    } else if (previous instanceof CommonDelphiNode) {
-      DelphiTokenType tokenType = previous.getTokenType();
-      return tokenType == DelphiTokenType.STRING || tokenType == DelphiTokenType.FILE;
+    if (!argumentList.isEmpty()) {
+      Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
+      if (previous instanceof NameReferenceNode) {
+        NameReferenceNode nameReference = ((NameReferenceNode) previous);
+        NameDeclaration declaration = nameReference.getLastName().getNameDeclaration();
+        return declaration instanceof TypeNameDeclaration;
+      } else if (previous instanceof CommonDelphiNode) {
+        DelphiTokenType tokenType = previous.getTokenType();
+        return tokenType == DelphiTokenType.STRING || tokenType == DelphiTokenType.FILE;
+      }
     }
     return false;
   }

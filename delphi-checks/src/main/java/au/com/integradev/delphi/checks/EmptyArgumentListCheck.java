@@ -78,9 +78,9 @@ public class EmptyArgumentListCheck extends DelphiCheck {
   private static boolean isPartOfSystemAssignedArgumentExpression(ArgumentListNode arguments) {
     DelphiNode parent = arguments.getParent();
     if (parent instanceof PrimaryExpressionNode) {
-      DelphiNode grandparent = parent.getParent();
-      if (grandparent instanceof ArgumentListNode) {
-        DelphiNode prev = grandparent.getParent().getChild(grandparent.getChildIndex() - 1);
+      DelphiNode ancestor = parent.getParent().getParent();
+      if (ancestor instanceof ArgumentListNode) {
+        DelphiNode prev = ancestor.getParent().getChild(ancestor.getChildIndex() - 1);
         if (prev instanceof NameReferenceNode) {
           var declaration = ((NameReferenceNode) prev).getLastName().getNameDeclaration();
           return declaration instanceof RoutineNameDeclaration
