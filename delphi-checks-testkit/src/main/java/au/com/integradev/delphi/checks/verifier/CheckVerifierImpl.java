@@ -56,7 +56,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -559,9 +558,7 @@ public class CheckVerifierImpl implements CheckVerifier {
     return SearchPath.create(
         searchPathUnits.stream()
             .map(builder -> builder.delphiFile().getInputFile())
-            .map(InputFile::uri)
-            .map(DelphiUtils::uriToAbsolutePath)
-            .map(Path::of)
+            .map(DelphiUtils::inputFileToPath)
             .map(Path::getParent)
             .collect(Collectors.toUnmodifiableList()));
   }
