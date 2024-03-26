@@ -837,6 +837,18 @@ public class NameResolver {
   }
 
   private void handleArgumentList(ArgumentListNode node) {
+    for (ArgumentNode argument : node.getArgumentNodes()) {
+      ExpressionNode width = argument.getWidth();
+      if (width != null) {
+        getNameResolutionHelper().resolve(width);
+      }
+
+      ExpressionNode decimals = argument.getDecimals();
+      if (decimals != null) {
+        getNameResolutionHelper().resolve(decimals);
+      }
+    }
+
     if (handleExplicitArrayConstructorInvocation(node)) {
       return;
     }

@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Type resolution inaccuracies around subtract expressions.
+- Name resolution did not occur for the magic `Width` and `Decimals` arguments.
+  (See: [System.Write](https://docwiki.embarcadero.com/Libraries/en/System.Write))
 - The wrong inherited method could be found in `InheritedMethodWithNoCode`, causing false negatives.
 - Exception when scanning UNC paths.
 
