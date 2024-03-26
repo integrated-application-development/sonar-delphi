@@ -183,6 +183,10 @@ public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
     return this;
   }
 
+  public List<QuickFix> getQuickFixes() {
+    return quickFixes == null ? null : Collections.unmodifiableList(quickFixes);
+  }
+
   @Override
   public DelphiIssueBuilderImpl withCost(int cost) {
     requiresValueToBeSet(this.message, MESSAGE_NAME);
