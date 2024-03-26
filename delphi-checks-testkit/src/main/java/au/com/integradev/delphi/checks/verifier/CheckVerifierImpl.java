@@ -22,28 +22,33 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
-import au.com.integradev.delphi.check.DelphiCheckContextImpl;
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.compiler.Toolchain;
+import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
+import au.com.integradev.delphi.reporting.TextRangeReplacement;
+import au.com.integradev.delphi.reporting.edits.QuickFixEditImpl;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Splitter;
+import com.google.common.base.Suppliers;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -51,8 +56,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
@@ -65,7 +69,8 @@ import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
-import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 
 /**
  * Based loosely on {@code InternalCheckVerifier} from the sonar-java project.
@@ -76,8 +81,6 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
  */
 public class CheckVerifierImpl implements CheckVerifier {
   private static final Logger LOG = LoggerFactory.getLogger(CheckVerifierImpl.class);
-  private static final Pattern NONCOMPLIANT_PATTERN =
-      Pattern.compile("(?i)^//\\s*Noncompliant(?:@([-+]\\d+))?\\b");
 
   private DelphiCheck check;
   private DelphiTestFile testFile;
@@ -140,46 +143,27 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   @Override
   public void verifyIssues() {
-
-    List<Issue> issues = execute();
+    ExecutionResult result = execute();
+    List<Issue> issues = result.getIssues();
+    List<QuickFix> quickFixes = result.getQuickFixes();
 
     if (issues.isEmpty()) {
       throw new AssertionError("No issue raised. At least one issue expected");
     }
 
-    List<Integer> expected =
-        testFile.delphiFile().getComments().stream()
-            .map(
-                c -> {
-                  Matcher matcher = NONCOMPLIANT_PATTERN.matcher(c.getImage());
-                  if (!matcher.matches()) {
-                    return Optional.<Integer>empty();
-                  }
+    Expectations expected = Expectations.fromComments(testFile.delphiFile());
 
-                  var matchResult = matcher.toMatchResult();
-                  String offset = matchResult.group(1);
-                  if (offset == null) {
-                    return Optional.of(c.getBeginLine());
-                  }
-
-                  try {
-                    return Optional.of(c.getBeginLine() + Integer.parseInt(offset));
-                  } catch (NumberFormatException e) {
-                    throw new AssertionError(
-                        String.format(
-                            "Failed to parse 'Noncompliant' comment line offset '%s' as an"
-                                + " integer.",
-                            offset));
-                  }
-                })
-            .flatMap(Optional::stream)
-            .collect(Collectors.toList());
-
-    verifyIssuesOnLinesInternal(issues, expected);
+    verifyIssuesOnLinesInternal(issues, expected.issues());
+    if (!expected.quickFixes().isEmpty()) {
+      assertQuickFixes(quickFixes, expected.quickFixes());
+    }
   }
 
-  private static void verifyIssuesOnLinesInternal(List<Issue> issues, List<Integer> expected) {
+  private static void verifyIssuesOnLinesInternal(
+      List<Issue> issues, List<IssueExpectation> expectedIssues) {
     List<Integer> unexpectedLines = new ArrayList<>();
+    List<Integer> expectedLines =
+        expectedIssues.stream().map(IssueExpectation::getBeginLine).collect(Collectors.toList());
 
     for (Issue issue : issues) {
       IssueLocation issueLocation = issue.primaryLocation();
@@ -193,17 +177,160 @@ public class CheckVerifierImpl implements CheckVerifier {
       }
 
       Integer line = textRange.start().line();
-      if (!expected.remove(line)) {
+      if (!expectedLines.remove(line)) {
         unexpectedLines.add(line);
       }
     }
 
-    if (!expected.isEmpty() || !unexpectedLines.isEmpty()) {
-      StringBuilder message = new StringBuilder("Issues were ");
-      if (!expected.isEmpty()) {
-        message.append("expected at ").append(expected);
+    assertIssueMismatchesEmpty(expectedLines, unexpectedLines);
+  }
+
+  private void assertQuickFixes(
+      List<QuickFix> actualQuickFixes, List<QuickFixExpectation> expectedQuickFixes) {
+    if (expectedQuickFixes.size() != actualQuickFixes.size()) {
+      throw new AssertionError(
+          String.format(
+              "%d quick fixes expected, found %d",
+              expectedQuickFixes.size(), actualQuickFixes.size()));
+    }
+
+    List<QuickFix> unmatchedActuals = new ArrayList<>(actualQuickFixes);
+
+    for (QuickFixExpectation expected : expectedQuickFixes) {
+
+      Optional<QuickFix> matchingQuickFix =
+          unmatchedActuals.stream()
+              .filter(actual -> textEditsMatch(actual.getEdits(), expected.getExpectedTextEdits()))
+              .findFirst();
+
+      matchingQuickFix.ifPresent(unmatchedActuals::remove);
+      if (matchingQuickFix.isPresent()) {
+        unmatchedActuals.remove(matchingQuickFix.get());
+      } else {
+        throw new AssertionError(
+            String.format(
+                "Expected:%n%s%nFound %d non-matching quick fixes:%n%s",
+                getQuickFixString(expected),
+                actualQuickFixes.size(),
+                actualQuickFixes.stream()
+                    .map(this::getQuickFixString)
+                    .collect(Collectors.joining("\n"))));
       }
-      if (!expected.isEmpty() && !unexpectedLines.isEmpty()) {
+    }
+
+    if (!unmatchedActuals.isEmpty()) {
+      throw new AssertionError(
+          String.format(
+              "Found %d unexpected quick fixes:%n%s",
+              unmatchedActuals.size(),
+              unmatchedActuals.stream()
+                  .map(this::getQuickFixString)
+                  .collect(Collectors.joining("\n"))));
+    }
+  }
+
+  private String getQuickFixString(QuickFix quickFix) {
+    Supplier<DelphiFileStream> fileStreamSupplier = newFileStreamSupplier(testFile.delphiFile());
+
+    return "Quick fix:\n  "
+        + quickFix.getEdits().stream()
+            .map(QuickFixEditImpl.class::cast)
+            .map(e -> e.toTextEdits(fileStreamSupplier))
+            .flatMap(Collection::stream)
+            .map(CheckVerifierImpl::getTextEditString)
+            .collect(Collectors.joining("\n  "));
+  }
+
+  private static String getQuickFixString(QuickFixExpectation quickFix) {
+    return "Quick fix "
+        + quickFix.getFixId()
+        + ":\n  "
+        + quickFix.getExpectedTextEdits().stream()
+            .map(CheckVerifierImpl::getTextEditString)
+            .collect(Collectors.joining("\n  "));
+  }
+
+  private static String getTextEditString(TextRangeReplacement textEdit) {
+    return String.format(
+        "[%s:%s to %s:%s] replaced with %s",
+        textEdit.getLocation().getBeginLine(),
+        textEdit.getLocation().getBeginColumn(),
+        textEdit.getLocation().getEndLine(),
+        textEdit.getLocation().getEndColumn(),
+        textEdit.getReplacement());
+  }
+
+  private static String getTextEditString(TextEditExpectation textEdit) {
+    return String.format(
+        "[%s:%s to %s:%s] replaced with %s",
+        textEdit.getBeginLine(),
+        textEdit.getBeginColumn(),
+        textEdit.getEndLine(),
+        textEdit.getEndColumn(),
+        textEdit.getReplacement());
+  }
+
+  private static Supplier<DelphiFileStream> newFileStreamSupplier(DelphiFile delphiFile) {
+    return Suppliers.memoize(
+        () -> {
+          try {
+            return new DelphiFileStream(
+                delphiFile.getSourceCodeFile().getAbsolutePath(),
+                delphiFile.getSourceCodeFileEncoding());
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        });
+  }
+
+  private boolean textEditsMatch(
+      List<QuickFixEdit> textEdits, List<TextEditExpectation> expectedTextEdits) {
+    if (expectedTextEdits.size() != textEdits.size()) {
+      return false;
+    }
+
+    Supplier<DelphiFileStream> fileStreamSupplier = newFileStreamSupplier(testFile.delphiFile());
+
+    List<TextRangeReplacement> unmatchedActuals =
+        textEdits.stream()
+            .map(QuickFixEditImpl.class::cast)
+            .map(e -> e.toTextEdits(fileStreamSupplier))
+            .flatMap(Collection::stream)
+            .collect(Collectors.toCollection(ArrayList::new));
+
+    for (TextEditExpectation expected : expectedTextEdits) {
+      Optional<TextRangeReplacement> matchingTextEdit =
+          unmatchedActuals.stream().filter(actual -> textEditMatches(actual, expected)).findFirst();
+
+      if (matchingTextEdit.isPresent()) {
+        unmatchedActuals.remove(matchingTextEdit.get());
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static boolean textEditMatches(
+      TextRangeReplacement actual, TextEditExpectation expected) {
+    boolean rangeMatches =
+        actual.getLocation().getBeginLine() == expected.getBeginLine()
+            && actual.getLocation().getBeginColumn() == expected.getBeginColumn()
+            && actual.getLocation().getEndLine() == expected.getEndLine()
+            && actual.getLocation().getEndColumn() == expected.getEndColumn();
+
+    return rangeMatches && actual.getReplacement().equals(expected.getReplacement());
+  }
+
+  private static void assertIssueMismatchesEmpty(
+      List<Integer> expectedLines, List<Integer> unexpectedLines) {
+    if (!expectedLines.isEmpty() || !unexpectedLines.isEmpty()) {
+      StringBuilder message = new StringBuilder("Issues were ");
+      if (!expectedLines.isEmpty()) {
+        message.append("expected at ").append(expectedLines);
+      }
+      if (!expectedLines.isEmpty() && !unexpectedLines.isEmpty()) {
         message.append(", ");
       }
       if (!unexpectedLines.isEmpty()) {
@@ -215,9 +342,8 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   @Override
   public void verifyIssueOnFile() {
-    List<Issue> issues = execute();
-
-    IssueLocation issueLocation = verifySingleIssueOnComponent(issues, "file");
+    ExecutionResult result = execute();
+    IssueLocation issueLocation = verifySingleIssueOnComponent(result.getIssues(), "file");
 
     if (!issueLocation.inputComponent().isFile()) {
       throw new AssertionError(
@@ -227,9 +353,8 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   @Override
   public void verifyIssueOnProject() {
-    List<Issue> issues = execute();
-
-    IssueLocation issueLocation = verifySingleIssueOnComponent(issues, "project");
+    ExecutionResult result = execute();
+    IssueLocation issueLocation = verifySingleIssueOnComponent(result.getIssues(), "project");
 
     if (issueLocation.inputComponent().isFile()) {
       throw new AssertionError(
@@ -239,7 +364,9 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   @Override
   public void verifyNoIssues() {
-    List<Issue> issues = execute();
+    ExecutionResult result = execute();
+    List<Issue> issues = result.getIssues();
+
     if (!issues.isEmpty()) {
       throw new AssertionError(
           String.format(
@@ -247,7 +374,7 @@ public class CheckVerifierImpl implements CheckVerifier {
     }
   }
 
-  private List<Issue> execute() {
+  private ExecutionResult execute() {
     requireAssigned(check, "check");
     requireAssigned(testFile, "file");
 
@@ -288,15 +415,15 @@ public class CheckVerifierImpl implements CheckVerifier {
         .thenReturn(Optional.of(RuleKey.of("test", check.getClass().getSimpleName())));
     when(checkRegistrar.getScope(check)).thenReturn(RuleScope.ALL);
 
-    DelphiCheckContext context =
-        new DelphiCheckContextImpl(
+    var context =
+        new DelphiCheckContextTester(
             check, sensorContext, file, compilerDirectiveParser, checkRegistrar);
 
     check.start(context);
     check.visit(file.getAst(), context);
     check.end(context);
 
-    return List.copyOf(sensorContext.allIssues());
+    return new ExecutionResult(List.copyOf(sensorContext.allIssues()), context.getQuickFixes());
   }
 
   private static IssueLocation verifySingleIssueOnComponent(List<Issue> issues, String component) {
@@ -576,5 +703,23 @@ public class CheckVerifierImpl implements CheckVerifier {
             .map(DelphiUtils::inputFileToPath)
             .map(Path::getParent)
             .collect(Collectors.toUnmodifiableList()));
+  }
+
+  private static class ExecutionResult {
+    private final List<Issue> issues;
+    private final List<QuickFix> quickFixes;
+
+    public ExecutionResult(List<Issue> issues, List<QuickFix> quickFixes) {
+      this.issues = issues;
+      this.quickFixes = quickFixes;
+    }
+
+    public List<Issue> getIssues() {
+      return issues;
+    }
+
+    public List<QuickFix> getQuickFixes() {
+      return quickFixes;
+    }
   }
 }
