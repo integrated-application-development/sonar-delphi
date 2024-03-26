@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.AsmStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -101,7 +102,8 @@ public class RoutineResultAssignedCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ArgumentListNode argumentList, DelphiCheckContext context) {
-    argumentList.getArguments().stream()
+    argumentList.getArgumentNodes().stream()
+        .map(ArgumentNode::getExpression)
         .map(RoutineResultAssignedCheck::skipParenthesesAndAddressOperators)
         .forEach(this::handleResultReference);
     return super.visit(argumentList, context);

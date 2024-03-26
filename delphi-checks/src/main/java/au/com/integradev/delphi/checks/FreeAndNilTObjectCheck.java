@@ -59,12 +59,16 @@ public class FreeAndNilTObjectCheck extends DelphiCheck {
       return false;
     }
 
+    ArgumentListNode argumentList = (ArgumentListNode) expression.getChild(1);
+    if (argumentList.getArgumentNodes().size() != 1) {
+      return false;
+    }
+
     NameDeclaration declaration = reference.getNameDeclaration();
     if (declaration instanceof RoutineNameDeclaration) {
       RoutineNameDeclaration routine = (RoutineNameDeclaration) declaration;
       if (routine.fullyQualifiedName().equals("System.SysUtils.FreeAndNil")) {
-        ArgumentListNode argumentList = (ArgumentListNode) expression.getChild(1);
-        ExpressionNode argument = argumentList.getArguments().get(0);
+        ExpressionNode argument = argumentList.getArgumentNodes().get(0).getExpression();
         return !argument.getType().isUnresolved()
             && !argument.getType().isUnknown()
             && !argument.getType().isClass();

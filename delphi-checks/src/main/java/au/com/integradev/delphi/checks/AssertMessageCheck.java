@@ -51,7 +51,7 @@ public class AssertMessageCheck extends DelphiCheck {
   private static boolean isMissingErrorMessage(NameReferenceNode nameNode) {
     ArgumentListNode argumentList = getArgumentList(nameNode);
     if (argumentList != null) {
-      return argumentList.getArguments().size() < 2;
+      return argumentList.getArgumentNodes().size() < 2;
     }
     return false;
   }

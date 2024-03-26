@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -177,15 +178,19 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
   private static boolean argumentSignaturesMatch(
       RoutineNode routine, ArgumentListNode argumentList) {
     List<FormalParameterData> parameters = routine.getParameters();
-    List<ExpressionNode> arguments =
-        (argumentList == null) ? Collections.emptyList() : argumentList.getArguments();
+    List<ArgumentNode> arguments =
+        (argumentList == null) ? Collections.emptyList() : argumentList.getArgumentNodes();
 
     if (arguments.size() != parameters.size()) {
       return false;
     }
 
     for (int i = 0; i < arguments.size(); ++i) {
-      if (!arguments.get(i).getImage().equalsIgnoreCase(parameters.get(i).getImage())) {
+      if (!arguments
+          .get(i)
+          .getExpression()
+          .getImage()
+          .equalsIgnoreCase(parameters.get(i).getImage())) {
         return false;
       }
     }

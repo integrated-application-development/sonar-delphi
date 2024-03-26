@@ -52,6 +52,8 @@ public final class RoutineUtils {
 
   private static boolean isAssertFalse(StatementNode statement) {
     return isRoutineInvocation(
-        statement, "System.Assert", arguments -> ExpressionNodeUtils.isFalse(arguments.get(0)));
+        statement,
+        "System.Assert",
+        arguments -> ExpressionNodeUtils.isFalse(arguments.get(0).getExpression()));
   }
 }

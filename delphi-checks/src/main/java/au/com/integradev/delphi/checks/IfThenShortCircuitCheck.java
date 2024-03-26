@@ -22,9 +22,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
@@ -51,7 +53,11 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
         && nameReference.getLastName().getIdentifier().getImage().equalsIgnoreCase("IfThen")) {
       DelphiNode argumentList = parent.getChild(nameReference.getChildIndex() + 1);
       if (argumentList instanceof ArgumentListNode) {
-        List<ExpressionNode> arguments = ((ArgumentListNode) argumentList).getArguments();
+        List<ExpressionNode> arguments =
+            ((ArgumentListNode) argumentList)
+                .getArgumentNodes().stream()
+                    .map(ArgumentNode::getExpression)
+                    .collect(Collectors.toUnmodifiableList());
         if (isViolation(arguments)) {
           reportIssue(context, nameReference, MESSAGE);
         }
@@ -107,8 +113,12 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
             && ((RoutineNameDeclaration) declaration)
                 .fullyQualifiedName()
                 .equals("System.Assigned")) {
-          ExpressionNode argument = ((ArgumentListNode) argumentList).getArguments().get(0);
-          images.add(argument.getImage());
+          images.add(
+              ((ArgumentListNode) argumentList)
+                  .getArgumentNodes()
+                  .get(0)
+                  .getExpression()
+                  .getImage());
         }
       }
     }
