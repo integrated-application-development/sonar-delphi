@@ -84,8 +84,8 @@ public class AssignedAndFreeCheck extends DelphiCheck {
     Node sibling = guard.getChild(1);
     if (sibling instanceof ArgumentListNode) {
       ArgumentListNode argumentList = (ArgumentListNode) sibling;
-      if (!argumentList.getArguments().isEmpty()) {
-        return argumentList.getChild(0).getImage();
+      if (!argumentList.isEmpty()) {
+        return argumentList.getArgumentNodes().get(0).getExpression().getImage();
       }
     }
 

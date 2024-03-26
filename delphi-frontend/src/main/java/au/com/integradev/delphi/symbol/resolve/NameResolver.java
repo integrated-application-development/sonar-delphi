@@ -57,6 +57,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -852,7 +853,12 @@ public class NameResolver {
     if (handleExplicitArrayConstructorInvocation(node)) {
       return;
     }
-    disambiguateArguments(node.getArguments(), true);
+
+    disambiguateArguments(
+        node.getArgumentNodes().stream()
+            .map(ArgumentNode::getExpression)
+            .collect(Collectors.toUnmodifiableList()),
+        true);
   }
 
   private boolean handleExplicitArrayConstructorInvocation(ArgumentListNode node) {
@@ -860,7 +866,9 @@ public class NameResolver {
     if (previous instanceof NameReferenceNode
         && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous))) {
       updateType(((ClassReferenceType) currentType).classType());
-      node.getArguments().forEach(getNameResolutionHelper()::resolve);
+      node.getArgumentNodes().stream()
+          .map(ArgumentNode::getExpression)
+          .forEach(getNameResolutionHelper()::resolve);
       return true;
     }
     return false;

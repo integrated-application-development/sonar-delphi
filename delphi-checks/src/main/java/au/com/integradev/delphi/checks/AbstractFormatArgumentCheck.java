@@ -24,8 +24,8 @@ import au.com.integradev.delphi.utils.format.FormatStringParser;
 import java.util.List;
 import java.util.Optional;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -61,7 +61,7 @@ public abstract class AbstractFormatArgumentCheck extends DelphiCheck {
       return;
     }
 
-    List<ExpressionNode> arguments = argumentList.getArguments();
+    List<ArgumentNode> arguments = argumentList.getArgumentNodes();
     if (arguments.size() < 2) {
       return;
     }
@@ -90,19 +90,23 @@ public abstract class AbstractFormatArgumentCheck extends DelphiCheck {
       ArrayConstructorNode arrayConstructor,
       DelphiCheckContext context) {}
 
-  private Optional<TextLiteralNode> getLiteralArgument(DelphiNode argument) {
-    if (argument instanceof PrimaryExpressionNode
-        && argument.getChild(0) instanceof TextLiteralNode) {
-      return Optional.of((TextLiteralNode) argument.getChild(0));
+  private Optional<TextLiteralNode> getLiteralArgument(ArgumentNode argument) {
+    ExpressionNode expression = argument.getExpression();
+
+    if (expression instanceof PrimaryExpressionNode
+        && expression.getChild(0) instanceof TextLiteralNode) {
+      return Optional.of((TextLiteralNode) expression.getChild(0));
     }
 
     return Optional.empty();
   }
 
-  private Optional<ArrayConstructorNode> getArrayConstructorArgument(DelphiNode argument) {
-    if (argument instanceof PrimaryExpressionNode
-        && argument.getChild(0) instanceof ArrayConstructorNode) {
-      return Optional.of((ArrayConstructorNode) argument.getChild(0));
+  private Optional<ArrayConstructorNode> getArrayConstructorArgument(ArgumentNode argument) {
+    ExpressionNode expression = argument.getExpression();
+
+    if (expression instanceof PrimaryExpressionNode
+        && expression.getChild(0) instanceof ArrayConstructorNode) {
+      return Optional.of((ArrayConstructorNode) expression.getChild(0));
     }
 
     return Optional.empty();

@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
-import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
@@ -39,7 +39,7 @@ public final class StatementUtils {
   public static boolean isRoutineInvocation(
       StatementNode statement,
       String fullyQualifiedName,
-      Predicate<List<ExpressionNode>> argumentListPredicate) {
+      Predicate<List<ArgumentNode>> argumentListPredicate) {
     if (!(statement instanceof ExpressionStatementNode)) {
       return false;
     }
@@ -55,15 +55,15 @@ public final class StatementUtils {
     }
 
     NameDeclaration declaration = ((NameReferenceNode) name).getLastName().getNameDeclaration();
-    List<ExpressionNode> arguments = extractArguments(expression.getChild(1));
+    List<ArgumentNode> arguments = extractArguments(expression.getChild(1));
     return declaration instanceof RoutineNameDeclaration
         && ((RoutineNameDeclaration) declaration).fullyQualifiedName().equals(fullyQualifiedName)
         && argumentListPredicate.test(arguments);
   }
 
-  private static List<ExpressionNode> extractArguments(Node argumentList) {
+  private static List<ArgumentNode> extractArguments(Node argumentList) {
     if (argumentList instanceof ArgumentListNode) {
-      return ((ArgumentListNode) argumentList).getArguments();
+      return ((ArgumentListNode) argumentList).getArgumentNodes();
     }
     return Collections.emptyList();
   }

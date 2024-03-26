@@ -21,6 +21,7 @@ package au.com.integradev.delphi.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -47,9 +48,9 @@ public class PlatformDependentCastCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(ArgumentListNode argumentList, DelphiCheckContext context) {
-    List<ExpressionNode> arguments = argumentList.getArguments();
+    List<ArgumentNode> arguments = argumentList.getArgumentNodes();
     if (arguments.size() == 1) {
-      ExpressionNode expression = arguments.get(0);
+      ExpressionNode expression = arguments.get(0).getExpression();
       if (!ExpressionNodeUtils.isNilLiteral(expression)
           && !ExpressionNodeUtils.isIntegerLiteral(expression)) {
         Type originalType = getOriginalType(expression);

@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
@@ -100,7 +101,7 @@ public final class ExpressionTypeResolver {
       if (child instanceof Typed) {
         type = handleTyped((Typed) child, type.isUnknown() ? null : type);
       } else if (child instanceof ArgumentListNode) {
-        List<ExpressionNode> arguments = ((ArgumentListNode) child).getArguments();
+        List<ArgumentNode> arguments = ((ArgumentListNode) child).getArgumentNodes();
         if (classReference) {
           type = handleHardCasts(type, arguments);
         } else {
@@ -205,18 +206,19 @@ public final class ExpressionTypeResolver {
     return factory.collect(operator, operand);
   }
 
-  private static Type handleHardCasts(Type type, List<ExpressionNode> arguments) {
+  private static Type handleHardCasts(Type type, List<ArgumentNode> arguments) {
     if (type.isClassReference() && arguments.size() == 1) {
       return ((ClassReferenceType) type).classType();
     }
     return type;
   }
 
-  private static Type handleIntrinsicReturnTypes(Type type, List<ExpressionNode> arguments) {
+  private static Type handleIntrinsicReturnTypes(Type type, List<ArgumentNode> arguments) {
     if (type instanceof IntrinsicReturnType) {
       return ((IntrinsicReturnType) type)
           .getReturnType(
               arguments.stream()
+                  .map(ArgumentNode::getExpression)
                   .map(ExpressionNode::getType)
                   .collect(Collectors.toUnmodifiableList()));
     }

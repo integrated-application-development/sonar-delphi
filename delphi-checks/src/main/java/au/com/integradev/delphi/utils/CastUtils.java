@@ -21,6 +21,7 @@ package au.com.integradev.delphi.utils;
 import java.util.List;
 import java.util.Optional;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
@@ -61,11 +62,11 @@ public class CastUtils {
     }
 
     ArgumentListNode argumentList = (ArgumentListNode) primaryExpression.getChild(1);
-    List<ExpressionNode> arguments = argumentList.getArguments();
+    List<ArgumentNode> arguments = argumentList.getArgumentNodes();
     if (arguments.size() != 1) {
       return Optional.empty();
     }
-    Type originalType = getOriginalType(arguments.get(0));
+    Type originalType = getOriginalType(arguments.get(0).getExpression());
 
     DelphiNode nameReference = primaryExpression.getChild(0);
     Type castedType = getHardCastedType(nameReference, typeFactory);

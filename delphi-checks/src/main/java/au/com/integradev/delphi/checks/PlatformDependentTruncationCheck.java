@@ -21,6 +21,7 @@ package au.com.integradev.delphi.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -61,10 +62,10 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
       return super.visit(argumentList, context);
     }
 
-    List<ExpressionNode> arguments = argumentList.getArguments();
+    List<ArgumentNode> arguments = argumentList.getArgumentNodes();
     List<Parameter> parameters = procedural.parameters();
     for (int i = 0; i < arguments.size() && i < parameters.size(); ++i) {
-      ExpressionNode argument = arguments.get(i);
+      ExpressionNode argument = arguments.get(i).getExpression();
       if (isViolation(argument.getType(), parameters.get(i).getType())) {
         reportIssue(context, argument, MESSAGE);
       }
