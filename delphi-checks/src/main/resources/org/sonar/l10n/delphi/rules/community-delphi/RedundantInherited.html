@@ -1,0 +1,26 @@
+<h2>Why is this an issue?</h2>
+<p>
+  It is possible to use a bare <code>inherited</code> in any method implementation, even if there is
+  no base method to call. Although this statement has no behavioral effect, it is misleading and
+  indicates a possible programming mistake.
+</p>
+<p>
+  Since the <code>inherited</code> keyword works regardless of whether the method is marked as
+  <code>override</code>, it can also lead to unexpected behavioral change if corresponding ancestor
+  methods are added later.
+</p>
+<h2>How to fix it</h2>
+<p>Remove the <code>inherited</code> statement:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure TChild.Proc(Foo: TFoo);
+begin
+  inherited;
+  // ...
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure TChild.Proc(Foo: TFoo);
+begin
+  // ...
+end;
+</pre>
