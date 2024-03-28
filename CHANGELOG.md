@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `ArgumentNode` node type.
 - **API:** `ArgumentListNode::getArgumentNodes` method.
 - **API:** `AttributeNode::isAssembly` method.
+- `RedundantInherited` analysis rule, which flags redundant `inherited`s that can be removed.
 
 ### Changed
 
