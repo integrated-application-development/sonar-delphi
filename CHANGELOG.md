@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2024-04-02
+
 ### Added
 
 - Support for multiline string literals within compiler directives.
@@ -1217,7 +1219,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.0.0...v1.1.0
