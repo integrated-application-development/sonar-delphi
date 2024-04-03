@@ -19,8 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,6 +46,16 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {
   private String image;
+  private final Supplier<ControlFlowGraph> cfgSupplier =
+      Suppliers.memoize(
+          () -> {
+            CompoundStatementNode compoundStatementNode =
+                getFirstChildOfType(CompoundStatementNode.class);
+            if (compoundStatementNode == null) {
+              return null;
+            }
+            return ControlFlowGraphFactory.create(compoundStatementNode);
+          });
 
   public AnonymousMethodNodeImpl(Token token) {
     super(token);
@@ -153,5 +167,10 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
                 ? TypeFactory.voidType()
                 : returnTypeNode.getTypeNode().getType(),
             getDirectives());
+  }
+
+  @Nullable
+  public ControlFlowGraph getControlFlowGraph() {
+    return cfgSupplier.get();
   }
 }
