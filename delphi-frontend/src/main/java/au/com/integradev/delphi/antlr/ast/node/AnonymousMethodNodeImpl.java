@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.cfg.ControlFlowGraphImpl;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.Collections;
@@ -26,8 +27,10 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -36,6 +39,7 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {
   private String image;
   private RoutineKind routineKind;
+  private ControlFlowGraph cfg;
 
   public AnonymousMethodNodeImpl(Token token) {
     super(token);
@@ -113,5 +117,16 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
             returnTypeNode == null
                 ? TypeFactory.voidType()
                 : returnTypeNode.getTypeNode().getType());
+  }
+
+  public ControlFlowGraph cfg() {
+    CompoundStatementNode compoundStatementNode = getFirstChildOfType(CompoundStatementNode.class);
+    if (compoundStatementNode == null) {
+      return null;
+    }
+    if (cfg == null) {
+      cfg = new ControlFlowGraphImpl(compoundStatementNode.getStatements());
+    }
+    return cfg;
   }
 }
