@@ -1,0 +1,19 @@
+{
+  "title": "Redundant jumps should not be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "2min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["clumsy"],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

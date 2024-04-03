@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `RedundantJump` analysis rule, which flags redundant jump statements, e.g., `Continue`, `Exit`.
 - **API:** `RepeatStatementNode::getGuardExpression` method.
 - **API:** `RepeatStatementNode::getStatementList` method.
 - **API:** `CaseStatementNode::getSelectorExpression` method.
