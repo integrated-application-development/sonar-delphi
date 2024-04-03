@@ -1,0 +1,156 @@
+/*
+ * Sonar Delphi Plugin
+ * Copyright (C) 2019 Integrated Application Development
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ */
+package au.com.integradev.delphi.checks;
+
+import au.com.integradev.delphi.antlr.ast.node.RoutineImplementationNodeImpl;
+import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.cfg.api.Block;
+import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExitPath;
+import au.com.integradev.delphi.cfg.api.Linear;
+import au.com.integradev.delphi.cfg.api.UnconditionalJump;
+import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
+
+@Rule(key = "RedundantJump")
+public class RedundantJumpCheck extends DelphiCheck {
+  private static final String MESSAGE = "Remove this redundant jump.";
+
+  @Override
+  public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
+    ControlFlowGraph cfg = ((RoutineImplementationNodeImpl) routine).getControlFlowGraph();
+    if (cfg != null) {
+      cfg.getBlocks().forEach(block -> checkBlock(block, context));
+    }
+
+    return super.visit(routine, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(AnonymousMethodNode routine, DelphiCheckContext context) {
+    CompoundStatementNode compoundStatementNode =
+        routine.getFirstChildOfType(CompoundStatementNode.class);
+    if (compoundStatementNode != null) {
+      ControlFlowGraph cfg = ControlFlowGraphFactory.create(compoundStatementNode);
+      cfg.getBlocks().forEach(block -> checkBlock(block, context));
+    }
+
+    return super.visit(routine, context);
+  }
+
+  private void checkBlock(Block block, DelphiCheckContext context) {
+    if (!(block.getSuccessors() instanceof UnconditionalJump)) {
+      return;
+    }
+
+    UnconditionalJump jump = (UnconditionalJump) block.getSuccessors();
+    Block successorWithoutJump = jump.getSuccessorWithoutJump();
+    DelphiNode terminator = jump.getTerminator();
+
+    if (!isContinueOrExit(terminator) || isExitWithExpression(terminator)) {
+      return;
+    }
+
+    Block successor = jump.getSuccessor();
+    successorWithoutJump = nonEmptySuccessor(successorWithoutJump);
+
+    if (!successorWithoutJump.equals(successor)) {
+      return;
+    }
+
+    Block finallyBlock = getFinallyBlock(block);
+    if (finallyBlock != null) {
+      if (isInViolatingTryFinally(finallyBlock)) {
+        reportIssue(context, terminator, MESSAGE);
+      }
+      return;
+    }
+
+    reportIssue(context, terminator, MESSAGE);
+  }
+
+  private static Block getFinallyBlock(Block block) {
+    return block.getSuccessorBlocks().stream()
+        .filter(successor -> successor.getSuccessors() instanceof ExitPath)
+        .findFirst()
+        .orElse(null);
+  }
+
+  private static boolean isInViolatingTryFinally(Block finallyBlock) {
+    while (finallyBlock.getSuccessorBlocks().size() == 1) {
+      Block finallySuccessor = finallyBlock.getSuccessorBlocks().iterator().next();
+      if (!(finallySuccessor.getSuccessors() instanceof ExitPath)) {
+        break;
+      }
+      finallyBlock = finallySuccessor;
+    }
+    return finallyBlock.getSuccessorBlocks().size() == 1
+        && finallyBlock.getSuccessorBlocks().iterator().next().getSuccessorBlocks().isEmpty();
+  }
+
+  private static boolean isContinueOrExit(DelphiNode node) {
+    if (!(node instanceof NameReferenceNode)) {
+      return false;
+    }
+    NameDeclaration nameDeclaration = ((NameReferenceNode) node).getNameDeclaration();
+    if (!(nameDeclaration instanceof RoutineNameDeclaration)) {
+      return false;
+    }
+
+    String fullyQualifiedName = ((RoutineNameDeclaration) nameDeclaration).fullyQualifiedName();
+    return fullyQualifiedName.equals("System.Continue") || fullyQualifiedName.equals("System.Exit");
+  }
+
+  private static boolean isExitWithExpression(DelphiNode node) {
+    if (!(node instanceof NameReferenceNode)) {
+      return false;
+    }
+    NameDeclaration nameDeclaration = ((NameReferenceNode) node).getNameDeclaration();
+    if (!(nameDeclaration instanceof RoutineNameDeclaration)) {
+      return false;
+    }
+
+    String fullyQualifiedName = ((RoutineNameDeclaration) nameDeclaration).fullyQualifiedName();
+    if (!fullyQualifiedName.equals("System.Exit")) {
+      return false;
+    }
+    ArgumentListNode argumentList = node.getParent().getFirstChildOfType(ArgumentListNode.class);
+    if (argumentList == null) {
+      return false;
+    }
+    return argumentList.getArgumentNodes().size() == 1;
+  }
+
+  private static Block nonEmptySuccessor(Block initialBlock) {
+    Block result = initialBlock;
+    while (result.getElements().isEmpty() && result.getSuccessors() instanceof Linear) {
+      result = ((Linear) result).getSuccessor();
+    }
+    return result;
+  }
+}
