@@ -126,6 +126,7 @@ public final class CheckList {
           RedundantBooleanCheck.class,
           RedundantCastCheck.class,
           RedundantInheritedCheck.class,
+          RedundantJumpCheck.class,
           RedundantParenthesesCheck.class,
           RoutineNameCheck.class,
           RoutineNestingDepthCheck.class,

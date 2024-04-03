@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "Correct to (correct case)" quick fix for `LowercaseKeyword`.
 - Ability to create a control flow graph.
+- `RedundantJump` analysis rule, which flags redundant jump statements, e.g., `Continue`, `Exit`.
 - **API:** `PropertyNameDeclaration::getImplementedTypes` method.
 - **API:** `PropertyNode::getDefaultSpecifier` method.
 - **API:** `PropertyNode::getImplementsSpecifier` method.
