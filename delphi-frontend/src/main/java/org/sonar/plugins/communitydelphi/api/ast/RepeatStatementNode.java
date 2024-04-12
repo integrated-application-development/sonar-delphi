@@ -18,4 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface RepeatStatementNode extends StatementNode {}
+public interface RepeatStatementNode extends StatementNode {
+  ExpressionNode getGuardExpression();
+
+  StatementListNode getStatementList();
+}

@@ -20,11 +20,23 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
 public final class RepeatStatementNodeImpl extends DelphiNodeImpl implements RepeatStatementNode {
   public RepeatStatementNodeImpl(Token token) {
     super(token);
+  }
+
+  @Override
+  public ExpressionNode getGuardExpression() {
+    return (ExpressionNode) getChild(2);
+  }
+
+  @Override
+  public StatementListNode getStatementList() {
+    return (StatementListNode) getChild(0);
   }
 
   @Override
