@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `CaseItemStatementNode::getExpressions` method.
+- **API:** `RepeatStatementNode::getGuardExpression` method.
+- **API:** `RepeatStatementNode::getStatements` method.
 
 ### Changed
 
