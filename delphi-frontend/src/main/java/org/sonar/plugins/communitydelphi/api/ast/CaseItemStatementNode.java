@@ -19,7 +19,11 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public interface CaseItemStatementNode extends StatementNode {
   List<ExpressionNode> getExpressions();
+
+  @Nullable
+  StatementNode getStatement();
 }
