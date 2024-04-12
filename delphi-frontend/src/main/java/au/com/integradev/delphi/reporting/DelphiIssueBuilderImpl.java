@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -41,9 +41,9 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
-import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext.Location;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.DelphiIssueBuilder;
 
 /**
  * Based directly on {@code InternalJavaIssueBuilder} from the sonar-java project.
@@ -52,8 +52,8 @@ import org.sonar.plugins.communitydelphi.api.check.FilePosition;
  *     href="https://github.com/SonarSource/sonar-java/blob/master/java-frontend/src/main/java/org/sonar/java/reporting/InternalJavaIssueBuilder.java">
  *     InternalJavaIssueBuilder </a>
  */
-public final class DelphiIssueBuilder {
-  private static final Logger LOG = LoggerFactory.getLogger(DelphiIssueBuilder.class);
+public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiIssueBuilderImpl.class);
 
   private static final String MESSAGE_NAME = "message";
   private static final String FLOWS_NAME = "flows";
@@ -65,12 +65,12 @@ public final class DelphiIssueBuilder {
   private final MasterCheckRegistrar checkRegistrar;
   private FilePosition position;
   private String message;
-  @Nullable private List<DelphiCheckContext.Location> secondaries;
+  @Nullable private List<Location> secondaries;
   @Nullable private List<List<Location>> flows;
   @Nullable private Integer cost;
   private boolean reported;
 
-  public DelphiIssueBuilder(
+  public DelphiIssueBuilderImpl(
       DelphiCheck check,
       SensorContext context,
       DelphiInputFile delphiFile,
@@ -94,11 +94,13 @@ public final class DelphiIssueBuilder {
     Preconditions.checkState(target == null, "Cannot set %s multiple times.", targetName);
   }
 
-  public DelphiIssueBuilder onNode(DelphiNode node) {
+  @Override
+  public DelphiIssueBuilderImpl onNode(DelphiNode node) {
     return onFilePosition(FilePosition.from(node));
   }
 
-  public DelphiIssueBuilder onRange(DelphiNode startNode, DelphiNode endNode) {
+  @Override
+  public DelphiIssueBuilderImpl onRange(DelphiNode startNode, DelphiNode endNode) {
     return onFilePosition(
         FilePosition.from(
             startNode.getBeginLine(),
@@ -107,27 +109,32 @@ public final class DelphiIssueBuilder {
             endNode.getEndColumn()));
   }
 
-  public DelphiIssueBuilder onFilePosition(FilePosition position) {
+  @Override
+  public DelphiIssueBuilderImpl onFilePosition(FilePosition position) {
     this.position = position;
     return this;
   }
 
-  public DelphiIssueBuilder withMessage(String message) {
+  @Override
+  public DelphiIssueBuilderImpl withMessage(String message) {
     this.message = message;
     return this;
   }
 
+  @Override
   @FormatMethod
-  public DelphiIssueBuilder withMessage(@FormatString String message, Object... args) {
+  public DelphiIssueBuilderImpl withMessage(@FormatString String message, Object... args) {
     this.message = String.format(message, args);
     return this;
   }
 
-  public DelphiIssueBuilder withSecondaries(DelphiCheckContext.Location... secondaries) {
+  @Override
+  public DelphiIssueBuilderImpl withSecondaries(Location... secondaries) {
     return withSecondaries(Arrays.asList(secondaries));
   }
 
-  public DelphiIssueBuilder withSecondaries(List<DelphiCheckContext.Location> secondaries) {
+  @Override
+  public DelphiIssueBuilderImpl withSecondaries(List<Location> secondaries) {
     requiresValueToBeSet(this.message, MESSAGE_NAME);
     requiresValueNotToBeSet(this.flows, FLOWS_NAME, SECONDARIES_NAME);
     requiresSetOnlyOnce(this.secondaries, SECONDARIES_NAME);
@@ -136,7 +143,8 @@ public final class DelphiIssueBuilder {
     return this;
   }
 
-  public DelphiIssueBuilder withFlows(List<List<DelphiCheckContext.Location>> flows) {
+  @Override
+  public DelphiIssueBuilderImpl withFlows(List<List<Location>> flows) {
     requiresValueToBeSet(this.message, MESSAGE_NAME);
     requiresValueNotToBeSet(this.secondaries, SECONDARIES_NAME, FLOWS_NAME);
     requiresSetOnlyOnce(this.flows, FLOWS_NAME);
@@ -145,7 +153,8 @@ public final class DelphiIssueBuilder {
     return this;
   }
 
-  public DelphiIssueBuilder withCost(int cost) {
+  @Override
+  public DelphiIssueBuilderImpl withCost(int cost) {
     requiresValueToBeSet(this.message, MESSAGE_NAME);
     requiresSetOnlyOnce(this.cost, "cost");
 
@@ -153,6 +162,7 @@ public final class DelphiIssueBuilder {
     return this;
   }
 
+  @Override
   public void report() {
     Preconditions.checkState(!reported, "Can only be reported once.");
     requiresValueToBeSet(message, MESSAGE_NAME);
@@ -187,7 +197,7 @@ public final class DelphiIssueBuilder {
     }
 
     if (flows != null) {
-      for (List<DelphiCheckContext.Location> flow : flows) {
+      for (List<Location> flow : flows) {
         newIssue.addFlow(
             flow.stream()
                 .map(location -> createNewIssueLocation(inputFile, newIssue, location))
@@ -197,6 +207,10 @@ public final class DelphiIssueBuilder {
 
     newIssue.save();
     reported = true;
+  }
+
+  public boolean isReported() {
+    return reported;
   }
 
   private static NewIssueLocation createNewIssueLocation(

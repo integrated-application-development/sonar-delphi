@@ -20,13 +20,14 @@ package au.com.integradev.delphi.check;
 
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
-import au.com.integradev.delphi.reporting.DelphiIssueBuilder;
+import au.com.integradev.delphi.reporting.DelphiIssueBuilderImpl;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
+import org.sonar.plugins.communitydelphi.api.reporting.DelphiIssueBuilder;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -82,6 +83,6 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
 
   @Override
   public DelphiIssueBuilder newIssue() {
-    return new DelphiIssueBuilder(check, sensorContext, delphiFile, checkRegistrar);
+    return new DelphiIssueBuilderImpl(check, sensorContext, delphiFile, checkRegistrar);
   }
 }
