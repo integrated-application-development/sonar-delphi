@@ -25,10 +25,16 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
 public final class CaseStatementNodeImpl extends DelphiNodeImpl implements CaseStatementNode {
   public CaseStatementNodeImpl(Token token) {
     super(token);
+  }
+
+  @Override
+  public ExpressionNode getSelectorExpression() {
+    return getFirstChildOfType(ExpressionNode.class);
   }
 
   @Override

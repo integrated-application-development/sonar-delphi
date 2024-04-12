@@ -22,6 +22,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 public interface CaseStatementNode extends StatementNode {
+  ExpressionNode getSelectorExpression();
+
   List<CaseItemStatementNode> getCaseItems();
 
   @Nullable
