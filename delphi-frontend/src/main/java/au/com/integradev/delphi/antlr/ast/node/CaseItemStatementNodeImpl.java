@@ -23,6 +23,7 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
 public final class CaseItemStatementNodeImpl extends DelphiNodeImpl
     implements CaseItemStatementNode {
@@ -42,5 +43,10 @@ public final class CaseItemStatementNodeImpl extends DelphiNodeImpl
   @Override
   public List<ExpressionNode> getExpressions() {
     return findChildrenOfType(ExpressionNode.class);
+  }
+
+  @Override
+  public StatementNode getStatement() {
+    return getFirstChildOfType(StatementNode.class);
   }
 }
