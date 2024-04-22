@@ -953,6 +953,7 @@ callConvention               : CDECL
                              | REGISTER
                              | SAFECALL
                              | STDCALL
+                             | WINAPI
                              | EXPORT // deprecated
                              ;
 oldCallConventionDirective   : FAR // deprecated
@@ -987,7 +988,7 @@ keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | ASSEMB
                              | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
                              | (PRIVATE | PROTECTED | PUBLIC | PUBLISHED | READ | READONLY | REFERENCE | REGISTER | REINTRODUCE)
                              | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
-                             | (VARARGS | VIRTUAL | WRITE | WRITEONLY)
+                             | (VARARGS | VIRTUAL | WINAPI | WRITE | WRITEONLY)
                              ;
 keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS | ASM | ASSEMBLER | ASSEMBLY)
                              | (AT | AUTOMATED | BEGIN | CASE | CDECL | CLASS | CONST | CONSTRUCTOR | CONTAINS| DEFAULT)
@@ -1001,7 +1002,7 @@ keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS |
                              | (RECORD | REFERENCE | REGISTER | REINTRODUCE | REPEAT | REQUIRES | RESIDENT)
                              | (RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT)
                              | (STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS)
-                             | (VIRTUAL | WHILE | WITH | WRITE | WRITEONLY | XOR)
+                             | (VIRTUAL | WHILE | WINAPI | WITH | WRITE | WRITEONLY | XOR)
                              ;
 nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration nameDeclaration*)
                              ;
@@ -1171,6 +1172,7 @@ VAR               : V A R                       ;
 VARARGS           : V A R A R G S               ;
 VIRTUAL           : V I R T U A L               ;
 WHILE             : W H I L E                   ;
+WINAPI            : W I N A P I                 ;
 WITH              : W I T H                     ;
 WRITE             : W R I T E                   ;
 WRITEONLY         : W R I T E O N L Y           ;

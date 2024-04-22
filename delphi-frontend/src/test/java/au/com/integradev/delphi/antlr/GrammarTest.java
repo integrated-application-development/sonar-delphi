@@ -196,6 +196,11 @@ class GrammarTest {
   }
 
   @Test
+  void testWinapiCallingConvention() {
+    assertParsed("WinapiCallingConvention.pas");
+  }
+
+  @Test
   void testOptionalFunctionReturnType() {
     assertParsed("OptionalFunctionReturnType.pas");
   }
