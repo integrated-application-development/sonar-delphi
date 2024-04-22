@@ -572,7 +572,7 @@ public class NameResolver {
     }
   }
 
-  private void readNameReference(NameReferenceNode node, boolean attribute) {
+  private void readNameReference(NameReferenceNode node, boolean inAttribute) {
     boolean couldBeUnitNameReference =
         currentScope == null
             || (!(currentScope instanceof UnknownScope) && currentScope.equals(node.getScope()));
@@ -582,12 +582,12 @@ public class NameResolver {
         return;
       }
 
-      NameOccurrence occurrence = createNameOccurrence(reference, attribute);
+      NameOccurrence occurrence = createNameOccurrence(reference, inAttribute);
       resolveNameReferenceOccurrence(occurrence, reference.nextName() == null);
 
       if (nameResolutionFailed()) {
         if (couldBeUnitNameReference) {
-          readPossibleUnitNameReference(node);
+          readPossibleUnitNameReference(node, inAttribute);
         }
         return;
       }
@@ -664,9 +664,9 @@ public class NameResolver {
     return type.isClassReference() && ((ClassReferenceType) type).classType().isDynamicArray();
   }
 
-  private void readPossibleUnitNameReference(NameReferenceNode node) {
+  private void readPossibleUnitNameReference(NameReferenceNode node, boolean inAttribute) {
     NameResolver unitNameResolver = new NameResolver(((DelphiNodeImpl) node).getTypeFactory());
-    if (unitNameResolver.readUnitNameReference(node)) {
+    if (unitNameResolver.readUnitNameReference(node, inAttribute)) {
       this.currentType = unknownType();
       this.names.clear();
       this.resolvedDeclarations.clear();
@@ -678,7 +678,7 @@ public class NameResolver {
     }
   }
 
-  private boolean readUnitNameReference(NameReferenceNode node) {
+  private boolean readUnitNameReference(NameReferenceNode node, boolean inAttribute) {
     FileScope fileScope = node.getScope().getEnclosingScope(FileScope.class);
 
     List<QualifiedNameDeclaration> unitDeclarations = new ArrayList<>();
@@ -687,7 +687,7 @@ public class NameResolver {
     unitDeclarations.sort(Comparator.comparing(NameDeclaration::getImage).reversed());
 
     for (QualifiedNameDeclaration declaration : unitDeclarations) {
-      if (matchReferenceToUnitNameDeclaration(node, declaration)) {
+      if (matchReferenceToUnitNameDeclaration(node, declaration, inAttribute)) {
         return true;
       }
     }
@@ -695,7 +695,7 @@ public class NameResolver {
   }
 
   private boolean matchReferenceToUnitNameDeclaration(
-      NameReferenceNode node, QualifiedNameDeclaration declaration) {
+      NameReferenceNode node, QualifiedNameDeclaration declaration, boolean inAttribute) {
     List<String> declarationParts = declaration.getQualifiedName().parts();
     List<NameReferenceNode> references = node.flatten();
 
@@ -730,7 +730,7 @@ public class NameResolver {
     addResolvedDeclaration();
 
     if (references.size() > declarationParts.size()) {
-      readNameReference(references.get(declarationParts.size()));
+      readNameReference(references.get(declarationParts.size()), inAttribute);
     }
 
     return true;
