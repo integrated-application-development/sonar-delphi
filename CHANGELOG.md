@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for the `winapi` calling convention.
+- **API:** `DelphiTokenType.WINAPI` token type.
+
 ### Fixed
 
 - Exception when parsing fully qualified attribute references.

@@ -42,6 +42,7 @@ public enum RoutineDirective {
   REGISTER(DelphiTokenType.REGISTER),
   SAFECALL(DelphiTokenType.SAFECALL),
   STDCALL(DelphiTokenType.STDCALL),
+  WINAPI(DelphiTokenType.WINAPI),
   EXPORT(DelphiTokenType.EXPORT),
   FAR(DelphiTokenType.FAR),
   LOCAL(DelphiTokenType.LOCAL),
