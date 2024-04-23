@@ -1004,7 +1004,7 @@ keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS |
                              | (STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS)
                              | (VIRTUAL | WHILE | WINAPI | WITH | WRITE | WRITEONLY | XOR)
                              ;
-nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration nameDeclaration*)
+nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration (',' nameDeclaration)*)
                              ;
 label                        : ident
                              | intNum
