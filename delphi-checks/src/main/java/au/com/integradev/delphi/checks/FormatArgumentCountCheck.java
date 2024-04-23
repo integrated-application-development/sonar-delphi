@@ -19,9 +19,17 @@
 package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.utils.format.DelphiFormatString;
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 
 @Rule(key = "FormatArgumentCount")
 public class FormatArgumentCountCheck extends AbstractFormatArgumentCheck {
@@ -29,7 +37,9 @@ public class FormatArgumentCountCheck extends AbstractFormatArgumentCheck {
   protected void checkFormatStringViolation(
       DelphiFormatString formatString,
       ArrayConstructorNode arrayConstructor,
-      DelphiCheckContext context) {
+      DelphiCheckContext context,
+      TextLiteralNode textLiteral,
+      PrimaryExpressionNode primaryExpression) {
     int expectedArgs = formatString.getArguments().size();
     int actualArgs = arrayConstructor.getElements().size();
     int difference = expectedArgs - actualArgs;
@@ -41,12 +51,41 @@ public class FormatArgumentCountCheck extends AbstractFormatArgumentCheck {
           String.format(
               "Add %d more formatting argument%s to this 'Format' call.", difference, plural));
     } else if (difference < 0) {
-      reportIssue(
-          context,
-          arrayConstructor,
-          String.format(
-              "Remove %d formatting argument%s from this 'Format' call.",
-              Math.abs(difference), plural));
+      List<QuickFix> quickFixes = new ArrayList<>();
+
+      if (expectedArgs == 0) {
+        quickFixes.add(
+            QuickFix.newFix("Use string value directly")
+                .withEdit(QuickFixEdit.copyReplacing(textLiteral, primaryExpression)));
+
+        quickFixes.add(
+            QuickFix.newFix("Remove %d unused formatting argument%s", Math.abs(difference), plural)
+                .withEdit(QuickFixEdit.replace(arrayConstructor, "[]")));
+      } else {
+        List<ExpressionNode> elements = arrayConstructor.getElements();
+        ExpressionNode lastOkElement = elements.get(expectedArgs - 1);
+        ExpressionNode lastBadElement = elements.get(elements.size() - 1);
+
+        quickFixes.add(
+            QuickFix.newFix("Remove %d unused formatting argument%s", Math.abs(difference), plural)
+                .withEdit(
+                    QuickFixEdit.delete(
+                        FilePosition.from(
+                            lastOkElement.getEndLine(),
+                            lastOkElement.getEndColumn(),
+                            lastBadElement.getEndLine(),
+                            lastBadElement.getEndColumn()))));
+      }
+
+      context
+          .newIssue()
+          .onNode(arrayConstructor)
+          .withMessage(
+              String.format(
+                  "Remove %d formatting argument%s from this 'Format' call.",
+                  Math.abs(difference), plural))
+          .withQuickFixes(quickFixes)
+          .report();
     }
   }
 }

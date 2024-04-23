@@ -76,7 +76,14 @@ public abstract class AbstractFormatArgumentCheck extends DelphiCheck {
     String rawFormatString = textLiteral.get().getValue();
     FormatStringParser parser = new FormatStringParser(rawFormatString);
     try {
-      checkFormatStringViolation(parser.parse(), arrayConstructor.get(), context);
+      DelphiFormatString formatString = parser.parse();
+      checkFormatStringViolation(formatString, arrayConstructor.get(), context);
+      checkFormatStringViolation(
+          parser.parse(),
+          arrayConstructor.get(),
+          context,
+          textLiteral.get(),
+          (PrimaryExpressionNode) nameReference.getParent());
     } catch (DelphiFormatStringException e) {
       handleInvalidFormatString(textLiteral.get(), context);
     }
@@ -89,6 +96,13 @@ public abstract class AbstractFormatArgumentCheck extends DelphiCheck {
       DelphiFormatString formatString,
       ArrayConstructorNode arrayConstructor,
       DelphiCheckContext context) {}
+
+  protected void checkFormatStringViolation(
+      DelphiFormatString formatString,
+      ArrayConstructorNode arrayConstructor,
+      DelphiCheckContext context,
+      TextLiteralNode textLiteral,
+      PrimaryExpressionNode primaryExpression) {}
 
   private Optional<TextLiteralNode> getLiteralArgument(ArgumentNode argument) {
     ExpressionNode expression = argument.getExpression();

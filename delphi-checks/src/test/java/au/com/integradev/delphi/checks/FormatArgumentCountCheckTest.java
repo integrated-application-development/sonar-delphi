@@ -56,6 +56,20 @@ class FormatArgumentCountCheckTest {
   }
 
   @Test
+  void testOneTooManyArgumentsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentCountCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("initialization")
+                .appendImpl("  // Fix@[+1:31 to +1:38] <<>>")
+                .appendImpl("  Format('%s %s', ['foo', 'bar', 'baz']); // Noncompliant"))
+        .verifyIssues();
+  }
+
+  @Test
   void testTooManyArgumentsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new FormatArgumentCountCheck())
@@ -64,7 +78,23 @@ class FormatArgumentCountCheckTest {
             new DelphiTestUnitBuilder()
                 .appendImpl("uses System.SysUtils;")
                 .appendImpl("initialization")
-                .appendImpl("  Format('%s %s', ['foo', 'bar', 'baz']); // Noncompliant"))
+                .appendImpl("  // Fix@[+1:31 to +1:47] <<>>")
+                .appendImpl("  Format('%s %s', ['foo', 'bar', 'baz', 'flarp']); // Noncompliant"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testTooManyArgumentsNoneNeededShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentCountCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("initialization")
+                .appendImpl("  // Fix qf1@[+2:25 to +2:46] <<[]>>")
+                .appendImpl("  // Fix qf2@[+1:2 to +1:47] <<'Hello world!'>>")
+                .appendImpl("  Format('Hello world!', ['foo', 'bar', 'baz']); // Noncompliant"))
         .verifyIssues();
   }
 
