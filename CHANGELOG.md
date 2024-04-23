@@ -10,7 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for the `winapi` calling convention.
+- Support for quick fixes.
+- "Remove the superflous semicolon" quick fix for `SuperfluousSemicolon`.
+- "Correct to (correct case)" quick fix for `MixedNames`.
+- "Remove redundant parentheses" quick fix for `RedundantParentheses`.
+- "Convert to initialization section" quick fix for `LegacyInitializationSection`.
+- "Replace Pascal-style result with Result" quick fix for `PascalStyleResult`.
+- "Replace with TList.Last" quick fix for `IndexLastListElement`.
+- "Remove empty argument list" quick fix for `EmptyArgumentList`.
+- "Remove redundant assignment check" quick fix for `AssignedAndFree`.
+- "Separate grouped parameters" quick fix for `GroupedParameterDeclaration`.
+- "Remove (n) unused formatting arguments" quick fix for `FormatArgumentCount`.
+- "Use string value directly" quick fix for `FormatArgumentCount`.
 - **API:** `DelphiTokenType.WINAPI` token type.
+- **API:** `DelphiIssueBuilder` type, which is returned by `DelphiCheckContext::newIssue`.
+- **API:** `QuickFix` type, which is accepted by `DelphiIssueBuilder::withQuickFixes`.
+- **API:** `QuickFixEdit` type, which is accepted by `QuickFix::addEdits`.
 
 ### Fixed
 
