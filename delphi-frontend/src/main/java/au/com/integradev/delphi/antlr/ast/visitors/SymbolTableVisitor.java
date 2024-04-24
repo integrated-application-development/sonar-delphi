@@ -61,6 +61,7 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
@@ -68,8 +69,10 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
 import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.FieldDeclarationNode;
@@ -83,9 +86,11 @@ import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
+import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -102,6 +107,7 @@ import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.TryStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
@@ -111,6 +117,7 @@ import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
 import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
@@ -534,6 +541,43 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(TryStatementNode node, Data data) {
+    createLocalScope(node.getStatementList(), data);
+    if (node.hasExceptBlock()) {
+      ExceptBlockNode exceptBlock = node.getExceptBlock();
+      if (exceptBlock.isBareExcept()) {
+        createLocalScope(exceptBlock.getStatementList(), data);
+      } else {
+        DelphiParserVisitor.super.visit(exceptBlock, data);
+      }
+    } else if (node.hasFinallyBlock()) {
+      return createLocalScope(node.getFinallyBlock().getStatementList(), data);
+    }
+    return data;
+  }
+
+  @Override
+  public Data visit(IfStatementNode node, Data data) {
+    DelphiParserVisitor.super.visit(node.getGuardExpression(), data);
+
+    StatementNode thenStatement = node.getThenStatement();
+    if (thenStatement instanceof CompoundStatementNode) {
+      DelphiParserVisitor.super.visit(thenStatement, data);
+    } else if (thenStatement != null) {
+      createLocalScope(thenStatement, data);
+    }
+
+    StatementNode elseStatement = node.getElseStatement();
+    if (elseStatement instanceof CompoundStatementNode) {
+      DelphiParserVisitor.super.visit(elseStatement, data);
+    } else if (elseStatement != null) {
+      createLocalScope(elseStatement, data);
+    }
+
+    return data;
+  }
+
+  @Override
+  public Data visit(ElseBlockNode node, Data data) {
     return createLocalScope(node, data);
   }
 
@@ -564,6 +608,11 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   public Data visit(ForLoopVarReferenceNode node, Data data) {
     data.nameResolutionHelper.resolve(node.getNameReference());
     return DelphiParserVisitor.super.visit(node, data);
+  }
+
+  @Override
+  public Data visit(WhileStatementNode node, Data data) {
+    return createLocalScope(node, data);
   }
 
   @Override
@@ -610,6 +659,23 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   @Override
   public Data visit(CaseStatementNode node, Data data) {
     return createLocalScope(node, data);
+  }
+
+  @Override
+  public Data visit(CaseItemStatementNode node, Data data) {
+    return createLocalScope(node, data);
+  }
+
+  @Override
+  public Data visit(LabelStatementNode node, Data data) {
+    // Bizarre behavior:
+    //   If a label is the first statement in a given scope (routine, local, etc.), then it
+    //   doesn't get its own local scope!
+    //   This is probably a poorly thought-out compiler optimization.
+    if (node.getChildIndex() > 0) {
+      return createLocalScope(node, data);
+    }
+    return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override

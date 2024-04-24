@@ -381,6 +381,13 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testLocalScopes() {
+    execute("LocalScopes.pas");
+    verifyUsages(68, 8, reference(69, 10));
+    verifyUsages(73, 10, reference(74, 12));
+  }
+
+  @Test
   void testClassReferenceMethodResolution() {
     execute("classReferences/MethodResolution.pas");
     verifyUsages(9, 14, reference(18, 6));

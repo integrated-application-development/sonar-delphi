@@ -18,14 +18,49 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+/** {@code try} statement. */
 public interface TryStatementNode extends StatementNode {
+  /**
+   * Returns the list of statements from within this {@code try} statement.
+   *
+   * @return statement list from within this {@code try} statement
+   */
   StatementListNode getStatementList();
 
+  /**
+   * Returns whether this {@code try} statement has an {@code except} block.
+   *
+   * @return true if this {@code try} statement has an {@code except} block
+   */
   boolean hasExceptBlock();
 
+  /**
+   * Returns whether this {@code try} statement has a {@code finally} block.
+   *
+   * @return true if this {@code try} statement has a {@code finally} block
+   */
   boolean hasFinallyBlock();
 
+  /**
+   * Returns the {@code except} block for this {@code try} statement.
+   *
+   * @return the {@code except} block for this {@code try} statement
+   * @deprecated Use {@link TryStatementNode#getExceptBlock()} instead
+   */
+  @Deprecated(forRemoval = true)
   ExceptBlockNode getExpectBlock();
 
+  /**
+   * Returns the {@code except} block for this {@code try} statement.
+   *
+   * @return the {@code except} block for this {@code try} statement
+   */
+  ExceptBlockNode getExceptBlock();
+
+  /**
+   * Returns the {@code finally} block for this {@code try} statement.
+   *
+   * @return the {@code finally} block for this {@code try} statement
+   */
   FinallyBlockNode getFinallyBlock();
 }

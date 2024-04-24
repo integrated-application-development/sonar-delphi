@@ -18,4 +18,23 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface WhileStatementNode extends StatementNode {}
+import javax.annotation.Nullable;
+
+/** {@code while} loop statement. */
+public interface WhileStatementNode extends StatementNode {
+  /**
+   * Returns the guard expression for this {@code while} loop.
+   *
+   * @return the guard expression for this {@code while} loop
+   */
+  ExpressionNode getGuardExpression();
+
+  /**
+   * Returns the statement that will be executed in this {@code while} loop, also known as the loop
+   * body.
+   *
+   * @return the statement that will be executed in this {@code while} loop
+   */
+  @Nullable
+  StatementNode getStatement();
+}
