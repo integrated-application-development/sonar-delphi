@@ -19,7 +19,10 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 
 public final class WhileStatementNodeImpl extends DelphiNodeImpl implements WhileStatementNode {
@@ -30,5 +33,16 @@ public final class WhileStatementNodeImpl extends DelphiNodeImpl implements Whil
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public ExpressionNode getGuardExpression() {
+    return (ExpressionNode) getChild(0);
+  }
+
+  @Override
+  @Nullable
+  public StatementNode getStatement() {
+    return (StatementNode) getChild(2);
   }
 }

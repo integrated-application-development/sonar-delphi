@@ -22,14 +22,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Separate grouped parameters" quick fix for `GroupedParameterDeclaration`.
 - "Remove (n) unused formatting arguments" quick fix for `FormatArgumentCount`.
 - "Use string value directly" quick fix for `FormatArgumentCount`.
+- **API:** `TryStatementNode::getExceptBlock` method.
+- **API:** `WhileStatementNode::getGuardExpression` method.
+- **API:** `WhileStatementNode::getStatement` method.
 - **API:** `DelphiTokenType.WINAPI` token type.
 - **API:** `DelphiIssueBuilder` type, which is returned by `DelphiCheckContext::newIssue`.
 - **API:** `QuickFix` type, which is accepted by `DelphiIssueBuilder::withQuickFixes`.
 - **API:** `QuickFixEdit` type, which is accepted by `QuickFix::addEdits`.
 
+### Deprecated
+
+- **API:** `TryStatementNode::getExpectBlock` method, use `getExceptBlock` instead.
+
 ### Fixed
 
 - Exception when parsing fully qualified attribute references.
+- `DuplicatedDeclarationException` errors caused by some local scopes being modeled incorrectly.
 
 ## [1.4.0] - 2024-04-02
 

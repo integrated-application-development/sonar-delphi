@@ -53,8 +53,14 @@ public final class TryStatementNodeImpl extends DelphiNodeImpl implements TrySta
     return getChild(1) instanceof FinallyBlockNode;
   }
 
+  @SuppressWarnings("removal")
   @Override
   public ExceptBlockNode getExpectBlock() {
+    return getExceptBlock();
+  }
+
+  @Override
+  public ExceptBlockNode getExceptBlock() {
     if (exceptBlock == null && hasExceptBlock()) {
       exceptBlock = (ExceptBlockNode) getChild(1);
     }
