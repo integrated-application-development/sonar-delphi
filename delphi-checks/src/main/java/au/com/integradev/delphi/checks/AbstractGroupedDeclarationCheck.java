@@ -37,7 +37,7 @@ public abstract class AbstractGroupedDeclarationCheck extends DelphiCheck {
       DelphiIssueBuilder newIssue =
           context.newIssue().onNode(declarationList).withMessage(getIssueMessage());
 
-      QuickFix quickFix = createQuickFix(declarationList, context);
+      QuickFix quickFix = createQuickFix(declarationList);
       if (quickFix != null) {
         newIssue.withQuickFixes(quickFix);
       }
@@ -47,8 +47,14 @@ public abstract class AbstractGroupedDeclarationCheck extends DelphiCheck {
     return super.visit(declarationList, context);
   }
 
-  protected QuickFix createQuickFix(
-      NameDeclarationListNode declarationList, DelphiCheckContext context) {
+  /**
+   * Stub for implementing a quick fix that separates the grouped declarations. Does nothing by
+   * default, but can be overridden to implement behaviour.
+   *
+   * @param declarationList the node containing the grouped declarations.
+   * @return a quick fix to associate with the raised issue, or null.
+   */
+  protected QuickFix createQuickFix(NameDeclarationListNode declarationList) {
     return null;
   }
 }

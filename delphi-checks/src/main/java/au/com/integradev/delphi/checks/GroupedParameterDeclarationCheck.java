@@ -27,7 +27,6 @@ import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationListNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
-import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -59,8 +58,7 @@ public class GroupedParameterDeclarationCheck extends AbstractGroupedDeclaration
   }
 
   @Override
-  protected QuickFix createQuickFix(
-      NameDeclarationListNode declarationList, DelphiCheckContext context) {
+  protected QuickFix createQuickFix(NameDeclarationListNode declarationList) {
     FormalParameterNode formalParameter = (FormalParameterNode) declarationList.getParent();
 
     TypeNode typeNode = formalParameter.getTypeNode();
