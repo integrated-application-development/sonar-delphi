@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exception when parsing fully qualified attribute references.
 - `DuplicatedDeclarationException` errors caused by some local scopes being modeled incorrectly.
+- Name resolution issues around `if`, `else`, `for`, and `with` constructs when the body contains a single statement.
 
 ## [1.4.0] - 2024-04-02
 

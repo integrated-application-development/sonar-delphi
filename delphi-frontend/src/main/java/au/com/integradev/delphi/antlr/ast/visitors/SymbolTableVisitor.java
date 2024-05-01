@@ -343,7 +343,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
         || node.getParent() instanceof ForStatementNode) {
       return DelphiParserVisitor.super.visit(node, data);
     }
-    return createLocalScope(node, data);
+    return visitNewLocalScope(node, data);
   }
 
   @Override
@@ -541,16 +541,16 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(TryStatementNode node, Data data) {
-    createLocalScope(node.getStatementList(), data);
+    visitNewLocalScope(node.getStatementList(), data);
     if (node.hasExceptBlock()) {
       ExceptBlockNode exceptBlock = node.getExceptBlock();
       if (exceptBlock.isBareExcept()) {
-        createLocalScope(exceptBlock.getStatementList(), data);
+        visitNewLocalScope(exceptBlock.getStatementList(), data);
       } else {
         DelphiParserVisitor.super.visit(exceptBlock, data);
       }
     } else if (node.hasFinallyBlock()) {
-      return createLocalScope(node.getFinallyBlock().getStatementList(), data);
+      return visitNewLocalScope(node.getFinallyBlock().getStatementList(), data);
     }
     return data;
   }
@@ -561,16 +561,18 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
     StatementNode thenStatement = node.getThenStatement();
     if (thenStatement instanceof CompoundStatementNode) {
+      // A local scope already gets created for CompoundStatements
       thenStatement.accept(this, data);
     } else if (thenStatement != null) {
-      createLocalScope(thenStatement, data);
+      visitNewLocalScopeFromRoot(thenStatement, data);
     }
 
     StatementNode elseStatement = node.getElseStatement();
     if (elseStatement instanceof CompoundStatementNode) {
+      // A local scope already gets created for CompoundStatements
       elseStatement.accept(this, data);
     } else if (elseStatement != null) {
-      createLocalScope(elseStatement, data);
+      visitNewLocalScopeFromRoot(elseStatement, data);
     }
 
     return data;
@@ -578,7 +580,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(ElseBlockNode node, Data data) {
-    return createLocalScope(node, data);
+    return visitNewLocalScope(node, data);
   }
 
   @Override
@@ -590,7 +592,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     node.getTargetExpression().accept(this, data);
     node.getVariable().accept(this, data);
 
-    return visitScope(node.getStatement(), data);
+    return visitScopeFromRoot(node.getStatement(), data);
   }
 
   @Override
@@ -601,7 +603,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     node.getEnumerable().accept(this, data);
     node.getVariable().accept(this, data);
 
-    return visitScope(node.getStatement(), data);
+    return visitScopeFromRoot(node.getStatement(), data);
   }
 
   @Override
@@ -612,12 +614,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(WhileStatementNode node, Data data) {
-    return createLocalScope(node, data);
+    return visitNewLocalScope(node, data);
   }
 
   @Override
   public Data visit(RepeatStatementNode node, Data data) {
-    return createLocalScope(node, data);
+    return visitNewLocalScope(node, data);
   }
 
   @Override
@@ -637,7 +639,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     data.addScope(scope, node);
     scope.setParent(parent);
 
-    return visitScope(node.getStatement(), data);
+    return visitScopeFromRoot(node.getStatement(), data);
   }
 
   private static DelphiScope getTargetScope(ExpressionNode target) {
@@ -658,12 +660,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(CaseStatementNode node, Data data) {
-    return createLocalScope(node, data);
+    return visitNewLocalScope(node, data);
   }
 
   @Override
   public Data visit(CaseItemStatementNode node, Data data) {
-    return createLocalScope(node, data);
+    return visitNewLocalScope(node, data);
   }
 
   @Override
@@ -673,7 +675,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     //   doesn't get its own local scope!
     //   This is probably a poorly thought-out compiler optimization.
     if (node.getChildIndex() > 0) {
-      return createLocalScope(node, data);
+      return visitNewLocalScope(node, data);
     }
     return DelphiParserVisitor.super.visit(node, data);
   }
@@ -802,9 +804,28 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     return visitScope(node, data);
   }
 
-  private Data createLocalScope(DelphiNode node, Data data) {
+  /**
+   * Creates a new local scope attached to a node, visits that node's children, then pops the scope.
+   *
+   * @param node the node to attach the scope to, then visit the children of.
+   * @param data the symbol table data.
+   * @return the symbol table data.
+   */
+  private Data visitNewLocalScope(DelphiNode node, Data data) {
     data.addScope(new LocalScopeImpl(), node);
     return visitScope(node, data);
+  }
+
+  /**
+   * Creates a new local scope attached to a node, visits that node, then pops the scope.
+   *
+   * @param node the node to attach the scope to, then visit.
+   * @param data the symbol table data.
+   * @return the symbol table data.
+   */
+  private Data visitNewLocalScopeFromRoot(DelphiNode node, Data data) {
+    data.addScope(new LocalScopeImpl(), node);
+    return visitScopeFromRoot(node, data);
   }
 
   private Data createTypeScope(TypeDeclarationNode node, Data data) {
@@ -863,9 +884,33 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     return visitScope(node, data);
   }
 
+  /**
+   * Visits all children of a node, then pops the innermost scope.
+   *
+   * @param node the node to visit the children of (generally the root node of the innermost scope).
+   * @param data the symbol table data.
+   * @return the symbol table data.
+   */
   private Data visitScope(DelphiNode node, Data data) {
     if (node != null) {
+      // Visits all children of this node
       DelphiParserVisitor.super.visit(node, data);
+    }
+    data.scopes.pop();
+    return data;
+  }
+
+  /**
+   * Visits a node, then pops the innermost scope.
+   *
+   * @param node the node to visit (generally the root node of the innermost scope).
+   * @param data the symbol table data.
+   * @return the symbol table data.
+   */
+  private Data visitScopeFromRoot(DelphiNode node, Data data) {
+    if (node != null) {
+      // Visits this node
+      node.accept(this, data);
     }
     data.scopes.pop();
     return data;
