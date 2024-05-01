@@ -557,18 +557,18 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(IfStatementNode node, Data data) {
-    DelphiParserVisitor.super.visit(node.getGuardExpression(), data);
+    node.getGuardExpression().accept(this, data);
 
     StatementNode thenStatement = node.getThenStatement();
     if (thenStatement instanceof CompoundStatementNode) {
-      DelphiParserVisitor.super.visit(thenStatement, data);
+      thenStatement.accept(this, data);
     } else if (thenStatement != null) {
       createLocalScope(thenStatement, data);
     }
 
     StatementNode elseStatement = node.getElseStatement();
     if (elseStatement instanceof CompoundStatementNode) {
-      DelphiParserVisitor.super.visit(elseStatement, data);
+      elseStatement.accept(this, data);
     } else if (elseStatement != null) {
       createLocalScope(elseStatement, data);
     }
