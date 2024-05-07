@@ -112,8 +112,10 @@ public class FormatStringParser {
   }
 
   private Optional<FormatSpecifierType> parseFormatSpecifierType() {
+    char specifierChar = Character.toLowerCase(current());
+
     for (FormatSpecifierType type : FormatSpecifierType.values()) {
-      if (type.getImage() == current()) {
+      if (type.getImage() == specifierChar) {
         return Optional.of(type);
       }
     }

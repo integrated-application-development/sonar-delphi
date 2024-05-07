@@ -31,7 +31,13 @@ class FormatStringValidCheckTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"%s %d %*.*f %0:e %*.f", "I have no specifiers", ""})
+  @ValueSource(
+      strings = {
+        "%s %d %*.*f %0:e %*.f",
+        "I have no specifiers",
+        "",
+        "Uppercase %S and %D and %X as well %%"
+      })
   void testValidFormatStringShouldNotAddIssue(String formatString) {
     CheckVerifier.newVerifier()
         .withCheck(new FormatStringValidCheck())

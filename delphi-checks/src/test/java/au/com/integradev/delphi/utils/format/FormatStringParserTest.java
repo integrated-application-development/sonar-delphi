@@ -165,6 +165,29 @@ class FormatStringParserTest {
     assertThat(specifiers.get(0).getType()).isEqualTo(expectedType);
   }
 
+  @ParameterizedTest(name = "[{index}] {0} parsed as {1}")
+  @CsvSource(
+      value = {
+        "%D,DECIMAL",
+        "%U,UNSIGNED_DECIMAL",
+        "%E,SCIENTIFIC",
+        "%F,FIXED",
+        "%G,GENERAL",
+        "%N,NUMBER",
+        "%M,MONEY",
+        "%P,POINTER",
+        "%S,STRING",
+        "%X,HEXADECIMAL"
+      })
+  void testParseUppercaseFormatSpecifierType(
+      String formatString, FormatSpecifierType expectedType) {
+    List<FormatSpecifier> specifiers =
+        new FormatStringParser(formatString).parse().getFormatSpecifiers();
+
+    assertThat(specifiers).hasSize(1);
+    assertThat(specifiers.get(0).getType()).isEqualTo(expectedType);
+  }
+
   @Test
   void testParseStringWithNoSpecifiers() {
     assertThat(new FormatStringParser("Hello world").parse().getFormatSpecifiers()).isEmpty();
