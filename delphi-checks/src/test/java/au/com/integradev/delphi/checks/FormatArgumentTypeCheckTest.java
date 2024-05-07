@@ -69,8 +69,8 @@ class FormatArgumentTypeCheckTest {
   @CsvSource(
       value = {
         "%d,5000", "%d,-5000", "%d,0",
-        "%u,5000", "%d,-5000", "%u,0",
-        "%x,5000", "%d,-5000", "%x,0",
+        "%u,5000", "%u,-5000", "%u,0",
+        "%x,5000", "%x,-5000", "%x,0",
         "%e,25.5", "%e,-25.5", "%e,0.0",
         "%f,25.5", "%f,-25.5", "%f,0.0",
         "%g,25.5", "%g,-25.5", "%g,0.0",
@@ -135,6 +135,23 @@ class FormatArgumentTypeCheckTest {
                 .appendImpl("uses System.SysUtils;")
                 .appendImpl("initialization")
                 .appendImpl("  Format('I got %*.*f and I am %0:d years old', [")
+                .appendImpl("    5,")
+                .appendImpl("    2,")
+                .appendImpl("    67.455")
+                .appendImpl("  ]);"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testMultipleUppercaseValidTypesShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new FormatArgumentTypeCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("initialization")
+                .appendImpl("  Format('I got %*.*F and I am %0:D years old', [")
                 .appendImpl("    5,")
                 .appendImpl("    2,")
                 .appendImpl("    67.455")
