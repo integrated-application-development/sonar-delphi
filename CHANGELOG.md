@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Incorrect ordering of edits in the "Separate grouped parameters" quick fix for `GroupedParameterDeclaration`.
+
 ## [1.5.0] - 2024-05-02
 
 ### Fixed

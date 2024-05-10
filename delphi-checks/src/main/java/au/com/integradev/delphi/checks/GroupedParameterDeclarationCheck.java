@@ -79,8 +79,8 @@ public class GroupedParameterDeclarationCheck extends AbstractGroupedDeclaration
         fixEdits.add(QuickFixEdit.replace(commaNode, ";"));
       }
 
-      fixEdits.add(QuickFixEdit.copyAfter(typeNode, first));
       fixEdits.add(QuickFixEdit.insertAfter(": ", first));
+      fixEdits.add(QuickFixEdit.copyAfter(typeNode, first));
 
       String prefix = getFormalParameterTextPrefix(formalParameter);
       if (!prefix.isEmpty()) {
