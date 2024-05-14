@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `UsesClauseNode::getImports` method.
+- **API:** `InterfaceSectionNode::getUsesClause` method.
+- **API:** `ImplementationSectionNode::getUsesClause` method.
 
 ### Fixed
 

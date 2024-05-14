@@ -20,7 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 
 public final class InterfaceSectionNodeImpl extends DelphiNodeImpl implements InterfaceSectionNode {
   public InterfaceSectionNodeImpl(Token token) {
@@ -30,5 +32,11 @@ public final class InterfaceSectionNodeImpl extends DelphiNodeImpl implements In
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public UsesClauseNode getUsesClause() {
+    DelphiNode child = getChild(0);
+    return child instanceof UsesClauseNode ? (UsesClauseNode) child : null;
   }
 }
