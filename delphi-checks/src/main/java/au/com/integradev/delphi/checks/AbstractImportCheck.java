@@ -110,9 +110,7 @@ public abstract class AbstractImportCheck extends DelphiCheck {
 
   protected abstract boolean isViolation(UnitImportNode unitImport);
 
-  protected QuickFix getQuickFix(UnitImportNode unitImport) {
-    return null;
-  }
+  protected abstract QuickFix getQuickFix(UnitImportNode unitImport);
 
   protected QuickFixEdit deleteImportEdit(UnitImportNode unitImport) {
     UsesClauseNode usesClause = (UsesClauseNode) unitImport.getParent();
