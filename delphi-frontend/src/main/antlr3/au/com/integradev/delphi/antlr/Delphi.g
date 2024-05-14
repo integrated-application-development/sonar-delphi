@@ -697,6 +697,7 @@ attribute                    : (ASSEMBLY ':')? nameReference argumentList? (':' 
 // Expressions
 //----------------------------------------------------------------------------
 expression                   : relationalExpression
+                             | anonymousMethod
                              ;
 // ANTLR sets the begin and end tokens for nested binary expression nodes
 // in relationalOperator, not relationalExpression, meaning that their
@@ -748,8 +749,7 @@ argument                     : argumentName? argumentExpression
 argumentName                 : ident ':='!
                              | keywords ':=' -> ^({changeTokenType(TkIdentifier, -2)})
                              ;
-argumentExpression           : anonymousMethod
-                             | expression writeArguments?
+argumentExpression           : expression writeArguments?
                              ;
 writeArguments               : ':'! expression (':'! expression)? // See: https://docwiki.embarcadero.com/Libraries/en/System.Write
                              ;
@@ -758,17 +758,9 @@ anonymousMethod              : PROCEDURE<AnonymousMethodNodeImpl>^ routineParame
                              ;
 expressionOrRange            : expression ('..'<RangeExpressionNodeImpl>^ expression)?
                              ;
-expressionOrAnonymousMethod  : anonymousMethod
-                             | expression
-                             ;
-exprOrRangeOrAnonMethod      : anonymousMethod
-                             | expressionOrRange
-                             ;
 expressionList               : (expression (','!)?)+
                              ;
 expressionOrRangeList        : (expressionOrRange (','!)?)+
-                             ;
-exprOrRangeOrAnonMethodList  : (exprOrRangeOrAnonMethod (','!)?)+
                              ;
 textLiteral                  : singleLineTextLiteral -> ^(TkTextLiteral<TextLiteralNodeImpl> singleLineTextLiteral)
                              | multilineTextLiteral -> ^(TkTextLiteral<TextLiteralNodeImpl> multilineTextLiteral)
@@ -783,8 +775,8 @@ escapedCharacter             : TkCharacterEscapeCode
                              ;
 nilLiteral                   : NIL<NilLiteralNodeImpl>
                              ;
-arrayConstructor             : lbrack exprOrRangeOrAnonMethodList? rbrack
-                             -> ^(TkArrayConstructor<ArrayConstructorNodeImpl> lbrack exprOrRangeOrAnonMethodList? rbrack)
+arrayConstructor             : lbrack expressionOrRangeList? rbrack
+                             -> ^(TkArrayConstructor<ArrayConstructorNodeImpl> lbrack expressionOrRangeList? rbrack)
                              ;
 addOperator                  : '+'<BinaryExpressionNodeImpl>
                              | '-'<BinaryExpressionNodeImpl>
@@ -848,11 +840,11 @@ statement                    : ifStatement
                              ;
 ifStatement                  : IF<IfStatementNodeImpl>^ expression THEN statement? (ELSE statement?)?
                              ;
-varStatement                 : VAR attributeList? nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)?
-                             -> ^(VAR<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expressionOrAnonymousMethod)? attributeList?)
+varStatement                 : VAR attributeList? nameDeclarationList (':' varType)? (':=' expression)?
+                             -> ^(VAR<VarStatementNodeImpl> nameDeclarationList (':' varType)? (':=' expression)? attributeList?)
                              ;
-constStatement               : CONST attributeList? nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod
-                             -> ^(CONST<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expressionOrAnonymousMethod attributeList?)
+constStatement               : CONST attributeList? nameDeclaration (':' varType)? '=' expression
+                             -> ^(CONST<ConstStatementNodeImpl> nameDeclaration (':' varType)? '=' expression attributeList?)
                              ;
 caseStatement                : CASE<CaseStatementNodeImpl>^ expression OF caseItem* elseBlock? END
                              ;
@@ -881,7 +873,7 @@ delimitedStatements          : (statement | ';')+
                              ;
 labelStatement               : label ':' statement? -> ^(TkLabelStatement<LabelStatementNodeImpl> label statement?)
                              ;
-assignmentStatement          : expression ':='<AssignmentStatementNodeImpl>^ expressionOrAnonymousMethod
+assignmentStatement          : expression ':='<AssignmentStatementNodeImpl>^ expression
                              ;
 expressionStatement          : expression -> ^(TkExpressionStatement<ExpressionStatementNodeImpl> expression)
                              ;

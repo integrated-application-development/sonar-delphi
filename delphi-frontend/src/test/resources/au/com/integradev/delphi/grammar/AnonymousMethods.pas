@@ -24,4 +24,12 @@ begin
     end);
 end;
 
+function IsStringEmptyImmediateInvocation(const aValue : string) : Boolean;
+begin
+  Result := (function(const aValue : string) : Boolean
+    begin
+      Result := aValue = '';
+    end)(aValue);
+end;
+
 end.
