@@ -18,11 +18,18 @@
  */
 package au.com.integradev.delphi.checks;
 
+import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "ImportSpecificityRule", repositoryKey = "delph")
@@ -43,5 +50,54 @@ public class ImportSpecificityCheck extends AbstractImportCheck {
     UnitNameDeclaration dependency = unitImport.getImportNameDeclaration().getOriginalDeclaration();
     return !getUnitDeclaration().getInterfaceDependencies().contains(dependency)
         && getUnitDeclaration().getImplementationDependencies().contains(dependency);
+  }
+
+  private static FilePosition getTokenEnd(DelphiNode node) {
+    DelphiToken token = node.getToken();
+    return FilePosition.from(
+        token.getEndLine(), token.getEndColumn(), token.getEndLine(), token.getEndColumn());
+  }
+
+  @Override
+  protected QuickFix getQuickFix(UnitImportNode unitImport) {
+    var implementation =
+        unitImport.getAst().getFirstDescendantOfType(ImplementationSectionNode.class);
+    if (implementation == null) {
+      return null;
+    }
+
+    UsesClauseNode implementationUses = implementation.getUsesClause();
+    if (implementationUses == null) {
+      FilePosition afterImplementation = getTokenEnd(implementation);
+
+      return QuickFix.newFix("Move to implementation section")
+          .withEdits(
+              deleteImportEdit(unitImport),
+              QuickFixEdit.insert(
+                  "\r\n\r\nuses ",
+                  afterImplementation.getBeginLine(),
+                  afterImplementation.getBeginColumn()),
+              QuickFixEdit.copy(unitImport, afterImplementation),
+              QuickFixEdit.insert(
+                  ";", afterImplementation.getBeginLine(), afterImplementation.getBeginColumn()));
+    }
+
+    return buildMoveQuickFix(unitImport, implementationUses);
+  }
+
+  private QuickFix buildMoveQuickFix(
+      UnitImportNode unitImport, UsesClauseNode destinationUsesClause) {
+    List<UnitImportNode> imports = destinationUsesClause.getImports();
+    if (imports.isEmpty()) {
+      return null;
+    }
+
+    var lastImplementationImport = imports.get(imports.size() - 1);
+
+    return QuickFix.newFix("Move to implementation section")
+        .withEdits(
+            deleteImportEdit(unitImport),
+            QuickFixEdit.insertAfter(", ", lastImplementationImport),
+            QuickFixEdit.copyAfter(unitImport, lastImplementationImport));
   }
 }
