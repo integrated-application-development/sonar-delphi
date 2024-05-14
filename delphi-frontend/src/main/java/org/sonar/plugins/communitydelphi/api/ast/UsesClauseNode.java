@@ -18,4 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface UsesClauseNode extends ImportClauseNode {}
+import java.util.List;
+
+public interface UsesClauseNode extends ImportClauseNode {
+  List<UnitImportNode> getImports();
+}

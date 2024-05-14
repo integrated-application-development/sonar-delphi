@@ -19,7 +19,9 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.util.List;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 
 public final class UsesClauseNodeImpl extends ImportClauseNodeImpl implements UsesClauseNode {
@@ -30,5 +32,10 @@ public final class UsesClauseNodeImpl extends ImportClauseNodeImpl implements Us
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public List<UnitImportNode> getImports() {
+    return findChildrenOfType(UnitImportNode.class);
   }
 }
