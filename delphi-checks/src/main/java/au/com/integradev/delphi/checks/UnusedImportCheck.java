@@ -20,6 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
@@ -35,5 +36,10 @@ public class UnusedImportCheck extends AbstractImportCheck {
   @Override
   protected String getIssueMessage() {
     return "Review this potentially unnecessary import.";
+  }
+
+  @Override
+  protected QuickFix getQuickFix(UnitImportNode unitImport) {
+    return QuickFix.newFix("Remove unused import").withEdit(deleteImportEdit(unitImport));
   }
 }

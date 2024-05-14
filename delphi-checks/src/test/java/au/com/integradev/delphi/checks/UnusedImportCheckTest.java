@@ -134,6 +134,67 @@ class UnusedImportCheckTest {
         .verifyNoIssues();
   }
 
+  @Test
+  void testSingleUnusedImportShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix@[+1:0 to +2:18] <<>>")
+                .appendImpl("uses")
+                .appendImpl("  System.SysUtils; // Noncompliant")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testFirstUnusedImportShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("// Fix@[+1:2 to +2:2] <<>>")
+                .appendImpl("  System.Classes, // Noncompliant")
+                .appendImpl("  System.SysUtils;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("  FreeAndNil(Obj);")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testNthUnusedImportShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .withSearchPathUnit(createSysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("// Fix@[+1:17 to +2:16] <<>>")
+                .appendImpl("  System.SysUtils,")
+                .appendImpl("  System.Classes; // Noncompliant")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TObject.Create;")
+                .appendImpl("  FreeAndNil(Obj);")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
   private static DelphiTestUnitBuilder createSysUtils() {
     return new DelphiTestUnitBuilder()
         .unitName("System.SysUtils")

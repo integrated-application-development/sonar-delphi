@@ -74,6 +74,81 @@ class ImportSpecificityCheckTest {
         .verifyNoIssues();
   }
 
+  @Test
+  void testImportUsedInImplementationShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("// Fix@[+1:0 to +2:17] <<>>")
+                .appendDecl("uses")
+                .appendDecl("  System.UITypes; // Noncompliant")
+                .appendImpl("// Fix@[+2:20 to +2:20] <<, >>")
+                .appendImpl("// Fix@[+1:20 to +1:20] <<System.UITypes>>")
+                .appendImpl("uses System.SysUtils;")
+                .appendImpl("type")
+                .appendImpl("  Alias = System.UITypes.TMsgDlgType;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testSingleImportUsedInImplementationWithNoUsesClauseShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("// Fix@[+1:0 to +2:17] <<>>")
+                .appendDecl("uses")
+                .appendDecl("  System.UITypes; // Noncompliant")
+                .appendImpl("// Fix@[-2:14 to -2:14] <<\\r\\n\\r\\nuses >>")
+                .appendImpl("// Fix@[-3:14 to -3:14] <<System.UITypes>>")
+                .appendImpl("// Fix@[-4:14 to -4:14] <<;>>")
+                .appendImpl("type")
+                .appendImpl("  Alias = System.UITypes.TMsgDlgType;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testFirstImportUsedInImplementationWithNoUsesClauseShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("// Fix@[+2:2 to +3:2] <<>>")
+                .appendDecl("uses")
+                .appendDecl("  System.UITypes, // Noncompliant")
+                .appendDecl("  System.SysUtils;")
+                .appendImpl("// Fix@[-2:14 to -2:14] <<\\r\\n\\r\\nuses >>")
+                .appendImpl("// Fix@[-3:14 to -3:14] <<System.UITypes>>")
+                .appendImpl("// Fix@[-4:14 to -4:14] <<;>>")
+                .appendImpl("type")
+                .appendImpl("  Alias = System.UITypes.TMsgDlgType;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testNthImportUsedInImplementationWithNoUsesClauseShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ImportSpecificityCheck())
+        .withSearchPathUnit(createSystemUITypes())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("// Fix@[+1:16 to +2:16] <<>>")
+                .appendDecl("  System.Contnrs,")
+                .appendDecl("  System.UITypes, // Noncompliant")
+                .appendDecl("  System.SysUtils;")
+                .appendImpl("// Fix@[-2:14 to -2:14] <<\\r\\n\\r\\nuses >>")
+                .appendImpl("// Fix@[-3:14 to -3:14] <<System.UITypes>>")
+                .appendImpl("// Fix@[-4:14 to -4:14] <<;>>")
+                .appendImpl("type")
+                .appendImpl("  Alias = System.UITypes.TMsgDlgType;"))
+        .verifyIssues();
+  }
+
   private static DelphiTestUnitBuilder createSystemUITypes() {
     return new DelphiTestUnitBuilder()
         .unitName("System.UITypes")

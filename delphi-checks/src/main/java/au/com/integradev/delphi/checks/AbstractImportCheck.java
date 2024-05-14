@@ -20,6 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import org.sonar.check.RuleProperty;
@@ -27,8 +28,13 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.DelphiIssueBuilder;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
@@ -69,7 +75,15 @@ public abstract class AbstractImportCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(UnitImportNode unitImport, DelphiCheckContext context) {
     if (!isExcluded(unitImport) && isViolation(unitImport)) {
-      reportIssue(context, unitImport, getIssueMessage());
+      DelphiIssueBuilder builder =
+          context.newIssue().onNode(unitImport).withMessage(getIssueMessage());
+
+      var quickFix = getQuickFix(unitImport);
+      if (quickFix != null) {
+        builder.withQuickFixes(quickFix);
+      }
+
+      builder.report();
     }
     return context;
   }
@@ -95,4 +109,34 @@ public abstract class AbstractImportCheck extends DelphiCheck {
   }
 
   protected abstract boolean isViolation(UnitImportNode unitImport);
+
+  protected QuickFix getQuickFix(UnitImportNode unitImport) {
+    return null;
+  }
+
+  protected QuickFixEdit deleteImportEdit(UnitImportNode unitImport) {
+    UsesClauseNode usesClause = (UsesClauseNode) unitImport.getParent();
+    List<UnitImportNode> imports = usesClause.getImports();
+
+    if (imports.size() == 1) {
+      return QuickFixEdit.delete(usesClause);
+    }
+
+    int index = imports.indexOf(unitImport);
+    if (index == 0) {
+      return QuickFixEdit.delete(
+          FilePosition.from(
+              unitImport.getBeginLine(),
+              unitImport.getBeginColumn(),
+              imports.get(1).getBeginLine(),
+              imports.get(1).getBeginColumn()));
+    }
+
+    return QuickFixEdit.delete(
+        FilePosition.from(
+            imports.get(index - 1).getEndLine(),
+            imports.get(index - 1).getEndColumn(),
+            unitImport.getEndLine(),
+            unitImport.getEndColumn()));
+  }
 }
