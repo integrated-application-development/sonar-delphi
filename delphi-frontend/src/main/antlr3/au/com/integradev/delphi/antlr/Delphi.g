@@ -300,9 +300,9 @@ usesClause                   : USES<UsesClauseNodeImpl>^ unitImportList
                              ;
 usesFileClause               : USES<UsesClauseNodeImpl>^ unitInFileImportList
                              ;
-unitInFileImportList         : unitInFileImport (','! unitInFileImport)* ';'!
+unitInFileImportList         : unitInFileImport (',' unitInFileImport)* ';'
                              ;
-unitImportList               : unitImport (','! unitImport)* ';'!
+unitImportList               : unitImport (',' unitImport)* ';'
                              ;
 unitImport                   : qualifiedNameDeclaration
                              -> ^(TkUnitImport<UnitImportNodeImpl> qualifiedNameDeclaration)
