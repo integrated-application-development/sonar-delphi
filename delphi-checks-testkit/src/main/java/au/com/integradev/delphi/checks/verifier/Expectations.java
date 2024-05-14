@@ -119,7 +119,7 @@ class Expectations {
 
     return new TextEditExpectation(
         fixId == null ? "(unnamed)" : fixId,
-        replacementStr,
+        replacementStr.replace("\\n", "\n").replace("\\r", "\r"),
         beginLine + offset,
         endLine + offset,
         Integer.parseInt(beginColumnStr),
