@@ -45,6 +45,11 @@ public class SonarSymbolTableVisitor implements DelphiParserVisitor<NewSymbolTab
     Node location = declaration.getNode();
     String symbolUnit = location.getUnitName();
 
+    if (location.getTokenType() == DelphiTokenType.INVALID) {
+      // imaginary node
+      return;
+    }
+
     if (location instanceof SymbolicNode && ((SymbolicNode) location).isIncludedNode()) {
       // Symbols from include files may overlap with both their own
       // references and other symbols from the same file.

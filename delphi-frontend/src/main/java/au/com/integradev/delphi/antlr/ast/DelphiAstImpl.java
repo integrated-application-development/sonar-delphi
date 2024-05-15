@@ -28,6 +28,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
@@ -91,24 +92,27 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
     return delphiFile;
   }
 
+  @Nullable
   @Override
   public FileHeaderNode getFileHeader() {
-    return (FileHeaderNode) getChild(0);
+    DelphiNode fileHeader = getChild(0);
+    return fileHeader instanceof FileHeaderNode ? (FileHeaderNode) fileHeader : null;
   }
 
   @Override
   public boolean isProgram() {
-    return !getChildren().isEmpty() && getFileHeader() instanceof ProgramDeclarationNode;
+    FileHeaderNode fileHeader = getFileHeader();
+    return fileHeader instanceof ProgramDeclarationNode || fileHeader == null;
   }
 
   @Override
   public boolean isUnit() {
-    return !getChildren().isEmpty() && getFileHeader() instanceof UnitDeclarationNode;
+    return getFileHeader() instanceof UnitDeclarationNode;
   }
 
   @Override
   public boolean isPackage() {
-    return !getChildren().isEmpty() && getFileHeader() instanceof PackageDeclarationNode;
+    return getFileHeader() instanceof PackageDeclarationNode;
   }
 
   public List<DelphiToken> getCommentsInsideNode(DelphiNode node) {

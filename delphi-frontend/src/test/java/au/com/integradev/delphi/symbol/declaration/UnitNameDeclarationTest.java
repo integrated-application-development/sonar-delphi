@@ -27,6 +27,7 @@ import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.file.DelphiFile;
 import java.io.File;
+import java.nio.file.Path;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -82,6 +83,6 @@ class UnitNameDeclarationTest {
     when(location.getNamespace()).thenReturn("");
     when(location.getAst()).thenReturn(ast);
 
-    return new UnitNameDeclarationImpl(location, null);
+    return new UnitNameDeclarationImpl(location, null, Path.of(path));
   }
 }

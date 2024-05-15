@@ -18,6 +18,8 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
+import au.com.integradev.delphi.symbol.QualifiedNameImpl;
+import au.com.integradev.delphi.symbol.SymbolicNode;
 import java.util.Objects;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
@@ -31,12 +33,17 @@ public abstract class QualifiedNameDeclarationImpl extends NameDeclarationImpl
 
   protected QualifiedNameDeclarationImpl(QualifiedNameDeclarationNode node) {
     super(node);
-    qualifiedName = node.getQualifiedName();
+    this.qualifiedName = node.getQualifiedName();
   }
 
   protected QualifiedNameDeclarationImpl(QualifiedNameDeclarationNode node, DelphiScope scope) {
     super(node, scope);
-    qualifiedName = node.getQualifiedName();
+    this.qualifiedName = node.getQualifiedName();
+  }
+
+  protected QualifiedNameDeclarationImpl(SymbolicNode node) {
+    super(node);
+    this.qualifiedName = QualifiedNameImpl.of(node.getImage());
   }
 
   @Override
