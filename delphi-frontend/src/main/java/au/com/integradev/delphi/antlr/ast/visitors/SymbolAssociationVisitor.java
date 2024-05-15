@@ -59,10 +59,9 @@ public class SymbolAssociationVisitor implements DelphiParserVisitor<Data> {
     String filePath = node.getDelphiFile().getSourceCodeFile().getAbsolutePath();
 
     UnitNameDeclaration declaration = data.symbolTable.getUnitByPath(filePath);
-    String unitName = node.getFileHeader().getName();
 
     Preconditions.checkNotNull(
-        declaration, "Expected unit '%s' to exist in global scope.", unitName);
+        declaration, "Expected unit '%s' to exist in global scope.", declaration.getName());
 
     data.fileScope = (FileScopeImpl) declaration.getFileScope();
     ((DelphiAstImpl) node).setScope(data.fileScope);

@@ -54,6 +54,7 @@ import au.com.integradev.delphi.type.factory.ClassReferenceTypeImpl;
 import au.com.integradev.delphi.type.factory.PointerTypeImpl;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
+import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
@@ -113,7 +114,6 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
@@ -156,6 +156,8 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
  * <p>Also finds occurrences of the declarations and creates NameOccurrence objects accordingly.
  */
 public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
+  private static final String DEFAULT_PROGRAM_NAME = "PROGRAM";
+
   public static class Data {
     protected final TypeFactory typeFactory;
     protected final NameResolutionHelper nameResolutionHelper;
@@ -250,8 +252,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     return new SymbolTableVisitor() {
       @Override
       public Data visit(DelphiAst node, Data data) {
-        FileHeaderNode header = node.getFileHeader();
-        if (!(header instanceof UnitDeclarationNode)) {
+        if (!node.isUnit()) {
           // Only units have interface sections.
           return data;
         }
@@ -865,7 +866,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   private Data createUnitScope(DelphiAst node, Data data) {
     FileHeaderNode fileHeader = node.getFileHeader();
-    String name = fileHeader.getName();
+    String name = fileHeader == null ? DEFAULT_PROGRAM_NAME : fileHeader.getName();
     FileScope fileScope;
 
     if (name.equals("System")) {
@@ -878,8 +879,16 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
     data.scopes.add(fileScope);
     ((DelphiAstImpl) node).setScope(fileScope);
-    data.unitDeclaration = new UnitNameDeclarationImpl(fileHeader, fileScope);
-    data.addDeclaration(data.unitDeclaration, fileHeader.getNameNode());
+
+    Path path = Path.of(node.getDelphiFile().getSourceCodeFile().getAbsolutePath());
+
+    if (fileHeader == null) {
+      data.unitDeclaration = new UnitNameDeclarationImpl(name, fileScope, path);
+      data.addDeclarationToCurrentScope(data.unitDeclaration);
+    } else {
+      data.unitDeclaration = new UnitNameDeclarationImpl(fileHeader, fileScope, path);
+      data.addDeclaration(data.unitDeclaration, fileHeader.getNameNode());
+    }
 
     return visitScope(node, data);
   }

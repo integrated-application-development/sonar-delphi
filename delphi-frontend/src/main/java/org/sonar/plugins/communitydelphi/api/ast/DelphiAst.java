@@ -19,10 +19,12 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import au.com.integradev.delphi.file.DelphiFile;
+import javax.annotation.Nullable;
 
 public interface DelphiAst extends DelphiNode {
   DelphiFile getDelphiFile();
 
+  @Nullable
   FileHeaderNode getFileHeader();
 
   boolean isProgram();

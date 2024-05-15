@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
+import au.com.integradev.delphi.symbol.SymbolicNode;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Objects;
@@ -38,11 +39,20 @@ public final class UnitNameDeclarationImpl extends QualifiedNameDeclarationImpl
   private final Set<UnitNameDeclaration> implementationDependencies;
   private int hashCode;
 
-  public UnitNameDeclarationImpl(FileHeaderNode node, FileScope fileScope) {
+  public UnitNameDeclarationImpl(FileHeaderNode node, FileScope fileScope, Path path) {
     super(node.getNameNode(), fileScope);
     this.fileScope = fileScope;
     this.namespace = node.getNamespace();
-    this.path = Path.of(node.getAst().getDelphiFile().getSourceCodeFile().getAbsolutePath());
+    this.path = path;
+    this.interfaceDependencies = new HashSet<>();
+    this.implementationDependencies = new HashSet<>();
+  }
+
+  public UnitNameDeclarationImpl(String image, FileScope fileScope, Path path) {
+    super(SymbolicNode.imaginary(image, fileScope));
+    this.fileScope = fileScope;
+    this.namespace = "";
+    this.path = path;
     this.interfaceDependencies = new HashSet<>();
     this.implementationDependencies = new HashSet<>();
   }

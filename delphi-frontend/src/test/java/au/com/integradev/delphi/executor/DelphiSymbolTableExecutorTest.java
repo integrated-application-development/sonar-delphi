@@ -388,6 +388,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testDefaultProgramName() {
+    execute("DefaultProgramName.dpr");
+    verifyUsages(2, 2, reference(5, 19));
+  }
+
+  @Test
   void testClassReferenceMethodResolution() {
     execute("classReferences/MethodResolution.pas");
     verifyUsages(9, 14, reference(18, 6));
