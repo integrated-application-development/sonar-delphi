@@ -20,10 +20,15 @@ package au.com.integradev.delphi;
 
 import au.com.integradev.delphi.checks.CheckList;
 import au.com.integradev.delphi.core.Delphi;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.plugins.communitydelphi.api.check.MetadataResourcePath;
 import org.sonar.plugins.communitydelphi.api.check.RuleTemplateAnnotationReader;
+import org.sonar.plugins.communitydelphi.api.check.SonarLintUnsupported;
 import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 
 public class DelphiRulesDefinition implements RulesDefinition {
@@ -53,9 +58,19 @@ public class DelphiRulesDefinition implements RulesDefinition {
 
     RuleTemplateAnnotationReader ruleTemplateAnnotationReader = new RuleTemplateAnnotationReader();
 
-    ruleMetadataLoader.addRulesByAnnotatedClass(repository, CheckList.getChecks());
-    ruleTemplateAnnotationReader.updateRulesByAnnotatedClass(repository, CheckList.getChecks());
+    List<Class<?>> checks =
+        CheckList.getChecks().stream()
+            .filter(this::isCheckSupportedOnPlatform)
+            .collect(Collectors.toList());
+
+    ruleMetadataLoader.addRulesByAnnotatedClass(repository, checks);
+    ruleTemplateAnnotationReader.updateRulesByAnnotatedClass(repository, checks);
 
     repository.done();
+  }
+
+  private boolean isCheckSupportedOnPlatform(Class<?> check) {
+    return runtime.getProduct() == SonarProduct.SONARQUBE
+        || AnnotationUtils.getAnnotation(check, SonarLintUnsupported.class) == null;
   }
 }
