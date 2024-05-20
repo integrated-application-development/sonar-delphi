@@ -18,8 +18,6 @@
  */
 package au.com.integradev.delphi.file;
 
-import static org.apache.commons.io.FileUtils.readLines;
-
 import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiLexer.LexerException;
@@ -33,6 +31,7 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
+import com.google.common.base.Splitter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -151,7 +150,7 @@ public interface DelphiFile {
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());
       delphiFile.setTextBlockLineEndingModeRegistry(
           preprocessor.getTextBlockLineEndingModeRegistry());
-      delphiFile.setSourceCodeLines(readLines(sourceFile, fileStream.getEncoding()));
+      delphiFile.setSourceCodeLines(getSourceCodeLines(fileStream));
       delphiFile.setTokens(preprocessor.getRawTokens());
       delphiFile.setComments(extractComments(delphiFile.getTokens()));
     } catch (IOException
@@ -198,6 +197,10 @@ public interface DelphiFile {
     }
 
     return new DelphiAstImpl(delphiFile, root);
+  }
+
+  private static List<String> getSourceCodeLines(DelphiFileStream fileStream) {
+    return Splitter.onPattern("\\R").splitToList(fileStream.substring(0, fileStream.size() - 1));
   }
 
   private static List<DelphiToken> extractComments(List<DelphiToken> tokenList) {

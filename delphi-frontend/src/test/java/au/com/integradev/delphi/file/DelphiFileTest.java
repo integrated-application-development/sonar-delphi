@@ -89,4 +89,21 @@ class DelphiFileTest {
     DelphiFile delphiFile = DelphiFile.from(file, config);
     assertThat(delphiFile.getSourceCodeFileLines().get(4)).hasSize(120);
   }
+
+  @Test
+  void testByteOrderMarkShouldBeStripped() {
+    File file = DelphiUtils.getResource("/au/com/integradev/delphi/file/Utf8.pas");
+
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            StandardCharsets.UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            TypeFactoryUtils.defaultFactory(),
+            SearchPath.create(Collections.emptyList()),
+            Collections.emptySet());
+
+    DelphiFile delphiFile = DelphiFile.from(file, config);
+    String firstLine = delphiFile.getSourceCodeFileLines().get(0);
+    assertThat(firstLine).doesNotStartWith("\ufeff");
+  }
 }
