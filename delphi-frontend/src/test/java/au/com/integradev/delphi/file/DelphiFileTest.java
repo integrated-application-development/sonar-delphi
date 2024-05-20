@@ -71,7 +71,7 @@ class DelphiFileTest {
             Collections.emptySet());
 
     DelphiFile delphiFile = DelphiInputFile.from(inputFile, config);
-    assertThat(delphiFile.getSourceCodeFilesLines().get(4)).isEqualTo("// €†šŸÀÿ");
+    assertThat(delphiFile.getSourceCodeFileLines().get(4)).isEqualTo("// €†šŸÀÿ");
   }
 
   @Test
@@ -87,6 +87,6 @@ class DelphiFileTest {
             Collections.emptySet());
 
     DelphiFile delphiFile = DelphiFile.from(file, config);
-    assertThat(delphiFile.getSourceCodeFilesLines().get(4)).hasSize(120);
+    assertThat(delphiFile.getSourceCodeFileLines().get(4)).hasSize(120);
   }
 }

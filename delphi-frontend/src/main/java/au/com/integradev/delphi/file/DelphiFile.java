@@ -52,7 +52,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 public interface DelphiFile {
   File getSourceCodeFile();
 
-  List<String> getSourceCodeFilesLines();
+  List<String> getSourceCodeFileLines();
 
   String getSourceCodeFileEncoding();
 
