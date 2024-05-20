@@ -47,7 +47,7 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
-  public List<String> getSourceCodeFilesLines() {
+  public List<String> getSourceCodeFileLines() {
     return sourceCodeLines;
   }
 

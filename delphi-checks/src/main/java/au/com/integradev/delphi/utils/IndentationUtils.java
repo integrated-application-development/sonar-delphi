@@ -33,7 +33,7 @@ public final class IndentationUtils {
    */
   public static String getLineIndentation(DelphiNode node) {
     return getLineIndentation(
-        node.getAst().getDelphiFile().getSourceCodeFilesLines().get(node.getBeginLine() - 1));
+        node.getAst().getDelphiFile().getSourceCodeFileLines().get(node.getBeginLine() - 1));
   }
 
   /**

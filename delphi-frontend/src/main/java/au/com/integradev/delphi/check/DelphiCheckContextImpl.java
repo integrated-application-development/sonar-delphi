@@ -63,7 +63,7 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
 
   @Override
   public List<String> getFileLines() {
-    return delphiFile.getSourceCodeFilesLines();
+    return delphiFile.getSourceCodeFileLines();
   }
 
   @Override
