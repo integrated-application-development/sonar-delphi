@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- File pointer errors when an issue is raised on the first line of a file with a byte order mark.
 - Symbol table construction errors for program files omitting the `program` header.
 - Parsing errors on parenthesised anonymous methods.
 - Incorrect ordering of edits in the "Separate grouped parameters" quick fix for `GroupedParameterDeclaration`.
