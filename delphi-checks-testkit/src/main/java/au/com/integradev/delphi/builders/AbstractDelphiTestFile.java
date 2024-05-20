@@ -55,6 +55,8 @@ abstract class AbstractDelphiTestFile<T extends AbstractDelphiTestFile<T>>
       file.deleteOnExit();
 
       try (FileWriter fileWriter = new FileWriter(file, UTF_8)) {
+        // Prepend UTF-8 BOM
+        fileWriter.write('\ufeff');
         fileWriter.write(sourceCode());
         fileWriter.flush();
       }
