@@ -31,6 +31,12 @@ class PointerNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
+                .appendDecl("  PCompliesWithPrefixT = ^TCompliesWithPrefixT;")
+                .appendDecl("  PCompliesWithPrefixE = ^ECompliesWithPrefixE;")
+                .appendDecl("  PCompliesWithPrefixI = ^ICompliesWithPrefixI;")
+                .appendDecl("  PCompliesWithPascalCase = ^CompliesWithPascalCase;")
+                .appendDecl("  PCompliantPointer = ^noncompliant_type;")
+                .appendDecl("  PxyMyClass = ^TxyMyClass;")
                 .appendDecl("  PInteger = ^Integer;")
                 .appendDecl("  PFooInteger = ^TFooInteger;"))
         .verifyNoIssues();
@@ -43,6 +49,13 @@ class PointerNameCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
+                .appendDecl("  CompliesWithPrefixT = ^TCompliesWithPrefixT; // Noncompliant")
+                .appendDecl("  CompliesWithPrefixE = ^ECompliesWithPrefixE; // Noncompliant")
+                .appendDecl("  CompliesWithPrefixI = ^ICompliesWithPrefixI; // Noncompliant")
+                .appendDecl("  AnotherPascalCase = ^CompliesWithPascalCase; // Noncompliant")
+                .appendDecl("  Pmy_object = ^my_object; // Noncompliant")
+                .appendDecl("  PMyClass = ^TxyMyClass; // Noncompliant")
+                .appendDecl("  PxyMyClass = ^TMyClass; // Noncompliant")
                 .appendDecl("  pMyPointer = ^Integer; // Noncompliant")
                 .appendDecl("  PInteger = ^TFooInteger; // Noncompliant"))
         .verifyIssues();
