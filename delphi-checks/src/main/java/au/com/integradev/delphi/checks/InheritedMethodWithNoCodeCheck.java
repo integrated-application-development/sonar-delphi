@@ -18,12 +18,12 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.utils.RoutineUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
@@ -43,11 +43,7 @@ import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "InheritedMethodWithNoCodeRule", repositoryKey = "delph")
@@ -97,31 +93,8 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
     return null;
   }
 
-  private static Stream<Type> concreteParentTypesStream(Type type) {
-    return type.ancestorList().stream()
-        .filter(Type::isClass)
-        .findFirst()
-        .map(value -> Stream.concat(Stream.of(value), concreteParentTypesStream(value)))
-        .orElseGet(Stream::empty);
-  }
-
-  private static List<RoutineNameDeclaration> getParentMethodDeclarations(
-      RoutineImplementationNode method) {
-    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
-    RoutineNameDeclaration nameDeclaration = method.getRoutineNameDeclaration();
-    if (typeDeclaration == null || nameDeclaration == null) {
-      return Collections.emptyList();
-    }
-
-    return concreteParentTypesStream(typeDeclaration.getType())
-        .map(ScopedType.class::cast)
-        .flatMap(type -> type.typeScope().getRoutineDeclarations().stream())
-        .filter(methodDeclaration -> isOverriddenMethod(methodDeclaration, nameDeclaration))
-        .collect(Collectors.toUnmodifiableList());
-  }
-
   private static boolean isVisibilityChanged(RoutineImplementationNode method) {
-    List<RoutineNameDeclaration> parentMethods = getParentMethodDeclarations(method);
+    List<RoutineNameDeclaration> parentMethods = RoutineUtils.findParentMethodDeclarations(method);
     if (parentMethods.isEmpty() || method.getRoutineNameDeclaration() == null) {
       return true;
     }
@@ -132,7 +105,7 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
   }
 
   private static boolean isAddingMeaningfulDirectives(RoutineImplementationNode method) {
-    List<RoutineNameDeclaration> parentMethods = getParentMethodDeclarations(method);
+    List<RoutineNameDeclaration> parentMethods = RoutineUtils.findParentMethodDeclarations(method);
     if (parentMethods.isEmpty() || method.getRoutineNameDeclaration() == null) {
       return false;
     }
@@ -196,28 +169,5 @@ public class InheritedMethodWithNoCodeCheck extends DelphiCheck {
     }
 
     return true;
-  }
-
-  private static boolean isOverriddenMethod(
-      RoutineNameDeclaration parent, RoutineNameDeclaration child) {
-    if (parent.getName().equalsIgnoreCase(child.getName())
-        && parent.getParameters().equals(child.getParameters())) {
-      if (parent.isClassInvocable()) {
-        if (parent.getRoutineKind() == RoutineKind.CONSTRUCTOR
-            || parent.getRoutineKind() == RoutineKind.DESTRUCTOR) {
-          // An instance constructor or destructor cannot inherit from a class constructor or
-          // destructor
-          return child.isClassInvocable();
-        } else {
-          // Any other type of invocable can inherit from a class invocable
-          return true;
-        }
-      } else {
-        // A class invocable cannot inherit from an instance invocable
-        return !child.isClassInvocable();
-      }
-    } else {
-      return false;
-    }
   }
 }

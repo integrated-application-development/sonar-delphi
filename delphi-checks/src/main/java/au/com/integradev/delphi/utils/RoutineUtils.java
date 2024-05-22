@@ -20,12 +20,21 @@ package au.com.integradev.delphi.utils;
 
 import static au.com.integradev.delphi.utils.StatementUtils.isRoutineInvocation;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
 public final class RoutineUtils {
   private RoutineUtils() {
@@ -55,5 +64,51 @@ public final class RoutineUtils {
         statement,
         "System.Assert",
         arguments -> ExpressionNodeUtils.isFalse(arguments.get(0).getExpression()));
+  }
+
+  private static Stream<Type> concreteParentTypesStream(Type type) {
+    return type.ancestorList().stream()
+        .filter(Type::isClass)
+        .findFirst()
+        .map(value -> Stream.concat(Stream.of(value), concreteParentTypesStream(value)))
+        .orElseGet(Stream::empty);
+  }
+
+  private static boolean isOverriddenMethod(
+      RoutineNameDeclaration parent, RoutineNameDeclaration child) {
+    if (parent.getName().equalsIgnoreCase(child.getName())
+        && parent.getParameters().equals(child.getParameters())) {
+      if (parent.isClassInvocable()) {
+        if (parent.getRoutineKind() == RoutineKind.CONSTRUCTOR
+            || parent.getRoutineKind() == RoutineKind.DESTRUCTOR) {
+          // An instance constructor or destructor cannot inherit from a class constructor or
+          // destructor
+          return child.isClassInvocable();
+        } else {
+          // Any other type of invocable can inherit from a class invocable
+          return true;
+        }
+      } else {
+        // A class invocable cannot inherit from an instance invocable
+        return !child.isClassInvocable();
+      }
+    } else {
+      return false;
+    }
+  }
+
+  public static List<RoutineNameDeclaration> findParentMethodDeclarations(
+      RoutineImplementationNode method) {
+    TypeNameDeclaration typeDeclaration = method.getTypeDeclaration();
+    RoutineNameDeclaration nameDeclaration = method.getRoutineNameDeclaration();
+    if (typeDeclaration == null || nameDeclaration == null) {
+      return Collections.emptyList();
+    }
+
+    return concreteParentTypesStream(typeDeclaration.getType())
+        .map(ScopedType.class::cast)
+        .flatMap(type -> type.typeScope().getRoutineDeclarations().stream())
+        .filter(methodDeclaration -> isOverriddenMethod(methodDeclaration, nameDeclaration))
+        .collect(Collectors.toUnmodifiableList());
   }
 }
