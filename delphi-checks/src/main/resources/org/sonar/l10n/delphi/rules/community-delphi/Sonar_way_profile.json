@@ -68,6 +68,7 @@
     "RedundantAssignment",
     "RedundantBoolean",
     "RedundantCast",
+    "RedundantInherited",
     "RedundantParentheses",
     "RoutineName",
     "RoutineNestingDepth",
