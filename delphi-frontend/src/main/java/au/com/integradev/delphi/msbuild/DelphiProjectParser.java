@@ -28,6 +28,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,18 +94,32 @@ final class DelphiProjectParser {
   }
 
   private List<Path> createPathList(ProjectProperties properties, String propertyName) {
-    return propertyList(properties.get(propertyName)).stream()
-        .map(DelphiUtils::normalizeFileName)
-        .map(this::resolvePath)
-        .filter(
-            directory -> {
-              if (!Files.exists(directory) || !Files.isDirectory(directory)) {
-                LOG.warn("Invalid {} directory: {}", propertyName, directory);
-                return false;
+    List<Path> result = new ArrayList<>();
+    propertyList(properties.get(propertyName))
+        .forEach(
+            pathString -> {
+              Path path = resolveDirectory(pathString);
+              if (path == null) {
+                LOG.warn("Invalid {} directory: {}", propertyName, pathString);
+                return;
               }
-              return true;
-            })
-        .collect(Collectors.toUnmodifiableList());
+              result.add(path);
+            });
+    return Collections.unmodifiableList(result);
+  }
+
+  @Nullable
+  private Path resolveDirectory(String pathString) {
+    try {
+      pathString = DelphiUtils.normalizeFileName(pathString);
+      Path path = DelphiUtils.resolvePathFromBaseDir(evaluationDirectory(), Path.of(pathString));
+      if (Files.isDirectory(path)) {
+        return path;
+      }
+    } catch (InvalidPathException e) {
+      LOG.debug("Invalid path string", e);
+    }
+    return null;
   }
 
   private static Map<String, String> createUnitAliases(ProjectProperties properties) {
@@ -129,10 +144,6 @@ final class DelphiProjectParser {
       return Collections.emptyList();
     }
     return Splitter.on(';').omitEmptyStrings().splitToList(value);
-  }
-
-  private Path resolvePath(String pathString) {
-    return DelphiUtils.resolvePathFromBaseDir(evaluationDirectory(), Path.of(pathString));
   }
 
   private Path evaluationDirectory() {
