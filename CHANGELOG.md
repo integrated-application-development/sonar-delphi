@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - File pointer errors when an issue is raised on the first line of a file with a byte order mark.
 - Symbol table construction errors for program files omitting the `program` header.
 - Parsing errors on parenthesised anonymous methods.
+- Scan failures on invalid paths in dproj files.
 - Incorrect ordering of edits in the "Separate grouped parameters" quick fix for `GroupedParameterDeclaration`.
 - SonarLint registration of rules that don't support execution in a SonarLint context.
 
