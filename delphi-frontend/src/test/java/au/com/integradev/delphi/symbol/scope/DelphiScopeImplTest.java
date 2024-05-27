@@ -180,7 +180,7 @@ class DelphiScopeImplTest {
   }
 
   @Test
-  void testGenericTypesWithSameNumberofTypeParametersAreNotDuplicates() {
+  void testGenericTypesWithSameNumberOfTypeParametersAreNotDuplicates() {
     scope.addDeclaration(createClassType("Foo", List.of(createType("Bar"))));
     assertThatCode(() -> scope.addDeclaration(createClassType("Foo", List.of(createType("Bar")))))
         .doesNotThrowAnyException();
