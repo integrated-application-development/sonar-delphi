@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.LabelNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
@@ -71,6 +72,8 @@ public interface DelphiScope {
   Set<RoutineNameDeclaration> getRoutineDeclarations();
 
   Set<VariableNameDeclaration> getVariableDeclarations();
+
+  Set<LabelNameDeclaration> getLabelDeclarations();
 
   static DelphiScope unknownScope() {
     return UnknownScopeImpl.instance();

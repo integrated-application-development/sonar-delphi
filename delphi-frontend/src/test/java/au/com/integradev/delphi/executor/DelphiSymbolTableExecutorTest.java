@@ -394,6 +394,15 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testLabels() {
+    execute("Labels.pas");
+    verifyUsages(8, 6, reference(10, 7), reference(11, 2));
+    verifyUsages(15, 6, reference(17, 7), reference(18, 2));
+    verifyUsages(22, 6, reference(24, 7), reference(25, 2));
+    verifyUsages(29, 6, reference(31, 7), reference(32, 2));
+  }
+
+  @Test
   void testClassReferenceMethodResolution() {
     execute("classReferences/MethodResolution.pas");
     verifyUsages(9, 14, reference(18, 6));

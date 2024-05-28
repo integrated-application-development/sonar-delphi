@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.LabelNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
@@ -60,6 +61,7 @@ public class DelphiScopeImpl implements DelphiScope {
   private final Set<PropertyNameDeclaration> propertyDeclarations;
   private final Set<RoutineNameDeclaration> routineDeclarations;
   private final Set<VariableNameDeclaration> variableDeclarations;
+  private final Set<LabelNameDeclaration> labelDeclarations;
   private final Map<String, HelperType> helpersByType;
 
   private DelphiScope parent;
@@ -74,6 +76,7 @@ public class DelphiScopeImpl implements DelphiScope {
     propertyDeclarations = new HashSet<>();
     routineDeclarations = new HashSet<>();
     variableDeclarations = new HashSet<>();
+    labelDeclarations = new HashSet<>();
     helpersByType = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   }
 
@@ -105,6 +108,8 @@ public class DelphiScopeImpl implements DelphiScope {
       typeDeclarations.add((TypeNameDeclaration) declaration);
     } else if (declaration instanceof UnitNameDeclaration) {
       unitDeclarations.add((UnitNameDeclaration) declaration);
+    } else if (declaration instanceof LabelNameDeclaration) {
+      labelDeclarations.add((LabelNameDeclaration) declaration);
     }
   }
 
@@ -412,5 +417,10 @@ public class DelphiScopeImpl implements DelphiScope {
   @Override
   public Set<VariableNameDeclaration> getVariableDeclarations() {
     return Collections.unmodifiableSet(variableDeclarations);
+  }
+
+  @Override
+  public Set<LabelNameDeclaration> getLabelDeclarations() {
+    return Collections.unmodifiableSet(labelDeclarations);
   }
 }

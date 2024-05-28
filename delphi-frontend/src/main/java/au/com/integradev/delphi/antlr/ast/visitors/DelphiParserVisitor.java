@@ -85,6 +85,7 @@ import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceGuidNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.LabelDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.LibraryDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
@@ -309,6 +310,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(InterfaceSectionNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(LabelDeclarationNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 

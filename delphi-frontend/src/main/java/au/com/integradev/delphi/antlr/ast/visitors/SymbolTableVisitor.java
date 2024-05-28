@@ -30,6 +30,7 @@ import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.symbol.ImportResolutionHandler;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.EnumElementNameDeclarationImpl;
+import au.com.integradev.delphi.symbol.declaration.LabelNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.PropertyNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
@@ -87,10 +88,12 @@ import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
+import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.LabelDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
@@ -352,6 +355,14 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     data.addScope(new LocalScopeImpl(), node);
     data.nameResolutionHelper.resolve(node.getExceptionType());
     return visitScope(node, data);
+  }
+
+  @Override
+  public Data visit(LabelDeclarationNode node, Data data) {
+    for (NameDeclarationNode declarationNode : node.getDeclarations()) {
+      data.addDeclaration(new LabelNameDeclarationImpl(declarationNode), declarationNode);
+    }
+    return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
@@ -671,6 +682,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(LabelStatementNode node, Data data) {
+    data.nameResolutionHelper.resolve(node.getNameReference());
     // Bizarre behavior:
     //   If a label is the first statement in a given scope (routine, local, etc.), then it
     //   doesn't get its own local scope!
@@ -775,6 +787,12 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
   @Override
   public Data visit(AttributeNode node, Data data) {
     data.nameResolutionHelper.resolve(node);
+    return data;
+  }
+
+  @Override
+  public Data visit(GotoStatementNode node, Data data) {
+    data.nameResolutionHelper.resolve(node.getNameReference());
     return data;
   }
 
