@@ -336,7 +336,7 @@ interfaceDecl                : constSection
                              | routineInterface
                              | attributeList
                              ;
-labelDeclSection             : LABEL (label (','!)?)+ ';'
+labelDeclSection             : LABEL<LabelDeclarationNodeImpl>^ labelNameDeclaration (',' labelNameDeclaration)* ';'
                              ;
 constSection                 : (CONST<ConstSectionNodeImpl>^ | RESOURCESTRING<ConstSectionNodeImpl>^) constDeclaration*
                              // constSection was changed at some point from "constDeclaration+" to "constDeclaration*" to cater to invalid includes
@@ -871,13 +871,14 @@ statementList                : delimitedStatements? -> ^(TkStatementList<Stateme
                              ;
 delimitedStatements          : (statement | ';')+
                              ;
-labelStatement               : label ':' statement? -> ^(TkLabelStatement<LabelStatementNodeImpl> label statement?)
+labelStatement               : {input.LA(2) == COLON}? => labelNameReference ':' statement?
+                             -> ^(TkLabelStatement<LabelStatementNodeImpl> labelNameReference ':' statement?)
                              ;
 assignmentStatement          : expression ':='<AssignmentStatementNodeImpl>^ expression
                              ;
 expressionStatement          : expression -> ^(TkExpressionStatement<ExpressionStatementNodeImpl> expression)
                              ;
-gotoStatement                : GOTO<GotoStatementNodeImpl>^ label
+gotoStatement                : GOTO<GotoStatementNodeImpl>^ labelNameReference
                              ;
 tryStatement                 : TRY<TryStatementNodeImpl>^ statementList (exceptBlock | finallyBlock) END
                              ;
@@ -998,9 +999,6 @@ keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS |
                              ;
 nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration (',' nameDeclaration)*)
                              ;
-label                        : ident
-                             | intNum
-                             ;
 nameDeclaration              : ident -> ^(TkNameDeclaration<SimpleNameDeclarationNodeImpl> ident)
                              ;
 genericNameDeclaration       : ident ('.' extendedIdent)* genericDefinition?
@@ -1025,6 +1023,15 @@ extendedNameReference        : extendedIdent genericArguments? ('.' extendedName
                              ;
 extendedIdent                : ident
                              | keywords -> ^({changeTokenType(TkIdentifier)})
+                             ;
+labelIdent                   : ident
+                             | TkIntNumber -> ^({changeTokenType(TkIdentifier)})
+                             | TkHexNumber -> ^({changeTokenType(TkIdentifier)})
+                             | TkBinaryNumber -> ^({changeTokenType(TkIdentifier)})
+                             ;
+labelNameDeclaration         : labelIdent -> ^(TkNameDeclaration<SimpleNameDeclarationNodeImpl> labelIdent)
+                             ;
+labelNameReference           : labelIdent -> ^(TkNameReference<NameReferenceNodeImpl> labelIdent)
                              ;
 //----------------------------------------------------------------------------
 // Literals

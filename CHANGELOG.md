@@ -15,6 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `UsesClauseNode::getImports` method.
 - **API:** `InterfaceSectionNode::getUsesClause` method.
 - **API:** `ImplementationSectionNode::getUsesClause` method.
+- **API:** `LabelNameDeclaration` symbol declaration type.
+- **API:** `DelphiScope::getLabelDeclarations` method.
+- **API:** `LabelDeclarationNode` node type.
+- **API:** `LabelStatementNode::getNameReference` method.
+- **API:** `LabelStatementNode::getStatement` method.
+- **API:** `GotoStatementNode::getNameReference` method.
+
+### Changed
+
+- Improve semantic analysis around `label` and `goto` statements.
 
 ### Fixed
 

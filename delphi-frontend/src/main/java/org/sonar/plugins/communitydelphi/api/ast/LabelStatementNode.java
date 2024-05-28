@@ -18,4 +18,11 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface LabelStatementNode extends StatementNode {}
+import javax.annotation.Nullable;
+
+public interface LabelStatementNode extends StatementNode {
+  NameReferenceNode getNameReference();
+
+  @Nullable
+  StatementNode getStatement();
+}

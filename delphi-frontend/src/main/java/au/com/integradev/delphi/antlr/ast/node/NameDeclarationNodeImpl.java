@@ -87,6 +87,7 @@ public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
     IMPORT,
     INLINE_CONST,
     INLINE_VAR,
+    LABEL,
     LOOP_VAR,
     ROUTINE,
     PARAMETER,

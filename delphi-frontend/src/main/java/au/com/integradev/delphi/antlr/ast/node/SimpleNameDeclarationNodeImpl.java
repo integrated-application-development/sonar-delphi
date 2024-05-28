@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Objects;
 import org.antlr.runtime.Token;
@@ -29,17 +30,19 @@ import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 public final class SimpleNameDeclarationNodeImpl extends NameDeclarationNodeImpl
     implements SimpleNameDeclarationNode {
   private static final Map<Class<?>, DeclarationKind> PARENT_NODE_KIND_MAP =
-      Map.of(
-          ConstDeclarationNodeImpl.class, DeclarationKind.CONST,
-          ConstStatementNodeImpl.class, DeclarationKind.INLINE_CONST,
-          EnumElementNodeImpl.class, DeclarationKind.ENUM_ELEMENT,
-          ExceptItemNodeImpl.class, DeclarationKind.EXCEPT_ITEM,
-          ForLoopVarDeclarationNodeImpl.class, DeclarationKind.LOOP_VAR,
-          RoutineNameNodeImpl.class, DeclarationKind.ROUTINE,
-          PropertyNodeImpl.class, DeclarationKind.PROPERTY,
-          RecordVariantTagNodeImpl.class, DeclarationKind.RECORD_VARIANT_TAG,
-          TypeDeclarationNodeImpl.class, DeclarationKind.TYPE,
-          TypeParameterNodeImpl.class, DeclarationKind.TYPE_PARAMETER);
+      ImmutableMap.<Class<?>, DeclarationKind>builder()
+          .put(ConstDeclarationNodeImpl.class, DeclarationKind.CONST)
+          .put(ConstStatementNodeImpl.class, DeclarationKind.INLINE_CONST)
+          .put(EnumElementNodeImpl.class, DeclarationKind.ENUM_ELEMENT)
+          .put(ExceptItemNodeImpl.class, DeclarationKind.EXCEPT_ITEM)
+          .put(LabelDeclarationNodeImpl.class, DeclarationKind.LABEL)
+          .put(ForLoopVarDeclarationNodeImpl.class, DeclarationKind.LOOP_VAR)
+          .put(RoutineNameNodeImpl.class, DeclarationKind.ROUTINE)
+          .put(PropertyNodeImpl.class, DeclarationKind.PROPERTY)
+          .put(RecordVariantTagNodeImpl.class, DeclarationKind.RECORD_VARIANT_TAG)
+          .put(TypeDeclarationNodeImpl.class, DeclarationKind.TYPE)
+          .put(TypeParameterNodeImpl.class, DeclarationKind.TYPE_PARAMETER)
+          .build();
 
   private static final Map<Class<?>, DeclarationKind> GRANDPARENT_NODE_KIND_MAP =
       Map.of(

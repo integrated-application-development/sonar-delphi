@@ -127,6 +127,11 @@ class UnknownScopeImplTest {
     assertThat(unknownScope.getVariableDeclarations()).isEmpty();
   }
 
+  @Test
+  void testGetLabelDeclarations() {
+    assertThat(unknownScope.getLabelDeclarations()).isEmpty();
+  }
+
   private static NameOccurrence makeNameOccurrence() {
     DelphiToken token = mock(DelphiToken.class);
     when(token.isIncludedToken()).thenReturn(false);

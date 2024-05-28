@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,25 +16,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.antlr.ast.node;
+package org.sonar.plugins.communitydelphi.api.ast;
 
-import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import java.util.List;
 
-public final class GotoStatementNodeImpl extends DelphiNodeImpl implements GotoStatementNode {
-  public GotoStatementNodeImpl(Token token) {
-    super(token);
-  }
-
-  @Override
-  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
-    return visitor.visit(this, data);
-  }
-
-  @Override
-  public NameReferenceNode getNameReference() {
-    return (NameReferenceNode) getChild(0);
-  }
+public interface LabelDeclarationNode extends DelphiNode {
+  List<NameDeclarationNode> getDeclarations();
 }
