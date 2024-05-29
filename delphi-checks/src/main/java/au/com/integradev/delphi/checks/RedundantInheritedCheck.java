@@ -27,11 +27,16 @@ import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 @Rule(key = "RedundantInherited")
 public class RedundantInheritedCheck extends DelphiCheck {
@@ -40,9 +45,65 @@ public class RedundantInheritedCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
     for (DelphiNode violationNode : findViolations(routine)) {
-      reportIssue(context, violationNode, MESSAGE);
+      context
+          .newIssue()
+          .onNode(violationNode)
+          .withMessage(MESSAGE)
+          .withQuickFixes(getQuickFixes(violationNode))
+          .report();
     }
     return super.visit(routine, context);
+  }
+
+  private static List<QuickFix> getQuickFixes(DelphiNode violationNode) {
+    DelphiNode statement = violationNode;
+    DelphiNode parent = violationNode.getParent();
+    while (!(parent instanceof StatementListNode)) {
+      statement = parent;
+      parent = parent.getParent();
+      if (parent == null) {
+        return Collections.emptyList();
+      }
+    }
+    StatementListNode statementListNode = (StatementListNode) parent;
+    int statementIndex = statementListNode.getStatements().indexOf(statement);
+
+    int startLine = statement.getBeginLine();
+    int startCol = statement.getBeginColumn();
+    int endLine = statement.getEndLine();
+    int endCol = statement.getEndColumn();
+
+    if (statementListNode.getStatements().size() > statementIndex + 1) {
+      StatementNode statementNode = statementListNode.getStatements().get(statementIndex + 1);
+      endLine = statementNode.getBeginLine();
+      endCol = statementNode.getBeginColumn();
+    } else if (statementIndex > 0) {
+      StatementNode statementNode = statementListNode.getStatements().get(statementIndex - 1);
+      startLine = statementNode.getEndLine();
+      startCol = statementNode.getEndColumn();
+    } else {
+      DelphiNode lastToken = getLastStatementToken(statementListNode, statement);
+      endLine = lastToken.getEndLine();
+      endCol = lastToken.getEndColumn();
+    }
+
+    return List.of(
+        QuickFix.newFix("Remove redundant inherited call")
+            .withEdit(
+                QuickFixEdit.delete(FilePosition.from(startLine, startCol, endLine, endCol))));
+  }
+
+  private static boolean isSemicolon(DelphiNode node) {
+    return node.getChildren().isEmpty() && node.getToken().getType() == DelphiTokenType.SEMICOLON;
+  }
+
+  private static DelphiNode getLastStatementToken(
+      StatementListNode statementListNode, DelphiNode node) {
+    return statementListNode.getChildren().stream()
+        .skip(node.getChildIndex() + 1)
+        .takeWhile(RedundantInheritedCheck::isSemicolon)
+        .reduce((first, second) -> second)
+        .orElse(node);
   }
 
   private static List<DelphiNode> findViolations(RoutineImplementationNode routine) {
