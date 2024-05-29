@@ -136,10 +136,13 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+1:2 to +2:2] <<>>")
                 .appendImpl("  inherited; // Noncompliant")
                 .appendImpl("  begin")
+                .appendImpl("    // Fix qf2@[+1:4 to +1:14] <<>>")
                 .appendImpl("    inherited; // Noncompliant")
                 .appendImpl("  end;")
+                .appendImpl("  // Fix qf3@[-1:5 to +1:11] <<>>")
                 .appendImpl("  inherited; // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
