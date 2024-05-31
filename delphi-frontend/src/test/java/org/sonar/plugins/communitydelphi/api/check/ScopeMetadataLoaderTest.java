@@ -19,7 +19,6 @@
 package org.sonar.plugins.communitydelphi.api.check;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;

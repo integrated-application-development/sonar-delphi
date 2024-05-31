@@ -53,7 +53,7 @@ class GrammarTest {
 
   private void parse(String fileName) {
     String path = BASE_DIR + fileName;
-    LOG.info("Parsing file: " + path);
+    LOG.info("Parsing file: {}", path);
     DelphiFile.from(DelphiUtils.getResource(path), fileConfig);
   }
 

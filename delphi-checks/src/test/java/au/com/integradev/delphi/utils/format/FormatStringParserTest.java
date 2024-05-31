@@ -155,19 +155,7 @@ class FormatStringParserTest {
         "%m,MONEY",
         "%p,POINTER",
         "%s,STRING",
-        "%x,HEXADECIMAL"
-      })
-  void testParseFormatSpecifierType(String formatString, FormatSpecifierType expectedType) {
-    List<FormatSpecifier> specifiers =
-        new FormatStringParser(formatString).parse().getFormatSpecifiers();
-
-    assertThat(specifiers).hasSize(1);
-    assertThat(specifiers.get(0).getType()).isEqualTo(expectedType);
-  }
-
-  @ParameterizedTest(name = "[{index}] {0} parsed as {1}")
-  @CsvSource(
-      value = {
+        "%x,HEXADECIMAL",
         "%D,DECIMAL",
         "%U,UNSIGNED_DECIMAL",
         "%E,SCIENTIFIC",
@@ -179,8 +167,7 @@ class FormatStringParserTest {
         "%S,STRING",
         "%X,HEXADECIMAL"
       })
-  void testParseUppercaseFormatSpecifierType(
-      String formatString, FormatSpecifierType expectedType) {
+  void testParseFormatSpecifierType(String formatString, FormatSpecifierType expectedType) {
     List<FormatSpecifier> specifiers =
         new FormatStringParser(formatString).parse().getFormatSpecifiers();
 
