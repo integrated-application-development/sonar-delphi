@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "Move to implementation section" quick fix for `ImportSpecificity`.
 - "Remove unused import" quick fix for `UnusedImport`.
-- More comprehensive analysis and more detailed documentation for the `PointerName` rule.
 - **API:** `UsesClauseNode::getImports` method.
 - **API:** `InterfaceSectionNode::getUsesClause` method.
 - **API:** `ImplementationSectionNode::getUsesClause` method.
@@ -25,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve semantic analysis around `label` and `goto` statements.
+- Improve handling for dereferenced types starting with `E` and `I` in `PointerName`.
+- Improve handling for dereferenced types that don't comply with naming conventions in `PointerName`.
 
 ### Fixed
 
