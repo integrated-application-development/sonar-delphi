@@ -84,11 +84,6 @@ In addition to template rules, SonarDelphi can be extended with custom rules plu
 4. View analysis results:
     * Visit the link provided at the end of the scan to view analysis results on SonarQube.
 
-> [!WARNING]
-> Unfortunately, Delphi Community Edition is **not** supported.
->
-> SonarDelphi requires source code for all dependencies, including the standard library.
-
 ## Read the Manual
 
 The [SonarDelphi Manual](docs/MANUAL.md) provides a comprehensive guide to SonarDelphi and the Sonar ecosystem,
