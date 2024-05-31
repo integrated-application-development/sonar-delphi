@@ -37,10 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.0] - 2024-05-02
 
-### Fixed
-
-- False positive `FormatStringValid` issues on strings containing uppercase format specifiers.
-
 ### Added
 
 - Support for the `winapi` calling convention.
@@ -70,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- False positive `FormatStringValid` issues on strings containing uppercase format specifiers.
 - Exception when parsing fully qualified attribute references.
 - `DuplicatedDeclarationException` errors caused by some local scopes being modeled incorrectly.
 - Name resolution issues around `if`, `else`, `for`, and `with` constructs when the body contains a single statement.
