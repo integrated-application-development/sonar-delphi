@@ -1,23 +1,24 @@
 <h2>Why is this an issue?</h2>
 <p>
   Code that follows a consistent naming convention is self-documenting. In Delphi, all pointer names
-  should be named identically to the dereferenced type, with the type prefix swapped for <code>P</code>.
+  should be named identically to the dereferenced type, with the type prefix swapped for
+  <code>P</code>.
 </p>
 <p>
-  For example, the pointer types for <code>TMyType</code>, 
-  <code>EMyType</code>, and <code>IMyType</code> should be named <code>PMyType</code>.
+  For example, the pointer types for <code>TMyType</code>, <code>EMyType</code>, and
+  <code>IMyType</code> should be named <code>PMyType</code>.
 </p>
 <p>
-  Custom prefixes for dereferenced types are also supported, 
-  provided they also start with <code>T</code>, <code>E</code> or <code>I</code>.
+  Custom prefixes for dereferenced types are also supported, provided they also start with
+  <code>T</code>, <code>E</code> or <code>I</code>.
 </p>
 <p>
-  For example, the pointer types for <code>TxyMyType</code>, 
-  <code>ExyMyType</code>, and <code>IxyMyType</code> should be named <code>PxyMyType</code>.
+  For example, the pointer types for <code>TxyMyType</code>, <code>ExyMyType</code>, and
+  <code>IxyMyType</code> should be named <code>PxyMyType</code>.
 </p>
 <p>
-  If dereferenced type is in PascalCase but does not have a valid prefix, 
-  the pointer name is expected to be the same as the type name but with the addition of the prefix <code>P</code>.
+  If the dereferenced type is in PascalCase but does not have a valid prefix, the pointer name is
+  expected to be the same as the type name but with the addition of the prefix <code>P</code>.
 </p>
 <p>For example:</p>
 <ul>
@@ -25,8 +26,8 @@
   <li><code>^MyType</code> should be named <code>PMyType</code></li>
 </ul>
 <p>
-  Note that pointers to types that do not follow the naming standard are valid 
-  as long as they are in PascalCase with the prefix <code>P</code>.
+  Note that pointers to types that do not follow the naming standard are valid as long as they are
+  in PascalCase with the prefix <code>P</code>.
 </p>
 <p>For example:</p>
 <ul>
