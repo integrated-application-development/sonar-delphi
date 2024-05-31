@@ -31,6 +31,7 @@ var
   HELPER: Boolean;
   IMPLEMENTS: Boolean;
   INDEX: Boolean;
+  LABEL: Boolean; // Allowed in Delphi.NET
   LOCAL: Boolean;
   MESSAGE: Boolean;
   NAME: Boolean;
