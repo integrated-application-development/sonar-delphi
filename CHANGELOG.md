@@ -629,7 +629,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `MemoryManagementRule` from the Sonar Way quality profile.
 - Improve handling of constructor calls in `RedundantCastRule`.
 - Improve handling of multi-variable declarations in `TooManyVariablesRule`.
-- Improved handling of `else` blocks (within `case` statements and `except` blocks) in
+- Improve handling of `else` blocks (within `case` statements and `except` blocks) in
   `BeginEndRequiredRule`.
 
 ## [0.28.0] - 2021-02-02
@@ -815,9 +815,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type comparisons between text-literal arguments and character pointer parameters.
 - Improve type comparisons involving `nil` literals.
 - Improve support for the `High` and `Low` intrinsics.
-- Improved primary expression type resolution around constructor invocations.
-- Improved primary expression type resolution around hard casts.
-- Improved primary expression type resolution around array properties.
+- Improve primary expression type resolution around constructor invocations.
+- Improve primary expression type resolution around hard casts.
+- Improve primary expression type resolution around array properties.
 - Types nested within the `testSuiteType` will now be treated as test code.
 - `Char` is now treated as an alias to `WideChar`.
 
