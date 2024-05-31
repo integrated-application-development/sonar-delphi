@@ -136,14 +136,14 @@ class InvocationResolverTest {
     resolved = resolver.chooseBest();
   }
 
-  private static InvocationCandidate mockCandidate(List<Type> parameterTypes, boolean var) {
+  private static InvocationCandidate mockCandidate(List<Type> parameterTypes, boolean isVar) {
     Invocable invocable = mock(Invocable.class);
     List<Parameter> parameters = new ArrayList<>();
 
     for (Type paramType : parameterTypes) {
       FormalParameterData formalParameterData = mock(FormalParameterData.class);
       when(formalParameterData.getType()).thenReturn(paramType);
-      if (var) {
+      if (isVar) {
         when(formalParameterData.isVar()).thenReturn(true);
       }
       parameters.add(FormalParameter.create(formalParameterData));
