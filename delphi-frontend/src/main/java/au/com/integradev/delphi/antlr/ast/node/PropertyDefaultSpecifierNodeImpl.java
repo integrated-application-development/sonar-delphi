@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,30 +16,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.symbol.declaration;
+package au.com.integradev.delphi.antlr.ast.node;
 
-import java.util.List;
+import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nullable;
-import org.sonar.plugins.communitydelphi.api.ast.Visibility;
-import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
-import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyDefaultSpecifierNode;
 
-public interface PropertyNameDeclaration extends TypedDeclaration, Invocable, Visibility {
-  String fullyQualifiedName();
+public final class PropertyDefaultSpecifierNodeImpl extends DelphiNodeImpl
+    implements PropertyDefaultSpecifierNode {
+  public PropertyDefaultSpecifierNodeImpl(Token token) {
+    super(token);
+  }
+
+  @Override
+  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
+    return visitor.visit(this, data);
+  }
 
   @Nullable
-  NameDeclaration getReadDeclaration();
-
-  @Nullable
-  NameDeclaration getWriteDeclaration();
-
-  List<Type> getImplementedTypes();
-
-  boolean isArrayProperty();
-
-  boolean isDefaultProperty();
-
-  List<PropertyNameDeclaration> getRedeclarations();
-
-  List<Type> getAttributeTypes();
+  @Override
+  public ExpressionNode getExpression() {
+    return (ExpressionNode) getChild(0);
+  }
 }

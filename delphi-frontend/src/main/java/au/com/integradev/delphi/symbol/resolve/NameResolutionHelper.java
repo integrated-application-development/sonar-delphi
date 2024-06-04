@@ -47,6 +47,7 @@ import org.sonar.plugins.communitydelphi.api.ast.MethodResolutionClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyImplementsSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
@@ -256,6 +257,11 @@ public class NameResolutionHelper {
       writeResolver.readPrimaryExpression(write.getExpression());
       writeResolver.disambiguateParameters(parameterTypes);
       writeResolver.addToSymbolTable();
+    }
+
+    PropertyImplementsSpecifierNode impl = property.getImplementsSpecifier();
+    if (impl != null) {
+      impl.getTypeReferences().stream().map(TypeReferenceNode::getNameNode).forEach(this::resolve);
     }
   }
 

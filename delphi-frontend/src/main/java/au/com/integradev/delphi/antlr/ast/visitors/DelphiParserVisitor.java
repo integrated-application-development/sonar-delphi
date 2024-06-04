@@ -105,8 +105,12 @@ import org.sonar.plugins.communitydelphi.api.ast.ProcedureReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProgramDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyDefaultSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyImplementsSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyIndexSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyStoredSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
@@ -353,7 +357,23 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  default T visit(PropertyDefaultSpecifierNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(PropertyIndexSpecifierNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(PropertyImplementsSpecifierNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
   default T visit(PropertyReadSpecifierNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(PropertyStoredSpecifierNode node, T data) {
     return visit((DelphiNode) node, data);
   }
 
@@ -453,6 +473,7 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(RoutineImplementationNode node, T data) {
+
     return visit((RoutineNode) node, data);
   }
 

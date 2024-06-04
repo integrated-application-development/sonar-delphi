@@ -38,6 +38,18 @@ public interface PropertyNode extends DelphiNode, Typed, Visibility {
   @Nullable
   PropertyWriteSpecifierNode getWriteSpecifier();
 
+  @Nullable
+  PropertyDefaultSpecifierNode getDefaultSpecifier();
+
+  @Nullable
+  PropertyImplementsSpecifierNode getImplementsSpecifier();
+
+  @Nullable
+  PropertyIndexSpecifierNode getIndexSpecifier();
+
+  @Nullable
+  PropertyStoredSpecifierNode getStoredSpecifier();
+
   List<FormalParameterData> getParameters();
 
   @Nullable

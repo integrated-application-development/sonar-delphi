@@ -28,8 +28,12 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyDefaultSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyImplementsSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyIndexSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyStoredSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
@@ -97,6 +101,30 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
   }
 
   @Override
+  @Nullable
+  public PropertyDefaultSpecifierNode getDefaultSpecifier() {
+    return getFirstChildOfType(PropertyDefaultSpecifierNode.class);
+  }
+
+  @Override
+  @Nullable
+  public PropertyImplementsSpecifierNode getImplementsSpecifier() {
+    return getFirstChildOfType(PropertyImplementsSpecifierNode.class);
+  }
+
+  @Override
+  @Nullable
+  public PropertyIndexSpecifierNode getIndexSpecifier() {
+    return getFirstChildOfType(PropertyIndexSpecifierNode.class);
+  }
+
+  @Override
+  @Nullable
+  public PropertyStoredSpecifierNode getStoredSpecifier() {
+    return getFirstChildOfType(PropertyStoredSpecifierNode.class);
+  }
+
+  @Override
   public List<FormalParameterData> getParameters() {
     FormalParameterListNode paramList = getParameterListNode();
     return (paramList == null) ? Collections.emptyList() : paramList.getParameters();
@@ -120,6 +148,6 @@ public final class PropertyNodeImpl extends DelphiNodeImpl implements PropertyNo
 
   @Override
   public boolean isDefaultProperty() {
-    return getFirstChildWithTokenType(DelphiTokenType.DEFAULT) != null;
+    return getDefaultSpecifier() != null;
   }
 }
