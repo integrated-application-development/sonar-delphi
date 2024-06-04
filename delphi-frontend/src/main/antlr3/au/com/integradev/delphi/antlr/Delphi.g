@@ -650,16 +650,26 @@ property                     : attributeList? CLASS? PROPERTY nameDeclaration pr
                              ;
 propertyArray                : lbrack! formalParameterList rbrack!
                              ;
-propertyDirective            : ';' DEFAULT
-                             | DEFAULT expression
+propertyDirective            : ';' propertyDefaultNoExpression
+                             | propertyDefault
                              | propertyReadWrite
                              | propertyDispInterface
-                             | IMPLEMENTS typeReference (',' typeReference)*
-                             | INDEX expression
+                             | propertyImplements
+                             | propertyIndex
+                             | propertyStored
                              | NODEFAULT
-                             | STORED expression
+                             ;
+propertyDefaultNoExpression  : DEFAULT<PropertyDefaultSpecifierNodeImpl>^
+                             ;
+propertyDefault              : DEFAULT<PropertyDefaultSpecifierNodeImpl>^ expression
                              ;
 propertyReadWrite            : (READ<PropertyReadSpecifierNodeImpl>^ | WRITE<PropertyWriteSpecifierNodeImpl>^) primaryExpression
+                             ;
+propertyImplements           : IMPLEMENTS<PropertyImplementsSpecifierNodeImpl>^ typeReference (',' typeReference)*
+                             ;
+propertyIndex                : INDEX<PropertyIndexSpecifierNodeImpl>^ expression
+                             ;
+propertyStored               : STORED<PropertyStoredSpecifierNodeImpl>^ expression
                              ;
 propertyDispInterface        : READONLY
                              | WRITEONLY

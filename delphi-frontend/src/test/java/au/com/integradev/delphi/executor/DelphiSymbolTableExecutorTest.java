@@ -826,6 +826,30 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testIndexProperties() {
+    execute("properties/IndexProperties.pas");
+    verifyUsages(6, 2, reference(10, 32));
+  }
+
+  @Test
+  void testStoredProperties() {
+    execute("properties/StoredProperties.pas");
+    verifyUsages(6, 2, reference(10, 33));
+  }
+
+  @Test
+  void testDefaultProperties() {
+    execute("properties/DefaultProperties.pas");
+    verifyUsages(6, 2, reference(10, 34));
+  }
+
+  @Test
+  void testImplementsProperties() {
+    execute("properties/ImplementsProperties.pas");
+    verifyUsages(6, 2, reference(13, 34));
+  }
+
+  @Test
   void testOverrideProperties() {
     execute("properties/OverrideProperties.pas");
     verifyUsages(8, 14, reference(29, 10), reference(30, 10), reference(31, 13), reference(32, 13));

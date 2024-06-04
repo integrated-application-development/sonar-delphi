@@ -31,6 +31,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyImplementsSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
@@ -40,6 +41,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDecl
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     implements PropertyNameDeclaration {
@@ -51,6 +53,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
   private final Type type;
   private final NameDeclaration readDeclaration;
   private final NameDeclaration writeDeclaration;
+  private final List<Type> implementedTypes;
   private final VisibilityType visibility;
   private final List<PropertyNameDeclaration> redeclarations;
   private final List<Type> attributeTypes;
@@ -67,6 +70,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
         extractType(node, concreteDeclaration),
         extractReadDeclaration(node, concreteDeclaration),
         extractWriteDeclaration(node, concreteDeclaration),
+        extractImplementedTypes(node, concreteDeclaration),
         node.getVisibility(),
         extractAttributeTypes(node));
   }
@@ -80,6 +84,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
       Type type,
       NameDeclaration readDeclaration,
       NameDeclaration writeDeclaration,
+      List<Type> implementedTypes,
       VisibilityType visibility,
       List<Type> attributeTypes) {
     super(location);
@@ -90,6 +95,7 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     this.type = type;
     this.readDeclaration = readDeclaration;
     this.writeDeclaration = writeDeclaration;
+    this.implementedTypes = implementedTypes;
     this.visibility = visibility;
     this.attributeTypes = attributeTypes;
     this.redeclarations = new ArrayList<>();
@@ -147,6 +153,22 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
     return null;
   }
 
+  private static List<Type> extractImplementedTypes(
+      PropertyNode node, @Nullable PropertyNameDeclaration concreteDeclaration) {
+    if (concreteDeclaration != null) {
+      return concreteDeclaration.getImplementedTypes();
+    }
+
+    PropertyImplementsSpecifierNode implementsSpecifier = node.getImplementsSpecifier();
+    if (implementsSpecifier != null) {
+      return implementsSpecifier.getTypeReferences().stream()
+          .map(Typed::getType)
+          .collect(Collectors.toUnmodifiableList());
+    }
+
+    return Collections.emptyList();
+  }
+
   private static NameDeclaration extractSpecifierDeclaration(PrimaryExpressionNode node) {
     NameDeclaration result = null;
     for (DelphiNode child : node.getChildren()) {
@@ -186,6 +208,11 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
   @Nullable
   public NameDeclaration getWriteDeclaration() {
     return writeDeclaration;
+  }
+
+  @Override
+  public List<Type> getImplementedTypes() {
+    return implementedTypes;
   }
 
   @Override
@@ -250,6 +277,9 @@ public final class PropertyNameDeclarationImpl extends NameDeclarationImpl
         type.specialize(context),
         specializeIfNotNull(readDeclaration, context),
         specializeIfNotNull(writeDeclaration, context),
+        implementedTypes.stream()
+            .map(implementedType -> implementedType.specialize(context))
+            .collect(Collectors.toUnmodifiableList()),
         visibility,
         attributeTypes);
   }

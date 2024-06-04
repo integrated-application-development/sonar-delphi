@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `PropertyNameDeclaration::getImplementedTypes` method.
+- **API:** `PropertyNode::getDefaultSpecifier` method.
+- **API:** `PropertyNode::getImplementsSpecifier` method.
+- **API:** `PropertyNode::getIndexSpecifier` method.
+- **API:** `PropertyNode::getStoredSpecifier` method.
+- **API:** `PropertyDefaultSpecifierNode` node type.
+- **API:** `PropertyImplementsSpecifierNode` node type.
+- **API:** `PropertyIndexSpecifierNode` node type.
+- **API:** `PropertyStoredSpecifierNode` node type.
+
+### Changed
+
+- Improve AST modeling around property specifiers.
+- Improve semantic analysis around property specifiers.
+
 ## [1.7.0] - 2024-07-02
 
 ### Added
