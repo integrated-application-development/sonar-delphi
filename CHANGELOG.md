@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improve AST modeling around property specifiers.
 - Improve semantic analysis around property specifiers.
+- Exclude properties with `implements` specifiers in `UnusedProperty`.
 
 ## [1.7.0] - 2024-07-02
 
