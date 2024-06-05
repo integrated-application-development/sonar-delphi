@@ -38,7 +38,7 @@ public final class StringTypeNodeImpl extends TypeNodeImpl implements StringType
 
   @Override
   public boolean isFixedString() {
-    return getChild(0) instanceof ExpressionNode;
+    return getChild(1) instanceof ExpressionNode;
   }
 
   @Override
