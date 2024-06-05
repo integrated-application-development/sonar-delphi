@@ -495,7 +495,7 @@ exportItem                   : ('(' formalParameterList ')')? (INDEX expression)
 //----------------------------------------------------------------------------
 typeDecl                     : arrayType
                              | setType
-                             | fileType
+                             | fullFileType
                              | classHelperType
                              | classReferenceType
                              | classType
@@ -504,7 +504,7 @@ typeDecl                     : arrayType
                              | recordType
                              | recordHelperType
                              | pointerType
-                             | stringType
+                             | fullStringType
                              | procedureType
                              | subRangeType
                              | typeOfType
@@ -515,7 +515,8 @@ typeDecl                     : arrayType
                              ;
 varType                      : arrayType
                              | setType
-                             | fileType
+                             | fullStringType
+                             | fullFileType
                              | recordType
                              | pointerType
                              | procedureType
@@ -545,13 +546,17 @@ arrayIndices                 : lbrack (varType ','?)+ rbrack
 arrayElementType             : CONST<ConstArrayElementTypeNodeImpl>
                              | varType
                              ;
-setType                      : SET<SetTypeNodeImpl>^ OF varType
+fileType                     : FILE<FileTypeNodeImpl>^
                              ;
-fileType                     : FILE<FileTypeNodeImpl>^ (OF varType)?
+fullFileType                 : FILE<FileTypeNodeImpl>^ (OF varType)?
+                             ;
+setType                      : SET<SetTypeNodeImpl>^ OF varType
                              ;
 pointerType                  : '^'<PointerTypeNodeImpl>^ varType
                              ;
-stringType                   : STRING<StringTypeNodeImpl>^ (lbrack! expression rbrack!)?
+stringType                   : STRING<StringTypeNodeImpl>^
+                             ;
+fullStringType               : STRING<StringTypeNodeImpl>^ (lbrack expression rbrack)?
                              ;
 procedureType                : procedureOfObject
                              | procedureReference
@@ -568,7 +573,7 @@ procedureTypeHeading         : FUNCTION<ProcedureTypeHeadingNodeImpl>^ routinePa
                              ;
 typeOfType                   : TYPE<TypeOfTypeNodeImpl>^ OF typeDecl
                              ;
-strongAliasType              : TYPE<StrongAliasTypeNodeImpl>^ typeReference codePageExpression?
+strongAliasType              : TYPE<StrongAliasTypeNodeImpl>^ typeReferenceOrStringOrFile codePageExpression?
                              ;
 codePageExpression           : '('! expression ')'!
                              ;
@@ -580,9 +585,14 @@ enumType                     : '('<EnumTypeNodeImpl>^ (enumTypeElement (',')?)* 
                              ;
 enumTypeElement              : nameDeclaration ('=' expression)? -> ^(TkEnumElement<EnumElementNodeImpl> nameDeclaration expression?)
                              ;
-typeReference                : stringType
-                             | FILE<FileTypeNodeImpl>^
-                             | nameReference -> ^(TkTypeReference<TypeReferenceNodeImpl> nameReference)
+typeReference                : nameReference -> ^(TkTypeReference<TypeReferenceNodeImpl> nameReference)
+                             ;
+typeReferenceOrString        : stringType
+                             | typeReference
+                             ;
+typeReferenceOrStringOrFile  : stringType
+                             | fileType
+                             | typeReference
                              ;
 
 //----------------------------------------------------------------------------
@@ -643,7 +653,7 @@ recordVariantTag             : (nameDeclaration ':')? typeReference
 recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSection? ')' ';'?
                              -> ^(TkRecordVariantItem<RecordVariantItemNodeImpl> expressionList fieldDecl* recordVariantSection? ';'?)
                              ;
-recordHelperType             : RECORD<RecordHelperTypeNodeImpl>^ HELPER FOR typeReference visibilitySection* END
+recordHelperType             : RECORD<RecordHelperTypeNodeImpl>^ HELPER FOR typeReferenceOrStringOrFile visibilitySection* END
                              ;
 property                     : attributeList? CLASS? PROPERTY nameDeclaration propertyArray? (':' varType)? (propertyDirective)* ';'
                              -> ^(PROPERTY<PropertyNodeImpl> nameDeclaration propertyArray? varType? CLASS? attributeList? propertyDirective*)
@@ -700,8 +710,8 @@ genericConstraint            : typeReference
                              | CLASS
                              | CONSTRUCTOR
                              ;
-genericArguments             : '<' typeReference (',' typeReference)* '>'
-                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> typeReference typeReference*)
+genericArguments             : '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>'
+                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> typeReferenceOrStringOrFile typeReferenceOrStringOrFile*)
                              ;
 
 //----------------------------------------------------------------------------
@@ -797,8 +807,7 @@ routineKey                   : PROCEDURE
                              ;
 routineReturnType            : ':' attributeList? returnType -> ^(TkRoutineReturn<RoutineReturnTypeNodeImpl> returnType attributeList?)
                              ;
-returnType                   : stringType
-                             | typeReference
+returnType                   : typeReferenceOrString
                              ;
 routineParameters            : '(' formalParameterList? ')' -> ^(TkRoutineParameters<RoutineParametersNodeImpl> '(' formalParameterList? ')')
                              ;
