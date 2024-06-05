@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve semantic analysis around property specifiers.
 - Exclude properties with `implements` specifiers in `UnusedProperty`.
 
+### Fixed
+
+- Overly permissive parsing rules around `string` and `file` types.
+
 ## [1.7.0] - 2024-07-02
 
 ### Added
