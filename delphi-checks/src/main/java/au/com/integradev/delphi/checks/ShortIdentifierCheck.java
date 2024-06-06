@@ -35,7 +35,7 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 public class ShortIdentifierCheck extends DelphiCheck {
   private static final String MESSAGE = "Give this short identifier a more meaningful name.";
   private static final int DEFAULT_MINIMUM_LENGTH = 3;
-  private static final String DEFAULT_WHITELIST = "E,I,X,Y,ID";
+  private static final String DEFAULT_WHITELIST = "E,I,J,K,X,Y,ID";
 
   @RuleProperty(
       key = "minimumLength",

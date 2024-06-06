@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `RedundantInherited` analysis rule, which flags redundant `inherited` statements that can be safely removed.
 
+### Changed
+
+- Exclude `J` and `K` by default in `ShortIdentifier`.
+
 ## [1.6.0] - 2024-05-31
 
 ### Added
