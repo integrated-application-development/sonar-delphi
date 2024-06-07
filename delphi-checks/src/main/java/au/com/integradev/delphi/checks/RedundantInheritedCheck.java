@@ -100,7 +100,7 @@ public class RedundantInheritedCheck extends DelphiCheck {
   private static DelphiNode getLastStatementToken(
       StatementListNode statementListNode, DelphiNode node) {
     return statementListNode.getChildren().stream()
-        .skip(node.getChildIndex() + 1)
+        .skip(node.getChildIndex() + 1L)
         .takeWhile(RedundantInheritedCheck::isSemicolon)
         .reduce((first, second) -> second)
         .orElse(node);
@@ -124,8 +124,8 @@ public class RedundantInheritedCheck extends DelphiCheck {
     }
 
     return statements.stream()
-        .filter((statement) -> statement instanceof ExpressionStatementNode)
-        .map((statement) -> ((ExpressionStatementNode) statement).getExpression())
+        .filter(ExpressionStatementNode.class::isInstance)
+        .map(statement -> ((ExpressionStatementNode) statement).getExpression())
         .filter(ExpressionNodeUtils::isBareInherited)
         .collect(Collectors.toList());
   }
