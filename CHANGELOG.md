@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Include "found" and "expected" values for issues messages in `LowercaseKeyword`.
 - Exclude `J` and `K` by default in `ShortIdentifier`.
 
 ## [1.6.0] - 2024-05-31
