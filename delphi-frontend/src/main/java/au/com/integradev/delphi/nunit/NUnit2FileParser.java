@@ -38,13 +38,13 @@ public class NUnit2FileParser extends NUnitFileParser {
   }
 
   private TestResult.Status parseTestCaseStatus(String statusText) {
-    switch (statusText) {
-      case "Success":
+    switch (statusText.toLowerCase()) {
+      case "success":
         return Status.PASSED;
-      case "Ignored":
+      case "ignored":
         return Status.SKIPPED;
-      case "Failure":
-      case "Error":
+      case "failure":
+      case "error":
         return Status.FAILED;
       default:
         LOG.warn("Unexpected test result status: '{}'. Treating as Failure.", statusText);
