@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include "found" and "expected" values for issues messages in `LowercaseKeyword`.
 - Exclude `J` and `K` by default in `ShortIdentifier`.
 
+### Fixed
+
+- The `result` attribute in NUnit test reports was not being treated as case-insensitive.
+
 ## [1.6.0] - 2024-05-31
 
 ### Added

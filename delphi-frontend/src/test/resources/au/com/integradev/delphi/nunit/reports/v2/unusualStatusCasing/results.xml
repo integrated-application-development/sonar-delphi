@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<test-results name="path\to\executable.exe" total="5" errors="1" failures="1" ignored="1" inconclusive="0" not-run="1" skipped="0" invalid="0" date="2023-11-30" time="0.017">
+  <culture-info current-culture="en" current-uiculture="en" />
+  <test-suite type="Assembly" name="executable.exe" executed="true" result="failure" success="False" time="0.017" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="MyTests" executed="true" result="success" success="True" time="0.016" asserts="0" >
+        <results>
+          <test-suite type="Fixture" name="PassingAndSkippedSuite" executed="True" result="SuCCesS" success="True" time="0.016" >
+            <results>
+              <test-case name="SkippedTest" executed="False" result="ignored"  time="0.000" asserts="0" >
+                <reason>
+                  <message>
+                    <![CDATA[ This is my reason for skipping ]]>
+                  </message>
+                </reason>
+              </test-case>
+              <test-case name="PassedTest." executed="True" result="SUCCESS" success="True" time="0.000" asserts="0" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="Fixture" name="ErrorSuite" executed="True" result="SUccESS" success="True" time="0.016" >
+        <results>
+          <test-case name="ErrorCase." executed="True" result="ERROR" success="False" time="0.000" asserts="0" >
+            <failure>
+              <message>
+                <![CDATA[ This is my exception message ]]>
+              </message>
+              <stack-trace>
+                <![CDATA[  ]]>
+              </stack-trace>
+            </failure>
+          </test-case>
+        </results>
+      </test-suite>
+      <test-suite type="Fixture" name="PassingSuite" executed="True" result="Success" success="True" time="0.012" >
+        <results>
+          <test-case name="TestCase1." executed="True" result="success" success="True" time="0.000" asserts="0" />
+          <test-case name="TestCase2." executed="True" result="SUCCESS" success="True" time="0.000" asserts="0" />
+          <test-case name="TestCase3." executed="True" result="sUcCeSs" success="True" time="0.000" asserts="0" />
+          <test-case name="TestCase4." executed="True" result="SuCcEsS" success="True" time="0.000" asserts="0" />
+        </results>
+      </test-suite>
+      <test-suite type="Fixture" name="FailingSuite" executed="True" result="Failure" success="False" time="0.005" >
+        <results>
+          <test-case name="FailedCase1." executed="True" result="fAiLuRe" success="False" time="0.000" asserts="0" >
+            <failure>
+              <message>
+                <![CDATA[ This is my failure message ]]>
+              </message>
+              <stack-trace>
+                <![CDATA[  ]]>
+              </stack-trace>
+            </failure>
+          </test-case>
+          <test-case name="FailedCase2." executed="True" result="failure" success="False" time="0.000" asserts="0" >
+            <failure>
+              <message>
+                <![CDATA[ This is my failure message ]]>
+              </message>
+              <stack-trace>
+                <![CDATA[  ]]>
+              </stack-trace>
+            </failure>
+          </test-case>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

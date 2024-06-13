@@ -45,13 +45,24 @@ class DelphiNUnitParserTest {
     ResultsAggregator results = getResults(getPath("v3"));
 
     assertThat(results).isNotNull();
-    assertThat(results.getTestsRun()).isEqualTo(12);
+    assertThat(results.getTestsRun()).isEqualTo(20);
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"v2", "v3"})
   void testParseReport(String version) {
     ResultsAggregator results = getResults(getPath(version) + "/normal");
+
+    assertThat(results).isNotNull();
+    assertThat(results.getTestsRun()).isEqualTo(8);
+    assertThat(results.getSkipped()).isEqualTo(1);
+    assertThat(results.getFailures()).isEqualTo(3);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"v2", "v3"})
+  void testParseReportWithUnusualStatusCasing(String version) {
+    ResultsAggregator results = getResults(getPath(version) + "/unusualStatusCasing");
 
     assertThat(results).isNotNull();
     assertThat(results.getTestsRun()).isEqualTo(8);
