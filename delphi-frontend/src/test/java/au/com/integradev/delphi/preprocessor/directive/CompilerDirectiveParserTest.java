@@ -240,6 +240,18 @@ class CompilerDirectiveParserTest {
   }
 
   @Test
+  void testDirectiveNameWithTrailingSymbol() {
+    CompilerDirective directive = parse("{$if%01010 <> 123}");
+    assertThat(directive).isInstanceOf(IfDirective.class);
+  }
+
+  @Test
+  void testDirectiveNameWithTrailingNonAsciiCharacter() {
+    CompilerDirective directive = parse("{$ifǣ <> 123}");
+    assertThat(directive).isInstanceOf(IfDirective.class);
+  }
+
+  @Test
   void testCreateUnsupportedDirectives() {
     CompilerDirective directive = parse("{$FOO}");
     assertThat(directive).isNull();

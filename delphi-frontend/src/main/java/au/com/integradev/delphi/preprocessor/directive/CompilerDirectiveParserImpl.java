@@ -238,7 +238,10 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
     StringBuilder name = new StringBuilder();
     char character = currentChar();
 
-    while (Character.isLetter(character) || Character.isDigit(character) || character == '_') {
+    while ((character >= 'a' && character <= 'z')
+        || (character >= 'A' && character <= 'Z')
+        || Character.isDigit(character)
+        || character == '_') {
       name.append(character);
       character = nextChar();
     }
