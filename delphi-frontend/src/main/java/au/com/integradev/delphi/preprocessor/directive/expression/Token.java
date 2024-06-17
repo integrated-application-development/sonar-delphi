@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
 public class Token {
-  enum TokenType {
+  public enum TokenType {
     UNKNOWN,
     INTEGER,
     REAL,
