@@ -147,22 +147,125 @@ package au.com.integradev.delphi.antlr;
   }
 
   public static class LexerException extends RuntimeException {
+    public LexerException(String message) {
+      super(message);
+    }
+
     public LexerException(String message, Throwable cause) {
       super(message, cause);
     }
   }
 
-  private int lookaheadMultilineString() {
-    int startQuotes = lookaheadSingleQuotes(1);
-    if (startQuotes >= 3 && (startQuotes & 1) != 0 && isNewLine(input.LA(startQuotes + 1))) {
-      int i = startQuotes;
+  private int lookaheadMultilineComment(String end) {
+    return lookaheadMultilineComment(end, 1);
+  }
+
+  private int lookaheadMultilineComment(String end, int i) {
+    char endStart = end.charAt(0);
+    String directiveName = null;
+
+    if (input.LA(i) == '$') {
+      StringBuilder directiveNameBuilder = new StringBuilder();
+      int character = input.LA(i + 1);
+
+      while ((character >= 'a' && character <= 'z')
+          || (character >= 'A' && character <= 'Z')
+          || Character.isDigit(character)
+          || character == '_') {
+        ++i;
+        directiveNameBuilder.append((char) character);
+        character = input.LA(i + 1);
+      }
+
+      directiveName = directiveNameBuilder.toString();
+    }
+
+    boolean nestedExpression =
+        "if".equalsIgnoreCase(directiveName) || "elseif".equalsIgnoreCase(directiveName);
+
+    while (true) {
+      int character = input.LA(++i);
+
+      if (character == endStart) {
+        int j;
+        for (j = 1; j < end.length(); ++j) {
+          if (input.LA(i + j) != end.charAt(j)) {
+            break;
+          }
+        }
+        if (j == end.length()) {
+          return i + j;
+        }
+      }
+
+      switch (character) {
+        case '\'':
+          if (nestedExpression) {
+            i = lookaheadString(i) - 1;
+          }
+          break;
+
+        case '/':
+          if (nestedExpression && input.LA(i + 1) == '/') {
+            i = lookaheadLineComment(i + 2);
+          }
+          break;
+
+        case '{':
+          if (nestedExpression) {
+            i = lookaheadMultilineComment("}", i + 1) - 1;
+          }
+          break;
+
+        case '(':
+          if (nestedExpression && input.LA(i + 1) == '*') {
+            i = lookaheadMultilineComment("*)", i + 2) - 1;
+          }
+          break;
+
+        case EOF:
+          throw new LexerException(
+              "line "
+                  + state.tokenStartLine
+                  + ":"
+                  + state.tokenStartCharPositionInLine
+                  + " unterminated multi-line comment");
+
+        default:
+          // do nothing
+      }
+    }
+  }
+
+  private int lookaheadLineComment(int i) {
+    while (true) {
+      int character = input.LA(i);
+      if (isNewLine(character) || character == EOF) {
+        return i;
+      }
+      ++i;
+    }
+  }
+
+  private int lookaheadString(int i) {
+    int offset = lookaheadMultilineString(i);
+    if (offset == 0) {
+      offset = lookaheadSingleLineString(i);
+    }
+    return i + offset;
+  }
+
+  private int lookaheadMultilineString(int i) {
+    int startQuotes = lookaheadSingleQuotes(i);
+    if (startQuotes >= 3 && (startQuotes & 1) != 0 && isNewLine(input.LA(i + startQuotes))) {
+      int offset = startQuotes - 1;
       while (true) {
-        switch (input.LA(++i)) {
+        switch (input.LA(i + ++offset)) {
           case '\'':
-            int quotes = Math.min(startQuotes, lookaheadSingleQuotes(i));
-            i += quotes;
+            int quotes = Math.min(startQuotes, lookaheadSingleQuotes(i + offset));
+            offset += quotes;
             if (quotes == startQuotes) {
-              return i;
+              return offset;
             }
             break;
 
@@ -183,6 +286,25 @@ package au.com.integradev.delphi.antlr;
       ++result;
     }
     return result;
+  }
+
+  private int lookaheadSingleLineString(int i) {
+    int offset = 1;
+
+    int character;
+
+    while ((character = input.LA(i + offset)) != EOF && !isNewLine(character)) {
+      ++offset;
+      if (character == '\'') {
+        if (input.LA(i + offset) == '\'') {
+          ++offset;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return offset;
   }
 
   private static boolean isNewLine(int c) {
@@ -1233,10 +1355,10 @@ TkAsmId                 : { asmMode }? => '@' '@'? (Alpha | '_' | Digit)+
                         ;
 TkAsmHexNum             : { asmMode }? => HexDigitSeq ('h'|'H')
                         ;
-TkQuotedString          @init { int multilineStringRemaining = lookaheadMultilineString(); }
+TkQuotedString          @init { int multilineStringRemaining = lookaheadMultilineString(1); }
                         : '\''
                           ({ multilineStringRemaining != 0 }? => {
-                            int i = multilineStringRemaining - 1;
+                            int i = multilineStringRemaining;
                             while (--i > 0) {
                               matchAny();
                             }
@@ -1326,30 +1448,28 @@ fragment Z              : 'z' | 'Z';
 // Hidden channel
 //----------------------------------------------------------------------------
 COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel=HIDDEN;}
-                        |  '(*' ( options {greedy=false;} : . )* '*)'
-                        {
-                          $channel=HIDDEN;
-                          if ($text.startsWith("(*\$")) {
-                            $type = TkCompilerDirective;
-                            if ($text.startsWith("(*\$endif") || $text.startsWith("(*\$ifend")) {
-                              --directiveNesting;
-                            } else if ($text.startsWith("(*\$if")) {
-                              ++directiveNesting;
+                        |  ('(*' | '{')
+                           {
+                              $channel=HIDDEN;
+
+                              String start = $text;
+                              String end = start.equals("{") ? "}" : "*)";
+
+                              int multilineCommentRemaining = lookaheadMultilineComment(end);
+
+                              while (--multilineCommentRemaining > 0) {
+                                matchAny();
+                              }
+
+                              if ($text.startsWith(start + "\$")) {
+                                $type = TkCompilerDirective;
+                                if ($text.startsWith(start + "\$endif") || $text.startsWith(start + "\$ifend")) {
+                                  --directiveNesting;
+                                } else if ($text.startsWith(start + "\$if")) {
+                                  ++directiveNesting;
+                                }
+                              }
                             }
-                          }
-                        }
-                        |  '{' ( options {greedy=false;} : . )* '}'
-                        {
-                          $channel=HIDDEN;
-                          if ($text.startsWith("{\$")) {
-                            $type = TkCompilerDirective;
-                            if ($text.startsWith("{\$endif") || $text.startsWith("{\$ifend")) {
-                              --directiveNesting;
-                            } else if ($text.startsWith("{\$if")) {
-                              ++directiveNesting;
-                            }
-                          }
-                        }
                         ;
 WHITESPACE              : ('\u0000'..'\u0020' | '\u3000')+ {$channel=HIDDEN;}
                         ;

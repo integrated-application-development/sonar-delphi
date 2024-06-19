@@ -99,12 +99,35 @@ class ExpressionLexerTest {
     }
   }
 
+  static class CommentTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("// foo", TokenType.COMMENT),
+          Arguments.of("{bar}", TokenType.COMMENT),
+          Arguments.of("(*baz*)", TokenType.COMMENT));
+    }
+  }
+
+  static class DirectiveTokensArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return Stream.of(
+          Arguments.of("{$i foo.inc}", TokenType.DIRECTIVE),
+          Arguments.of("(*$i bar.inc*)", TokenType.DIRECTIVE),
+          Arguments.of("(*$i foo.inc*)", TokenType.DIRECTIVE),
+          Arguments.of("(*$i bar.inc*)", TokenType.DIRECTIVE));
+    }
+  }
+
   @ParameterizedTest(name = "\"{0}\" should be token type: {1}")
   @ArgumentsSource(NumberTokensArgumentsProvider.class)
   @ArgumentsSource(IdentifierTokensArgumentsProvider.class)
   @ArgumentsSource(SyntaxTokensArgumentsProvider.class)
   @ArgumentsSource(OperatorTokensArgumentsProvider.class)
   @ArgumentsSource(StringTokensArgumentsProvider.class)
+  @ArgumentsSource(CommentTokensArgumentsProvider.class)
+  @ArgumentsSource(DirectiveTokensArgumentsProvider.class)
   void testTokenTypes(String data, TokenType type) {
     assertThat(lexToken(data).getType()).isEqualTo(type);
   }

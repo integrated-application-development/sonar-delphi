@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The `result` attribute in NUnit test reports was not being treated as case-insensitive.
+- Scan failures on nested compiler directives.
 
 ## [1.6.0] - 2024-05-31
 

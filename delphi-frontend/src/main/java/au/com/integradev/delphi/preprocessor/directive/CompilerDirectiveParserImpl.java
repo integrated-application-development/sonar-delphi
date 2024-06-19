@@ -321,11 +321,11 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
     boolean result = false;
 
     if (directiveBracketType == CURLY) {
-      result = (character == '}');
+      result = character == '}' && peekChar() == END_OF_INPUT;
     }
 
     if (directiveBracketType == PAREN) {
-      result = (character == '*' && peekChar() == ')');
+      result = character == '*' && peekChar() == ')' && peekChar(1) == END_OF_INPUT;
     }
 
     return result;
@@ -341,7 +341,11 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
   }
 
   private char peekChar() {
-    return getChar(position + 1);
+    return peekChar(0);
+  }
+
+  private char peekChar(int offset) {
+    return getChar(position + offset + 1);
   }
 
   private char getChar(int position) {

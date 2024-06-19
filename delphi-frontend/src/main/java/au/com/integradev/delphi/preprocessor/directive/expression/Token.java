@@ -50,7 +50,9 @@ public class Token {
     MULTIPLY,
     DIVIDE,
     COMMA,
-    DOT
+    DOT,
+    COMMENT,
+    DIRECTIVE
   }
 
   private final TokenType type;
