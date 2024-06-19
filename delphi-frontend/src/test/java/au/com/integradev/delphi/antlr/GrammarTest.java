@@ -330,4 +330,12 @@ class GrammarTest {
   void testNamedArguments() {
     assertParsed("NamedArguments.pas");
   }
+
+  @Test
+  void testUnterminatedCommentShouldThrow() {
+    assertThatThrownBy(() -> parse("UnterminatedComment.pas"))
+        .isInstanceOf(DelphiFileConstructionException.class)
+        .hasCauseInstanceOf(DelphiLexer.LexerException.class)
+        .hasMessageContaining("line 7:0 unterminated multi-line comment");
+  }
 }

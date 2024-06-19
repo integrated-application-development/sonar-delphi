@@ -117,23 +117,25 @@ public class ExpressionLexer {
       ++position;
     }
 
-    if (character != END_OF_INPUT) {
-      if (numberReader.isNumberStart(character)) {
-        return readNumber();
-      } else if (Character.isLetter(character) || character == '_') {
-        return readIdentifier();
-      } else if (OPERATOR_CHARACTERS.containsKey(character)) {
-        return readOperator();
-      } else if (SYNTAX_CHARACTERS.containsKey(character)) {
-        return readSyntaxToken();
-      } else if (character == '\'') {
-        return readString();
-      } else {
-        throw new ExpressionLexerError("Unexpected character: '" + character + "'");
-      }
+    if (character == END_OF_INPUT) {
+      return null;
+    } else if (numberReader.isNumberStart(character)) {
+      return readNumber();
+    } else if (Character.isLetter(character) || character == '_') {
+      return readIdentifier();
+    } else if (character == '\'') {
+      return readString();
+    } else if (character == '/' && peekChar(1) == '/') {
+      return readLineComment();
+    } else if (character == '{' || (character == '(' && peekChar(1) == '*')) {
+      return readMultilineComment();
+    } else if (OPERATOR_CHARACTERS.containsKey(character)) {
+      return readOperator();
+    } else if (SYNTAX_CHARACTERS.containsKey(character)) {
+      return readSyntaxToken();
+    } else {
+      throw new ExpressionLexerError("Unexpected character: '" + character + "'");
     }
-
-    return null;
   }
 
   private Token readNumber() {
@@ -200,7 +202,7 @@ public class ExpressionLexer {
 
     char character;
 
-    while ((character = getChar()) != END_OF_INPUT) {
+    while ((character = getChar()) != END_OF_INPUT && !isNewLine(character)) {
       value.append(character);
       if (character == '\'') {
         if (peekChar() == '\'') {
@@ -215,7 +217,7 @@ public class ExpressionLexer {
   }
 
   private Token readMultilineString() {
-    int lookahead = lookaheadMultilineString();
+    int lookahead = lookaheadMultilineString(0);
     if (lookahead == 0) {
       return null;
     }
@@ -226,17 +228,25 @@ public class ExpressionLexer {
     return new Token(TokenType.MULTILINE_STRING, value);
   }
 
-  private int lookaheadMultilineString() {
-    int startQuotes = lookaheadSingleQuotes(0);
-    if (startQuotes >= 3 && (startQuotes % 2 == 1) && isNewLine(peekChar(startQuotes))) {
-      int i = startQuotes;
+  private int lookaheadString(int i) {
+    int offset = lookaheadMultilineString(i);
+    if (offset == 0) {
+      offset = lookaheadSingleLineString(i);
+    }
+    return i + offset;
+  }
+
+  private int lookaheadMultilineString(int i) {
+    int startQuotes = lookaheadSingleQuotes(i);
+    if (startQuotes >= 3 && (startQuotes % 2 == 1) && isNewLine(peekChar(i + startQuotes))) {
+      int offset = startQuotes - 1;
       while (true) {
-        switch (peekChar(++i)) {
+        switch (peekChar(i + ++offset)) {
           case '\'':
-            int quotes = Math.min(startQuotes, lookaheadSingleQuotes(i));
-            i += quotes;
+            int quotes = Math.min(startQuotes, lookaheadSingleQuotes(i + offset));
+            offset += quotes;
             if (quotes == startQuotes) {
-              return i;
+              return offset;
             }
             break;
 
@@ -257,6 +267,149 @@ public class ExpressionLexer {
       ++result;
     }
     return result;
+  }
+
+  private int lookaheadSingleLineString(int i) {
+    int offset = 1;
+
+    char character;
+
+    while ((character = peekChar(i + offset)) != END_OF_INPUT && !isNewLine(character)) {
+      ++offset;
+      if (character == '\'') {
+        if (peekChar(i + offset) == '\'') {
+          ++offset;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return offset;
+  }
+
+  private Token readLineComment() {
+    StringBuilder value = new StringBuilder();
+    char character;
+
+    while ((character = peekChar()) != END_OF_INPUT) {
+      if (isNewLine(character)) {
+        break;
+      }
+      value.append(character);
+      ++position;
+    }
+
+    return new Token(TokenType.COMMENT, value.toString());
+  }
+
+  private Token readMultilineComment() {
+    int offset = 1;
+    Token.TokenType type = TokenType.COMMENT;
+    String end;
+
+    if (peekChar() == '(') {
+      ++offset;
+      end = "*)";
+    } else {
+      end = "}";
+    }
+
+    if (peekChar(offset) == '$') {
+      type = TokenType.DIRECTIVE;
+    }
+
+    int lookahead = lookaheadMultilineComment(end, offset);
+    if (lookahead == 0) {
+      return null;
+    }
+
+    String value = data.substring(position, position + lookahead);
+    position += lookahead;
+
+    return new Token(type, value);
+  }
+
+  private int lookaheadLineComment(int i) {
+    while (true) {
+      int character = peekChar(i);
+      if (isNewLine(character) || character == END_OF_INPUT) {
+        return i;
+      }
+      ++i;
+    }
+  }
+
+  private int lookaheadMultilineComment(String end, int i) {
+    char endStart = end.charAt(0);
+    String directiveName = null;
+
+    if (peekChar(i) == '$') {
+      StringBuilder directiveNameBuilder = new StringBuilder();
+      int character = peekChar(i + 1);
+
+      while ((character >= 'a' && character <= 'z')
+          || (character >= 'A' && character <= 'Z')
+          || Character.isDigit(character)
+          || character == '_') {
+        ++i;
+        directiveNameBuilder.append((char) character);
+        character = peekChar(i + 1);
+      }
+
+      directiveName = directiveNameBuilder.toString();
+    }
+
+    boolean nestedExpression =
+        "if".equalsIgnoreCase(directiveName) || "elseif".equalsIgnoreCase(directiveName);
+
+    while (true) {
+      int character = peekChar(++i);
+
+      if (character == endStart) {
+        int j;
+        for (j = 1; j < end.length(); ++j) {
+          if (peekChar(i + j) != end.charAt(j)) {
+            break;
+          }
+        }
+        if (j == end.length()) {
+          return i + j;
+        }
+      }
+
+      switch (character) {
+        case '\'':
+          if (nestedExpression) {
+            i = lookaheadString(i) - 1;
+          }
+          break;
+
+        case '/':
+          if (nestedExpression && peekChar(i + 1) == '/') {
+            i = lookaheadLineComment(i + 2);
+          }
+          break;
+
+        case '{':
+          if (nestedExpression) {
+            i = lookaheadMultilineComment("}", i + 1);
+          }
+          break;
+
+        case '(':
+          if (nestedExpression && peekChar(i + 1) == '*') {
+            i = lookaheadMultilineComment("*)", i + 2);
+          }
+          break;
+
+        case END_OF_INPUT:
+          return 0;
+
+        default:
+          // do nothing
+      }
+    }
   }
 
   private boolean isNewLine(int c) {

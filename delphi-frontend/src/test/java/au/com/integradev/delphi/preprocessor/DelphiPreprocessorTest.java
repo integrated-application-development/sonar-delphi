@@ -110,6 +110,16 @@ class DelphiPreprocessorTest {
   }
 
   @Test
+  void testExpressionsShouldNotThrowException() {
+    assertThatCode(() -> execute("Expressions.pas")).doesNotThrowAnyException();
+  }
+
+  @Test
+  void testPseudoExpressionsShouldNotThrowException() {
+    assertThatCode(() -> execute("PseudoExpressions.pas")).doesNotThrowAnyException();
+  }
+
+  @Test
   void testCallingProcessTwiceShouldThrowException() throws Exception {
     String filePath =
         DelphiUtils.getResource(BASE_DIR + "includeTest/SameNameBacktrack.pas").getAbsolutePath();

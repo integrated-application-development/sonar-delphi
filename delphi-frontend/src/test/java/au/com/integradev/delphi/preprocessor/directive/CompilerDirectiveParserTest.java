@@ -18,13 +18,16 @@
  */
 package au.com.integradev.delphi.preprocessor.directive;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
+import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl.CompilerDirectiveParserError;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer.ExpressionLexerError;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionParser.ExpressionParserError;
@@ -32,6 +35,8 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
 import org.sonar.plugins.communitydelphi.api.directive.ConditionalDirective;
@@ -54,7 +59,10 @@ class CompilerDirectiveParserTest {
 
   @BeforeEach
   void setup() {
-    parser = new CompilerDirectiveParserImpl(Platform.WINDOWS, mock());
+    TextBlockLineEndingModeRegistry registry = mock();
+    when(registry.getLineEndingMode(anyInt())).thenReturn(TextBlockLineEndingMode.LF);
+
+    parser = new CompilerDirectiveParserImpl(Platform.WINDOWS, registry);
   }
 
   @Test
@@ -122,6 +130,20 @@ class CompilerDirectiveParserTest {
     assertThatThrownBy(() -> parse("{$if 1..2}"))
         .isInstanceOf(CompilerDirectiveParserError.class)
         .hasCauseInstanceOf(ExpressionLexerError.class);
+  }
+
+  @ValueSource(
+      strings = {"{$if Bracket = '}'}", "{$if Bracket = '}\n}", "{$if Bracket = '''\n}\n'''}"})
+  @ParameterizedTest
+  void testCreateNestedIfDirectivesWithConfusingStringExpressions(String input) {
+    CompilerDirective directive = parse("{$if " + input + "}");
+    assertThat(directive).isInstanceOf(IfDirective.class);
+  }
+
+  @Test
+  void testExpressionSurroundedWithNestedDirectivesShouldNotThrowException() {
+    assertThatCode(() -> parse("{$if {$if True} True {$endif}}")).doesNotThrowAnyException();
+    assertThatCode(() -> parse("(*$if {$if True} True {$endif}*)")).doesNotThrowAnyException();
   }
 
   @Test
@@ -249,6 +271,15 @@ class CompilerDirectiveParserTest {
   void testDirectiveNameWithTrailingNonAsciiCharacter() {
     CompilerDirective directive = parse("{$ifǣ <> 123}");
     assertThat(directive).isInstanceOf(IfDirective.class);
+  }
+
+  @Test
+  void testNestedDirective() {
+    CompilerDirective directive = parse("{$if {$i foo.inc}}");
+    assertThat(directive).isInstanceOf(IfDirective.class);
+
+    directive = parse("{$elseif {$i foo.inc}}");
+    assertThat(directive).isInstanceOf(ElseIfDirective.class);
   }
 
   @Test
