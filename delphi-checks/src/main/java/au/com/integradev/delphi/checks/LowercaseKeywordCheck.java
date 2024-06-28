@@ -29,6 +29,8 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
+import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "LowerCaseReservedWordsRule", repositoryKey = "delph")
@@ -54,12 +56,15 @@ public class LowercaseKeywordCheck extends DelphiCheck {
       String actual = node.getToken().getImage();
       String expected = actual.toLowerCase();
 
+      FilePosition issuePosition = FilePosition.from(node.getToken());
+
       context
           .newIssue()
-          .onFilePosition(FilePosition.from(node.getToken()))
-          .withMessage(
-              String.format(
-                  "Lowercase this keyword (found: \"%s\" expected: \"%s\").", actual, expected))
+          .onFilePosition(issuePosition)
+          .withMessage("Lowercase this keyword (found: \"%s\" expected: \"%s\").", actual, expected)
+          .withQuickFixes(
+              QuickFix.newFix("Correct to \"%s\"", expected)
+                  .withEdit(QuickFixEdit.replace(issuePosition, expected)))
           .report();
     }
     return super.visit(node, context);
