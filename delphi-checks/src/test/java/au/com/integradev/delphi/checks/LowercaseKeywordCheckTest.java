@@ -37,8 +37,10 @@ class LowercaseKeywordCheckTest {
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("procedure Foo;")
+                .appendImpl("// Fix qf1@[+1:0 to +1:5] <<begin>>")
                 .appendImpl("Begin // Noncompliant")
                 .appendImpl("  MyVar := True;")
+                .appendImpl("// Fix qf2@[+1:0 to +1:3] <<end>>")
                 .appendImpl("END; // Noncompliant"))
         .verifyIssues();
   }
@@ -70,5 +72,21 @@ class LowercaseKeywordCheckTest {
                 .appendImpl("  Result := VarA + VarB;")
                 .appendImpl("end;"))
         .verifyNoIssues();
+  }
+
+  @Test
+  void testUppercaseKeywordShouldAddQuickFixOnToken() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix@[+1:2 to +1:5] <<for>>")
+                .appendImpl("  FOR I := 0 to 5 do // Noncompliant")
+                .appendImpl("  begin")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssues();
   }
 }
