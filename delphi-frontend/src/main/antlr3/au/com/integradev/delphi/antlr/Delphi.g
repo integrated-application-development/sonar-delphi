@@ -184,7 +184,7 @@ package au.com.integradev.delphi.antlr;
         "if".equalsIgnoreCase(directiveName) || "elseif".equalsIgnoreCase(directiveName);
 
     while (true) {
-      int character = input.LA(++i);
+      int character = input.LA(i);
 
       if (character == endStart) {
         int j;
@@ -234,6 +234,8 @@ package au.com.integradev.delphi.antlr;
         default:
           // do nothing
       }
+
+      ++i;
     }
   }
 

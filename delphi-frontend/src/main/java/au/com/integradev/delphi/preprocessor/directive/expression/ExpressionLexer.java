@@ -364,7 +364,7 @@ public class ExpressionLexer {
         "if".equalsIgnoreCase(directiveName) || "elseif".equalsIgnoreCase(directiveName);
 
     while (true) {
-      int character = peekChar(++i);
+      int character = peekChar(i);
 
       if (character == endStart) {
         int j;
@@ -409,6 +409,8 @@ public class ExpressionLexer {
         default:
           // do nothing
       }
+
+      ++i;
     }
   }
 
