@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class ForbiddenIdentifierCheckTest {
-  private static String FORBIDDEN_IDENTIFIER = "BadName";
+  private static final String FORBIDDEN_IDENTIFIER = "BadName";
 
   private static DelphiCheck createCheck() {
     ForbiddenIdentifierCheck check = new ForbiddenIdentifierCheck();
