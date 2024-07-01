@@ -338,4 +338,9 @@ class GrammarTest {
         .hasCauseInstanceOf(DelphiLexer.LexerException.class)
         .hasMessageContaining("line 7:0 unterminated multi-line comment");
   }
+
+  @Test
+  void testImmediatelyTerminatedComments() {
+    assertParsed("ImmediatelyTerminatedComments.pas");
+  }
 }
