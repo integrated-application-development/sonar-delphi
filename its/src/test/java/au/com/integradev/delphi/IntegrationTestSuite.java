@@ -48,7 +48,7 @@ class IntegrationTestSuite {
           new File("../sonar-delphi-plugin/target"), "sonar-delphi-plugin-*.jar");
 
   @RegisterExtension
-  static OrchestratorExtension ORCHESTRATOR =
+  static final OrchestratorExtension ORCHESTRATOR =
       OrchestratorExtension.builderEnv()
           .useDefaultAdminCredentialsForBuilds(true)
           .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))

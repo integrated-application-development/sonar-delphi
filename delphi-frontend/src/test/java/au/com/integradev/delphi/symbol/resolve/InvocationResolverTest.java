@@ -166,11 +166,11 @@ class InvocationResolverTest {
     assertResolved(type(INTEGER), type(WORD), type(BYTE));
     assertResolved(type(SHORTINT), type(NATIVEINT), type(NATIVEUINT));
 
-    Type HWND = FACTORY.strongAlias("HWND", type(NATIVEUINT));
+    Type hwnd = FACTORY.strongAlias("HWND", type(NATIVEUINT));
     assertResolved(
-        List.of(HWND, type(NATIVEUINT), type(SHORTINT), type(SHORTINT)),
-        List.of(HWND, type(NATIVEUINT), type(NATIVEINT), type(NATIVEINT)),
-        List.of(HWND, type(NATIVEUINT), type(NATIVEUINT), type(NATIVEINT)));
+        List.of(hwnd, type(NATIVEUINT), type(SHORTINT), type(SHORTINT)),
+        List.of(hwnd, type(NATIVEUINT), type(NATIVEINT), type(NATIVEINT)),
+        List.of(hwnd, type(NATIVEUINT), type(NATIVEUINT), type(NATIVEINT)));
 
     assertResolved(type(BYTE), type(INTEGER), type(DOUBLE));
 

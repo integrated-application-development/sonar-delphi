@@ -421,6 +421,8 @@ class OperatorOverloadResolutionTest {
         return ((TypeFactoryImpl) TYPE_FACTORY).anonymousUInt31();
       case "Extended":
         return TYPE_FACTORY.getIntrinsic(IntrinsicType.EXTENDED);
+      default:
+        // do nothing
     }
 
     if (name.endsWith("_Subrange")) {

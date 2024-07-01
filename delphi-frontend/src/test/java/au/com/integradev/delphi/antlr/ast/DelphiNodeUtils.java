@@ -55,7 +55,7 @@ public final class DelphiNodeUtils {
 
   public static final DescribedPredicate<JavaClass> IMPLEMENT_ACCEPT =
       new DescribedPredicate<>("have a method that implements accept(DelphiParserVisitor, T)") {
-        private final Class<?>[] ACCEPT_PARAMETERS = {DelphiParserVisitor.class, Object.class};
+        private final Class<?>[] acceptParameters = {DelphiParserVisitor.class, Object.class};
 
         @Override
         public boolean test(JavaClass javaClass) {
@@ -65,14 +65,14 @@ public final class DelphiNodeUtils {
         private boolean isAcceptMethodImplementation(JavaMethod javaMethod) {
           Method method = javaMethod.reflect();
           return method.getName().equals("accept")
-              && Arrays.equals(method.getParameterTypes(), ACCEPT_PARAMETERS)
+              && Arrays.equals(method.getParameterTypes(), acceptParameters)
               && !Modifier.isAbstract(method.getModifiers());
         }
       };
 
   public static final ArchCondition<JavaClass> HAVE_TOKEN_CONSTRUCTOR =
       new ArchCondition<>("have a public constructor(Token)") {
-        private final Class<?>[] TOKEN_PARAMETER = {Token.class};
+        private final Class<?>[] tokenParameter = {Token.class};
 
         @Override
         public void check(JavaClass javaClass, ConditionEvents events) {
@@ -81,7 +81,7 @@ public final class DelphiNodeUtils {
                   .map(JavaConstructor::reflect)
                   .anyMatch(
                       constructor ->
-                          Arrays.equals(constructor.getParameterTypes(), TOKEN_PARAMETER));
+                          Arrays.equals(constructor.getParameterTypes(), tokenParameter));
 
           String message =
               javaClass
