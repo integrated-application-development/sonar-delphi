@@ -54,6 +54,9 @@ class DelphiProjectParserTest {
   private static final String BAD_SOURCE_FILE_PROJECT =
       "/au/com/integradev/delphi/msbuild/BadSourceFile.dproj";
 
+  private static final String LIBRARY_PATH_PROJECT =
+      "/au/com/integradev/delphi/msbuild/LibraryPath.dproj";
+
   private EnvironmentVariableProvider environmentVariableProvider;
   private Path environmentProj;
 
@@ -152,5 +155,17 @@ class DelphiProjectParserTest {
 
     assertThat(project.getSourceFiles())
         .containsOnly(DelphiUtils.getResource("/au/com/integradev/delphi/file/Empty.pas").toPath());
+  }
+
+  @Test
+  void testLibraryPathShouldBeAppendedToSearchDirectories() {
+    DelphiProject project = parse(LIBRARY_PATH_PROJECT);
+
+    assertThat(project.getSearchDirectories())
+        .containsExactly(
+            DelphiUtils.getResource("/au/com/integradev/delphi/msbuild").toPath(),
+            DelphiUtils.getResource("/au/com/integradev/delphi").toPath(),
+            DelphiUtils.getResource("/au/com/integradev").toPath(),
+            DelphiUtils.getResource("/au/com").toPath());
   }
 }
