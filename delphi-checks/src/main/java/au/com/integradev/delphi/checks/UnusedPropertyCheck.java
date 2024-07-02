@@ -56,6 +56,10 @@ public class UnusedPropertyCheck extends DelphiCheck {
       return false;
     }
 
+    if (!declaration.getImplementedTypes().isEmpty()) {
+      return false;
+    }
+
     if (excludeApi && declaration.isPublic() && !declaration.isImplementationDeclaration()) {
       return false;
     }

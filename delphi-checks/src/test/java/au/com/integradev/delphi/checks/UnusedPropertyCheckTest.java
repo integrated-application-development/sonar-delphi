@@ -190,6 +190,28 @@ class UnusedPropertyCheckTest {
   }
 
   @Test
+  void testUnusedPropertyImplementingInterfaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  IBar = interface")
+                .appendDecl("  end;")
+                .appendDecl("")
+                .appendDecl("  TBar = class")
+                .appendDecl("  end;")
+                .appendDecl("")
+                .appendDecl("  TFoo = class(IBar)")
+                .appendDecl("  private")
+                .appendDecl("    FBar: TBar;")
+                .appendDecl("  public")
+                .appendDecl("    property Bar: TBar implements IBar;")
+                .appendDecl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testUnusedApiPropertyWithExcludeApiShouldNotAddIssue() {
     var check = new UnusedPropertyCheck();
     check.excludeApi = true;
@@ -239,7 +261,7 @@ class UnusedPropertyCheckTest {
                 .appendImpl("private")
                 .appendImpl("  FBar: Integer;")
                 .appendImpl("public")
-                .appendImpl("  property Bar: Integer read FBar; //Noncompliant")
+                .appendImpl("  property Bar: Integer read FBar; // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
   }
