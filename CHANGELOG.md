@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2024-07-02
+
 ### Added
 
 - `RedundantInherited` analysis rule, which flags redundant `inherited` statements that can be safely removed.
@@ -1302,7 +1304,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.3.0...v1.4.0
