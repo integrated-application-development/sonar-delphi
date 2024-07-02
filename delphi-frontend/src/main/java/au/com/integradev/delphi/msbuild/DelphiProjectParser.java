@@ -81,11 +81,26 @@ final class DelphiProjectParser {
   }
 
   private List<Path> createSearchDirectories(Path dprojDirectory, ProjectProperties properties) {
-    List<Path> explicitPaths = createPathList(properties, "DCC_UnitSearchPath");
+    /*
+     We manually append the library paths here, even though it's not strictly correct to do so.
 
-    List<Path> allPaths = new ArrayList<>(explicitPaths.size() + 1);
+     CodeGear.Delphi.Targets appends the library paths to DCC_UnitSearchPath to create a new
+     property called UnitSearchPath, which then gets passed through to the compiler.
+
+     However, there are some good reasons not to just read the UnitSearchPath property:
+
+     - It would tie us to an implementation detail of the MSBuild glue in CodeGear.Delphi.Targets.
+     - If the UnitSearchPath property were ever renamed, we'd fall out of compatibility.
+     - Relying on CodeGear.Delphi.Targets details would require us to mock it up in testing.
+    */
+
+    List<Path> allPaths = new ArrayList<>();
+
     allPaths.add(dprojDirectory);
-    allPaths.addAll(explicitPaths);
+    allPaths.addAll(createPathList(properties, "DCC_UnitSearchPath"));
+    allPaths.addAll(createPathList(properties, "DelphiLibraryPath"));
+    allPaths.addAll(createPathList(properties, "DelphiTranslatedLibraryPath"));
+
     return Collections.unmodifiableList(allPaths);
   }
 

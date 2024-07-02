@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Include the global library path in unit import resolution.
 - Improve AST modeling around property specifiers.
 - Improve semantic analysis around property specifiers.
 - Exclude properties with `implements` specifiers in `UnusedProperty`.
