@@ -23,6 +23,7 @@ import static au.com.integradev.delphi.utils.StatementUtils.isRoutineInvocation;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
@@ -76,25 +77,32 @@ public final class RoutineUtils {
 
   private static boolean isOverriddenMethod(
       RoutineNameDeclaration parent, RoutineNameDeclaration child) {
-    if (parent.getName().equalsIgnoreCase(child.getName())
-        && parent.getParameters().equals(child.getParameters())) {
-      if (parent.isClassInvocable()) {
-        if (parent.getRoutineKind() == RoutineKind.CONSTRUCTOR
-            || parent.getRoutineKind() == RoutineKind.DESTRUCTOR) {
-          // An instance constructor or destructor cannot inherit from a class constructor or
-          // destructor
-          return child.isClassInvocable();
-        } else {
-          // Any other type of invocable can inherit from a class invocable
-          return true;
-        }
-      } else {
-        // A class invocable cannot inherit from an instance invocable
-        return !child.isClassInvocable();
-      }
-    } else {
+    if (!(parent.getName().equalsIgnoreCase(child.getName())
+        && parent.getParametersCount() == child.getParametersCount())) {
       return false;
     }
+
+    if (!IntStream.range(0, parent.getParametersCount())
+        .allMatch(
+            param ->
+                parent.getParameter(param).getType().is(child.getParameter(param).getType()))) {
+      return false;
+    }
+
+    if (!parent.isClassInvocable()) {
+      // A class invocable cannot inherit from an instance invocable
+      return !child.isClassInvocable();
+    }
+
+    if (parent.getRoutineKind() == RoutineKind.CONSTRUCTOR
+        || parent.getRoutineKind() == RoutineKind.DESTRUCTOR) {
+      // An instance constructor or destructor cannot inherit from a class constructor or
+      // destructor
+      return child.isClassInvocable();
+    }
+
+    // Any other type of invocable can inherit from a class invocable
+    return true;
   }
 
   public static List<RoutineNameDeclaration> findParentMethodDeclarations(

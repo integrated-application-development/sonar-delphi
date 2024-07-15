@@ -124,6 +124,64 @@ class RedundantInheritedCheckTest {
   }
 
   @Test
+  void testOverridingMethodWithDifferentParameterNamesShouldNotAddIssues() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject)")
+                .appendDecl("    procedure MyProcedure(A: TObject);")
+                .appendDecl("  end;")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("    procedure MyProcedure(B: TObject);")
+                .appendDecl("  end;")
+                .appendImpl("procedure TChild.MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  inherited; // Compliant")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOverridingMethodWithDifferentArgsShouldAddIssues() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject)")
+                .appendDecl("    procedure MyProcedure(A: TObject); overload;")
+                .appendDecl("    procedure MyProcedure(A: TObject; B: String); overload;")
+                .appendDecl("  end;")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("    procedure MyProcedure;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TChild.MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  inherited; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testMessageHandlerShouldNotAddIssues() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("    procedure Handler(A: TObject); message 1;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TFoo.Handler;")
+                .appendImpl("begin")
+                .appendImpl("  inherited; // Compliant")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testNotOverridingMethodShouldAddIssues() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantInheritedCheck())
