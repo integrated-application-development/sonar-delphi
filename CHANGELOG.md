@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Overly permissive parsing rules around `string` and `file` types.
+- Quick fixes removing comments and compiler directives in `RedundantInherited`.
 - **API:** `ArrayConstructorNode::getImage` returned an incorrect image containing `[` as an element.
 
 ## [1.7.0] - 2024-07-02

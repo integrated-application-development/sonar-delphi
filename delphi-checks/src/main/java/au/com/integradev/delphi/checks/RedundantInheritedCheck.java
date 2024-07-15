@@ -36,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 @Rule(key = "RedundantInherited")
@@ -49,13 +50,14 @@ public class RedundantInheritedCheck extends DelphiCheck {
           .newIssue()
           .onNode(violationNode)
           .withMessage(MESSAGE)
-          .withQuickFixes(getQuickFixes(violationNode))
+          .withQuickFixes(getQuickFixes(violationNode, context))
           .report();
     }
     return super.visit(routine, context);
   }
 
-  private static List<QuickFix> getQuickFixes(DelphiNode violationNode) {
+  private static List<QuickFix> getQuickFixes(
+      DelphiNode violationNode, DelphiCheckContext context) {
     DelphiNode statement = violationNode;
     DelphiNode parent = violationNode.getParent();
     while (!(parent instanceof StatementListNode)) {
@@ -74,11 +76,21 @@ public class RedundantInheritedCheck extends DelphiCheck {
     int endCol = statement.getEndColumn();
 
     if (statementListNode.getStatements().size() > statementIndex + 1) {
-      StatementNode statementNode = statementListNode.getStatements().get(statementIndex + 1);
+      int tokenIndex = statement.getLastToken().getIndex() + 1;
+      final List<DelphiTokenType> skipTokenTypes =
+          List.of(DelphiTokenType.SEMICOLON, DelphiTokenType.WHITESPACE);
+      while (skipTokenTypes.contains(context.getTokens().get(tokenIndex).getType())) {
+        tokenIndex++;
+      }
+      DelphiToken statementNode = context.getTokens().get(tokenIndex);
       endLine = statementNode.getBeginLine();
       endCol = statementNode.getBeginColumn();
     } else if (statementIndex > 0) {
-      StatementNode statementNode = statementListNode.getStatements().get(statementIndex - 1);
+      int tokenIndex = statement.getLastToken().getIndex() - 1;
+      while (context.getTokens().get(tokenIndex).getType() == DelphiTokenType.WHITESPACE) {
+        tokenIndex--;
+      }
+      DelphiToken statementNode = context.getTokens().get(tokenIndex);
       startLine = statementNode.getEndLine();
       startCol = statementNode.getEndColumn();
     } else {
