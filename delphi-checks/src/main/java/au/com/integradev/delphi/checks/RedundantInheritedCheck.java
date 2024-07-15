@@ -35,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -119,6 +120,15 @@ public class RedundantInheritedCheck extends DelphiCheck {
   }
 
   private static List<DelphiNode> findViolations(RoutineImplementationNode routine) {
+    RoutineNameDeclaration nameDeclaration = routine.getRoutineNameDeclaration();
+    if (nameDeclaration != null && nameDeclaration.hasDirective(RoutineDirective.MESSAGE)) {
+      // HACK:
+      //   Calls to inherited don't currently resolve to parent message handlers with different
+      //   signatures.
+      //   See: https://github.com/integrated-application-development/sonar-delphi/issues/271
+      return Collections.emptyList();
+    }
+
     CompoundStatementNode block = routine.getStatementBlock();
     if (block == null) {
       return Collections.emptyList();
