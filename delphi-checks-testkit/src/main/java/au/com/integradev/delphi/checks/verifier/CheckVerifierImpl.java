@@ -285,10 +285,6 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   private boolean textEditsMatch(
       List<QuickFixEdit> textEdits, List<TextEditExpectation> expectedTextEdits) {
-    if (expectedTextEdits.size() != textEdits.size()) {
-      return false;
-    }
-
     Supplier<DelphiFileStream> fileStreamSupplier = newFileStreamSupplier(testFile.delphiFile());
 
     List<TextRangeReplacement> unmatchedActuals =
@@ -297,6 +293,10 @@ public class CheckVerifierImpl implements CheckVerifier {
             .map(e -> e.toTextEdits(fileStreamSupplier))
             .flatMap(Collection::stream)
             .collect(Collectors.toCollection(ArrayList::new));
+
+    if (expectedTextEdits.size() != unmatchedActuals.size()) {
+      return false;
+    }
 
     for (TextEditExpectation expected : expectedTextEdits) {
       Optional<TextRangeReplacement> matchingTextEdit =
