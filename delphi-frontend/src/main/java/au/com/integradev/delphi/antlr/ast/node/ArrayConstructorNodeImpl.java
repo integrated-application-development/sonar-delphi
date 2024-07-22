@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -53,16 +54,14 @@ public final class ArrayConstructorNodeImpl extends ExpressionNodeImpl
   @Override
   public String getImage() {
     if (image == null) {
-      StringBuilder builder = new StringBuilder();
-      builder.append("[");
-      for (int i = 0; i < getChildren().size() - 1; ++i) {
-        if (i > 0) {
-          builder.append(", ");
-        }
-        builder.append(getChild(i).getImage());
-      }
-      builder.append("]");
-      image = builder.toString();
+      image =
+          "["
+              + getChildren().stream()
+                  .skip(1)
+                  .limit(getChildren().size() - 2)
+                  .map(DelphiNode::getImage)
+                  .collect(Collectors.joining(", "))
+              + "]";
     }
     return image;
   }
