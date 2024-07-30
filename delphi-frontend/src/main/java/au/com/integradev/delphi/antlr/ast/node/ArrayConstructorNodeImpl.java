@@ -58,7 +58,7 @@ public final class ArrayConstructorNodeImpl extends ExpressionNodeImpl
           "["
               + getChildren().stream()
                   .skip(1)
-                  .limit(getChildren().size() - 2)
+                  .limit(getChildren().size() - 2L)
                   .map(DelphiNode::getImage)
                   .collect(Collectors.joining(", "))
               + "]";
