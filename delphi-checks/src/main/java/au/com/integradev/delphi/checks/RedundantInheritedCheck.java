@@ -22,6 +22,7 @@ import au.com.integradev.delphi.utils.RoutineUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -59,45 +60,34 @@ public class RedundantInheritedCheck extends DelphiCheck {
 
   private static List<QuickFix> getQuickFixes(
       DelphiNode violationNode, DelphiCheckContext context) {
-    DelphiNode statement = violationNode;
+    DelphiNode violationStatement = violationNode;
     DelphiNode parent = violationNode.getParent();
     while (!(parent instanceof StatementListNode)) {
-      statement = parent;
+      violationStatement = parent;
       parent = parent.getParent();
       if (parent == null) {
         return Collections.emptyList();
       }
     }
     StatementListNode statementListNode = (StatementListNode) parent;
-    int statementIndex = statementListNode.getStatements().indexOf(statement);
+    int statementIndex = statementListNode.getStatements().indexOf(violationStatement);
 
-    int startLine = statement.getBeginLine();
-    int startCol = statement.getBeginColumn();
-    int endLine = statement.getEndLine();
-    int endCol = statement.getEndColumn();
+    int startLine = violationStatement.getBeginLine();
+    int startCol = violationStatement.getBeginColumn();
+
+    DelphiToken lastStatementToken = getLastStatementToken(statementListNode, violationStatement);
+    int endLine = lastStatementToken.getEndLine();
+    int endCol = lastStatementToken.getEndColumn();
 
     if (statementListNode.getStatements().size() > statementIndex + 1) {
-      int tokenIndex = statement.getLastToken().getIndex() + 1;
-      final List<DelphiTokenType> skipTokenTypes =
-          List.of(DelphiTokenType.SEMICOLON, DelphiTokenType.WHITESPACE);
-      while (skipTokenTypes.contains(context.getTokens().get(tokenIndex).getType())) {
-        tokenIndex++;
-      }
-      DelphiToken statementNode = context.getTokens().get(tokenIndex);
-      endLine = statementNode.getBeginLine();
-      endCol = statementNode.getBeginColumn();
+      DelphiToken lastDeletableToken = nextNonWhitespaceToken(context, lastStatementToken, true);
+      endLine = lastDeletableToken.getBeginLine();
+      endCol = lastDeletableToken.getBeginColumn();
     } else if (statementIndex > 0) {
-      int tokenIndex = statement.getLastToken().getIndex() - 1;
-      while (context.getTokens().get(tokenIndex).getType() == DelphiTokenType.WHITESPACE) {
-        tokenIndex--;
-      }
-      DelphiToken statementNode = context.getTokens().get(tokenIndex);
-      startLine = statementNode.getEndLine();
-      startCol = statementNode.getEndColumn();
-    } else {
-      DelphiNode lastToken = getLastStatementToken(statementListNode, statement);
-      endLine = lastToken.getEndLine();
-      endCol = lastToken.getEndColumn();
+      DelphiToken lastDeletableToken =
+          nextNonWhitespaceToken(context, violationStatement.getFirstToken(), false);
+      startLine = lastDeletableToken.getEndLine();
+      startCol = lastDeletableToken.getEndColumn();
     }
 
     return List.of(
@@ -106,17 +96,39 @@ public class RedundantInheritedCheck extends DelphiCheck {
                 QuickFixEdit.delete(FilePosition.from(startLine, startCol, endLine, endCol))));
   }
 
+  private static DelphiToken nextNonWhitespaceToken(
+      DelphiCheckContext context, DelphiToken startingToken, boolean forward) {
+    int step = forward ? 1 : -1;
+    int contextIndex = getContextIndex(context, startingToken);
+    if (contextIndex == -1) {
+      return startingToken;
+    }
+
+    do {
+      contextIndex += step;
+    } while (context.getTokens().get(contextIndex).getType() == DelphiTokenType.WHITESPACE);
+    return context.getTokens().get(contextIndex);
+  }
+
   private static boolean isSemicolon(DelphiNode node) {
     return node.getChildren().isEmpty() && node.getToken().getType() == DelphiTokenType.SEMICOLON;
   }
 
-  private static DelphiNode getLastStatementToken(
+  private static int getContextIndex(DelphiCheckContext context, DelphiToken token) {
+    return IntStream.range(0, context.getTokens().size())
+        .filter(tokenIndex -> context.getTokens().get(tokenIndex).getIndex() == token.getIndex())
+        .findFirst()
+        .orElse(-1);
+  }
+
+  private static DelphiToken getLastStatementToken(
       StatementListNode statementListNode, DelphiNode node) {
     return statementListNode.getChildren().stream()
         .skip(node.getChildIndex() + 1L)
         .takeWhile(RedundantInheritedCheck::isSemicolon)
         .reduce((first, second) -> second)
-        .orElse(node);
+        .orElse(node)
+        .getLastToken();
   }
 
   private static List<DelphiNode> findViolations(RoutineImplementationNode routine) {
