@@ -98,8 +98,8 @@ final class DelphiProjectParser {
 
     allPaths.add(dprojDirectory);
     allPaths.addAll(createPathList(properties, "DCC_UnitSearchPath"));
-    allPaths.addAll(createPathList(properties, "DelphiLibraryPath"));
-    allPaths.addAll(createPathList(properties, "DelphiTranslatedLibraryPath"));
+    allPaths.addAll(createPathList(properties, "DelphiLibraryPath", false));
+    allPaths.addAll(createPathList(properties, "DelphiTranslatedLibraryPath", false));
 
     return Collections.unmodifiableList(allPaths);
   }
@@ -109,16 +109,21 @@ final class DelphiProjectParser {
   }
 
   private List<Path> createPathList(ProjectProperties properties, String propertyName) {
+    return createPathList(properties, propertyName, true);
+  }
+
+  private List<Path> createPathList(
+      ProjectProperties properties, String propertyName, boolean emitWarnings) {
     List<Path> result = new ArrayList<>();
     propertyList(properties.get(propertyName))
         .forEach(
             pathString -> {
               Path path = resolveDirectory(pathString);
-              if (path == null) {
+              if (path != null) {
+                result.add(path);
+              } else if (emitWarnings) {
                 LOG.warn("Invalid {} directory: {}", propertyName, pathString);
-                return;
               }
-              result.add(path);
             });
     return Collections.unmodifiableList(result);
   }
