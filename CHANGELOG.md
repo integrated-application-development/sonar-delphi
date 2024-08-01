@@ -32,7 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Overly permissive parsing rules around `string` and `file` types.
 - Quick fixes removing comments and compiler directives in `RedundantInherited`.
 - False positives around `message` handler methods in `RedundantInherited`.
-- False positives when parameter names were mismatched to the inherited method in `RedundantInherited`.
+- False positives when parameter names were mismatched to the inherited method in `RedundantInherited` and
+  `InheritedMethodWithNoCode`.
 - **API:** `ArrayConstructorNode::getImage` returned an incorrect image containing `[` as an element.
 
 ## [1.7.0] - 2024-07-02
