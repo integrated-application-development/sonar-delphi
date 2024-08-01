@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.builders.DelphiTestFile;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
@@ -203,9 +204,19 @@ class RedundantInheritedCheckTest {
                 .appendImpl("    // Fix qf3@[+1:4 to +1:14] <<>>")
                 .appendImpl("    inherited; // Noncompliant")
                 .appendImpl("  end;")
-                .appendImpl("  // Fix qf4@[+0:34 to +1:11] <<>>")
+                .appendImpl("  // Fix qf4@[+0:34 to +1:12] <<>>")
                 .appendImpl("  inherited; // Noncompliant")
                 .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testQuickFixesFollowingIncludeDirective() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            DelphiTestFile.fromResource(
+                "/au/com/integradev/delphi/checks/RedundantInherited/QuickFixesFollowingIncludeDirectives.pas"))
         .verifyIssues();
   }
 }
