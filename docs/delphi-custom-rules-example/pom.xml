@@ -7,7 +7,7 @@
   <parent>
     <groupId>au.com.integradev.delphi</groupId>
     <artifactId>docs</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
   </parent>
 
   <groupId>au.com.integradev.samples</groupId>
@@ -48,7 +48,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.delphi.version>1.7.0</sonar.delphi.version>
+    <sonar.delphi.version>1.8.0</sonar.delphi.version>
     <sonar.plugin.api.version>10.1.0.809</sonar.plugin.api.version>
     <sonar.analyzer.commons.version>2.7.0.1482</sonar.analyzer.commons.version>
     <slf4j.version>1.7.30</slf4j.version>
