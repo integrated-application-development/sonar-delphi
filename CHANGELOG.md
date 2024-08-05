@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `out` parameters are treated as uninitialized at the start of a routine in
+  `VariableInitialization`.
+
 ### Fixed
 
 - Parsing errors around partial `asm` blocks blocks in conditional branches.
