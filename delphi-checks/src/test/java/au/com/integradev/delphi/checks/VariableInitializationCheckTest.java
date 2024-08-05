@@ -1156,6 +1156,106 @@ class VariableInitializationCheckTest {
         .verifyNoIssues();
   }
 
+  @Test
+  void testVarParameterShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Int: Integer);")
+                .appendImpl("procedure Test(var I: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  Foo(I);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutParameterShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Int: Integer);")
+                .appendImpl("procedure Test(out I: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  Foo(I); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testInitializedOutParameterShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Int: Integer);")
+                .appendImpl("procedure Test(out I: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  I := 123;")
+                .appendImpl("  Foo(I);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOutParameterDeclaredInNestedRoutineShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Int: Integer);")
+                .appendImpl("procedure Test;")
+                .appendImpl("  procedure Sub(out I: Integer);")
+                .appendImpl("  begin")
+                .appendImpl("    Foo(I); // Noncompliant")
+                .appendImpl("  end;")
+                .appendImpl("var")
+                .appendImpl("  I: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Sub(I);")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testOutParameterAccessedInNestedRoutineShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Int: Integer);")
+                .appendImpl("procedure Test(out I: Integer);")
+                .appendImpl("  procedure Sub;")
+                .appendImpl("  begin")
+                .appendImpl("    Foo(I); // Noncompliant")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  Sub;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testOutParameterInitializedInNestedRoutineShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(Int: Integer);")
+                .appendImpl("procedure Test(out I: Integer);")
+                .appendImpl("  procedure Sub;")
+                .appendImpl("  begin")
+                .appendImpl("    I := 123;")
+                .appendImpl("  end;")
+                .appendImpl("begin")
+                .appendImpl("  Sub;")
+                .appendImpl("  Foo(I);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
   private static DelphiTestUnitBuilder createSysUtils() {
     return new DelphiTestUnitBuilder()
         .unitName("System.SysUtils")

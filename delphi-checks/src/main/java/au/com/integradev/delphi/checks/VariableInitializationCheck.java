@@ -38,6 +38,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -89,6 +90,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     CompoundStatementNode block = routine.getStatementBlock();
     if (block != null) {
       collectNestedRoutines(routine);
+      collectDeclarationsFromParameterList(routine);
       collectDeclarationsFromVarSections(routine);
       visitStatements(block, context);
     }
@@ -103,6 +105,20 @@ public class VariableInitializationCheck extends DelphiCheck {
     declarationSection
         .findChildrenOfType(RoutineImplementationNode.class)
         .forEach(nested -> nestedRoutines.put(nested.getRoutineNameDeclaration(), nested));
+  }
+
+  private void collectDeclarationsFromParameterList(RoutineImplementationNode routine) {
+    routine.getParameters().stream()
+        .filter(FormalParameterData::isOut)
+        .map(FormalParameterData::getNode)
+        .map(NameDeclarationNode::getNameDeclaration)
+        .filter(VariableNameDeclaration.class::isInstance)
+        .map(VariableNameDeclaration.class::cast)
+        .forEach(
+            declaration -> {
+              InitializationState state = InitializationState.from(declaration.getType());
+              initializationStateMap.put(declaration, state);
+            });
   }
 
   private void collectDeclarationsFromVarSections(RoutineImplementationNode routine) {
