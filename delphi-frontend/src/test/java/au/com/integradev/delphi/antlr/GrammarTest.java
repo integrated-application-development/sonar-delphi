@@ -343,4 +343,9 @@ class GrammarTest {
   void testImmediatelyTerminatedComments() {
     assertParsed("ImmediatelyTerminatedComments.pas");
   }
+
+  @Test
+  void testConditionalAsm() {
+    assertParsed("ConditionalAsm.pas");
+  }
 }
