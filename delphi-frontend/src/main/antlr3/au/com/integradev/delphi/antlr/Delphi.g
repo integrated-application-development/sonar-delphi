@@ -1201,7 +1201,16 @@ ASSEMBLER         : A S S E M B L E R           ;
 ASSEMBLY          : A S S E M B L Y             ;
 AT                : A T                         ;
 AUTOMATED         : A U T O M A T E D           ;
-BEGIN             : B E G I N                   ;
+BEGIN             : B E G I N {
+                    // HACK:
+                    //  We exit asmMode in the lexer if we encounter a BEGIN token, which is a hack
+                    //  to support partial asm blocks sharing an END keyword with some other block
+                    //  due to conditional compilation.
+                    //
+                    //  For more information, see:
+                    //    https://github.com/integrated-application-development/sonar-delphi/issues/116
+                    asmMode = false;
+                  };
 CASE              : C A S E                     ;
 CDECL             : C D E C L                   ;
 CLASS             : C L A S S                   ;

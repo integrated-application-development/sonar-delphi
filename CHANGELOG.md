@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Parsing errors around partial `asm` blocks blocks in conditional branches.
+
 ## [1.8.0] - 2024-08-02
 
 ### Added
