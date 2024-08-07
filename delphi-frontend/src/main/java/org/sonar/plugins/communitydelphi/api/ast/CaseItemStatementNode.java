@@ -18,4 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface CaseItemStatementNode extends StatementNode {}
+import java.util.List;
+
+public interface CaseItemStatementNode extends StatementNode {
+  List<ExpressionNode> getExpressions();
+}

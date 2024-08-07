@@ -19,7 +19,9 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.RangeExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -28,13 +30,34 @@ import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 @Rule(key = "CaseStatementSize")
 public class CaseStatementSizeCheck extends DelphiCheck {
   private static final String MESSAGE = "Replace this 'case' statement with an 'if' statement.";
+  private static final int REQUIRED_CASE_ITEMS = 2;
 
   @Override
   public DelphiCheckContext visit(CaseStatementNode caseStatement, DelphiCheckContext context) {
-    if (caseStatement.getCaseItems().size() < 2) {
+    if (countCaseItems(caseStatement) < REQUIRED_CASE_ITEMS) {
       reportIssue(context, caseStatement.getChild(0), MESSAGE);
     }
 
     return super.visit(caseStatement, context);
+  }
+
+  private static int countCaseItems(CaseStatementNode caseStatement) {
+    return caseStatement.getCaseItems().stream()
+        .mapToInt(CaseStatementSizeCheck::countCaseItem)
+        .sum();
+  }
+
+  private static int countCaseItem(CaseItemStatementNode caseItem) {
+    return caseItem.getExpressions().stream()
+        .mapToInt(
+            expression -> {
+              if (expression instanceof RangeExpressionNode) {
+                // Exclude cases with items that match ranges, since they're not cleanly mappable
+                // to a simple if statement.
+                return REQUIRED_CASE_ITEMS;
+              }
+              return 1;
+            })
+        .sum();
   }
 }
