@@ -104,6 +104,7 @@ public final class CheckList {
           InterfaceGuidCheck.class,
           InterfaceNameCheck.class,
           LegacyInitializationSectionCheck.class,
+          LoopExecutingAtMostOnceCheck.class,
           LowercaseKeywordCheck.class,
           MathFunctionSingleOverloadCheck.class,
           MemberDeclarationOrderCheck.class,

@@ -49,6 +49,7 @@
     "InstanceInvokedConstructor",
     "InterfaceName",
     "LegacyInitializationSection",
+    "LoopExecutingAtMostOnce",
     "LowercaseKeyword",
     "MathFunctionSingleOverload",
     "MemberDeclarationOrder",

@@ -1,0 +1,19 @@
+{
+  "title": "Loops with at most one iteration should be refactored",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["clumsy"],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

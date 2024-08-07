@@ -1,0 +1,63 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Loops with at most one iteration are equivalent to an <code>if</code> statement. Using loops in
+  this case makes the code less readable.
+</p>
+<p>
+  If the intention was to execute the loop once, an <code>if</code> statement may be used or the
+  loop removed.
+  Otherwise, the jumping statement should be made conditional so the loop can execute more than
+  once.
+</p>
+<p>
+  Loops with at most one iteration can happen with a statement that unconditionally transfers
+  control is misplaced inside the body of the loop.
+</p>
+<p>
+  These statements are:
+</p>
+<ul>
+  <li><code>Exit</code></li>
+  <li><code>Break</code></li>
+  <li><code>Halt</code></li>
+  <li><code>raise</code></li>
+  <li><code>goto</code></li>
+</ul>
+
+<h2>How to fix it</h2>
+<p>
+  Make the statement that affects execution of the loop conditional, or remove it all together.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+var I := 0;
+while I &lt; 10 do begin
+  Inc(I);
+  Break; // Noncompliant
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+for var I := 0 to 10 do begin
+  if I = 2 then
+    Break // Noncompliant
+  else begin
+    Writeln(I);
+    Exit; // Noncompliant
+  end;
+end;
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+var I := 0;
+while I &lt; 10 do begin
+  Inc(I);
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+for var I := 0 to 10 do begin
+  if I = 2 then
+    Break
+  else begin
+    Writeln(I);
+  end;
+end;
+</pre>
