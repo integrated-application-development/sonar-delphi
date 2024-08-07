@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `CaseItemStatementNode::getExpressions` method.
+
 ### Changed
 
 - `out` parameters are treated as uninitialized at the start of a routine in
@@ -15,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Parsing errors around partial `asm` blocks blocks in conditional branches.
+- False positives around case items with multiple values in `CaseStatementSize`.
 
 ## [1.8.0] - 2024-08-02
 

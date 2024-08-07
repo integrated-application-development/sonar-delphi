@@ -19,8 +19,10 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import java.util.List;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 
 public final class CaseItemStatementNodeImpl extends DelphiNodeImpl
     implements CaseItemStatementNode {
@@ -35,5 +37,10 @@ public final class CaseItemStatementNodeImpl extends DelphiNodeImpl
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  @Override
+  public List<ExpressionNode> getExpressions() {
+    return findChildrenOfType(ExpressionNode.class);
   }
 }

@@ -33,8 +33,8 @@ class CaseStatementSizeCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  case MyNumber of")
-                .appendImpl("    1: Break;")
-                .appendImpl("    2: Break;")
+                .appendImpl("    1: Exit;")
+                .appendImpl("    2: Exit;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
         .verifyNoIssues();
@@ -49,10 +49,10 @@ class CaseStatementSizeCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  case MyNumber of")
-                .appendImpl("    1: Break;")
-                .appendImpl("    2: Break;")
+                .appendImpl("    1: Exit;")
+                .appendImpl("    2: Exit;")
                 .appendImpl("    else begin")
-                .appendImpl("      Break;")
+                .appendImpl("      Exit;")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
@@ -68,7 +68,7 @@ class CaseStatementSizeCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  case MyNumber of // Noncompliant")
-                .appendImpl("    1: Break;")
+                .appendImpl("    1: Exit;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
         .verifyIssues();
@@ -83,12 +83,42 @@ class CaseStatementSizeCheckTest {
                 .appendImpl("procedure Test;")
                 .appendImpl("begin")
                 .appendImpl("  case MyNumber of // Noncompliant")
-                .appendImpl("    1: Break;")
+                .appendImpl("    1: Exit;")
                 .appendImpl("    else begin")
-                .appendImpl("      Break;")
+                .appendImpl("      Exit;")
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
         .verifyIssues();
+  }
+
+  @Test
+  void testOneCaseItemWithTwoValuesShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CaseStatementSizeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  case MyNumber of")
+                .appendImpl("    1, 2: Exit;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testOneCaseItemWithRangeValueShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new CaseStatementSizeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  case MyNumber of")
+                .appendImpl("    1..3: Exit;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }
