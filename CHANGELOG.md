@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `CaseItemStatementNode::getExpressions` method.
+- **API:** `RepeatStatementNode::getGuardExpression` method.
+- **API:** `RepeatStatementNode::getStatements` method.
+- **API:** `CaseStatementNode::getSelectorExpression` method.
+- **API:** `CaseItemStatementNode::getStatement` method.
 
 ### Changed
 
@@ -26,6 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - "Correct to (correct case)" quick fix for `LowercaseKeyword`.
+- Ability to create a control flow graph.
+- `RedundantJump` analysis rule, which flags redundant jump statements, e.g., `Continue`, `Exit`.
+- `LoopExecutingAtMostOnce` analysis rule, which flags loop statements that can execute at most once.
 - **API:** `PropertyNameDeclaration::getImplementedTypes` method.
 - **API:** `PropertyNode::getDefaultSpecifier` method.
 - **API:** `PropertyNode::getImplementsSpecifier` method.
