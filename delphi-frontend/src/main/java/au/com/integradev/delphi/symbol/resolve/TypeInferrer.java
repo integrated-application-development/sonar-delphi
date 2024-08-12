@@ -24,10 +24,12 @@ import java.util.Comparator;
 import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
@@ -48,8 +50,15 @@ public final class TypeInferrer {
 
       if (arrayConstructor instanceof ArrayConstructorNode) {
         type = inferArrayConstructor((ArrayConstructorNode) arrayConstructor);
-      } else if (ExpressionNodeUtils.isIntegerLiteral(expression) && type.size() <= 4) {
-        type = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+      } else {
+        IntegerLiteralNode literal = ExpressionNodeUtils.unwrapInteger(expression);
+        if (literal != null) {
+          IntegerType integer = (IntegerType) typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+          if (integer.min().compareTo(literal.getValue()) <= 0
+              && integer.max().compareTo(literal.getValue()) >= 0) {
+            type = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+          }
+        }
       }
     }
 
