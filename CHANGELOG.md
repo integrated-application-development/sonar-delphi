@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Improve type inference around unsigned integer literals.
 - `out` parameters are treated as uninitialized at the start of a routine in
   `VariableInitialization`.
 
