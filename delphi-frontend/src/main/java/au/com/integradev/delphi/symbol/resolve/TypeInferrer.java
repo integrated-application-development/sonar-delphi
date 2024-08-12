@@ -20,7 +20,6 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
-import java.util.Comparator;
 import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
@@ -76,9 +75,21 @@ public final class TypeInferrer {
     Type element =
         arrayConstructor.getElements().stream()
             .map(this::infer)
-            .max(Comparator.comparingInt(Type::size))
+            .max(TypeInferrer::compareTypeSize)
             .orElse(TypeFactory.voidType());
 
     return ((TypeFactoryImpl) typeFactory).array(null, element, Set.of(ArrayOption.DYNAMIC));
+  }
+
+  private static int compareTypeSize(Type a, Type b) {
+    if (a.size() > b.size()) {
+      return 1;
+    } else if (a.size() < b.size()) {
+      return -1;
+    } else if (a instanceof IntegerType && b instanceof IntegerType) {
+      return ((IntegerType) a).max().compareTo(((IntegerType) b).max());
+    } else {
+      return 0;
+    }
   }
 }
