@@ -50,14 +50,7 @@ public final class TypeInferrer {
       if (arrayConstructor instanceof ArrayConstructorNode) {
         type = inferArrayConstructor((ArrayConstructorNode) arrayConstructor);
       } else {
-        IntegerLiteralNode literal = ExpressionNodeUtils.unwrapInteger(expression);
-        if (literal != null) {
-          IntegerType integer = (IntegerType) typeFactory.getIntrinsic(IntrinsicType.INTEGER);
-          if (integer.min().compareTo(literal.getValue()) <= 0
-              && integer.max().compareTo(literal.getValue()) >= 0) {
-            type = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
-          }
-        }
+        type = widenIntegerLiteralToInteger(type, expression);
       }
     }
 
@@ -67,6 +60,8 @@ public final class TypeInferrer {
         type = returnType;
       }
     }
+
+    type = widenFloatingPointToExtended(type);
 
     return type;
   }
@@ -79,6 +74,28 @@ public final class TypeInferrer {
             .orElse(TypeFactory.voidType());
 
     return ((TypeFactoryImpl) typeFactory).array(null, element, Set.of(ArrayOption.DYNAMIC));
+  }
+
+  private Type widenIntegerLiteralToInteger(Type type, ExpressionNode expression) {
+    IntegerLiteralNode literal = ExpressionNodeUtils.unwrapInteger(expression);
+    if (literal != null) {
+      IntegerType integer = (IntegerType) typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+      if (integer.min().compareTo(literal.getValue()) <= 0
+          && integer.max().compareTo(literal.getValue()) >= 0) {
+        type = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+      }
+    }
+    return type;
+  }
+
+  private Type widenFloatingPointToExtended(Type type) {
+    if (type.isReal() && !type.is(IntrinsicType.COMP) && !type.is(IntrinsicType.CURRENCY)) {
+      // Inline vars will widen any floating point real type to Extended, even when the assigned
+      // expression's type is explicitly known.
+      // See: https://quality.embarcadero.com/browse/RSP-42107
+      type = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
+    }
+    return type;
   }
 
   private static int compareTypeSize(Type a, Type b) {
