@@ -161,7 +161,7 @@ public class BlockBuilder {
 
     @Override
     public DelphiNode getTerminator() {
-      return terminator.getTerminator();
+      return terminator.getTerminatorNode();
     }
 
     @Override
@@ -211,7 +211,7 @@ public class BlockBuilder {
 
     @Override
     public DelphiNode getTerminator() {
-      return terminator.getTerminator();
+      return terminator.getTerminatorNode();
     }
 
     @Override
@@ -301,7 +301,7 @@ public class BlockBuilder {
 
     @Override
     public DelphiNode getTerminator() {
-      return terminator.getTerminator();
+      return terminator.getTerminatorNode();
     }
 
     @Override
@@ -320,9 +320,7 @@ public class BlockBuilder {
     }
   }
 
-  static class TerminusImpl extends AbstractSuccessor implements Terminus {
-    public TerminusImpl() {}
-
+  private static class TerminusImpl extends AbstractSuccessor implements Terminus {
     @Override
     public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
       return this;
@@ -361,7 +359,7 @@ public class BlockBuilder {
 
     @Override
     public DelphiNode getTerminator() {
-      return terminator.getTerminator();
+      return terminator.getTerminatorNode();
     }
 
     @Override

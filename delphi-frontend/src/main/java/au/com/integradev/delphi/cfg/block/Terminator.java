@@ -27,11 +27,11 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDecla
 
 public class Terminator {
   private final TerminatorKind kind;
-  private final DelphiNode terminator;
+  private final DelphiNode terminatorNode;
 
   public Terminator(DelphiNode terminator) {
     this.kind = findTerminatorKind(terminator);
-    this.terminator = terminator;
+    this.terminatorNode = terminator;
   }
 
   private TerminatorKind findTerminatorKind(DelphiNode terminator) {
@@ -64,7 +64,7 @@ public class Terminator {
     return kind;
   }
 
-  public DelphiNode getTerminator() {
-    return terminator;
+  public DelphiNode getTerminatorNode() {
+    return terminatorNode;
   }
 }

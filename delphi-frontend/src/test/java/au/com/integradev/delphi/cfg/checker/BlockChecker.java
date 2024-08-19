@@ -158,6 +158,7 @@ public class BlockChecker {
   }
 
   public BlockChecker succeedsToCases(int... cases) {
+    Set<Integer> expectedCases = Arrays.stream(cases).boxed().collect(Collectors.toSet());
     this.successorChecker =
         new BlockDetailChecker(
             block -> {
@@ -170,9 +171,11 @@ public class BlockChecker {
                   .as(
                       getBlockId(block)
                           + " is expected to have case successors of ["
-                          + caseIds.stream().map(id -> "B" + id).collect(Collectors.joining(", "))
+                          + expectedCases.stream()
+                              .map(id -> "B" + id)
+                              .collect(Collectors.joining(", "))
                           + "]")
-                  .containsExactlyInAnyOrderElementsOf(caseIds);
+                  .containsExactlyInAnyOrderElementsOf(expectedCases);
             });
     return this;
   }

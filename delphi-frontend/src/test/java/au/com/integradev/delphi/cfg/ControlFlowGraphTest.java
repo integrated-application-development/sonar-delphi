@@ -228,7 +228,7 @@ class ControlFlowGraphTest {
   void testEmptyCFG() {
     final ControlFlowGraphImpl cfg = buildCFG("");
     checker().check(cfg);
-    assertThat(cfg.getEntryBlock().getSuccessorBlocks().isEmpty()).as("entry is an exit").isTrue();
+    assertThat(cfg.getEntryBlock().getSuccessorBlocks()).as("entry is an exit").isEmpty();
   }
 
   @Test
@@ -236,10 +236,10 @@ class ControlFlowGraphTest {
     final ControlFlowGraphImpl cfg = buildCFG("Foo;");
     checker(block(element(NameReferenceNode.class, "Foo")).succeedsTo(0)).check(cfg);
     Block entry = cfg.getEntryBlock();
-    assertThat(entry.getSuccessorBlocks().isEmpty()).as("1st block is not an exit").isFalse();
+    assertThat(entry.getSuccessorBlocks()).as("1st block is not an exit").isNotEmpty();
     assertThat(entry.getSuccessorBlocks()).as("number of succeedsTo").hasSize(1);
     Block exit = entry.getSuccessorBlocks().iterator().next();
-    assertThat(exit.getSuccessorBlocks().isEmpty()).as("2nd block is an exit").isTrue();
+    assertThat(exit.getSuccessorBlocks()).as("2nd block is an exit").isEmpty();
   }
 
   @Test
