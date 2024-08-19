@@ -188,7 +188,6 @@ public class ControlFlowGraphImpl implements ControlFlowGraph {
 
   public void addLabel(LabelStatementNode labelNode) {
     NameReferenceNode labelName = labelNode.getNameReference();
-    //    addElement(labelName);
     String label = labelName.getImage();
 
     labelTargets.put(label, currentBlock);
