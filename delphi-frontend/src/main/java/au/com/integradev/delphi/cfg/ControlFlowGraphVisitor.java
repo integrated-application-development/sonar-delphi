@@ -318,7 +318,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    *   A: Body1;
    *   B: Body2;
    * else
-   *   C: Body3;
+   *   Body3;
    * end;
    * }</pre>
    *
