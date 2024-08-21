@@ -83,6 +83,7 @@ public final class CheckList {
           FormatArgumentTypeCheck.class,
           FormatStringValidCheck.class,
           FreeAndNilTObjectCheck.class,
+          FullyQualifiedImportCheck.class,
           GotoStatementCheck.class,
           GroupedFieldDeclarationCheck.class,
           GroupedParameterDeclarationCheck.class,

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `FullyQualifiedImportCheck` analysis rule, which flags non-fully qualified imports.
 - **API:** `CaseItemStatementNode::getExpressions` method.
 
 ### Changed
