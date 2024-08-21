@@ -1,0 +1,21 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Imports should be done using the full name of the unit, as this facilitates code readability, avoids potential ambiguities about which unit is being imported, and ensures consistency throughout the codebase.
+</p>
+<p>
+  Using the full name of the units not only improves code clarity and maintenance but also optimizes the compilation process. The compiler does not need to spend time searching implicit scopes to resolve which units are being referenced. By specifying the full unit name, the compiler can immediately locate the necessary files, resulting in faster and more efficient compilation.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Fully qualify the unit name.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+uses
+  Classes,
+  SysUtils;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+uses
+  System.Classes,
+  System.SysUtils;
+</pre>

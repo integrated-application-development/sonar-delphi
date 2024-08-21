@@ -1,0 +1,18 @@
+{
+  "title": "Imports should be fully qualified",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    }
+  },
+  "tags": ["convention"],
+  "defaultSeverity": "Minor",
+  "scope": "ALL"
+}
