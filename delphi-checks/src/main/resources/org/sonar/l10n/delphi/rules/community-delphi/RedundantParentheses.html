@@ -1,8 +1,14 @@
 <h2>Why is this an issue?</h2>
 <p>
   Parentheses should be used to clarify the intent behind a piece of code or enforce a desired
-  order of operations. Redundant pairs of parentheses do neither of these things, making code more
-  confusing and less readable.
+  order of operations. Redundant parentheses do neither of these things, making code more confusing
+  and less readable.
+</p>
+<p>
+  This rule will suggest removing parentheses that wrap another parenthesized expression, or a
+  primary expression (e.g. <code>'foo'</code> or <code>Bar.Baz(123)</code>). In both cases,
+  parenthesizing the expression is syntactically meaningless without improving readability for a
+  human.
 </p>
 <h2>How to fix it</h2>
 <p>Remove the redundant parentheses:</p>

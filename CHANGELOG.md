@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve type inference around unsigned integer literals.
 - Improve type inference around array constructors containing integer literals.
 - Improve type inference around real expressions.
+- Parentheses enclosing a primary expression are considered redundant in `RedundantParentheses`.
 - `out` parameters are treated as uninitialized at the start of a routine in
   `VariableInitialization`.
 

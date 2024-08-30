@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class RedundantParenthesesCheckTest {
   @Test
-  void testNoParenthesesShouldNotAddIssue() {
+  void testPrimaryExpressionShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantParenthesesCheck())
         .onFile(
@@ -37,29 +37,87 @@ class RedundantParenthesesCheckTest {
   }
 
   @Test
-  void testParenthesesShouldNotAddIssue() {
+  void testBinaryExpressionShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantParenthesesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("function GetInteger: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  Result := (123);")
+                .appendImpl("  Result := 1 + 2;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @Test
-  void testRedundantParenthesesShouldAddIssue() {
+  void testUnaryExpressionShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantParenthesesCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendImpl("function GetInteger: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  // Fix@[+2:13 to +2:14] <<>>")
-                .appendImpl("  // Fix@[+1:17 to +1:18] <<>>")
-                .appendImpl("  Result := ((123)); // Noncompliant")
+                .appendImpl("  Result := -123;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testParenthesesOnBinaryExpressionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := (1 + 2);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testParenthesesOnUnaryExpressionShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Result := (-123);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testParenthesesOnParenthesizedExpressionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix@[+2:12 to +2:13] <<>>")
+                .appendImpl("  // Fix@[+1:20 to +1:21] <<>>")
+                .appendImpl("  Result := ((1 + 2)); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testParenthesesOnPrimaryExpressionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function GetInteger: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+6:12 to +6:13] <<>>")
+                .appendImpl("  // Fix qf2@[+5:13 to +5:14] <<>>")
+                .appendImpl("  // Fix qf2@[+4:17 to +4:18] <<>>")
+                .appendImpl("  // Fix qf1@[+3:18 to +3:19] <<>>")
+                .appendImpl("  // Noncompliant@+2")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl("  Result := ((123));")
                 .appendImpl("end;"))
         .verifyIssues();
   }
