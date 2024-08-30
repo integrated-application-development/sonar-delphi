@@ -20,6 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
@@ -34,7 +35,8 @@ public class RedundantParenthesesCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(
       ParenthesizedExpressionNode expression, DelphiCheckContext context) {
-    if (expression.getParent() instanceof ParenthesizedExpressionNode) {
+    if (expression.getExpression() instanceof ParenthesizedExpressionNode
+        || expression.getExpression() instanceof PrimaryExpressionNode) {
       context
           .newIssue()
           .onNode(expression.getChild(0))
