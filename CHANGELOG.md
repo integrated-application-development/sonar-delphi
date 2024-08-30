@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Name resolution errors around alias ancestor types.
 - Parsing errors around partial `asm` blocks blocks in conditional branches.
 - False positives around case items with multiple values in `CaseStatementSize`.
 

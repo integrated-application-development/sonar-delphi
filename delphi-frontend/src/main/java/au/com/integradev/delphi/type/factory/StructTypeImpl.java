@@ -70,7 +70,7 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
     } else {
       this.parent =
           this.ancestorList.stream()
-              .filter(StructTypeImpl.class::isInstance)
+              .filter(Type::isStruct)
               .filter(not(Type::isInterface))
               .findFirst()
               .orElse(TypeFactory.unknownType());
