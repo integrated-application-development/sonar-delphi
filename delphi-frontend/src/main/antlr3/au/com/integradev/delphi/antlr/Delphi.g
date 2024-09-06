@@ -482,7 +482,7 @@ varSection                   : (VAR<VarSectionNodeImpl>^ | THREADVAR<VarSectionN
 varDeclaration               : attributeList? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
                              -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList varType varValueSpec? attributeList?)
                              ;
-varValueSpec                 : ABSOLUTE constExpression
+varValueSpec                 : ABSOLUTE expression
                              | '=' constExpression
                              ;
 exportsSection               : EXPORTS ident exportItem (',' ident exportItem)* ';'
@@ -643,7 +643,7 @@ interfaceItem                : routineInterface
                              ;
 objectType                   : OBJECT<ObjectTypeNodeImpl>^ classParent? visibilitySection* END // Obselete, kept for backwards compatibility with Turbo Pascal
                              ;                                                                 // See: https://www.oreilly.com/library/view/delphi-in-a/1565926595/re192.html
-recordType                   : RECORD<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? END (ALIGN constExpression)?
+recordType                   : RECORD<RecordTypeNodeImpl>^ visibilitySection* recordVariantSection? END (ALIGN expression)?
                              ;
 recordVariantSection         : CASE<RecordVariantSectionNodeImpl>^ recordVariantTag OF recordVariant+
                              ;
@@ -1105,8 +1105,8 @@ externalDirective            : EXTERNAL^ dllName? externalSpecifier*
                              ;
 dllName                      : {!input.LT(1).getText().equals("name")}? expression
                              ;
-externalSpecifier            : NAME^ constExpression
-                             | INDEX^ constExpression // specific to a platform
+externalSpecifier            : NAME^ expression
+                             | INDEX^ expression // specific to a platform
                              | DELAYED // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/en/Libraries_and_Packages_(Delphi))
                              ;
 dispIDDirective              : DISPID expression
