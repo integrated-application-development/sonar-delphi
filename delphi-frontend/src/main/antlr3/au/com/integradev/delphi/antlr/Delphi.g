@@ -467,7 +467,9 @@ constSection                 : (CONST<ConstSectionNodeImpl>^ | RESOURCESTRING<Co
                              // example: "const {$include versioninfo.inc}"
                              // Is this really the appropriate solution?
                              ;
-constDeclaration             : attributeList? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
+constDeclaration             : attributeList? nameDeclaration ':' fixedArrayType '=' arrayExpression portabilityDirective* ';'
+                             -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration arrayExpression fixedArrayType attributeList? portabilityDirective*)
+                             | attributeList? nameDeclaration (':' varType)? '=' constExpression portabilityDirective* ';'
                              -> ^(TkConstDeclaration<ConstDeclarationNodeImpl> nameDeclaration constExpression varType? attributeList? portabilityDirective*)
                              ;
 typeSection                  : TYPE<TypeSectionNodeImpl>^ typeDeclaration+
@@ -479,8 +481,13 @@ typeDeclaration              : attributeList? genericNameDeclaration '=' typeDec
                              ;
 varSection                   : (VAR<VarSectionNodeImpl>^ | THREADVAR<VarSectionNodeImpl>^) varDeclaration varDeclaration*
                              ;
-varDeclaration               : attributeList? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
+varDeclaration               : attributeList? nameDeclarationList ':' fixedArrayType portabilityDirective* arrayVarValueSpec? portabilityDirective* ';'
+                             -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList fixedArrayType arrayVarValueSpec? attributeList?)
+                             | attributeList? nameDeclarationList ':' varType portabilityDirective* varValueSpec? portabilityDirective* ';'
                              -> ^(TkVarDeclaration<VarDeclarationNodeImpl> nameDeclarationList varType varValueSpec? attributeList?)
+                             ;
+arrayVarValueSpec            : ABSOLUTE expression
+                             | '=' arrayExpression
                              ;
 varValueSpec                 : ABSOLUTE expression
                              | '=' constExpression
@@ -530,6 +537,9 @@ parameterType                : stringType
                              | arrayType
                              | typeReference
                              | PACKED parameterType^
+                             ;
+fixedArrayType               : ARRAY arrayIndices OF arrayElementType
+                             -> ^(ARRAY<ArrayTypeNodeImpl> OF arrayElementType arrayIndices )
                              ;
 arrayType                    :  ARRAY arrayIndices? OF arrayElementType
                              -> ^(ARRAY<ArrayTypeNodeImpl> OF arrayElementType arrayIndices? )
