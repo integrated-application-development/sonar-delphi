@@ -89,7 +89,7 @@ class RedundantParenthesesCheckTest {
   }
 
   @Test
-  void testParenthesesOnNonTrivialInheritedExpressionShouldAddIssue() {
+  void testParenthesesOnNonTrivialInheritedExpressionShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantParenthesesCheck())
         .onFile(
@@ -99,6 +99,41 @@ class RedundantParenthesesCheckTest {
                 .appendImpl("  (inherited Bar);")
                 .appendImpl("end;"))
         .verifyNoIssues();
+  }
+
+  @Test
+  void testSingleElementConstArrayLiteralShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("const")
+                .appendImpl("  CArray: array[0..0] of Integer = (123);"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testSingleElementVarArrayLiteralShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("var")
+                .appendImpl("  A: array[0..0] of Integer = (123);"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testParenthesesOnPrimaryExpressionWithinSingleElementArrayLiteralShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("var")
+                .appendImpl("  // Fix@[+2:31 to +2:32] <<>>")
+                .appendImpl("  // Fix@[+1:35 to +1:36] <<>>")
+                .appendImpl("  A: array[0..0] of Integer = ((123)); // Noncompliant"))
+        .verifyIssues();
   }
 
   @Test

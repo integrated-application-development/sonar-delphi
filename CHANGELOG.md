@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Non-trivial `inherited` expressions are excluded in `RedundantParentheses`.
 
+### Fixed
+
+- False positives around const array literals in `RedundantParentheses`.
+
 ## [1.9.0] - 2024-09-03
 
 ### Added
