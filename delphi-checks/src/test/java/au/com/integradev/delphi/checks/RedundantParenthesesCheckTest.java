@@ -89,6 +89,19 @@ class RedundantParenthesesCheckTest {
   }
 
   @Test
+  void testParenthesesOnNonTrivialInheritedExpressionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  (inherited Bar);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testParenthesesOnParenthesizedExpressionShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantParenthesesCheck())
@@ -118,6 +131,21 @@ class RedundantParenthesesCheckTest {
                 .appendImpl("  // Noncompliant@+2")
                 .appendImpl("  // Noncompliant@+1")
                 .appendImpl("  Result := ((123));")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testParenthesesOnBareInheritedExpressionShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantParenthesesCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix@[+2:2 to +2:3] <<>>")
+                .appendImpl("  // Fix@[+1:12 to +1:13] <<>>")
+                .appendImpl("  (inherited); // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
   }
