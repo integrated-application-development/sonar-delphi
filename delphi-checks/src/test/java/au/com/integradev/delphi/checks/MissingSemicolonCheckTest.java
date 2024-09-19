@@ -265,7 +265,7 @@ class MissingSemicolonCheckTest {
   }
 
   @Test
-  void testShouldSkipInlineAsm() {
+  void testInlineAsmShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new MissingSemicolonCheck())
         .onFile(

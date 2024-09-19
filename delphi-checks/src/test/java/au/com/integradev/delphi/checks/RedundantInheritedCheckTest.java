@@ -211,7 +211,7 @@ class RedundantInheritedCheckTest {
   }
 
   @Test
-  void testQuickFixesFollowingIncludeDirective() {
+  void testIssuesFollowingIncludeDirectiveShouldAddQuickFixes() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantInheritedCheck())
         .onFile(

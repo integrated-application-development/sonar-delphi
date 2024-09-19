@@ -75,7 +75,7 @@ class LowercaseKeywordCheckTest {
   }
 
   @Test
-  void testUppercaseKeywordShouldAddQuickFixOnToken() {
+  void testUppercaseRootTokenKeywordShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(

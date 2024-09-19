@@ -218,7 +218,7 @@ class HelperNameCheckTest {
   }
 
   @Test
-  void testGetUnknownExtendedTypeSimpleName() {
+  void testImplementationDetailGetUnknownExtendedTypeSimpleName() {
     DelphiAst ast =
         new DelphiTestUnitBuilder()
             .appendDecl("type")

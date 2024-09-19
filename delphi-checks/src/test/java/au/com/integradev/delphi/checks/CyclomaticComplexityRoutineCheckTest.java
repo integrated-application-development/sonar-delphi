@@ -75,7 +75,7 @@ class CyclomaticComplexityRoutineCheckTest {
   }
 
   @Test
-  void testTooComplexNestedRoutineeShouldOnlyAddIssueForNestedRoutine() {
+  void testTooComplexNestedRoutineShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;") // 1

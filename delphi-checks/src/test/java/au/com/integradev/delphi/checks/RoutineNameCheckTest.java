@@ -64,7 +64,7 @@ class RoutineNameCheckTest {
   }
 
   @Test
-  void testPublishedMethodsShouldBeSkipped() {
+  void testPublishedMethodsShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RoutineNameCheck())
         .onFile(
@@ -77,7 +77,7 @@ class RoutineNameCheckTest {
   }
 
   @Test
-  void testMethodsImplementingInterfacesWithMatchingNameShouldBeSkipped() {
+  void testInterfaceMethodDeclarationsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RoutineNameCheck())
         .onFile(
@@ -95,7 +95,7 @@ class RoutineNameCheckTest {
   }
 
   @Test
-  void testMethodOverridesWithMatchingNameShouldBeSkipped() {
+  void testOverriddenMethodsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new RoutineNameCheck())
         .onFile(

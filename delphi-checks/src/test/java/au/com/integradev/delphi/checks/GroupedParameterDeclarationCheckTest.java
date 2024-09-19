@@ -54,7 +54,7 @@ class GroupedParameterDeclarationCheckTest {
   }
 
   @Test
-  void testConstParameterKeywordShouldPropagateInQuickFix() {
+  void testConstParameterKeywordShouldAddQuickFix() {
     CheckVerifier.newVerifier()
         .withCheck(new GroupedParameterDeclarationCheck())
         .onFile(
@@ -71,7 +71,7 @@ class GroupedParameterDeclarationCheckTest {
   }
 
   @Test
-  void testThreeParametersInQuickFix() {
+  void testThreeParametersShouldAddQuickFix() {
     CheckVerifier.newVerifier()
         .withCheck(new GroupedParameterDeclarationCheck())
         .onFile(
