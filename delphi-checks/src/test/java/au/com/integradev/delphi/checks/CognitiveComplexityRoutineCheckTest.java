@@ -57,7 +57,7 @@ class CognitiveComplexityRoutineCheckTest {
   }
 
   @Test
-  void testTooComplexSubProcedureShouldOnlyAddIssueForSubProcedure() {
+  void testTooComplexSubProcedureShouldAddIssue() {
     DelphiTestUnitBuilder builder =
         new DelphiTestUnitBuilder()
             .appendImpl("function Foo: Integer;")

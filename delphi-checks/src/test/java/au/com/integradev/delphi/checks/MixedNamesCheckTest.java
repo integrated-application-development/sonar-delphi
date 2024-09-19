@@ -306,7 +306,7 @@ class MixedNamesCheckTest {
   }
 
   @Test
-  void testUnitReferenceMatchingDeclarationAndNotMatchingImportShouldNotAddIssue() {
+  void testUnitReferenceMatchingDeclarationAndNotMatchingImportShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new MixedNamesCheck())
         .withUnitScopeName("System")

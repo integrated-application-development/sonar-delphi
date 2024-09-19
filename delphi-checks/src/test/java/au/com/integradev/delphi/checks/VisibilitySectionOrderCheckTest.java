@@ -95,7 +95,7 @@ class VisibilitySectionOrderCheckTest {
   }
 
   @Test
-  void testMultipleOutOfOrderSectionsShouldAddMultipleIssues() {
+  void testMultipleOutOfOrderSectionsShouldAddIssues() {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilitySectionOrderCheck())
         .onFile(

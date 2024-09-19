@@ -330,7 +330,7 @@ class CommentedOutCodeCheckTest {
   }
 
   @Test
-  void testRegexTimeoutCharSequenceSubsequence() {
+  void testImplementationDetailRegexTimeoutCharSequenceSubsequence() {
     CharSequence charSequence = new RegexTimeoutCharSequence("Hello, World!", 0);
     assertThat(charSequence.subSequence(0, 5)).asString().isEqualTo("Hello");
   }

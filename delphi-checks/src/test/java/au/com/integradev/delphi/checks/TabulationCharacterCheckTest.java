@@ -41,7 +41,7 @@ class TabulationCharacterCheckTest {
   }
 
   @Test
-  void testFileWithMultipleTabsShouldAddOnlyOneIssue() {
+  void testFileWithMultipleTabsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TabulationCharacterCheck())
         .onFile(

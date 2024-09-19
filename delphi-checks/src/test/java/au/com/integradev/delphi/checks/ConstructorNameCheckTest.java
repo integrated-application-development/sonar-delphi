@@ -64,7 +64,7 @@ class ConstructorNameCheckTest {
   }
 
   @Test
-  void testBadPascalCaseAddIssue() {
+  void testBadPascalCaseShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ConstructorNameCheck())
         .onFile(

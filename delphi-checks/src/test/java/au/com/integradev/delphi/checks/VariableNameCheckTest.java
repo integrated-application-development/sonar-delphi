@@ -201,7 +201,7 @@ class VariableNameCheckTest {
   }
 
   @Test
-  void testBadPascalCaseInRoutineImplementingBadPascalCaseInterfaceShouldNotAddIssue() {
+  void testBadPascalCaseInRoutineImplementingBadPascalCaseInterfaceShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())
         .onFile(

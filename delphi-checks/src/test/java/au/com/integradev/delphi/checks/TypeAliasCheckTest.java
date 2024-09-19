@@ -47,7 +47,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositiveMetaClassIsNotTypeAlias() {
+  void testClassReferenceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(
@@ -60,7 +60,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositiveEmptyRecordIsNotTypeAlias() {
+  void testEmptyRecordShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(
@@ -72,7 +72,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositiveEmptyClassIsNotTypeAlias() {
+  void testEmptyClassShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(
@@ -84,7 +84,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositiveSetsAreNotTypeAlias() {
+  void testSetsShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(
@@ -95,7 +95,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositiveArraysAreNotTypeAlias() {
+  void testArraysShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(
@@ -106,7 +106,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositiveSubRangesAreNotTypeAlias() {
+  void testSubRangesShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(
@@ -117,7 +117,7 @@ class TypeAliasCheckTest {
   }
 
   @Test
-  void testFalsePositivePointerTypesAreNotTypeAlias() {
+  void testPointerTypesShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TypeAliasCheck())
         .onFile(

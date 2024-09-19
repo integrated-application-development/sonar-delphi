@@ -229,7 +229,7 @@ class ImplicitDefaultEncodingCheckTest {
   }
 
   @Test
-  void testForbiddenOverloadsAddIssues() {
+  void testForbiddenOverloadsShouldAddIssues() {
     CheckVerifier.newVerifier()
         .withCheck(new ImplicitDefaultEncodingCheck())
         .withStandardLibraryUnit(getSystem())

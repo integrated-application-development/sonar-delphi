@@ -80,7 +80,7 @@ class ClassPerFileCheckTest {
   }
 
   @Test
-  void testMultipleViolationsShouldAddOneIssue() {
+  void testMultipleViolationsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ClassPerFileCheck())
         .onFile(
@@ -99,7 +99,7 @@ class ClassPerFileCheckTest {
   }
 
   @Test
-  void testFalsePositiveMetaClass() {
+  void testClassReferenceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ClassPerFileCheck())
         .onFile(
@@ -113,7 +113,7 @@ class ClassPerFileCheckTest {
   }
 
   @Test
-  void testFalsePositiveClassMethods() {
+  void testClassMethodsShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ClassPerFileCheck())
         .onFile(

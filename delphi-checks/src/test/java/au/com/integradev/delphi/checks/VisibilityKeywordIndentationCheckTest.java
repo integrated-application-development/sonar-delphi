@@ -34,7 +34,7 @@ class VisibilityKeywordIndentationCheckTest {
         "class helper for TObject",
         "record helper for string"
       })
-  void testTooIndentedVisibilitySpecifierShouldRaiseIssue(String structType) {
+  void testTooIndentedVisibilitySpecifierShouldAddIssue(String structType) {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -56,7 +56,7 @@ class VisibilityKeywordIndentationCheckTest {
         "class helper for TObject",
         "record helper for string"
       })
-  void testCorrectlyIndentedVisibilitySpecifierShouldNotRaiseIssue(String structType) {
+  void testCorrectlyIndentedVisibilitySpecifierShouldNotAddIssue(String structType) {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -70,7 +70,7 @@ class VisibilityKeywordIndentationCheckTest {
   }
 
   @Test
-  void testImplicitPublishedVisibilitySectionShouldNotRaiseIssue() {
+  void testImplicitPublishedVisibilitySectionShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -84,7 +84,7 @@ class VisibilityKeywordIndentationCheckTest {
   }
 
   @Test
-  void testUnindentedVisibilitySpecifierShouldRaiseIssue() {
+  void testUnindentedVisibilitySpecifierShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(

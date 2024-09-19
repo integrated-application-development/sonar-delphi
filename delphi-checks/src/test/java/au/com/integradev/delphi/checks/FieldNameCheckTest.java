@@ -57,7 +57,7 @@ class FieldNameCheckTest {
   }
 
   @Test
-  void testPublicAndPublishedFieldsShouldNotAddIssue() {
+  void testPublicAndPublishedFieldsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new FieldNameCheck())
         .onFile(
@@ -76,7 +76,7 @@ class FieldNameCheckTest {
   }
 
   @Test
-  void testPublicAndPublishedFieldsInMultipleClassesShouldNotAddIssue() {
+  void testPublicAndPublishedFieldsInMultipleClassesShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new FieldNameCheck())
         .onFile(

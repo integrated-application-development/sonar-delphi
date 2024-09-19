@@ -139,7 +139,7 @@ class BeginEndRequiredCheckTest {
   }
 
   @Test
-  void testShouldSkipAsmProcedure() {
+  void testAsmProcedureShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new BeginEndRequiredCheck())
         .onFile(

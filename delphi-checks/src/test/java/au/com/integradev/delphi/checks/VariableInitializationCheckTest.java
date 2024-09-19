@@ -277,25 +277,6 @@ class VariableInitializationCheckTest {
                 .appendImpl("  FormatSettings: TFormatSettings;")
                 .appendImpl("begin")
                 .appendImpl("  Foo(FormatSettings); // Noncompliant")
-                .appendImpl("end;"))
-        .verifyIssues();
-  }
-
-  @Test
-  void testVariableWithoutInitializationShouldOnlyAddOneIssue() {
-    CheckVerifier.newVerifier()
-        .withCheck(new VariableInitializationCheck())
-        .onFile(
-            new DelphiTestUnitBuilder()
-                .appendDecl("uses")
-                .appendDecl("    System.SysUtils")
-                .appendDecl("  ;")
-                .appendDecl("procedure Foo(FormatSettings: TFormatSettings);")
-                .appendImpl("procedure Test;")
-                .appendImpl("var")
-                .appendImpl("  FormatSettings: TFormatSettings;")
-                .appendImpl("begin")
-                .appendImpl("  Foo(FormatSettings); // Noncompliant")
                 .appendImpl("  Foo(FormatSettings);")
                 .appendImpl("end;"))
         .verifyIssues();
@@ -739,7 +720,7 @@ class VariableInitializationCheckTest {
   }
 
   @Test
-  void testPassedToArrayProcVarOutParameterFalsePositiveShouldFailOnUpgrade() {
+  void testFailOnUpgradeVarPassedToArrayProcVarOutParameterShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VariableInitializationCheck())
         .onFile(
@@ -934,7 +915,7 @@ class VariableInitializationCheckTest {
   }
 
   @Test
-  void testSizeOfShouldNotAddIssueOrAffectInitializationState() {
+  void testUninitializedVariableUseAfterSizeOfShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VariableInitializationCheck())
         .onFile(

@@ -107,7 +107,7 @@ class EmptyFileCheckTest {
   }
 
   @Test
-  void testIgnorePackage() {
+  void testPackageShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyFileCheck())
         .onFile(DelphiTestFile.fromResource(PACKAGE_FILE))

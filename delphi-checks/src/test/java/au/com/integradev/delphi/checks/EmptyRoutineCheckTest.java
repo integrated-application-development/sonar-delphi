@@ -160,7 +160,7 @@ class EmptyRoutineCheckTest {
   }
 
   @Test
-  void testFalsePositiveForwardTypeDeclaration() {
+  void testForwardTypeDeclarationShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyRoutineCheck())
         .onFile(
@@ -179,7 +179,7 @@ class EmptyRoutineCheckTest {
   }
 
   @Test
-  void testFalsePositiveOverloadedMethod() {
+  void testOverloadedMethodShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyRoutineCheck())
         .onFile(
