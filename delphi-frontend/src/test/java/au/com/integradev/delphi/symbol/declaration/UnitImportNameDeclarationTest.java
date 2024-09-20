@@ -27,6 +27,7 @@ import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.UnitImportNodeImpl;
 import au.com.integradev.delphi.file.DelphiFile;
+import com.google.common.testing.EqualsTester;
 import java.io.File;
 import java.nio.file.Path;
 import org.antlr.runtime.CommonToken;
@@ -45,17 +46,13 @@ class UnitImportNameDeclarationTest {
     UnitImportNameDeclaration differentName = createImport("Bar");
     UnitImportNameDeclaration differentOriginalDeclaration = createImport("Foo", createUnit("Foo"));
 
-    assertThat(foo)
-        .isEqualTo(foo)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(otherFoo)
-        .isEqualByComparingTo(otherFoo)
-        .hasSameHashCodeAs(otherFoo)
-        .isNotEqualTo(differentName)
-        .doesNotHaveSameHashCodeAs(differentName)
-        .isNotEqualTo(differentOriginalDeclaration)
-        .doesNotHaveSameHashCodeAs(differentOriginalDeclaration);
+    new EqualsTester()
+        .addEqualityGroup(foo, otherFoo)
+        .addEqualityGroup(differentName)
+        .addEqualityGroup(differentOriginalDeclaration)
+        .testEquals();
+
+    assertThat(foo).isEqualByComparingTo(otherFoo).isNotEqualByComparingTo(differentName);
   }
 
   @Test

@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import au.com.integradev.delphi.symbol.SymbolicNode;
+import com.google.common.testing.EqualsTester;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
@@ -53,32 +54,32 @@ class NameOccurrenceImplTest {
   @Test
   void testEquals() {
     SymbolicNode foo = SymbolicNode.imaginary("Foo", DelphiScope.unknownScope());
-
     NameOccurrence occurrenceA = new NameOccurrenceImpl(foo);
-    assertThat(occurrenceA).isEqualTo(occurrenceA).isNotEqualTo(null).isNotEqualTo(new Object());
-
     NameOccurrence occurrenceB = new NameOccurrenceImpl(foo);
-    assertThat(occurrenceA).isEqualTo(occurrenceB);
 
     SymbolicNode bar = SymbolicNode.imaginary("Bar", DelphiScope.unknownScope());
     NameOccurrence occurrenceC = new NameOccurrenceImpl(bar);
-    assertThat(occurrenceA).isNotEqualTo(occurrenceC);
 
     NameOccurrenceImpl occurrenceD = new NameOccurrenceImpl(foo);
     occurrenceD.setIsExplicitInvocation(true);
-    assertThat(occurrenceA).isNotEqualTo(occurrenceD);
 
     NameOccurrenceImpl occurrenceE = new NameOccurrenceImpl(foo);
     occurrenceE.setIsGeneric();
-    assertThat(occurrenceA).isNotEqualTo(occurrenceE);
 
     NameOccurrenceImpl occurrenceF = new NameOccurrenceImpl(foo);
     occurrenceF.setNameDeclaration(mock(NameDeclaration.class));
-    assertThat(occurrenceA).isNotEqualTo(occurrenceF);
 
     NameOccurrenceImpl occurrenceG = new NameOccurrenceImpl(foo);
     occurrenceG.setTypeArguments(List.of(TypeFactory.unknownType()));
-    assertThat(occurrenceA).isNotEqualTo(occurrenceG);
+
+    new EqualsTester()
+        .addEqualityGroup(occurrenceA, occurrenceB)
+        .addEqualityGroup(occurrenceC)
+        .addEqualityGroup(occurrenceD)
+        .addEqualityGroup(occurrenceE)
+        .addEqualityGroup(occurrenceF)
+        .addEqualityGroup(occurrenceG)
+        .testEquals();
   }
 
   @Test

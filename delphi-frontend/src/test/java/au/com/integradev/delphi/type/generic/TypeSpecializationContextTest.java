@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.common.testing.EqualsTester;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -65,16 +66,10 @@ class TypeSpecializationContextTest {
 
   @Test
   void testEquals() {
-    TypeSpecializationContext context =
-        new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList());
-    TypeSpecializationContext other =
-        new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList());
-
-    assertThat(context)
-        .isEqualTo(context)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(other)
-        .hasSameHashCodeAs(other);
+    new EqualsTester()
+        .addEqualityGroup(
+            new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList()),
+            new TypeSpecializationContextImpl(mock(NameDeclaration.class), Collections.emptyList()))
+        .testEquals();
   }
 }
