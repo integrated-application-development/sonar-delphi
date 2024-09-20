@@ -368,7 +368,7 @@
             <arg>-XDcompilePolicy=simple</arg>
             <arg>-Werror</arg>
             <arg>-Xlint:all,-serial,-processing,-classfile,-path</arg>
-            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:StringCaseLocaleUsage:OFF</arg>
+            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:StringCaseLocaleUsage:OFF -Xep:EnumOrdinal:OFF</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
