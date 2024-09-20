@@ -26,6 +26,7 @@ import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.QualifiedNameDeclarationNodeImpl;
 import au.com.integradev.delphi.file.DelphiFile;
+import com.google.common.testing.EqualsTester;
 import java.io.File;
 import java.nio.file.Path;
 import org.antlr.runtime.CommonToken;
@@ -42,18 +43,16 @@ class UnitNameDeclarationTest {
     UnitNameDeclaration fooWithDifferentPath = createUnit("Foo", "/bar/foo.pas");
     UnitNameDeclaration bar = createUnit("Bar", "/bar.pas");
 
+    new EqualsTester()
+        .addEqualityGroup(foo, otherFoo)
+        .addEqualityGroup(fooWithDifferentPath)
+        .addEqualityGroup(bar)
+        .testEquals();
+
     assertThat(foo)
-        .isEqualTo(foo)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(otherFoo)
-        .hasSameHashCodeAs(otherFoo)
-        .isNotEqualTo(fooWithDifferentPath)
+        .isEqualByComparingTo(otherFoo)
         .isNotEqualByComparingTo(fooWithDifferentPath)
-        .doesNotHaveSameHashCodeAs(fooWithDifferentPath)
-        .isNotEqualTo(bar)
-        .isNotEqualByComparingTo(bar)
-        .doesNotHaveSameHashCodeAs(bar);
+        .isNotEqualByComparingTo(bar);
   }
 
   @Test

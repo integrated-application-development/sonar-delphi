@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeSpecializationContextImpl;
+import com.google.common.testing.EqualsTester;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
@@ -65,13 +66,9 @@ class ParameterTest {
     Parameter formalParameter = FormalParameter.create(data);
     Parameter intrinsicParameter = IntrinsicParameter.create(TYPE_PARAMETER);
 
-    assertThat(formalParameter)
-        .isEqualTo(formalParameter)
-        .isNotEqualTo(new Object())
-        .isNotEqualTo(null)
-        .isEqualTo(intrinsicParameter)
-        .isEqualByComparingTo(intrinsicParameter)
-        .hasSameHashCodeAs(intrinsicParameter);
+    new EqualsTester().addEqualityGroup(formalParameter, intrinsicParameter).testEquals();
+
+    assertThat(formalParameter).isEqualByComparingTo(intrinsicParameter);
   }
 
   private static TypeSpecializationContext createSpecializationContext() {

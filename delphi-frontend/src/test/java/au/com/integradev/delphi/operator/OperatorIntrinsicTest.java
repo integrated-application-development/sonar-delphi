@@ -21,6 +21,7 @@ package au.com.integradev.delphi.operator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.integradev.delphi.type.parameter.IntrinsicParameter;
+import com.google.common.testing.EqualsTester;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ class OperatorIntrinsicTest {
 
   @Test
   void testEquals() {
-    OperatorIntrinsic equal =
+    OperatorIntrinsic base =
         new OperatorIntrinsic("Foo", List.of(TypeFactory.untypedType()), TypeFactory.voidType());
     OperatorIntrinsic differentName =
         new OperatorIntrinsic("Bar", List.of(TypeFactory.untypedType()), TypeFactory.voidType());
@@ -67,17 +68,11 @@ class OperatorIntrinsicTest {
     OperatorIntrinsic differentReturnType =
         new OperatorIntrinsic("Foo", List.of(TypeFactory.untypedType()), TypeFactory.untypedType());
 
-    assertThat(INTRINSIC)
-        .isEqualTo(INTRINSIC)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(equal)
-        .hasSameHashCodeAs(equal)
-        .isNotEqualTo(differentName)
-        .doesNotHaveSameHashCodeAs(differentName)
-        .isNotEqualTo(differentParameters)
-        .doesNotHaveSameHashCodeAs(differentParameters)
-        .isNotEqualTo(differentReturnType)
-        .doesNotHaveSameHashCodeAs(differentReturnType);
+    new EqualsTester()
+        .addEqualityGroup(base)
+        .addEqualityGroup(differentName)
+        .addEqualityGroup(differentParameters)
+        .addEqualityGroup(differentReturnType)
+        .testEquals();
   }
 }

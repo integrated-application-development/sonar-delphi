@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
+import com.google.common.testing.EqualsTester;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -80,7 +81,7 @@ class RoutineNameDeclarationTest {
 
   @Test
   void testEquals() {
-    RoutineNameDeclaration equals =
+    RoutineNameDeclaration base =
         new RoutineNameDeclarationImpl(
             LOCATION,
             FULLY_QUALIFIED_NAME,
@@ -247,42 +248,31 @@ class RoutineNameDeclarationTest {
             Collections.emptyList(),
             ATTRIBUTE_TYPES);
 
+    new EqualsTester()
+        .addEqualityGroup(ROUTINE, base)
+        .addEqualityGroup(forwardDeclaration)
+        .addEqualityGroup(implementationDeclaration)
+        .addEqualityGroup(differentLocation)
+        .addEqualityGroup(differentFullyQualifiedName)
+        .addEqualityGroup(differentReturnType)
+        .addEqualityGroup(differentDirectives)
+        .addEqualityGroup(differentIsClassInvocable)
+        .addEqualityGroup(differentIsCallable)
+        .addEqualityGroup(differentRoutineType)
+        .addEqualityGroup(differentTypeParameters)
+        .testEquals();
+
     assertThat(ROUTINE)
-        .isEqualTo(ROUTINE)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(equals)
-        .hasSameHashCodeAs(equals)
-        .isEqualByComparingTo(equals)
-        .isNotEqualTo(forwardDeclaration)
-        .doesNotHaveSameHashCodeAs(forwardDeclaration)
+        .isEqualByComparingTo(base)
         .isNotEqualByComparingTo(forwardDeclaration)
-        .isNotEqualTo(implementationDeclaration)
-        .doesNotHaveSameHashCodeAs(implementationDeclaration)
         .isNotEqualByComparingTo(implementationDeclaration)
-        .isNotEqualTo(differentLocation)
-        .doesNotHaveSameHashCodeAs(differentLocation)
         .isNotEqualByComparingTo(differentLocation)
-        .isNotEqualTo(differentFullyQualifiedName)
-        .doesNotHaveSameHashCodeAs(differentFullyQualifiedName)
         .isNotEqualByComparingTo(differentFullyQualifiedName)
-        .isNotEqualTo(differentReturnType)
-        .doesNotHaveSameHashCodeAs(differentReturnType)
         .isNotEqualByComparingTo(differentReturnType)
-        .isNotEqualTo(differentDirectives)
-        .doesNotHaveSameHashCodeAs(differentDirectives)
         .isNotEqualByComparingTo(differentDirectives)
-        .isNotEqualTo(differentIsClassInvocable)
-        .doesNotHaveSameHashCodeAs(differentIsClassInvocable)
         .isNotEqualByComparingTo(differentIsClassInvocable)
-        .isNotEqualTo(differentIsCallable)
-        .doesNotHaveSameHashCodeAs(differentIsCallable)
         .isNotEqualByComparingTo(differentIsCallable)
-        .isNotEqualTo(differentRoutineType)
-        .doesNotHaveSameHashCodeAs(differentRoutineType)
         .isNotEqualByComparingTo(differentRoutineType)
-        .isNotEqualTo(differentTypeParameters)
-        .doesNotHaveSameHashCodeAs(differentTypeParameters)
         .isNotEqualByComparingTo(differentTypeParameters);
   }
 

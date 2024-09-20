@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.node.CommonDelphiNodeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
+import com.google.common.testing.EqualsTester;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeParameterNameDeclaration;
@@ -38,18 +39,13 @@ class TypeParameterNameDeclarationTest {
     TypeParameterNameDeclaration fooWithDifferentTypeInstance = createTypeParameter("Foo");
     TypeParameterNameDeclaration bar = createTypeParameter("Bar");
 
-    assertThat(foo)
-        .isEqualTo(foo)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(otherFoo)
-        .isEqualByComparingTo(otherFoo)
-        .hasSameHashCodeAs(otherFoo)
-        .isNotEqualTo(fooWithDifferentTypeInstance)
-        .doesNotHaveSameHashCodeAs(fooWithDifferentTypeInstance)
-        .isNotEqualTo(bar)
-        .isNotEqualByComparingTo(bar)
-        .doesNotHaveSameHashCodeAs(bar);
+    new EqualsTester()
+        .addEqualityGroup(foo, otherFoo)
+        .addEqualityGroup(fooWithDifferentTypeInstance)
+        .addEqualityGroup(bar)
+        .testEquals();
+
+    assertThat(foo).isEqualByComparingTo(otherFoo).isNotEqualByComparingTo(bar);
   }
 
   @Test

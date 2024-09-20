@@ -31,6 +31,7 @@ import au.com.integradev.delphi.antlr.ast.node.IdentifierNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.SimpleNameDeclarationNodeImpl;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
+import com.google.common.testing.EqualsTester;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.EnumElementNameDeclaration;
@@ -41,17 +42,18 @@ class EnumElementNameDeclarationTest {
     EnumElementNameDeclaration foo = createEnumElement("Foo");
     EnumElementNameDeclaration otherFoo = createEnumElement("Foo");
     EnumElementNameDeclaration bar = createEnumElement("Bar");
+    EnumElementNameDeclaration baz = createEnumElement("Baz");
+
+    new EqualsTester()
+        .addEqualityGroup(foo, otherFoo)
+        .addEqualityGroup(bar)
+        .addEqualityGroup(baz)
+        .testEquals();
 
     assertThat(foo)
-        .isEqualTo(foo)
-        .isNotEqualTo(null)
-        .isNotEqualTo(new Object())
-        .isEqualTo(otherFoo)
         .isEqualByComparingTo(otherFoo)
-        .hasSameHashCodeAs(otherFoo)
-        .isNotEqualTo(bar)
         .isNotEqualByComparingTo(bar)
-        .doesNotHaveSameHashCodeAs(bar);
+        .isNotEqualByComparingTo(baz);
   }
 
   @Test
