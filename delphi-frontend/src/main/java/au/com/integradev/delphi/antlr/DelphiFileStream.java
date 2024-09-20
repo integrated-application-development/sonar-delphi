@@ -40,16 +40,7 @@ public class DelphiFileStream extends ANTLRStringStream {
     if (fileName != null) {
       File f = new File(fileName);
       int size = (int) f.length();
-      try (BOMInputStream input =
-          new BOMInputStream(
-              new FileInputStream(fileName),
-              false,
-              ByteOrderMark.UTF_8,
-              ByteOrderMark.UTF_16LE,
-              ByteOrderMark.UTF_16BE,
-              ByteOrderMark.UTF_32LE,
-              ByteOrderMark.UTF_32BE)) {
-
+      try (BOMInputStream input = bomInputStream(fileName).get()) {
         ByteOrderMark bom = input.getBOM();
         if (bom != null) {
           encoding = bom.getCharsetName();
@@ -75,5 +66,17 @@ public class DelphiFileStream extends ANTLRStringStream {
 
   public String getEncoding() {
     return this.encoding;
+  }
+
+  private static BOMInputStream.Builder bomInputStream(String fileName) throws IOException {
+    return BOMInputStream.builder()
+        .setInputStream(new FileInputStream(fileName))
+        .setInclude(false)
+        .setByteOrderMarks(
+            ByteOrderMark.UTF_8,
+            ByteOrderMark.UTF_16LE,
+            ByteOrderMark.UTF_16BE,
+            ByteOrderMark.UTF_32LE,
+            ByteOrderMark.UTF_32BE);
   }
 }
