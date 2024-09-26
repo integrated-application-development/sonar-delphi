@@ -25,32 +25,32 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 
 @Rule(key = "FullyQualifiedImport")
 public class FullyQualifiedImportCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(UnitImportNode unitImportNode, DelphiCheckContext context) {
-    if (!unitImportNode.isResolvedImport()) {
+    UnitImportNameDeclaration importDeclaration = unitImportNode.getImportNameDeclaration();
+    UnitNameDeclaration unitDeclaration = importDeclaration.getOriginalDeclaration();
+
+    if (unitDeclaration == null || importDeclaration.isAlias()) {
       return context;
     }
 
-    UnitImportNameDeclaration unitImportNameDeclaration = unitImportNode.getImportNameDeclaration();
+    String actual = importDeclaration.fullyQualifiedName();
+    String expected = unitDeclaration.fullyQualifiedName();
 
-    String unitFullyQualifiedName = unitImportNameDeclaration.getOriginalDeclaration().getImage();
-    String unitImportName = unitImportNameDeclaration.getImage();
-
-    if (unitImportName.length() != unitFullyQualifiedName.length()) {
+    if (!actual.equalsIgnoreCase(expected)) {
       context
           .newIssue()
           .onNode(unitImportNode)
           .withMessage(
-              "Fully qualify this unit name (found: \"%s\" expected: \"%s\").",
-              unitImportName, unitFullyQualifiedName)
+              "Fully qualify this unit name (found: \"%s\" expected: \"%s\").", actual, expected)
           .withQuickFixes(
               QuickFix.newFix("Fully qualify unit import")
-                  .withEdit(
-                      QuickFixEdit.replace(unitImportNode.getNameNode(), unitFullyQualifiedName)))
+                  .withEdit(QuickFixEdit.replace(unitImportNode.getNameNode(), expected)))
           .report();
     }
 
