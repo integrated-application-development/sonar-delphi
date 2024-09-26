@@ -83,6 +83,33 @@ class FullyQualifiedImportCheckTest {
   }
 
   @Test
+  void testUnitAliasImportShouldNotAddIssue() {
+    var testFile = new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  AliasName;");
+
+    CheckVerifier.newVerifier()
+        .withCheck(new FullyQualifiedImportCheck())
+        .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Scope.RealName"))
+        .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Scope.AliasName"))
+        .withUnitScopeName("Scope")
+        .withUnitAlias("AliasName", "Scope.RealName")
+        .onFile(testFile)
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnitAliasImportThatLooksLikeUnqualifiedImportShouldNotAddIssue() {
+    var testFile = new DelphiTestUnitBuilder().appendDecl("uses").appendDecl("  Name;");
+
+    CheckVerifier.newVerifier()
+        .withCheck(new FullyQualifiedImportCheck())
+        .withSearchPathUnit(new DelphiTestUnitBuilder().unitName("Scope.Name"))
+        .withUnitScopeName("Scope")
+        .withUnitAlias("Name", "Scope.Name")
+        .onFile(testFile)
+        .verifyNoIssues();
+  }
+
+  @Test
   void testNotFullyQualifiedImportShouldAddIssue() {
     var importedUnit = new DelphiTestUnitBuilder().unitName("Scope.UnitU");
 
