@@ -18,21 +18,34 @@
  */
 package au.com.integradev.delphi.symbol.declaration;
 
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
+
+import com.google.common.collect.ComparisonChain;
 import java.util.Objects;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitImportNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 
 public final class UnitImportNameDeclarationImpl extends QualifiedNameDeclarationImpl
     implements UnitImportNameDeclaration {
+  private final boolean alias;
   private final UnitNameDeclaration originalDeclaration;
 
   public UnitImportNameDeclarationImpl(
-      UnitImportNode node, @Nullable UnitNameDeclaration originalDeclaration) {
+      UnitImportNode node, boolean alias, @Nullable UnitNameDeclaration originalDeclaration) {
     super(node.getNameNode());
+    this.alias = alias;
     this.originalDeclaration = originalDeclaration;
+  }
+
+  @Override
+  public boolean isAlias() {
+    return alias;
   }
 
   @Override
@@ -54,14 +67,27 @@ public final class UnitImportNameDeclarationImpl extends QualifiedNameDeclaratio
   public boolean equals(Object other) {
     if (super.equals(other)) {
       UnitImportNameDeclarationImpl that = (UnitImportNameDeclarationImpl) other;
-      return Objects.equals(originalDeclaration, that.originalDeclaration);
+      return alias == that.alias && Objects.equals(originalDeclaration, that.originalDeclaration);
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), originalDeclaration);
+    return Objects.hash(super.hashCode(), alias, originalDeclaration);
+  }
+
+  @Override
+  public int compareTo(@Nonnull NameDeclaration other) {
+    int result = super.compareTo(other);
+    if (result == 0) {
+      UnitImportNameDeclarationImpl that = (UnitImportNameDeclarationImpl) other;
+      return ComparisonChain.start()
+          .compareTrueFirst(this.alias, that.alias)
+          .compare(this.originalDeclaration, that.originalDeclaration, nullsLast(naturalOrder()))
+          .result();
+    }
+    return result;
   }
 
   @Override
