@@ -50,8 +50,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
-import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
@@ -202,7 +202,17 @@ public class SymbolTableBuilder {
 
   private UnitImportNameDeclaration createImportDeclaration(
       UnitNameDeclaration unit, UnitImportNode node) {
-    UnitData data = searchForImport(unit, node.getNameNode());
+    QualifiedNameDeclarationNode nameNode = node.getNameNode();
+
+    String importName = nameNode.fullyQualifiedName();
+    String aliased = unitAliases.get(importName);
+
+    boolean alias = aliased != null;
+    if (alias) {
+      importName = aliased;
+    }
+
+    UnitData data = searchForImport(unit, importName, nameNode.isQualified());
 
     UnitNameDeclaration unitDeclaration = null;
     if (data != null) {
@@ -214,18 +224,12 @@ public class SymbolTableBuilder {
       LOG.debug("{}X {} **Failed to locate unit**", indentation, unitName);
     }
 
-    return new UnitImportNameDeclarationImpl(node, unitDeclaration);
+    return new UnitImportNameDeclarationImpl(node, alias, unitDeclaration);
   }
 
   @Nullable
-  private UnitData searchForImport(UnitNameDeclaration unit, Qualifiable qualifiableImportName) {
-    String importName = qualifiableImportName.fullyQualifiedName();
-    String aliased = unitAliases.get(importName);
-
-    if (aliased != null) {
-      importName = aliased;
-    }
-
+  private UnitData searchForImport(
+      UnitNameDeclaration unit, String importName, boolean isQualified) {
     UnitData data = findImportByName(unit, importName);
 
     if (data == null) {
@@ -239,7 +243,7 @@ public class SymbolTableBuilder {
 
     if (data == null) {
       String namespace = unit.getNamespace();
-      if (!qualifiableImportName.isQualified() && !namespace.isEmpty()) {
+      if (!isQualified && !namespace.isEmpty()) {
         data = findImportByName(unit, namespace + "." + importName);
       }
     }

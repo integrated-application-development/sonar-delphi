@@ -22,6 +22,8 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 
 public interface UnitImportNameDeclaration extends QualifiedNameDeclaration {
+  boolean isAlias();
+
   @Nullable
   UnitNameDeclaration getOriginalDeclaration();
 

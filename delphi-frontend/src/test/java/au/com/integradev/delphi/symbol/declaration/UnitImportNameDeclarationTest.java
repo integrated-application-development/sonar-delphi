@@ -40,19 +40,31 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 
 class UnitImportNameDeclarationTest {
   @Test
+  void testIsAlias() {
+    assertThat(createImport("Foo", true).isAlias()).isTrue();
+    assertThat(createImport("Bar", false).isAlias()).isFalse();
+  }
+
+  @Test
   void testEquals() {
     UnitImportNameDeclaration foo = createImport("Foo");
     UnitImportNameDeclaration otherFoo = createImport("Foo");
+    UnitImportNameDeclaration aliasFoo = createImport("Foo", true);
     UnitImportNameDeclaration differentName = createImport("Bar");
     UnitImportNameDeclaration differentOriginalDeclaration = createImport("Foo", createUnit("Foo"));
 
     new EqualsTester()
         .addEqualityGroup(foo, otherFoo)
+        .addEqualityGroup(aliasFoo)
         .addEqualityGroup(differentName)
         .addEqualityGroup(differentOriginalDeclaration)
         .testEquals();
 
-    assertThat(foo).isEqualByComparingTo(otherFoo).isNotEqualByComparingTo(differentName);
+    assertThat(foo)
+        .isEqualByComparingTo(otherFoo)
+        .isNotEqualByComparingTo(aliasFoo)
+        .isNotEqualByComparingTo(differentName)
+        .isNotEqualByComparingTo(differentOriginalDeclaration);
   }
 
   @Test
@@ -64,11 +76,20 @@ class UnitImportNameDeclarationTest {
     return createImport(name, null);
   }
 
+  private static UnitImportNameDeclaration createImport(String name, boolean alias) {
+    return createImport(name, null, alias);
+  }
+
   private static UnitImportNameDeclaration createImport(
       String name, UnitNameDeclaration originalDeclaration) {
+    return createImport(name, originalDeclaration, false);
+  }
+
+  private static UnitImportNameDeclaration createImport(
+      String name, UnitNameDeclaration originalDeclaration, boolean alias) {
     var location = new UnitImportNodeImpl(DelphiLexer.TkUnitImport);
     location.addChild(createNameNode(name));
-    return new UnitImportNameDeclarationImpl(location, originalDeclaration);
+    return new UnitImportNameDeclarationImpl(location, alias, originalDeclaration);
   }
 
   private static UnitNameDeclaration createUnit(String name) {
