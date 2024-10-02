@@ -69,6 +69,8 @@ tokens {
   TkArrayConstructor;
   TkArrayIndices;
   TkArgument;
+  TkAnonymousMethod;
+  TkAnonymousMethodHeading;
 }
 
 @header
@@ -907,8 +909,12 @@ argumentExpression           : expression writeArguments?
                              ;
 writeArguments               : ':'! expression (':'! expression)? // See: https://docwiki.embarcadero.com/Libraries/en/System.Write
                              ;
-anonymousMethod              : PROCEDURE<AnonymousMethodNodeImpl>^ routineParameters? block
-                             | FUNCTION<AnonymousMethodNodeImpl>^ routineParameters? routineReturnType block
+anonymousMethod              : anonymousMethodHeading block -> ^(TkAnonymousMethod<AnonymousMethodNodeImpl> anonymousMethodHeading block)
+                             ;
+anonymousMethodHeading       : PROCEDURE routineParameters? ((';')? interfaceDirective)*
+                             -> ^(TkAnonymousMethodHeading<AnonymousMethodHeadingNodeImpl> PROCEDURE routineParameters? ((';')? interfaceDirective)*)
+                             | FUNCTION routineParameters? routineReturnType ((';')? interfaceDirective)*
+                             -> ^(TkAnonymousMethodHeading<AnonymousMethodHeadingNodeImpl> FUNCTION routineParameters? routineReturnType ((';')? interfaceDirective)*)
                              ;
 expressionOrRange            : expression ('..'<RangeExpressionNodeImpl>^ expression)?
                              ;

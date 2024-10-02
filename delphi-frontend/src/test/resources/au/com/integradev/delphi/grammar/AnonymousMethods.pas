@@ -32,4 +32,13 @@ begin
     end)(aValue);
 end;
 
+function IsStringEmptyWithCallingConvention(const aValue : string) : Boolean;
+begin
+  Result := StringMatches(aValue,
+    function(const aValue : string) : Boolean register
+    begin
+      Result := aValue = '';
+    end);
+end;
+
 end.

@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `AnonymousMethodNode::getAnonymousMethodHeading` method.
+- **API:** `AnonymousMethodNode::getDirectives` method.
+- **API:** `AnonymousMethodNode::hasDirective` method.
+- **API:** `AnonymousMethodHeadingNode` node type.
+- **API:** `DelphiTokenType.ANONYMOUS_METHOD` token type.
+- **API:** `DelphiTokenType.ANONYMOUS_METHOD_HEADING` token type.
+
 ### Fixed
 
 - Parsing errors on `implementation` keywords nested in conditional branches.
+- Parsing errors on anonymous methods with routine directives (like calling conventions).
 
 ## [1.10.0] - 2024-10-01
 

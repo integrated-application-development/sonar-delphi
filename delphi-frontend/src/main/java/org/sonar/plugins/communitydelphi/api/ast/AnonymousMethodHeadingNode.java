@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,24 +21,13 @@ package org.sonar.plugins.communitydelphi.api.ast;
 import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public interface AnonymousMethodNode extends ExpressionNode {
-  AnonymousMethodHeadingNode getAnonymousMethodHeading();
-
+public interface AnonymousMethodHeadingNode extends DelphiNode {
   RoutineParametersNode getRoutineParametersNode();
 
   RoutineReturnTypeNode getReturnTypeNode();
 
-  Type getReturnType();
-
   RoutineKind getRoutineKind();
 
   Set<RoutineDirective> getDirectives();
-
-  boolean hasDirective(RoutineDirective directive);
-
-  boolean isFunction();
-
-  boolean isProcedure();
 }

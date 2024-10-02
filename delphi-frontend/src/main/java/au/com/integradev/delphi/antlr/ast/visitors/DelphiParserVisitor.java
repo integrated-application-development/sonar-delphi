@@ -23,6 +23,7 @@
 package au.com.integradev.delphi.antlr.ast.visitors;
 
 import org.sonar.plugins.communitydelphi.api.ast.AncestorListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
@@ -183,6 +184,10 @@ public interface DelphiParserVisitor<T> {
 
   default void visitToken(DelphiToken token, T data) {
     // Do nothing
+  }
+
+  default T visit(AnonymousMethodHeadingNode node, T data) {
+    return visit((DelphiNode) node, data);
   }
 
   default T visit(ArgumentListNode node, T data) {
