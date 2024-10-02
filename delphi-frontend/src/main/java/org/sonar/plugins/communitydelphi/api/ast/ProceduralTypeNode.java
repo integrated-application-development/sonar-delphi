@@ -19,11 +19,17 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.List;
+import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public interface ProceduralTypeNode extends TypeNode {
   Type getReturnType();
 
   List<FormalParameterData> getParameters();
+
+  Set<RoutineDirective> getDirectives();
+
+  boolean hasDirective(RoutineDirective directive);
 }

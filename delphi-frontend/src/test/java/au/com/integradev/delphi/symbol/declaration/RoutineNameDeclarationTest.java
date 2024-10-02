@@ -39,6 +39,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class RoutineNameDeclarationTest {
@@ -52,7 +53,12 @@ class RoutineNameDeclarationTest {
   private static final boolean IS_CALLABLE = true;
   private static final RoutineKind KIND = RoutineKind.PROCEDURE;
   private static final ProceduralType ROUTINE_TYPE =
-      ((TypeFactoryImpl) FACTORY).routine(List.of(mock(Parameter.class)), RETURN_TYPE);
+      ((TypeFactoryImpl) FACTORY)
+          .createProcedural(
+              ProceduralKind.ROUTINE,
+              List.of(mock(Parameter.class)),
+              RETURN_TYPE,
+              Collections.emptySet());
   private static final TypeNameDeclaration TYPE_NAME_DECLARATION =
       new TypeNameDeclarationImpl(
           SymbolicNode.imaginary("Baz", DelphiScope.unknownScope()),
@@ -227,7 +233,12 @@ class RoutineNameDeclarationTest {
             IS_CLASS_INVOCABLE,
             IS_CALLABLE,
             KIND,
-            ((TypeFactoryImpl) FACTORY).routine(Collections.emptyList(), TypeFactory.untypedType()),
+            ((TypeFactoryImpl) FACTORY)
+                .createProcedural(
+                    ProceduralKind.ROUTINE,
+                    Collections.emptyList(),
+                    TypeFactory.untypedType(),
+                    Collections.emptySet()),
             TYPE_NAME_DECLARATION,
             VISIBILITY,
             TYPE_PARAMETERS,

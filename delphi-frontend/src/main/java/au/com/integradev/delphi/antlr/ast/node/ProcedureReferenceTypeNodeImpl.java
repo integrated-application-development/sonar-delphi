@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 
 public final class ProcedureReferenceTypeNodeImpl extends ProceduralTypeNodeImpl
     implements ProcedureReferenceTypeNode {
@@ -42,10 +43,12 @@ public final class ProcedureReferenceTypeNodeImpl extends ProceduralTypeNodeImpl
   @Nonnull
   protected Type createType() {
     return ((TypeFactoryImpl) getTypeFactory())
-        .reference(
+        .createProcedural(
+            ProceduralKind.REFERENCE,
             getParameters().stream()
                 .map(FormalParameter::create)
                 .collect(Collectors.toUnmodifiableList()),
-            getReturnType());
+            getReturnType(),
+            getDirectives());
   }
 }

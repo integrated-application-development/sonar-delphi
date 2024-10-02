@@ -123,7 +123,8 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     RoutineReturnTypeNode returnTypeNode = getReturnTypeNode();
 
     return ((TypeFactoryImpl) getTypeFactory())
-        .anonymous(
+        .createProcedural(
+            ProceduralKind.ANONYMOUS,
             parameters == null
                 ? Collections.emptyList()
                 : parameters.getParameters().stream()
@@ -131,6 +132,7 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
                     .collect(Collectors.toUnmodifiableList()),
             returnTypeNode == null
                 ? TypeFactory.voidType()
-                : returnTypeNode.getTypeNode().getType());
+                : returnTypeNode.getTypeNode().getType(),
+            getDirectives());
   }
 }

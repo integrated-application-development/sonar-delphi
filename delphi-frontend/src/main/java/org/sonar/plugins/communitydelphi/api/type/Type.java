@@ -21,6 +21,7 @@ package org.sonar.plugins.communitydelphi.api.type;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 
 public interface Type {
@@ -502,6 +503,13 @@ public interface Type {
      * @return Procedural kind
      */
     ProceduralKind kind();
+
+    /**
+     * The routine directives declared on this procedural type
+     *
+     * @return Routine directives
+     */
+    Set<RoutineDirective> directives();
   }
 
   interface FileType extends Type {

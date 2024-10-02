@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 
 public final class ProcedureTypeNodeImpl extends ProceduralTypeNodeImpl
     implements ProcedureTypeNode {
@@ -46,10 +47,12 @@ public final class ProcedureTypeNodeImpl extends ProceduralTypeNodeImpl
   @Nonnull
   protected Type createType() {
     return ((TypeFactoryImpl) getTypeFactory())
-        .procedure(
+        .createProcedural(
+            ProceduralKind.PROCEDURE,
             getParameters().stream()
                 .map(FormalParameter::create)
                 .collect(Collectors.toUnmodifiableList()),
-            getReturnType());
+            getReturnType(),
+            getDirectives());
   }
 }

@@ -43,6 +43,7 @@ import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
@@ -378,16 +379,6 @@ public class TypeFactoryImpl implements TypeFactory {
     return null;
   }
 
-  private ProceduralType createProcedural(
-      ProceduralKind kind, List<Parameter> parameters, Type returnType) {
-    return createProcedural(kind, parameters, returnType, false);
-  }
-
-  private ProceduralType createProcedural(
-      ProceduralKind kind, List<Parameter> parameters, Type returnType, boolean variadic) {
-    return new ProceduralTypeImpl(proceduralSize(kind), kind, parameters, returnType, variadic);
-  }
-
   @Override
   public Type getIntrinsic(IntrinsicType intrinsic) {
     return intrinsicTypes.get(intrinsic);
@@ -492,30 +483,6 @@ public class TypeFactoryImpl implements TypeFactory {
     return new ClassReferenceTypeImpl(image, type, pointerSize());
   }
 
-  public ProceduralType procedure(List<Parameter> parameters, Type returnType) {
-    return createProcedural(ProceduralKind.PROCEDURE, parameters, returnType);
-  }
-
-  public ProceduralType ofObject(List<Parameter> parameters, Type returnType) {
-    return createProcedural(ProceduralKind.PROCEDURE_OF_OBJECT, parameters, returnType);
-  }
-
-  public ProceduralType reference(List<Parameter> parameters, Type returnType) {
-    return createProcedural(ProceduralKind.REFERENCE, parameters, returnType);
-  }
-
-  public ProceduralType anonymous(List<Parameter> parameters, Type returnType) {
-    return createProcedural(ProceduralKind.ANONYMOUS, parameters, returnType);
-  }
-
-  public ProceduralType routine(List<Parameter> parameters, Type returnType) {
-    return createProcedural(ProceduralKind.ROUTINE, parameters, returnType);
-  }
-
-  public ProceduralType routine(List<Parameter> parameters, Type returnType, boolean variadic) {
-    return createProcedural(ProceduralKind.ROUTINE, parameters, returnType, variadic);
-  }
-
   @Override
   public AliasType strongAlias(String image, Type aliased) {
     return typeAliasGenerator.generate(image, aliased, true);
@@ -524,6 +491,14 @@ public class TypeFactoryImpl implements TypeFactory {
   @Override
   public AliasType weakAlias(String image, Type aliased) {
     return typeAliasGenerator.generate(image, aliased, false);
+  }
+
+  public ProceduralType createProcedural(
+      ProceduralKind kind,
+      List<Parameter> parameters,
+      Type returnType,
+      Set<RoutineDirective> directives) {
+    return new ProceduralTypeImpl(proceduralSize(kind), kind, parameters, returnType, directives);
   }
 
   public StructType struct(TypeNode node) {

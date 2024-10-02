@@ -67,6 +67,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.EnumType;
 import org.sonar.plugins.communitydelphi.api.type.Type.FileType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -773,20 +774,24 @@ class TypeComparerTest {
 
   private static ProceduralType procedure(List<Type> parameterTypes, Type returnType) {
     return ((TypeFactoryImpl) FACTORY)
-        .procedure(
+        .createProcedural(
+            ProceduralKind.PROCEDURE,
             parameterTypes.stream()
                 .map(TypeMocker::parameter)
                 .collect(Collectors.toUnmodifiableList()),
-            returnType);
+            returnType,
+            Collections.emptySet());
   }
 
   private static ProceduralType anonymous(List<Type> parameterTypes, Type returnType) {
     return ((TypeFactoryImpl) FACTORY)
-        .anonymous(
+        .createProcedural(
+            ProceduralKind.ANONYMOUS,
             parameterTypes.stream()
                 .map(TypeMocker::parameter)
                 .collect(Collectors.toUnmodifiableList()),
-            returnType);
+            returnType,
+            Collections.emptySet());
   }
 
   private static AnsiStringType ansiString(int codePage) {
