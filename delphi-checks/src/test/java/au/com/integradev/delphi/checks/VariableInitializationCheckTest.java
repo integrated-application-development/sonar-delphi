@@ -1237,6 +1237,25 @@ class VariableInitializationCheckTest {
         .verifyNoIssues();
   }
 
+  // See: https://github.com/integrated-application-development/sonar-delphi/issues/297
+  @Test
+  void testIssue297ShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("var")
+                .appendImpl("  SetValues: procedure(Values: Integer); cdecl varargs;")
+                .appendImpl("")
+                .appendImpl("procedure MyProcedure;")
+                .appendImpl("var")
+                .appendImpl("  Value: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  SetValues(Value, Value); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
   private static DelphiTestUnitBuilder createSysUtils() {
     return new DelphiTestUnitBuilder()
         .unitName("System.SysUtils")

@@ -20,12 +20,14 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.ProceduralTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -52,5 +54,15 @@ public abstract class ProceduralTypeNodeImpl extends TypeNodeImpl implements Pro
   public List<FormalParameterData> getParameters() {
     RoutineParametersNode parametersNode = getHeading().getRoutineParametersNode();
     return parametersNode == null ? Collections.emptyList() : parametersNode.getParameters();
+  }
+
+  @Override
+  public Set<RoutineDirective> getDirectives() {
+    return getHeading().getDirectives();
+  }
+
+  @Override
+  public boolean hasDirective(RoutineDirective directive) {
+    return getDirectives().contains(directive);
   }
 }

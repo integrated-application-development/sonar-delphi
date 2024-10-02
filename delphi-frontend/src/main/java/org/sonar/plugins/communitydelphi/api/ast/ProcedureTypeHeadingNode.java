@@ -18,7 +18,9 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import java.util.Set;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 
 public interface ProcedureTypeHeadingNode extends DelphiNode {
   @Nullable
@@ -26,4 +28,6 @@ public interface ProcedureTypeHeadingNode extends DelphiNode {
 
   @Nullable
   RoutineReturnTypeNode getRoutineReturnTypeNode();
+
+  Set<RoutineDirective> getDirectives();
 }

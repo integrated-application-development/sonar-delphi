@@ -47,6 +47,7 @@ import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class TypeInferrerTest {
@@ -274,7 +275,9 @@ class TypeInferrerTest {
   }
 
   private static ExpressionNode procedural(Type returnType) {
-    return genericExpression(TYPE_FACTORY.routine(Collections.emptyList(), returnType));
+    return genericExpression(
+        TYPE_FACTORY.createProcedural(
+            ProceduralKind.ROUTINE, Collections.emptyList(), returnType, Collections.emptySet()));
   }
 
   private static ExpressionNode genericExpression(IntrinsicType type) {

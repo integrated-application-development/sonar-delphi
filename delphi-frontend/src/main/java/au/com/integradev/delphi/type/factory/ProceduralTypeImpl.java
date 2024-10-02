@@ -21,7 +21,9 @@ package au.com.integradev.delphi.type.factory;
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
 import com.google.common.collect.Iterables;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -32,19 +34,19 @@ public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements Pr
   private final ProceduralKind kind;
   private final List<Parameter> parameters;
   private final Type returnType;
-  private final boolean variadic;
+  private final Set<RoutineDirective> directives;
 
   ProceduralTypeImpl(
       int size,
       ProceduralKind kind,
       List<Parameter> parameters,
       Type returnType,
-      boolean variadic) {
+      Set<RoutineDirective> directives) {
     this.size = size;
     this.kind = kind;
     this.parameters = List.copyOf(parameters);
     this.returnType = returnType;
-    this.variadic = variadic;
+    this.directives = directives;
   }
 
   @Override
@@ -93,14 +95,14 @@ public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements Pr
 
   @Override
   public int parametersCount() {
-    return variadic ? 255 : parameters().size();
+    return directives.contains(RoutineDirective.VARARGS) ? 255 : parameters().size();
   }
 
   @Override
   public Parameter getParameter(int index) {
     if (index < parameters().size()) {
       return parameters().get(index);
-    } else if (variadic) {
+    } else if (directives.contains(RoutineDirective.VARARGS)) {
       return Iterables.getLast(parameters());
     }
 
@@ -120,6 +122,11 @@ public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements Pr
   @Override
   public ProceduralKind kind() {
     return kind;
+  }
+
+  @Override
+  public Set<RoutineDirective> directives() {
+    return directives;
   }
 
   @Override
@@ -151,6 +158,6 @@ public final class ProceduralTypeImpl extends GenerifiableTypeImpl implements Pr
             .map(parameter -> parameter.specialize(context))
             .collect(Collectors.toUnmodifiableList()),
         returnType.specialize(context),
-        variadic);
+        directives);
   }
 }

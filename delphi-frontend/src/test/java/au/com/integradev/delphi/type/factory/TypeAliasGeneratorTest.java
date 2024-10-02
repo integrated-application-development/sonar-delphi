@@ -27,6 +27,7 @@ import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -54,6 +55,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.HelperType;
 import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.Type.RealType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
@@ -86,16 +88,36 @@ class TypeAliasGeneratorTest {
           Arguments.of(FACTORY.untypedPointer(), PointerType.class),
           Arguments.of(FACTORY.pointerTo(ALIASED_NAME, BYTE), PointerType.class),
           Arguments.of(
-              ((TypeFactoryImpl) FACTORY).procedure(List.of(TypeMocker.parameter(BYTE)), BYTE),
+              ((TypeFactoryImpl) FACTORY)
+                  .createProcedural(
+                      ProceduralKind.PROCEDURE,
+                      List.of(TypeMocker.parameter(BYTE)),
+                      BYTE,
+                      Collections.emptySet()),
               ProceduralType.class),
           Arguments.of(
-              ((TypeFactoryImpl) FACTORY).ofObject(List.of(TypeMocker.parameter(BYTE)), BYTE),
+              ((TypeFactoryImpl) FACTORY)
+                  .createProcedural(
+                      ProceduralKind.PROCEDURE_OF_OBJECT,
+                      List.of(TypeMocker.parameter(BYTE)),
+                      BYTE,
+                      Collections.emptySet()),
               ProceduralType.class),
           Arguments.of(
-              ((TypeFactoryImpl) FACTORY).routine(List.of(TypeMocker.parameter(BYTE)), BYTE),
+              ((TypeFactoryImpl) FACTORY)
+                  .createProcedural(
+                      ProceduralKind.ROUTINE,
+                      List.of(TypeMocker.parameter(BYTE)),
+                      BYTE,
+                      Collections.emptySet()),
               ProceduralType.class),
           Arguments.of(
-              ((TypeFactoryImpl) FACTORY).anonymous(List.of(TypeMocker.parameter(BYTE)), BYTE),
+              ((TypeFactoryImpl) FACTORY)
+                  .createProcedural(
+                      ProceduralKind.ANONYMOUS,
+                      List.of(TypeMocker.parameter(BYTE)),
+                      BYTE,
+                      Collections.emptySet()),
               ProceduralType.class),
           Arguments.of(FACTORY.untypedFile(), FileType.class),
           Arguments.of(FACTORY.fileOf(BYTE), FileType.class),

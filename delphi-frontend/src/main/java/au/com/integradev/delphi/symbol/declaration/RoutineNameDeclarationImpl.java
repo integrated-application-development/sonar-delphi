@@ -52,6 +52,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclarat
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
@@ -112,7 +113,11 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
         true,
         data.getRoutineKind(),
         ((TypeFactoryImpl) typeFactory)
-            .routine(createParameters(data), data.getReturnType(), data.isVariadic()),
+            .createProcedural(
+                ProceduralKind.ROUTINE,
+                createParameters(data),
+                data.getReturnType(),
+                data.isVariadic() ? Set.of(RoutineDirective.VARARGS) : Collections.emptySet()),
         null,
         VisibilityType.PUBLIC,
         Collections.emptyList(),
@@ -147,7 +152,12 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
         routine.isClassMethod(),
         isCallable,
         routine.getRoutineKind(),
-        ((TypeFactoryImpl) typeFactory).routine(createParameters(routine), routine.getReturnType()),
+        ((TypeFactoryImpl) typeFactory)
+            .createProcedural(
+                ProceduralKind.ROUTINE,
+                createParameters(routine),
+                routine.getReturnType(),
+                routine.getDirectives()),
         routine.getTypeDeclaration(),
         routine.getVisibility(),
         extractGenericTypeParameters(routine),

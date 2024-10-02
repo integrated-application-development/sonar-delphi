@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **API:** `ProceduralType::directives` method.
+- **API:** `ProceduralTypeNode::getDirectives` method.
+- **API:** `ProceduralTypeNode::hasDirective` method.
+- **API:** `ProceduralTypeHeadingNode::getDirectives` method.
 - **API:** `AnonymousMethodNode::getAnonymousMethodHeading` method.
 - **API:** `AnonymousMethodNode::getDirectives` method.
 - **API:** `AnonymousMethodNode::hasDirective` method.
@@ -20,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Parsing errors on `implementation` keywords nested in conditional branches.
 - Parsing errors on anonymous methods with routine directives (like calling conventions).
+- `IndexOutOfBoundsException` errors around procedural types declared with `varargs` in
+  `VariableInitialization`.
 
 ## [1.10.0] - 2024-10-01
 
