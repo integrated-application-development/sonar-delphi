@@ -22,23 +22,30 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType.ProceduralKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {
   private String image;
-  private RoutineKind routineKind;
 
   public AnonymousMethodNodeImpl(Token token) {
     super(token);
+  }
+
+  public AnonymousMethodNodeImpl(int tokenType) {
+    super(tokenType);
   }
 
   @Override
@@ -47,13 +54,18 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   }
 
   @Override
+  public AnonymousMethodHeadingNode getAnonymousMethodHeading() {
+    return (AnonymousMethodHeadingNode) getChild(0);
+  }
+
+  @Override
   public RoutineParametersNode getRoutineParametersNode() {
-    return getFirstChildOfType(RoutineParametersNode.class);
+    return getAnonymousMethodHeading().getRoutineParametersNode();
   }
 
   @Override
   public RoutineReturnTypeNode getReturnTypeNode() {
-    return getFirstChildOfType(RoutineReturnTypeNode.class);
+    return getAnonymousMethodHeading().getReturnTypeNode();
   }
 
   @Override
@@ -63,10 +75,17 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
 
   @Override
   public RoutineKind getRoutineKind() {
-    if (routineKind == null) {
-      routineKind = RoutineKind.fromTokenType(getTokenType());
-    }
-    return routineKind;
+    return getAnonymousMethodHeading().getRoutineKind();
+  }
+
+  @Override
+  public Set<RoutineDirective> getDirectives() {
+    return getAnonymousMethodHeading().getDirectives();
+  }
+
+  @Override
+  public boolean hasDirective(RoutineDirective directive) {
+    return getDirectives().contains(directive);
   }
 
   @Override
