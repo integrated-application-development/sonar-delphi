@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,16 +16,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.ast;
+package au.com.integradev.delphi.cfg.api;
 
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
-public interface CaseStatementNode extends StatementNode {
-  ExpressionNode getSelectorExpression();
+public interface Block {
+  /** Unique block identifier */
+  int getId();
 
-  List<CaseItemStatementNode> getCaseItems();
+  /** Successor blocks of the block */
+  Set<Block> getSuccessorBlocks();
 
-  @Nullable
-  ElseBlockNode getElseBlockNode();
+  /** Predecessors of the block */
+  Set<Block> getPredecessorBlocks();
+
+  /** Successors handler of the block */
+  Successors getSuccessors();
+
+  /** Elements of the block */
+  List<DelphiNode> getElements();
 }

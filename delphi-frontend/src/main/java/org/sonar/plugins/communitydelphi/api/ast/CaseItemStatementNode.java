@@ -22,4 +22,6 @@ import java.util.List;
 
 public interface CaseItemStatementNode extends StatementNode {
   List<ExpressionNode> getExpressions();
+
+  StatementNode getStatement();
 }

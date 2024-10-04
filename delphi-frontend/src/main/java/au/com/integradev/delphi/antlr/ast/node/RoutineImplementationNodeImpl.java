@@ -19,6 +19,8 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,6 +38,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclarat
 public final class RoutineImplementationNodeImpl extends RoutineNodeImpl
     implements RoutineImplementationNode {
   private TypeNameDeclaration typeDeclaration;
+  @Nullable private ControlFlowGraph cfg;
 
   public RoutineImplementationNodeImpl(Token token) {
     super(token);
@@ -125,6 +128,17 @@ public final class RoutineImplementationNodeImpl extends RoutineNodeImpl
   @Nonnull
   public NameReferenceNode getNameReferenceNode() {
     return getRoutineNameNode().getNameReferenceNode();
+  }
+
+  @Nullable
+  public ControlFlowGraph getControlFlowGraph() {
+    if (getRoutineBody() == null || getRoutineBody().getStatementBlock() == null) {
+      return null;
+    }
+    if (cfg == null) {
+      cfg = ControlFlowGraphFactory.create(getRoutineBody().getStatementBlock());
+    }
+    return cfg;
   }
 
   @Override

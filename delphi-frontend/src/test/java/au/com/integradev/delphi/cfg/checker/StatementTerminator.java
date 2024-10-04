@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2024 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,16 +16,29 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.ast;
+package au.com.integradev.delphi.cfg.checker;
 
-import java.util.List;
-import javax.annotation.Nullable;
+import au.com.integradev.delphi.cfg.block.TerminatorKind;
 
-public interface CaseStatementNode extends StatementNode {
-  ExpressionNode getSelectorExpression();
+public enum StatementTerminator {
+  EXIT("System.Exit", TerminatorKind.EXIT),
+  BREAK("System.Break", TerminatorKind.BREAK),
+  HALT("System.Halt", TerminatorKind.HALT),
+  CONTINUE("System.Continue", TerminatorKind.CONTINUE);
 
-  List<CaseItemStatementNode> getCaseItems();
+  private final String methodName;
+  private final TerminatorKind terminatorKind;
 
-  @Nullable
-  ElseBlockNode getElseBlockNode();
+  StatementTerminator(String methodName, TerminatorKind terminatorKind) {
+    this.methodName = methodName;
+    this.terminatorKind = terminatorKind;
+  }
+
+  public String getMethodName() {
+    return methodName;
+  }
+
+  public TerminatorKind getTerminatorKind() {
+    return terminatorKind;
+  }
 }
