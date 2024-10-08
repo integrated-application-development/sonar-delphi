@@ -18,8 +18,7 @@
  */
 package au.com.integradev.delphi.file;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.Delphi;
@@ -36,6 +35,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
@@ -105,5 +106,22 @@ class DelphiFileTest {
     DelphiFile delphiFile = DelphiFile.from(file, config);
     String firstLine = delphiFile.getSourceCodeFileLines().get(0);
     assertThat(firstLine).doesNotStartWith("\ufeff");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"SkipImplementation.pas", "SkipImplementationWithDirectiveNesting.pas"})
+  void testShouldSkipImplementation(String filename) {
+    File file = DelphiUtils.getResource("/au/com/integradev/delphi/file/" + filename);
+
+    DelphiFileConfig config =
+        DelphiFile.createConfig(
+            StandardCharsets.UTF_8.name(),
+            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            TypeFactoryUtils.defaultFactory(),
+            SearchPath.create(Collections.emptyList()),
+            Collections.emptySet(),
+            true);
+
+    assertThatNoException().isThrownBy(() -> DelphiFile.from(file, config));
   }
 }

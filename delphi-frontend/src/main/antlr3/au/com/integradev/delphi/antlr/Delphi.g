@@ -122,6 +122,7 @@ import au.com.integradev.delphi.antlr.ast.node.*;
 
 package au.com.integradev.delphi.antlr;
 
+import org.apache.commons.lang3.StringUtils;
 }
 
 @lexer::members {
@@ -1503,9 +1504,9 @@ COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel
 
                               if ($text.startsWith(start + "\$")) {
                                 $type = TkCompilerDirective;
-                                if ($text.startsWith(start + "\$endif") || $text.startsWith(start + "\$ifend")) {
+                                if (StringUtils.startsWithIgnoreCase($text, start + "\$endif") || StringUtils.startsWithIgnoreCase($text, start + "\$ifend")) {
                                   --directiveNesting;
-                                } else if ($text.startsWith(start + "\$if")) {
+                                } else if (StringUtils.startsWithIgnoreCase($text, start + "\$if")) {
                                   ++directiveNesting;
                                 }
                               }
