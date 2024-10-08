@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Parsing errors on `implementation` keywords nested in conditional branches.
+
 ## [1.10.0] - 2024-10-01
 
 ### Added
