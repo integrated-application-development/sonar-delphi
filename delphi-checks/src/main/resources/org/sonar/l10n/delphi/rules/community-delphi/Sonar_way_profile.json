@@ -52,6 +52,7 @@
     "LowercaseKeyword",
     "MathFunctionSingleOverload",
     "MemberDeclarationOrder",
+    "MissingRaise",
     "MissingSemicolon",
     "MixedNames",
     "NilComparison",

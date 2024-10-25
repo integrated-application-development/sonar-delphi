@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `MissingRaise` analysis rule, which flags exception constructions for which `raise` has been omitted.
 - **API:** `ProceduralType::directives` method.
 - **API:** `ProceduralTypeNode::getDirectives` method.
 - **API:** `ProceduralTypeNode::hasDirective` method.
