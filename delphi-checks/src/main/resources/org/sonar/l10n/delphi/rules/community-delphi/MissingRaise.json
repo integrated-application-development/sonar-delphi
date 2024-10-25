@@ -1,0 +1,21 @@
+{
+  "title": "Exceptions should be raised",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "COMPLETE",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
+  "tags": [
+    "suspicious"
+  ],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

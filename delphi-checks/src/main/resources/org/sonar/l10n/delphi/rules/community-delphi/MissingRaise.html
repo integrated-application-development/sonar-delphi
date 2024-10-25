@@ -1,0 +1,32 @@
+<h2>Why is this an issue?</h2>
+<p>
+  When writing an exception raise in Delphi, a common mistake is to omit the <code>raise</code>,
+  causing the exception to be created but not actually used. This is bad for a number of reasons:
+</p>
+<ul>
+  <li>The exception object is never freed, causing a memory leak.</li>
+  <li>Control flow continues as usual, even though an undesired exceptional state has been reached.</li>
+  <li>The bug is easy to miss but can greatly alter the path of execution.</li>
+</ul>
+<h2>How to fix it</h2>
+<p>Add the <code>raise</code> keyword. If the exception is not required, delete the constructor invocation instead.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure DeleteDatabase;
+begin
+  if InProductionEnvironment then begin
+    EDontBreakProduction.Create('DeleteDatabase attempted in production');
+  end;
+
+  Database.DeleteAllImportantRecords;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure DeleteDatabase;
+begin
+  if InProductionEnvironment then begin
+    raise EDontBreakProduction.Create('DeleteDatabase attempted in production');
+  end;
+
+  Database.DeleteAllImportantRecords;
+end;
+</pre>

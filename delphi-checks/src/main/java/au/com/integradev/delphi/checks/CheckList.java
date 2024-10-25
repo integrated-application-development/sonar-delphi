@@ -107,6 +107,7 @@ public final class CheckList {
           LowercaseKeywordCheck.class,
           MathFunctionSingleOverloadCheck.class,
           MemberDeclarationOrderCheck.class,
+          MissingRaiseCheck.class,
           MissingSemicolonCheck.class,
           MixedNamesCheck.class,
           NilComparisonCheck.class,
