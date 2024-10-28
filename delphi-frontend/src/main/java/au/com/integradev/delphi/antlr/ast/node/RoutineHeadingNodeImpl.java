@@ -18,14 +18,13 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
+import au.com.integradev.delphi.antlr.ast.node.utils.RoutineDirectiveUtils;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineHeadingNode;
@@ -36,7 +35,6 @@ import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
-import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
@@ -194,15 +192,7 @@ public final class RoutineHeadingNodeImpl extends DelphiNodeImpl implements Rout
   @Override
   public Set<RoutineDirective> getDirectives() {
     if (directives == null) {
-      var builder = new ImmutableSet.Builder<RoutineDirective>();
-      for (DelphiNode child : getChildren()) {
-        DelphiToken token = child.getToken();
-        RoutineDirective directive = RoutineDirective.fromToken(token);
-        if (directive != null) {
-          builder.add(directive);
-        }
-      }
-      directives = builder.build();
+      directives = RoutineDirectiveUtils.getDirectives(this);
     }
     return directives;
   }
