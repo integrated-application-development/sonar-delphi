@@ -179,4 +179,172 @@ class MissingRaiseCheckTest {
                 .appendImpl("  MyError := ECalculatorError.Create(1, 2);"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testImplicitSelfCallInConstructorShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("    constructor CreateFmt(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("constructor ECalculatorError.CreateFmt(A: Integer; B: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  CreateFmt(A, B);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testExplicitSelfCallInConstructorShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("    constructor CreateFmt(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("constructor ECalculatorError.CreateFmt(A: Integer; B: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  Self.CreateFmt(A, B);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testSelfAncestorCallInMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    function Add(A: Integer; B: Integer): Integer;")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("function ECalculatorError.Add(A: Integer; B: Integer): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Create('foo');")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNewInstanceOfAncestorTypeInMethodShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    function Add(A: Integer; B: Integer): Integer;")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("function ECalculatorError.Add(A: Integer; B: Integer): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Exception.Create('foo'); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testImplicitSelfCallInMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    function Add(A: Integer; B: Integer): Integer;")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("function ECalculatorError.Add(A: Integer; B: Integer): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Create(A, B);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testExplicitSelfCallInMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    function Add(A: Integer; B: Integer): Integer;")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("function ECalculatorError.Add(A: Integer; B: Integer): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  Self.Create(A, B);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNewInstanceOfSelfTypeInMethodShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    function Add(A: Integer; B: Integer): Integer;")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("function ECalculatorError.Add(A: Integer; B: Integer): Integer;")
+                .appendImpl("begin")
+                .appendImpl("  ECalculatorError.Create(A, B); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testNewInstanceOfSelfTypeInConstructorShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new MissingRaiseCheck())
+        .withStandardLibraryUnit(sysUtils())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses System.SysUtils;")
+                .appendDecl("type")
+                .appendDecl("  ECalculatorError = class(Exception)")
+                .appendDecl("  public")
+                .appendDecl("    constructor CreateFmt(A: Integer; B: Integer);")
+                .appendDecl("    constructor Create(A: Integer; B: Integer);")
+                .appendDecl("  end;")
+                .appendImpl("constructor ECalculatorError.CreateFmt(A: Integer; B: Integer);")
+                .appendImpl("begin")
+                .appendImpl("  ECalculatorError.Create(A, B); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }
