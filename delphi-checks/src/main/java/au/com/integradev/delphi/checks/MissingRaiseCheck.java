@@ -55,30 +55,54 @@ public class MissingRaiseCheck extends DelphiCheck {
     return context;
   }
 
-  private boolean isExceptionConstructorInvocation(ExpressionNode expression) {
-    if (!(expression instanceof PrimaryExpressionNode)
-        || !(expression.getChild(0) instanceof NameReferenceNode)) {
-      return false;
-    }
+  private boolean isExceptionType(Type type) {
+    return type.is(BASE_EXCEPTION) || type.isDescendantOf(BASE_EXCEPTION);
+  }
 
-    NameDeclaration declaration =
-        ((NameReferenceNode) expression.getChild(0)).getLastName().getNameDeclaration();
+  private RoutineNameDeclaration getConstructor(NameReferenceNode nameReference) {
+    NameDeclaration declaration = nameReference.getNameDeclaration();
     if (!(declaration instanceof RoutineNameDeclaration)) {
-      return false;
+      // Not an invocation
+      return null;
     }
 
     RoutineNameDeclaration routineDeclaration = (RoutineNameDeclaration) declaration;
-    if (routineDeclaration.getRoutineKind() != RoutineKind.CONSTRUCTOR) {
+    return routineDeclaration.getRoutineKind() == RoutineKind.CONSTRUCTOR
+        ? routineDeclaration
+        : null;
+  }
+
+  private Type getType(NameReferenceNode nameReference) {
+    NameDeclaration declaration = nameReference.getNameDeclaration();
+    if (!(declaration instanceof TypeNameDeclaration)) {
+      // Type could not be resolved
+      return null;
+    }
+
+    return ((TypeNameDeclaration) declaration).getType();
+  }
+
+  private boolean isExceptionConstructorInvocation(ExpressionNode expression) {
+    if (!(expression instanceof PrimaryExpressionNode)
+        || !(expression.getChild(0) instanceof NameReferenceNode)) {
+      // Not a name reference
       return false;
     }
 
-    TypeNameDeclaration typeDecl = routineDeclaration.getTypeDeclaration();
-    if (typeDecl == null) {
+    NameReferenceNode lastName = ((NameReferenceNode) expression.getChild(0)).getLastName();
+    NameReferenceNode prevName = lastName.prevName();
+    if (prevName == null) {
+      // Not a qualified reference
       return false;
     }
 
-    Type type = typeDecl.getType();
+    RoutineNameDeclaration constructorDeclaration = getConstructor(lastName);
+    if (constructorDeclaration == null) {
+      // Not a constructor
+      return false;
+    }
 
-    return type.is(BASE_EXCEPTION) || type.isDescendantOf(BASE_EXCEPTION);
+    Type constructingType = getType(prevName);
+    return constructingType != null && isExceptionType(constructingType);
   }
 }
