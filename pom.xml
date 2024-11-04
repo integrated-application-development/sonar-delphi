@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.com.integradev.delphi</groupId>
   <artifactId>delphi</artifactId>
-  <version>1.10.0</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
   <name>SonarDelphi</name>
   <description>Code Analyzer for Delphi</description>
