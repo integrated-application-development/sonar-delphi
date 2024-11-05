@@ -22,9 +22,13 @@
  */
 package au.com.integradev.delphi.checks;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableSortedSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -48,12 +52,30 @@ public class MixedNamesCheck extends DelphiCheck {
   private static final String MESSAGE = "Avoid mixing names (found: \"%s\" expected: \"%s\").";
   private static final String QUICK_FIX_MESSAGE = "Correct to \"%s\"";
 
+  private Set<String> excludedSet;
+
+  @RuleProperty(
+      key = "excludedNames",
+      description = "List of names to ignore, separated by a comma.")
+  public String excludedNames = "";
+
+  @Override
+  public void start(DelphiCheckContext context) {
+    excludedSet =
+        ImmutableSortedSet.copyOf(
+            String.CASE_INSENSITIVE_ORDER, Splitter.on(',').trimResults().split(excludedNames));
+  }
+
   @Override
   public DelphiCheckContext visit(NameReferenceNode reference, DelphiCheckContext context) {
     NameDeclaration declaration = reference.getNameDeclaration();
     NameOccurrence occurrence = reference.getNameOccurrence();
 
     if (declaration != null) {
+      if (excludedSet.contains(occurrence.getImage())) {
+        return context;
+      }
+
       if (declaration instanceof UnitImportNameDeclaration) {
         // Checks the occurrence against the original unit declaration instead of the import
         // declaration
