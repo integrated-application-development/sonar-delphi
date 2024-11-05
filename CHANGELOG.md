@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `RedundantJump` analysis rule, which flags redundant jump statements, e.g., `Continue`, `Exit`.
 - `LoopExecutingAtMostOnce` analysis rule, which flags loop statements that can execute at most once.
+- `excludedNames` rule property to the `MixedNames` rule.
 - **API:** `RepeatStatementNode::getGuardExpression` method.
 - **API:** `RepeatStatementNode::getStatementList` method.
 - **API:** `CaseStatementNode::getSelectorExpression` method.

@@ -23,8 +23,47 @@ import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class MixedNamesCheckTest {
+  private static DelphiCheck createCheck() {
+    MixedNamesCheck check = new MixedNamesCheck();
+    check.excludedNames = "Foo,Bar";
+    return check;
+  }
+
+  @Test
+  void testNamesInExcludedListShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: Boolean;")
+                .appendImpl("  Bar: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  foo := True;")
+                .appendImpl("  BAR := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testDifferentlyCasedNameFromExcludedListShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  FOO: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  foo := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
   @Test
   void testMatchingVarNamesShouldNotAddIssue() {
     CheckVerifier.newVerifier()
