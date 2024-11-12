@@ -783,7 +783,24 @@ public class NameResolver {
   }
 
   private boolean handleDefaultArrayProperties(ArrayAccessorNode accessor) {
-    if (!declarations.isEmpty() && isArrayProperty(Iterables.getLast(declarations))) {
+    if (!declarations.isEmpty()
+        && declarations.stream().allMatch(NameResolver::isDefaultArrayProperty)) {
+      Type type = currentType;
+      if (type.isClassReference()) {
+        type = ((ClassReferenceType) type).classType();
+      } else if (type.isProcedural()) {
+        type = ((ProceduralType) type).returnType();
+      }
+
+      if (type.isStruct()) {
+        StructType structType = (StructType) TypeUtils.findBaseType(type);
+        NameDeclaration declaration = Iterables.getLast(declarations);
+        ((StructTypeImpl) structType)
+            .findDefaultArrayProperties().stream()
+                .filter(property -> property.getName().equalsIgnoreCase(declaration.getName()))
+                .forEach(declarations::add);
+      }
+
       // An explicit array property access can be handled by argument disambiguation.
       return false;
     }
@@ -828,6 +845,11 @@ public class NameResolver {
   private static boolean isArrayProperty(NameDeclaration declaration) {
     return declaration instanceof PropertyNameDeclaration
         && ((PropertyNameDeclaration) declaration).isArrayProperty();
+  }
+
+  private static boolean isDefaultArrayProperty(NameDeclaration declaration) {
+    return isArrayProperty(declaration)
+        && ((PropertyNameDeclaration) declaration).isDefaultProperty();
   }
 
   void disambiguateImplicitEmptyArgumentList() {

@@ -83,4 +83,26 @@ class ExplicitDefaultPropertyReferenceCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testExplicitDefaultPropertyAccessOnOverloadedParentPropertyShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ExplicitDefaultPropertyReferenceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    property Baz[Index: Integer]: TObject; default;")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class(TFoo)")
+                .appendDecl("    property Baz[Name: string]: TObject; default;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Test(Bar: TBar);")
+                .appendImpl("var")
+                .appendImpl("  Obj: TObject;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := Bar.Baz[0]; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }
