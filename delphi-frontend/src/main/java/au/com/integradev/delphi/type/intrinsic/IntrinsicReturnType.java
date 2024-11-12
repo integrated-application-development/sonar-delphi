@@ -26,6 +26,7 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.STRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODESTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDECHAR;
 
+import au.com.integradev.delphi.compiler.Architecture;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.type.TypeImpl;
 import au.com.integradev.delphi.type.factory.ArrayOption;
@@ -96,19 +97,37 @@ public abstract class IntrinsicReturnType extends TypeImpl {
     return new ArgumentByIndexReturnType(index);
   }
 
+  private static Type getOpenArraySizeType(TypeFactory typeFactory) {
+    if (((TypeFactoryImpl) typeFactory).getToolchain().architecture == Architecture.X86) {
+      return typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    } else {
+      return typeFactory.getIntrinsic(
+          ((TypeFactoryImpl) typeFactory).getCompilerVersion().compareTo(VERSION_ATHENS) >= 0
+              ? IntrinsicType.NATIVEINT
+              : IntrinsicType.INTEGER);
+    }
+  }
+
+  private static Type getDynamicArraySizeType(TypeFactory typeFactory) {
+    if (((TypeFactoryImpl) typeFactory).getToolchain().architecture == Architecture.X86) {
+      return typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+    } else {
+      return typeFactory.getIntrinsic(IntrinsicType.NATIVEINT);
+    }
+  }
+
   private static final class LengthReturnType extends IntrinsicReturnType {
     private final Type byteType;
     private final Type integerType;
+
     private final Type openArraySizeType;
+    private final Type dynamicArraySizeType;
 
     private LengthReturnType(TypeFactory typeFactory) {
       this.byteType = typeFactory.getIntrinsic(IntrinsicType.BYTE);
       this.integerType = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
-      this.openArraySizeType =
-          typeFactory.getIntrinsic(
-              ((TypeFactoryImpl) typeFactory).getCompilerVersion().compareTo(VERSION_ATHENS) >= 0
-                  ? IntrinsicType.NATIVEINT
-                  : IntrinsicType.INTEGER);
+      this.openArraySizeType = getOpenArraySizeType(typeFactory);
+      this.dynamicArraySizeType = getDynamicArraySizeType(typeFactory);
     }
 
     @Override
@@ -118,6 +137,8 @@ public abstract class IntrinsicReturnType extends TypeImpl {
         return byteType;
       } else if (type.isOpenArray()) {
         return openArraySizeType;
+      } else if (type.isDynamicArray()) {
+        return dynamicArraySizeType;
       } else {
         return integerType;
       }
@@ -127,14 +148,12 @@ public abstract class IntrinsicReturnType extends TypeImpl {
   private static final class HighLowReturnType extends IntrinsicReturnType {
     private final Type integerType;
     private final Type openArraySizeType;
+    private final Type dynamicArraySizeType;
 
     private HighLowReturnType(TypeFactory typeFactory) {
       this.integerType = typeFactory.getIntrinsic(IntrinsicType.INTEGER);
-      this.openArraySizeType =
-          typeFactory.getIntrinsic(
-              ((TypeFactoryImpl) typeFactory).getCompilerVersion().compareTo(VERSION_ATHENS) >= 0
-                  ? IntrinsicType.NATIVEINT
-                  : IntrinsicType.INTEGER);
+      this.openArraySizeType = getOpenArraySizeType(typeFactory);
+      this.dynamicArraySizeType = getDynamicArraySizeType(typeFactory);
     }
 
     @Override
@@ -147,6 +166,8 @@ public abstract class IntrinsicReturnType extends TypeImpl {
 
       if (type.isOpenArray()) {
         type = openArraySizeType;
+      } else if (type.isDynamicArray()) {
+        type = dynamicArraySizeType;
       } else if (type.isArray() || type.isString()) {
         type = integerType;
       }

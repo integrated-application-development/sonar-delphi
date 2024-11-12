@@ -35,83 +35,118 @@ import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class IntrinsicReturnTypeTest {
-  private static final TypeFactory TYPE_FACTORY =
+  private static final TypeFactory TYPE_FACTORY_32_ALEXANDRIA =
+      new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionNumber("35.0"));
+  private static final TypeFactory TYPE_FACTORY_32_ATHENS =
+      new TypeFactoryImpl(Toolchain.DCC32, CompilerVersion.fromVersionNumber("36.0"));
+  private static final TypeFactory TYPE_FACTORY_64_ALEXANDRIA =
       new TypeFactoryImpl(Toolchain.DCC64, CompilerVersion.fromVersionNumber("35.0"));
-  private static final TypeFactory TYPE_FACTORY_ATHENS =
+  private static final TypeFactory TYPE_FACTORY_64_ATHENS =
       new TypeFactoryImpl(Toolchain.DCC64, CompilerVersion.fromVersionNumber("36.0"));
 
   @Test
   void testLength() {
-    Type shortString = TYPE_FACTORY.getIntrinsic(IntrinsicType.SHORTSTRING);
-    Type ansiString = TYPE_FACTORY.getIntrinsic(IntrinsicType.ANSISTRING);
-    Type wideString = TYPE_FACTORY.getIntrinsic(IntrinsicType.WIDESTRING);
-    Type unicodeString = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
+    Type shortString = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.SHORTSTRING);
+    Type ansiString = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.ANSISTRING);
+    Type wideString = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.WIDESTRING);
+    Type unicodeString = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.UNICODESTRING);
     Type fixedArray =
-        ((TypeFactoryImpl) TYPE_FACTORY).array(null, ansiString, Set.of(ArrayOption.FIXED));
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, ansiString, Set.of(ArrayOption.FIXED));
     Type dynamicArray =
-        ((TypeFactoryImpl) TYPE_FACTORY).array(null, ansiString, Set.of(ArrayOption.DYNAMIC));
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, ansiString, Set.of(ArrayOption.DYNAMIC));
     Type openArray =
-        ((TypeFactoryImpl) TYPE_FACTORY).array(null, ansiString, Set.of(ArrayOption.OPEN));
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, ansiString, Set.of(ArrayOption.OPEN));
 
-    var length35 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY);
-    assertThat(length35.getReturnType(List.of(shortString)).is(IntrinsicType.BYTE)).isTrue();
-    assertThat(length35.getReturnType(List.of(ansiString)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length35.getReturnType(List.of(wideString)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length35.getReturnType(List.of(unicodeString)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length35.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length35.getReturnType(List.of(dynamicArray)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length35.getReturnType(List.of(openArray)).is(IntrinsicType.INTEGER)).isTrue();
+    var rio32 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY_32_ALEXANDRIA);
+    assertThat(rio32.getReturnType(List.of(shortString)).is(IntrinsicType.BYTE)).isTrue();
+    assertThat(rio32.getReturnType(List.of(ansiString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(rio32.getReturnType(List.of(wideString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(rio32.getReturnType(List.of(unicodeString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(rio32.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(rio32.getReturnType(List.of(dynamicArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(rio32.getReturnType(List.of(openArray)).is(IntrinsicType.INTEGER)).isTrue();
 
-    var length36 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY_ATHENS);
-    assertThat(length36.getReturnType(List.of(shortString)).is(IntrinsicType.BYTE)).isTrue();
-    assertThat(length36.getReturnType(List.of(ansiString)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length36.getReturnType(List.of(wideString)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length36.getReturnType(List.of(unicodeString)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length36.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length36.getReturnType(List.of(dynamicArray)).is(IntrinsicType.INTEGER)).isTrue();
-    assertThat(length36.getReturnType(List.of(openArray)).is(IntrinsicType.NATIVEINT)).isTrue();
+    var rio64 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY_64_ALEXANDRIA);
+    assertThat(rio64.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(rio64.getReturnType(List.of(dynamicArray)).is(IntrinsicType.NATIVEINT)).isTrue();
+    assertThat(rio64.getReturnType(List.of(openArray)).is(IntrinsicType.INTEGER)).isTrue();
+
+    var alex32 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY_32_ATHENS);
+    assertThat(alex32.getReturnType(List.of(shortString)).is(IntrinsicType.BYTE)).isTrue();
+    assertThat(alex32.getReturnType(List.of(ansiString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(alex32.getReturnType(List.of(wideString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(alex32.getReturnType(List.of(unicodeString)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(alex32.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(alex32.getReturnType(List.of(dynamicArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(alex32.getReturnType(List.of(openArray)).is(IntrinsicType.INTEGER)).isTrue();
+
+    var alex64 = (IntrinsicReturnType) IntrinsicReturnType.length(TYPE_FACTORY_64_ATHENS);
+    assertThat(alex64.getReturnType(List.of(fixedArray)).is(IntrinsicType.INTEGER)).isTrue();
+    assertThat(alex64.getReturnType(List.of(dynamicArray)).is(IntrinsicType.NATIVEINT)).isTrue();
+    assertThat(alex64.getReturnType(List.of(openArray)).is(IntrinsicType.NATIVEINT)).isTrue();
   }
 
   @Test
   void testHighLow() {
-    Type smallInt = TYPE_FACTORY.getIntrinsic(IntrinsicType.SMALLINT);
-    Type integer = TYPE_FACTORY.getIntrinsic(IntrinsicType.INTEGER);
-    Type nativeInt = TYPE_FACTORY.getIntrinsic(IntrinsicType.NATIVEINT);
-    Type string = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
-    Type array = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.DYNAMIC));
-    Type openArray = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.OPEN));
+    Type smallInt = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.SMALLINT);
+    Type integer = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.INTEGER);
+    Type string = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.UNICODESTRING);
+    Type fixedArray =
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, string, Set.of(ArrayOption.FIXED));
+    Type dynamicArray =
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, string, Set.of(ArrayOption.DYNAMIC));
+    Type openArray =
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, string, Set.of(ArrayOption.OPEN));
     Type classType = mock(StructType.class);
-    Type classReference = TYPE_FACTORY.classOf("Foo", classType);
+    Type classReference = TYPE_FACTORY_64_ALEXANDRIA.classOf("Foo", classType);
 
-    var high35 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY);
-    assertThat(high35.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
-    assertThat(high35.getReturnType(List.of(integer)).is(integer)).isTrue();
-    assertThat(high35.getReturnType(List.of(string)).is(integer)).isTrue();
-    assertThat(high35.getReturnType(List.of(array)).is(integer)).isTrue();
-    assertThat(high35.getReturnType(List.of(openArray)).is(integer)).isTrue();
-    assertThat(high35.getReturnType(List.of(classReference))).isSameAs(classType);
+    var rio32 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY_32_ALEXANDRIA);
+    assertThat(rio32.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
+    assertThat(rio32.getReturnType(List.of(integer)).is(integer)).isTrue();
+    assertThat(rio32.getReturnType(List.of(string)).is(integer)).isTrue();
+    assertThat(rio32.getReturnType(List.of(fixedArray)).is(integer)).isTrue();
+    assertThat(rio32.getReturnType(List.of(dynamicArray)).is(integer)).isTrue();
+    assertThat(rio32.getReturnType(List.of(openArray)).is(integer)).isTrue();
+    assertThat(rio32.getReturnType(List.of(classReference))).isSameAs(classType);
 
-    var high36 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY_ATHENS);
-    assertThat(high36.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
-    assertThat(high36.getReturnType(List.of(integer)).is(integer)).isTrue();
-    assertThat(high36.getReturnType(List.of(string)).is(integer)).isTrue();
-    assertThat(high36.getReturnType(List.of(array)).is(integer)).isTrue();
-    assertThat(high36.getReturnType(List.of(openArray)).is(nativeInt)).isTrue();
-    assertThat(high36.getReturnType(List.of(classReference))).isSameAs(classType);
+    var rio64 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY_64_ALEXANDRIA);
+    assertThat(rio64.getReturnType(List.of(fixedArray)).is(integer)).isTrue();
+    assertThat(rio64.getReturnType(List.of(dynamicArray)).is(IntrinsicType.NATIVEINT)).isTrue();
+    assertThat(rio64.getReturnType(List.of(openArray)).is(integer)).isTrue();
+
+    var alex32 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY_32_ATHENS);
+    assertThat(alex32.getReturnType(List.of(smallInt)).is(smallInt)).isTrue();
+    assertThat(alex32.getReturnType(List.of(integer)).is(integer)).isTrue();
+    assertThat(alex32.getReturnType(List.of(string)).is(integer)).isTrue();
+    assertThat(alex32.getReturnType(List.of(fixedArray)).is(integer)).isTrue();
+    assertThat(alex32.getReturnType(List.of(dynamicArray)).is(integer)).isTrue();
+    assertThat(alex32.getReturnType(List.of(openArray)).is(integer)).isTrue();
+    assertThat(alex32.getReturnType(List.of(classReference))).isSameAs(classType);
+
+    var alex64 = (IntrinsicReturnType) IntrinsicReturnType.high(TYPE_FACTORY_64_ATHENS);
+    assertThat(alex64.getReturnType(List.of(fixedArray)).is(integer)).isTrue();
+    assertThat(alex64.getReturnType(List.of(dynamicArray)).is(IntrinsicType.NATIVEINT)).isTrue();
+    assertThat(alex64.getReturnType(List.of(openArray)).is(IntrinsicType.NATIVEINT)).isTrue();
   }
 
   @Test
   void testRoundTrunc() {
-    Type single = TYPE_FACTORY.getIntrinsic(IntrinsicType.SINGLE);
-    Type int64 = TYPE_FACTORY.getIntrinsic(IntrinsicType.INT64);
-    var round = (IntrinsicReturnType) IntrinsicReturnType.round(TYPE_FACTORY);
+    Type single = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.SINGLE);
+    Type int64 = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.INT64);
+    var round = (IntrinsicReturnType) IntrinsicReturnType.round(TYPE_FACTORY_64_ALEXANDRIA);
     assertThat(round.getReturnType(List.of(single)).is(int64)).isTrue();
   }
 
   @Test
   void testClassReferenceValueType() {
     Type classType = mock(StructType.class);
-    Type classReference = TYPE_FACTORY.classOf("Foo", classType);
+    Type classReference = TYPE_FACTORY_64_ALEXANDRIA.classOf("Foo", classType);
 
     var classReferenceValue = (IntrinsicReturnType) IntrinsicReturnType.classReferenceValue();
     assertThat(classReferenceValue.getReturnType(List.of(classReference))).isSameAs(classType);
@@ -120,18 +155,20 @@ class IntrinsicReturnTypeTest {
 
   @Test
   void testConcat() {
-    Type ansiString = TYPE_FACTORY.getIntrinsic(IntrinsicType.ANSISTRING);
-    Type string = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
-    Type stringAlias = TYPE_FACTORY.strongAlias("StringAlias", string);
-    Type stringAlias2 = TYPE_FACTORY.strongAlias("StringAlias2", stringAlias);
-    Type ansiChar = TYPE_FACTORY.getIntrinsic(IntrinsicType.ANSICHAR);
-    Type wideChar = TYPE_FACTORY.getIntrinsic(IntrinsicType.WIDECHAR);
-    Type array = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.DYNAMIC));
-    Type arrayConstructor = TYPE_FACTORY.arrayConstructor(List.of(string));
-    Type variant = TYPE_FACTORY.getIntrinsic(IntrinsicType.VARIANT);
-    Type oleVariant = TYPE_FACTORY.getIntrinsic(IntrinsicType.OLEVARIANT);
+    Type ansiString = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.ANSISTRING);
+    Type string = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.UNICODESTRING);
+    Type stringAlias = TYPE_FACTORY_64_ALEXANDRIA.strongAlias("StringAlias", string);
+    Type stringAlias2 = TYPE_FACTORY_64_ALEXANDRIA.strongAlias("StringAlias2", stringAlias);
+    Type ansiChar = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.ANSICHAR);
+    Type wideChar = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.WIDECHAR);
+    Type array =
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, string, Set.of(ArrayOption.DYNAMIC));
+    Type arrayConstructor = TYPE_FACTORY_64_ALEXANDRIA.arrayConstructor(List.of(string));
+    Type variant = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.VARIANT);
+    Type oleVariant = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.OLEVARIANT);
 
-    var concat = (IntrinsicReturnType) IntrinsicReturnType.concat(TYPE_FACTORY);
+    var concat = (IntrinsicReturnType) IntrinsicReturnType.concat(TYPE_FACTORY_64_ALEXANDRIA);
     assertThat(concat.getReturnType(List.of(ansiString, ansiString)).is(ansiString)).isTrue();
     assertThat(concat.getReturnType(List.of(ansiChar, ansiString)).is(ansiString)).isTrue();
     assertThat(concat.getReturnType(List.of(string, string)).is(string)).isTrue();
@@ -157,17 +194,19 @@ class IntrinsicReturnTypeTest {
 
   @Test
   void testCopy() {
-    Type ansiString = TYPE_FACTORY.getIntrinsic(IntrinsicType.ANSISTRING);
-    Type string = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
-    Type stringAlias = TYPE_FACTORY.strongAlias("StringAlias", string);
-    Type ansiChar = TYPE_FACTORY.getIntrinsic(IntrinsicType.ANSICHAR);
-    Type wideChar = TYPE_FACTORY.getIntrinsic(IntrinsicType.WIDECHAR);
-    Type array = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.DYNAMIC));
-    Type arrayConstructor = TYPE_FACTORY.arrayConstructor(List.of(string));
-    Type variant = TYPE_FACTORY.getIntrinsic(IntrinsicType.VARIANT);
-    Type oleVariant = TYPE_FACTORY.getIntrinsic(IntrinsicType.OLEVARIANT);
+    Type ansiString = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.ANSISTRING);
+    Type string = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.UNICODESTRING);
+    Type stringAlias = TYPE_FACTORY_64_ALEXANDRIA.strongAlias("StringAlias", string);
+    Type ansiChar = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.ANSICHAR);
+    Type wideChar = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.WIDECHAR);
+    Type array =
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, string, Set.of(ArrayOption.DYNAMIC));
+    Type arrayConstructor = TYPE_FACTORY_64_ALEXANDRIA.arrayConstructor(List.of(string));
+    Type variant = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.VARIANT);
+    Type oleVariant = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.OLEVARIANT);
 
-    var copy = (IntrinsicReturnType) IntrinsicReturnType.copy(TYPE_FACTORY);
+    var copy = (IntrinsicReturnType) IntrinsicReturnType.copy(TYPE_FACTORY_64_ALEXANDRIA);
     assertThat(copy.getReturnType(List.of(ansiString)).is(ansiString)).isTrue();
     assertThat(copy.getReturnType(List.of(string)).is(string)).isTrue();
     assertThat(copy.getReturnType(List.of(stringAlias)).is(stringAlias)).isTrue();
@@ -181,11 +220,13 @@ class IntrinsicReturnTypeTest {
 
   @Test
   void testSlice() {
-    Type string = TYPE_FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING);
-    Type array = ((TypeFactoryImpl) TYPE_FACTORY).array(null, string, Set.of(ArrayOption.DYNAMIC));
-    Type arrayConstructor = TYPE_FACTORY.arrayConstructor(List.of(string));
+    Type string = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.UNICODESTRING);
+    Type array =
+        ((TypeFactoryImpl) TYPE_FACTORY_64_ALEXANDRIA)
+            .array(null, string, Set.of(ArrayOption.DYNAMIC));
+    Type arrayConstructor = TYPE_FACTORY_64_ALEXANDRIA.arrayConstructor(List.of(string));
 
-    var slice = (IntrinsicReturnType) IntrinsicReturnType.slice(TYPE_FACTORY);
+    var slice = (IntrinsicReturnType) IntrinsicReturnType.slice(TYPE_FACTORY_64_ALEXANDRIA);
     assertThat(slice.getReturnType(List.of(array)).isOpenArray()).isTrue();
     assertThat(slice.getReturnType(List.of(string)).isUnknown()).isTrue();
     assertThat(slice.getReturnType(List.of(arrayConstructor)).isUnknown()).isTrue();
@@ -193,8 +234,8 @@ class IntrinsicReturnTypeTest {
 
   @Test
   void testArgumentByIndex() {
-    Type shortInt = TYPE_FACTORY.getIntrinsic(IntrinsicType.SHORTINT);
-    Type smallInt = TYPE_FACTORY.getIntrinsic(IntrinsicType.SMALLINT);
+    Type shortInt = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.SHORTINT);
+    Type smallInt = TYPE_FACTORY_64_ALEXANDRIA.getIntrinsic(IntrinsicType.SMALLINT);
 
     var argumentByIndex0 = (IntrinsicReturnType) IntrinsicReturnType.argumentByIndex(0);
     assertThat(argumentByIndex0.getReturnType(List.of(shortInt, smallInt)).is(shortInt)).isTrue();
