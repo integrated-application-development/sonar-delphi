@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Incorrect return types for `Length`, `High`, and `Low` on open/dynamic arrays depending on the
+  compiler version and toolchain.
+
 ## [1.11.0] - 2024-11-04
 
 ### Added

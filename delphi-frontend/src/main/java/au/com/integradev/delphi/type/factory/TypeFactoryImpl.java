@@ -569,4 +569,8 @@ public class TypeFactoryImpl implements TypeFactory {
   public CompilerVersion getCompilerVersion() {
     return compilerVersion;
   }
+
+  public Toolchain getToolchain() {
+    return toolchain;
+  }
 }
