@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Incorrect return types for `Length`, `High`, and `Low` on open/dynamic arrays depending on the
   compiler version and toolchain.
+- Name resolution failures on explicit references to default array properties with overloads on
+  ancestor types.
 
 ## [1.11.0] - 2024-11-04
 

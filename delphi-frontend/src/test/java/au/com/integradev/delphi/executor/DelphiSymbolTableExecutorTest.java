@@ -871,6 +871,22 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testDefaultArrayProperties() {
+    execute("properties/DefaultArrayProperties.pas");
+    verifyUsages(12, 14, reference(44, 15), reference(48, 19));
+    verifyUsages(18, 14, reference(45, 15), reference(49, 19));
+    verifyUsages(19, 14, reference(46, 15), reference(50, 19));
+  }
+
+  @Test
+  void testDefaultClassArrayProperties() {
+    execute("properties/DefaultClassArrayProperties.pas");
+    verifyUsages(12, 20, reference(46, 16), reference(50, 24));
+    verifyUsages(18, 20, reference(47, 16), reference(51, 24));
+    verifyUsages(19, 20, reference(48, 16), reference(52, 24));
+  }
+
+  @Test
   void testSimpleOverloads() {
     execute("overloads/Simple.pas");
     verifyUsages(8, 10, reference(14, 10), reference(35, 2));
