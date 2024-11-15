@@ -348,4 +348,9 @@ class GrammarTest {
   void testConditionalAsm() {
     assertParsed("ConditionalAsm.pas");
   }
+
+  @Test
+  void testSemicolonSeparatedGenericArguments() {
+    assertParsed("SemicolonSeparatedGenericArguments.pas");
+  }
 }

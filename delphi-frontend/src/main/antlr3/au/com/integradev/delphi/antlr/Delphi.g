@@ -724,7 +724,12 @@ genericConstraint            : typeReference
                              | CONSTRUCTOR
                              ;
 genericArguments             : '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>'
-                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> typeReferenceOrStringOrFile typeReferenceOrStringOrFile*)
+                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>')
+                             ;
+routineNameGenericArguments  : '<' typeReferenceOrStringOrFile (commaOrSemicolon typeReferenceOrStringOrFile)* '>'
+                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' typeReferenceOrStringOrFile (commaOrSemicolon typeReferenceOrStringOrFile)* '>')
+                             ;
+commaOrSemicolon             : ',' | ';'
                              ;
 
 //----------------------------------------------------------------------------
@@ -810,7 +815,7 @@ routineDeclarationName       : (
                              )
                              -> ^(TkRoutineName<RoutineNameNodeImpl> $decl)
                              ;
-routineImplementationName    : nameReference -> ^(TkRoutineName<RoutineNameNodeImpl> nameReference)
+routineImplementationName    : routineNameReference -> ^(TkRoutineName<RoutineNameNodeImpl> routineNameReference)
                              ;
 routineKey                   : PROCEDURE
                              | CONSTRUCTOR
@@ -1181,6 +1186,12 @@ simpleNameReference          : ident
                              ;
 extendedNameReference        : extendedIdent genericArguments? ('.' extendedNameReference)?
                              -> ^(TkNameReference<NameReferenceNodeImpl> extendedIdent genericArguments? ('.' extendedNameReference)?)
+                             ;
+routineNameReference         : ident routineNameGenericArguments? ('.' extendedRoutineNameReference)?
+                             -> ^(TkNameReference<NameReferenceNodeImpl> ident routineNameGenericArguments? ('.' extendedRoutineNameReference)?)
+                             ;
+extendedRoutineNameReference : extendedIdent routineNameGenericArguments? ('.' extendedRoutineNameReference)?
+                             -> ^(TkNameReference<NameReferenceNodeImpl> extendedIdent routineNameGenericArguments? ('.' extendedRoutineNameReference)?)
                              ;
 extendedIdent                : ident
                              | keywords -> ^({changeTokenType(TkIdentifier)})

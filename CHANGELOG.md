@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Parsing errors on semicolon-delimited generic type parameters in routine implementation headers.
 - Incorrect return types for `Length`, `High`, and `Low` on open/dynamic arrays depending on the
   compiler version and toolchain.
 - Name resolution failures on explicit references to default array properties with overloads on
