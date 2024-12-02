@@ -19,8 +19,10 @@
 package org.sonar.plugins.communitydelphi.api.check;
 
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.directive.CompilerDirectiveParser;
@@ -30,6 +32,15 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 /** Context injected in check classes and used to report issues. */
 public interface DelphiCheckContext {
+  /**
+   * Identifier of the file. The only guarantee is that it is unique in the project. You should not
+   * assume it is a file:// URI.
+   *
+   * @return identifier of the file
+   * @see InputFile#uri()
+   */
+  URI getUri();
+
   /**
    * Returns the parsed ast of the current file.
    *

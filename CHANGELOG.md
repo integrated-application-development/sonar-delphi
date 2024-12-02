@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `DelphiCheckContext::getUri` method.
+
 ### Fixed
 
 - Parsing errors on semicolon-delimited generic type parameters in routine implementation headers.

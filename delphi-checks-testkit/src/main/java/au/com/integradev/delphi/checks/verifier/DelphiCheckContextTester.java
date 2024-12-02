@@ -22,6 +22,7 @@ import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.reporting.DelphiIssueBuilderImpl;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,6 +57,11 @@ class DelphiCheckContextTester implements DelphiCheckContext {
     this.delphiFile = delphiFile;
     this.compilerDirectiveParser = compilerDirectiveParser;
     this.checkRegistrar = checkRegistrar;
+  }
+
+  @Override
+  public URI getUri() {
+    return delphiFile.getInputFile().uri();
   }
 
   @Override
