@@ -21,6 +21,7 @@ package au.com.integradev.delphi.check;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.reporting.DelphiIssueBuilderImpl;
+import java.net.URI;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
@@ -49,6 +50,11 @@ public class DelphiCheckContextImpl implements DelphiCheckContext {
     this.delphiFile = delphiFile;
     this.compilerDirectiveParser = compilerDirectiveParser;
     this.checkRegistrar = checkRegistrar;
+  }
+
+  @Override
+  public URI getUri() {
+    return delphiFile.getInputFile().uri();
   }
 
   @Override
