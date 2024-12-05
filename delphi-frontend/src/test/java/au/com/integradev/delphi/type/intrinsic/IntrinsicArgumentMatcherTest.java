@@ -63,14 +63,14 @@ class IntrinsicArgumentMatcherTest {
 
     assertThat(matches(LIKE_DYNAMIC_ARRAY, dynamicArray)).isTrue();
     assertThat(matches(LIKE_DYNAMIC_ARRAY, arrayConstructor)).isTrue();
-    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.ANSICHAR))).isTrue();
-    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.WIDECHAR))).isTrue();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.ANSICHAR))).isFalse();
+    assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.WIDECHAR))).isFalse();
     assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.SHORTSTRING)))
-        .isTrue();
+        .isFalse();
     assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.ANSISTRING)))
-        .isTrue();
+        .isFalse();
     assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.getIntrinsic(IntrinsicType.UNICODESTRING)))
-        .isTrue();
+        .isFalse();
     assertThat(matches(LIKE_DYNAMIC_ARRAY, fixedArray)).isFalse();
     assertThat(matches(LIKE_DYNAMIC_ARRAY, FACTORY.emptySet())).isFalse();
   }

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Various intrinsic routines had incorrect signatures around dynamic and open arrays.
+
 ## [1.12.0] - 2024-12-02
 
 ### Added

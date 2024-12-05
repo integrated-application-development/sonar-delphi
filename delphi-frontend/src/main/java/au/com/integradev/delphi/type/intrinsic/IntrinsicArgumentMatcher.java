@@ -27,12 +27,8 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 public final class IntrinsicArgumentMatcher extends TypeImpl {
   public static final Type LIKE_DYNAMIC_ARRAY =
       new IntrinsicArgumentMatcher(
-          "<dynamic array, array constructor, string, or char>",
-          type ->
-              type.isDynamicArray()
-                  || type.isArrayConstructor()
-                  || type.isString()
-                  || type.isChar());
+          "<dynamic array, array constructor>",
+          type -> type.isDynamicArray() || type.isArrayConstructor());
 
   public static final Type ANY_STRING =
       new IntrinsicArgumentMatcher("<string or char>", type -> type.isString() || type.isChar());
