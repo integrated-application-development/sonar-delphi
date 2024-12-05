@@ -21,6 +21,7 @@ package au.com.integradev.delphi.checks;
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import au.com.integradev.delphi.compiler.CompilerVersion;
+import au.com.integradev.delphi.compiler.Toolchain;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -204,6 +205,80 @@ class PlatformDependentTruncationCheckTest {
                 .appendImpl("  Nat: NativeInt;")
                 .appendImpl("begin")
                 .appendImpl("  Bar(Nat);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntAssignmentInBinaryExpressionShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .withToolchain(Toolchain.DCC64)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Nat := Nat + 1;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntArgumentInBinaryExpressionShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .withToolchain(Toolchain.DCC64)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Bar(Nat: NativeInt);")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Bar(Nat + 1);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntAssignmentInNestedBinaryExpressionShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .withToolchain(Toolchain.DCC64)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Nat := (Nat + 1) + 1;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testPlatformDependentCastInBinaryExpressionShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .withToolchain(Toolchain.DCC64)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Int: Integer;")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  Int := Integer(Nat) + 1;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }

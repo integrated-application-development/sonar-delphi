@@ -23,6 +23,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
@@ -44,7 +45,7 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(AssignmentStatementNode assignment, DelphiCheckContext context) {
-    if (isViolation(assignment.getValue().getType(), assignment.getAssignee().getType())) {
+    if (isViolation(assignment.getValue(), assignment.getAssignee().getType())) {
       reportIssue(context, assignment, MESSAGE);
     }
     return super.visit(assignment, context);
@@ -66,7 +67,7 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
     List<Parameter> parameters = procedural.parameters();
     for (int i = 0; i < arguments.size() && i < parameters.size(); ++i) {
       ExpressionNode argument = arguments.get(i).getExpression();
-      if (isViolation(argument.getType(), parameters.get(i).getType())) {
+      if (isViolation(argument, parameters.get(i).getType())) {
         reportIssue(context, argument, MESSAGE);
       }
     }
@@ -84,8 +85,8 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
     return null;
   }
 
-  private static boolean isViolation(Type from, Type to) {
-    if (!from.isInteger() || !to.isInteger()) {
+  private static boolean isViolation(ExpressionNode from, Type to) {
+    if (!from.getType().isInteger() || !to.isInteger()) {
       return false;
     }
 
@@ -93,7 +94,17 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
       return false;
     }
 
-    return (isNativeInteger(from) && to.size() < 8) || (isNativeInteger(to) && from.size() > 4);
+    return (isNativeInteger(from) && to.size() < 8)
+        || (isNativeInteger(to) && from.getType().size() > 4);
+  }
+
+  private static boolean isNativeInteger(ExpressionNode expression) {
+    expression = expression.skipParentheses();
+    if (expression instanceof BinaryExpressionNode) {
+      BinaryExpressionNode binary = (BinaryExpressionNode) expression;
+      return isNativeInteger(binary.getLeft()) || isNativeInteger(binary.getRight());
+    }
+    return isNativeInteger(expression.getType());
   }
 
   private static boolean isNativeInteger(Type type) {

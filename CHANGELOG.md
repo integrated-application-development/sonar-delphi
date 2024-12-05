@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Various intrinsic routines had incorrect signatures around dynamic and open arrays.
+- False positives around platform-dependent binary expressions in `PlatformDependentTruncation`.
 
 ## [1.12.0] - 2024-12-02
 
