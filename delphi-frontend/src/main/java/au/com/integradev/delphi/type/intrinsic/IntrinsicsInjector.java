@@ -54,6 +54,7 @@ import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
+import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,6 +86,14 @@ public final class IntrinsicsInjector {
 
   private Type type(IntrinsicType type) {
     return typeFactory.getIntrinsic(type);
+  }
+
+  private Type openArraySizeType() {
+    return ((TypeFactoryImpl) typeFactory).openArraySizeType();
+  }
+
+  private Type dynamicArraySizeType() {
+    return ((TypeFactoryImpl) typeFactory).dynamicArraySizeType();
   }
 
   private void buildRoutines() {
@@ -162,6 +171,11 @@ public final class IntrinsicsInjector {
         .param(LIKE_DYNAMIC_ARRAY)
         .variadic(LIKE_DYNAMIC_ARRAY)
         .returns(IntrinsicReturnType.concat(typeFactory));
+    routine("Concat")
+        .param(ANY_STRING)
+        .param(ANY_STRING)
+        .variadic(ANY_STRING)
+        .returns(IntrinsicReturnType.concat(typeFactory));
     routine("Continue");
     routine("Copy")
         .param(type(PANSICHAR))
@@ -174,9 +188,14 @@ public final class IntrinsicsInjector {
         .param(type(INTEGER))
         .returns(IntrinsicReturnType.copy(typeFactory));
     routine("Copy")
+        .param(ANY_STRING)
+        .param(type(INTEGER))
+        .param(type(INTEGER))
+        .returns(IntrinsicReturnType.copy(typeFactory));
+    routine("Copy")
         .param(LIKE_DYNAMIC_ARRAY)
-        .param(type(INTEGER))
-        .param(type(INTEGER))
+        .param(dynamicArraySizeType())
+        .param(dynamicArraySizeType())
         .required(1)
         .returns(IntrinsicReturnType.copy(typeFactory));
     routine("Dec").varParam(ANY_ORDINAL).param(type(INTEGER)).required(1);
@@ -184,7 +203,11 @@ public final class IntrinsicsInjector {
     routine("Default")
         .param(ANY_CLASS_REFERENCE)
         .returns(IntrinsicReturnType.classReferenceValue());
-    routine("Delete").varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER)).param(type(INTEGER));
+    routine("Delete").varParam(ANY_STRING).param(type(INTEGER)).param(type(INTEGER));
+    routine("Delete")
+        .varParam(LIKE_DYNAMIC_ARRAY)
+        .param(dynamicArraySizeType())
+        .param(dynamicArraySizeType());
     routine("Dispose").varParam(ANY_POINTER);
     routine("Eof").varParam(ANY_FILE).required(0).returns(type(BOOLEAN));
     routine("Eoln").varParam(ANY_FILE).required(0).returns(type(BOOLEAN));
@@ -209,7 +232,11 @@ public final class IntrinsicsInjector {
     routine("Inc").varParam(ANY_TYPED_POINTER).param(type(INTEGER)).required(1);
     routine("Include").varParam(ANY_SET).param(ANY_ORDINAL);
     routine("Initialize").varParam(TypeFactory.untypedType()).param(type(NATIVEINT)).required(1);
-    routine("Insert").param(LIKE_DYNAMIC_ARRAY).varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER));
+    routine("Insert").param(ANY_STRING).varParam(ANY_STRING).param(type(INTEGER));
+    routine("Insert")
+        .param(LIKE_DYNAMIC_ARRAY)
+        .varParam(LIKE_DYNAMIC_ARRAY)
+        .param(dynamicArraySizeType());
     routine("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
     routine("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
     routine("Length").param(type(SHORTSTRING)).returns(IntrinsicReturnType.length(typeFactory));
@@ -251,7 +278,11 @@ public final class IntrinsicsInjector {
     routine("Seek").varParam(ANY_FILE).param(type(INTEGER));
     routine("SeekEof").varParam(ANY_TEXT_FILE).required(0).returns(type(BOOLEAN));
     routine("SeekEoln").varParam(ANY_TEXT_FILE).required(0).returns(type(BOOLEAN));
-    routine("SetLength").varParam(LIKE_DYNAMIC_ARRAY).param(type(INTEGER)).variadic(type(INTEGER));
+    routine("SetLength").varParam(ANY_STRING).param(type(INTEGER));
+    routine("SetLength")
+        .varParam(LIKE_DYNAMIC_ARRAY)
+        .param(dynamicArraySizeType())
+        .variadic(dynamicArraySizeType());
     routine("SetString").varParam(ANY_STRING).param(type(PANSICHAR)).param(type(INTEGER));
     routine("SetString").varParam(ANY_STRING).param(type(PWIDECHAR)).param(type(INTEGER));
     routine("SetTextBuf")
@@ -262,7 +293,7 @@ public final class IntrinsicsInjector {
     routine("SizeOf").param(TypeFactory.untypedType()).returns(type(INTEGER));
     routine("Slice")
         .varParam(ANY_ARRAY)
-        .param(type(INTEGER))
+        .param(openArraySizeType())
         .returns(IntrinsicReturnType.slice(typeFactory));
     routine("Sqr").param(type(EXTENDED)).returns(type(EXTENDED));
     routine("Sqr").param(type(INTEGER)).returns(type(INTEGER));

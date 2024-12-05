@@ -84,6 +84,8 @@ public class TypeFactoryImpl implements TypeFactory {
   private final EnumMap<IntrinsicType, Type> intrinsicTypes;
   private final IntegerSubrangeType anonymousUInt15;
   private final IntegerSubrangeType anonymousUInt31;
+  private final IntegerType openArraySizeType;
+  private final IntegerType dynamicArraySizeType;
   private final PointerType nilPointer;
   private final FileType untypedFile;
   private final CollectionType emptySet;
@@ -110,6 +112,18 @@ public class TypeFactoryImpl implements TypeFactory {
             ":AnonymousUInt31",
             BigInteger.ZERO,
             ((IntegerType) getIntrinsic(IntrinsicType.INTEGER)).max());
+
+    if (toolchain.architecture == Architecture.X86) {
+      this.openArraySizeType = (IntegerType) getIntrinsic(IntrinsicType.INTEGER);
+      this.dynamicArraySizeType = (IntegerType) getIntrinsic(IntrinsicType.INTEGER);
+    } else {
+      IntrinsicType openArraySizeIntrinsic =
+          compilerVersion.compareTo(VERSION_ATHENS) >= 0
+              ? IntrinsicType.NATIVEINT
+              : IntrinsicType.INTEGER;
+      this.openArraySizeType = (IntegerType) getIntrinsic(openArraySizeIntrinsic);
+      this.dynamicArraySizeType = (IntegerType) getIntrinsic(IntrinsicType.NATIVEINT);
+    }
   }
 
   private boolean isReal48Bit() {
@@ -556,6 +570,14 @@ public class TypeFactoryImpl implements TypeFactory {
     return anonymousUInt31;
   }
 
+  public IntegerType openArraySizeType() {
+    return openArraySizeType;
+  }
+
+  public IntegerType dynamicArraySizeType() {
+    return dynamicArraySizeType;
+  }
+
   @Override
   public IntegerType integerFromLiteralValue(BigInteger value) {
     return intrinsicTypes.values().stream()
@@ -564,13 +586,5 @@ public class TypeFactoryImpl implements TypeFactory {
         .filter(type -> type.min().compareTo(value) <= 0 && type.max().compareTo(value) >= 0)
         .findFirst()
         .orElseThrow(IllegalStateException::new);
-  }
-
-  public CompilerVersion getCompilerVersion() {
-    return compilerVersion;
-  }
-
-  public Toolchain getToolchain() {
-    return toolchain;
   }
 }
