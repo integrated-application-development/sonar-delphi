@@ -28,6 +28,14 @@ body:
       required: true
   - type: input
     attributes:
+      label: Delphi version
+      description: >
+        Specify the version of Delphi you are using.
+      placeholder: "12.2"
+    validations:
+      required: true
+  - type: input
+    attributes:
       label: SonarQube version
       description: >
         If applicable, specify the SonarQube version you are using.
