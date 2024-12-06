@@ -782,26 +782,31 @@ public class NameResolver {
     }
   }
 
+  private void addExplicitDefaultArrayPropertyDeclarations() {
+    if (!declarations.stream().allMatch(NameResolver::isDefaultArrayProperty)) {
+      return;
+    }
+
+    Type type = currentType;
+    if (type.isClassReference()) {
+      type = ((ClassReferenceType) type).classType();
+    } else if (type.isProcedural()) {
+      type = ((ProceduralType) type).returnType();
+    }
+
+    if (type.isStruct()) {
+      StructType structType = (StructType) TypeUtils.findBaseType(type);
+      NameDeclaration declaration = Iterables.getLast(declarations);
+      ((StructTypeImpl) structType)
+          .findDefaultArrayProperties().stream()
+              .filter(property -> property.getName().equalsIgnoreCase(declaration.getName()))
+              .forEach(declarations::add);
+    }
+  }
+
   private boolean handleDefaultArrayProperties(ArrayAccessorNode accessor) {
-    if (!declarations.isEmpty()
-        && declarations.stream().allMatch(NameResolver::isDefaultArrayProperty)) {
-      Type type = currentType;
-      if (type.isClassReference()) {
-        type = ((ClassReferenceType) type).classType();
-      } else if (type.isProcedural()) {
-        type = ((ProceduralType) type).returnType();
-      }
-
-      if (type.isStruct()) {
-        StructType structType = (StructType) TypeUtils.findBaseType(type);
-        NameDeclaration declaration = Iterables.getLast(declarations);
-        ((StructTypeImpl) structType)
-            .findDefaultArrayProperties().stream()
-                .filter(property -> property.getName().equalsIgnoreCase(declaration.getName()))
-                .forEach(declarations::add);
-      }
-
-      // An explicit array property access can be handled by argument disambiguation.
+    if (!declarations.isEmpty() && isArrayProperty(Iterables.getLast(declarations))) {
+      addExplicitDefaultArrayPropertyDeclarations();
       return false;
     }
 
