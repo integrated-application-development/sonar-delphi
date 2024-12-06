@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.1] - 2024-12-06
+
 ### Fixed
 
 - Various intrinsic routines had incorrect signatures around dynamic and open arrays.
@@ -1414,7 +1416,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.1...HEAD
+[1.12.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.0...v1.12.1
 [1.12.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.9.0...v1.10.0
