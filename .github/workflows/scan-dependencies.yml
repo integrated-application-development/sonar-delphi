@@ -1,0 +1,27 @@
+name: Scan Dependencies
+
+on:
+  push:
+    paths:
+      - '**/pom.xml'
+    branches:
+      - 'master'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Maven Install
+        run: mvn clean install --batch-mode --no-transfer-progress -DskipTests=true
+      - name: Submit Dependency Snapshot
+        uses: advanced-security/maven-dependency-submission-action@v4
