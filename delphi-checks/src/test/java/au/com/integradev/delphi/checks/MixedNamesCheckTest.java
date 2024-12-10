@@ -23,8 +23,30 @@ import au.com.integradev.delphi.checks.verifier.CheckVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class MixedNamesCheckTest {
+  private static DelphiCheck createCheck() {
+    MixedNamesCheck check = new MixedNamesCheck();
+    check.excludedNames = "b_IgnoreBool";
+    return check;
+  }
+
+  @Test
+  void testNameInExcludedListShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  b_IGNOREBOOL: Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  b_IgnoreBool := True;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
   @Test
   void testMatchingVarNamesShouldNotAddIssue() {
     CheckVerifier.newVerifier()
