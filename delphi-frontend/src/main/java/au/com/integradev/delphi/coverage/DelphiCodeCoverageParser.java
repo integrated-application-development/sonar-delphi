@@ -24,7 +24,11 @@ package au.com.integradev.delphi.coverage;
 
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import com.google.common.base.Splitter;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSortedMap;
 import java.io.File;
+import java.util.Map;
+import java.util.function.Supplier;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,9 +46,19 @@ import org.xml.sax.SAXException;
 public class DelphiCodeCoverageParser implements DelphiCoverageParser {
   private static final Logger LOG = LoggerFactory.getLogger(DelphiCodeCoverageParser.class);
   private final DelphiProjectHelper delphiProjectHelper;
+  private final Supplier<Map<String, InputFile>> fileNameToInputFile;
 
   public DelphiCodeCoverageParser(DelphiProjectHelper delphiProjectHelper) {
     this.delphiProjectHelper = delphiProjectHelper;
+    this.fileNameToInputFile = Suppliers.memoize(this::indexInputFiles);
+  }
+
+  private Map<String, InputFile> indexInputFiles() {
+    var builder = ImmutableSortedMap.<String, InputFile>orderedBy(String.CASE_INSENSITIVE_ORDER);
+    for (InputFile inputFile : delphiProjectHelper.inputFiles()) {
+      builder.put(inputFile.filename(), inputFile);
+    }
+    return builder.build();
   }
 
   @Override
@@ -89,12 +103,12 @@ public class DelphiCodeCoverageParser implements DelphiCoverageParser {
 
   private void parseFileNode(SensorContext sensorContext, Node srcFile) {
     String fileName = srcFile.getAttributes().getNamedItem("name").getTextContent();
-    InputFile sourceFile = delphiProjectHelper.getFileFromBasename(fileName);
-
+    InputFile sourceFile = fileNameToInputFile.get().get(fileName);
     if (sourceFile == null) {
       LOG.debug("File not found in project: {}", fileName);
       return;
     }
+
     LOG.debug("Parsing line hit information for file: {}", fileName);
 
     NewCoverage newCoverage = sensorContext.newCoverage();

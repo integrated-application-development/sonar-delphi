@@ -365,10 +365,6 @@ public class DelphiProjectHelper {
     return fs.inputFile(fs.predicates().hasURI(Paths.get(path).toUri()));
   }
 
-  public InputFile getFileFromBasename(String basename) {
-    return fs.inputFile(fs.predicates().hasFilename(basename));
-  }
-
   public String encoding() {
     return fs != null ? fs.encoding().name() : Charset.defaultCharset().name();
   }
