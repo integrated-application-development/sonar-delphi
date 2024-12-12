@@ -56,6 +56,8 @@ class DelphiCoverageToolParserTest {
   private static final String INVALID_STRUCTURE = BASE_REPORT_PATH + "InvalidStructure.xml";
   private static final String NORMAL_COVERAGE = BASE_REPORT_PATH + "NormalCoverage.xml";
   private static final String NORMAL_COVERAGE_PART_2 = BASE_REPORT_PATH + "NormalCoverage2.xml";
+  private static final String MISMATCHED_CASING_COVERAGE =
+      BASE_REPORT_PATH + "MismatchedCasingCoverage.xml";
 
   private static final String GLOBALS_FILENAME = "Globals.pas";
   private static final String GLOBALS_FILE_KEY = ":" + GLOBALS_FILENAME;
@@ -92,10 +94,11 @@ class DelphiCoverageToolParserTest {
     delphiProjectHelper =
         new DelphiProjectHelper(
             context.config(), context.fileSystem(), environmentVariableProvider);
-    parser = new DelphiCodeCoverageParser(delphiProjectHelper);
 
     addFile(ROOT_NAME + "/" + GLOBALS_FILENAME);
     addFile(ROOT_NAME + "/" + MAIN_WINDOW_FILENAME);
+
+    parser = new DelphiCodeCoverageParser(delphiProjectHelper);
   }
 
   @Test
@@ -122,6 +125,22 @@ class DelphiCoverageToolParserTest {
     assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo((Integer) 1);
     assertThat(context.lineHits(GLOBALS_FILE_KEY, 17)).isEqualTo((Integer) 1);
     assertThat(context.lineHits(GLOBALS_FILE_KEY, 23)).isEqualTo((Integer) 1);
+  }
+
+  @Test
+  void testMismatchedCasingAllowed() {
+    parser.parse(context, DelphiUtils.getResource(MISMATCHED_CASING_COVERAGE));
+
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo(1);
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 17)).isEqualTo(1);
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 23)).isZero();
+
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 31)).isEqualTo(1);
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 36)).isEqualTo(1);
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 37)).isEqualTo(1);
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 38)).isEqualTo(1);
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 39)).isEqualTo(1);
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 40)).isEqualTo(1);
   }
 
   void testReportFileIsIgnored(File file) {
