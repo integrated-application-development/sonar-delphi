@@ -26,6 +26,8 @@ import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,7 @@ import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext.Location;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 
@@ -54,6 +57,57 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDecla
 public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
   private static final Set<String> EXIT_METHODS =
       Set.of("System.Exit", "System.Break", "System.Halt");
+
+  private final Deque<DelphiNode> loopStack = new ArrayDeque<>();
+  private final Deque<List<Location>> violations = new ArrayDeque<>();
+
+  // Loops
+
+  private void pushLoop(DelphiNode node) {
+    loopStack.push(node);
+    violations.push(new ArrayList<>());
+  }
+
+  private void popLoop(DelphiCheckContext context) {
+    DelphiNode loop = loopStack.pop();
+    List<Location> loopViolations = violations.pop();
+    if (loop == null || loopViolations == null || loopViolations.isEmpty()) {
+      return;
+    }
+
+    context
+        .newIssue()
+        .onNode(loop)
+        .withMessage("Ensure this loop doesn't execute just once.")
+        .withSecondaries(loopViolations)
+        .report();
+  }
+
+  @Override
+  public DelphiCheckContext visit(ForStatementNode node, DelphiCheckContext data) {
+    pushLoop(node);
+    DelphiCheckContext result = super.visit(node, data);
+    popLoop(data);
+    return result;
+  }
+
+  @Override
+  public DelphiCheckContext visit(RepeatStatementNode node, DelphiCheckContext data) {
+    pushLoop(node);
+    DelphiCheckContext result = super.visit(node, data);
+    popLoop(data);
+    return result;
+  }
+
+  @Override
+  public DelphiCheckContext visit(WhileStatementNode node, DelphiCheckContext data) {
+    pushLoop(node);
+    DelphiCheckContext result = super.visit(node, data);
+    popLoop(data);
+    return result;
+  }
+
+  // Statements
 
   @Override
   public DelphiCheckContext visit(RaiseStatementNode node, DelphiCheckContext context) {
@@ -82,24 +136,22 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
   private DelphiCheckContext visitExitingNode(
       DelphiNode node, DelphiCheckContext context, String description) {
     DelphiNode enclosingStatement = findEnclosingStatement(node);
-    DelphiNode enclosingLoop = findEnclosingLoop(node);
+    DelphiNode enclosingLoop = findEnclosingLoop();
     if (enclosingStatement == null || enclosingLoop == null) {
       return context;
     }
 
     if (isViolation(enclosingLoop, node) && violationInRelevantStatement(enclosingStatement)) {
-      reportIssue(
-          context,
-          node,
-          String.format("Remove this \"%s\" statement or make it conditional.", description));
+      List<Location> violationLocations = violations.peek();
+      if (violationLocations == null) {
+        return context;
+      }
+      violationLocations.add(
+          new Location(
+              String.format("Remove this \"%s\" statement or make it conditional.", description),
+              node));
     }
     return context;
-  }
-
-  private static boolean isLoopNode(DelphiNode node) {
-    return node instanceof RepeatStatementNode
-        || node instanceof ForStatementNode
-        || node instanceof WhileStatementNode;
   }
 
   private static DelphiNode findEnclosingStatement(DelphiNode node) {
@@ -117,12 +169,8 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     return parent;
   }
 
-  private static DelphiNode findEnclosingLoop(DelphiNode node) {
-    DelphiNode parent = node;
-    while (parent != null && !isLoopNode(parent)) {
-      parent = parent.getFirstParentOfType(StatementNode.class);
-    }
-    return parent;
+  private DelphiNode findEnclosingLoop() {
+    return loopStack.peek();
   }
 
   private static boolean isViolation(DelphiNode loop, DelphiNode jump) {

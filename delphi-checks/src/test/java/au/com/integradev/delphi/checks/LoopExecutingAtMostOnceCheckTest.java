@@ -22,7 +22,9 @@ import static java.lang.String.format;
 
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.checks.verifier.CheckVerifier;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -49,12 +51,35 @@ class LoopExecutingAtMostOnceCheckTest {
     ExpectingNoIssues
   }
 
-  private void doLoopTest(LoopType loopType, List<String> loopContents, Issues issues) {
+  private void doSimpleCompliantLoopTest(LoopType loopType, String loopContents) {
+    doLoopTest(loopType, Collections.emptyList(), List.of(loopContents));
+  }
+
+  private void doSimpleNoncompliantLoopTest(LoopType loopType, String loopContents) {
+    doLoopTest(loopType, List.of(1), List.of(loopContents));
+  }
+
+  private void doLoopTest(LoopType loopType, List<String> loopContents) {
+    doLoopTest(loopType, Collections.emptyList(), loopContents);
+  }
+
+  private void doLoopTest(
+      LoopType loopType, List<Integer> secondaryLocations, List<String> loopContents) {
+    String annotation;
+    if (!secondaryLocations.isEmpty()) {
+      annotation =
+          "// Noncompliant "
+              + secondaryLocations.stream()
+                  .map(location -> "(" + location + ")")
+                  .collect(Collectors.joining(" "));
+    } else {
+      annotation = "// Compliant";
+    }
     var unitBuilder =
         new DelphiTestUnitBuilder()
             .appendImpl("procedure Test;")
             .appendImpl("begin")
-            .appendImpl(format("  %s", loopType.loopHeader));
+            .appendImpl(format("  %s %s", loopType.loopHeader, annotation));
     for (String loopLine : loopContents) {
       unitBuilder.appendImpl("    " + loopLine);
     }
@@ -64,7 +89,7 @@ class LoopExecutingAtMostOnceCheckTest {
         CheckVerifier.newVerifier()
             .withCheck(new LoopExecutingAtMostOnceCheck())
             .onFile(unitBuilder);
-    if (issues == Issues.ExpectingIssues) {
+    if (!secondaryLocations.isEmpty()) {
       verifier.verifyIssues();
     } else {
       verifier.verifyNoIssues();
@@ -100,59 +125,59 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalContinueShouldNotAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("Continue; // Compliant"), Issues.ExpectingNoIssues);
+    doSimpleCompliantLoopTest(loopType, "Continue;");
   }
 
   // Break
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalBreakShouldAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("Break; // Noncompliant"), Issues.ExpectingIssues);
+    doSimpleNoncompliantLoopTest(loopType, "Break;");
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalBreakShouldNotAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("if A then Break; // Compliant"), Issues.ExpectingNoIssues);
+    doSimpleCompliantLoopTest(loopType, "if A then Break;");
   }
 
   // Exit
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalExitShouldAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("Exit; // Noncompliant"), Issues.ExpectingIssues);
+    doSimpleNoncompliantLoopTest(loopType, "Exit;");
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalExitShouldNotAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("if A then Exit; // Compliant"), Issues.ExpectingNoIssues);
+    doSimpleCompliantLoopTest(loopType, "if A then Exit;");
   }
 
   // Halt
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalHaltShouldAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("Halt; // Noncompliant"), Issues.ExpectingIssues);
+    doSimpleNoncompliantLoopTest(loopType, "Halt;");
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalHaltShouldNotAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("if A then Halt; // Compliant"), Issues.ExpectingNoIssues);
+    doSimpleCompliantLoopTest(loopType, "if A then Halt;");
   }
 
   // Raise
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalRaiseShouldAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("raise A; // Noncompliant"), Issues.ExpectingIssues);
+    doSimpleNoncompliantLoopTest(loopType, "raise A;");
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalRaiseShouldNotAddIssue(LoopType loopType) {
-    doLoopTest(loopType, List.of("if A then raise B; // Compliant"), Issues.ExpectingNoIssues);
+    doSimpleCompliantLoopTest(loopType, "if A then raise B;");
   }
 
   // Goto
@@ -160,16 +185,23 @@ class LoopExecutingAtMostOnceCheckTest {
   @EnumSource(value = LoopType.class)
   void testUnconditionalGotoBeforeShouldNotAddIssue(LoopType loopType) {
     doRoutineTest(
-        List.of("before:", loopType.loopHeader, "  goto before; // Compliant", loopType.loopFooter),
+        List.of(
+            "before:",
+            loopType.loopHeader + " // Compliant",
+            "  goto before;",
+            loopType.loopFooter),
         Issues.ExpectingNoIssues);
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
-  void testUnconditionalGotoAfterShouldNotAddIssue(LoopType loopType) {
+  void testUnconditionalGotoAfterShouldAddIssue(LoopType loopType) {
     doRoutineTest(
         List.of(
-            loopType.loopHeader, "  goto after; // Noncompliant", loopType.loopFooter, "after:"),
+            loopType.loopHeader + " // Noncompliant (1)", //
+            "  goto after;", // Secondary
+            loopType.loopFooter,
+            "after:"),
         Issues.ExpectingIssues);
   }
 
@@ -178,8 +210,8 @@ class LoopExecutingAtMostOnceCheckTest {
   void testConditionalGotoShouldNotAddIssue(LoopType loopType) {
     doRoutineTest(
         List.of(
-            "before:",
-            loopType.loopHeader,
+            "before:", //
+            loopType.loopHeader + " // Compliant",
             "  if A then goto before; // Compliant",
             loopType.loopFooter),
         Issues.ExpectingNoIssues);
@@ -190,10 +222,10 @@ class LoopExecutingAtMostOnceCheckTest {
   void testGotoBeforeExitShouldAddIssue(LoopType loopType) {
     doRoutineTest(
         List.of(
-            "before:",
+            "before:", //
             "Exit;",
-            loopType.loopHeader,
-            "  goto before; // Noncompliant",
+            loopType.loopHeader + " // Noncompliant (1)",
+            "  goto before; // Secondary",
             loopType.loopFooter),
         Issues.ExpectingIssues);
   }
@@ -203,12 +235,12 @@ class LoopExecutingAtMostOnceCheckTest {
   void testGotoMultiBlockInfiniteLoopShouldAddIssue(LoopType loopType) {
     doRoutineTest(
         List.of(
-            "before:",
+            "before:", //
             "Writeln('A');",
             "middle:",
             "goto before;",
-            loopType.loopHeader,
-            "  goto middle; // Noncompliant",
+            loopType.loopHeader + " // Noncompliant (1)",
+            "  goto middle; // Secondary",
             loopType.loopFooter),
         Issues.ExpectingIssues);
   }
@@ -218,10 +250,10 @@ class LoopExecutingAtMostOnceCheckTest {
   void testGotoSameBlockInfiniteLoopShouldAddIssue(LoopType loopType) {
     doRoutineTest(
         List.of(
-            "before:",
+            "before:", //
             "goto before;",
-            loopType.loopHeader,
-            "  goto before; // Noncompliant",
+            loopType.loopHeader + " // Noncompliant (1)",
+            "  goto before; // Secondary",
             loopType.loopFooter),
         Issues.ExpectingIssues);
   }
@@ -232,8 +264,12 @@ class LoopExecutingAtMostOnceCheckTest {
   void testIfBreakElseExitShouldAddIssue(LoopType loopType) {
     doLoopTest(
         loopType,
-        List.of("if A then", "  Break // Noncompliant", "else", "  Exit; // Noncompliant"),
-        Issues.ExpectingIssues);
+        List.of(2, 4),
+        List.of(
+            "if A then", //
+            "  Break // Secondary",
+            "else",
+            "  Exit; // Secondary"));
   }
 
   @ParameterizedTest
@@ -241,8 +277,11 @@ class LoopExecutingAtMostOnceCheckTest {
   void testIfBreakElseIfExitShouldNotAddIssue(LoopType loopType) {
     doLoopTest(
         loopType,
-        List.of("if A then", "  Break // Compliant", "else if B then", "  Exit; // Compliant"),
-        Issues.ExpectingNoIssues);
+        List.of(
+            "if A then", //
+            "  Break // Compliant",
+            "else if B then",
+            "  Exit; // Compliant"));
   }
 
   @ParameterizedTest
@@ -250,13 +289,13 @@ class LoopExecutingAtMostOnceCheckTest {
   void testIfExitElseIfBreakThenExitShouldAddIssue(LoopType loopType) {
     doLoopTest(
         loopType,
+        List.of(5),
         List.of(
-            "if A then",
+            "if A then", //
             "  Exit // Compliant",
             "else if B then",
             "  Break; // Compliant",
-            "Exit // Noncompliant"),
-        Issues.ExpectingIssues);
+            "Exit // Secondary"));
   }
 
   @ParameterizedTest
@@ -264,8 +303,11 @@ class LoopExecutingAtMostOnceCheckTest {
   void testIfContinueElseExitShouldNotAddIssue(LoopType loopType) {
     doLoopTest(
         loopType,
-        List.of("if A then", "  Continue", "else", "  Exit; // Compliant"),
-        Issues.ExpectingNoIssues);
+        List.of(
+            "if A then", //
+            "  Continue // Compliant",
+            "else",
+            "  Exit; // Compliant"));
   }
 
   @ParameterizedTest
@@ -273,7 +315,10 @@ class LoopExecutingAtMostOnceCheckTest {
   void testConditionalBreakAndUnconditionalExitShouldAddIssue(LoopType loopType) {
     doLoopTest(
         loopType,
-        List.of("if B then", "  Break; // Compliant", "Exit; // Noncompliant"),
-        Issues.ExpectingIssues);
+        List.of(3),
+        List.of(
+            "if B then", //
+            "  Break;",
+            "Exit; // Secondary"));
   }
 }
