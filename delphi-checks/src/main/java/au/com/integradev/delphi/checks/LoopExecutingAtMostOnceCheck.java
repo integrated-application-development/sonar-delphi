@@ -25,10 +25,11 @@ import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Terminated;
+import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.sonar.check.Rule;
@@ -148,14 +149,13 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
 
   private static Optional<Block> getTerminatorBlock(ControlFlowGraph cfg, DelphiNode loop) {
     return cfg.getBlocks().stream()
-        .filter(block -> block.getSuccessors() instanceof Terminated)
-        .filter(
-            terminated -> loop.equals(((Terminated) terminated.getSuccessors()).getTerminator()))
+        .filter(Terminated.class::isInstance)
+        .filter(terminated -> loop.equals(((Terminated) terminated).getTerminator()))
         .findFirst();
   }
 
   private static boolean hasPredecessorInBlock(Block block, DelphiNode loop) {
-    for (Block predecessor : block.getPredecessorBlocks()) {
+    for (Block predecessor : block.getPredecessors()) {
       List<DelphiNode> predecessorElements = predecessor.getElements();
       if (predecessorElements.isEmpty()) {
         return hasPredecessorInBlock(predecessor, loop);
@@ -182,12 +182,12 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     if (jumpBlock.isEmpty()) {
       return false;
     }
-    Block jumpTarget = jumpBlock.get().getSuccessorBlocks().iterator().next();
+    Block jumpTarget = jumpBlock.get().getSuccessors().iterator().next();
     if (jumpTarget == null) {
       return false;
     }
-    if (loopBlock.getSuccessors() instanceof Branch) {
-      Branch loopBranch = (Branch) loopBlock.getSuccessors();
+    if (loopBlock instanceof Branch) {
+      Branch loopBranch = (Branch) loopBlock;
       if (loopBranch.getTerminator() instanceof RepeatStatementNode
           && loopBranch.getFalseBlock().equals(jumpTarget)) {
         return true;
@@ -195,16 +195,14 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     }
 
     Set<Block> visited = new HashSet<>();
-    PriorityQueue<Block> queue =
-        new PriorityQueue<>((a, b) -> Math.abs(a.getId() - b.getId() - loopBlock.getId()));
+    Queue<Block> queue = new ArrayDeque<>();
     queue.add(jumpTarget);
     while (!queue.isEmpty()) {
       Block search = queue.poll();
       if (search.equals(loopBlock)) {
         return true;
       }
-      if (search.getSuccessorBlocks().size() == 1
-          && search.getSuccessorBlocks().contains(jumpTarget)) {
+      if (search.getSuccessors().size() == 1 && search.getSuccessors().contains(jumpTarget)) {
         return false;
       }
 
@@ -212,7 +210,7 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
         return false;
       }
       visited.add(search);
-      search.getSuccessorBlocks().stream().filter(b -> !visited.contains(b)).forEach(queue::add);
+      search.getSuccessors().stream().filter(b -> !visited.contains(b)).forEach(queue::add);
     }
 
     return false;
