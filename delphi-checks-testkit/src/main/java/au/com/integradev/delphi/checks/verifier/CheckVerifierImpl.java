@@ -49,6 +49,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -161,28 +162,74 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   private static void verifyIssuesOnLinesInternal(
       List<Issue> issues, List<IssueExpectation> expectedIssues) {
-    List<Integer> unexpectedLines = new ArrayList<>();
-    List<Integer> expectedLines =
-        expectedIssues.stream().map(IssueExpectation::getBeginLine).collect(Collectors.toList());
+    List<IssueExpectation> unexpectedIssues = new ArrayList<>();
+    List<IssueExpectation> expectations = new ArrayList<>(expectedIssues);
 
     for (Issue issue : issues) {
-      IssueLocation issueLocation = issue.primaryLocation();
-
-      TextRange textRange = issueLocation.textRange();
-      if (textRange == null) {
-        throw new AssertionError(
-            String.format(
-                "Expected issues to be raised at line level, not at %s level",
-                issueLocation.inputComponent().isFile() ? "file" : "project"));
-      }
-
-      Integer line = textRange.start().line();
-      if (!expectedLines.remove(line)) {
-        unexpectedLines.add(line);
+      Optional<IssueExpectation> expectedIssue = findIssue(issue, expectations);
+      if (expectedIssue.isPresent()) {
+        expectations.remove(expectedIssue.get());
+      } else {
+        unexpectedIssues.add(expectationFromIssue(issue));
       }
     }
 
-    assertIssueMismatchesEmpty(expectedLines, unexpectedLines);
+    assertIssueMismatchesEmpty(expectations, unexpectedIssues);
+  }
+
+  private static IssueExpectation expectationFromIssue(Issue issue) {
+    int primaryLine = getStartingLine(issue.primaryLocation());
+    List<List<Integer>> actualLines =
+        issue.flows().stream()
+            .map(
+                flow ->
+                    flow.locations().stream()
+                        .map(location -> getStartingLine(location) - primaryLine)
+                        .collect(Collectors.toList()))
+            .sorted(Comparator.comparing(list -> list.get(0)))
+            .collect(Collectors.toList());
+    return new IssueExpectation(primaryLine, actualLines);
+  }
+
+  private static Optional<IssueExpectation> findIssue(
+      Issue issue, List<IssueExpectation> expectations) {
+    int line = getStartingLine(issue.primaryLocation());
+
+    for (IssueExpectation expectation : expectations) {
+      if (expectation.getBeginLine() != line
+          || expectation.getFlowLines().size() != issue.flows().size()) {
+        continue;
+      }
+      List<List<Integer>> expectedLines =
+          expectation.getFlowLines().stream()
+              .map(
+                  offsets ->
+                      offsets.stream().map(offset -> offset + line).collect(Collectors.toList()))
+              .collect(Collectors.toList());
+      List<List<Integer>> actualLines =
+          issue.flows().stream()
+              .map(
+                  flow ->
+                      flow.locations().stream()
+                          .map(CheckVerifierImpl::getStartingLine)
+                          .collect(Collectors.toList()))
+              .collect(Collectors.toList());
+      if (expectedLines.equals(actualLines)) {
+        return Optional.of(expectation);
+      }
+    }
+    return Optional.empty();
+  }
+
+  private static int getStartingLine(IssueLocation location) {
+    TextRange textRange = location.textRange();
+    if (textRange == null) {
+      throw new AssertionError(
+          String.format(
+              "Expected issues to be raised at line level, not at %s level",
+              location.inputComponent().isFile() ? "file" : "project"));
+    }
+    return textRange.start().line();
   }
 
   private void assertQuickFixes(
@@ -324,17 +371,17 @@ public class CheckVerifierImpl implements CheckVerifier {
   }
 
   private static void assertIssueMismatchesEmpty(
-      List<Integer> expectedLines, List<Integer> unexpectedLines) {
-    if (!expectedLines.isEmpty() || !unexpectedLines.isEmpty()) {
+      List<IssueExpectation> expectedIssues, List<IssueExpectation> unexpectedIssues) {
+    if (!expectedIssues.isEmpty() || !unexpectedIssues.isEmpty()) {
       StringBuilder message = new StringBuilder("Issues were ");
-      if (!expectedLines.isEmpty()) {
-        message.append("expected at ").append(expectedLines);
+      if (!expectedIssues.isEmpty()) {
+        message.append("expected at ").append(expectedIssues);
       }
-      if (!expectedLines.isEmpty() && !unexpectedLines.isEmpty()) {
+      if (!expectedIssues.isEmpty() && !unexpectedIssues.isEmpty()) {
         message.append(", ");
       }
-      if (!unexpectedLines.isEmpty()) {
-        message.append("unexpected at ").append(unexpectedLines);
+      if (!unexpectedIssues.isEmpty()) {
+        message.append("unexpected at ").append(unexpectedIssues);
       }
       throw new AssertionError(message.toString());
     }
