@@ -64,11 +64,11 @@ public class RedundantJumpCheck extends DelphiCheck {
   }
 
   private void checkBlock(Block block, DelphiCheckContext context) {
-    if (!(block.getSuccessors() instanceof UnconditionalJump)) {
+    if (!(block instanceof UnconditionalJump)) {
       return;
     }
 
-    UnconditionalJump jump = (UnconditionalJump) block.getSuccessors();
+    UnconditionalJump jump = (UnconditionalJump) block;
     Block successorWithoutJump = jump.getSuccessorWithoutJump();
     DelphiNode terminator = jump.getTerminator();
 
@@ -95,22 +95,22 @@ public class RedundantJumpCheck extends DelphiCheck {
   }
 
   private static Block getFinallyBlock(Block block) {
-    return block.getSuccessorBlocks().stream()
-        .filter(successor -> successor.getSuccessors() instanceof ExitPath)
+    return block.getSuccessors().stream()
+        .filter(ExitPath.class::isInstance)
         .findFirst()
         .orElse(null);
   }
 
   private static boolean isInViolatingTryFinally(Block finallyBlock) {
-    while (finallyBlock.getSuccessorBlocks().size() == 1) {
-      Block finallySuccessor = finallyBlock.getSuccessorBlocks().iterator().next();
-      if (!(finallySuccessor.getSuccessors() instanceof ExitPath)) {
+    while (finallyBlock.getSuccessors().size() == 1) {
+      Block finallySuccessor = finallyBlock.getSuccessors().iterator().next();
+      if (!(finallySuccessor instanceof ExitPath)) {
         break;
       }
       finallyBlock = finallySuccessor;
     }
-    return finallyBlock.getSuccessorBlocks().size() == 1
-        && finallyBlock.getSuccessorBlocks().iterator().next().getSuccessorBlocks().isEmpty();
+    return finallyBlock.getSuccessors().size() == 1
+        && finallyBlock.getSuccessors().iterator().next().getSuccessors().isEmpty();
   }
 
   private static boolean isContinueOrExit(DelphiNode node) {
@@ -148,7 +148,7 @@ public class RedundantJumpCheck extends DelphiCheck {
 
   private static Block nonEmptySuccessor(Block initialBlock) {
     Block result = initialBlock;
-    while (result.getElements().isEmpty() && result.getSuccessors() instanceof Linear) {
+    while (result.getElements().isEmpty() && result instanceof Linear) {
       result = ((Linear) result).getSuccessor();
     }
     return result;
