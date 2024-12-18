@@ -21,15 +21,21 @@ package au.com.integradev.delphi.checks.verifier;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class Expectations {
   private static final Pattern NONCOMPLIANT_PATTERN =
-      Pattern.compile("(?i)^//\\s*Noncompliant(?:@([-+]\\d+))?\\b");
+      Pattern.compile("(?i)^//\\s*Noncompliant(?:@([-+]\\d+))?\\b(.+)?");
+
+  private static final Pattern FLOW_PATTERN = Pattern.compile("\\s*\\(([^)]*)\\)");
+  private static final Pattern FLOW_LINE_OFFSET_PATTERN =
+      Pattern.compile("\\s*,?\\s*([+-]?\\d+)\\b");
 
   private static final Pattern QUICK_FIX_RANGE_PATTERN =
       Pattern.compile("^([+-]\\d+):(\\d*) to ([+-]\\d+):(\\d*)$");
@@ -128,17 +134,63 @@ class Expectations {
 
   private static IssueExpectation parseNoncompliantComment(int beginLine, MatchResult matchResult) {
     String offset = matchResult.group(1);
+    String flows = matchResult.group(2);
+
+    int lineOffset = parseIssueOffset(offset);
+    List<List<Integer>> flowLines = parseFlows(flows);
+
+    return new IssueExpectation(beginLine + lineOffset, flowLines);
+  }
+
+  private static int parseIssueOffset(String offset) {
     if (offset == null) {
-      return new IssueExpectation(beginLine);
+      return 0;
     }
 
     try {
-      return new IssueExpectation(beginLine + Integer.parseInt(offset));
+      return Integer.parseInt(offset);
     } catch (NumberFormatException e) {
       throw new AssertionError(
           String.format(
               "Failed to parse 'Noncompliant' comment line offset '%s' as an integer.", offset));
     }
+  }
+
+  private static List<List<Integer>> parseFlows(String flows) {
+    List<List<Integer>> flowLines = new ArrayList<>();
+    if (flows == null) {
+      return flowLines;
+    }
+    Matcher flowMatcher = FLOW_PATTERN.matcher(flows);
+    while (flowMatcher.find()) {
+      String flow = flowMatcher.group(1);
+      List<Integer> lines = parseFlowLines(flow);
+      if (!lines.isEmpty()) {
+        flowLines.add(lines);
+      }
+    }
+    flowLines.sort(Comparator.comparing(list -> list.get(0)));
+    return flowLines;
+  }
+
+  private static List<Integer> parseFlowLines(String flow) {
+    List<Integer> lines = new ArrayList<>();
+    if (flow == null) {
+      return lines;
+    }
+    Matcher lineMatcher = FLOW_LINE_OFFSET_PATTERN.matcher(flow);
+    while (lineMatcher.find()) {
+      String flowLineOffset = lineMatcher.group(1);
+      try {
+        lines.add(Integer.parseInt(flowLineOffset));
+      } catch (NumberFormatException e) {
+        throw new AssertionError(
+            String.format(
+                "Failed to parse 'Noncompliant' flow line offset '%s' as an integer.",
+                flowLineOffset));
+      }
+    }
+    return lines;
   }
 
   private static class MatchResultOnLine {

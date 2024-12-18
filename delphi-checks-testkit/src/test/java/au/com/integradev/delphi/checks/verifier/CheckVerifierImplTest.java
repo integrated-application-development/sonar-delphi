@@ -21,14 +21,29 @@ package au.com.integradev.delphi.checks.verifier;
 import static org.assertj.core.api.Assertions.*;
 
 import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext.Location;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFixEdit;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
@@ -367,6 +382,214 @@ class CheckVerifierImplTest {
     assertThatThrownBy(verifier::verifyIssueOnProject).isInstanceOf(AssertionError.class);
   }
 
+  private static Stream<Arguments> validSecondaryLocationsCases() {
+    return Stream.of(
+        Arguments.of(Named.of("InOrder", "(1) (2) (3)"), "(-2) (-1)"),
+        Arguments.of(Named.of("OutOfOrder", "(3) (1) (2)"), "(-1) (-2)"),
+        Arguments.of(Named.of("ExtraSpaces", "   ( 1  )   (2 ) ( 3)"), "(-2   ) (-1  ) "));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("validSecondaryLocationsCases")
+  void testValidSecondaryLocationsOnIssue(String annotation1, String annotation2) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseDirectionalSecondariesOnIntegersCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 2; // Noncompliant " + annotation1)
+                        .appendDecl("  Foo1 = 2;")
+                        .appendDecl("  Foo2 = 2;")
+                        .appendDecl("  Foo3 = 2;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Bar1 = 1;")
+                        .appendDecl("  Bar2 = 1; // Noncompliant " + annotation2));
+
+    assertThatCode(verifier.get()::verifyIssues).doesNotThrowAnyException();
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  private static Stream<Arguments> invalidSecondaryLocationsCases() {
+    return Stream.of(
+        Arguments.of(Named.of("MissingLocation", "(1) (2)"), "(-2)"),
+        Arguments.of(Named.of("ExtraLocation", "(1) (2) (3) (0)"), "(-2) (0) (-1)"),
+        Arguments.of(Named.of("ErroneousFlow", "(1, 0) (2) (3)"), "(-2, 1) (-1)"),
+        Arguments.of(Named.of("MissingLocation", "(1) (3)"), "(-2)"));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("invalidSecondaryLocationsCases")
+  void testInvalidSecondaryLocationsOnIssue(String annotation1, String annotation2) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseDirectionalSecondariesOnIntegersCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 2; // Noncompliant " + annotation1)
+                        .appendDecl("  Foo1 = 2;")
+                        .appendDecl("  Foo2 = 2;")
+                        .appendDecl("  Foo3 = 2;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Bar1 = 1;")
+                        .appendDecl("  Bar2 = 1; // Noncompliant " + annotation2));
+
+    assertThatThrownBy(verifier.get()::verifyIssues)
+        .hasMessageContainingAll("Issues were expected at", "unexpected at")
+        .isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("invalidSecondaryLocationsCases")
+  void testInvalidSecondaryLocationsOnIssueWithOffset(String annotation1, String annotation2) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseDirectionalSecondariesOnIntegersCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 2;")
+                        .appendDecl("  Foo1 = 2; // Noncompliant@-1 " + annotation1)
+                        .appendDecl("  Foo2 = 2;")
+                        .appendDecl("  Foo3 = 2;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Bar1 = 1; // Noncompliant@+1 " + annotation2)
+                        .appendDecl("  Bar2 = 1;"));
+
+    assertThatThrownBy(verifier.get()::verifyIssues)
+        .hasMessageContainingAll("Issues were expected at", "unexpected at")
+        .isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  private static Stream<Arguments> validFlowsLocationsCases() {
+    return Stream.of(
+        Arguments.of(Named.of("InOrder", "(-3, -1, 2, 3) (-2, 1)")),
+        Arguments.of(Named.of("OutOfOrder", "(-2, 1) (-3, -1, 2, 3)")),
+        Arguments.of(Named.of("ExtraSpaces", "  (   -3,  -1    ,2, 3   )    (-2 , 1)")));
+  }
+
+  @ParameterizedTest
+  @MethodSource("validFlowsLocationsCases")
+  void testValidFlowsLocations(String flows) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseFlowOnEachIntegerLiteralForBinaryExpressionCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 0;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Foo1 = 0;")
+                        .appendDecl("  Bar1 = 0 + 1; // Noncompliant " + flows)
+                        .appendDecl("  Bar2 = 1;")
+                        .appendDecl("  Foo2 = 0;")
+                        .appendDecl("  Foo3 = 0;"));
+
+    assertThatCode(verifier.get()::verifyIssues).doesNotThrowAnyException();
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  @ParameterizedTest
+  @MethodSource("validFlowsLocationsCases")
+  void testValidFlowsLocationsWithOffset(String flows) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseFlowOnEachIntegerLiteralForBinaryExpressionCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 0;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Foo1 = 0;")
+                        .appendDecl("  Bar1 = 0 + 1;")
+                        .appendDecl("  Bar2 = 1; // Noncompliant@-1 " + flows)
+                        .appendDecl("  Foo2 = 0;")
+                        .appendDecl("  Foo3 = 0;"));
+
+    assertThatCode(verifier.get()::verifyIssues).doesNotThrowAnyException();
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  private static Stream<Arguments> invalidFlowsLocationsCases() {
+    return Stream.of(
+        Arguments.of(Named.of("LocationsOutOfOrder", "(-1, 2, 3, -3) (1, -2)")),
+        Arguments.of(Named.of("MissingFlow", "(-3, -1, 2, 3)")),
+        Arguments.of(Named.of("ExtraFlow", "(-1, 2, 3, -3) (1, -2) ()")),
+        Arguments.of(Named.of("MissingLocation", "(-3, -1, 2) (-2)")),
+        Arguments.of(Named.of("EmptyFlow", "()")),
+        Arguments.of(Named.of("NoFlows", "")));
+  }
+
+  @ParameterizedTest
+  @MethodSource("invalidFlowsLocationsCases")
+  void testInvalidFlowsLocationsOnIssue(String annotation) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseFlowOnEachIntegerLiteralForBinaryExpressionCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 0;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Foo1 = 0;")
+                        .appendDecl("  Bar1 = 0 + 1; // Noncompliant " + annotation)
+                        .appendDecl("  Bar2 = 1;")
+                        .appendDecl("  Foo2 = 0;")
+                        .appendDecl("  Foo3 = 0;"));
+
+    assertThatThrownBy(verifier.get()::verifyIssues)
+        .hasMessageContainingAll("Issues were expected at", "unexpected at")
+        .isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
+  @ParameterizedTest
+  @MethodSource("invalidFlowsLocationsCases")
+  void testInvalidFlowsLocationsOnIssueWithOffset(String annotation) {
+    Supplier<CheckVerifier> verifier =
+        () ->
+            CheckVerifier.newVerifier()
+                .withCheck(new WillRaiseFlowOnEachIntegerLiteralForBinaryExpressionCheck())
+                .onFile(
+                    new DelphiTestUnitBuilder()
+                        .appendDecl("const")
+                        .appendDecl("  Foo0 = 0;")
+                        .appendDecl("  Bar0 = 1;")
+                        .appendDecl("  Foo1 = 0; // Noncompliant@+1 " + annotation)
+                        .appendDecl("  Bar1 = 0 + 1;")
+                        .appendDecl("  Bar2 = 1;")
+                        .appendDecl("  Foo2 = 0;")
+                        .appendDecl("  Foo3 = 0;"));
+
+    assertThatThrownBy(verifier.get()::verifyIssues)
+        .hasMessageContainingAll("Issues were expected at", "unexpected at")
+        .isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyNoIssues).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnFile).isInstanceOf(AssertionError.class);
+    assertThatThrownBy(verifier.get()::verifyIssueOnProject).isInstanceOf(AssertionError.class);
+  }
+
   @Test
   void testFileIssue() {
     CheckVerifier verifier =
@@ -492,6 +715,106 @@ class CheckVerifierImplTest {
         reportIssue(context, nameReference, MESSAGE);
       }
       return super.visit(nameReference, context);
+    }
+  }
+
+  /**
+   * This check will add secondary locations on: the same even integer after the first instance; and
+   * the same odd integer before the last instance.
+   */
+  @Rule(key = "WillRaiseDirectionalSecondariesOnIntegersCheck")
+  public static class WillRaiseDirectionalSecondariesOnIntegersCheck extends DelphiCheck {
+
+    private final Map<Integer, List<IntegerLiteralNode>> locations = new HashMap<>();
+
+    @Override
+    public DelphiCheckContext visit(DelphiAst ast, DelphiCheckContext context) {
+      context = super.visit(ast, context);
+      for (Entry<Integer, List<IntegerLiteralNode>> entry : locations.entrySet()) {
+        Integer key = entry.getKey();
+        List<IntegerLiteralNode> literals = entry.getValue();
+        IntegerLiteralNode node;
+        if (key % 2 == 0) {
+          node = literals.remove(0);
+        } else {
+          node = literals.remove(literals.size() - 1);
+        }
+
+        context
+            .newIssue()
+            .onNode(node)
+            .withMessage(MESSAGE)
+            .withSecondaries(
+                literals.stream()
+                    .map(literal -> new Location(MESSAGE, literal))
+                    .collect(Collectors.toList()))
+            .report();
+      }
+      return context;
+    }
+
+    @Override
+    public DelphiCheckContext visit(
+        IntegerLiteralNode integerLiteralNode, DelphiCheckContext context) {
+      Integer number = integerLiteralNode.getValue().intValue();
+      if (this.locations.containsKey(number)) {
+        locations.get(number).add(integerLiteralNode);
+      } else {
+        List<IntegerLiteralNode> numberLocations = new ArrayList<>();
+        numberLocations.add(integerLiteralNode);
+        locations.put(number, numberLocations);
+      }
+
+      return context;
+    }
+  }
+
+  @Rule(key = "WillRaiseFlowOnEachIntegerLiteralForBinaryExpression")
+  public static class WillRaiseFlowOnEachIntegerLiteralForBinaryExpressionCheck
+      extends DelphiCheck {
+
+    private final List<BinaryExpressionNode> binaryExpressions = new ArrayList<>();
+    private final Map<Integer, List<Location>> locations = new HashMap<>();
+
+    @Override
+    public DelphiCheckContext visit(DelphiAst ast, DelphiCheckContext context) {
+      context = super.visit(ast, context);
+      for (BinaryExpressionNode node : binaryExpressions) {
+        IntegerLiteralNode left = node.getLeft().getFirstDescendantOfType(IntegerLiteralNode.class);
+        IntegerLiteralNode right =
+            node.getRight().getFirstDescendantOfType(IntegerLiteralNode.class);
+        if (left == null || right == null) {
+          continue;
+        }
+
+        List<Location> leftLocations = this.locations.get(left.getValue().intValue());
+        List<Location> rightLocations = this.locations.get(right.getValue().intValue());
+        context
+            .newIssue()
+            .onNode(node)
+            .withMessage(MESSAGE)
+            .withFlows(List.of(leftLocations, rightLocations))
+            .report();
+      }
+      return context;
+    }
+
+    @Override
+    public DelphiCheckContext visit(
+        IntegerLiteralNode integerLiteralNode, DelphiCheckContext context) {
+      Integer number = integerLiteralNode.getValue().intValue();
+      if (!locations.containsKey(number)) {
+        this.locations.put(number, new ArrayList<>());
+      }
+      this.locations.get(number).add(new Location(MESSAGE, integerLiteralNode));
+      return context;
+    }
+
+    @Override
+    public DelphiCheckContext visit(
+        BinaryExpressionNode binaryExpressionNode, DelphiCheckContext context) {
+      this.binaryExpressions.add(binaryExpressionNode);
+      return context;
     }
   }
 
