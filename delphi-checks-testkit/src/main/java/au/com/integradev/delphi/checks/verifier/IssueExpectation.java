@@ -18,14 +18,38 @@
  */
 package au.com.integradev.delphi.checks.verifier;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 class IssueExpectation {
   private final int beginLine;
+  private final List<List<Integer>> flowLines;
 
-  public IssueExpectation(int beginLine) {
+  public IssueExpectation(int beginLine, List<List<Integer>> flowLines) {
     this.beginLine = beginLine;
+    this.flowLines = flowLines;
   }
 
   public int getBeginLine() {
     return beginLine;
+  }
+
+  public List<List<Integer>> getFlowLines() {
+    return flowLines;
+  }
+
+  @Override
+  public String toString() {
+    return "{"
+        + beginLine
+        + " "
+        + flowLines.stream()
+            .map(
+                list ->
+                    "("
+                        + list.stream().map(Object::toString).collect(Collectors.joining(", "))
+                        + ")")
+            .collect(Collectors.joining(" "))
+        + "}";
   }
 }
