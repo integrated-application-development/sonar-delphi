@@ -18,8 +18,10 @@
  */
 package au.com.integradev.delphi.cfg;
 
+import static au.com.integradev.delphi.cfg.block.BlockBuilder.newBlock;
+
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.cfg.api.Block;
+import au.com.integradev.delphi.cfg.block.BuilderBlock;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,63 +77,66 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonarsource.analyzer.commons.collections.ListUtils;
 
 /**
- * This visitor constructs a control flow graph. Generally, the statements and elements are
- * traversed backward simplify the construction of a directed graph. `Block`s typically are ordered
- * in way they are evaluated.
+ * This visitor populates the <code>ControlFlowGraphBuilder</code> to construct a control flow
+ * graph. Generally, the statements and elements are traversed backward simplify the construction of
+ * a directed graph. `Block`s typically are ordered in way they are evaluated.
  */
-class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImpl> {
+class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBuilder> {
 
   // Literals / Block elements
   // These nodes get added to the current block
 
   @Override
-  public ControlFlowGraphImpl visit(IntegerLiteralNode node, ControlFlowGraphImpl data) {
-    data.addElement(node);
-    return data;
+  public ControlFlowGraphBuilder visit(IntegerLiteralNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
+    return builder;
   }
 
   @Override
-  public ControlFlowGraphImpl visit(RealLiteralNode node, ControlFlowGraphImpl data) {
-    data.addElement(node);
-    return data;
+  public ControlFlowGraphBuilder visit(RealLiteralNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
+    return builder;
   }
 
   @Override
-  public ControlFlowGraphImpl visit(NilLiteralNode node, ControlFlowGraphImpl data) {
-    data.addElement(node);
-    return data;
+  public ControlFlowGraphBuilder visit(NilLiteralNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
+    return builder;
   }
 
   @Override
-  public ControlFlowGraphImpl visit(SimpleNameDeclarationNode node, ControlFlowGraphImpl data) {
-    data.addElement(node);
-    return data;
+  public ControlFlowGraphBuilder visit(
+      SimpleNameDeclarationNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
+    return builder;
   }
 
   @Override
-  public ControlFlowGraphImpl visit(RangeExpressionNode node, ControlFlowGraphImpl data) {
-    build(node.getLowExpression(), data);
-    return build(node.getHighExpression(), data);
+  public ControlFlowGraphBuilder visit(RangeExpressionNode node, ControlFlowGraphBuilder builder) {
+    build(node.getLowExpression(), builder);
+    return build(node.getHighExpression(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(ArrayConstructorNode node, ControlFlowGraphImpl data) {
-    return build(node.getElements(), data);
+  public ControlFlowGraphBuilder visit(ArrayConstructorNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getElements(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(ForLoopVarDeclarationNode node, ControlFlowGraphImpl data) {
-    return build(node.getNameDeclarationNode(), data);
+  public ControlFlowGraphBuilder visit(
+      ForLoopVarDeclarationNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getNameDeclarationNode(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(ForLoopVarReferenceNode node, ControlFlowGraphImpl data) {
-    return build(node.getNameReference(), data);
+  public ControlFlowGraphBuilder visit(
+      ForLoopVarReferenceNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getNameReference(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(ArgumentNode node, ControlFlowGraphImpl data) {
-    return build(node.getExpression(), data);
+  public ControlFlowGraphBuilder visit(ArgumentNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getExpression(), builder);
   }
 
   /**
@@ -139,86 +144,87 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * are handled individually.
    */
   @Override
-  public ControlFlowGraphImpl visit(NameReferenceNode node, ControlFlowGraphImpl data) {
+  public ControlFlowGraphBuilder visit(NameReferenceNode node, ControlFlowGraphBuilder builder) {
     if (!(node.getLastName().getNameDeclaration() instanceof RoutineNameDeclaration)) {
-      data.addElement(node);
-      return data;
+      builder.addElement(node);
+      return builder;
     }
     String routineName =
         ((RoutineNameDeclaration) node.getLastName().getNameDeclaration()).fullyQualifiedName();
     switch (routineName) {
       case "System.Exit":
-        data.nextBlock(
-            data.buildNewBlock().withJump(node, data.getExitBlock(), data.getCurrentBlock()));
-        return data;
+        builder.nextBlock(
+            newBlock().withJump(node, builder.getExitBlock(), builder.getCurrentBlock()));
+        return builder;
       case "System.Break":
-        return buildControlFlowStatement(node, data.getBreakTarget(), data);
+        return buildControlFlowStatement(node, builder.getBreakTarget(), builder);
       case "System.Halt":
-        data.nextBlock(data.buildNewBlock().withTerminator(node));
-        return data;
+        builder.nextBlock(newBlock().withTerminator(node));
+        return builder;
       case "System.Continue":
-        return buildControlFlowStatement(node, data.getContinueTarget(), data);
+        return buildControlFlowStatement(node, builder.getContinueTarget(), builder);
       default:
-        handleExceptionalPaths(data);
-        data.addElement(node);
+        handleExceptionalPaths(builder);
+        builder.addElement(node);
         break;
     }
 
-    return data;
+    return builder;
   }
 
-  private ControlFlowGraphImpl buildControlFlowStatement(
-      DelphiNode node, Block target, ControlFlowGraphImpl data) {
+  private ControlFlowGraphBuilder buildControlFlowStatement(
+      DelphiNode node, BuilderBlock target, ControlFlowGraphBuilder builder) {
     if (target == null) {
       throw new IllegalStateException(
           String.format("'%s' statement not in loop statement", node.getImage()));
     }
-    data.nextBlock(data.buildNewBlock().withJump(node, target, data.getCurrentBlock()));
-    return data;
+    builder.nextBlock(newBlock().withJump(node, target, builder.getCurrentBlock()));
+    return builder;
   }
 
-  private void handleExceptionalPaths(ControlFlowGraphImpl data) {
-    if (!data.inTryContext()) {
+  private void handleExceptionalPaths(ControlFlowGraphBuilder builder) {
+    if (!builder.inTryContext()) {
       // Only consider routines as potentially exceptional if in a `try` context.
       return;
     }
 
-    Set<Block> exceptions = data.getAllCatchTargets();
-    data.nextBlock(data.buildNewBlock().withExceptions(data.getCurrentBlock(), exceptions));
+    Set<BuilderBlock> exceptions = builder.getAllCatchTargets();
+    builder.nextBlock(newBlock().withExceptions(builder.getCurrentBlock(), exceptions));
   }
 
   /** Overridden to ensure <code>NodeDeclaration</code>s are added in the correct order */
   @Override
-  public ControlFlowGraphImpl visit(NameDeclarationListNode node, ControlFlowGraphImpl data) {
-    return build(node.getDeclarations(), data);
+  public ControlFlowGraphBuilder visit(
+      NameDeclarationListNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getDeclarations(), builder);
   }
 
   /** <code>ExpressionNode</code> covers the <code>inherited</code> expressions */
   @Override
-  public ControlFlowGraphImpl visit(ExpressionNode node, ControlFlowGraphImpl data) {
+  public ControlFlowGraphBuilder visit(ExpressionNode node, ControlFlowGraphBuilder builder) {
     if (!ExpressionNodeUtils.isInherited(node)) {
-      return DelphiParserVisitor.super.visit(node, data);
+      return DelphiParserVisitor.super.visit(node, builder);
     }
 
     // Arguments
     ArgumentListNode arguments = node.getFirstChildOfType(ArgumentListNode.class);
     if (arguments != null) {
-      build(arguments.getArgumentNodes(), data);
+      build(arguments.getArgumentNodes(), builder);
     }
 
     // Possible name
-    build(node.getFirstChildOfType(NameReferenceNode.class), data);
+    build(node.getFirstChildOfType(NameReferenceNode.class), builder);
 
     // `inherited`
-    data.addElement(node.getFirstChildOfType(CommonDelphiNode.class));
-    return data;
+    builder.addElement(node.getFirstChildOfType(CommonDelphiNode.class));
+    return builder;
   }
 
   // Statements
 
   @Override
-  public ControlFlowGraphImpl visit(StatementListNode node, ControlFlowGraphImpl data) {
-    return build(node.getStatements(), data);
+  public ControlFlowGraphBuilder visit(StatementListNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getStatements(), builder);
   }
 
   /**
@@ -238,76 +244,85 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * </pre>
    */
   @Override
-  public ControlFlowGraphImpl visit(IfStatementNode node, ControlFlowGraphImpl data) {
-    Block after = data.getCurrentBlock();
+  public ControlFlowGraphBuilder visit(IfStatementNode node, ControlFlowGraphBuilder builder) {
+    BuilderBlock after = builder.getCurrentBlock();
 
     // process `else`
-    Block elseBlock = after;
+    BuilderBlock elseBlock = after;
     if (node.getElseStatement() != null) {
       StatementNode elseStatement = node.getElseStatement();
       if (!(elseStatement instanceof IfStatementNode)) {
-        data.nextBlockTo(after);
+        builder.nextBlockTo(after);
       }
-      elseStatement.accept(this, data);
-      elseBlock = data.getCurrentBlock();
+      elseStatement.accept(this, builder);
+      elseBlock = builder.getCurrentBlock();
     }
 
     // process `then`
-    data.nextBlockTo(after);
-    build(node.getThenStatement(), data);
-    Block thenBlock = data.getCurrentBlock();
+    builder.nextBlockTo(after);
+    build(node.getThenStatement(), builder);
+    BuilderBlock thenBlock = builder.getCurrentBlock();
 
     // process condition
-    data.nextBlock(data.buildNewBlock().withBranch(node, thenBlock, elseBlock));
-    return buildCondition(data, node.getGuardExpression(), thenBlock, elseBlock);
+    builder.nextBlock(newBlock().withBranch(node, thenBlock, elseBlock));
+    return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
   }
 
-  private ControlFlowGraphImpl buildCondition(
-      ControlFlowGraphImpl data, ExpressionNode node, Block trueBlock, Block falseBlock) {
+  private ControlFlowGraphBuilder buildCondition(
+      ControlFlowGraphBuilder builder,
+      ExpressionNode node,
+      BuilderBlock trueBlock,
+      BuilderBlock falseBlock) {
     node = node.skipParentheses();
     if (!(node instanceof BinaryExpressionNode)) {
-      return build(node, data);
+      return build(node, builder);
     }
     BinaryExpressionNode binaryExpression = (BinaryExpressionNode) node;
     BinaryOperator operator = binaryExpression.getOperator();
     if (operator == BinaryOperator.OR) {
-      return buildConditionOr(data, binaryExpression, trueBlock, falseBlock);
+      return buildConditionOr(builder, binaryExpression, trueBlock, falseBlock);
     } else if (operator == BinaryOperator.AND) {
-      return buildConditionAnd(data, binaryExpression, trueBlock, falseBlock);
+      return buildConditionAnd(builder, binaryExpression, trueBlock, falseBlock);
     }
-    return build(node, data);
+    return build(node, builder);
   }
 
-  private ControlFlowGraphImpl buildConditionAnd(
-      ControlFlowGraphImpl data, BinaryExpressionNode node, Block trueBlock, Block falseBlock) {
+  private ControlFlowGraphBuilder buildConditionAnd(
+      ControlFlowGraphBuilder builder,
+      BinaryExpressionNode node,
+      BuilderBlock trueBlock,
+      BuilderBlock falseBlock) {
     // RHS
-    buildCondition(data, node.getRight(), trueBlock, falseBlock);
-    Block newTrueBlock = data.getCurrentBlock();
+    buildCondition(builder, node.getRight(), trueBlock, falseBlock);
+    BuilderBlock newTrueBlock = builder.getCurrentBlock();
     // LHS
-    data.nextBlock(data.buildNewBlock().withBranch(node, newTrueBlock, falseBlock));
-    return buildCondition(data, node.getLeft(), newTrueBlock, falseBlock);
+    builder.nextBlock(newBlock().withBranch(node, newTrueBlock, falseBlock));
+    return buildCondition(builder, node.getLeft(), newTrueBlock, falseBlock);
   }
 
-  private ControlFlowGraphImpl buildConditionOr(
-      ControlFlowGraphImpl data, BinaryExpressionNode node, Block trueBlock, Block falseBlock) {
+  private ControlFlowGraphBuilder buildConditionOr(
+      ControlFlowGraphBuilder builder,
+      BinaryExpressionNode node,
+      BuilderBlock trueBlock,
+      BuilderBlock falseBlock) {
     // RHS
-    buildCondition(data, node.getRight(), trueBlock, falseBlock);
-    Block newFalseBlock = data.getCurrentBlock();
+    buildCondition(builder, node.getRight(), trueBlock, falseBlock);
+    BuilderBlock newFalseBlock = builder.getCurrentBlock();
     // LHS
-    data.nextBlock(data.buildNewBlock().withBranch(node, trueBlock, newFalseBlock));
-    return buildCondition(data, node.getLeft(), trueBlock, newFalseBlock);
+    builder.nextBlock(newBlock().withBranch(node, trueBlock, newFalseBlock));
+    return buildCondition(builder, node.getLeft(), trueBlock, newFalseBlock);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(VarStatementNode node, ControlFlowGraphImpl data) {
-    build(node.getNameDeclarationList(), data);
-    return build(node.getExpression(), data);
+  public ControlFlowGraphBuilder visit(VarStatementNode node, ControlFlowGraphBuilder builder) {
+    build(node.getNameDeclarationList(), builder);
+    return build(node.getExpression(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(ConstStatementNode node, ControlFlowGraphImpl data) {
-    build(node.getNameDeclarationNode(), data);
-    return build(node.getExpression(), data);
+  public ControlFlowGraphBuilder visit(ConstStatementNode node, ControlFlowGraphBuilder builder) {
+    build(node.getNameDeclarationNode(), builder);
+    return build(node.getExpression(), builder);
   }
 
   /**
@@ -331,27 +346,27 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * </pre>
    */
   @Override
-  public ControlFlowGraphImpl visit(CaseStatementNode node, ControlFlowGraphImpl data) {
-    Block after = data.getCurrentBlock();
+  public ControlFlowGraphBuilder visit(CaseStatementNode node, ControlFlowGraphBuilder builder) {
+    BuilderBlock after = builder.getCurrentBlock();
 
     // Selector
-    Block caseBlock = data.nextBlockToCurrent();
+    BuilderBlock caseBlock = builder.nextBlockToCurrent();
 
     List<ExpressionNode> caseLabels =
         node.getCaseItems().stream()
             .flatMap(caseNode -> caseNode.getExpressions().stream())
             .collect(Collectors.toList());
-    build(caseLabels, data);
-    build(node.getSelectorExpression(), data);
-    Block conditionBlock = data.getCurrentBlock();
+    build(caseLabels, builder);
+    build(node.getSelectorExpression(), builder);
+    BuilderBlock conditionBlock = builder.getCurrentBlock();
 
-    Set<Block> caseSuccessors = new HashSet<>();
+    Set<BuilderBlock> caseSuccessors = new HashSet<>();
 
     // Else
     if (node.getElseBlockNode() != null) {
-      data.nextBlockTo(after);
-      build(node.getElseBlockNode().getStatementList(), data);
-      caseSuccessors.add(data.getCurrentBlock());
+      builder.nextBlockTo(after);
+      build(node.getElseBlockNode().getStatementList(), builder);
+      caseSuccessors.add(builder.getCurrentBlock());
     } else {
       // If there is no `else` block the statement can be jumped
       caseSuccessors.add(after);
@@ -363,14 +378,14 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
             node.getCaseItems().stream()
                 .map(CaseItemStatementNode::getStatement)
                 .collect(Collectors.toList()))) {
-      data.nextBlockTo(after);
-      build(statement, data);
-      caseSuccessors.add(data.getCurrentBlock());
+      builder.nextBlockTo(after);
+      build(statement, builder);
+      caseSuccessors.add(builder.getCurrentBlock());
     }
 
-    data.updateBlock(data.buildReplacement(caseBlock).withCases(node, caseSuccessors));
-    data.setCurrentBlock(conditionBlock);
-    return data;
+    caseBlock.update(newBlock().withCases(node, caseSuccessors));
+    builder.setCurrentBlock(conditionBlock);
+    return builder;
   }
 
   /**
@@ -392,24 +407,24 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * </pre>
    */
   @Override
-  public ControlFlowGraphImpl visit(RepeatStatementNode node, ControlFlowGraphImpl data) {
-    Block after = data.getCurrentBlock();
+  public ControlFlowGraphBuilder visit(RepeatStatementNode node, ControlFlowGraphBuilder builder) {
+    BuilderBlock after = builder.getCurrentBlock();
     // Create a placeholder for the conditional block
-    Block loopback = data.nextBlockTo(after);
+    BuilderBlock loopback = builder.nextBlockTo(after);
 
     // Condition
-    data.nextBlock(data.buildNewBlock().withBranch(node, after, loopback));
-    buildCondition(data, node.getGuardExpression(), after, loopback);
+    builder.nextBlock(newBlock().withBranch(node, after, loopback));
+    buildCondition(builder, node.getGuardExpression(), after, loopback);
 
     // Body
-    data.pushLoopContext(data.getCurrentBlock(), after);
-    data.nextBlockToCurrent();
-    build(node.getStatementList(), data);
-    data.popLoopContext();
+    builder.pushLoopContext(builder.getCurrentBlock(), after);
+    builder.nextBlockToCurrent();
+    build(node.getStatementList(), builder);
+    builder.popLoopContext();
 
-    data.updateBlock(data.buildReplacement(loopback).withSuccessor(data.getCurrentBlock()));
-    data.nextBlockToCurrent();
-    return data;
+    loopback.update(newBlock().withSuccessor(builder.getCurrentBlock()));
+    builder.nextBlockToCurrent();
+    return builder;
   }
 
   /**
@@ -430,25 +445,25 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * </pre>
    */
   @Override
-  public ControlFlowGraphImpl visit(WhileStatementNode node, ControlFlowGraphImpl data) {
-    Block after = data.getCurrentBlock();
+  public ControlFlowGraphBuilder visit(WhileStatementNode node, ControlFlowGraphBuilder builder) {
+    BuilderBlock after = builder.getCurrentBlock();
     // Create a placeholder for the conditional block
-    Block loopback = data.nextBlockTo(after);
+    BuilderBlock loopback = builder.nextBlockTo(after);
 
     // Body
-    data.nextBlockTo(loopback);
-    data.pushLoopContext(loopback, after);
-    build(node.getStatement(), data);
-    data.popLoopContext();
-    Block body = data.getCurrentBlock();
+    builder.nextBlockTo(loopback);
+    builder.pushLoopContext(loopback, after);
+    build(node.getStatement(), builder);
+    builder.popLoopContext();
+    BuilderBlock body = builder.getCurrentBlock();
 
     // Condition
-    data.nextBlock(data.buildNewBlock().withBranch(node, body, after));
-    buildCondition(data, node.getGuardExpression(), body, after);
+    builder.nextBlock(newBlock().withBranch(node, body, after));
+    buildCondition(builder, node.getGuardExpression(), body, after);
 
-    data.updateBlock(data.buildReplacement(loopback).withSuccessor(data.getCurrentBlock()));
-    data.nextBlockToCurrent();
-    return data;
+    loopback.update(newBlock().withSuccessor(builder.getCurrentBlock()));
+    builder.nextBlockToCurrent();
+    return builder;
   }
 
   /**
@@ -469,11 +484,11 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * </pre>
    */
   @Override
-  public ControlFlowGraphImpl visit(ForToStatementNode node, ControlFlowGraphImpl data) {
+  public ControlFlowGraphBuilder visit(ForToStatementNode node, ControlFlowGraphBuilder builder) {
     return buildForLoop(
         node,
         List.of(node.getVariable(), node.getTargetExpression(), node.getInitializerExpression()),
-        data);
+        builder);
   }
 
   /**
@@ -493,40 +508,39 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * </pre>
    */
   @Override
-  public ControlFlowGraphImpl visit(ForInStatementNode node, ControlFlowGraphImpl data) {
-    return buildForLoop(node, List.of(node.getVariable(), node.getEnumerable()), data);
+  public ControlFlowGraphBuilder visit(ForInStatementNode node, ControlFlowGraphBuilder builder) {
+    return buildForLoop(node, List.of(node.getVariable(), node.getEnumerable()), builder);
   }
 
-  private ControlFlowGraphImpl buildForLoop(
-      ForStatementNode node, List<DelphiNode> parts, ControlFlowGraphImpl data) {
-    Block after = data.getCurrentBlock();
+  private ControlFlowGraphBuilder buildForLoop(
+      ForStatementNode node, List<DelphiNode> parts, ControlFlowGraphBuilder builder) {
+    BuilderBlock after = builder.getCurrentBlock();
     // Create a placeholder for the conditional block
-    Block loopback = data.nextBlockToCurrent();
-    data.nextBlockToCurrent();
+    BuilderBlock loopback = builder.nextBlockToCurrent();
+    builder.nextBlockToCurrent();
 
-    data.pushLoopContext(loopback, after);
-    build(node.getStatement(), data);
-    data.popLoopContext();
+    builder.pushLoopContext(loopback, after);
+    build(node.getStatement(), builder);
+    builder.popLoopContext();
 
-    data.updateBlock(
-        data.buildReplacement(loopback).withBranch(node, data.getCurrentBlock(), after));
+    loopback.update(newBlock().withBranch(node, builder.getCurrentBlock(), after));
 
-    data.setCurrentBlock(loopback);
+    builder.setCurrentBlock(loopback);
     parts.forEach(
         part -> {
-          build(part, data);
-          data.nextBlockToCurrent();
+          build(part, builder);
+          builder.nextBlockToCurrent();
         });
-    return data;
+    return builder;
   }
 
   @Override
-  public ControlFlowGraphImpl visit(WithStatementNode node, ControlFlowGraphImpl data) {
-    build(node.getStatement(), data);
-    data.nextBlockToCurrent();
-    build(node.getTargets(), data);
-    data.nextBlockToCurrent();
-    return data;
+  public ControlFlowGraphBuilder visit(WithStatementNode node, ControlFlowGraphBuilder builder) {
+    build(node.getStatement(), builder);
+    builder.nextBlockToCurrent();
+    build(node.getTargets(), builder);
+    builder.nextBlockToCurrent();
+    return builder;
   }
 
   /**
@@ -536,61 +550,61 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * a successors to the catches/finally block.
    */
   @Override
-  public ControlFlowGraphImpl visit(TryStatementNode node, ControlFlowGraphImpl data) {
-    data.nextBlockToCurrent();
+  public ControlFlowGraphBuilder visit(TryStatementNode node, ControlFlowGraphBuilder builder) {
+    builder.nextBlockToCurrent();
     // Finally
     FinallyBlockNode finallyNode = node.getFinallyBlock();
     if (finallyNode != null) {
-      data.nextBlock(
-          data.buildNewBlock().withExitPath(data.getCurrentBlock(), data.getExitBlock()));
-      build(finallyNode.getStatementList(), data);
-      data.pushLoopContext(data.getCurrentBlock(), data.getCurrentBlock());
-      data.pushExitBlock(data.getCurrentBlock());
+      builder.nextBlock(newBlock().withExitPath(builder.getCurrentBlock(), builder.getExitBlock()));
+      build(finallyNode.getStatementList(), builder);
+      builder.pushLoopContext(builder.getCurrentBlock(), builder.getCurrentBlock());
+      builder.pushExitBlock(builder.getCurrentBlock());
     }
-    Block finallyOrEndBlock = data.getCurrentBlock();
-    Block beforeFinally = data.nextBlockToCurrent();
+    BuilderBlock finallyOrEndBlock = builder.getCurrentBlock();
+    BuilderBlock beforeFinally = builder.nextBlockToCurrent();
 
     // Exception catches
-    List<Entry<Type, Block>> catches = new ArrayList<>();
-    Block elseBlock = null;
+    List<Entry<Type, BuilderBlock>> catches = new ArrayList<>();
+    BuilderBlock elseBlock = null;
 
     ExceptBlockNode exceptBlock = node.getExceptBlock();
     if (exceptBlock != null) {
       if (exceptBlock.isBareExcept()) {
-        data.nextBlockTo(finallyOrEndBlock);
-        build(exceptBlock.getStatementList(), data);
-        elseBlock = data.getCurrentBlock();
+        builder.nextBlockTo(finallyOrEndBlock);
+        build(exceptBlock.getStatementList(), builder);
+        elseBlock = builder.getCurrentBlock();
       } else if (exceptBlock.getElseBlock() != null) {
-        data.nextBlockTo(finallyOrEndBlock);
-        build(exceptBlock.getElseBlock().getStatementList(), data);
-        elseBlock = data.getCurrentBlock();
+        builder.nextBlockTo(finallyOrEndBlock);
+        build(exceptBlock.getElseBlock().getStatementList(), builder);
+        elseBlock = builder.getCurrentBlock();
       }
       if (exceptBlock.hasHandlers()) {
         for (ExceptItemNode exceptItem : ListUtils.reverse(exceptBlock.getHandlers())) {
-          data.nextBlockTo(finallyOrEndBlock);
-          build(exceptItem.getStatement(), data);
-          build(exceptItem.getExceptionName(), data);
+          builder.nextBlockTo(finallyOrEndBlock);
+          build(exceptItem.getStatement(), builder);
+          build(exceptItem.getExceptionName(), builder);
           catches.add(
               0,
-              new SimpleEntry<>(exceptItem.getExceptionType().getType(), data.getCurrentBlock()));
+              new SimpleEntry<>(
+                  exceptItem.getExceptionType().getType(), builder.getCurrentBlock()));
         }
       }
     }
 
     // Body
-    data.setCurrentBlock(beforeFinally);
+    builder.setCurrentBlock(beforeFinally);
 
-    data.pushTryContext(catches, elseBlock);
-    build(node.getStatementList(), data);
-    data.popTryContext();
+    builder.pushTryContext(catches, elseBlock);
+    build(node.getStatementList(), builder);
+    builder.popTryContext();
 
-    data.nextBlockToCurrent();
-    data.addElement(node);
+    builder.nextBlockToCurrent();
+    builder.addElement(node);
 
     if (finallyNode != null) {
-      data.popExitBlock();
+      builder.popExitBlock();
     }
-    return data;
+    return builder;
   }
 
   /**
@@ -598,68 +612,70 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * have successors of all exceptional targets.
    */
   @Override
-  public ControlFlowGraphImpl visit(RaiseStatementNode node, ControlFlowGraphImpl data) {
+  public ControlFlowGraphBuilder visit(RaiseStatementNode node, ControlFlowGraphBuilder builder) {
     if (node.getRaiseExpression() == null) {
-      Set<Block> exceptions = data.getAllCatchTargets();
-      data.nextBlock(data.buildNewBlock().withExceptions(data.getCurrentBlock(), exceptions));
-      data.addElement(node);
-      return data;
+      Set<BuilderBlock> exceptions = builder.getAllCatchTargets();
+      builder.nextBlock(newBlock().withExceptions(builder.getCurrentBlock(), exceptions));
+      builder.addElement(node);
+      return builder;
     }
 
     Type raiseType = node.getRaiseExpression().getType();
-    Block jumpTarget = data.getCatchTarget(raiseType);
-    data.nextBlock(data.buildNewBlock().withJump(node, jumpTarget, data.getCurrentBlock()));
-    return build(node.getRaiseExpression(), data);
+    BuilderBlock jumpTarget = builder.getCatchTarget(raiseType);
+    builder.nextBlock(newBlock().withJump(node, jumpTarget, builder.getCurrentBlock()));
+    return build(node.getRaiseExpression(), builder);
   }
 
   /** Label statements create a new block as they allow for the control flow to jump to them. */
   @Override
-  public ControlFlowGraphImpl visit(LabelStatementNode node, ControlFlowGraphImpl data) {
-    build(node.getStatement(), data);
-    data.addLabel(node);
-    data.nextBlockToCurrent();
-    return data;
+  public ControlFlowGraphBuilder visit(LabelStatementNode node, ControlFlowGraphBuilder builder) {
+    build(node.getStatement(), builder);
+    builder.addLabel(node);
+    builder.nextBlockToCurrent();
+    return builder;
   }
 
   /** `goto` statements have a successor of the label they jump to. */
   @Override
-  public ControlFlowGraphImpl visit(GotoStatementNode node, ControlFlowGraphImpl data) {
-    data.addGoto(node);
-    return data;
+  public ControlFlowGraphBuilder visit(GotoStatementNode node, ControlFlowGraphBuilder builder) {
+    builder.addGoto(node);
+    return builder;
   }
 
   @Override
-  public ControlFlowGraphImpl visit(AssignmentStatementNode node, ControlFlowGraphImpl data) {
-    build(node.getAssignee(), data);
-    return build(node.getValue(), data);
+  public ControlFlowGraphBuilder visit(
+      AssignmentStatementNode node, ControlFlowGraphBuilder builder) {
+    build(node.getAssignee(), builder);
+    return build(node.getValue(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(ExpressionStatementNode node, ControlFlowGraphImpl data) {
-    return build(node.getExpression(), data);
+  public ControlFlowGraphBuilder visit(
+      ExpressionStatementNode node, ControlFlowGraphBuilder builder) {
+    return build(node.getExpression(), builder);
   }
 
   // Expressions
 
   @Override
-  public ControlFlowGraphImpl visit(UnaryExpressionNode node, ControlFlowGraphImpl data) {
-    data.addElement(node);
-    return build(node.getOperand(), data);
+  public ControlFlowGraphBuilder visit(UnaryExpressionNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
+    return build(node.getOperand(), builder);
   }
 
   @Override
-  public ControlFlowGraphImpl visit(BinaryExpressionNode node, ControlFlowGraphImpl data) {
+  public ControlFlowGraphBuilder visit(BinaryExpressionNode node, ControlFlowGraphBuilder builder) {
     boolean isBooleanExpr = node.getType().isBoolean();
     if (isBooleanExpr && node.getOperator() == BinaryOperator.AND) {
-      return buildBooleanAnd(node, data);
+      return buildBooleanAnd(node, builder);
     } else if (isBooleanExpr && node.getOperator() == BinaryOperator.OR) {
-      return buildBooleanOr(node, data);
+      return buildBooleanOr(node, builder);
     }
 
-    data.addElement(node);
-    build(node.getRight(), data);
-    build(node.getLeft(), data);
-    return data;
+    builder.addElement(node);
+    build(node.getRight(), builder);
+    build(node.getLeft(), builder);
+    return builder;
   }
 
   /**
@@ -671,12 +687,12 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    *      └─> false ───────┘
    * </pre>
    */
-  private ControlFlowGraphImpl buildBooleanAnd(
-      BinaryExpressionNode node, ControlFlowGraphImpl data) {
-    Block falseBlock = data.getCurrentBlock();
-    data.nextBlockTo(falseBlock);
-    build(node.getRight(), data);
-    return buildBooleanLHS(data, node, data.getCurrentBlock(), falseBlock);
+  private ControlFlowGraphBuilder buildBooleanAnd(
+      BinaryExpressionNode node, ControlFlowGraphBuilder builder) {
+    BuilderBlock falseBlock = builder.getCurrentBlock();
+    builder.nextBlockTo(falseBlock);
+    build(node.getRight(), builder);
+    return buildBooleanLHS(builder, node, builder.getCurrentBlock(), falseBlock);
   }
 
   /**
@@ -688,18 +704,21 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    *      └─> false ─> `B` ─┘
    * </pre>
    */
-  private ControlFlowGraphImpl buildBooleanOr(
-      BinaryExpressionNode node, ControlFlowGraphImpl data) {
-    Block trueBlock = data.getCurrentBlock();
-    data.nextBlockTo(trueBlock);
-    build(node.getRight(), data);
-    return buildBooleanLHS(data, node, trueBlock, data.getCurrentBlock());
+  private ControlFlowGraphBuilder buildBooleanOr(
+      BinaryExpressionNode node, ControlFlowGraphBuilder builder) {
+    BuilderBlock trueBlock = builder.getCurrentBlock();
+    builder.nextBlockTo(trueBlock);
+    build(node.getRight(), builder);
+    return buildBooleanLHS(builder, node, trueBlock, builder.getCurrentBlock());
   }
 
-  private ControlFlowGraphImpl buildBooleanLHS(
-      ControlFlowGraphImpl data, BinaryExpressionNode node, Block trueBlock, Block falseBlock) {
-    data.nextBlock(data.buildNewBlock().withBranch(node, trueBlock, falseBlock));
-    return build(node.getLeft(), data);
+  private ControlFlowGraphBuilder buildBooleanLHS(
+      ControlFlowGraphBuilder builder,
+      BinaryExpressionNode node,
+      BuilderBlock trueBlock,
+      BuilderBlock falseBlock) {
+    builder.nextBlock(newBlock().withBranch(node, trueBlock, falseBlock));
+    return build(node.getLeft(), builder);
   }
 
   // Exclusions
@@ -709,28 +728,28 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphImp
    * current one being constructed.
    */
   @Override
-  public ControlFlowGraphImpl visit(AnonymousMethodNode node, ControlFlowGraphImpl data) {
-    return data;
+  public ControlFlowGraphBuilder visit(AnonymousMethodNode node, ControlFlowGraphBuilder builder) {
+    return builder;
   }
 
   /** Assembly control flow graphs are not supported. */
   @Override
-  public ControlFlowGraphImpl visit(AsmStatementNode node, ControlFlowGraphImpl data) {
-    return data;
+  public ControlFlowGraphBuilder visit(AsmStatementNode node, ControlFlowGraphBuilder builder) {
+    return builder;
   }
 
   // Helpers
 
-  private ControlFlowGraphImpl build(DelphiNode node, ControlFlowGraphImpl data) {
+  private ControlFlowGraphBuilder build(DelphiNode node, ControlFlowGraphBuilder builder) {
     if (node == null) {
-      return data;
+      return builder;
     }
-    return node.accept(this, data);
+    return node.accept(this, builder);
   }
 
-  private <T extends DelphiNode> ControlFlowGraphImpl build(
-      List<T> nodes, ControlFlowGraphImpl data) {
-    ListUtils.reverse(nodes).forEach(node -> build(node, data));
-    return data;
+  private <T extends DelphiNode> ControlFlowGraphBuilder build(
+      List<T> nodes, ControlFlowGraphBuilder builder) {
+    ListUtils.reverse(nodes).forEach(node -> build(node, builder));
+    return builder;
   }
 }

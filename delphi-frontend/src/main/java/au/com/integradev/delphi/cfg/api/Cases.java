@@ -20,12 +20,12 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
-public interface Cases extends Successors, Terminated {
+public interface Cases extends Block, Terminated {
   /** All the cases this statement can succeed to */
   Set<Block> getCaseSuccessors();
 
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return getCaseSuccessors();
   }
 }

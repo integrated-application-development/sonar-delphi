@@ -20,7 +20,7 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
-public interface UnconditionalJump extends Successors, Terminated {
+public interface UnconditionalJump extends Block, Terminated {
   /** The block this block jumps to */
   Block getSuccessor();
 
@@ -28,7 +28,7 @@ public interface UnconditionalJump extends Successors, Terminated {
   Block getSuccessorWithoutJump();
 
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return Set.of(getSuccessor());
   }
 }

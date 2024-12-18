@@ -20,15 +20,16 @@ package au.com.integradev.delphi.cfg;
 
 import static au.com.integradev.delphi.cfg.checker.BlockChecker.block;
 import static au.com.integradev.delphi.cfg.checker.BlockChecker.terminator;
-import static au.com.integradev.delphi.cfg.checker.CfgCheckerFactory.checker;
 import static au.com.integradev.delphi.cfg.checker.ElementChecker.element;
+import static au.com.integradev.delphi.cfg.checker.GraphChecker.checker;
 import static org.assertj.core.api.Assertions.*;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.cfg.api.Block;
+import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
-import au.com.integradev.delphi.cfg.checker.CfgCheckerFactory.CfgChecker;
+import au.com.integradev.delphi.cfg.checker.GraphChecker;
 import au.com.integradev.delphi.cfg.checker.StatementTerminator;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile;
@@ -76,15 +77,15 @@ import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 class ControlFlowGraphTest {
   private static final Logger LOG = LoggerFactory.getLogger(ControlFlowGraphTest.class);
 
-  private ControlFlowGraphImpl buildCFG(String input) {
+  private ControlFlowGraph buildCFG(String input) {
     return buildCFG(Collections.emptyMap(), input);
   }
 
-  private ControlFlowGraphImpl buildCFG(List<String> variables, String input) {
+  private ControlFlowGraph buildCFG(List<String> variables, String input) {
     return buildCFG(Map.of("var", variables), input);
   }
 
-  private ControlFlowGraphImpl buildCFG(Map<String, List<String>> sections, String input) {
+  private ControlFlowGraph buildCFG(Map<String, List<String>> sections, String input) {
     try {
       var tempFile = File.createTempFile("CFGTest-", ".pas");
       tempFile.deleteOnExit();
@@ -130,7 +131,6 @@ class ControlFlowGraphTest {
       new SymbolAssociationVisitor()
           .visit(file.getAst(), new SymbolAssociationVisitor.Data(symbolTable));
 
-      var visitor = new ControlFlowGraphVisitor();
       var statementList =
           file.getAst().findDescendantsOfType(RoutineImplementationNode.class).stream()
               .filter(impl -> impl.getRoutineBody() != null)
@@ -138,26 +138,24 @@ class ControlFlowGraphTest {
               .findFirst()
               .orElseThrow();
 
-      var context = new ControlFlowGraphImpl();
-      visitor.visit(statementList, context);
-      context.finalise();
-      LOG.info(CfgDebug.toString(context));
+      var cfg = ControlFlowGraphFactory.create(statementList);
+      LOG.info(ControlFlowGraphDebug.toString(cfg));
 
-      return context;
+      return cfg;
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
   }
 
-  private void test(String input, CfgChecker checker) {
+  private void test(String input, GraphChecker checker) {
     test(Collections.emptyMap(), input, checker);
   }
 
-  private void test(List<String> variables, String input, CfgChecker checker) {
+  private void test(List<String> variables, String input, GraphChecker checker) {
     checker.check(buildCFG(variables, input));
   }
 
-  private void test(Map<String, List<String>> sections, String input, CfgChecker checker) {
+  private void test(Map<String, List<String>> sections, String input, GraphChecker checker) {
     checker.check(buildCFG(sections, input));
   }
 
@@ -226,20 +224,20 @@ class ControlFlowGraphTest {
 
   @Test
   void testEmptyCFG() {
-    final ControlFlowGraphImpl cfg = buildCFG("");
+    final ControlFlowGraph cfg = buildCFG("");
     checker().check(cfg);
-    assertThat(cfg.getEntryBlock().getSuccessorBlocks()).as("entry is an exit").isEmpty();
+    assertThat(cfg.getEntryBlock().getSuccessors()).as("entry is an exit").isEmpty();
   }
 
   @Test
   void testSimplestCFG() {
-    final ControlFlowGraphImpl cfg = buildCFG("Foo;");
+    final ControlFlowGraph cfg = buildCFG("Foo;");
     checker(block(element(NameReferenceNode.class, "Foo")).succeedsTo(0)).check(cfg);
     Block entry = cfg.getEntryBlock();
-    assertThat(entry.getSuccessorBlocks()).as("1st block is not an exit").isNotEmpty();
-    assertThat(entry.getSuccessorBlocks()).as("number of succeedsTo").hasSize(1);
-    Block exit = entry.getSuccessorBlocks().iterator().next();
-    assertThat(exit.getSuccessorBlocks()).as("2nd block is an exit").isEmpty();
+    assertThat(entry.getSuccessors()).as("1st block is not an exit").isNotEmpty();
+    assertThat(entry.getSuccessors()).as("number of succeedsTo").hasSize(1);
+    Block exit = entry.getSuccessors().iterator().next();
+    assertThat(exit.getSuccessors()).as("2nd block is an exit").isEmpty();
   }
 
   @Test

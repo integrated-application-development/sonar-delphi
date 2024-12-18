@@ -19,15 +19,15 @@
 package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import com.google.common.collect.Lists;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
-import org.sonarsource.analyzer.commons.collections.ListUtils;
 
-public class ControlFlowGraphFactory {
+public final class ControlFlowGraphFactory {
   private ControlFlowGraphFactory() {
     // Utility class
   }
@@ -49,10 +49,9 @@ public class ControlFlowGraphFactory {
   }
 
   public static ControlFlowGraph create(List<StatementNode> statements) {
-    ControlFlowGraphImpl cfg = new ControlFlowGraphImpl();
+    ControlFlowGraphBuilder builder = new ControlFlowGraphBuilder();
     ControlFlowGraphVisitor visitor = new ControlFlowGraphVisitor();
-    ListUtils.reverse(statements).forEach(statement -> statement.accept(visitor, cfg));
-    cfg.finalise();
-    return cfg;
+    Lists.reverse(statements).forEach(statement -> statement.accept(visitor, builder));
+    return builder.build();
   }
 }

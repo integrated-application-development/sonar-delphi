@@ -22,9 +22,9 @@ import java.util.Collections;
 import java.util.Set;
 
 /** No successors */
-public interface Terminus extends Successors {
+public interface Terminus extends Block {
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return Collections.emptySet();
   }
 }

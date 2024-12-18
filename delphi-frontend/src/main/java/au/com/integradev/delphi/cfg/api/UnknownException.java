@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public interface UnknownException extends Successors {
+public interface UnknownException extends Block {
   /** Next block without exceptional circumstances */
   Block getSuccessor();
 
@@ -30,7 +30,7 @@ public interface UnknownException extends Successors {
   Set<Block> getExceptions();
 
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return Stream.concat(Stream.of(getSuccessor()), getExceptions().stream())
         .collect(Collectors.toSet());
   }

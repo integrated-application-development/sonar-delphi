@@ -24,92 +24,112 @@ import au.com.integradev.delphi.cfg.api.Cases;
 import au.com.integradev.delphi.cfg.api.ExitPath;
 import au.com.integradev.delphi.cfg.api.Linear;
 import au.com.integradev.delphi.cfg.api.Sink;
-import au.com.integradev.delphi.cfg.api.Successors;
 import au.com.integradev.delphi.cfg.api.Terminus;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import au.com.integradev.delphi.cfg.api.UnknownException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public class BlockBuilder {
-  private final int id;
-  private Successors successor;
+  private Function<List<DelphiNode>, Block> blockSupplier;
+  private BiConsumer<Map<BuilderBlock, Block>, Block> dataSetter;
 
-  public static BlockBuilder newBlock(int id) {
-    return new BlockBuilder(id);
+  public static BlockBuilder newBlock() {
+    return new BlockBuilder();
   }
 
-  private BlockBuilder(int id) {
-    this.id = id;
-    this.successor = new TerminusImpl();
+  private BlockBuilder() {
+    this.blockSupplier = TerminusImpl::new;
+    this.dataSetter = (blocks, block) -> {};
   }
 
   public BlockBuilder withTerminator(DelphiNode terminator) {
-    this.successor = new SinkImpl(terminator);
+    this.blockSupplier = SinkImpl::new;
+    this.dataSetter = (blocks, block) -> ((SinkImpl) block).setData(terminator);
     return this;
   }
 
-  public BlockBuilder withBranch(DelphiNode terminator, Block trueBlock, Block falseBlock) {
-    this.successor = new BranchImpl(terminator, trueBlock, falseBlock);
+  public BlockBuilder withBranch(
+      DelphiNode terminator, BuilderBlock trueBlock, BuilderBlock falseBlock) {
+    this.blockSupplier = BranchImpl::new;
+    this.dataSetter =
+        (blocks, block) ->
+            ((BranchImpl) block).setData(terminator, blocks.get(trueBlock), blocks.get(falseBlock));
     return this;
   }
 
-  public BlockBuilder withExitPath(Block successor, Block exitSuccessor) {
-    this.successor = new ExitPathImpl(successor, exitSuccessor);
+  public BlockBuilder withExitPath(BuilderBlock successor, BuilderBlock exitSuccessor) {
+    this.blockSupplier = ExitPathImpl::new;
+    this.dataSetter =
+        (blocks, block) ->
+            ((ExitPathImpl) block).setData(blocks.get(successor), blocks.get(exitSuccessor));
     return this;
   }
 
-  public BlockBuilder withSuccessor(Block successor) {
-    this.successor = new LinearImpl(successor);
+  public BlockBuilder withSuccessor(BuilderBlock successor) {
+    this.blockSupplier = LinearImpl::new;
+    this.dataSetter = (blocks, block) -> ((LinearImpl) block).setData(blocks.get(successor));
     return this;
   }
 
-  public BlockBuilder withJump(DelphiNode terminator, Block target, Block withoutJump) {
-    this.successor = new UnconditionalJumpImpl(terminator, target, withoutJump);
+  public BlockBuilder withJump(
+      DelphiNode terminator, BuilderBlock target, BuilderBlock withoutJump) {
+    this.blockSupplier = UnconditionalJumpImpl::new;
+    this.dataSetter =
+        (blocks, block) ->
+            ((UnconditionalJumpImpl) block)
+                .setData(terminator, blocks.get(target), blocks.get(withoutJump));
     return this;
   }
 
-  public BlockBuilder withExceptions(Block successor, Set<Block> exceptions) {
-    this.successor = new UnknownExceptionImpl(successor, exceptions);
+  public BlockBuilder withExceptions(BuilderBlock successor, Set<BuilderBlock> exceptions) {
+    this.blockSupplier = UnknownExceptionImpl::new;
+    this.dataSetter =
+        (blocks, block) ->
+            ((UnknownExceptionImpl) block)
+                .setData(
+                    blocks.get(successor),
+                    exceptions.stream().map(blocks::get).collect(Collectors.toSet()));
     return this;
   }
 
-  public BlockBuilder withCases(DelphiNode terminator, Set<Block> cases) {
-    this.successor = new CasesImpl(terminator, cases);
+  public BlockBuilder withCases(DelphiNode terminator, Set<BuilderBlock> cases) {
+    this.blockSupplier = CasesImpl::new;
+    this.dataSetter =
+        (blocks, block) ->
+            ((CasesImpl) block)
+                .setData(terminator, cases.stream().map(blocks::get).collect(Collectors.toSet()));
     return this;
   }
 
-  public Block build() {
-    return new BlockImpl(id, successor);
+  public BuilderBlock build() {
+    return new BuilderBlock(blockSupplier, dataSetter);
   }
 
-  public abstract static class AbstractSuccessor implements Successors {
-    public abstract Successors replaceInactiveBlock(Block inactiveBlock, Block target);
+  private static String getBlocksString(Collection<Block> block) {
+    return block.stream().map(BlockBuilder::getBlockString).collect(Collectors.joining(" "));
+  }
 
-    public abstract String getDescription();
+  private static String getBlockString(Block block) {
+    return "B" + ((BlockImpl) block).getId();
+  }
 
-    final Block getNewTarget(Block subject, Block inactiveBlock, Block target) {
-      if (subject == inactiveBlock) return target;
-      return subject;
+  static class UnknownExceptionImpl extends BlockImpl implements UnknownException {
+    private Block successor;
+    private Set<Block> exceptions;
+
+    public UnknownExceptionImpl(List<DelphiNode> elements) {
+      super(elements);
     }
 
-    final String getBlocksString(Collection<Block> block) {
-      return block.stream().map(this::getBlockString).collect(Collectors.joining(" "));
-    }
-
-    final String getBlockString(Block block) {
-      return "B" + block.getId();
-    }
-  }
-
-  static class UnknownExceptionImpl extends AbstractSuccessor implements UnknownException {
-    private final Block successor;
-    private final Set<Block> exceptions;
-
-    public UnknownExceptionImpl(Block successor, Set<Block> exceptions) {
+    public void setData(Block successor, Set<Block> exceptions) {
       this.successor = successor;
       this.exceptions = exceptions;
     }
@@ -125,12 +145,11 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      if (exceptions.contains(inactiveBlock)) {
-        exceptions.remove(inactiveBlock);
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      if (exceptions.remove(inactiveBlock)) {
         exceptions.add(target);
       }
-      return new UnknownExceptionImpl(getNewTarget(successor, inactiveBlock, target), exceptions);
+      this.successor = getNewTarget(this.successor, inactiveBlock, target);
     }
 
     @Override
@@ -141,16 +160,16 @@ public class BlockBuilder {
     }
   }
 
-  static class CasesImpl extends AbstractSuccessor implements Cases {
-    private final Terminator terminator;
-    private final Set<Block> cases;
+  static class CasesImpl extends BlockImpl implements Cases {
+    private Terminator terminator;
+    private Set<Block> cases;
 
-    public CasesImpl(DelphiNode terminator, Set<Block> cases) {
-      this(new Terminator(terminator), cases);
+    public CasesImpl(List<DelphiNode> elements) {
+      super(elements);
     }
 
-    private CasesImpl(Terminator terminator, Set<Block> cases) {
-      this.terminator = terminator;
+    private void setData(DelphiNode terminator, Set<Block> cases) {
+      this.terminator = new Terminator(terminator);
       this.cases = cases;
     }
 
@@ -170,12 +189,10 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      if (cases.contains(inactiveBlock)) {
-        cases.remove(inactiveBlock);
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      if (cases.remove(inactiveBlock)) {
         cases.add(target);
       }
-      return new CasesImpl(terminator, cases);
     }
 
     @Override
@@ -184,17 +201,17 @@ public class BlockBuilder {
     }
   }
 
-  static class UnconditionalJumpImpl extends AbstractSuccessor implements UnconditionalJump {
-    private final Block target;
-    private final Block withoutJump;
-    private final Terminator terminator;
+  static class UnconditionalJumpImpl extends BlockImpl implements UnconditionalJump {
+    private Block target;
+    private Block withoutJump;
+    private Terminator terminator;
 
-    public UnconditionalJumpImpl(DelphiNode terminator, Block target, Block withoutJump) {
-      this(new Terminator(terminator), target, withoutJump);
+    public UnconditionalJumpImpl(List<DelphiNode> elements) {
+      super(elements);
     }
 
-    private UnconditionalJumpImpl(Terminator terminator, Block target, Block withoutJump) {
-      this.terminator = terminator;
+    private void setData(DelphiNode terminator, Block target, Block withoutJump) {
+      this.terminator = new Terminator(terminator);
       this.target = target;
       this.withoutJump = withoutJump;
     }
@@ -220,11 +237,9 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      return new UnconditionalJumpImpl(
-          terminator,
-          getNewTarget(this.target, inactiveBlock, target),
-          getNewTarget(withoutJump, inactiveBlock, target));
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      this.target = getNewTarget(this.target, inactiveBlock, target);
+      this.withoutJump = getNewTarget(this.withoutJump, inactiveBlock, target);
     }
 
     @Override
@@ -235,10 +250,14 @@ public class BlockBuilder {
     }
   }
 
-  static class LinearImpl extends AbstractSuccessor implements Linear {
-    private final Block successor;
+  static class LinearImpl extends BlockImpl implements Linear {
+    private Block successor;
 
-    public LinearImpl(Block successor) {
+    protected LinearImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
+    public void setData(Block successor) {
       this.successor = successor;
     }
 
@@ -248,8 +267,8 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      return new LinearImpl(getNewTarget(successor, inactiveBlock, target));
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      this.successor = getNewTarget(this.successor, inactiveBlock, target);
     }
 
     @Override
@@ -258,11 +277,15 @@ public class BlockBuilder {
     }
   }
 
-  static class ExitPathImpl extends AbstractSuccessor implements ExitPath {
-    private final Block successor;
-    private final Block exitSuccessor;
+  static class ExitPathImpl extends BlockImpl implements ExitPath {
+    private Block successor;
+    private Block exitSuccessor;
 
-    public ExitPathImpl(Block successor, Block exitSuccessor) {
+    protected ExitPathImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
+    public void setData(Block successor, Block exitSuccessor) {
       this.successor = successor;
       this.exitSuccessor = exitSuccessor;
     }
@@ -278,10 +301,9 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      return new ExitPathImpl(
-          getNewTarget(successor, inactiveBlock, target),
-          getNewTarget(exitSuccessor, inactiveBlock, target));
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      this.successor = getNewTarget(this.successor, inactiveBlock, target);
+      this.exitSuccessor = getNewTarget(this.exitSuccessor, inactiveBlock, target);
     }
 
     @Override
@@ -292,10 +314,14 @@ public class BlockBuilder {
     }
   }
 
-  static class SinkImpl extends AbstractSuccessor implements Sink {
-    private final Terminator terminator;
+  static class SinkImpl extends BlockImpl implements Sink {
+    private Terminator terminator;
 
-    public SinkImpl(DelphiNode terminator) {
+    protected SinkImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
+    public void setData(DelphiNode terminator) {
       this.terminator = new Terminator(terminator);
     }
 
@@ -310,8 +336,8 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      return this;
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      // Block has no successors
     }
 
     @Override
@@ -320,10 +346,15 @@ public class BlockBuilder {
     }
   }
 
-  private static class TerminusImpl extends AbstractSuccessor implements Terminus {
+  private static class TerminusImpl extends BlockImpl implements Terminus {
+
+    public TerminusImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      return this;
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      // Block has no successors
     }
 
     @Override
@@ -332,17 +363,17 @@ public class BlockBuilder {
     }
   }
 
-  static class BranchImpl extends AbstractSuccessor implements Branch {
-    private final Block trueBlock;
-    private final Block falseBlock;
-    private final Terminator terminator;
+  static class BranchImpl extends BlockImpl implements Branch {
+    private Block trueBlock;
+    private Block falseBlock;
+    private Terminator terminator;
 
-    public BranchImpl(DelphiNode terminator, Block trueBlock, Block falseBlock) {
-      this(new Terminator(terminator), trueBlock, falseBlock);
+    public BranchImpl(List<DelphiNode> elements) {
+      super(elements);
     }
 
-    private BranchImpl(Terminator terminator, Block trueBlock, Block falseBlock) {
-      this.terminator = terminator;
+    private void setData(DelphiNode terminator, Block trueBlock, Block falseBlock) {
+      this.terminator = new Terminator(terminator);
       this.trueBlock = trueBlock;
       this.falseBlock = falseBlock;
     }
@@ -368,11 +399,9 @@ public class BlockBuilder {
     }
 
     @Override
-    public Successors replaceInactiveBlock(Block inactiveBlock, Block target) {
-      return new BranchImpl(
-          terminator,
-          getNewTarget(trueBlock, inactiveBlock, target),
-          getNewTarget(falseBlock, inactiveBlock, target));
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      this.trueBlock = getNewTarget(this.trueBlock, inactiveBlock, target);
+      this.falseBlock = getNewTarget(this.falseBlock, inactiveBlock, target);
     }
 
     @Override

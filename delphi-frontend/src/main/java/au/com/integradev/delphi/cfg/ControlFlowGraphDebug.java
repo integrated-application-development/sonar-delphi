@@ -21,16 +21,16 @@ package au.com.integradev.delphi.cfg;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Terminated;
-import au.com.integradev.delphi.cfg.block.BlockBuilder.AbstractSuccessor;
+import au.com.integradev.delphi.cfg.block.BlockImpl;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
-public class CfgDebug {
+public class ControlFlowGraphDebug {
   private static final int MAX_NODE_TYPE_NAME = 30;
 
-  private CfgDebug() {}
+  private ControlFlowGraphDebug() {}
 
   public static String toString(ControlFlowGraph cfg) {
     StringBuilder buffer = new StringBuilder();
@@ -51,7 +51,7 @@ public class CfgDebug {
     IntStream.range(0, block.getElements().size())
         .forEach(index -> appendElement(buffer, index, block.getElements().get(index)));
 
-    getSuccessorsAs(block, Terminated.class)
+    getAs(block, Terminated.class)
         .ifPresent(
             successors -> {
               buffer.append("\nT:\t");
@@ -59,7 +59,7 @@ public class CfgDebug {
               buffer.append(successors.getTerminator().getImage());
             });
 
-    buffer.append(getSuccessorsAs(block, AbstractSuccessor.class).orElseThrow().getDescription());
+    buffer.append(getAs(block, BlockImpl.class).orElseThrow().getDescription());
     buffer.append("\n\n");
     return buffer.toString();
   }
@@ -81,12 +81,12 @@ public class CfgDebug {
   }
 
   private static String getBlockString(Block block) {
-    return "B" + block.getId();
+    return "B" + ((BlockImpl) block).getId();
   }
 
-  private static <T> Optional<T> getSuccessorsAs(Block block, Class<T> successorClass) {
-    if (successorClass.isInstance(block.getSuccessors())) {
-      return Optional.of(successorClass.cast(block.getSuccessors()));
+  private static <T> Optional<T> getAs(Block block, Class<T> clazz) {
+    if (clazz.isInstance(block)) {
+      return Optional.of(clazz.cast(block));
     }
     return Optional.empty();
   }

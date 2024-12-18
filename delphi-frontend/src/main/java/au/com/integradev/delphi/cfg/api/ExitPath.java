@@ -18,10 +18,11 @@
  */
 package au.com.integradev.delphi.cfg.api;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public interface ExitPath extends Successors {
+public interface ExitPath extends Block {
   /** Next block without exceptional circumstances */
   Block getSuccessor();
 
@@ -29,10 +30,10 @@ public interface ExitPath extends Successors {
   Block getExitSuccessor();
 
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     Set<Block> successors = new HashSet<>();
     successors.add(getSuccessor());
     successors.add(getExitSuccessor());
-    return successors;
+    return Collections.unmodifiableSet(successors);
   }
 }

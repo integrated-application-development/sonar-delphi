@@ -22,9 +22,9 @@ import java.util.Collections;
 import java.util.Set;
 
 /** No successors */
-public interface Sink extends Successors, Terminated {
+public interface Sink extends Block, Terminated {
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return Collections.emptySet();
   }
 }

@@ -19,65 +19,52 @@
 package au.com.integradev.delphi.cfg.block;
 
 import au.com.integradev.delphi.cfg.api.Block;
-import au.com.integradev.delphi.cfg.api.Successors;
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonarsource.analyzer.commons.collections.ListUtils;
 
-public class BlockImpl implements Block, Successors {
-  private int id;
-  private final List<DelphiNode> elements = new ArrayList<>();
-  private Successors successors;
-  private Set<Block> predecessors = new HashSet<>();
+public abstract class BlockImpl implements Block {
+  private int id = 0;
+  private final List<DelphiNode> elements;
+  private final Set<Block> predecessors = new HashSet<>();
 
-  public BlockImpl(int id, Successors successors) {
-    this.id = id;
-    this.successors = successors;
+  protected BlockImpl(List<DelphiNode> elements) {
+    this.elements = elements;
   }
 
   @Override
-  public int getId() {
-    return this.id;
+  public List<DelphiNode> getElements() {
+    return Collections.unmodifiableList(Lists.reverse(elements));
+  }
+
+  public void addPredecessor(Block predecessor) {
+    predecessors.add(predecessor);
+  }
+
+  @Override
+  public Set<Block> getPredecessors() {
+    return Collections.unmodifiableSet(predecessors);
   }
 
   public void setId(int id) {
     this.id = id;
   }
 
-  @Override
-  public List<DelphiNode> getElements() {
-    return Collections.unmodifiableList(ListUtils.reverse(elements));
+  public int getId() {
+    return id;
   }
 
-  @Override
-  public Successors getSuccessors() {
-    return successors;
+  public abstract void replaceInactiveSuccessor(Block inactiveBlock, Block target);
+
+  protected static Block getNewTarget(Block subject, Block inactiveBlock, Block target) {
+    if (subject == inactiveBlock) {
+      return target;
+    }
+    return subject;
   }
 
-  public void setSuccessors(Successors successor) {
-    this.successors = successor;
-  }
-
-  @Override
-  public Set<Block> getSuccessorBlocks() {
-    return Collections.unmodifiableSet(successors.getSuccessorBlocks());
-  }
-
-  @Override
-  public Set<Block> getPredecessorBlocks() {
-    return Collections.unmodifiableSet(predecessors);
-  }
-
-  /** This is allows the mutation `predecessors` */
-  public Set<Block> getPredecessors() {
-    return predecessors;
-  }
-
-  public void addElement(DelphiNode element) {
-    elements.add(element);
-  }
+  public abstract String getDescription();
 }

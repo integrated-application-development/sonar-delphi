@@ -20,7 +20,7 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
-public interface Branch extends Successors, Terminated {
+public interface Branch extends Block, Terminated {
   /** Next block when the condition is `true` */
   Block getTrueBlock();
 
@@ -28,7 +28,7 @@ public interface Branch extends Successors, Terminated {
   Block getFalseBlock();
 
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return Set.of(getTrueBlock(), getFalseBlock());
   }
 }

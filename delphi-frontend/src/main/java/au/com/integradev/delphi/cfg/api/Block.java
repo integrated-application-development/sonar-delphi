@@ -23,17 +23,11 @@ import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
 public interface Block {
-  /** Unique block identifier */
-  int getId();
-
   /** Successor blocks of the block */
-  Set<Block> getSuccessorBlocks();
+  Set<Block> getSuccessors();
 
   /** Predecessors of the block */
-  Set<Block> getPredecessorBlocks();
-
-  /** Successors handler of the block */
-  Successors getSuccessors();
+  Set<Block> getPredecessors();
 
   /** Elements of the block */
   List<DelphiNode> getElements();

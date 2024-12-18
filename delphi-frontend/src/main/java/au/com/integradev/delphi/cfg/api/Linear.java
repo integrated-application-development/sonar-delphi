@@ -20,12 +20,12 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
-public interface Linear extends Successors {
+public interface Linear extends Block {
   /** Next block */
   Block getSuccessor();
 
   @Override
-  default Set<Block> getSuccessorBlocks() {
+  default Set<Block> getSuccessors() {
     return Set.of(getSuccessor());
   }
 }
