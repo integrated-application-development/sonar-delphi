@@ -738,7 +738,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     return builder;
   }
 
-  // Helpers
+  // Utils
 
   private ControlFlowGraphBuilder build(DelphiNode node, ControlFlowGraphBuilder builder) {
     if (node == null) {

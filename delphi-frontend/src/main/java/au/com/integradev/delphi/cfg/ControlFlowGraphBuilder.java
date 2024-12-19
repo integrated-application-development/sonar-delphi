@@ -73,16 +73,16 @@ public class ControlFlowGraphBuilder {
 
     ControlFlowGraph cfg =
         new ControlFlowGraphImpl(
-            map.get(currentBlock), map.get(exitBlocks.peek()), new ArrayList<>(map.values()));
-    cfg = ControlFlowGraphPruner.prune(cfg);
+                map.get(currentBlock), map.get(exitBlocks.peek()), new ArrayList<>(map.values()))
+            .pruned();
 
-    populateSuccessors(cfg);
+    populatePredecessors(cfg);
     populateIds(cfg);
 
     return cfg;
   }
 
-  private static void populateSuccessors(ControlFlowGraph cfg) {
+  private static void populatePredecessors(ControlFlowGraph cfg) {
     for (Block block : cfg.getBlocks()) {
       for (Block successor : block.getSuccessors()) {
         ((BlockImpl) successor).addPredecessor(block);
