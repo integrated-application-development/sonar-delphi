@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
@@ -50,6 +51,7 @@ import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext.Location;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 
@@ -77,7 +79,7 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
 
     context
         .newIssue()
-        .onNode(loop)
+        .onFilePosition(FilePosition.from(loop.getFirstToken()))
         .withMessage("Ensure this loop doesn't execute just once.")
         .withSecondaries(loopViolations)
         .report();
@@ -130,18 +132,13 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
       return context;
     }
 
-    return visitExitingNode(node, context, fullyQualifiedName);
+    return visitExitingNode(node, context, declaration.getImage());
   }
 
   private DelphiCheckContext visitExitingNode(
-      DelphiNode node, DelphiCheckContext context, String description) {
-    DelphiNode enclosingStatement = findEnclosingStatement(node);
-    DelphiNode enclosingLoop = findEnclosingLoop();
-    if (enclosingStatement == null || enclosingLoop == null) {
-      return context;
-    }
+      DelphiNode exitingNode, DelphiCheckContext context, String description) {
 
-    if (isViolation(enclosingLoop, node) && violationInRelevantStatement(enclosingStatement)) {
+    if (isInViolatingLoop(exitingNode) && isRelevantViolation(exitingNode)) {
       List<Location> violationLocations = violations.peek();
       if (violationLocations == null) {
         return context;
@@ -149,31 +146,16 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
       violationLocations.add(
           new Location(
               String.format("Remove this \"%s\" statement or make it conditional.", description),
-              node));
+              exitingNode));
     }
     return context;
   }
 
-  private static DelphiNode findEnclosingStatement(DelphiNode node) {
-    DelphiNode parent = node;
-    if (!(parent instanceof StatementNode)) {
-      // Finding the enclosing statement of the NameReferenceNode
-      parent = parent.getFirstParentOfType(StatementNode.class);
+  private boolean isInViolatingLoop(DelphiNode jump) {
+    DelphiNode loop = this.loopStack.peek();
+    if (loop == null) {
+      return false;
     }
-    if (parent == null) {
-      return null;
-    }
-    do {
-      parent = parent.getFirstParentOfType(StatementNode.class);
-    } while (parent instanceof CompoundStatementNode);
-    return parent;
-  }
-
-  private DelphiNode findEnclosingLoop() {
-    return loopStack.peek();
-  }
-
-  private static boolean isViolation(DelphiNode loop, DelphiNode jump) {
     ControlFlowGraph cfg = getCFG(loop);
     Block loopBlock =
         getTerminatorBlock(cfg, loop)
@@ -183,16 +165,25 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     return !hasPredecessorInBlock(loopBlock, loop) && !jumpsBeforeLoop(cfg, loopBlock, jump);
   }
 
-  private static boolean violationInRelevantStatement(DelphiNode enclosingStatement) {
-    if (!(enclosingStatement instanceof IfStatementNode)) {
-      return true;
-    }
+  private static boolean isRelevantViolation(DelphiNode node) {
+    DelphiNode lastStatement = node;
+    for (StatementNode statement : node.getParentsOfType(StatementNode.class)) {
+      if (statement instanceof ForStatementNode
+          || statement instanceof RepeatStatementNode
+          || statement instanceof WhileStatementNode) {
+        // Reached the loop, it is a non-conditional statement or in a chain of `else` blocks
+        return true;
+      }
 
-    IfStatementNode ifStatement = (IfStatementNode) enclosingStatement;
-    if (!ifStatement.hasElseBranch()) {
-      return false;
+      if (statement instanceof IfStatementNode
+          && ((IfStatementNode) statement).getElseStatement() != lastStatement) {
+        // If we are in the `if then` branch, then it is not relevant
+        return false;
+      }
+
+      lastStatement = statement;
     }
-    return !(ifStatement.getElseStatement() instanceof IfStatementNode);
+    return false;
   }
 
   private static Optional<Block> getTerminatorBlock(ControlFlowGraph cfg, DelphiNode loop) {
@@ -290,6 +281,9 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     }
     if (node instanceof AnonymousMethodNodeImpl) {
       return ((AnonymousMethodNodeImpl) node)::getControlFlowGraph;
+    }
+    if (node instanceof CompoundStatementNode && node.getParent() instanceof DelphiAst) {
+      return () -> ControlFlowGraphFactory.create((CompoundStatementNode) node);
     }
     return null;
   }
