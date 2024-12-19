@@ -22,7 +22,7 @@ import au.com.integradev.delphi.antlr.ast.node.RoutineImplementationNodeImpl;
 import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
-import au.com.integradev.delphi.cfg.api.ExitPath;
+import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Linear;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import org.sonar.check.Rule;
@@ -96,7 +96,7 @@ public class RedundantJumpCheck extends DelphiCheck {
 
   private static Block getFinallyBlock(Block block) {
     return block.getSuccessors().stream()
-        .filter(ExitPath.class::isInstance)
+        .filter(Finally.class::isInstance)
         .findFirst()
         .orElse(null);
   }
@@ -104,7 +104,7 @@ public class RedundantJumpCheck extends DelphiCheck {
   private static boolean isInViolatingTryFinally(Block finallyBlock) {
     while (finallyBlock.getSuccessors().size() == 1) {
       Block finallySuccessor = finallyBlock.getSuccessors().iterator().next();
-      if (!(finallySuccessor instanceof ExitPath)) {
+      if (!(finallySuccessor instanceof Finally)) {
         break;
       }
       finallyBlock = finallySuccessor;
