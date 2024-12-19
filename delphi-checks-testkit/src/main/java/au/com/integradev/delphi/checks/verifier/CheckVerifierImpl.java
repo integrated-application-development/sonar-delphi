@@ -161,7 +161,7 @@ public class CheckVerifierImpl implements CheckVerifier {
 
   private static void verifyIssuesOnLinesInternal(
       List<Issue> issues, List<IssueExpectation> expectedIssues) {
-    List<Integer> unexpectedLines = new ArrayList<>();
+    List<IssueExpectation> unexpectedLines = new ArrayList<>();
     List<IssueExpectation> expectations = new ArrayList<>(expectedIssues);
 
     for (Issue issue : issues) {
@@ -169,11 +169,24 @@ public class CheckVerifierImpl implements CheckVerifier {
       if (expectedIssue.isPresent()) {
         expectations.remove(expectedIssue.get());
       } else {
-        unexpectedLines.add(getStartingLine(issue.primaryLocation()));
+        unexpectedLines.add(expectationFromIssue(issue));
       }
     }
 
     assertIssueMismatchesEmpty(expectations, unexpectedLines);
+  }
+
+  private static IssueExpectation expectationFromIssue(Issue issue) {
+    int primaryLine = getStartingLine(issue.primaryLocation());
+    List<List<Integer>> actualLines =
+        issue.flows().stream()
+            .map(
+                flow ->
+                    flow.locations().stream()
+                        .map(location -> getStartingLine(location) - primaryLine)
+                        .collect(Collectors.toList()))
+            .collect(Collectors.toList());
+    return new IssueExpectation(primaryLine, actualLines);
   }
 
   private static Optional<IssueExpectation> findIssue(
@@ -356,7 +369,7 @@ public class CheckVerifierImpl implements CheckVerifier {
   }
 
   private static void assertIssueMismatchesEmpty(
-      List<IssueExpectation> expectedIssues, List<Integer> unexpectedLines) {
+      List<IssueExpectation> expectedIssues, List<IssueExpectation> unexpectedLines) {
     if (!expectedIssues.isEmpty() || !unexpectedLines.isEmpty()) {
       StringBuilder message = new StringBuilder("Issues were ");
       if (!expectedIssues.isEmpty()) {
