@@ -21,7 +21,7 @@ package au.com.integradev.delphi.cfg.block;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.Cases;
-import au.com.integradev.delphi.cfg.api.ExitPath;
+import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Linear;
 import au.com.integradev.delphi.cfg.api.Sink;
 import au.com.integradev.delphi.cfg.api.Terminus;
@@ -65,11 +65,12 @@ public class BlockBuilder {
     return this;
   }
 
-  public BlockBuilder withExitPath(BuilderBlock successor, BuilderBlock exitSuccessor) {
-    this.blockSupplier = ExitPathImpl::new;
+  public BlockBuilder withFinallyPath(BuilderBlock successor, BuilderBlock finallySuccessor) {
+    this.blockSupplier = FinallyImpl::new;
     this.dataSetter =
         (blocks, block) ->
-            ((ExitPathImpl) block).setData(blocks.get(successor), blocks.get(exitSuccessor));
+            ((FinallyImpl) block)
+                .setData(blocks.get(successor), blocks.get(finallySuccessor));
     return this;
   }
 
@@ -277,17 +278,17 @@ public class BlockBuilder {
     }
   }
 
-  static class ExitPathImpl extends BlockImpl implements ExitPath {
+  static class FinallyImpl extends BlockImpl implements Finally {
     private Block successor;
-    private Block exitSuccessor;
+    private Block exceptionSuccessor;
 
-    protected ExitPathImpl(List<DelphiNode> elements) {
+    protected FinallyImpl(List<DelphiNode> elements) {
       super(elements);
     }
 
     public void setData(Block successor, Block exitSuccessor) {
       this.successor = successor;
-      this.exitSuccessor = exitSuccessor;
+      this.exceptionSuccessor = exitSuccessor;
     }
 
     @Override
@@ -296,21 +297,21 @@ public class BlockBuilder {
     }
 
     @Override
-    public Block getExitSuccessor() {
-      return exitSuccessor;
+    public Block getExceptionSuccessor() {
+      return exceptionSuccessor;
     }
 
     @Override
     public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
       this.successor = getNewTarget(this.successor, inactiveBlock, target);
-      this.exitSuccessor = getNewTarget(this.exitSuccessor, inactiveBlock, target);
+      this.exceptionSuccessor = getNewTarget(this.exceptionSuccessor, inactiveBlock, target);
     }
 
     @Override
     public String getDescription() {
       return String.format(
           "%n\tjumps to: %s%n\texits to: %s",
-          getBlockString(successor), getBlockString(exitSuccessor));
+          getBlockString(successor), getBlockString(exceptionSuccessor));
     }
   }
 

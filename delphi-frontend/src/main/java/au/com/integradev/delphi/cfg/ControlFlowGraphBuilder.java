@@ -142,7 +142,7 @@ public class ControlFlowGraphBuilder {
       return;
     }
 
-    // When they are processed, all the previously unresolved targets must be updated
+    // When "resolving" label, all the previously unresolved targets must be updated
     for (UnresolvedLabel unresolvedLabel : unresolvedLabels.get(label)) {
       unresolvedLabel.block.update(
           newBlock().withJump(unresolvedLabel.node, currentBlock, unresolvedLabel.nextBlock));

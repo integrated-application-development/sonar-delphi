@@ -21,7 +21,7 @@ package au.com.integradev.delphi.cfg.api;
 import java.util.Collections;
 import java.util.Set;
 
-/** No successors */
+/** A block which has no successors by nature, e.g., the end of a routine */
 public interface Terminus extends Block {
   @Override
   default Set<Block> getSuccessors() {

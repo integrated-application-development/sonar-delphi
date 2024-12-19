@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.Cases;
-import au.com.integradev.delphi.cfg.api.ExitPath;
+import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Linear;
 import au.com.integradev.delphi.cfg.api.Sink;
 import au.com.integradev.delphi.cfg.api.Terminated;
@@ -107,11 +107,11 @@ public class BlockChecker {
     this.successorChecker =
         new BlockDetailChecker(
             block -> {
-              ExitPath branch = assertBlockIsType(block, ExitPath.class);
+              Finally branch = assertBlockIsType(block, Finally.class);
               assertThat(getBlockId(branch.getSuccessor()))
                   .as(getBlockDisplay(block) + " is expected to have successor of B" + successor)
                   .isEqualTo(successor);
-              assertThat(getBlockId(branch.getExitSuccessor()))
+              assertThat(getBlockId(branch.getExceptionSuccessor()))
                   .as(
                       getBlockDisplay(block)
                           + " is expected to have exit successor of B"

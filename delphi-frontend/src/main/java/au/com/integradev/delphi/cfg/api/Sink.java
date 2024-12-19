@@ -21,7 +21,7 @@ package au.com.integradev.delphi.cfg.api;
 import java.util.Collections;
 import java.util.Set;
 
-/** No successors */
+/** A block which has no successors by design, e.g., <code>Exit</code> in a routine */
 public interface Sink extends Block, Terminated {
   @Override
   default Set<Block> getSuccessors() {

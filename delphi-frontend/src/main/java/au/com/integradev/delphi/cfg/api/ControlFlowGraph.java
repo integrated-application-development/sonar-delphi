@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.List;
 
+/** A graph representation of all paths that could be traversed in the execution of code */
 public interface ControlFlowGraph {
   /** The entry block to the control flow graph */
   Block getEntryBlock();

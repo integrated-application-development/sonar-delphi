@@ -20,8 +20,9 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
+/** A block which has particular alteration in control flow, e.g., <code>goto</code> */
 public interface UnconditionalJump extends Block, Terminated {
-  /** The block this block jumps to */
+  /** The target block */
   Block getSuccessor();
 
   /** The next block if this block weren't to jump */

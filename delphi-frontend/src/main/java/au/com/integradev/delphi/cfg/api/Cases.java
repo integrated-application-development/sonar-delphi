@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
+/** A block for the <code>case</code> statement's behaviour of a possible successor for each arm */
 public interface Cases extends Block, Terminated {
   /** All the cases this statement can succeed to */
   Set<Block> getCaseSuccessors();

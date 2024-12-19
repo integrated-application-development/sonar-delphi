@@ -21,6 +21,7 @@ package au.com.integradev.delphi.cfg.api;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
+/** Some blocks are terminated by a distinct control flow operation */
 public interface Terminated {
   /** Node that terminates this block */
   DelphiNode getTerminator();

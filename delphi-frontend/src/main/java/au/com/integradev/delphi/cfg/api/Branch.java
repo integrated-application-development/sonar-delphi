@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
+/** A block where the control flow is dictated by a boolean condition, e.g., <code>if</code> */
 public interface Branch extends Block, Terminated {
   /** Next block when the condition is `true` */
   Block getTrueBlock();

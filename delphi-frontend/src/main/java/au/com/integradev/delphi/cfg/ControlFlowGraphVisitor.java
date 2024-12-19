@@ -555,7 +555,8 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     // Finally
     FinallyBlockNode finallyNode = node.getFinallyBlock();
     if (finallyNode != null) {
-      builder.nextBlock(newBlock().withExitPath(builder.getCurrentBlock(), builder.getExitBlock()));
+      builder.nextBlock(
+          newBlock().withFinallyPath(builder.getCurrentBlock(), builder.getExitBlock()));
       build(finallyNode.getStatementList(), builder);
       builder.pushLoopContext(builder.getCurrentBlock(), builder.getCurrentBlock());
       builder.pushExitBlock(builder.getCurrentBlock());

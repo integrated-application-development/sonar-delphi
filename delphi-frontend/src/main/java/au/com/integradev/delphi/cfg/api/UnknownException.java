@@ -22,6 +22,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * A block which may alter the control flow with an exception, e.g., routine invocations in a
+ * try-catch
+ *
+ * <p>Known exceptions with be directly specified with a <code>Linear</code> block to their target
+ */
 public interface UnknownException extends Block {
   /** Next block without exceptional circumstances */
   Block getSuccessor();

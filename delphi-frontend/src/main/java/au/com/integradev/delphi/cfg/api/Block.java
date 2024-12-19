@@ -22,13 +22,14 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
+/** The unit of data within a <code>ControlFlowGraph</code> */
 public interface Block {
-  /** Successor blocks of the block */
+  /** Successor blocks of the block, i.e., the blocks that could be next in the control flow */
   Set<Block> getSuccessors();
 
-  /** Predecessors of the block */
+  /** Predecessors of the block, i.e., the blocks which could succeed to this block */
   Set<Block> getPredecessors();
 
-  /** Elements of the block */
+  /** Elements of the block, e.g., variable names and expressions */
   List<DelphiNode> getElements();
 }

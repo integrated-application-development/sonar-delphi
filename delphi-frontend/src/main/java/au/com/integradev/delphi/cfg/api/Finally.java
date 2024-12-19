@@ -22,18 +22,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public interface ExitPath extends Block {
+/** A block whose control flow depends on previous exceptions, e.g., <code>finally</code> block */
+public interface Finally extends Block {
   /** Next block without exceptional circumstances */
   Block getSuccessor();
 
-  /** Next block if exceptional circumstance */
-  Block getExitSuccessor();
+  /** Next block with exceptional circumstances */
+  Block getExceptionSuccessor();
 
   @Override
   default Set<Block> getSuccessors() {
     Set<Block> successors = new HashSet<>();
     successors.add(getSuccessor());
-    successors.add(getExitSuccessor());
+    successors.add(getExceptionSuccessor());
     return Collections.unmodifiableSet(successors);
   }
 }

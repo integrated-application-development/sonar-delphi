@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg.api;
 
 import java.util.Set;
 
+/** A block which has a single successor */
 public interface Linear extends Block {
   /** Next block */
   Block getSuccessor();
