@@ -23,6 +23,8 @@ import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -39,7 +41,16 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
     implements AnonymousMethodNode {
   private String image;
   private RoutineKind routineKind;
-  private ControlFlowGraph cfg;
+  private final Supplier<ControlFlowGraph> cfgSupplier =
+      Suppliers.memoize(
+          () -> {
+            CompoundStatementNode compoundStatementNode =
+                getFirstChildOfType(CompoundStatementNode.class);
+            if (compoundStatementNode == null) {
+              return null;
+            }
+            return ControlFlowGraphFactory.create(compoundStatementNode);
+          });
 
   public AnonymousMethodNodeImpl(Token token) {
     super(token);
@@ -120,13 +131,6 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   }
 
   public ControlFlowGraph getControlFlowGraph() {
-    CompoundStatementNode compoundStatementNode = getFirstChildOfType(CompoundStatementNode.class);
-    if (compoundStatementNode == null) {
-      return null;
-    }
-    if (cfg == null) {
-      cfg = ControlFlowGraphFactory.create(compoundStatementNode);
-    }
-    return cfg;
+    return cfgSupplier.get();
   }
 }
