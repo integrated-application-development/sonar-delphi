@@ -27,10 +27,12 @@ import java.util.stream.IntStream;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
-public class ControlFlowGraphDebug {
+public final class ControlFlowGraphDebug {
   private static final int MAX_NODE_TYPE_NAME = 30;
 
-  private ControlFlowGraphDebug() {}
+  private ControlFlowGraphDebug() {
+    // Utility class
+  }
 
   public static String toString(ControlFlowGraph cfg) {
     StringBuilder buffer = new StringBuilder();
