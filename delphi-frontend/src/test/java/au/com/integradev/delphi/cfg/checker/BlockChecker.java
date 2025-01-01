@@ -251,8 +251,8 @@ public class BlockChecker {
                   .as(
                       getBlockDisplay(block)
                           + " is expected to be terminated with "
-                          + terminator.getMethodName())
-                  .isEqualTo(terminator.getMethodName());
+                          + terminator.getRoutineName())
+                  .isEqualTo(terminator.getRoutineName());
             });
     return this;
   }

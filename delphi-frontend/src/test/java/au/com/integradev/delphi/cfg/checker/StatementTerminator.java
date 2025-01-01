@@ -26,16 +26,16 @@ public enum StatementTerminator {
   HALT("System.Halt", TerminatorKind.HALT),
   CONTINUE("System.Continue", TerminatorKind.CONTINUE);
 
-  private final String methodName;
+  private final String routineName;
   private final TerminatorKind terminatorKind;
 
-  StatementTerminator(String methodName, TerminatorKind terminatorKind) {
-    this.methodName = methodName;
+  StatementTerminator(String routineName, TerminatorKind terminatorKind) {
+    this.routineName = routineName;
     this.terminatorKind = terminatorKind;
   }
 
-  public String getMethodName() {
-    return methodName;
+  public String getRoutineName() {
+    return routineName;
   }
 
   public TerminatorKind getTerminatorKind() {
