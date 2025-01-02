@@ -1,13 +1,14 @@
 <h2>Why is this an issue?</h2>
 <p>
-  Unnecessarily using control flow intrinsics makes the code harder to read and understand with no
-  benefit. These statements appear to jump in the code, however, the jump is to the location that
-  would be next anyway.
+  Unnecessarily annotating the default control flow of a program using statements such as
+  <code>Continue</code>, <code>Break</code>, and <code>Exit</code> makes the code harder to read and
+  understand. Although these statements appear to alter the flow of a program, the control flow is
+  identical without it.
 </p>
 <h2>How to fix it</h2>
 <p>Remove the redundant jump:</p>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-procedure Example(Foo: TFoo);
+procedure Example;
 begin
   while Condition do begin
     Foo;
@@ -16,7 +17,7 @@ begin
 end;
 </pre>
 <pre data-diff-id="1" data-diff-type="compliant">
-procedure Example(Foo: TFoo);
+procedure Example;
 begin
   while Condition do begin
     Foo;
