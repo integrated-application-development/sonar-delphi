@@ -28,6 +28,8 @@ import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.Linear;
+import au.com.integradev.delphi.cfg.api.Terminus;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
 import au.com.integradev.delphi.cfg.checker.GraphChecker;
 import au.com.integradev.delphi.cfg.checker.StatementTerminator;
@@ -206,18 +208,17 @@ class ControlFlowGraphTest {
 
   private Consumer<DelphiNode> binaryOpTest(BinaryOperator operator) {
     return node -> {
-      assertThat(node).as("binary expression expected").isInstanceOf(BinaryExpressionNode.class);
-      assertThat(((BinaryExpressionNode) node).getOperator())
-          .as(operator + " operator expected")
-          .isEqualTo(operator);
+      assertThat(node).as("node type").isInstanceOf(BinaryExpressionNode.class);
+      BinaryOperator actualOp = ((BinaryExpressionNode) node).getOperator();
+      assertThat(actualOp).as("binary operator type").isEqualTo(operator);
     };
   }
 
   private Consumer<DelphiNode> unaryOpTest(UnaryOperator operator) {
     return node -> {
-      assertThat(node).as("unary expression expected").isInstanceOf(UnaryExpressionNode.class);
+      assertThat(node).as("node type").isInstanceOf(UnaryExpressionNode.class);
       assertThat(((UnaryExpressionNode) node).getOperator())
-          .as(operator + " operator expected")
+          .as("unary operator type")
           .isEqualTo(operator);
     };
   }
@@ -234,10 +235,13 @@ class ControlFlowGraphTest {
     final ControlFlowGraph cfg = buildCFG("Foo;");
     checker(block(element(NameReferenceNode.class, "Foo")).succeedsTo(0)).check(cfg);
     Block entry = cfg.getEntryBlock();
-    assertThat(entry.getSuccessors()).as("1st block is not an exit").isNotEmpty();
-    assertThat(entry.getSuccessors()).as("number of succeedsTo").hasSize(1);
+    assertThat(entry)
+        .withFailMessage("Expecting entry block to have single successor")
+        .isInstanceOf(Linear.class);
     Block exit = entry.getSuccessors().iterator().next();
-    assertThat(exit.getSuccessors()).as("2nd block is an exit").isEmpty();
+    assertThat(exit)
+        .withFailMessage("Expecting entry block's successor to be the exit block")
+        .isInstanceOf(Terminus.class);
   }
 
   @Test

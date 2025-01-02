@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.block.BlockImpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -40,26 +41,30 @@ public class GraphChecker {
   }
 
   public void check(final ControlFlowGraph cfg) {
-    assertThat(cfg.getBlocks()).as("Expected number of blocks").hasSize(checkers.size() + 1);
+    assertThat(cfg.getBlocks()).as("block count").hasSize(checkers.size() + 1);
     final Iterator<BlockChecker> checkerIterator = checkers.iterator();
 
     List<Block> blocks = new ArrayList<>(cfg.getBlocks());
     final Block exitBlock = blocks.remove(blocks.size() - 1);
     for (Block block : blocks) {
       checkerIterator.next().check(block);
-      checkLinkedBlocks("Successor", cfg.getBlocks(), block.getSuccessors());
-      checkLinkedBlocks("Predecessors", cfg.getBlocks(), block.getPredecessors());
+      int blockId = ((BlockImpl) block).getId();
+      checkLinkedBlocks("Successor of B" + blockId, cfg.getBlocks(), block.getSuccessors());
+      checkLinkedBlocks("Predecessor of B" + blockId, cfg.getBlocks(), block.getPredecessors());
     }
     assertThat(exitBlock.getElements()).isEmpty();
     assertThat(exitBlock.getSuccessors()).isEmpty();
     assertThat(cfg.getBlocks())
-        .as("CFG entry block is no longer in the list of blocks!")
+        .withFailMessage("CFG entry block is no longer in the list of blocks!")
         .contains(cfg.getEntryBlock());
   }
 
   private void checkLinkedBlocks(String type, List<Block> blocks, Set<Block> linkedBlocks) {
     for (Block block : linkedBlocks) {
-      assertThat(block).as(type + " block " + " is missing from he list of blocks").isIn(blocks);
+      assertThat(block)
+          .withFailMessage(
+              type + ", block B" + ((BlockImpl) block).getId() + " is missing from CFG's blocks")
+          .isIn(blocks);
     }
   }
 }

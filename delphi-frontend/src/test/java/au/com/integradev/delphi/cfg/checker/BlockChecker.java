@@ -70,14 +70,12 @@ public class BlockChecker {
   }
 
   public void check(final Block block) {
-    assertThat(block.getElements())
-        .as(getBlockDisplay(block) + " is expected to have " + elementCheckers.size() + " elements")
-        .hasSize(elementCheckers.size());
+    assertThat(block.getElements()).as("elements count").hasSize(elementCheckers.size());
     for (int elementId = 0; elementId < elementCheckers.size(); elementId++) {
       elementCheckers.get(elementId).check(block.getElements().get(elementId));
     }
     assertThat(successorChecker)
-        .as(getBlockDisplay(block) + " should have its successors declared")
+        .withFailMessage("%s should have its successors declared", getBlockDisplay(block))
         .isNotNull();
     successorChecker.check(block);
 
@@ -85,7 +83,7 @@ public class BlockChecker {
       terminatorChecker.check(block);
     } else {
       assertThat(block.getSuccessors())
-          .as(getBlockDisplay(block) + " should have its terminator specified")
+          .withFailMessage("%s should have its terminator specified", getBlockDisplay(block))
           .isNotInstanceOf(Terminated.class);
     }
     terminatorNodeChecks.forEach(check -> check.check(block));
@@ -97,7 +95,8 @@ public class BlockChecker {
             block -> {
               Linear branch = assertBlockIsType(block, Linear.class);
               assertThat(getBlockId(branch.getSuccessor()))
-                  .as(getBlockDisplay(block) + " is expected to have successor of B" + successor)
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to have successor of B" + successor)
                   .isEqualTo(successor);
             });
     return this;
@@ -109,10 +108,11 @@ public class BlockChecker {
             block -> {
               Finally branch = assertBlockIsType(block, Finally.class);
               assertThat(getBlockId(branch.getSuccessor()))
-                  .as(getBlockDisplay(block) + " is expected to have successor of B" + successor)
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to have successor of B" + successor)
                   .isEqualTo(successor);
               assertThat(getBlockId(branch.getExceptionSuccessor()))
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to have exit successor of B"
                           + exitSuccessor)
@@ -127,13 +127,13 @@ public class BlockChecker {
             block -> {
               Branch branch = assertBlockIsType(block, Branch.class);
               assertThat(getBlockId(branch.getTrueBlock()))
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to have true successor of B"
                           + trueBlock)
                   .isEqualTo(trueBlock);
               assertThat(getBlockId(branch.getFalseBlock()))
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to have false successor of B"
                           + falseBlock)
@@ -148,10 +148,11 @@ public class BlockChecker {
             block -> {
               UnconditionalJump branch = assertBlockIsType(block, UnconditionalJump.class);
               assertThat(getBlockId(branch.getSuccessor()))
-                  .as(getBlockDisplay(block) + " is expected to have successor of B" + successor)
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to have successor of B" + successor)
                   .isEqualTo(successor);
               assertThat(getBlockId(branch.getSuccessorWithoutJump()))
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to have successor without jump of B"
                           + successorWithoutJump)
@@ -171,7 +172,7 @@ public class BlockChecker {
                       .map(BlockChecker::getBlockId)
                       .collect(Collectors.toSet());
               assertThat(caseIds)
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to have case successors of ["
                           + expectedCases.stream()
@@ -190,14 +191,15 @@ public class BlockChecker {
             block -> {
               UnknownException branch = assertBlockIsType(block, UnknownException.class);
               assertThat(getBlockId(branch.getSuccessor()))
-                  .as(getBlockDisplay(block) + " is expected to have successor of B" + successor)
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to have successor of B" + successor)
                   .isEqualTo(successor);
               Set<Integer> blockIds =
                   branch.getExceptions().stream()
                       .map(BlockChecker::getBlockId)
                       .collect(Collectors.toSet());
               assertThat(blockIds)
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to have exception successors of ["
                           + exceptions.stream()
@@ -215,9 +217,7 @@ public class BlockChecker {
   }
 
   private <T extends Block> T assertBlockIsType(Block block, Class<T> type) {
-    assertThat(block)
-        .as(block.toString() + " is expected to be of type " + type.getTypeName())
-        .isInstanceOf(type);
+    assertThat(block).as("block type").isInstanceOf(type);
     return type.cast(block);
   }
 
@@ -231,24 +231,26 @@ public class BlockChecker {
             block -> {
               Terminated terminated = assertBlockTerminated(block);
               assertThat(terminated.getTerminatorKind())
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to be terminated with kind "
                           + terminator.getTerminatorKind())
                   .isEqualTo(terminator.getTerminatorKind());
 
               assertThat(terminated.getTerminator())
-                  .as(getBlockDisplay(block) + " is expected to be terminated with name reference")
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to be terminated with name reference")
                   .isInstanceOf(NameReferenceNode.class);
               NameReferenceNode nameReferenceNode = (NameReferenceNode) terminated.getTerminator();
               assertThat(nameReferenceNode.getLastName().getNameDeclaration())
-                  .as(getBlockDisplay(block) + " is expected to be terminated with routine")
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to be terminated with routine")
                   .isInstanceOf(RoutineNameDeclaration.class);
               assertThat(
                       ((RoutineNameDeclaration)
                               nameReferenceNode.getLastName().getNameDeclaration())
                           .fullyQualifiedName())
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to be terminated with "
                           + terminator.getRoutineName())
@@ -264,13 +266,14 @@ public class BlockChecker {
             block -> {
               Terminated terminated = assertBlockTerminated(block);
               assertThat(terminated.getTerminator())
-                  .as(
+                  .withFailMessage(
                       getBlockDisplay(block)
                           + " is expected to be terminated with "
                           + terminatorClass.getTypeName())
                   .isInstanceOf(terminatorClass);
               assertThat(terminated.getTerminatorKind())
-                  .as(getBlockDisplay(block) + " is expected to be terminated with kind " + kind)
+                  .withFailMessage(
+                      getBlockDisplay(block) + " is expected to be terminated with kind " + kind)
                   .isEqualTo(kind);
             });
     return this;
@@ -288,7 +291,7 @@ public class BlockChecker {
 
   private Terminated assertBlockTerminated(Block block) {
     assertThat(block)
-        .as(getBlockDisplay(block) + " is expected to be terminated")
+        .withFailMessage(getBlockDisplay(block) + " is expected to be terminated")
         .isInstanceOf(Terminated.class);
     return (Terminated) block;
   }
