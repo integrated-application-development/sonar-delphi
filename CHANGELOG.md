@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.2] - 2025-01-06
+
 ### Fixed
 
 - Incorrect case-sensitive treatment of file names in coverage reports.
@@ -1420,7 +1422,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.1...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.2...HEAD
+[1.12.2]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.1...v1.12.2
 [1.12.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.12.0...v1.12.1
 [1.12.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.10.0...v1.11.0
