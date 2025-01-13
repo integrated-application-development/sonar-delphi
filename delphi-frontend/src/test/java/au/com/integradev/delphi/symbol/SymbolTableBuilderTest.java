@@ -38,6 +38,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -155,6 +157,95 @@ class SymbolTableBuilderTest {
             .build();
 
     assertThat(symbolTable.getUnitByPath(excludedPath.toString())).isNull();
+  }
+
+  @Test
+  void testSonarSourcesArePrioritizedOverReferencedFiles(
+      @TempDir Path standardLibraryPath,
+      @TempDir Path referencedFilesPath,
+      @TempDir Path sourceFilesPath)
+      throws IOException {
+    createStandardLibrary(standardLibraryPath);
+    createStandardLibrary(referencedFilesPath);
+    createStandardLibrary(sourceFilesPath);
+
+    List<Path> referencedFiles;
+    try (Stream<Path> referencedFilesStream = Files.list(referencedFilesPath)) {
+      referencedFiles = referencedFilesStream.collect(Collectors.toUnmodifiableList());
+    }
+
+    List<Path> sourceFiles;
+    try (Stream<Path> sourceFilesStream = Files.list(sourceFilesPath)) {
+      sourceFiles = sourceFilesStream.collect(Collectors.toUnmodifiableList());
+    }
+
+    SymbolTable symbolTable =
+        SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
+            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .standardLibraryPath(standardLibraryPath)
+            .referencedFiles(referencedFiles)
+            .sourceFiles(sourceFiles)
+            .build();
+
+    assertThat(symbolTable.getUnitByPath(standardLibraryPath.resolve("SysInit.pas").toString()))
+        .isNull();
+    assertThat(symbolTable.getUnitByPath(referencedFilesPath.resolve("SysInit.pas").toString()))
+        .isNull();
+    assertThat(symbolTable.getUnitByPath(sourceFilesPath.resolve("SysInit.pas").toString()))
+        .isNotNull();
+  }
+
+  @Test
+  void testReferencedFilesArePrioritizedOverSearchPath(
+      @TempDir Path standardLibraryPath,
+      @TempDir Path searchPathRoot,
+      @TempDir Path referencedFilesPath)
+      throws IOException {
+    createStandardLibrary(standardLibraryPath);
+    createStandardLibrary(searchPathRoot);
+    createStandardLibrary(referencedFilesPath);
+
+    List<Path> referencedFiles;
+    try (Stream<Path> referencedFilesStream = Files.list(referencedFilesPath)) {
+      referencedFiles = referencedFilesStream.collect(Collectors.toUnmodifiableList());
+    }
+
+    SymbolTable symbolTable =
+        SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
+            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .standardLibraryPath(standardLibraryPath)
+            .searchPath(SearchPath.create(List.of(searchPathRoot)))
+            .referencedFiles(referencedFiles)
+            .build();
+
+    assertThat(symbolTable.getUnitByPath(standardLibraryPath.resolve("SysInit.pas").toString()))
+        .isNull();
+    assertThat(symbolTable.getUnitByPath(searchPathRoot.resolve("SysInit.pas").toString()))
+        .isNull();
+    assertThat(symbolTable.getUnitByPath(referencedFilesPath.resolve("SysInit.pas").toString()))
+        .isNotNull();
+  }
+
+  @Test
+  void testSearchPathIsPrioritizedOverStandardLibrary(
+      @TempDir Path standardLibraryPath, @TempDir Path searchPathRoot) throws IOException {
+    createStandardLibrary(standardLibraryPath);
+    createStandardLibrary(searchPathRoot);
+
+    SymbolTable symbolTable =
+        SymbolTable.builder()
+            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
+            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .standardLibraryPath(standardLibraryPath)
+            .searchPath(SearchPath.create(List.of(searchPathRoot)))
+            .build();
+
+    assertThat(symbolTable.getUnitByPath(standardLibraryPath.resolve("SysInit.pas").toString()))
+        .isNull();
+    assertThat(symbolTable.getUnitByPath(searchPathRoot.resolve("SysInit.pas").toString()))
+        .isNotNull();
   }
 
   @ParameterizedTest

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Reprioritize the analysis search path in the following order (highest to lowest):
+  - Analysis source files (`sonar.sources`)
+  - Referenced project files (`DCCReference`)
+  - Search path (`DCC_UnitSearchPath`)
+  - Debugger source path (`Debugger_DebugSourcePath`)
+  - Library path (`DelphiLibraryPath`/`DelphiTranslatedLibraryPath`)
+  - Standard library
+
+
 ## [1.12.2] - 2025-01-06
 
 ### Fixed
