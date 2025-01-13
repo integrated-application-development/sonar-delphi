@@ -69,6 +69,8 @@ public class DelphiProjectHelper {
   private final CompilerVersion compilerVersion;
   private final List<Path> searchDirectories;
   private final List<Path> debugSourceDirectories;
+  private final List<Path> libraryPathDirectories;
+  private final List<Path> browsingPathDirectories;
   private final List<Path> referencedFiles;
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
@@ -93,6 +95,8 @@ public class DelphiProjectHelper {
     this.compilerVersion = getCompilerVersionFromSettings();
     this.searchDirectories = getSearchDirectoriesFromSettings();
     this.debugSourceDirectories = new ArrayList<>();
+    this.libraryPathDirectories = new ArrayList<>();
+    this.browsingPathDirectories = new ArrayList<>();
     this.referencedFiles = new ArrayList<>();
     this.conditionalDefines = getPredefinedConditionalDefines();
     this.unitScopeNames = getSetFromSettings(DelphiProperties.UNIT_SCOPE_NAMES_KEY);
@@ -201,6 +205,8 @@ public class DelphiProjectHelper {
     for (DelphiProject project : projects) {
       searchDirectories.addAll(project.getSearchDirectories());
       debugSourceDirectories.addAll(project.getDebugSourceDirectories());
+      libraryPathDirectories.addAll(project.getLibraryPathDirectories());
+      browsingPathDirectories.addAll(project.getBrowsingPathDirectories());
       conditionalDefines.addAll(project.getConditionalDefines());
       referencedFiles.addAll(project.getSourceFiles());
       unitScopeNames.addAll(project.getUnitScopeNames());
@@ -310,11 +316,31 @@ public class DelphiProjectHelper {
   /**
    * Gets the debug source directories specified in project files
    *
-   * @return List of debug source directorie
+   * @return List of debug source directories
    */
   public List<Path> getDebugSourceDirectories() {
     indexProjects();
     return debugSourceDirectories;
+  }
+
+  /**
+   * Gets the library path directories specified in project files
+   *
+   * @return List of library path directories
+   */
+  public List<Path> getLibraryPathDirectories() {
+    indexProjects();
+    return libraryPathDirectories;
+  }
+
+  /**
+   * Gets the browsing path directories specified in project files
+   *
+   * @return List of browsing path directories
+   */
+  public List<Path> getBrowsingPathDirectories() {
+    indexProjects();
+    return browsingPathDirectories;
   }
 
   /**

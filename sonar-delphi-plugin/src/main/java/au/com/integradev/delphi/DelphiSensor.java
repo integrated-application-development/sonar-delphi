@@ -99,10 +99,7 @@ public class DelphiSensor implements Sensor {
     Iterable<InputFile> inputFiles = delphiProjectHelper.inputFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);
     List<Path> referencedFiles = delphiProjectHelper.getReferencedFiles();
-    List<Path> searchPathDirectories = new ArrayList<>();
-    searchPathDirectories.addAll(delphiProjectHelper.getSearchDirectories());
-    searchPathDirectories.addAll(delphiProjectHelper.getDebugSourceDirectories());
-    SearchPath searchPath = SearchPath.create(searchPathDirectories);
+    SearchPath searchPath = createSearchPath();
 
     SymbolTable symbolTable =
         SymbolTable.builder()
@@ -151,6 +148,33 @@ public class DelphiSensor implements Sensor {
     } finally {
       stopProgressReport(progressReport, success);
     }
+  }
+
+  private SearchPath createSearchPath() {
+    /*
+     CodeGear.Delphi.Targets appends the library paths to DCC_UnitSearchPath to create a new
+     property called UnitSearchPath, which then gets passed through to the compiler.
+     If we were reading UnitSearchPath directly instead of DCC_UnitSearchPath, we could avoid
+     manually appending the library path here.
+
+     There's a major benefit though, as the current approach allows us to prioritize the debug
+     source paths in between DCC_UnitSearchPath and DelphiLibraryPath in the search path.
+     From the perspective of a static analysis tool, this is the more correct ordering since it's
+     common for the debug source path to contain corresponding source files for DCUs in the search
+     path. These debug sources are more local to the project than the library path and should be
+     prioritized higher.
+
+     Some more reasons not to just read the UnitSearchPath property...
+     - It would tie us to an implementation detail of the MSBuild glue in CodeGear.Delphi.Targets.
+     - If the UnitSearchPath property were ever renamed, we'd fall out of compatibility.
+     - Relying on CodeGear.Delphi.Targets details would require us to mock it up in testing.
+    */
+    List<Path> searchPathDirectories = new ArrayList<>();
+    searchPathDirectories.addAll(delphiProjectHelper.getSearchDirectories());
+    searchPathDirectories.addAll(delphiProjectHelper.getDebugSourceDirectories());
+    searchPathDirectories.addAll(delphiProjectHelper.getLibraryPathDirectories());
+    searchPathDirectories.addAll(delphiProjectHelper.getBrowsingPathDirectories());
+    return SearchPath.create(searchPathDirectories);
   }
 
   private boolean shouldExecuteOnProject() {
