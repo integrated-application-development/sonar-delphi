@@ -38,5 +38,9 @@ public interface DelphiProject {
 
   List<Path> getDebugSourceDirectories();
 
+  List<Path> getLibraryPathDirectories();
+
+  List<Path> getBrowsingPathDirectories();
+
   Map<String, String> getUnitAliases();
 }

@@ -66,6 +66,8 @@ final class DelphiProjectParser {
     project.setUnitScopeNames(createUnitScopeNames(result.getProperties()));
     project.setSearchDirectories(createSearchDirectories(dprojDirectory, result.getProperties()));
     project.setDebugSourceDirectories(createDebugSourceDirectories(result.getProperties()));
+    project.setLibraryPath(createLibraryPathDirectories(result.getProperties()));
+    project.setBrowsingPath(createBrowsingPathDirectories(result.getProperties()));
     project.setUnitAliases(createUnitAliases(result.getProperties()));
     project.setSourceFiles(result.getSourceFiles());
 
@@ -81,31 +83,29 @@ final class DelphiProjectParser {
   }
 
   private List<Path> createSearchDirectories(Path dprojDirectory, ProjectProperties properties) {
-    /*
-     We manually append the library paths here, even though it's not strictly correct to do so.
+    List<Path> result = new ArrayList<>();
 
-     CodeGear.Delphi.Targets appends the library paths to DCC_UnitSearchPath to create a new
-     property called UnitSearchPath, which then gets passed through to the compiler.
+    result.add(dprojDirectory);
+    result.addAll(createPathList(properties, "DCC_UnitSearchPath"));
 
-     However, there are some good reasons not to just read the UnitSearchPath property:
-
-     - It would tie us to an implementation detail of the MSBuild glue in CodeGear.Delphi.Targets.
-     - If the UnitSearchPath property were ever renamed, we'd fall out of compatibility.
-     - Relying on CodeGear.Delphi.Targets details would require us to mock it up in testing.
-    */
-
-    List<Path> allPaths = new ArrayList<>();
-
-    allPaths.add(dprojDirectory);
-    allPaths.addAll(createPathList(properties, "DCC_UnitSearchPath"));
-    allPaths.addAll(createPathList(properties, "DelphiLibraryPath", false));
-    allPaths.addAll(createPathList(properties, "DelphiTranslatedLibraryPath", false));
-
-    return Collections.unmodifiableList(allPaths);
+    return Collections.unmodifiableList(result);
   }
 
   private List<Path> createDebugSourceDirectories(ProjectProperties properties) {
     return createPathList(properties, "Debugger_DebugSourcePath");
+  }
+
+  private List<Path> createLibraryPathDirectories(ProjectProperties properties) {
+    List<Path> result = new ArrayList<>();
+
+    result.addAll(createPathList(properties, "DelphiLibraryPath", false));
+    result.addAll(createPathList(properties, "DelphiTranslatedLibraryPath", false));
+
+    return Collections.unmodifiableList(result);
+  }
+
+  private List<Path> createBrowsingPathDirectories(ProjectProperties properties) {
+    return createPathList(properties, "DelphiBrowsingPath", false);
   }
 
   private List<Path> createPathList(ProjectProperties properties, String propertyName) {
@@ -176,6 +176,8 @@ final class DelphiProjectParser {
     private List<Path> sourceFiles = Collections.emptyList();
     private List<Path> searchDirectories = Collections.emptyList();
     private List<Path> debugSourceDirectories = Collections.emptyList();
+    private List<Path> libraryPathDirectories = Collections.emptyList();
+    private List<Path> browsingPathDirectories = Collections.emptyList();
     private Map<String, String> unitAliases = Collections.emptyMap();
 
     private void setDefinitions(Set<String> definitions) {
@@ -197,6 +199,14 @@ final class DelphiProjectParser {
 
     private void setDebugSourceDirectories(List<Path> debugSourceDirectories) {
       this.debugSourceDirectories = List.copyOf(debugSourceDirectories);
+    }
+
+    private void setLibraryPath(List<Path> libraryPathDirectories) {
+      this.libraryPathDirectories = List.copyOf(libraryPathDirectories);
+    }
+
+    private void setBrowsingPath(List<Path> browsingPathDirectories) {
+      this.browsingPathDirectories = List.copyOf(browsingPathDirectories);
     }
 
     private void setUnitAliases(Map<String, String> unitAliases) {
@@ -226,6 +236,16 @@ final class DelphiProjectParser {
     @Override
     public List<Path> getDebugSourceDirectories() {
       return debugSourceDirectories;
+    }
+
+    @Override
+    public List<Path> getLibraryPathDirectories() {
+      return libraryPathDirectories;
+    }
+
+    @Override
+    public List<Path> getBrowsingPathDirectories() {
+      return browsingPathDirectories;
     }
 
     @Override

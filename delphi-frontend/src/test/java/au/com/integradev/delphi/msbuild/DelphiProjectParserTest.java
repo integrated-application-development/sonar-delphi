@@ -57,6 +57,9 @@ class DelphiProjectParserTest {
   private static final String LIBRARY_PATH_PROJECT =
       "/au/com/integradev/delphi/msbuild/LibraryPath.dproj";
 
+  private static final String BROWSING_PATH_PROJECT =
+      "/au/com/integradev/delphi/msbuild/BrowsingPath.dproj";
+
   private EnvironmentVariableProvider environmentVariableProvider;
   private Path environmentProj;
 
@@ -158,14 +161,20 @@ class DelphiProjectParserTest {
   }
 
   @Test
-  void testLibraryPathShouldBeAppendedToSearchDirectories() {
+  void testLibraryPathProject() {
     DelphiProject project = parse(LIBRARY_PATH_PROJECT);
 
-    assertThat(project.getSearchDirectories())
+    assertThat(project.getLibraryPathDirectories())
         .containsExactly(
-            DelphiUtils.getResource("/au/com/integradev/delphi/msbuild").toPath(),
             DelphiUtils.getResource("/au/com/integradev/delphi").toPath(),
-            DelphiUtils.getResource("/au/com/integradev").toPath(),
-            DelphiUtils.getResource("/au/com").toPath());
+            DelphiUtils.getResource("/au/com/integradev").toPath());
+  }
+
+  @Test
+  void testBrowsingPathProject() {
+    DelphiProject project = parse(BROWSING_PATH_PROJECT);
+
+    assertThat(project.getBrowsingPathDirectories())
+        .containsExactly(DelphiUtils.getResource("/au/com/integradev/delphi").toPath());
   }
 }
