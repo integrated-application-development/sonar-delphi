@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
@@ -96,6 +97,16 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   @Override
   public boolean isProcedure() {
     return getRoutineKind() == RoutineKind.PROCEDURE;
+  }
+
+  @Override
+  public CompoundStatementNode getStatementBlock() {
+    return (CompoundStatementNode) getChild(1);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return getStatementBlock().isEmpty();
   }
 
   @Override

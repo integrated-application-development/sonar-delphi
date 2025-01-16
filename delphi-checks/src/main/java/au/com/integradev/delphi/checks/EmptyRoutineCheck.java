@@ -20,10 +20,12 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.utils.InterfaceUtils;
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -36,15 +38,30 @@ public class EmptyRoutineCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
-    if (routine.isEmpty() && shouldAddViolation(routine)) {
+    if (shouldAddViolation(routine)) {
       reportIssue(context, routine.getRoutineNameNode(), MESSAGE);
     }
     return super.visit(routine, context);
   }
 
-  private static boolean shouldAddViolation(RoutineImplementationNode routine) {
-    DelphiNode block = routine.getBlock();
+  @Override
+  public DelphiCheckContext visit(AnonymousMethodNode anonymousMethod, DelphiCheckContext context) {
+    if (shouldAddViolation(anonymousMethod)) {
+      context
+          .newIssue()
+          .onFilePosition(FilePosition.from(anonymousMethod.getFirstToken()))
+          .withMessage(MESSAGE)
+          .report();
+    }
+    return super.visit(anonymousMethod, context);
+  }
 
+  private static boolean shouldAddViolation(RoutineImplementationNode routine) {
+    if (!routine.isEmpty()) {
+      return false;
+    }
+
+    DelphiNode block = routine.getBlock();
     if (block != null && block.getComments().isEmpty()) {
       // All exclusions aside, an explanatory comment is mandatory
       return true;
@@ -58,5 +75,9 @@ public class EmptyRoutineCheck extends DelphiCheck {
     return !declaration.hasDirective(RoutineDirective.OVERRIDE)
         && !declaration.hasDirective(RoutineDirective.VIRTUAL)
         && !InterfaceUtils.implementsMethodOnInterface(declaration);
+  }
+
+  private static boolean shouldAddViolation(AnonymousMethodNode anonymousMethod) {
+    return anonymousMethod.isEmpty() && anonymousMethod.getStatementBlock().getComments().isEmpty();
   }
 }
