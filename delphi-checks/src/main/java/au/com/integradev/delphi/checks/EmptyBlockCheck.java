@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
@@ -49,7 +50,7 @@ public class EmptyBlockCheck extends DelphiCheck {
   private static boolean shouldAddViolation(CompoundStatementNode block) {
     DelphiNode parent = block.getParent();
 
-    if (parent instanceof RoutineBodyNode) {
+    if (parent instanceof RoutineBodyNode || parent instanceof AnonymousMethodNode) {
       // Handled by EmptyRoutineRule
       return false;
     }
