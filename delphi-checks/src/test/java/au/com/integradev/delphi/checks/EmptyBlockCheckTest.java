@@ -157,4 +157,24 @@ class EmptyBlockCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testEmptyAnonymousMethodShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TProc = reference to procedure;")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TProc;")
+                .appendImpl("begin")
+                .appendImpl("  Bar :=")
+                .appendImpl("    procedure")
+                .appendImpl("    begin")
+                .appendImpl("    end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
 }
