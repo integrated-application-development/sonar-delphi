@@ -201,6 +201,47 @@ class EmptyRoutineCheckTest {
   }
 
   @Test
+  void testEmptyAnonymousMethodWithoutCommentShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyRoutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TProc = reference to procedure;")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TProc;")
+                .appendImpl("begin")
+                .appendImpl("  Bar :=")
+                .appendImpl("    procedure // Noncompliant")
+                .appendImpl("    begin")
+                .appendImpl("    end;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testEmptyAnonymousMethodWithCommentShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyRoutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TProc = reference to procedure;")
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TProc;")
+                .appendImpl("begin")
+                .appendImpl("  Bar :=")
+                .appendImpl("    procedure")
+                .appendImpl("    begin")
+                .appendImpl("      // do nothing")
+                .appendImpl("    end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testForwardDeclarationShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyRoutineCheck())

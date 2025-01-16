@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Library path (`DelphiLibraryPath`/`DelphiTranslatedLibraryPath`)
   - Browsing path (`DelphiBrowsingPath`)
   - Standard library
+- Empty anonymous methods are now flagged in `EmptyRoutine`.
+- **API:** `AnonymousMethodNode::getStatementBlock` method.
+- **API:** `AnonymousMethodNode::isEmpty` method.
 
 ## [1.12.2] - 2025-01-06
 

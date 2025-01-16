@@ -41,4 +41,8 @@ public interface AnonymousMethodNode extends ExpressionNode {
   boolean isFunction();
 
   boolean isProcedure();
+
+  CompoundStatementNode getStatementBlock();
+
+  boolean isEmpty();
 }
