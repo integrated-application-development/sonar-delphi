@@ -19,6 +19,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -41,6 +42,9 @@ public interface AnonymousMethodNode extends ExpressionNode {
   boolean isFunction();
 
   boolean isProcedure();
+
+  @Nullable
+  LocalDeclarationSectionNode getDeclarationSection();
 
   CompoundStatementNode getStatementBlock();
 

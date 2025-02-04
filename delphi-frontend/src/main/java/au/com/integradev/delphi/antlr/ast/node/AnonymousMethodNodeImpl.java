@@ -25,10 +25,12 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.LocalDeclarationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineParametersNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineReturnTypeNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
@@ -97,6 +99,12 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
   @Override
   public boolean isProcedure() {
     return getRoutineKind() == RoutineKind.PROCEDURE;
+  }
+
+  @Override
+  @Nullable
+  public LocalDeclarationSectionNode getDeclarationSection() {
+    return getFirstChildOfType(LocalDeclarationSectionNode.class);
   }
 
   @Override
