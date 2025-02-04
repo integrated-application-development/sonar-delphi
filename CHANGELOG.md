@@ -17,13 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Include the global browsing path in unit import resolution.
 - Reprioritize the analysis search path in the following order (highest to lowest):
-  - Analysis source files (`sonar.sources`)
   - Referenced project files (`DCCReference`)
   - Search path (`DCC_UnitSearchPath`)
   - Debugger source path (`Debugger_DebugSourcePath`)
   - Library path (`DelphiLibraryPath`/`DelphiTranslatedLibraryPath`)
   - Browsing path (`DelphiBrowsingPath`)
   - Standard library
+  - Analysis source files (`sonar.sources`)
 - Empty anonymous methods are now ignored in `EmptyBlock`.
 - Empty anonymous methods are now flagged in `EmptyRoutine`.
 
