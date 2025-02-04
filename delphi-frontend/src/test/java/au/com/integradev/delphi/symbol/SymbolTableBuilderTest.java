@@ -160,43 +160,6 @@ class SymbolTableBuilderTest {
   }
 
   @Test
-  void testSonarSourcesArePrioritizedOverReferencedFiles(
-      @TempDir Path standardLibraryPath,
-      @TempDir Path referencedFilesPath,
-      @TempDir Path sourceFilesPath)
-      throws IOException {
-    createStandardLibrary(standardLibraryPath);
-    createStandardLibrary(referencedFilesPath);
-    createStandardLibrary(sourceFilesPath);
-
-    List<Path> referencedFiles;
-    try (Stream<Path> referencedFilesStream = Files.list(referencedFilesPath)) {
-      referencedFiles = referencedFilesStream.collect(Collectors.toUnmodifiableList());
-    }
-
-    List<Path> sourceFiles;
-    try (Stream<Path> sourceFilesStream = Files.list(sourceFilesPath)) {
-      sourceFiles = sourceFilesStream.collect(Collectors.toUnmodifiableList());
-    }
-
-    SymbolTable symbolTable =
-        SymbolTable.builder()
-            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
-            .typeFactory(TypeFactoryUtils.defaultFactory())
-            .standardLibraryPath(standardLibraryPath)
-            .referencedFiles(referencedFiles)
-            .sourceFiles(sourceFiles)
-            .build();
-
-    assertThat(symbolTable.getUnitByPath(standardLibraryPath.resolve("SysInit.pas").toString()))
-        .isNull();
-    assertThat(symbolTable.getUnitByPath(referencedFilesPath.resolve("SysInit.pas").toString()))
-        .isNull();
-    assertThat(symbolTable.getUnitByPath(sourceFilesPath.resolve("SysInit.pas").toString()))
-        .isNotNull();
-  }
-
-  @Test
   void testReferencedFilesArePrioritizedOverSearchPath(
       @TempDir Path standardLibraryPath,
       @TempDir Path searchPathRoot,

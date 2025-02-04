@@ -185,7 +185,7 @@ public class SymbolTableBuilder {
   }
 
   private void createUnitData(Path unitPath, boolean isSourceFile) {
-    if (unitPaths.add(unitPath)) {
+    if (unitPaths.add(unitPath) || isSourceFile) {
       String unitName = FilenameUtils.getBaseName(unitPath.toString());
       UnitData unitData = new UnitData(unitPath, isSourceFile);
 
@@ -459,11 +459,10 @@ public class SymbolTableBuilder {
       throw new SymbolTableConstructionException("typeFactory was not supplied.");
     }
 
-    sourceFiles.forEach(file -> this.createUnitData(file, true));
     referencedFiles.forEach(file -> this.createUnitData(file, false));
     searchPath.getRootDirectories().forEach(this::processSearchPath);
-
     processStandardLibrarySearchPaths();
+    sourceFiles.forEach(file -> this.createUnitData(file, true));
 
     ProgressReport progressReport =
         new ProgressReport(
