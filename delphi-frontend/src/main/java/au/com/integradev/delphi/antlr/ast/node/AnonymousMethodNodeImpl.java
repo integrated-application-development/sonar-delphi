@@ -101,7 +101,7 @@ public final class AnonymousMethodNodeImpl extends ExpressionNodeImpl
 
   @Override
   public CompoundStatementNode getStatementBlock() {
-    return (CompoundStatementNode) getChild(1);
+    return getFirstChildOfType(CompoundStatementNode.class);
   }
 
   @Override
