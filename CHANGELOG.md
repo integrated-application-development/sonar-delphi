@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `AnonymousMethodNode::getStatementBlock` method.
+- **API:** `AnonymousMethodNode::isEmpty` method.
+
 ### Changed
 
 - Include the global browsing path in unit import resolution.
@@ -20,8 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Standard library
 - Empty anonymous methods are now ignored in `EmptyBlock`.
 - Empty anonymous methods are now flagged in `EmptyRoutine`.
-- **API:** `AnonymousMethodNode::getStatementBlock` method.
-- **API:** `AnonymousMethodNode::isEmpty` method.
 
 ## [1.12.2] - 2025-01-06
 
