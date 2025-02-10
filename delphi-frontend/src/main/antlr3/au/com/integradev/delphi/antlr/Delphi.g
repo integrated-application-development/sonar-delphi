@@ -71,6 +71,8 @@ tokens {
   TkArgument;
   TkAnonymousMethod;
   TkAnonymousMethodHeading;
+  TkLessThanEqual;
+  TkGreaterThanEqual;
 }
 
 @header
@@ -328,11 +330,17 @@ import org.apache.commons.lang3.StringUtils;
     return t;
   }
 
-  private Token combineLastNTokens(int count) {
+  private Token combineLastNTokens(int type, int count) {
     CommonToken firstToken = (CommonToken) input.LT(-count);
     CommonToken lastToken = (CommonToken) input.LT(-1);
+    lastToken.setType(type);
     lastToken.setStartIndex(firstToken.getStartIndex());
     return lastToken;
+  }
+
+  private BinaryExpressionNodeImpl createBinaryExpression(Object operator) {
+    Token token = adaptor.getToken(operator);
+    return new BinaryExpressionNodeImpl(token);
   }
 
   @Override
@@ -965,11 +973,20 @@ unaryOperator                : NOT<UnaryExpressionNodeImpl>
 relationalOperator           : '='<BinaryExpressionNodeImpl>
                              | '>'<BinaryExpressionNodeImpl>
                              | '<'<BinaryExpressionNodeImpl>
-                             | '<='<BinaryExpressionNodeImpl>
-                             | '>='<BinaryExpressionNodeImpl>
+                             | op=lessThanEqualOperator -> {createBinaryExpression(op.getTree())}
+                             | op=greaterThanEqualOperator -> {createBinaryExpression(op.getTree())}
                              | '<>'<BinaryExpressionNodeImpl>
                              | IN<BinaryExpressionNodeImpl>
                              | IS<BinaryExpressionNodeImpl>
+                             ;
+// We're only doing this for symmetry with greaterThanEqualOperator. (see comment below)
+lessThanEqualOperator        : '<' '=' -> ^({combineLastNTokens(TkLessThanEqual, 2)})
+                             ;
+// We construct the "greater than equal" tokens while parsing binary expressions to preserve the
+// individual '>' and '=' tokens in other cases like `const Foo: TArray<Byte>=[1, 2, 3];`, which
+// we otherwise couldn't parse since the `>=` token would consume the closing angle bracket of the
+// generic type arguments and the const assignment operator.
+greaterThanEqualOperator     : '>' '=' -> ^({combineLastNTokens(TkGreaterThanEqual, 2)})
                              ;
 constExpression              : expression
                              | recordExpression
@@ -1372,8 +1389,6 @@ COLON                : ':'  ;
 EQUAL                : '='  ;
 NOT_EQUAL            : '<>' ;
 LESS_THAN            : '<'  ;
-LESS_THAN_EQUAL      : '<=' ;
-GREATER_THAN_EQUAL   : '>=' ;
 GREATER_THAN         : '>'  ;
 SQUARE_BRACKET_LEFT  : '['  ;
 SQUARE_BRACKET_RIGHT : ']'  ;

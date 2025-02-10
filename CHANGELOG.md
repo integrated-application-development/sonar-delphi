@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Parsing errors where adjacent `>` and `=` tokens were wrongly interpreted as the `>=` operator.
+
 ## [1.13.0] - 2025-02-05
 
 ### Added
