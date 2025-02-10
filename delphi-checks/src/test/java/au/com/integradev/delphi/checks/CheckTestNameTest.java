@@ -28,6 +28,7 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMember;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -35,6 +36,7 @@ import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 
 class CheckTestNameTest {
@@ -123,6 +125,10 @@ class CheckTestNameTest {
     methods()
         .that(VERIFY_ISSUES)
         .and(not(TESTING_IMPLEMENTATION_DETAILS))
+        .and(
+            DescribedPredicate.or(
+                Predicates.annotatedWith(Test.class),
+                Predicates.annotatedWith(ParameterizedTest.class)))
         .should()
         .haveNameMatching(".*ShouldAdd(Issues?|QuickFix(es)?)$")
         .allowEmptyShould(true)
@@ -135,6 +141,10 @@ class CheckTestNameTest {
         .that(VERIFY_NO_ISSUES)
         .and(not(TESTING_IMPLEMENTATION_DETAILS))
         .and(not(CALL_ASSERT_THROW_BY))
+        .and(
+            DescribedPredicate.or(
+                Predicates.annotatedWith(Test.class),
+                Predicates.annotatedWith(ParameterizedTest.class)))
         .should()
         .haveNameMatching(".*ShouldNotAddIssues?$")
         .allowEmptyShould(true)
@@ -166,8 +176,10 @@ class CheckTestNameTest {
   @Test
   void testCheckTestsShouldBeNamedCorrectly() {
     methods()
-        .that()
-        .areAnnotatedWith(Test.class)
+        .that(
+            DescribedPredicate.or(
+                Predicates.annotatedWith(Test.class),
+                Predicates.annotatedWith(ParameterizedTest.class)))
         .and(not(DECLARED_IN_METATESTS))
         .should()
         .haveNameMatching(".*Should((Not)?(Throw|Add(Issues?|QuickFix(es)?)))")
