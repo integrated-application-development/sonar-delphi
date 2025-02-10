@@ -353,4 +353,9 @@ class GrammarTest {
   void testSemicolonSeparatedGenericArguments() {
     assertParsed("SemicolonSeparatedGenericArguments.pas");
   }
+
+  @Test
+  void testGreaterThanEqualAmbiguity() {
+    assertParsed("GreaterThanEqualAmbiguity.pas");
+  }
 }
