@@ -182,6 +182,21 @@ class RedundantJumpCheckTest {
   }
 
   @Test
+  void testExitWithEmptyArgumentListShouldAddIssue() {
+    doExitTest(List.of("Exit(); // Noncompliant"), true);
+  }
+
+  @Test
+  void testExitWithEmptyArgumentListAtEndShouldAddIssue() {
+    doExitTest(List.of("Foo;", "Exit(); // Noncompliant"), true);
+  }
+
+  @Test
+  void testExitWithEmptyArgumentListBeforeEndShouldNotAddIssue() {
+    doExitTest(List.of("Exit();", "Foo;"), false);
+  }
+
+  @Test
   void testExitShouldAddIssue() {
     doExitTest(List.of("Exit; // Noncompliant"), true);
   }
@@ -193,7 +208,7 @@ class RedundantJumpCheckTest {
 
   @Test
   void testExitBeforeEndShouldNotAddIssue() {
-    doExitTest(List.of("Exit; // Noncompliant", "Foo;"), false);
+    doExitTest(List.of("Exit;", "Foo;"), false);
   }
 
   @Test
@@ -352,5 +367,34 @@ class RedundantJumpCheckTest {
   void testAnonymousMethodExitShouldAddIssue() {
     doExitTest(
         List.of("var A := procedure", "  begin", "    Exit; // Noncompliant", "  end;"), true);
+  }
+
+  @Test
+  void testGotoShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantJumpCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("label NextLine;")
+                .appendImpl("begin")
+                .appendImpl("  goto NextLine;")
+                .appendImpl("  NextLine:")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testAsmRoutineShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantJumpCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure AsmRoutine;")
+                .appendImpl("asm")
+                .appendImpl("  JMP @NextLine")
+                .appendImpl("  @NextLine:")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }

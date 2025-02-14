@@ -23,12 +23,10 @@ import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Finally;
-import au.com.integradev.delphi.cfg.api.Linear;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
-import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
@@ -53,12 +51,8 @@ public class RedundantJumpCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(AnonymousMethodNode routine, DelphiCheckContext context) {
-    CompoundStatementNode compoundStatementNode =
-        routine.getFirstChildOfType(CompoundStatementNode.class);
-    if (compoundStatementNode != null) {
-      ControlFlowGraph cfg = ControlFlowGraphFactory.create(compoundStatementNode);
-      cfg.getBlocks().forEach(block -> checkBlock(block, context));
-    }
+    ControlFlowGraph cfg = ControlFlowGraphFactory.create(routine.getStatementBlock());
+    cfg.getBlocks().forEach(block -> checkBlock(block, context));
 
     return super.visit(routine, context);
   }
@@ -69,19 +63,20 @@ public class RedundantJumpCheck extends DelphiCheck {
     }
 
     UnconditionalJump jump = (UnconditionalJump) block;
-    Block successorWithoutJump = jump.getSuccessorIfRemoved();
     DelphiNode terminator = jump.getTerminator();
 
     RoutineNameDeclaration routineNameDeclaration = getRoutineNameDeclaration(terminator);
+    if (routineNameDeclaration == null) {
+      return;
+    }
+
     if (!isContinueOrExit(routineNameDeclaration)
         || isExitWithExpression(routineNameDeclaration, terminator)) {
       return;
     }
 
     Block successor = jump.getSuccessor();
-    successorWithoutJump = nonEmptySuccessor(successorWithoutJump);
-
-    if (!successorWithoutJump.equals(successor)) {
+    if (!successor.equals(jump.getSuccessorIfRemoved())) {
       return;
     }
 
@@ -116,46 +111,31 @@ public class RedundantJumpCheck extends DelphiCheck {
   }
 
   private static RoutineNameDeclaration getRoutineNameDeclaration(DelphiNode node) {
-    if (!(node instanceof NameReferenceNode)) {
-      return null;
+    NameDeclaration nameDeclaration = null;
+    if (node instanceof NameReferenceNode) {
+      nameDeclaration = ((NameReferenceNode) node).getNameDeclaration();
     }
-    NameDeclaration nameDeclaration = ((NameReferenceNode) node).getNameDeclaration();
-    if (!(nameDeclaration instanceof RoutineNameDeclaration)) {
-      return null;
+    if (nameDeclaration instanceof RoutineNameDeclaration) {
+      return (RoutineNameDeclaration) nameDeclaration;
     }
-    return (RoutineNameDeclaration) nameDeclaration;
+    return null;
   }
 
   private static boolean isContinueOrExit(RoutineNameDeclaration routineNameDeclaration) {
-    if (routineNameDeclaration == null) {
-      return false;
-    }
     String fullyQualifiedName = routineNameDeclaration.fullyQualifiedName();
     return fullyQualifiedName.equals("System.Continue") || fullyQualifiedName.equals("System.Exit");
   }
 
   private static boolean isExitWithExpression(
       RoutineNameDeclaration routineNameDeclaration, DelphiNode statement) {
-    if (routineNameDeclaration == null) {
-      return false;
-    }
     String fullyQualifiedName = routineNameDeclaration.fullyQualifiedName();
     if (!fullyQualifiedName.equals("System.Exit")) {
       return false;
     }
-    ArgumentListNode argumentList =
-        statement.getParent().getFirstChildOfType(ArgumentListNode.class);
-    if (argumentList == null) {
-      return false;
-    }
-    return argumentList.getArgumentNodes().size() == 1;
-  }
 
-  private static Block nonEmptySuccessor(Block initialBlock) {
-    Block result = initialBlock;
-    while (result.getElements().isEmpty() && result instanceof Linear) {
-      result = ((Linear) result).getSuccessor();
-    }
-    return result;
+    var argumentList = statement.getParent().getFirstChildOfType(ArgumentListNode.class);
+    int arguments = argumentList == null ? 0 : argumentList.getArgumentNodes().size();
+
+    return arguments > 0;
   }
 }
