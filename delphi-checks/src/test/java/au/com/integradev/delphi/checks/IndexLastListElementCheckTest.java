@@ -198,4 +198,22 @@ class IndexLastListElementCheckTest {
                 .appendImpl("end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testAssignmentShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new IndexLastListElementCheck())
+        .withStandardLibraryUnit(systemGenericsCollections())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("uses")
+                .appendImpl("  System.Generics.Collections;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  List: TList<Integer>;")
+                .appendImpl("begin")
+                .appendImpl("  List[List.Count - 1] := 5;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
 }
