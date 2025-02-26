@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -45,6 +46,13 @@ public class IndexLastListElementCheck extends DelphiCheck {
     doVisit(arrayTypeNode, context);
 
     return super.visit(arrayTypeNode, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(
+      AssignmentStatementNode assignmentStatementNode, DelphiCheckContext context) {
+    // Ignore LHS of assignment statements - TList.Last is a function, so can't be put here
+    return super.visit(assignmentStatementNode.getValue(), context);
   }
 
   private void doVisit(ArrayAccessorNode arrayTypeNode, DelphiCheckContext context) {

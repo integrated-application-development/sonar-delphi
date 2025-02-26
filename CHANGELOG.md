@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Parsing errors where adjacent `>` and `=` tokens were wrongly interpreted as the `>=` operator.
+- False-positives within assignment statements in `IndexLastListElement`.
 
 ## [1.13.0] - 2025-02-05
 
