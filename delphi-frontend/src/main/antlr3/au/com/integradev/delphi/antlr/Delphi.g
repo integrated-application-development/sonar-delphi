@@ -335,6 +335,8 @@ import org.apache.commons.lang3.StringUtils;
     CommonToken lastToken = (CommonToken) input.LT(-1);
     lastToken.setType(type);
     lastToken.setStartIndex(firstToken.getStartIndex());
+    lastToken.setLine(firstToken.getLine());
+    lastToken.setCharPositionInLine(firstToken.getCharPositionInLine());
     return lastToken;
   }
 
