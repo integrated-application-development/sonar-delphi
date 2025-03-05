@@ -333,11 +333,12 @@ import org.apache.commons.lang3.StringUtils;
   private Token combineLastNTokens(int type, int count) {
     CommonToken firstToken = (CommonToken) input.LT(-count);
     CommonToken lastToken = (CommonToken) input.LT(-1);
-    lastToken.setType(type);
-    lastToken.setStartIndex(firstToken.getStartIndex());
-    lastToken.setLine(firstToken.getLine());
-    lastToken.setCharPositionInLine(firstToken.getCharPositionInLine());
-    return lastToken;
+    CommonToken result = new CommonToken(lastToken);
+    result.setType(type);
+    result.setStartIndex(firstToken.getStartIndex());
+    result.setLine(firstToken.getLine());
+    result.setCharPositionInLine(firstToken.getCharPositionInLine());
+    return result;
   }
 
   private BinaryExpressionNodeImpl createBinaryExpression(Object operator) {
