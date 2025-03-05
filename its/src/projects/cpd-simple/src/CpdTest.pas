@@ -15,7 +15,7 @@ type
   public
   {testDefinitionsIncludes}
   end;
-  
+
 type
   TfDemoSecond = class (TForm)
     bShowTracker: TButton;
@@ -25,7 +25,7 @@ type
   public
 
   end;
-  
+
 var
   fDemo: TfDemo;
 
@@ -37,7 +37,7 @@ begin
   multiline
   comment
   *)
-  
+
   for i:=0 to 100 do
   begin
     a := b;
@@ -46,7 +46,7 @@ begin
     end;
     c := d;
     a := b;
-    if a < b then begin
+    if a >= b then begin
       c := b;
     end;
   end;
@@ -59,11 +59,11 @@ begin
     end;
     c := d;
     a := b;
-    if a < b then begin
+    if a >= b then begin
       c := b;
     end;
   end;
-  
+
 end;
 
 end.
