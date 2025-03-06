@@ -318,6 +318,28 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testEmptyIf() {
+    test(
+        "if C then begin end; A;",
+        checker(
+            block(element(NameReferenceNode.class, "C"))
+                .branchesTo(1, 1)
+                .withTerminator(IfStatementNode.class),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
+  void testEmptyIfElse() {
+    test(
+        "if C then begin end else begin end; A;",
+        checker(
+            block(element(NameReferenceNode.class, "C"))
+                .branchesTo(1, 1)
+                .withTerminator(IfStatementNode.class),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
   void testLocalVarDeclaration() {
     test(
         "var Bar: TObject;",
@@ -422,6 +444,42 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testEmptyCase() {
+    test(
+        "case S of end; A;",
+        checker(
+            block(element(NameReferenceNode.class, "S"))
+                .withTerminator(CaseStatementNode.class)
+                .succeedsToCases(1),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
+  void testEmptyCaseElse() {
+    test(
+        "case S of else end; A;",
+        checker(
+            block(element(NameReferenceNode.class, "S"))
+                .withTerminator(CaseStatementNode.class)
+                .succeedsToCases(1),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
+  void testEmptyCaseArm() {
+    test(
+        "case S of S1:; S2:; end; A;",
+        checker(
+            block(
+                    element(NameReferenceNode.class, "S"),
+                    element(NameReferenceNode.class, "S1"),
+                    element(NameReferenceNode.class, "S2"))
+                .withTerminator(CaseStatementNode.class)
+                .succeedsToCases(1, 1),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
   void testRepeat() {
     test(
         "repeat Bar; until Foo;",
@@ -458,6 +516,17 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testEmptyRepeat() {
+    test(
+        "repeat until C; A;",
+        checker(
+            block(element(NameReferenceNode.class, "C"))
+                .branchesTo(1, 2)
+                .withTerminator(RepeatStatementNode.class),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
   void testWhile() {
     test(
         "while Foo do Bar;",
@@ -491,6 +560,17 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "Bar"))
                 .jumpsTo(0, 2)
                 .withTerminator(StatementTerminator.BREAK)));
+  }
+
+  @Test
+  void testEmptyWhile() {
+    test(
+        "while C do; A;",
+        checker(
+            block(element(NameReferenceNode.class, "C"))
+                .branchesTo(2, 1)
+                .withTerminator(WhileStatementNode.class),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
   }
 
   @Test
@@ -586,6 +666,19 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testEmptyForTo() {
+    test(
+        "for I := F to T do; A;",
+        checker(
+            block(element(NameReferenceNode.class, "F")).succeedsTo(3),
+            block(element(NameReferenceNode.class, "T")).succeedsTo(2),
+            block(element(NameReferenceNode.class, "I"))
+                .branchesTo(2, 1)
+                .withTerminator(ForToStatementNode.class),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
   void testForInVarDecl() {
     test(
         "for var I in List do Foo;",
@@ -672,6 +765,18 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testEmptyForIn() {
+    test(
+        "for I in C do; A;",
+        checker(
+            block(element(NameReferenceNode.class, "C")).succeedsTo(2),
+            block(element(NameReferenceNode.class, "I"))
+                .branchesTo(2, 1)
+                .withTerminator(ForInStatementNode.class),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
   void testBreakOutsideOfLoop() {
     GraphChecker checker = checker();
     assertThatThrownBy(() -> test("Break;", checker))
@@ -694,6 +799,15 @@ class ControlFlowGraphTest {
         checker(
             block(element(NameReferenceNode.class, "TObject.Create")).succeedsTo(1),
             block(element(NameReferenceNode.class, "Foo")).succeedsTo(0)));
+  }
+
+  @Test
+  void testEmptyWith() {
+    test(
+        "with S do; A;",
+        checker(
+            block(element(NameReferenceNode.class, "S")).succeedsTo(1),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
   }
 
   @Test
@@ -1075,6 +1189,25 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testEmptyTryExcept() {
+    test(
+        "try except end; A",
+        checker(
+            block(element(TryStatementNode.class)).succeedsTo(1),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
+  void testEmptyTryFinally() {
+    test(
+        "try finally end; A",
+        checker(
+            block(element(TryStatementNode.class)).succeedsTo(2),
+            block().succeedsToWithExit(1, 0),
+            block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
+  }
+
+  @Test
   void testRaiseOutsideTry() {
     test(
         "raise A;",
@@ -1318,6 +1451,14 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "A"))
                 .withTerminator(GotoStatementNode.class, TerminatorKind.GOTO)
                 .jumpsTo(2, 0)));
+  }
+
+  @Test
+  void testEmptyLabel() {
+    test(
+        Map.of("label", List.of("A,B")),
+        "A: B: C;",
+        checker(block(element(NameReferenceNode.class, "C")).succeedsTo(0)));
   }
 
   @Test
