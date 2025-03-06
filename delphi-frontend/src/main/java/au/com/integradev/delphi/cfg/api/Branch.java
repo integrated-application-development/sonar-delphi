@@ -18,6 +18,8 @@
  */
 package au.com.integradev.delphi.cfg.api;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /** A block where the control flow is dictated by a boolean condition, e.g., {@code if} */
@@ -38,6 +40,9 @@ public interface Branch extends Block, Terminated {
 
   @Override
   default Set<Block> getSuccessors() {
-    return Set.of(getTrueBlock(), getFalseBlock());
+    Set<Block> successors = new HashSet<>();
+    successors.add(getTrueBlock());
+    successors.add(getFalseBlock());
+    return Collections.unmodifiableSet(successors);
   }
 }
