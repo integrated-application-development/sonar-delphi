@@ -143,6 +143,11 @@ public final class ProtoBlockFactory {
           "%n\tjumps to: %s%n\texceptions to: %s",
           getBlockString(successor), getBlocksString(exceptions));
     }
+
+    @Override
+    public String getBlockType() {
+      return "UnknownException";
+    }
   }
 
   static class CasesImpl extends BlockImpl implements Cases {
@@ -194,6 +199,11 @@ public final class ProtoBlockFactory {
           "%n\tcases to: %s%n\tfallthrough to: %s",
           getBlocksString(cases), getBlockString(fallthrough));
     }
+
+    @Override
+    public String getBlockType() {
+      return "Cases";
+    }
   }
 
   static class UnconditionalJumpImpl extends BlockImpl implements UnconditionalJump {
@@ -243,6 +253,11 @@ public final class ProtoBlockFactory {
           "%n\tjumps to: %s%n\twithout jump to: %s",
           getBlockString(target), getBlockString(withoutJump));
     }
+
+    @Override
+    public String getBlockType() {
+      return "UnconditionalJump";
+    }
   }
 
   static class LinearImpl extends BlockImpl implements Linear {
@@ -269,6 +284,11 @@ public final class ProtoBlockFactory {
     @Override
     public String getDescription() {
       return String.format("%n\tjumps to: %s", getBlockString(successor));
+    }
+
+    @Override
+    public String getBlockType() {
+      return "Linear";
     }
   }
 
@@ -307,6 +327,11 @@ public final class ProtoBlockFactory {
           "%n\tjumps to: %s%n\texits to: %s",
           getBlockString(successor), getBlockString(exceptionSuccessor));
     }
+
+    @Override
+    public String getBlockType() {
+      return "Finally";
+    }
   }
 
   static class HaltImpl extends BlockImpl implements Halt {
@@ -339,6 +364,11 @@ public final class ProtoBlockFactory {
     public String getDescription() {
       return String.format("%n\tno successors");
     }
+
+    @Override
+    public String getBlockType() {
+      return "Halt";
+    }
   }
 
   private static class TerminusImpl extends BlockImpl implements Terminus {
@@ -355,6 +385,11 @@ public final class ProtoBlockFactory {
     @Override
     public String getDescription() {
       return String.format("%n\t(Exit)");
+    }
+
+    @Override
+    public String getBlockType() {
+      return "Terminus";
     }
   }
 
@@ -404,6 +439,11 @@ public final class ProtoBlockFactory {
       return String.format(
           "%n\tjumps to: %s(true) %s(false)",
           getBlockString(trueBlock), getBlockString(falseBlock));
+    }
+
+    @Override
+    public String getBlockType() {
+      return "Branch";
     }
   }
 }
