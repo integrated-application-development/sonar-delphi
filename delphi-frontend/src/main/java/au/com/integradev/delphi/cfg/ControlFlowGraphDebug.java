@@ -83,7 +83,7 @@ public final class ControlFlowGraphDebug {
   }
 
   private static String getBlockString(Block block) {
-    return "B" + ((BlockImpl) block).getId();
+    return "B" + ((BlockImpl) block).getId() + " - " + ((BlockImpl) block).getBlockType();
   }
 
   private static <T> Optional<T> getAs(Block block, Class<T> clazz) {

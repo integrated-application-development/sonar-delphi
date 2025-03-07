@@ -67,4 +67,6 @@ public abstract class BlockImpl implements Block {
   }
 
   public abstract String getDescription();
+
+  public abstract String getBlockType();
 }
