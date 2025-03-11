@@ -85,7 +85,7 @@ public class BlockChecker {
     if (terminatorChecker != null) {
       terminatorChecker.check(block);
     } else {
-      assertThat(block.getSuccessors())
+      assertThat(block)
           .withFailMessage("%s should have its terminator specified", getBlockDisplay(block))
           .isNotInstanceOf(Terminated.class);
     }
