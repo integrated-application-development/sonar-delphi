@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
 
 public final class ProtoBlockFactory {
   private ProtoBlockFactory() {
@@ -56,11 +57,13 @@ public final class ProtoBlockFactory {
                 .setData(terminator, blocks.get(trueBlock), blocks.get(falseBlock)));
   }
 
-  public static ProtoBlock finallyBlock(ProtoBlock successor, ProtoBlock finallySuccessor) {
+  public static ProtoBlock finallyBlock(
+      FinallyBlockNode terminator, ProtoBlock successor, ProtoBlock finallySuccessor) {
     return new ProtoBlock(
         FinallyImpl::new,
         (blocks, block) ->
-            ((FinallyImpl) block).setData(blocks.get(successor), blocks.get(finallySuccessor)));
+            ((FinallyImpl) block)
+                .setData(terminator, blocks.get(successor), blocks.get(finallySuccessor)));
   }
 
   public static ProtoBlock linear(ProtoBlock successor) {
@@ -295,14 +298,16 @@ public final class ProtoBlockFactory {
   static class FinallyImpl extends BlockImpl implements Finally {
     private Block successor;
     private Block exceptionSuccessor;
+    private Terminator terminator;
 
     protected FinallyImpl(List<DelphiNode> elements) {
       super(elements);
     }
 
-    public void setData(Block successor, Block exitSuccessor) {
+    public void setData(FinallyBlockNode node, Block successor, Block exitSuccessor) {
       this.successor = successor;
       this.exceptionSuccessor = exitSuccessor;
+      this.terminator = new Terminator(node);
     }
 
     @Override
@@ -313,6 +318,16 @@ public final class ProtoBlockFactory {
     @Override
     public Block getExceptionSuccessor() {
       return exceptionSuccessor;
+    }
+
+    @Override
+    public DelphiNode getTerminator() {
+      return terminator.getTerminatorNode();
+    }
+
+    @Override
+    public TerminatorKind getTerminatorKind() {
+      return terminator.getKind();
     }
 
     @Override

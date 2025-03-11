@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /** A {@code finally} block whose control flow depends on the existence of previous exceptions */
-public interface Finally extends Block {
+public interface Finally extends Block, Terminated {
   /**
    * Next block in the {@link ControlFlowGraph} without exceptional circumstances
    *
