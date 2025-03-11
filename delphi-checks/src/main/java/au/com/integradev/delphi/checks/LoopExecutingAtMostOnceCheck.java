@@ -18,13 +18,12 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.RoutineImplementationNodeImpl;
 import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Terminated;
+import au.com.integradev.delphi.utils.ControlFlowGraphUtils;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -33,22 +32,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
-import java.util.function.Supplier;
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
@@ -282,34 +275,11 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     return false;
   }
 
-  private static Supplier<ControlFlowGraph> getCFGSupplier(DelphiNode node) {
-    if (node instanceof RoutineImplementationNodeImpl) {
-      return ((RoutineImplementationNodeImpl) node)::getControlFlowGraph;
-    }
-    if (node instanceof AnonymousMethodNodeImpl) {
-      return ((AnonymousMethodNodeImpl) node)::getControlFlowGraph;
-    }
-    if (node instanceof CompoundStatementNode && node.getParent() instanceof DelphiAst) {
-      return () -> ControlFlowGraphFactory.create((CompoundStatementNode) node);
-    }
-    if (node instanceof StatementListNode
-        && (node.getParent() instanceof InitializationSectionNode
-            || node.getParent() instanceof FinalizationSectionNode)) {
-      return () -> ControlFlowGraphFactory.create((StatementListNode) node);
-    }
-    return null;
-  }
-
   private static ControlFlowGraph getCFG(DelphiNode loop) {
-    DelphiNode parent = loop.getParent();
-    Supplier<ControlFlowGraph> cfgSupplier = getCFGSupplier(parent);
-    while (parent != null && cfgSupplier == null) {
-      parent = parent.getParent();
-      cfgSupplier = getCFGSupplier(parent);
+    ControlFlowGraph cfg = ControlFlowGraphUtils.findContainingCFG(loop);
+    if (cfg == null) {
+      return ControlFlowGraphFactory.create(loop.findChildrenOfType(StatementNode.class));
     }
-    if (cfgSupplier != null) {
-      return cfgSupplier.get();
-    }
-    return ControlFlowGraphFactory.create(loop.findChildrenOfType(StatementNode.class));
+    return cfg;
   }
 }
