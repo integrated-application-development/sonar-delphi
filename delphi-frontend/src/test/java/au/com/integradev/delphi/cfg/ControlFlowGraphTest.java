@@ -59,6 +59,7 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
@@ -818,7 +819,9 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(1, 1),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(0, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(0, 0)));
   }
 
   @Test
@@ -830,7 +833,9 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "E"))
                 .withTerminator(RaiseStatementNode.class, TerminatorKind.RAISE)
                 .jumpsTo(1, 1),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(0, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(0, 0)));
   }
 
   @Test
@@ -840,7 +845,9 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             terminator(StatementTerminator.EXIT).jumpsTo(1, 1),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(0, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(0, 0)));
   }
 
   @Test
@@ -853,7 +860,9 @@ class ControlFlowGraphTest {
                 .withTerminator(WhileStatementNode.class),
             block(element(TryStatementNode.class)).succeedsTo(2),
             terminator(StatementTerminator.BREAK).jumpsTo(1, 1),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(4, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(4, 0)));
   }
 
   @Test
@@ -866,7 +875,9 @@ class ControlFlowGraphTest {
                 .withTerminator(WhileStatementNode.class),
             block(element(TryStatementNode.class)).succeedsTo(2),
             terminator(StatementTerminator.CONTINUE).jumpsTo(1, 1),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(4, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(4, 0)));
   }
 
   @Test
@@ -876,7 +887,9 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             terminator(StatementTerminator.HALT).isSink(),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(0, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(0, 0)));
   }
 
   @Test
@@ -894,7 +907,9 @@ class ControlFlowGraphTest {
             block(element(IntegerLiteralNode.class)).succeedsTo(1),
             block(element(TryStatementNode.class)).succeedsTo(3),
             terminator(StatementTerminator.CONTINUE).jumpsTo(2, 2),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(1, 0),
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(1, 0),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, 0)
                 .withTerminator(ForToStatementNode.class)));
@@ -915,7 +930,9 @@ class ControlFlowGraphTest {
             block(element(IntegerLiteralNode.class)).succeedsTo(1),
             block(element(TryStatementNode.class)).succeedsTo(3),
             terminator(StatementTerminator.BREAK).jumpsTo(2, 2),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(1, 0),
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(1, 0),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, 0)
                 .withTerminator(ForToStatementNode.class)));
@@ -936,7 +953,9 @@ class ControlFlowGraphTest {
             block(element(IntegerLiteralNode.class)).succeedsTo(1),
             block(element(TryStatementNode.class)).succeedsTo(3),
             terminator(StatementTerminator.EXIT).jumpsTo(2, 2),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(1, 0),
+            block(element(NameReferenceNode.class, "Bar"))
+                .succeedsToWithExit(1, 0)
+                .withTerminator(FinallyBlockNode.class),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, 0)
                 .withTerminator(ForToStatementNode.class)));
@@ -957,7 +976,9 @@ class ControlFlowGraphTest {
             block(element(IntegerLiteralNode.class)).succeedsTo(1),
             block(element(TryStatementNode.class)).succeedsTo(3),
             terminator(StatementTerminator.HALT).isSink(),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(1, 0),
+            block(element(NameReferenceNode.class, "Bar"))
+                .succeedsToWithExit(1, 0)
+                .withTerminator(FinallyBlockNode.class),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, 0)
                 .withTerminator(ForToStatementNode.class)));
@@ -971,7 +992,9 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(1, 1),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExit(0, 0)));
+            block(element(NameReferenceNode.class, "Bar"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(0, 0)));
   }
 
   @Test
@@ -1128,7 +1151,9 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(1, 1, 2),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Bar"))
                 .succeedsToWithExceptions(1, 1),
-            block(element(NameReferenceNode.class, "Baz")).succeedsToWithExit(0, 0)));
+            block(element(NameReferenceNode.class, "Baz"))
+                .withTerminator(FinallyBlockNode.class)
+                .succeedsToWithExit(0, 0)));
   }
 
   @Test
@@ -1146,7 +1171,7 @@ class ControlFlowGraphTest {
             block(element(TryStatementNode.class)).succeedsTo(5),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(4, 4),
             block(element(NameReferenceNode.class, "Bar")).succeedsToWithExceptions(3, 0, 1),
-            block().succeedsToWithExit(2, 0),
+            terminator(FinallyBlockNode.class).succeedsToWithExit(2, 0),
             block().succeedsToWithExceptions(0, 0, 1),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Baz"))
                 .succeedsTo(0)));
@@ -1205,7 +1230,7 @@ class ControlFlowGraphTest {
         "try finally end; A",
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
-            block().succeedsToWithExit(1, 0),
+            terminator(FinallyBlockNode.class).succeedsToWithExit(1, 0),
             block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
   }
 
@@ -1568,7 +1593,7 @@ class ControlFlowGraphTest {
                 .succeedsTo(2),
             block(element(TextLiteralNode.class, "'b'"), element(NameReferenceNode.class, "X"))
                 .succeedsTo(2),
-            block().succeedsToWithExit(12, 0),
+            terminator(FinallyBlockNode.class).succeedsToWithExit(12, 0),
             block(element(NameReferenceNode.class, "Foo4")).succeedsTo(0)));
   }
 }
