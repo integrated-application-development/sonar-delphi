@@ -263,6 +263,11 @@ class RedundantJumpCheckTest {
   }
 
   @Test
+  void testExitInExceptShouldAddIssue() {
+    doExitTest(List.of("try", "  Exit; // Noncompliant", "except", "  Foo2;", "end;"), true);
+  }
+
+  @Test
   void testExitInNestedTryFinallyAtEndShouldAddIssue() {
     doExitTest(
         List.of(
@@ -331,6 +336,27 @@ class RedundantJumpCheckTest {
   }
 
   @Test
+  void testExceptExitWithStatementAfterShouldNotAddIssue() {
+    doExitTest(
+        List.of(
+            "try",
+            "  try",
+            "    A;",
+            "  except",
+            "    on E: Exception do begin",
+            "      Exit;",
+            "    end;",
+            "  end;",
+            "finally;",
+            "  if B then begin",
+            "    C;",
+            "  end;",
+            "end;",
+            "C;"),
+        false);
+  }
+
+  @Test
   void testForLoopAfterConditionalTryFinallyExitShouldNotAddIssue() {
     doExitTest(
         List.of(
@@ -360,6 +386,42 @@ class RedundantJumpCheckTest {
             "  end;",
             "end;",
             "B;"),
+        false);
+  }
+
+  @Test
+  void testRedundantTryFinallyNestedAnonymousMethodShouldAddIssue() {
+    doExitTest(
+        List.of(
+            "try",
+            "  var A := procedure",
+            "    begin",
+            "      try",
+            "        Exit; // Noncompliant",
+            "      finally",
+            "      end;",
+            "    end;",
+            "finally",
+            "end;",
+            "A;"),
+        true);
+  }
+
+  @Test
+  void testNonRedundantTryFinallyNestedAnonymousMethodShouldNotAddIssue() {
+    doExitTest(
+        List.of(
+            "try",
+            "  var A := procedure",
+            "    begin",
+            "      try",
+            "        Exit;",
+            "      finally",
+            "      end;",
+            "      A;",
+            "    end;",
+            "finally",
+            "end;"),
         false);
   }
 
