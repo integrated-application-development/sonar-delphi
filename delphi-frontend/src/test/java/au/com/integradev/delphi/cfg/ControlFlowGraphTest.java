@@ -1142,10 +1142,12 @@ class ControlFlowGraphTest {
                 "procedure Baz; begin end")),
         "try try Foo finally Bar end except on E: Exception do Baz end;",
         checker(
-            block(element(TryStatementNode.class)).succeedsTo(4),
-            block(element(TryStatementNode.class)).succeedsTo(3),
-            block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(2, 2),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExceptions(0, 0, 1),
+            block(element(TryStatementNode.class)).succeedsTo(6),
+            block(element(TryStatementNode.class)).succeedsTo(5),
+            block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(4, 4),
+            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExceptions(3, 0, 1),
+            block().succeedsToWithExit(2, 0),
+            block().succeedsToWithExceptions(0, 0, 1),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Baz"))
                 .succeedsTo(0)));
   }

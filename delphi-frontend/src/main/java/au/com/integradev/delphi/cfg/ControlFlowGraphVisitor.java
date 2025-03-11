@@ -524,6 +524,9 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
 
   private ControlFlowGraphBuilder buildTryFinally(
       TryStatementNode node, ControlFlowGraphBuilder builder) {
+    // to ensure after a `finally` exceptional paths still exist
+    handleExceptionalPaths(builder);
+
     builder.addBlockBeforeCurrent();
     // Finally
     FinallyBlockNode finallyNode = node.getFinallyBlock();
