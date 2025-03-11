@@ -18,6 +18,8 @@
  */
 package au.com.integradev.delphi.cfg.api;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /** A block for the {@code case} statement's behaviour of a possible successor for each arm */
@@ -38,6 +40,8 @@ public interface Cases extends Block, Terminated {
 
   @Override
   default Set<Block> getSuccessors() {
-    return getCaseSuccessors();
+    Set<Block> successors = new HashSet<>(getCaseSuccessors());
+    successors.add(getFallthroughSuccessor());
+    return Collections.unmodifiableSet(successors);
   }
 }

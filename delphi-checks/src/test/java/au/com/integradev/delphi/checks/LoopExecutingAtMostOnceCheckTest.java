@@ -426,6 +426,46 @@ class LoopExecutingAtMostOnceCheckTest {
   }
 
   @Test
+  void testCaseBreakShouldNotAddIssue() {
+    DelphiTestUnitBuilder unitBuilder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  while A do begin // Compliant")
+            .appendImpl("    case True of")
+            .appendImpl("      True: Break; // Compliant")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    CheckVerifier.newVerifier()
+        .withCheck(new LoopExecutingAtMostOnceCheck())
+        .onFile(unitBuilder)
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testCaseBreakElseBreakShouldAddIssue() {
+    DelphiTestUnitBuilder unitBuilder =
+        new DelphiTestUnitBuilder()
+            .appendImpl("procedure Test;")
+            .appendImpl("begin")
+            .appendImpl("  while A do begin // Noncompliant (2) (4)")
+            .appendImpl("    case True of")
+            .appendImpl("      True: Break; // Secondary")
+            .appendImpl("    else")
+            .appendImpl("      Break; // Secondary")
+            .appendImpl("    end;")
+            .appendImpl("  end;")
+            .appendImpl("end;");
+
+    CheckVerifier.newVerifier()
+        .withCheck(new LoopExecutingAtMostOnceCheck())
+        .onFile(unitBuilder)
+        .verifyIssues();
+  }
+
+  @Test
   void testIfNestedShouldNotAddIssue() {
     DelphiTestUnitBuilder unitBuilder =
         new DelphiTestUnitBuilder()
