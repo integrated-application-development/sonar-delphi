@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Exceptions from empty structures (e.g., `if`) in `LoopExecutingAtMostOnce` and `RedundantJump`.
+- False positives from case statements in `LoopExecutingAtMostOnce`.
 
 ## [1.14.1] - 2025-03-05
 
