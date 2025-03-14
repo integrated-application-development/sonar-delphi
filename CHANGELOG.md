@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False positives from nested finally-except blocks in `RedundantJump`.
 - False positives around wrapped type declarations in `VisibilityKeywordIndentation`.
 - Several compiler directives were not being recognized:
+  - `E`
+  - `F`
+  - `K`
+  - `N`
+  - `S`
   - `ALLOWBIND`
   - `ALLOWISOLATION`
   - `HIGHENTROPYVA`
@@ -29,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `LARGEADDRESSAWARE`
   - `MAXPAGESIZE`
   - `NXCOMPAT`
+  - `STACKCHECKS`
+  - `STRINGCHECKS`
   - `TSAWARE`
   - `TYPEDADDRESS`
 
