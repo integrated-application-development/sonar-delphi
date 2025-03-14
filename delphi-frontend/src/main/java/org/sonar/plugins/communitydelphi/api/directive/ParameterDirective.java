@@ -38,6 +38,7 @@ public interface ParameterDirective extends CompilerDirective {
     LINK("link", 'l'),
     STACKSIZE(null, 'm', Platform.WINDOWS),
     MINSTACKSIZE("minstacksize"),
+    MAXPAGESIZE("maxpagesize"),
     MAXSTACKSIZE("maxstacksize"),
     MESSAGE("message"),
     MINENUMSIZE("minenumsize"),
