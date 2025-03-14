@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Several compiler directives were not being recognized:
+  - `E`
+  - `F`
+  - `K`
+  - `N`
+  - `S`
+  - `ALLOWBIND`
+  - `ALLOWISOLATION`
+  - `HIGHENTROPYVA`
+  - `HIGHCHARUNICODE`
+  - `LARGEADDRESSAWARE`
+  - `MAXPAGESIZE`
+  - `NXCOMPAT`
+  - `STACKCHECKS`
+  - `STRINGCHECKS`
+  - `TSAWARE`
+  - `TYPEDADDRESS`
+
 ## [1.14.1] - 2025-03-05
 
 ### Fixed
