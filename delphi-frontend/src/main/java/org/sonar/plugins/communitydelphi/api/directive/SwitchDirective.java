@@ -55,7 +55,7 @@ public interface SwitchDirective extends CompilerDirective {
     STRONGLINKTYPES("stronglinktypes"),
     DEFINITIONINFO("definitioninfo"),
     REFERENCEINFO("referenceinfo", 'y'),
-    TYPEADDRESS("typeaddress", 't'),
+    TYPEDADDRESS("typedaddress", 't'),
     VARSTRINGCHECKS("varstringchecks", 'v'),
     WARNINGS("warnings"),
     WEAKPACKAGEUNIT("weakpackageunit"),

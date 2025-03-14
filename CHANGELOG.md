@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Several compiler directives were not being recognized:
+  - `TYPEDADDRESS`
+
 ## [1.14.1] - 2025-03-05
 
 ### Fixed
