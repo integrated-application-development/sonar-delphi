@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Several compiler directives were not being recognized:
+  - `ALLOWBIND`
+  - `ALLOWISOLATION`
+  - `HIGHENTROPYVA`
+  - `HIGHCHARUNICODE`
+  - `LARGEADDRESSAWARE`
+  - `NXCOMPAT`
+  - `TSAWARE`
   - `TYPEDADDRESS`
 
 ## [1.14.1] - 2025-03-05
