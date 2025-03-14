@@ -11,12 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exclude types annotated with attributes in `UnusedType`.
 
+### Deprecated
+
+- **API:** `SwitchDirective.SwitchKind.TYPEADDRESS` enum member, use `TYPEDADDRESS` instead.
+
 ### Fixed
 
 - Exceptions from empty structures (e.g., `if`) in `LoopExecutingAtMostOnce` and `RedundantJump`.
 - False positives from case statements in `LoopExecutingAtMostOnce`.
 - False positives from nested finally-except blocks in `RedundantJump`.
 - False positives around wrapped type declarations in `VisibilityKeywordIndentation`.
+- Several compiler directives were not being recognized:
+  - `TYPEDADDRESS`
 
 ## [1.14.1] - 2025-03-05
 

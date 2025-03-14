@@ -55,7 +55,12 @@ public interface SwitchDirective extends CompilerDirective {
     STRONGLINKTYPES("stronglinktypes"),
     DEFINITIONINFO("definitioninfo"),
     REFERENCEINFO("referenceinfo", 'y'),
-    TYPEADDRESS("typeaddress", 't'),
+    /**
+     * @deprecated Use {@link SwitchKind#TYPEDADDRESS} instead.
+     */
+    @Deprecated(forRemoval = true)
+    TYPEADDRESS(null, null),
+    TYPEDADDRESS("typedaddress", 't'),
     VARSTRINGCHECKS("varstringchecks", 'v'),
     WARNINGS("warnings"),
     WEAKPACKAGEUNIT("weakpackageunit"),
