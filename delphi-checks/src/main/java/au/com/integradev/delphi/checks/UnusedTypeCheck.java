@@ -69,6 +69,10 @@ public class UnusedTypeCheck extends DelphiCheck {
       return false;
     }
 
+    if (node.getAttributeList() != null) {
+      return false;
+    }
+
     return node.getTypeNameNode().getUsages().stream()
         .allMatch(occurrence -> isWithinType(occurrence, type));
   }
