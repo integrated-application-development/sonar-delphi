@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Exclude types annotated with attributes in `UnusedType`.
+
 ### Fixed
 
 - Exceptions from empty structures (e.g., `if`) in `LoopExecutingAtMostOnce` and `RedundantJump`.
