@@ -199,4 +199,17 @@ class UnusedTypeCheckTest {
                 .appendImpl("end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testUnusedTypeWithAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  [Bar]")
+                .appendDecl("  TFoo = class")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
 }
