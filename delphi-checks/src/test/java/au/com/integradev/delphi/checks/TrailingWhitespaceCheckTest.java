@@ -29,6 +29,7 @@ class TrailingWhitespaceCheckTest {
         .withCheck(new TrailingWhitespaceCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+2:17 to +2:18] <<>>")
                 .appendImpl("// Noncompliant@+1")
                 .appendImpl("var Foo: TObject; "))
         .verifyIssues();
@@ -40,6 +41,7 @@ class TrailingWhitespaceCheckTest {
         .withCheck(new TrailingWhitespaceCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+2:17 to +2:18] <<>>")
                 .appendImpl("// Noncompliant@+1")
                 .appendImpl("var Foo: TObject;\t"))
         .verifyIssues();
@@ -51,8 +53,22 @@ class TrailingWhitespaceCheckTest {
         .withCheck(new TrailingWhitespaceCheck())
         .onFile(
             new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+2:17 to +2:26] <<>>")
                 .appendImpl("// Noncompliant@+1")
                 .appendImpl("var Foo: TObject;\t   \t\t \t "))
+        .verifyIssues();
+  }
+
+  @Test
+  void testTrailingSpaceOnFollowingLineShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+3:0 to +3:3] <<>>")
+                .appendImpl("// Noncompliant@+2")
+                .appendImpl("var Foo: TObject;")
+                .appendImpl("   "))
         .verifyIssues();
   }
 
@@ -70,5 +86,92 @@ class TrailingWhitespaceCheckTest {
         .withCheck(new TrailingWhitespaceCheck())
         .onFile(new DelphiTestUnitBuilder().appendImpl("\t   \t \t var Foo: TObject;"))
         .verifyNoIssues();
+  }
+
+  @Test
+  void testNoTrailingSpaceInLineCommentShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder().appendImpl("// there is no trailing whitespace in here"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testTrailingSpaceInLineCommentShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+2:42 to +2:43] <<>>")
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("// hey, there's a trailing spaces in here! "))
+        .verifyIssues();
+  }
+
+  @Test
+  void testTrailingTabsInLineCommentShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+2:39 to +2:40] <<>>")
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("// hey, there's a trailing tab in here!\t"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testNoTrailingSpaceInMultilineCommentShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("{")
+                .appendImpl("  there is no trailing whitespace in here")
+                .appendImpl("}"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testTrailingSpaceInMultilineCommentShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+3:40 to +3:41] <<>>")
+                .appendImpl("// Noncompliant@+2")
+                .appendImpl("{")
+                .appendImpl("  hey, there's a trailing space in here! ")
+                .appendImpl("}"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testTrailingTabInMultilineCommentShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+3:38 to +3:39] <<>>")
+                .appendImpl("// Noncompliant@+2")
+                .appendImpl("{")
+                .appendImpl("  hey, there's a trailing tab in here!\t")
+                .appendImpl("}"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testTrailingSpaceOnFirstLineOfMultilineCommentWithOffsetShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TrailingWhitespaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("// Fix qf@[+2:6 to +2:7] <<>>")
+                .appendImpl("// Noncompliant@+1")
+                .appendImpl("     {\t")
+                .appendImpl("  hey, there's a trailing tab up there!")
+                .appendImpl("}"))
+        .verifyIssues();
   }
 }
