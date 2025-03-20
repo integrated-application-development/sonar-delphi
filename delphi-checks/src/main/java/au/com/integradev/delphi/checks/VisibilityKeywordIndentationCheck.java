@@ -20,7 +20,8 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.utils.IndentationUtils;
 import org.sonar.check.Rule;
-import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VisibilityNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -32,19 +33,21 @@ public class VisibilityKeywordIndentationCheck extends DelphiCheck {
   private static final String MESSAGE =
       "Indent this visibility specifier to the indentation level of the containing type.";
 
-  private static String getExpectedIndentation(DelphiNode node) {
-    var visibilityNode = (VisibilityNode) node;
-    // Class/Record/etc. -> VisibilitySection -> Visibility
-    var parent = visibilityNode.getParent().getParent();
-    return IndentationUtils.getLineIndentation(parent);
-  }
-
   @Override
   public DelphiCheckContext visit(VisibilityNode visibilityNode, DelphiCheckContext context) {
-    if (!IndentationUtils.getLineIndentation(visibilityNode)
-        .equals(getExpectedIndentation(visibilityNode))) {
-      reportIssue(context, visibilityNode, MESSAGE);
+    var declaration = visibilityNode.getNthParent(3);
+
+    if (declaration instanceof TypeDeclarationNode) {
+      NameDeclarationNode typeName = ((TypeDeclarationNode) declaration).getTypeNameNode();
+
+      String actual = IndentationUtils.getLineIndentation(visibilityNode);
+      String expected = IndentationUtils.getLineIndentation(typeName);
+
+      if (!actual.equals(expected)) {
+        reportIssue(context, visibilityNode, MESSAGE);
+      }
     }
+
     return super.visit(visibilityNode, context);
   }
 }
