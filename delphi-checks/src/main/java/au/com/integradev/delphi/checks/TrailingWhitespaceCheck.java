@@ -20,9 +20,9 @@ package au.com.integradev.delphi.checks;
 
 import static java.util.regex.Pattern.compile;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -36,9 +36,19 @@ public class TrailingWhitespaceCheck extends DelphiCheck {
   private static final String MESSAGE = "Remove this trailing whitespace.";
 
   private static final Pattern NEW_LINE_DELIMITER = compile("\r\n?|\n");
+  private static final Splitter NEW_LINE_SPLITTER = Splitter.on(NEW_LINE_DELIMITER);
+  private static final CharMatcher WHITESPACE_MATCHER =
+      CharMatcher.inRange((char) 0x00, (char) 0x20)
+          .and(CharMatcher.isNot('\r'))
+          .and(CharMatcher.isNot('\n'));
 
   @Override
   public void visitToken(DelphiToken token, DelphiCheckContext context) {
+    visitWhitespace(token, context);
+    visitComment(token, context);
+  }
+
+  private static void visitWhitespace(DelphiToken token, DelphiCheckContext context) {
     if (!token.isWhitespace()) {
       return;
     }
@@ -50,8 +60,8 @@ public class TrailingWhitespaceCheck extends DelphiCheck {
     int line = token.getBeginLine();
     int column = token.getBeginColumn();
 
-    String image = StringUtils.stripEnd(token.getImage(), " \t\f");
-    var parts = Splitter.on(NEW_LINE_DELIMITER).split(image);
+    String image = WHITESPACE_MATCHER.trimTrailingFrom(token.getImage());
+    var parts = NEW_LINE_SPLITTER.split(image);
     for (String whitespace : parts) {
       if (!whitespace.isEmpty()) {
         context
@@ -62,6 +72,31 @@ public class TrailingWhitespaceCheck extends DelphiCheck {
       }
       ++line;
       column = 0;
+    }
+  }
+
+  private static void visitComment(DelphiToken token, DelphiCheckContext context) {
+    if (!token.isComment()) {
+      return;
+    }
+
+    var commentLines = NEW_LINE_SPLITTER.splitToList(token.getImage());
+
+    for (int i = 0; i < commentLines.size(); ++i) {
+      String commentLine = commentLines.get(i);
+      String trimmedCommentLine = WHITESPACE_MATCHER.trimTrailingFrom(commentLine);
+      int whitespaceLength = commentLine.length() - trimmedCommentLine.length();
+
+      if (whitespaceLength > 0) {
+        int line = token.getBeginLine() + i;
+        int column = trimmedCommentLine.length();
+
+        context
+            .newIssue()
+            .onFilePosition(FilePosition.from(line, column, line, column + whitespaceLength))
+            .withMessage(MESSAGE)
+            .report();
+      }
     }
   }
 }
