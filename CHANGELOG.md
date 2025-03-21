@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.14.1] - 2025-03-05
 
+### Changed
+
+- Exclude types annotated with attributes in `UnusedType`.
+
 ### Fixed
 
 - File pointer errors around `>=` and `<=` tokens.
