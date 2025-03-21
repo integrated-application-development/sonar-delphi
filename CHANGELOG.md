@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `LARGEADDRESSAWARE`
   - `MAXPAGESIZE`
   - `NXCOMPAT`
+  - `SONAME`
+  - `SOPREFIX`
+  - `SOSUFFIX`
+  - `SOVERSION`
   - `STACKCHECKS`
   - `STRINGCHECKS`
   - `TSAWARE`
