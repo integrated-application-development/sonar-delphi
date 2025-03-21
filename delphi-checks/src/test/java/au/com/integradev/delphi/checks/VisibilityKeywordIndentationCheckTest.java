@@ -34,7 +34,7 @@ class VisibilityKeywordIndentationCheckTest {
         "class helper for TObject",
         "record helper for string"
       })
-  void testTooIndentedVisibilitySpecifierShouldAddIssue(String structType) {
+  void testVisibilityWithTooMuchIndentationShouldAddIssue(String structType) {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -56,7 +56,7 @@ class VisibilityKeywordIndentationCheckTest {
         "class helper for TObject",
         "record helper for string"
       })
-  void testCorrectlyIndentedVisibilitySpecifierShouldNotAddIssue(String structType) {
+  void testVisibilityAnchoredToTypeDeclarationShouldNotAddIssue(String structType) {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -70,7 +70,7 @@ class VisibilityKeywordIndentationCheckTest {
   }
 
   @Test
-  void testImplicitPublishedVisibilitySectionShouldNotAddIssue() {
+  void testImplicitPublishedVisibilityShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -84,7 +84,7 @@ class VisibilityKeywordIndentationCheckTest {
   }
 
   @Test
-  void testUnindentedVisibilitySpecifierShouldAddIssue() {
+  void testVisibilityAtMarginShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VisibilityKeywordIndentationCheck())
         .onFile(
@@ -95,5 +95,79 @@ class VisibilityKeywordIndentationCheckTest {
                 .appendDecl("    procedure Proc;")
                 .appendDecl("  end;"))
         .verifyIssues();
+  }
+
+  @Test
+  void testWrappedClassDeclarationShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo =")
+                .appendDecl("    class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    procedure Proc;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testMisalignedCustomAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("    [Foo]")
+                .appendDecl("  TBar = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    procedure Baz;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testSameLineCustomAttributeShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  [Foo] TBar = class(TObject)")
+                .appendDecl("  private")
+                .appendDecl("    procedure Baz;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testVarAnonymousRecordShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("var")
+                .appendDecl("  Foo: record")
+                .appendDecl("  public")
+                .appendDecl("    public")
+                .appendDecl("    Bar: Integer;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testConstAnonymousRecordShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VisibilityKeywordIndentationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl("  Foo: record")
+                .appendDecl("  public")
+                .appendDecl("    public")
+                .appendDecl("    Bar: Integer;")
+                .appendDecl("  end = ();"))
+        .verifyNoIssues();
   }
 }
