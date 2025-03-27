@@ -226,6 +226,10 @@ public final class PredefinedConditionals {
       result.add("WEAKINTFREF");
     }
 
+    if (compilerVersion.compareTo(VERSION_ATHENS) >= 0) {
+      result.add("WEAK_NATIVEINT");
+    }
+
     if (checkToolchain(Toolchain.DCCIOSSIMARM64)) {
       result.add("IOSSIMULATOR");
     }

@@ -406,4 +406,11 @@ class PredefinedConditionalsTest {
     assertThat(PredefinedConditionals.getConditionalDefines(toolchain, VERSION_ALEXANDRIA))
         .doesNotContain("LLVM");
   }
+
+  @ParameterizedTest
+  @EnumSource(value = Toolchain.class)
+  void testAllToolchainsAfterDelphiAlexandriaShouldDefineWeakNativeInt(Toolchain toolchain) {
+    assertThat(PredefinedConditionals.getConditionalDefines(toolchain, VERSION_ATHENS))
+        .contains("WEAK_NATIVEINT");
+  }
 }
