@@ -85,8 +85,8 @@ public abstract class IntrinsicReturnType extends TypeImpl {
     return new SliceReturnType(typeFactory);
   }
 
-  public static Type classReferenceValue() {
-    return new ClassReferenceValueType();
+  public static Type classReferenceValue(int argumentIndex) {
+    return new ClassReferenceValueType(argumentIndex);
   }
 
   public static Type argumentByIndex(int index) {
@@ -179,9 +179,15 @@ public abstract class IntrinsicReturnType extends TypeImpl {
   }
 
   private static final class ClassReferenceValueType extends IntrinsicReturnType {
+    private final int argumentIndex;
+
+    private ClassReferenceValueType(int argumentIndex) {
+      this.argumentIndex = argumentIndex;
+    }
+
     @Override
     public Type getReturnType(List<Type> arguments) {
-      Type type = arguments.get(0);
+      Type type = arguments.get(argumentIndex);
       if (type.isClassReference()) {
         return ((ClassReferenceType) type).classType();
       }
