@@ -202,7 +202,7 @@ public final class IntrinsicsInjector {
     routine("Dec").varParam(ANY_TYPED_POINTER).param(type(INTEGER)).required(1);
     routine("Default")
         .param(ANY_CLASS_REFERENCE)
-        .returns(IntrinsicReturnType.classReferenceValue());
+        .returns(IntrinsicReturnType.classReferenceValue(0));
     routine("Delete").varParam(ANY_STRING).param(type(INTEGER)).param(type(INTEGER));
     routine("Delete")
         .varParam(LIKE_DYNAMIC_ARRAY)
@@ -312,6 +312,13 @@ public final class IntrinsicsInjector {
         .param(ANY_STRING)
         .varParam(TypeFactory.untypedType())
         .varParam(ANY_32_BIT_INTEGER);
+    routine("VarArgStart").varParam(TypeFactory.untypedType());
+    routine("VarArgGetValue")
+        .varParam(TypeFactory.untypedType())
+        .param(ANY_CLASS_REFERENCE)
+        .returns(IntrinsicReturnType.classReferenceValue(1));
+    routine("VarArgCopy").varParam(TypeFactory.untypedType()).varParam(TypeFactory.untypedType());
+    routine("VarArgEnd").varParam(TypeFactory.untypedType());
     routine("VarArrayRedim").varParam(ANY_VARIANT).param(type(INTEGER));
     routine("VarCast").varParam(ANY_VARIANT).param(ANY_VARIANT).param(type(INTEGER));
     routine("VarClear").varParam(ANY_VARIANT);

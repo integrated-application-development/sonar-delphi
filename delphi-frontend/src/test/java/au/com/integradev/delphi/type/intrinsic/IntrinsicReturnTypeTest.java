@@ -148,7 +148,7 @@ class IntrinsicReturnTypeTest {
     Type classType = mock(StructType.class);
     Type classReference = TYPE_FACTORY_64_ALEXANDRIA.classOf("Foo", classType);
 
-    var classReferenceValue = (IntrinsicReturnType) IntrinsicReturnType.classReferenceValue();
+    var classReferenceValue = (IntrinsicReturnType) IntrinsicReturnType.classReferenceValue(0);
     assertThat(classReferenceValue.getReturnType(List.of(classReference))).isSameAs(classType);
     assertThat(classReferenceValue.getReturnType(List.of(classType)).isUnknown()).isTrue();
   }
