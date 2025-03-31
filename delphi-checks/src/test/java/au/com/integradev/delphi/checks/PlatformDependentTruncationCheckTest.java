@@ -282,4 +282,223 @@ class PlatformDependentTruncationCheckTest {
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerToNativeIntInlineVarAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Int: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  var Nat: NativeInt := Int;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testInt64ToNativeIntInlineVarAssignmentShouldAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  I64: Int64;")
+                .appendImpl("begin")
+                .appendImpl("  var Nat: NativeInt := I64; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToIntegerInlineVarAssignmentShouldAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  var Int: Integer := Nat; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToI64InlineVarAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  var I64: Int64 := Nat;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToNativeIntInlineVarAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat2: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  var Nat1: NativeInt := Nat2;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToTypeInferredInlineVarAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat2: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  var Nat1 := Nat2;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNoAssignmentToNativeIntInlineVarShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  var Nat: NativeInt;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testIntegerToNativeIntInlineConstAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Int: Integer;")
+                .appendImpl("begin")
+                .appendImpl("  const Nat: NativeInt = Int;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testInt64ToNativeIntInlineConstAssignmentShouldAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  I64: Int64;")
+                .appendImpl("begin")
+                .appendImpl("  const Nat: NativeInt = I64; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToIntegerInlineConstAssignmentShouldAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  const Int: Integer = Nat; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToI64InlineConstAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  const I64: Int64 = Nat;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToNativeIntInlineConstAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat2: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  const Nat1: NativeInt = Nat2;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {VERSION_ALEXANDRIA, VERSION_ATHENS})
+  void testNativeIntToTypeInferredInlineConstAssignmentShouldNotAddIssue(String versionSymbol) {
+    CheckVerifier.newVerifier()
+        .withCheck(new PlatformDependentTruncationCheck())
+        .withCompilerVersion(CompilerVersion.fromVersionSymbol(versionSymbol))
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("var")
+                .appendImpl("  Nat2: NativeInt;")
+                .appendImpl("begin")
+                .appendImpl("  const Nat1 = Nat2;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
 }
