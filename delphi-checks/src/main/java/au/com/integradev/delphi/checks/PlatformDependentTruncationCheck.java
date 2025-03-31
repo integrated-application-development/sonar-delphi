@@ -19,14 +19,18 @@
 package au.com.integradev.delphi.checks;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
+import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -49,6 +53,22 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
       reportIssue(context, assignment, MESSAGE);
     }
     return super.visit(assignment, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(VarStatementNode varStatement, DelphiCheckContext context) {
+    if (isViolation(varStatement.getExpression(), varStatement.getTypeNode())) {
+      reportIssue(context, varStatement, MESSAGE);
+    }
+    return super.visit(varStatement, context);
+  }
+
+  @Override
+  public DelphiCheckContext visit(ConstStatementNode constStatement, DelphiCheckContext context) {
+    if (isViolation(constStatement.getExpression(), constStatement.getTypeNode())) {
+      reportIssue(context, constStatement, MESSAGE);
+    }
+    return super.visit(constStatement, context);
   }
 
   @Override
@@ -83,6 +103,13 @@ public class PlatformDependentTruncationCheck extends DelphiCheck {
       }
     }
     return null;
+  }
+
+  private static boolean isViolation(@Nullable ExpressionNode from, @Nullable TypeNode to) {
+    if (from == null || to == null) {
+      return false;
+    }
+    return isViolation(from, to.getType());
   }
 
   private static boolean isViolation(ExpressionNode from, Type to) {
