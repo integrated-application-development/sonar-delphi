@@ -25,6 +25,8 @@ package au.com.integradev.delphi;
 import static au.com.integradev.delphi.utils.DelphiUtils.inputFilesToPaths;
 import static au.com.integradev.delphi.utils.DelphiUtils.stopProgressReport;
 
+import au.com.integradev.delphi.antlr.DelphiLexer.LexerException;
+import au.com.integradev.delphi.antlr.DelphiParser.ParserException;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.core.Delphi;
@@ -33,6 +35,7 @@ import au.com.integradev.delphi.executor.ExecutorContext;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import au.com.integradev.delphi.file.DelphiFile.EmptyDelphiFileException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -51,6 +54,9 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.rule.RuleKey;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 public class DelphiSensor implements Sensor {
@@ -135,18 +141,50 @@ public class DelphiSensor implements Sensor {
     try {
       for (Path sourceFile : sourceFiles) {
         String absolutePath = sourceFile.toAbsolutePath().toString();
+        InputFile inputFile = delphiProjectHelper.getFile(absolutePath);
         try {
-          InputFile inputFile = delphiProjectHelper.getFile(absolutePath);
           DelphiInputFile delphiFile = DelphiInputFile.from(inputFile, config);
           executor.execute(executorContext, delphiFile);
           progressReport.nextFile();
         } catch (DelphiFileConstructionException e) {
           LOG.error("Error while analyzing {}", absolutePath, e);
+          handleParsingError(sensorContext, inputFile, e);
         }
       }
       success = true;
     } finally {
       stopProgressReport(progressReport, success);
+    }
+  }
+
+  private static void handleParsingError(
+      SensorContext context, InputFile inputFile, DelphiFileConstructionException e) {
+    Throwable cause = e.getCause();
+    if (cause instanceof LexerException
+        || cause instanceof ParserException
+        || cause instanceof EmptyDelphiFileException) {
+      NewIssue newIssue =
+          context.newIssue().forRule(RuleKey.of("community-delphi", "ParsingError"));
+
+      NewIssueLocation primaryLocation =
+          newIssue
+              .newLocation()
+              .on(inputFile)
+              .message(String.format("Parse error (%s)", cause.getMessage()));
+
+      int line = 0;
+      if (cause instanceof ParserException) {
+        line = ((ParserException) cause).getLine();
+      } else if (cause instanceof LexerException) {
+        line = ((LexerException) cause).getLine();
+      }
+
+      if (line != 0) {
+        primaryLocation.at(inputFile.selectLine(line));
+      }
+
+      newIssue.at(primaryLocation);
+      newIssue.save();
     }
   }
 

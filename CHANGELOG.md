@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `ParsingError` analysis rule, which flags files where parsing failures occurred.
 - Support for the `WEAK_NATIVEINT` symbol, which is defined from Delphi 12 onward.
 - Support for undocumented intrinsics usable within `varargs` routines:
   - `VarArgStart`

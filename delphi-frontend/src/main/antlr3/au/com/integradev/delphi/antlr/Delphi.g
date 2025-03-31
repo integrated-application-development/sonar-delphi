@@ -143,7 +143,7 @@ import org.apache.commons.lang3.StringUtils;
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
     String msg = this.getErrorMessage(e, this.getTokenNames());
-    throw new LexerException(hdr + " " + msg, e);
+    throw new LexerException(hdr + " " + msg, e.line, e);
   }
 
   @Override
@@ -152,12 +152,20 @@ import org.apache.commons.lang3.StringUtils;
   }
 
   public static class LexerException extends RuntimeException {
-    public LexerException(String message) {
+    private final int line;
+
+    public LexerException(String message, int line) {
       super(message);
+      this.line = line;
     }
 
-    public LexerException(String message, Throwable cause) {
+    public LexerException(String message, int line, Throwable cause) {
       super(message, cause);
+      this.line = line;
+    }
+
+    public int getLine() {
+      return line;
     }
   }
 
@@ -234,7 +242,8 @@ import org.apache.commons.lang3.StringUtils;
                   + state.tokenStartLine
                   + ":"
                   + state.tokenStartCharPositionInLine
-                  + " unterminated multi-line comment");
+                  + " unterminated multi-line comment",
+              state.tokenStartLine);
 
         default:
           // do nothing
@@ -350,7 +359,7 @@ import org.apache.commons.lang3.StringUtils;
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
     String msg = this.getErrorMessage(e, this.getTokenNames());
-    throw new ParserException(hdr + " " + msg, e);
+    throw new ParserException(hdr + " " + msg, e.line, e);
   }
 
   @Override
@@ -373,8 +382,15 @@ import org.apache.commons.lang3.StringUtils;
   }
 
   public static class ParserException extends RuntimeException {
-    public ParserException(String message, Throwable cause) {
+    private final int line;
+
+    public ParserException(String message, int line, Throwable cause) {
       super(message, cause);
+      this.line = line;
+    }
+
+    public int getLine() {
+      return line;
     }
   }
 }

@@ -208,6 +208,8 @@ class CheckTestNameTest {
         .areAssignableTo(DelphiCheck.class)
         .and()
         .doNotHaveModifier(JavaModifier.ABSTRACT)
+        .and()
+        .doNotBelongToAnyOf(ParsingErrorCheck.class)
         .should(HAVE_ASSOCIATED_TEST)
         .allowEmptyShould(true)
         .check(CHECKS_PACKAGE);

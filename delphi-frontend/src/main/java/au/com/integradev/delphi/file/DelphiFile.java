@@ -183,7 +183,7 @@ public interface DelphiFile {
                     token.getChannel() == Token.HIDDEN_CHANNEL || token.getType() == Token.EOF);
 
     if (isEmptyFile) {
-      throw new EmptyDelphiFileException("Empty files are not allowed.");
+      throw new EmptyDelphiFileException("Empty files are not allowed");
     }
 
     DelphiParser parser = new DelphiParser(tokenStream);
