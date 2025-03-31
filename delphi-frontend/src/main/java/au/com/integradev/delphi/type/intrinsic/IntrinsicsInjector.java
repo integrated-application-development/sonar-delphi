@@ -193,6 +193,11 @@ public final class IntrinsicsInjector {
         .param(type(INTEGER))
         .returns(IntrinsicReturnType.copy(typeFactory));
     routine("Copy")
+        .param(ANY_VARIANT)
+        .param(type(INTEGER))
+        .param(type(INTEGER))
+        .returns(IntrinsicReturnType.copy(typeFactory));
+    routine("Copy")
         .param(LIKE_DYNAMIC_ARRAY)
         .param(dynamicArraySizeType())
         .param(dynamicArraySizeType())
