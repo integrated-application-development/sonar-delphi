@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False positives around wrapped type declarations in `VisibilityKeywordIndentation`.
 - False negatives around inline `var` and `const` in `PlatformDependentTruncation`.
 - Trailing whitespace within comments not recognized in `TrailingWhitespace`.
+- Overload resolution failures on the variant overload of the `Copy` intrinsic.
 - Several compiler directives were not being recognized:
   - `E`
   - `F`
