@@ -34,6 +34,7 @@ import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -42,7 +43,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 class DelphiSensorTest {
   private final DelphiMasterExecutor executor = mock(DelphiMasterExecutor.class);
@@ -84,15 +88,53 @@ class DelphiSensorTest {
             + "implementation\n"
             + "end.");
 
-    Path sourceFilePath = baseDir.resolve("SourceFile.pas");
-    Files.writeString(sourceFilePath, "unit SourceFile;\ninterface\nimplementation\nend.");
+    setupFile("unit SourceFile;\ninterface\nimplementation\nend.");
+    when(delphiProjectHelper.standardLibraryPath()).thenReturn(standardLibraryPath);
+  }
 
-    InputFile inputFile = mock(InputFile.class);
-    when(inputFile.uri()).thenReturn(sourceFilePath.toUri());
+  private void setupFile(String content) {
+    Path sourceFilePath = baseDir.resolve("SourceFile.pas");
+
+    try {
+      Files.writeString(sourceFilePath, content);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+
+    InputFile inputFile =
+        TestInputFileBuilder.create("moduleKey", baseDir.toFile(), sourceFilePath.toFile())
+            .setContents(content)
+            .setLanguage(Delphi.KEY)
+            .setType(InputFile.Type.MAIN)
+            .build();
 
     when(delphiProjectHelper.inputFiles()).thenReturn(List.of(inputFile));
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
-    when(delphiProjectHelper.standardLibraryPath()).thenReturn(standardLibraryPath);
+  }
+
+  private void assertParsingErrorIssue(int expectedLine, String expectedMessage) {
+    SensorContextTester context = SensorContextTester.create(baseDir);
+
+    sensor.execute(context);
+
+    assertThat(context.allIssues())
+        .hasSize(1)
+        .element(0)
+        .satisfies(
+            issue -> {
+              assertThat(issue.ruleKey().repository()).isEqualTo("community-delphi");
+              assertThat(issue.ruleKey().rule()).isEqualTo("ParsingError");
+              assertThat(issue.primaryLocation().message()).isEqualTo(expectedMessage);
+
+              TextRange position = issue.primaryLocation().textRange();
+              if (expectedLine == 0) {
+                assertThat(position).isNull();
+              } else {
+                assertThat(position).isNotNull();
+                assertThat(position.start().line()).isEqualTo(expectedLine);
+                assertThat(position.end().line()).isEqualTo(expectedLine);
+              }
+            });
   }
 
   @AfterEach
@@ -142,5 +184,24 @@ class DelphiSensorTest {
     sensor.execute(mock());
 
     verify(executor, times(1)).execute(any(), any());
+  }
+
+  @Test
+  void testFileWithLexerErrorRaisesParsingErrorIssue() {
+    setupFile("\n\n'unterminated string literal");
+    assertParsingErrorIssue(
+        3, "Parse error (line 3:28 mismatched character '<EOF>' expecting ''')");
+  }
+
+  @Test
+  void testFileWithParserErrorRaisesParsingErrorIssue() {
+    setupFile("\n\n\n\n;");
+    assertParsingErrorIssue(5, "Parse error (line 5:0 no viable alternative at input ';')");
+  }
+
+  @Test
+  void testEmptyFileRaisesParsingErrorIssue() {
+    setupFile("");
+    assertParsingErrorIssue(0, "Parse error (Empty files are not allowed)");
   }
 }

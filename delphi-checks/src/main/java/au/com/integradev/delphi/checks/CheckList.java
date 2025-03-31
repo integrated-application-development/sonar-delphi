@@ -115,6 +115,7 @@ public final class CheckList {
           NoSonarCheck.class,
           NonLinearCastCheck.class,
           ObjectTypeCheck.class,
+          ParsingErrorCheck.class,
           PascalStyleResultCheck.class,
           PlatformDependentCastCheck.class,
           PlatformDependentTruncationCheck.class,
