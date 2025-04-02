@@ -39,9 +39,11 @@ import au.com.integradev.delphi.file.DelphiFile.EmptyDelphiFileException;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
+import au.com.integradev.delphi.preprocessor.PreprocessorException;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTable;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
+import au.com.integradev.delphi.utils.LocatableException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +164,7 @@ public class DelphiSensor implements Sensor {
     Throwable cause = e.getCause();
     if (cause instanceof LexerException
         || cause instanceof ParserException
+        || cause instanceof PreprocessorException
         || cause instanceof EmptyDelphiFileException) {
       NewIssue newIssue =
           context.newIssue().forRule(RuleKey.of("community-delphi", "ParsingError"));
@@ -172,14 +175,8 @@ public class DelphiSensor implements Sensor {
               .on(inputFile)
               .message(String.format("Parse error (%s)", cause.getMessage()));
 
-      int line = 0;
-      if (cause instanceof ParserException) {
-        line = ((ParserException) cause).getLine();
-      } else if (cause instanceof LexerException) {
-        line = ((LexerException) cause).getLine();
-      }
-
-      if (line != 0) {
+      if (cause instanceof LocatableException) {
+        int line = ((LocatableException) cause).getLine();
         primaryLocation.at(inputFile.selectLine(line));
       }
 

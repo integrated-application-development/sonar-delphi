@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Exclude types annotated with attributes in `UnusedType`.
+- Improve reporting of parsing failures occurring within include files.
+- Improve reporting of parsing failures occurring within compiler directives.
 
 ### Deprecated
 

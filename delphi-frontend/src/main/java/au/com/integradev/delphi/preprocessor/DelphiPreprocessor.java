@@ -35,6 +35,7 @@ import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Token;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -229,41 +231,44 @@ public class DelphiPreprocessor {
       Path includeFile = config.getSearchPath().search(filename, includePath);
 
       if (includeFile != null) {
-        String path = includeFile.toAbsolutePath().normalize().toString();
-
-        if (path.equals(lexer.getSourceName())) {
+        Path lexerFile = Path.of(lexer.getSourceName());
+        if (Files.isSameFile(includeFile, lexerFile)) {
           throw new SelfReferencingIncludeFileException(
-              "Include file <" + includeFile.toAbsolutePath() + "> references itself");
+              String.format("Include file '%s' references itself", includeFile.toAbsolutePath()),
+              location);
         }
 
-        DelphiFileStream fileStream = new DelphiFileStream(path, config.getEncoding());
-        DelphiLexer includeLexer = new DelphiLexer(fileStream);
-        DelphiPreprocessor preprocessor =
-            new DelphiPreprocessor(
-                includeLexer,
-                config,
-                platform,
-                definitions,
-                currentSwitches,
-                switchRegistry,
-                textBlockLineEndingModeRegistry,
-                location.getIndex(),
-                true);
-
-        preprocessor.process();
-
-        List<Token> includeTokens = preprocessor.getTokenStream().getTokens();
-        return includeTokens.stream()
-            .limit(includeTokens.size() - 1L)
-            .map(token -> new IncludeToken(token, location))
-            .collect(Collectors.toList());
+        List<Token> result = preprocessIncludeFile(location, includeFile);
+        result.remove(result.size() - 1); // Remove EOF token
+        return result;
       }
-    } catch (IOException | RuntimeException e) {
+    } catch (IOException e) {
       LOG.debug("Error occurred while resolving includes: ", e);
     }
 
     LOG.warn("Failed to resolve include '{}'.", filename);
     return Collections.emptyList();
+  }
+
+  private List<Token> preprocessIncludeFile(DelphiToken location, Path path) throws IOException {
+    var fileStream = new DelphiFileStream(path.toAbsolutePath().toString(), config.getEncoding());
+    DelphiLexer includeLexer = new DelphiIncludeLexer(fileStream, location);
+
+    DelphiPreprocessor preprocessor =
+        new DelphiPreprocessor(
+            includeLexer,
+            config,
+            platform,
+            definitions,
+            currentSwitches,
+            switchRegistry,
+            textBlockLineEndingModeRegistry,
+            location.getIndex(),
+            true);
+
+    preprocessor.process();
+
+    return preprocessor.getTokenStream().getTokens();
   }
 
   private void addBranchingDirective(BranchingDirective directive) {
@@ -363,9 +368,43 @@ public class DelphiPreprocessor {
         .collect(Collectors.toUnmodifiableList());
   }
 
-  static class SelfReferencingIncludeFileException extends RuntimeException {
-    SelfReferencingIncludeFileException(String message) {
-      super(message);
+  static class SelfReferencingIncludeFileException extends PreprocessorException {
+    SelfReferencingIncludeFileException(String message, DelphiToken token) {
+      super(message, token);
+    }
+  }
+
+  private static class DelphiIncludeLexer extends DelphiLexer {
+    private final DelphiToken insertionToken;
+
+    public DelphiIncludeLexer(CharStream input, DelphiToken insertionToken) {
+      super(input);
+      this.insertionToken = insertionToken;
+    }
+
+    @Override
+    public Token emit() {
+      Token token =
+          new IncludeToken(
+              input,
+              state.type,
+              state.channel,
+              state.tokenStartCharIndex,
+              getCharIndex() - 1,
+              insertionToken);
+      token.setLine(state.tokenStartLine);
+      token.setText(state.text);
+      token.setCharPositionInLine(state.tokenStartCharPositionInLine);
+      emit(token);
+      return token;
+    }
+
+    @Override
+    protected void throwLexerException(String message, int line, Throwable cause) {
+      super.throwLexerException(
+          String.format("included on line %d :: %s", insertionToken.getBeginLine(), message),
+          insertionToken.getBeginLine(),
+          cause);
     }
   }
 }

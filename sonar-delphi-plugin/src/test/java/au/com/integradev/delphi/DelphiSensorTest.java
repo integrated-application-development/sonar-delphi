@@ -38,6 +38,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,7 +113,11 @@ class DelphiSensorTest {
     when(delphiProjectHelper.getFile(anyString())).thenReturn(inputFile);
   }
 
-  private void assertParsingErrorIssue(int expectedLine, String expectedMessage) {
+  private void assertParsingErrorWithMessage(int expectedLine, String expectedMessage) {
+    assertParsingErrorMatchingMessage(expectedLine, Pattern.quote(expectedMessage));
+  }
+
+  private void assertParsingErrorMatchingMessage(int expectedLine, String expectedRegex) {
     SensorContextTester context = SensorContextTester.create(baseDir);
 
     sensor.execute(context);
@@ -124,7 +129,7 @@ class DelphiSensorTest {
             issue -> {
               assertThat(issue.ruleKey().repository()).isEqualTo("community-delphi");
               assertThat(issue.ruleKey().rule()).isEqualTo("ParsingError");
-              assertThat(issue.primaryLocation().message()).isEqualTo(expectedMessage);
+              assertThat(issue.primaryLocation().message()).matches(expectedRegex);
 
               TextRange position = issue.primaryLocation().textRange();
               if (expectedLine == 0) {
@@ -189,19 +194,78 @@ class DelphiSensorTest {
   @Test
   void testFileWithLexerErrorRaisesParsingErrorIssue() {
     setupFile("\n\n'unterminated string literal");
-    assertParsingErrorIssue(
+    assertParsingErrorWithMessage(
         3, "Parse error (line 3:28 mismatched character '<EOF>' expecting ''')");
   }
 
   @Test
   void testFileWithParserErrorRaisesParsingErrorIssue() {
     setupFile("\n\n\n\n;");
-    assertParsingErrorIssue(5, "Parse error (line 5:0 no viable alternative at input ';')");
+    assertParsingErrorWithMessage(5, "Parse error (line 5:0 no viable alternative at input ';')");
+  }
+
+  @Test
+  void testFileWithCompilerDirectiveExpressionLexerErrorRaisesParsingErrorIssue() {
+    setupFile("\n\n{$if 1..2}");
+    assertParsingErrorWithMessage(3, "Parse error (line 3:0 Unexpected '.' in numeric literal)");
+  }
+
+  @Test
+  void testFileWithCompilerDirectiveExpressionParserErrorRaisesParsingErrorIssue() {
+    setupFile("\n\n\n\n{$elseif}");
+    assertParsingErrorWithMessage(
+        5, "Parse error (line 5:0 Expected expression. Got '<end of input>')");
   }
 
   @Test
   void testEmptyFileRaisesParsingErrorIssue() {
     setupFile("");
-    assertParsingErrorIssue(0, "Parse error (Empty files are not allowed)");
+    assertParsingErrorWithMessage(0, "Parse error (Empty files are not allowed)");
+  }
+
+  @Test
+  void testIncludeFileWithLexerErrorRaisesParsingErrorIssue() throws IOException {
+    setupFile("\n{$I include.inc}");
+    Files.writeString(baseDir.resolve("include.inc"), "\n\n'unterminated string literal");
+    assertParsingErrorWithMessage(
+        2,
+        "Parse error (included on line 2 :: line 3:28 mismatched character '<EOF>' expecting ''')");
+  }
+
+  @Test
+  void testIncludeFileWithParserErrorRaisesParsingErrorIssue() throws IOException {
+    setupFile("\n\n{$INCLUDE include.inc}");
+    Files.writeString(baseDir.resolve("include.inc"), "\n\n\n\n;");
+    assertParsingErrorWithMessage(
+        3, "Parse error (included on line 3 :: line 5:0 no viable alternative at input ';')");
+  }
+
+  @Test
+  void testSelfReferencingIncludeRaisesParsingErrorIssue() throws IOException {
+    setupFile("\n\n\n{$INCLUDE include.inc}");
+    Files.writeString(baseDir.resolve("include.inc"), "\n{$I include.inc}");
+    assertParsingErrorMatchingMessage(
+        4,
+        "Parse error \\(included on line 4 :: line 2:0 Include file '.*include\\.inc' references"
+            + " itself\\)");
+  }
+
+  @Test
+  void testIncludeFileWithCompilerDirectiveExpressionLexerErrorRaisesParsingErrorIssue()
+      throws IOException {
+    setupFile("\n{$INCLUDE include.inc}");
+    Files.writeString(baseDir.resolve("include.inc"), "\n\n{$if 1..2}");
+    assertParsingErrorWithMessage(
+        2, "Parse error (included on line 2 :: line 3:0 Unexpected '.' in numeric literal)");
+  }
+
+  @Test
+  void testIncludeFileWithCompilerDirectiveExpressionParserErrorRaisesParsingErrorIssue()
+      throws IOException {
+    setupFile("\n\n{$INCLUDE include.inc}");
+    Files.writeString(baseDir.resolve("include.inc"), "\n\n\n\n{$elseif}");
+    assertParsingErrorWithMessage(
+        3,
+        "Parse error (included on line 3 :: line 5:0 Expected expression. Got '<end of input>')");
   }
 }

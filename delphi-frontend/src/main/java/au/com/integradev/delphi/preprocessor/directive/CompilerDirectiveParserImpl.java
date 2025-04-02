@@ -22,6 +22,7 @@ import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveP
 import static au.com.integradev.delphi.preprocessor.directive.CompilerDirectiveParserImpl.DirectiveBracketType.PAREN;
 
 import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.preprocessor.PreprocessorException;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression;
 import au.com.integradev.delphi.preprocessor.directive.expression.ExpressionLexer;
@@ -308,7 +309,7 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
       var tokens = EXPRESSION_LEXER.lex(input.toString());
       return expressionParser().parse(tokens);
     } catch (ExpressionLexerError | ExpressionParserError e) {
-      throw new CompilerDirectiveParserError(e, token);
+      throw new CompilerDirectiveParserError(token, e);
     }
   }
 
@@ -352,9 +353,9 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
     return (position < data.length()) ? data.charAt(position) : END_OF_INPUT;
   }
 
-  static final class CompilerDirectiveParserError extends RuntimeException {
-    private CompilerDirectiveParserError(Exception e, DelphiToken token) {
-      super(e.getMessage() + " <Line " + token.getBeginLine() + ">", e);
+  static final class CompilerDirectiveParserError extends PreprocessorException {
+    private CompilerDirectiveParserError(DelphiToken token, Throwable cause) {
+      super(cause.getMessage(), token, cause);
     }
   }
 }
