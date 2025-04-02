@@ -28,6 +28,7 @@ import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
+import au.com.integradev.delphi.preprocessor.PreprocessorException;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -157,6 +158,7 @@ public interface DelphiFile {
         | RecognitionException
         | LexerException
         | ParserException
+        | PreprocessorException
         | EmptyDelphiFileException e) {
       throw new DelphiFileConstructionException(e);
     }

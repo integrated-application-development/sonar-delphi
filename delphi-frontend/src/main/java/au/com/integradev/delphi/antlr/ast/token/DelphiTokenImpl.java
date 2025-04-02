@@ -84,11 +84,11 @@ public class DelphiTokenImpl implements DelphiToken {
 
   private void calculatePosition() {
     if (isIncludedToken()) {
-      FilePosition insertionPosition = ((IncludeToken) token).getInsertionPosition();
-      beginLine = insertionPosition.getBeginLine();
-      beginColumn = insertionPosition.getBeginColumn();
-      endLine = insertionPosition.getEndLine();
-      endColumn = insertionPosition.getEndColumn();
+      DelphiToken insertionToken = ((IncludeToken) token).getInsertionToken();
+      beginLine = insertionToken.getBeginLine();
+      beginColumn = insertionToken.getBeginColumn();
+      endLine = insertionToken.getEndLine();
+      endColumn = insertionToken.getEndColumn();
     } else if (isComment() || isCompilerDirective()) {
       TokenLocation location =
           new TokenLocation(token.getLine(), token.getCharPositionInLine(), token.getText());

@@ -25,11 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
+import au.com.integradev.delphi.antlr.DelphiLexer.LexerException;
 import au.com.integradev.delphi.antlr.DelphiParser;
 import au.com.integradev.delphi.antlr.ast.DelphiTreeAdaptor;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
+import au.com.integradev.delphi.preprocessor.DelphiPreprocessor.SelfReferencingIncludeFileException;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
@@ -39,6 +41,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 import org.antlr.runtime.BufferedTokenStream;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -93,8 +96,10 @@ class DelphiPreprocessorTest {
   }
 
   @Test
-  void testBadIncludeTokenShouldNotThrowException() {
-    assertThatCode(() -> execute("includeTest/BadIncludeToken.pas")).doesNotThrowAnyException();
+  void testBadIncludeTokenShouldThrowLexerException() {
+    assertThatThrownBy(() -> execute("includeTest/BadIncludeToken.pas"))
+        .isInstanceOf(LexerException.class)
+        .hasMessage("included on line 7 :: line 1:93 mismatched character '<EOF>' expecting '''");
   }
 
   @Test
@@ -104,9 +109,12 @@ class DelphiPreprocessorTest {
   }
 
   @Test
-  void testSelfReferencingIncludeShouldNotThrowException() {
+  void testSelfReferencingIncludeShouldThrow() {
     assertThatCode(() -> execute("includeTest/SelfReferencingInclude.pas"))
-        .doesNotThrowAnyException();
+        .isInstanceOf(SelfReferencingIncludeFileException.class)
+        .hasMessageMatching(
+            "included on line 7 :: line 1:0 Include file '.*SelfReferencingInclude.inc' references"
+                + " itself");
   }
 
   @Test
@@ -181,7 +189,7 @@ class DelphiPreprocessorTest {
       parser.setTreeAdaptor(new DelphiTreeAdaptor());
       parser.file();
     } catch (Exception e) {
-      throw new AssertionError("Expected file to parse successfully after preprocessing.", e);
+      ExceptionUtils.rethrow(e);
     }
   }
 }

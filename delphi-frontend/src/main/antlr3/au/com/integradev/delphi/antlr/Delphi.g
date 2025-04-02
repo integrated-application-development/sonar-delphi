@@ -100,6 +100,9 @@ tokens {
 package au.com.integradev.delphi.antlr;
 
 import au.com.integradev.delphi.antlr.ast.node.*;
+import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
+import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
+import au.com.integradev.delphi.utils.LocatableException;
 }
 
 @lexer::header
@@ -127,6 +130,7 @@ import au.com.integradev.delphi.antlr.ast.node.*;
 package au.com.integradev.delphi.antlr;
 
 import org.apache.commons.lang3.StringUtils;
+import au.com.integradev.delphi.utils.LocatableException;
 }
 
 @lexer::members {
@@ -143,7 +147,7 @@ import org.apache.commons.lang3.StringUtils;
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
     String msg = this.getErrorMessage(e, this.getTokenNames());
-    throw new LexerException(hdr + " " + msg, e.line, e);
+    throwLexerException(hdr + " " + msg, e.line, e);
   }
 
   @Override
@@ -151,7 +155,15 @@ import org.apache.commons.lang3.StringUtils;
     return "line " + e.line + ":" + e.charPositionInLine;
   }
 
-  public static class LexerException extends RuntimeException {
+  private void throwLexerException(String message, int line) {
+    throwLexerException(message, line, null);
+  }
+
+  protected void throwLexerException(String message, int line, Throwable cause) {
+    throw new LexerException(message, line, cause);
+  }
+
+  public static class LexerException extends RuntimeException implements LocatableException {
     private final int line;
 
     public LexerException(String message, int line) {
@@ -164,6 +176,7 @@ import org.apache.commons.lang3.StringUtils;
       this.line = line;
     }
 
+    @Override
     public int getLine() {
       return line;
     }
@@ -237,13 +250,14 @@ import org.apache.commons.lang3.StringUtils;
           break;
 
         case EOF:
-          throw new LexerException(
+          throwLexerException(
               "line "
                   + state.tokenStartLine
                   + ":"
                   + state.tokenStartCharPositionInLine
                   + " unterminated multi-line comment",
               state.tokenStartLine);
+          break;
 
         default:
           // do nothing
@@ -334,20 +348,27 @@ import org.apache.commons.lang3.StringUtils;
   }
 
   private Token changeTokenType(int type, int offset) {
-    CommonToken t = new CommonToken(input.LT(offset));
-    t.setType(type);
-    return t;
+    CommonToken result = cloneToken((CommonToken) input.LT(offset));
+    result.setType(type);
+    return result;
   }
 
   private Token combineLastNTokens(int type, int count) {
     CommonToken firstToken = (CommonToken) input.LT(-count);
     CommonToken lastToken = (CommonToken) input.LT(-1);
-    CommonToken result = new CommonToken(lastToken);
+    CommonToken result = cloneToken(lastToken);
     result.setType(type);
     result.setStartIndex(firstToken.getStartIndex());
     result.setLine(firstToken.getLine());
     result.setCharPositionInLine(firstToken.getCharPositionInLine());
     return result;
+  }
+
+  private static CommonToken cloneToken(CommonToken other) {
+    if (other instanceof IncludeToken) {
+      return new IncludeToken((IncludeToken) other);
+    }
+    return new CommonToken(other);
   }
 
   private BinaryExpressionNodeImpl createBinaryExpression(Object operator) {
@@ -359,7 +380,20 @@ import org.apache.commons.lang3.StringUtils;
   public void reportError(RecognitionException e) {
     String hdr = this.getErrorHeader(e);
     String msg = this.getErrorMessage(e, this.getTokenNames());
-    throw new ParserException(hdr + " " + msg, e.line, e);
+
+    String message = hdr + " " + msg;
+    int line;
+
+    if (e.token == null) {
+      line = 0;
+    } else if (e.token instanceof IncludeToken) {
+      line = ((DelphiTokenImpl) ((IncludeToken) e.token).getInsertionToken()).getBeginLine();
+      message = "included on line " + line + " :: " + message;
+    } else {
+      line = e.token.getLine();
+    }
+
+    throw new ParserException(message, line, e);
   }
 
   @Override
@@ -381,7 +415,7 @@ import org.apache.commons.lang3.StringUtils;
     resetBinaryExpressionTokens(binaryExpression.getRight());
   }
 
-  public static class ParserException extends RuntimeException {
+  public static class ParserException extends RuntimeException implements LocatableException {
     private final int line;
 
     public ParserException(String message, int line, Throwable cause) {
@@ -389,8 +423,9 @@ import org.apache.commons.lang3.StringUtils;
       this.line = line;
     }
 
+    @Override
     public int getLine() {
-      return line;
+      return this.line;
     }
   }
 }
