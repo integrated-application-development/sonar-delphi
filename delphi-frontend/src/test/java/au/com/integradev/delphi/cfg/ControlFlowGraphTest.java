@@ -123,7 +123,9 @@ class ControlFlowGraphTest {
       Path standardLibraryPath = createStandardLibrary();
       SymbolTable symbolTable =
           SymbolTable.builder()
-              .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
+              .preprocessorFactory(
+                  new DelphiPreprocessorFactory(
+                      DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS))
               .typeFactory(
                   new TypeFactoryImpl(
                       DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT,

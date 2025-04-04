@@ -1474,7 +1474,8 @@ class DelphiSymbolTableExecutorTest {
       throw new UncheckedIOException(e);
     }
 
-    var preprocessorFactory = new DelphiPreprocessorFactory(Platform.WINDOWS);
+    var preprocessorFactory =
+        new DelphiPreprocessorFactory(DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS);
     var typeFactory =
         new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);

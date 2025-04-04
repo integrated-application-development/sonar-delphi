@@ -89,7 +89,8 @@ abstract class AbstractDelphiTestFile<T extends AbstractDelphiTestFile<T>>
     when(mock.getTypeFactory()).thenReturn(typeFactory);
     when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(mock.getDefinitions()).thenReturn(Collections.emptySet());
-    when(mock.getPreprocessorFactory()).thenReturn(new DelphiPreprocessorFactory(Platform.WINDOWS));
+    when(mock.getPreprocessorFactory())
+        .thenReturn(new DelphiPreprocessorFactory(mock(), Platform.WINDOWS));
     return mock;
   }
 }
