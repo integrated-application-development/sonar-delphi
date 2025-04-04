@@ -436,7 +436,7 @@ public class CheckVerifierImpl implements CheckVerifier {
     DelphiInputFile file = testFile.delphiFile();
     SymbolTable symbolTable =
         SymbolTable.builder()
-            .preprocessorFactory(new DelphiPreprocessorFactory(Platform.WINDOWS))
+            .preprocessorFactory(new DelphiPreprocessorFactory(compilerVersion, Platform.WINDOWS))
             .typeFactory(new TypeFactoryImpl(toolchain, compilerVersion))
             .standardLibraryPath(standardLibraryPath)
             .sourceFiles(List.of(file.getSourceCodeFile().toPath()))

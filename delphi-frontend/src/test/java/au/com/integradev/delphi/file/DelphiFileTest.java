@@ -20,6 +20,7 @@ package au.com.integradev.delphi.file;
 
 import static org.assertj.core.api.Assertions.*;
 
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.file.DelphiFile.DelphiFileConstructionException;
@@ -66,7 +67,8 @@ class DelphiFileTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             StandardCharsets.UTF_8.name(),
-            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             Collections.emptySet());
@@ -82,7 +84,8 @@ class DelphiFileTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             StandardCharsets.UTF_8.name(),
-            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             Collections.emptySet());
@@ -98,7 +101,8 @@ class DelphiFileTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             StandardCharsets.UTF_8.name(),
-            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             Collections.emptySet());
@@ -116,7 +120,8 @@ class DelphiFileTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             StandardCharsets.UTF_8.name(),
-            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             Collections.emptySet(),

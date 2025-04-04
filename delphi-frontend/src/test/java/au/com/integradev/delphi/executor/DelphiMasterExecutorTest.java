@@ -180,7 +180,10 @@ class DelphiMasterExecutorTest {
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
-    when(mock.getPreprocessorFactory()).thenReturn(new DelphiPreprocessorFactory(Platform.WINDOWS));
+    when(mock.getPreprocessorFactory())
+        .thenReturn(
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS));
     when(mock.getTypeFactory()).thenReturn(typeFactory);
     when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(mock.getDefinitions()).thenReturn(Collections.emptySet());

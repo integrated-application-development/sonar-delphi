@@ -102,7 +102,7 @@ public class DelphiSensor implements Sensor {
     LOG.info("Compiler version: {}", compilerVersion.number());
     LOG.info("Conditional defines: {}", delphiProjectHelper.getConditionalDefines());
 
-    var preprocessorFactory = new DelphiPreprocessorFactory(toolchain.platform);
+    var preprocessorFactory = new DelphiPreprocessorFactory(compilerVersion, toolchain.platform);
     var typeFactory = new TypeFactoryImpl(toolchain, compilerVersion);
     Iterable<InputFile> inputFiles = delphiProjectHelper.inputFiles();
     List<Path> sourceFiles = inputFilesToPaths(inputFiles);

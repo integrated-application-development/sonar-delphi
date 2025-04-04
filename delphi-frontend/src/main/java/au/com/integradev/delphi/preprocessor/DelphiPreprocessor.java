@@ -25,6 +25,7 @@ import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiTokenStream;
 import au.com.integradev.delphi.antlr.ast.token.DelphiTokenImpl;
 import au.com.integradev.delphi.antlr.ast.token.IncludeToken;
+import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.directive.BranchDirective;
@@ -63,6 +64,7 @@ public class DelphiPreprocessor {
   private static final Logger LOG = LoggerFactory.getLogger(DelphiPreprocessor.class);
   private final DelphiLexer lexer;
   private final DelphiFileConfig config;
+  private final CompilerVersion compilerVersion;
   private final Platform platform;
   private final Set<String> definitions;
   private final List<CompilerDirective> directives;
@@ -77,10 +79,15 @@ public class DelphiPreprocessor {
   private List<Token> rawTokens;
   private int tokenIndex;
 
-  DelphiPreprocessor(DelphiLexer lexer, DelphiFileConfig config, Platform platform) {
+  DelphiPreprocessor(
+      DelphiLexer lexer,
+      DelphiFileConfig config,
+      CompilerVersion compilerVersion,
+      Platform platform) {
     this(
         lexer,
         config,
+        compilerVersion,
         platform,
         caseInsensitiveSet(config.getDefinitions()),
         new EnumMap<>(SwitchKind.class),
@@ -96,6 +103,7 @@ public class DelphiPreprocessor {
   private DelphiPreprocessor(
       DelphiLexer lexer,
       DelphiFileConfig config,
+      CompilerVersion compilerVersion,
       Platform platform,
       Set<String> definitions,
       Map<SwitchKind, Integer> currentSwitches,
@@ -105,6 +113,7 @@ public class DelphiPreprocessor {
       boolean processingIncludeFile) {
     this.lexer = lexer;
     this.config = config;
+    this.compilerVersion = compilerVersion;
     this.platform = platform;
     this.switchRegistry = switchRegistry;
     this.textBlockLineEndingModeRegistry = textBlockLineEndingModeRegistry;
@@ -258,6 +267,7 @@ public class DelphiPreprocessor {
         new DelphiPreprocessor(
             includeLexer,
             config,
+            compilerVersion,
             platform,
             definitions,
             currentSwitches,
@@ -343,6 +353,10 @@ public class DelphiPreprocessor {
 
   private TextBlockLineEndingMode nativeLineEnding() {
     return platform == Platform.WINDOWS ? TextBlockLineEndingMode.CRLF : TextBlockLineEndingMode.LF;
+  }
+
+  public CompilerVersion getCompilerVersion() {
+    return compilerVersion;
   }
 
   public DelphiTokenStream getTokenStream() {
