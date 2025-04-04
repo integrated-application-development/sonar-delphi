@@ -23,6 +23,7 @@ import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.antlr.DelphiFileStream;
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.DelphiLexer.LexerException;
@@ -135,7 +136,9 @@ class DelphiPreprocessorTest {
     DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
 
     DelphiLexer lexer = new DelphiLexer(fileStream);
-    DelphiPreprocessor preprocessor = new DelphiPreprocessor(lexer, config, Platform.WINDOWS);
+    DelphiPreprocessor preprocessor =
+        new DelphiPreprocessor(
+            lexer, config, DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS);
     preprocessor.process();
 
     assertThatThrownBy(preprocessor::process).isInstanceOf(IllegalStateException.class);
@@ -145,7 +148,8 @@ class DelphiPreprocessorTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             UTF_8.name(),
-            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
             SearchPath.create(Collections.emptyList()),
             new HashSet<>(Arrays.asList(defines)));
@@ -164,7 +168,8 @@ class DelphiPreprocessorTest {
         filename,
         DelphiFile.createConfig(
             UTF_8.name(),
-            new DelphiPreprocessorFactory(Platform.WINDOWS),
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             typeFactory,
             searchPath,
             emptySet()));

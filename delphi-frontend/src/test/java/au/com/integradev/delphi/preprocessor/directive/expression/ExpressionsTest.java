@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression.ExpressionValue;
@@ -214,9 +215,9 @@ class ExpressionsTest {
           Arguments.of("1 in [2, 3]", false),
           Arguments.of("1 in []", false),
           Arguments.of("1 in 1", UNKNOWN),
-          Arguments.of("True and True", true),
+          Arguments.of("True and System.True", true),
           Arguments.of("True and False", false),
-          Arguments.of("False and False", false),
+          Arguments.of("False and System.False", false),
           Arguments.of("True and 1", UNKNOWN),
           Arguments.of("1 and True", UNKNOWN),
           Arguments.of("True or True", true),
@@ -244,6 +245,8 @@ class ExpressionsTest {
           Arguments.of("-1.0", -1.0),
           Arguments.of("not True", false),
           Arguments.of("not False", true),
+          Arguments.of("not System.True", false),
+          Arguments.of("not System.False", true),
           Arguments.of("+'my string'", UNKNOWN),
           Arguments.of("+True", UNKNOWN),
           Arguments.of("not 1", UNKNOWN));
@@ -253,33 +256,42 @@ class ExpressionsTest {
   static class DefinedArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
-      return Stream.of(
-          Arguments.of("Defined(TEST_DEFINE)", true),
-          Arguments.of("Defined(NOT_DEFINED)", false),
-          Arguments.of("Defined()", UNKNOWN),
-          Arguments.of("Defined(123)", UNKNOWN));
+      return addSystemQualifier(
+          Stream.of(
+              Arguments.of("Defined(TEST_DEFINE)", true),
+              Arguments.of("Defined(NOT_DEFINED)", false),
+              Arguments.of("Defined()", UNKNOWN),
+              Arguments.of("Defined(123)", UNKNOWN)));
     }
   }
 
   static class SizeOfArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
-      return Stream.of(
-          Arguments.of("SizeOf(Byte)", size(IntrinsicType.BYTE)),
-          Arguments.of("SizeOf(NativeInt)", size(IntrinsicType.NATIVEINT)),
-          Arguments.of("SizeOf(LongWord)", size(IntrinsicType.LONGWORD)),
-          Arguments.of("SizeOf(Double)", size(IntrinsicType.DOUBLE)),
-          Arguments.of("SizeOf(Boolean)", size(IntrinsicType.BOOLEAN)),
-          Arguments.of("SizeOf(String)", size(IntrinsicType.UNICODESTRING)),
-          Arguments.of("SizeOf(Pointer)", size(IntrinsicType.POINTER)),
-          Arguments.of("SizeOf(Variant)", size(IntrinsicType.VARIANT)),
-          Arguments.of("SizeOf(TObject)", size(IntrinsicType.POINTER)),
-          Arguments.of("SizeOf('Foo')", size(IntrinsicType.UNICODESTRING)),
-          Arguments.of("SizeOf(123)", size(IntrinsicType.BYTE)),
-          Arguments.of("SizeOf(123.456)", size(IntrinsicType.EXTENDED)),
-          Arguments.of("SizeOf(True)", size(IntrinsicType.BOOLEAN)),
-          Arguments.of("SizeOf([])", TYPE_FACTORY.emptySet().size()),
-          Arguments.of("SizeOf(String)", size(IntrinsicType.UNICODESTRING)));
+      return addSystemQualifier(
+          Stream.of(
+              Arguments.of("SizeOf(Byte)", size(IntrinsicType.BYTE)),
+              Arguments.of("SizeOf(NativeInt)", size(IntrinsicType.NATIVEINT)),
+              Arguments.of("SizeOf(LongWord)", size(IntrinsicType.LONGWORD)),
+              Arguments.of("SizeOf(Double)", size(IntrinsicType.DOUBLE)),
+              Arguments.of("SizeOf(Boolean)", size(IntrinsicType.BOOLEAN)),
+              Arguments.of("SizeOf(String)", size(IntrinsicType.UNICODESTRING)),
+              Arguments.of("SizeOf(Pointer)", size(IntrinsicType.POINTER)),
+              Arguments.of("SizeOf(Variant)", size(IntrinsicType.VARIANT)),
+              Arguments.of("SizeOf(TObject)", size(IntrinsicType.POINTER)),
+              Arguments.of("SizeOf('Foo')", size(IntrinsicType.UNICODESTRING)),
+              Arguments.of("SizeOf(123)", size(IntrinsicType.BYTE)),
+              Arguments.of("SizeOf(123.456)", size(IntrinsicType.EXTENDED)),
+              Arguments.of("SizeOf(True)", size(IntrinsicType.BOOLEAN)),
+              Arguments.of("SizeOf([])", TYPE_FACTORY.emptySet().size()),
+              Arguments.of("SizeOf(String)", size(IntrinsicType.UNICODESTRING))));
+    }
+  }
+
+  static class CompilerVersionArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<Arguments> provideArguments(ExtensionContext context) {
+      return addSystemQualifier(Stream.of(Arguments.of("CompilerVersion", 30.0)));
     }
   }
 
@@ -291,6 +303,7 @@ class ExpressionsTest {
     preprocessor = mock(DelphiPreprocessor.class);
     when(preprocessor.getTypeFactory()).thenReturn(TYPE_FACTORY);
     when(preprocessor.isDefined("TEST_DEFINE")).thenReturn(true);
+    when(preprocessor.getCompilerVersion()).thenReturn(CompilerVersion.fromVersionNumber("30.0"));
   }
 
   @ParameterizedTest(name = "\"{0}\" should evaluate to: {1}")
@@ -305,6 +318,7 @@ class ExpressionsTest {
   @ArgumentsSource(UnaryEvaluationArgumentsProvider.class)
   @ArgumentsSource(DefinedArgumentsProvider.class)
   @ArgumentsSource(SizeOfArgumentsProvider.class)
+  @ArgumentsSource(CompilerVersionArgumentsProvider.class)
   void testExpressionEvaluation(String input, Object expected) {
     assertValue(input, expected);
   }
@@ -358,5 +372,16 @@ class ExpressionsTest {
 
   private static int size(IntrinsicType type) {
     return TYPE_FACTORY.getIntrinsic(type).size();
+  }
+
+  private static Stream<Arguments> addSystemQualifier(Stream<Arguments> arguments) {
+    return arguments
+        .map(
+            arg ->
+                List.of(
+                    arg,
+                    Arguments.of("System." + arg.get()[0], arg.get()[1]),
+                    Arguments.of("System  .  " + arg.get()[0], arg.get()[1])))
+        .flatMap(List::stream);
   }
 }

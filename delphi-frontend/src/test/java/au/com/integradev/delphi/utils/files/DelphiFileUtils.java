@@ -21,6 +21,7 @@ package au.com.integradev.delphi.utils.files;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -37,7 +38,10 @@ public final class DelphiFileUtils {
   public static DelphiFileConfig mockConfig() {
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
-    when(mock.getPreprocessorFactory()).thenReturn(new DelphiPreprocessorFactory(Platform.WINDOWS));
+    when(mock.getPreprocessorFactory())
+        .thenReturn(
+            new DelphiPreprocessorFactory(
+                DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS));
     when(mock.getTypeFactory()).thenReturn(TypeFactoryUtils.defaultFactory());
     when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(mock.getDefinitions()).thenReturn(Collections.emptySet());

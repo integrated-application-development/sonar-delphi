@@ -37,6 +37,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +46,9 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class Expressions {
+  private static final Pattern SYSTEM_UNIT =
+      Pattern.compile("^System\\s*\\.\\s*", Pattern.CASE_INSENSITIVE);
+
   private Expressions() {
     // Utility class
   }
@@ -75,6 +79,10 @@ public final class Expressions {
 
   public static Expression invocation(String name, List<Expression> arguments) {
     return new InvocationExpression(name, arguments);
+  }
+
+  private static String removeSystemUnit(String name) {
+    return SYSTEM_UNIT.matcher(name).replaceAll("");
   }
 
   static class BinaryExpression implements Expression {
@@ -226,10 +234,13 @@ public final class Expressions {
 
     @Override
     public ExpressionValue evaluate(DelphiPreprocessor preprocessor) {
-      if (this.name.equalsIgnoreCase("True")) {
+      String identifier = removeSystemUnit(name);
+      if (identifier.equalsIgnoreCase("True")) {
         return createBoolean(true);
-      } else if (this.name.equalsIgnoreCase("False")) {
+      } else if (identifier.equalsIgnoreCase("False")) {
         return createBoolean(false);
+      } else if (identifier.equalsIgnoreCase("CompilerVersion")) {
+        return createReal(preprocessor.getCompilerVersion().number().doubleValue());
       }
       return unknownValue();
     }
@@ -297,8 +308,7 @@ public final class Expressions {
     }
 
     private boolean isIntrinsic(String intrinsic, int minArguments) {
-      return StringUtils.removeStartIgnoreCase(name, "System.").equalsIgnoreCase(intrinsic)
-          && arguments.size() >= minArguments;
+      return removeSystemUnit(name).equalsIgnoreCase(intrinsic) && arguments.size() >= minArguments;
     }
 
     @Override
