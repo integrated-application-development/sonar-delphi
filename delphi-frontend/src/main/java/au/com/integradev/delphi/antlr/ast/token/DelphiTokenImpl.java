@@ -89,7 +89,9 @@ public class DelphiTokenImpl implements DelphiToken {
       beginColumn = insertionToken.getBeginColumn();
       endLine = insertionToken.getEndLine();
       endColumn = insertionToken.getEndColumn();
-    } else if (isComment() || isCompilerDirective()) {
+    } else if (isComment()
+        || isCompilerDirective()
+        || tokenType == DelphiTokenType.MULTILINE_STRING) {
       TokenLocation location =
           new TokenLocation(token.getLine(), token.getCharPositionInLine(), token.getText());
       beginLine = location.startLine();
