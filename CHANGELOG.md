@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Detect tab-indented multiline strings in `TabulationCharacter`.
 - Improve support for evaluating name references in compiler directive expressions.
 
 ### Fixed

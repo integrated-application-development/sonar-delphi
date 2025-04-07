@@ -52,4 +52,17 @@ class TabulationCharacterCheckTest {
                 .appendDecl("\t"))
         .verifyIssueOnFile();
   }
+
+  @Test
+  void testFileWithTabsInMultilineStringIndentationShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TabulationCharacterCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("const")
+                .appendDecl(" Foo = '''")
+                .appendDecl("\t\tBar")
+                .appendDecl("\t\t''';"))
+        .verifyIssueOnFile();
+  }
 }
