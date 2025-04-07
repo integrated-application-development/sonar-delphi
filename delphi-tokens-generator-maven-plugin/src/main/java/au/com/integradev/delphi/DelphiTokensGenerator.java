@@ -76,7 +76,8 @@ public class DelphiTokensGenerator {
   }
 
   private void generateEnum(List<TokenTypeRecord> tokenTypes) throws IOException {
-    Path outputPath = outputDirectory.toPath().resolve("org/sonar/plugins/delphi/api/token");
+    Path outputPath =
+        outputDirectory.toPath().resolve("org/sonar/plugins/communitydelphi/api/token");
 
     Files.createDirectories(outputPath);
 

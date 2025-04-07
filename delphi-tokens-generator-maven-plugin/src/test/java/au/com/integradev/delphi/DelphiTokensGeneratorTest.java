@@ -291,7 +291,7 @@ class DelphiTokensGeneratorTest {
   private static String getTokenEnum(Path root) {
     try {
       return Files.readString(
-          root.resolve("out/org/sonar/plugins/delphi/api/token/DelphiTokenType.java"));
+          root.resolve("out/org/sonar/plugins/communitydelphi/api/token/DelphiTokenType.java"));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
