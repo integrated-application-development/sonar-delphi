@@ -25,6 +25,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
+import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
 @DeprecatedRuleKey(ruleKey = "TabulationCharactersRule", repositoryKey = "delph")
@@ -53,6 +54,22 @@ public class TabulationCharacterCheck extends DelphiCheck {
   public void visitToken(DelphiToken token, DelphiCheckContext context) {
     if (token.isWhitespace()) {
       tabCount += countMatches(token.getImage(), '\t');
+    }
+
+    if (token.getType() == DelphiTokenType.MULTILINE_STRING) {
+      String lastLine = context.getFileLines().get(token.getEndLine() - 1);
+      int tabs = 0;
+
+      for (int i = 0; i < lastLine.length(); ++i) {
+        char c = lastLine.charAt(i);
+        if (c == '\t') {
+          ++tabs;
+        } else if (c == '\'') {
+          break;
+        }
+      }
+
+      tabCount += tabs * (token.getEndLine() - token.getBeginLine());
     }
   }
 }
