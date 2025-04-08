@@ -20,7 +20,6 @@ package au.com.integradev.delphi.antlr.ast.token;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 public class IncludeToken extends CommonToken {
@@ -29,11 +28,6 @@ public class IncludeToken extends CommonToken {
   public IncludeToken(
       CharStream input, int type, int channel, int start, int stop, DelphiToken insertionToken) {
     super(input, type, channel, start, stop);
-    this.insertionToken = insertionToken;
-  }
-
-  public IncludeToken(Token token, DelphiToken insertionToken) {
-    super(token);
     this.insertionToken = insertionToken;
   }
 
