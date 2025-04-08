@@ -620,6 +620,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     node.getEnumerable().accept(this, data);
     node.getVariable().accept(this, data);
 
+    data.nameResolutionHelper.resolve(node);
+
     return visitScopeFromRoot(node.getStatement(), data);
   }
 

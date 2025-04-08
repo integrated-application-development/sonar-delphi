@@ -18,12 +18,17 @@
  */
 package au.com.integradev.delphi.symbol.resolve;
 
+import static java.util.Collections.emptyList;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
+import au.com.integradev.delphi.antlr.ast.node.ForInStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.TypeNodeImpl;
 import au.com.integradev.delphi.symbol.SearchMode;
+import au.com.integradev.delphi.symbol.SymbolicNode;
 import au.com.integradev.delphi.symbol.declaration.NameDeclarationImpl;
+import au.com.integradev.delphi.symbol.occurrence.EnumeratorOccurrenceImpl;
 import au.com.integradev.delphi.symbol.occurrence.NameOccurrenceImpl;
+import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import au.com.integradev.delphi.symbol.scope.RoutineScopeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
@@ -39,6 +44,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterListNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
@@ -73,6 +79,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDecla
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
@@ -291,6 +298,64 @@ public class NameResolutionHelper {
     completeTypeParameterReferences(routine);
   }
 
+  public void resolve(ForInStatementNode forStatement) {
+    DelphiScope scope = forStatement.getScope();
+    Type enumerableType = forStatement.getEnumerable().getType();
+
+    NameOccurrenceImpl getEnumerator = imaginaryOccurrence("GetEnumerator", scope);
+    if (!resolveMethod(getEnumerator, enumerableType, emptyList())) {
+      return;
+    }
+
+    var getEnumeratorDeclaration = (RoutineNameDeclaration) getEnumerator.getNameDeclaration();
+    Type enumeratorType = getEnumeratorDeclaration.getReturnType();
+
+    NameOccurrenceImpl moveNext = imaginaryOccurrence("MoveNext", scope);
+    NameOccurrenceImpl current = imaginaryOccurrence("Current", scope);
+
+    boolean resolved = resolveMethod(moveNext, enumeratorType, emptyList());
+    resolved = resolveProperty(current, enumeratorType, emptyList()) && resolved;
+
+    if (resolved) {
+      var enumeratorOccurrence = new EnumeratorOccurrenceImpl(getEnumerator, moveNext, current);
+      var fileScope = forStatement.getScope().getEnclosingScope(FileScope.class);
+      ((FileScopeImpl) fileScope).registerOccurrence(forStatement, enumeratorOccurrence);
+      ((ForInStatementNodeImpl) forStatement).setEnumeratorOccurrence(enumeratorOccurrence);
+    }
+  }
+
+  private boolean resolveMethod(NameOccurrenceImpl occurrence, Type type, List<Type> parameters) {
+    return resolveInvocableMember(occurrence, type, parameters, RoutineNameDeclaration.class);
+  }
+
+  private boolean resolveProperty(NameOccurrenceImpl occurrence, Type type, List<Type> parameters) {
+    return resolveInvocableMember(occurrence, type, parameters, PropertyNameDeclaration.class);
+  }
+
+  private boolean resolveInvocableMember(
+      NameOccurrenceImpl occurrence,
+      Type type,
+      List<Type> parameters,
+      Class<? extends Invocable> declarationClass) {
+    NameResolver resolver = createNameResolver();
+    resolver.updateType(type);
+    resolver.addName(occurrence);
+    resolver.searchForDeclaration(occurrence);
+    resolver.disambiguateParameters(parameters);
+
+    NameDeclaration resolved = resolver.addResolvedDeclaration();
+    if (declarationClass.isInstance(resolved)) {
+      resolver.addToSymbolTable();
+      return true;
+    }
+
+    return false;
+  }
+
+  private static NameOccurrenceImpl imaginaryOccurrence(String image, DelphiScope scope) {
+    return new NameOccurrenceImpl(SymbolicNode.imaginary(image, scope));
+  }
+
   private static boolean isBareInterfaceRoutineReference(
       RoutineNode routine, NameResolver resolver) {
     return routine.getRoutineHeading().getRoutineParametersNode() == null
@@ -332,36 +397,6 @@ public class NameResolutionHelper {
                 }
               });
     }
-  }
-
-  public RoutineNameDeclaration findMethodMember(
-      DelphiNode node, Type type, String name, List<Type> parameters) {
-    return findInvocableMember(node, type, name, parameters, RoutineNameDeclaration.class);
-  }
-
-  public PropertyNameDeclaration findPropertyMember(
-      DelphiNode node, Type type, String name, List<Type> parameters) {
-    return findInvocableMember(node, type, name, parameters, PropertyNameDeclaration.class);
-  }
-
-  private <T extends Invocable> T findInvocableMember(
-      DelphiNode node, Type type, String name, List<Type> parameters, Class<T> declarationType) {
-    NameResolver resolver = memberResolver(node, type, name);
-    resolver.disambiguateParameters(parameters);
-    NameDeclaration resolved = resolver.addResolvedDeclaration();
-    if (declarationType.isInstance(resolved)) {
-      return declarationType.cast(resolved);
-    }
-    return null;
-  }
-
-  private NameResolver memberResolver(DelphiNode node, Type type, String name) {
-    NameOccurrenceImpl implicitOccurrence = new NameOccurrenceImpl(node, name);
-    NameResolver resolver = createNameResolver();
-    resolver.updateType(type);
-    resolver.addName(implicitOccurrence);
-    resolver.searchForDeclaration(implicitOccurrence);
-    return resolver;
   }
 
   public void resolve(ExpressionNode expression) {

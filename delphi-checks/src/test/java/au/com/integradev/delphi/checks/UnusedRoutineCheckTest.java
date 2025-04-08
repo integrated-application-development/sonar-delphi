@@ -409,4 +409,31 @@ class UnusedRoutineCheckTest {
                 .appendImpl("end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testUsedEnumeratorMethodsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedRoutineCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFooEnumerator = record")
+                .appendDecl("    function MoveNext: Boolean;")
+                .appendDecl("    property Current: string read FCurrent;")
+                .appendDecl("  end;")
+                .appendDecl("  TFoo = record")
+                .appendDecl("  private")
+                .appendDecl("    FCurrent: string;")
+                .appendDecl("  public")
+                .appendDecl("    function GetEnumerator: TFooEnumerator;")
+                .appendDecl("  end;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("  Bar: string;")
+                .appendImpl("begin")
+                .appendImpl("  for Bar in Foo do begin")
+                .appendImpl("    WriteLn(Bar);")
+                .appendImpl("  end;"))
+        .verifyNoIssues();
+  }
 }
