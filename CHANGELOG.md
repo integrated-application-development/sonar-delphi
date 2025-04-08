@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Name resolution failures in legacy initialization sections referencing the implementation section.
 - Incorrect file position calculation for multiline string tokens.
 
 ## [1.15.0] - 2025-04-03
