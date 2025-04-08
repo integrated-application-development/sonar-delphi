@@ -35,6 +35,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
+import org.sonar.plugins.communitydelphi.api.symbol.EnumeratorOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
@@ -184,17 +185,22 @@ public abstract class DependencyAnalysisVisitor implements DelphiParserVisitor<D
 
   @Override
   public Data visit(ForInStatementNode forInStatementNode, Data data) {
-    RoutineNameDeclaration enumerator = forInStatementNode.getGetEnumeratorDeclaration();
-    addDependenciesForDeclaration(enumerator, data);
-    handleInlineRoutines(enumerator, data);
+    EnumeratorOccurrence enumerator = forInStatementNode.getEnumeratorOccurrence();
 
-    RoutineNameDeclaration moveNext = forInStatementNode.getMoveNextDeclaration();
-    addDependenciesForDeclaration(moveNext, data);
-    handleInlineRoutines(moveNext, data);
+    if (enumerator != null) {
+      var getEnumerator =
+          (RoutineNameDeclaration) enumerator.getGetEnumerator().getNameDeclaration();
+      addDependenciesForDeclaration(getEnumerator, data);
+      handleInlineRoutines(getEnumerator, data);
 
-    PropertyNameDeclaration current = forInStatementNode.getCurrentDeclaration();
-    addDependenciesForDeclaration(current, data);
-    handleInlineRoutines(current, data);
+      var moveNext = (RoutineNameDeclaration) enumerator.getMoveNext().getNameDeclaration();
+      addDependenciesForDeclaration(moveNext, data);
+      handleInlineRoutines(moveNext, data);
+
+      var current = (PropertyNameDeclaration) enumerator.getCurrent().getNameDeclaration();
+      addDependenciesForDeclaration(current, data);
+      handleInlineRoutines(current, data);
+    }
 
     return DelphiParserVisitor.super.visit(forInStatementNode, data);
   }

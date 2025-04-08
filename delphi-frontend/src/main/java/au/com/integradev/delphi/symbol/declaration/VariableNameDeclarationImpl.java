@@ -36,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility;
+import org.sonar.plugins.communitydelphi.api.symbol.EnumeratorOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -148,7 +149,12 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     if (loop instanceof ForToStatementNode) {
       typed = ((ForToStatementNode) loop).getInitializerExpression();
     } else {
-      typed = ((ForInStatementNode) loop).getCurrentDeclaration();
+      EnumeratorOccurrence enumerator = ((ForInStatementNode) loop).getEnumeratorOccurrence();
+      if (enumerator != null) {
+        typed = (Typed) enumerator.getCurrent().getNameDeclaration();
+      } else {
+        typed = null;
+      }
     }
 
     return getDeclaredTypeWithTypeInferenceFallback(
