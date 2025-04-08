@@ -277,6 +277,11 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       public Data visit(FinalizationSectionNode node, Data data) {
         return data;
       }
+
+      @Override
+      public Data visit(CompoundStatementNode node, Data data) {
+        return data;
+      }
     };
   }
 
