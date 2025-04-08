@@ -7,13 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `EnumeratorOccurrence` type.
+- **API:** `EnumeratorOccurrence::getGetEnumerator` method.
+- **API:** `EnumeratorOccurrence::getMoveNext` method.
+- **API:** `EnumeratorOccurrence::getCurrent` method.
+- **API:** `ForInStatementNode.getEnumeratorOccurrence` method.
+
 ### Changed
 
 - Detect tab-indented multiline strings in `TabulationCharacter`.
 - Improve support for evaluating name references in compiler directive expressions.
 
+### Deprecated
+
+- **API:** `ForInStatementNode::getGetEnumeratorDeclaration` method, get the declaration through
+  `getEnumeratorOccurrence` instead.
+- **API:** `ForInStatementNode::getMoveNextDeclaration` method, get the declaration through
+  `getEnumeratorOccurrence` instead.
+- **API:** `ForInStatementNode::getCurrentDeclaration` method, get the declaration through
+  `getEnumeratorOccurrence` instead.
+
 ### Fixed
 
+- False positives on enumerable method `GetEnumerator` in `UnusedRoutine`.
+- False positives on enumerator method `MoveNext` in `UnusedRoutine`.
+- False positives on enumerator property `Current` in `UnusedProperty`.
 - Name resolution failures in legacy initialization sections referencing the implementation section.
 - Incorrect file position calculation for multiline string tokens.
 

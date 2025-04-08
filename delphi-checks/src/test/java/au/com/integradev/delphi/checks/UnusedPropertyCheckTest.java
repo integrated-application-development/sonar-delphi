@@ -265,4 +265,32 @@ class UnusedPropertyCheckTest {
                 .appendImpl("end;"))
         .verifyIssues();
   }
+
+  @Test
+  void testUsedEnumeratorPropertiesShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedPropertyCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFooEnumerator = record")
+                .appendDecl("    function MoveNext: Boolean;")
+                .appendDecl("    property Current: string read FCurrent;")
+                .appendDecl("  end;")
+                .appendDecl("  TFoo = record")
+                .appendDecl("  private")
+                .appendDecl("    FCurrent: string;")
+                .appendDecl("  public")
+                .appendDecl("    function GetEnumerator: TFooEnumerator;")
+                .appendDecl("  end;")
+                .appendImpl("procedure Bar(Foo: TFoo);")
+                .appendImpl("var")
+                .appendImpl("  Baz: string;")
+                .appendImpl("begin")
+                .appendImpl("  for Baz in Foo do begin")
+                .appendImpl("    WriteLn(Baz);")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
 }

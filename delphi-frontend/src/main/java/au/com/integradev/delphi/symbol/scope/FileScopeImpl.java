@@ -21,6 +21,7 @@ package au.com.integradev.delphi.symbol.scope;
 import static java.util.function.Predicate.not;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.ForInStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
@@ -35,10 +36,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
+import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
+import org.sonar.plugins.communitydelphi.api.symbol.EnumeratorOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
@@ -56,6 +59,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
   private Map<Integer, DelphiScope> registeredScopes = new HashMap<>();
   private Map<Integer, NameDeclaration> registeredDeclarations = new HashMap<>();
   private Map<Integer, NameOccurrence> registeredOccurrences = new HashMap<>();
+  private Map<Integer, EnumeratorOccurrence> registeredEnumeratorOccurrences = new HashMap<>();
 
   protected FileScopeImpl(String name) {
     this.name = name;
@@ -167,6 +171,17 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
   }
 
   /**
+   * Registers a for-in statement node as being associated with an enumerator occurrence so it can
+   * be re-attached later
+   *
+   * @param node The node which we want to associate the occurrence with
+   * @param occurrence The occurrence we are registering
+   */
+  public void registerOccurrence(ForInStatementNode node, EnumeratorOccurrence occurrence) {
+    registeredEnumeratorOccurrences.put(node.getTokenIndex(), occurrence);
+  }
+
+  /**
    * Attaches scope information to a particular node
    *
    * @param node The node which we want to attach symbol information to
@@ -208,6 +223,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
   /** Removes all name occurrence registrations */
   public void unregisterOccurrences() {
     registeredOccurrences = new HashMap<>(0);
+    registeredEnumeratorOccurrences = new HashMap<>(0);
   }
 
   /**
@@ -228,6 +244,16 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
   public void attach(ArrayAccessorNode node) {
     ((ArrayAccessorNodeImpl) node)
         .setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+  }
+
+  /**
+   * Attaches symbol occurrence information to a for-in statement node
+   *
+   * @param node The node which we want to attach symbol information to
+   */
+  public void attach(ForInStatementNode node) {
+    ((ForInStatementNodeImpl) node)
+        .setEnumeratorOccurrence(registeredEnumeratorOccurrences.get(node.getTokenIndex()));
   }
 
   @Override
