@@ -646,7 +646,7 @@ simpleProcedureType          : procedureTypeHeading -> ^(TkProcedureType<Procedu
 procedureTypeHeading         : FUNCTION<ProcedureTypeHeadingNodeImpl>^ routineParameters? routineReturnType? ((';')? interfaceDirective)*
                              | PROCEDURE<ProcedureTypeHeadingNodeImpl>^ routineParameters? ((';')? interfaceDirective)*
                              ;
-typeOfType                   : TYPE<TypeOfTypeNodeImpl>^ OF typeDecl
+typeOfType                   : TYPE<TypeOfTypeNodeImpl>^ OF typeReference
                              ;
 strongAliasType              : TYPE<StrongAliasTypeNodeImpl>^ typeReferenceOrStringOrFile codePageExpression?
                              ;

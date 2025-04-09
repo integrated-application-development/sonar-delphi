@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `EnumeratorOccurrence::getMoveNext` method.
 - **API:** `EnumeratorOccurrence::getCurrent` method.
 - **API:** `ForInStatementNode.getEnumeratorOccurrence` method.
+- **API:** `TypeOfTypeNode::getTypeReferenceNode` method.
 
 ### Changed
 
@@ -37,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False positives on enums that are never referenced by name (but have used values) in `UnusedType`.
 - Name resolution failures in legacy initialization sections referencing the implementation section.
 - Incorrect file position calculation for multiline string tokens.
+- Analysis errors around `type of` type declarations.
 
 ## [1.15.0] - 2025-04-03
 

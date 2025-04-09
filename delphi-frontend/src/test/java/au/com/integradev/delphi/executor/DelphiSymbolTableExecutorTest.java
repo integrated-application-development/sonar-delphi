@@ -422,6 +422,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testClassReferenceTypeOf() {
+    execute("classReferences/TypeOf.pas");
+    verifyUsages(10, 10, reference(17, 2));
+  }
+
+  @Test
   void testSimpleForwardDeclarations() {
     execute("forwardDeclarations/Simple.pas");
     verifyUsages(22, 26, reference(24, 14));
