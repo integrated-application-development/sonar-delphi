@@ -21,8 +21,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeOfTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class TypeOfTypeNodeImpl extends TypeNodeImpl implements TypeOfTypeNode {
@@ -36,8 +37,18 @@ public final class TypeOfTypeNodeImpl extends TypeNodeImpl implements TypeOfType
   }
 
   @Override
+  public TypeReferenceNode getTypeReferenceNode() {
+    return (TypeReferenceNode) getChild(1);
+  }
+
+  @Override
   @Nonnull
   protected Type createType() {
-    return ((TypeNode) getChild(0)).getType();
+    String image = null;
+    if (parent instanceof TypeDeclarationNode) {
+      image = ((TypeDeclarationNode) parent).fullyQualifiedName();
+    }
+    Type type = getTypeReferenceNode().getType();
+    return getTypeFactory().classOf(image, type);
   }
 }

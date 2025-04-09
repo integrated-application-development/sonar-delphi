@@ -18,4 +18,6 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface TypeOfTypeNode extends TypeNode {}
+public interface TypeOfTypeNode extends TypeNode {
+  TypeReferenceNode getTypeReferenceNode();
+}
