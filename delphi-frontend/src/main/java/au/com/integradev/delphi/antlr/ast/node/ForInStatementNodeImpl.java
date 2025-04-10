@@ -18,47 +18,19 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
-import static java.util.Collections.emptyList;
-
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.resolve.NameResolutionHelper;
-import com.google.common.base.Suppliers;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.symbol.EnumeratorOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
-import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class ForInStatementNodeImpl extends ForStatementNodeImpl
     implements ForInStatementNode {
-  private final Supplier<NameResolutionHelper> nameResolutionHelper =
-      Suppliers.memoize(() -> new NameResolutionHelper(getAst().getDelphiFile().getTypeFactory()));
-
-  private final Supplier<RoutineNameDeclaration> getEnumeratorDeclaration =
-      Suppliers.memoize(
-          () ->
-              nameResolutionHelper
-                  .get()
-                  .findMethodMember(this, getEnumerable().getType(), "GetEnumerator", emptyList()));
-
-  private final Supplier<RoutineNameDeclaration> moveNextDeclaration =
-      Suppliers.memoize(
-          () ->
-              nameResolutionHelper
-                  .get()
-                  .findMethodMember(this, getEnumeratorType(), "MoveNext", emptyList()));
-
-  private final Supplier<PropertyNameDeclaration> currentDeclaration =
-      Suppliers.memoize(
-          () ->
-              nameResolutionHelper
-                  .get()
-                  .findPropertyMember(this, getEnumeratorType(), "Current", emptyList()));
+  private EnumeratorOccurrence enumeratorOccurrence;
 
   public ForInStatementNodeImpl(Token token) {
     super(token);
@@ -69,30 +41,35 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
     return visitor.visit(this, data);
   }
 
+  @SuppressWarnings("removal")
   @Override
   @Nullable
   public RoutineNameDeclaration getGetEnumeratorDeclaration() {
-    return getEnumeratorDeclaration.get();
+    if (getEnumeratorOccurrence() == null) {
+      return null;
+    }
+    return (RoutineNameDeclaration)
+        getEnumeratorOccurrence().getGetEnumerator().getNameDeclaration();
   }
 
+  @SuppressWarnings("removal")
   @Override
   @Nullable
   public RoutineNameDeclaration getMoveNextDeclaration() {
-    return moveNextDeclaration.get();
+    if (getEnumeratorOccurrence() == null) {
+      return null;
+    }
+    return (RoutineNameDeclaration) getEnumeratorOccurrence().getMoveNext().getNameDeclaration();
   }
 
+  @SuppressWarnings("removal")
   @Override
   @Nullable
   public PropertyNameDeclaration getCurrentDeclaration() {
-    return currentDeclaration.get();
-  }
-
-  private Type getEnumeratorType() {
-    RoutineNameDeclaration enumerator = getGetEnumeratorDeclaration();
-    if (enumerator != null) {
-      return enumerator.getReturnType();
+    if (getEnumeratorOccurrence() == null) {
+      return null;
     }
-    return TypeFactory.unknownType();
+    return (PropertyNameDeclaration) getEnumeratorOccurrence().getCurrent().getNameDeclaration();
   }
 
   @Override
@@ -103,5 +80,15 @@ public final class ForInStatementNodeImpl extends ForStatementNodeImpl
   @Override
   public StatementNode getStatement() {
     return (StatementNode) getChild(4);
+  }
+
+  @Override
+  @Nullable
+  public EnumeratorOccurrence getEnumeratorOccurrence() {
+    return enumeratorOccurrence;
+  }
+
+  public void setEnumeratorOccurrence(EnumeratorOccurrence enumeratorOccurrence) {
+    this.enumeratorOccurrence = enumeratorOccurrence;
   }
 }

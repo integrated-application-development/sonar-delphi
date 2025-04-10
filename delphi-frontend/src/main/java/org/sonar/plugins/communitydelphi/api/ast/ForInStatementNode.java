@@ -19,18 +19,35 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.symbol.EnumeratorOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 
 public interface ForInStatementNode extends ForStatementNode {
+
+  /**
+   * @deprecated Get via {@link ForInStatementNode#getEnumeratorOccurrence} instead.
+   */
+  @Deprecated(forRemoval = true)
   @Nullable
   RoutineNameDeclaration getGetEnumeratorDeclaration();
 
+  /**
+   * @deprecated Get via {@link ForInStatementNode#getEnumeratorOccurrence} instead.
+   */
+  @Deprecated(forRemoval = true)
   @Nullable
   RoutineNameDeclaration getMoveNextDeclaration();
 
+  /**
+   * @deprecated Get via {@link ForInStatementNode#getEnumeratorOccurrence} instead.
+   */
+  @Deprecated(forRemoval = true)
   @Nullable
   PropertyNameDeclaration getCurrentDeclaration();
 
   ExpressionNode getEnumerable();
+
+  @Nullable
+  EnumeratorOccurrence getEnumeratorOccurrence();
 }

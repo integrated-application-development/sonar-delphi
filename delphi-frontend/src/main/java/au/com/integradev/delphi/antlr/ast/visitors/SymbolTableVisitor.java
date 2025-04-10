@@ -277,6 +277,11 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       public Data visit(FinalizationSectionNode node, Data data) {
         return data;
       }
+
+      @Override
+      public Data visit(CompoundStatementNode node, Data data) {
+        return data;
+      }
     };
   }
 
@@ -614,6 +619,8 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     // Visit the enumerable expression first - we may need the expression type for type inference.
     node.getEnumerable().accept(this, data);
     node.getVariable().accept(this, data);
+
+    data.nameResolutionHelper.resolve(node);
 
     return visitScopeFromRoot(node.getStatement(), data);
   }
