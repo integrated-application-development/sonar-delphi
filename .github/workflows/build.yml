@@ -27,7 +27,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Maven Install
-        run: mvn clean install -Pci --batch-mode --no-transfer-progress
+        env:
+          ORCHESTRATOR_SONAR_VERSION: ${{ vars.ORCHESTRATOR_SONAR_VERSION || 'LATEST_RELEASE' }}
+        run: >
+          mvn clean install
+          -Dsonar.runtimeVersion=$ORCHESTRATOR_SONAR_VERSION
+          -Pci --batch-mode --no-transfer-progress
       - name: Upload plugin jar
         uses: actions/upload-artifact@v4
         with:
