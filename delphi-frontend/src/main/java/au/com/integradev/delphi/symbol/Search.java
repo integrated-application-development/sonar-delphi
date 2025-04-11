@@ -253,14 +253,14 @@ public class Search {
   private Set<NameDeclaration> searchEnclosingTypes(@Nullable DelphiScope scope) {
     Set<NameDeclaration> result = Collections.emptySet();
     if (scope != null) {
-      TypeScope nextTypeScope = scope.getEnclosingScope(TypeScope.class);
-      if (nextTypeScope != null) {
+      TypeScope enclosingTypeScope = scope.getEnclosingScope(TypeScope.class);
+      if (enclosingTypeScope != null) {
         if (TRACE) {
-          LOG.info("  checking enclosing type scope {}", nextTypeScope);
+          LOG.info("  checking enclosing type scope {}", enclosingTypeScope);
         }
-        result = filterTypeScopeResults(nextTypeScope.findDeclaration(occurrence));
+        result = searchTypeScope(enclosingTypeScope);
         if (result.isEmpty()) {
-          return searchEnclosingTypes(nextTypeScope.getParent());
+          return searchEnclosingTypes(enclosingTypeScope.getParent());
         }
       }
     }
