@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False positives on enumerable method `GetEnumerator` in `UnusedRoutine`.
 - False positives on enumerator method `MoveNext` in `UnusedRoutine`.
 - False positives on enumerator property `Current` in `UnusedProperty`.
+- False positives on enums that are never referenced by name (but have used values) in `UnusedType`.
 - Name resolution failures in legacy initialization sections referencing the implementation section.
 - Incorrect file position calculation for multiline string tokens.
 
