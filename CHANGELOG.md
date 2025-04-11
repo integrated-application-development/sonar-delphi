@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False positives on enumerator method `MoveNext` in `UnusedRoutine`.
 - False positives on enumerator property `Current` in `UnusedProperty`.
 - Name resolution failures in legacy initialization sections referencing the implementation section.
+- Name resolution failures whena accessing ancestors of enclosing types from nested type methods.
 - Incorrect file position calculation for multiline string tokens.
 
 ## [1.15.0] - 2025-04-03

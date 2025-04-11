@@ -179,6 +179,7 @@ class DelphiSymbolTableExecutorTest {
     execute("NestedTypes.pas");
     verifyUsages(7, 8, reference(20, 10), reference(21, 5));
     verifyUsages(8, 26, reference(23, 4), reference(24, 4));
+    verifyUsages(29, 20, reference(46, 2));
   }
 
   @Test
