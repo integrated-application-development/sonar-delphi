@@ -28,7 +28,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ORCHESTRATOR_SONAR_VERSION: ${{ vars.ORCHESTRATOR_SONAR_VERSION || 'LATEST_RELEASE' }}
         run: >
           mvn clean install -Pci
+          -Dsonar.runtimeVersion=$ORCHESTRATOR_SONAR_VERSION
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=integrated-application-development_sonar-delphi
           --batch-mode --no-transfer-progress
