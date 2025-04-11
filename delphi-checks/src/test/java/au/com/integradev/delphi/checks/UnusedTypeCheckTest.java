@@ -212,4 +212,34 @@ class UnusedTypeCheckTest {
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testUnusedEnumWithUsedElementsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("type")
+                .appendImpl("  TBar = (Baz, Flarp);")
+                .appendImpl("begin")
+                .appendImpl("  Result := Ord(Baz) + 123;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUnusedEnumWithUnusedElementsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new UnusedTypeCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo: Integer;")
+                .appendImpl("type")
+                .appendImpl("  TBar = (Baz, Flarp); // Noncompliant")
+                .appendImpl("begin")
+                .appendImpl("  Result := 123;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
 }

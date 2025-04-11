@@ -18,9 +18,14 @@
  */
 package au.com.integradev.delphi.checks;
 
+import java.util.List;
+import java.util.function.Predicate;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.communitydelphi.api.ast.EnumElementNode;
+import org.sonar.plugins.communitydelphi.api.ast.EnumTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
+import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
@@ -63,6 +68,10 @@ public class UnusedTypeCheck extends DelphiCheck {
       return false;
     }
 
+    if (node.isEnum() && hasElementsWithUsages((EnumTypeNode) node.getTypeNode())) {
+      return false;
+    }
+
     if (excludeApi
         && (node.isPublic() || node.isPublished())
         && node.getFirstParentOfType(InterfaceSectionNode.class) != null) {
@@ -75,6 +84,13 @@ public class UnusedTypeCheck extends DelphiCheck {
 
     return node.getTypeNameNode().getUsages().stream()
         .allMatch(occurrence -> isWithinType(occurrence, type));
+  }
+
+  private static boolean hasElementsWithUsages(EnumTypeNode node) {
+    return node.getElements().stream()
+        .map(EnumElementNode::getNameDeclarationNode)
+        .map(NameDeclarationNode::getUsages)
+        .anyMatch(Predicate.not(List::isEmpty));
   }
 
   private static boolean isWithinType(NameOccurrence occurrence, Type type) {
