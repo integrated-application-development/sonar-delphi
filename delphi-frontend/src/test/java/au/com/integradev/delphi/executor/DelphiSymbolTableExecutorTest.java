@@ -1053,7 +1053,8 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testGenericImplicitSpecializations() {
     execute("generics/ImplicitSpecialization.pas");
-    verifyUsages(14, 14, reference(19, 20), reference(26, 2), reference(27, 2), reference(28, 2));
+    verifyUsages(15, 14, reference(21, 20), reference(37, 2), reference(38, 2), reference(39, 2));
+    verifyUsages(16, 14, reference(26, 20), reference(48, 2), reference(49, 2), reference(50, 2));
   }
 
   @Test

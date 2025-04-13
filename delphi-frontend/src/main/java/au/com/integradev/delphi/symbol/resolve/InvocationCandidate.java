@@ -32,6 +32,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 
 /**
  * Stores information about an invocation candidate, used for overload resolution. Based directly
@@ -197,11 +198,17 @@ public final class InvocationCandidate {
     Map<Type, Type> argumentsByTypeParameters = new HashMap<>();
     for (int i = 0; i < argumentTypes.size(); ++i) {
       Type parameterType = routineDeclaration.getParameter(i).getType();
+      Type argumentType = argumentTypes.get(i);
+
+      if (parameterType.isOpenArray() && argumentType.isArray()) {
+        parameterType = ((CollectionType) parameterType).elementType();
+        argumentType = ((CollectionType) argumentType).elementType();
+      }
+
       if (!parameterType.isTypeParameter()) {
         continue;
       }
 
-      Type argumentType = argumentTypes.get(i);
       Type existingMapping = argumentsByTypeParameters.get(parameterType);
 
       if (existingMapping != null && !existingMapping.is(argumentType)) {
