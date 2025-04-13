@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False positives on enums that are never referenced by name (but have used values) in `UnusedType`.
 - Name resolution failures in legacy initialization sections referencing the implementation section.
 - Name resolution failures whena accessing ancestors of enclosing types from nested type methods.
+- Name resolution failures on invocations of methods with generic open array parameters.
 - Incorrect file position calculation for multiline string tokens.
 - Analysis errors around `type of` type declarations.
 
