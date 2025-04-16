@@ -644,7 +644,6 @@ public class NameResolver {
   private void specializeDeclarations(NameOccurrence occurrence) {
     declarations =
         declarations.stream()
-            .map(NameDeclaration.class::cast)
             .map(
                 declaration -> {
                   List<Type> typeArguments = occurrence.getTypeArguments();
