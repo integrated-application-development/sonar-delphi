@@ -656,7 +656,7 @@ public class NameResolver {
   private boolean isExplicitArrayConstructorInvocation(NameReferenceNode reference) {
     return Iterables.getLast(resolvedDeclarations, null) instanceof TypeNameDeclaration
         && isDynamicArrayReference(currentType)
-        && reference.getLastName().getImage().equalsIgnoreCase("Create");
+        && reference.getIdentifier().getImage().equalsIgnoreCase("Create");
   }
 
   private static boolean isDynamicArrayReference(Type type) {
@@ -890,7 +890,7 @@ public class NameResolver {
   private boolean handleExplicitArrayConstructorInvocation(ArgumentListNode node) {
     Node previous = node.getParent().getChild(node.getChildIndex() - 1);
     if (previous instanceof NameReferenceNode
-        && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous))) {
+        && isExplicitArrayConstructorInvocation(((NameReferenceNode) previous).getLastName())) {
       updateType(((ClassReferenceType) currentType).classType());
       node.getArgumentNodes().stream()
           .map(ArgumentNode::getExpression)
