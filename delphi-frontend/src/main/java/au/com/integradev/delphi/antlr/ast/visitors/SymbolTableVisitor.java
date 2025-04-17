@@ -24,6 +24,7 @@ import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.antlr.ast.node.MutableDelphiNode;
 import au.com.integradev.delphi.antlr.ast.node.NameDeclarationNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.RoutineNameNodeImpl;
+import au.com.integradev.delphi.antlr.ast.node.TypeConstraintNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.WithStatementNodeImpl;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolTableVisitor.Data;
 import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
@@ -392,7 +393,11 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       @Nullable GenericDefinitionNode definition, Data data) {
     if (definition != null) {
       for (TypeParameterNode parameterNode : definition.getTypeParameterNodes()) {
-        parameterNode.getTypeConstraintNodes().forEach(data.nameResolutionHelper::resolve);
+        parameterNode.getConstraintNodes().stream()
+            .filter(TypeConstraintNodeImpl.class::isInstance)
+            .map(TypeConstraintNodeImpl.class::cast)
+            .map(TypeConstraintNodeImpl::getTypeNode)
+            .forEach(data.nameResolutionHelper::resolve);
       }
 
       for (TypeParameter typeParameter : definition.getTypeParameters()) {

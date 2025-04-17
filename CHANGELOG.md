@@ -15,11 +15,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `EnumeratorOccurrence::getCurrent` method.
 - **API:** `ForInStatementNode.getEnumeratorOccurrence` method.
 - **API:** `TypeOfTypeNode::getTypeReferenceNode` method.
+- **API:** `NameReferenceNode::getFirstName` method.
+- **API:** `DelphiTokenType.TYPE_CONSTRAINT` token type.
+- **API:** `ConstraintNode` node type.
+- **API:** `ClassConstraintNode` node type.
+- **API:** `ConstructorConstraintNode` node type.
+- **API:** `RecordConstraintNode` node type.
+- **API:** `TypeConstraintNode` node type.
+- **API:** `TypeParameterNode::getConstraintNodes` method.
+- **API:** `TypeParameterType::constraintItems` method.
+- **API:** `Constraint` type.
+- **API:** `Constraint.ClassConstraint` type.
+- **API:** `Constraint.ConstructorConstraint` type.
+- **API:** `Constraint.RecordConstraint` type.
+- **API:** `Constraint.TypeConstraint` type.
 
 ### Changed
 
 - Detect tab-indented multiline strings in `TabulationCharacter`.
 - Improve support for evaluating name references in compiler directive expressions.
+- Improve overload resolution in cases involving generic type parameter constraints.
 
 ### Deprecated
 
@@ -29,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `getEnumeratorOccurrence` instead.
 - **API:** `ForInStatementNode::getCurrentDeclaration` method, get the declaration through
   `getEnumeratorOccurrence` instead.
+- **API:** `TypeParameterNode::getTypeConstraintNodes` method, use `getConstraintNodes` instead.
+- **API:** `TypeParameterType::constraints` method, use `constraintItems` instead.
 
 ### Fixed
 
@@ -39,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Name resolution failures in legacy initialization sections referencing the implementation section.
 - Name resolution failures whena accessing ancestors of enclosing types from nested type methods.
 - Name resolution failures on invocations of methods with generic open array parameters.
+- Name resolution failures around `Create` calls on types with `constructor` constraints.
 - Incorrect file position calculation for multiline string tokens.
 - Analysis errors around `type of` type declarations.
 

@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2025 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,16 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import java.util.List;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
 
-public interface TypeParameterNode extends DelphiNode {
-  List<NameDeclarationNode> getTypeParameterNameNodes();
-
-  /**
-   * @deprecated Use {@link TypeParameterNode#getConstraintNodes} instead.
-   */
-  @Deprecated(forRemoval = true)
-  List<TypeReferenceNode> getTypeConstraintNodes();
-
-  List<ConstraintNode> getConstraintNodes();
+public interface ConstraintNode extends DelphiNode {
+  Constraint getConstraint();
 }

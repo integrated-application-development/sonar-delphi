@@ -564,18 +564,26 @@ public interface Type {
   }
 
   interface TypeParameterType extends Type {
-
     /**
-     * The set of constraint types for this type parameter.
-     *
-     * <p>For example, if we're constrained by a class type, then a generic specialization will
-     * require the type argument to be assignment-compatible with that class type.
+     * The constraint types for this type parameter.
      *
      * @return list of constraint types
-     * @see <a href="http://docwiki.embarcadero.com/RADStudio/Rio/en/Constraints_in_Generics">
+     * @deprecated Use {@link TypeParameterType#constraintItems} instead.
+     */
+    @Deprecated(forRemoval = true)
+    List<Type> constraints();
+
+    /**
+     * The constraints for this type parameter.
+     *
+     * <p>For example, if we're constrained by TFoo, then generic specialization will require the
+     * type argument to be assignment-compatible with TFoo.
+     *
+     * @return list of constraints
+     * @see <a href="http://docwiki.embarcadero.com/RADStudio/en/Constraints_in_Generics">
      *     Constraints in Generics</a>
      */
-    List<Type> constraints();
+    List<Constraint> constraintItems();
   }
 
   interface IntegerType extends Type {

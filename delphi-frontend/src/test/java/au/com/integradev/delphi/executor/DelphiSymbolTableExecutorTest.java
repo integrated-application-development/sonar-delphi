@@ -1085,13 +1085,19 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testGenericTypeParameterConflicts() {
+  void testGenericTypeParameterNameConflict() {
     execute("generics/TypeParameterNameConflict.pas");
     verifyUsages(7, 14, reference(25, 8));
     verifyUsages(11, 14, reference(26, 6), reference(27, 9));
     verifyUsages(14, 11, reference(15, 11), reference(21, 19));
     verifyUsages(
         16, 19, reference(16, 33), reference(21, 27), reference(21, 35), reference(23, 10));
+  }
+
+  @Test
+  void testGenericTypeParameterConstructor() {
+    execute("generics/TypeParameterConstructor.pas");
+    verifyUsages(10, 19, reference(17, 20), reference(24, 21), reference(25, 23));
   }
 
   @Test
