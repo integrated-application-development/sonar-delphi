@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `EnumeratorOccurrence` type.
-- **API:** `EnumeratorOccurrence::getGetEnumerator` method.
-- **API:** `EnumeratorOccurrence::getMoveNext` method.
-- **API:** `EnumeratorOccurrence::getCurrent` method.
 - **API:** `ForInStatementNode.getEnumeratorOccurrence` method.
 - **API:** `TypeOfTypeNode::getTypeReferenceNode` method.
 - **API:** `NameReferenceNode::getFirstName` method.
