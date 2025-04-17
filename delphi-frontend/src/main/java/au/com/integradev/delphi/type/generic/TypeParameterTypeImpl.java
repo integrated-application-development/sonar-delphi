@@ -23,21 +23,27 @@ import com.google.common.collect.ImmutableList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.ClassConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.ConstructorConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.RecordConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.TypeConstraint;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class TypeParameterTypeImpl extends TypeImpl implements TypeParameterType {
   private final String image;
-  private List<Type> constraints;
+  private List<Constraint> constraintItems;
 
-  private TypeParameterTypeImpl(String image, List<Type> constraints) {
+  private TypeParameterTypeImpl(String image, List<Constraint> constraintItems) {
     this.image = image;
-    this.constraints = ImmutableList.copyOf(constraints);
+    this.constraintItems = ImmutableList.copyOf(constraintItems);
   }
 
-  public static TypeParameterType create(String image, List<Type> constraints) {
-    return new TypeParameterTypeImpl(image, constraints);
+  public static TypeParameterType create(String image, List<Constraint> constraintItems) {
+    return new TypeParameterTypeImpl(image, constraintItems);
   }
 
   public static TypeParameterType create(String image) {
@@ -55,9 +61,19 @@ public final class TypeParameterTypeImpl extends TypeImpl implements TypeParamet
     return 0;
   }
 
+  @SuppressWarnings("removal")
   @Override
   public List<Type> constraints() {
-    return constraints;
+    return constraintItems.stream()
+        .filter(TypeConstraint.class::isInstance)
+        .map(TypeConstraint.class::cast)
+        .map(TypeConstraint::type)
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  @Override
+  public List<Constraint> constraintItems() {
+    return constraintItems;
   }
 
   @Override
@@ -82,6 +98,28 @@ public final class TypeParameterTypeImpl extends TypeImpl implements TypeParamet
    * @param fullType Type representing the full type declaration
    */
   public void setFullType(TypeParameterType fullType) {
-    this.constraints = fullType.constraints();
+    this.constraintItems = fullType.constraintItems();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder(image);
+
+    for (int i = 0; i < constraintItems.size(); i++) {
+      builder.append((i == 0) ? ": " : ", ");
+
+      Constraint constraint = constraintItems.get(i);
+      if (constraint instanceof TypeConstraint) {
+        builder.append(((TypeConstraint) constraint).type().getImage());
+      } else if (constraint instanceof ClassConstraint) {
+        builder.append("class");
+      } else if (constraint instanceof ConstructorConstraint) {
+        builder.append("constructor");
+      } else if (constraint instanceof RecordConstraint) {
+        builder.append("record");
+      }
+    }
+
+    return builder.toString();
   }
 }

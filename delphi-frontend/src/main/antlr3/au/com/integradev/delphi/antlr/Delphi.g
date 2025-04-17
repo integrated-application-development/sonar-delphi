@@ -64,6 +64,7 @@ tokens {
   TkCompilerDirective;
   TkRealNumber;
   TkTypeParameter;
+  TkTypeConstraint;
   TkForLoopVar;
   TkArrayAccessorNode;
   TkArrayConstructor;
@@ -780,10 +781,10 @@ typeParameter                :  nameDeclaration (',' nameDeclaration)* (':' gene
                                     nameDeclaration (nameDeclaration)* (genericConstraint genericConstraint*)?
                                  )
                              ;
-genericConstraint            : typeReference
-                             | RECORD
-                             | CLASS
-                             | CONSTRUCTOR
+genericConstraint            : typeReference -> ^(TkTypeConstraint<TypeConstraintNodeImpl> typeReference)
+                             | RECORD<RecordConstraintNodeImpl>^
+                             | CLASS<ClassConstraintNodeImpl>^
+                             | CONSTRUCTOR<ConstructorConstraintNodeImpl>^
                              ;
 genericArguments             : '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>'
                              -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>')

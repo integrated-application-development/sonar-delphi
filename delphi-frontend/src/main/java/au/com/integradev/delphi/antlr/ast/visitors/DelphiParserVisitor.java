@@ -40,6 +40,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ClassConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassHelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
@@ -49,6 +50,8 @@ import org.sonar.plugins.communitydelphi.api.ast.ConstArrayElementTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstraintNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstructorConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.ContainsClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -117,6 +120,7 @@ import org.sonar.plugins.communitydelphi.api.ast.QualifiedNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RangeExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.RecordConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordHelperTypeNode;
@@ -144,6 +148,7 @@ import org.sonar.plugins.communitydelphi.api.ast.StructTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.SubRangeTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.TryStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeOfTypeNode;
@@ -744,5 +749,26 @@ public interface DelphiParserVisitor<T> {
 
   default T visit(WithStatementNode node, T data) {
     return visit((StatementNode) node, data);
+  }
+
+  /* Constraints */
+  default T visit(ConstraintNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(ClassConstraintNode node, T data) {
+    return visit((ConstraintNode) node, data);
+  }
+
+  default T visit(ConstructorConstraintNode node, T data) {
+    return visit((ConstraintNode) node, data);
+  }
+
+  default T visit(RecordConstraintNode node, T data) {
+    return visit((ConstraintNode) node, data);
+  }
+
+  default T visit(TypeConstraintNode node, T data) {
+    return visit((ConstraintNode) node, data);
   }
 }

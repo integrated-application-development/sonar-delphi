@@ -91,6 +91,9 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.TypeScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.UnknownScope;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.ConstructorConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.TypeConstraint;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -582,6 +585,10 @@ public class NameResolver {
         return;
       }
 
+      if (handleTypeParameterConstructorInvocation(reference)) {
+        continue;
+      }
+
       NameOccurrence occurrence = createNameOccurrence(reference, inAttribute);
       resolveNameReferenceOccurrence(occurrence, reference.nextName() == null);
 
@@ -594,6 +601,16 @@ public class NameResolver {
 
       ((NameReferenceNodeImpl) reference).setNameOccurrence(occurrence);
     }
+  }
+
+  private boolean handleTypeParameterConstructorInvocation(NameReferenceNode reference) {
+    if (isTypeParameterConstructorInvocation(reference)) {
+      if (currentType.isClassReference()) {
+        updateType(((ClassReferenceType) currentType).classType());
+      }
+      return true;
+    }
+    return false;
   }
 
   private void resolveNameReferenceOccurrence(NameOccurrence occurrence, boolean isLastName) {
@@ -661,6 +678,34 @@ public class NameResolver {
 
   private static boolean isDynamicArrayReference(Type type) {
     return type.isClassReference() && ((ClassReferenceType) type).classType().isDynamicArray();
+  }
+
+  private boolean isTypeParameterConstructorInvocation(NameReferenceNode reference) {
+    Type type = currentType;
+    if (type.isClassReference()) {
+      type = ((ClassReferenceType) type).classType();
+    }
+
+    if (type.isTypeParameter()) {
+      boolean emptyArgumentList = (reference.nextName() != null);
+      if (!emptyArgumentList) {
+        NameReferenceNode firstName = reference.getFirstName();
+        DelphiNode next = firstName.getParent().getChild(firstName.getChildIndex() + 1);
+        emptyArgumentList = next instanceof ArgumentListNode && ((ArgumentListNode) next).isEmpty();
+      }
+      return emptyArgumentList
+          && ((TypeParameterType) type)
+              .constraintItems().stream().anyMatch(ConstructorConstraint.class::isInstance)
+          && reference.getIdentifier().getImage().equalsIgnoreCase("Create");
+    }
+
+    return false;
+  }
+
+  private boolean isTypeParameterConstructorInvocation(ArgumentListNode argumentList) {
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
+    return previous instanceof NameReferenceNode
+        && isTypeParameterConstructorInvocation(((NameReferenceNode) previous).getLastName());
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node, boolean inAttribute) {
@@ -876,7 +921,8 @@ public class NameResolver {
       }
     }
 
-    if (handleExplicitArrayConstructorInvocation(node)) {
+    if (handleExplicitArrayConstructorInvocation(node)
+        || isTypeParameterConstructorInvocation(node)) {
       return;
     }
 
@@ -1417,12 +1463,15 @@ public class NameResolver {
    */
   private void searchForDeclarationInConstraintTypes(NameOccurrence occurrence) {
     TypeParameterType type = (TypeParameterType) currentType;
-    for (Type constraint : type.constraints()) {
-      if (constraint instanceof ScopedType) {
-        updateType(constraint);
-        searchForDeclaration(occurrence);
-        if (!declarations.isEmpty()) {
-          break;
+    for (Constraint constraint : type.constraintItems()) {
+      if (constraint instanceof TypeConstraint) {
+        Type constraintType = ((TypeConstraint) constraint).type();
+        if (constraintType instanceof ScopedType) {
+          updateType(constraintType);
+          searchForDeclaration(occurrence);
+          if (!declarations.isEmpty()) {
+            break;
+          }
         }
       }
     }

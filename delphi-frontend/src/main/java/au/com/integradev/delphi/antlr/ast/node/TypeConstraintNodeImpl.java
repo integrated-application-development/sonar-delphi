@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2025 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,21 +19,20 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import java.util.List;
-import java.util.stream.Collectors;
+import au.com.integradev.delphi.type.generic.constraint.TypeConstraintImpl;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.ConstraintNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeConstraintNode;
-import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
 
-public final class TypeParameterNodeImpl extends DelphiNodeImpl implements TypeParameterNode {
-  public TypeParameterNodeImpl(Token token) {
+public final class TypeConstraintNodeImpl extends DelphiNodeImpl implements TypeConstraintNode {
+  private Constraint constraint;
+
+  public TypeConstraintNodeImpl(Token token) {
     super(token);
   }
 
-  public TypeParameterNodeImpl(int tokenType) {
+  public TypeConstraintNodeImpl(int tokenType) {
     super(tokenType);
   }
 
@@ -43,22 +42,15 @@ public final class TypeParameterNodeImpl extends DelphiNodeImpl implements TypeP
   }
 
   @Override
-  public List<NameDeclarationNode> getTypeParameterNameNodes() {
-    return findChildrenOfType(NameDeclarationNode.class);
-  }
-
-  @SuppressWarnings("removal")
-  @Override
-  public List<TypeReferenceNode> getTypeConstraintNodes() {
-    return getConstraintNodes().stream()
-        .filter(TypeConstraintNode.class::isInstance)
-        .map(TypeConstraintNode.class::cast)
-        .map(TypeConstraintNode::getTypeNode)
-        .collect(Collectors.toList());
+  public TypeReferenceNode getTypeNode() {
+    return (TypeReferenceNode) getChild(0);
   }
 
   @Override
-  public List<ConstraintNode> getConstraintNodes() {
-    return findChildrenOfType(ConstraintNode.class);
+  public Constraint getConstraint() {
+    if (constraint == null) {
+      constraint = new TypeConstraintImpl(getTypeNode().getType());
+    }
+    return constraint;
   }
 }
