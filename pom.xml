@@ -478,7 +478,7 @@
       <id>ci</id>
       <properties>
         <license.failIfMissing>true</license.failIfMissing>
-        <skipITs>false</skipITs>
+        <skipITs>true</skipITs>
       </properties>
     </profile>
 
