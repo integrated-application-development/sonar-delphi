@@ -24,13 +24,13 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.ConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
-import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
-import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
     implements GenericDefinitionNode {
@@ -56,9 +56,9 @@ public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
       ImmutableList.Builder<TypeParameter> builder = ImmutableList.builder();
 
       for (TypeParameterNode parameterNode : getTypeParameterNodes()) {
-        List<Type> constraints =
-            parameterNode.getTypeConstraintNodes().stream()
-                .map(Typed::getType)
+        List<Constraint> constraints =
+            parameterNode.getConstraintNodes().stream()
+                .map(ConstraintNode::getConstraint)
                 .collect(Collectors.toUnmodifiableList());
 
         for (NameDeclarationNode name : parameterNode.getTypeParameterNameNodes()) {

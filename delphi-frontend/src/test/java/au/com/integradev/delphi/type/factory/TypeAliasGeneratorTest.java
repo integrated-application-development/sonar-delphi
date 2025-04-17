@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
+import au.com.integradev.delphi.type.generic.constraint.TypeConstraintImpl;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
 import java.util.Collections;
@@ -127,7 +128,8 @@ class TypeAliasGeneratorTest {
           Arguments.of(FACTORY.subrange(ALIASED_NAME, BYTE), SubrangeType.class),
           Arguments.of(FACTORY.classOf(ALIASED_NAME, BYTE), ClassReferenceType.class),
           Arguments.of(
-              TypeParameterTypeImpl.create(ALIASED_NAME, List.of(BYTE)), TypeParameterType.class),
+              TypeParameterTypeImpl.create(ALIASED_NAME, List.of(new TypeConstraintImpl(BYTE))),
+              TypeParameterType.class),
           Arguments.of(BYTE, IntegerType.class),
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.DOUBLE), RealType.class),
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.BOOLEAN), BooleanType.class),
@@ -214,6 +216,7 @@ class TypeAliasGeneratorTest {
         .isInstanceOf(AssertionError.class);
   }
 
+  @SuppressWarnings("removal")
   private static void assertAliasImplementsTypeThroughDelegation(Type alias, Type aliased) {
     assertDelegated(Type::parent, alias, aliased);
     assertDelegated(Type::ancestorList, alias, aliased);
@@ -300,6 +303,7 @@ class TypeAliasGeneratorTest {
 
     if (aliased instanceof TypeParameterType) {
       assertDelegated(TypeParameterType::constraints, alias, aliased);
+      assertDelegated(TypeParameterType::constraintItems, alias, aliased);
     }
 
     if (aliased instanceof IntegerType) {

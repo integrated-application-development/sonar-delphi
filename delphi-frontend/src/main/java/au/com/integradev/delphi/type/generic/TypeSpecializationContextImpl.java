@@ -23,12 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
 
 public final class TypeSpecializationContextImpl implements TypeSpecializationContext {
@@ -55,8 +57,22 @@ public final class TypeSpecializationContextImpl implements TypeSpecializationCo
     for (int i = 0; i < typeParameters.size(); ++i) {
       Type parameter = typeParameters.get(i);
       Type argument = typeArguments.get(i);
+
+      if (constraintViolated(parameter, argument)) {
+        argumentsByParameter.clear();
+        break;
+      }
+
       argumentsByParameter.put(parameter, argument);
     }
+  }
+
+  private static boolean constraintViolated(Type parameter, Type argument) {
+    return parameter.isTypeParameter()
+        && ((TypeParameterType) parameter)
+            .constraintItems().stream()
+                .map(constraint -> constraint.satisfiedBy(argument))
+                .anyMatch(Predicate.not(Boolean::valueOf));
   }
 
   @Override

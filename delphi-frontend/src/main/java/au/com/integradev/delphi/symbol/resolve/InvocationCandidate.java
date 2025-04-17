@@ -32,6 +32,8 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ArrayConstructorType;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 
 /**
  * Stores information about an invocation candidate, used for overload resolution. Based directly
@@ -197,11 +199,20 @@ public final class InvocationCandidate {
     Map<Type, Type> argumentsByTypeParameters = new HashMap<>();
     for (int i = 0; i < argumentTypes.size(); ++i) {
       Type parameterType = routineDeclaration.getParameter(i).getType();
+      Type argumentType = argumentTypes.get(i);
+
+      if (parameterType.isOpenArray()) {
+        Type argumentElementType = getArrayElementType(argumentType);
+        if (argumentElementType != null) {
+          parameterType = ((CollectionType) parameterType).elementType();
+          argumentType = argumentElementType;
+        }
+      }
+
       if (!parameterType.isTypeParameter()) {
         continue;
       }
 
-      Type argumentType = argumentTypes.get(i);
       Type existingMapping = argumentsByTypeParameters.get(parameterType);
 
       if (existingMapping != null && !existingMapping.is(argumentType)) {
@@ -228,6 +239,33 @@ public final class InvocationCandidate {
     Invocable specialized = (Invocable) routineDeclaration.specialize(context);
 
     return new InvocationCandidate(specialized);
+  }
+
+  private static Type getArrayElementType(Type type) {
+    if (type.isArray()) {
+      return ((CollectionType) type).elementType();
+    } else if (type.isArrayConstructor()) {
+      return getHomogeneousElementType((ArrayConstructorType) type);
+    } else {
+      return null;
+    }
+  }
+
+  private static Type getHomogeneousElementType(ArrayConstructorType type) {
+    List<Type> elementTypes = type.elementTypes();
+    if (elementTypes.isEmpty()) {
+      return null;
+    }
+
+    Type result = elementTypes.get(0);
+    for (Type elementType : elementTypes) {
+      if (!elementType.is(result)) {
+        result = null;
+        break;
+      }
+    }
+
+    return result;
   }
 
   @Override

@@ -1053,7 +1053,8 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testGenericImplicitSpecializations() {
     execute("generics/ImplicitSpecialization.pas");
-    verifyUsages(14, 14, reference(19, 20), reference(26, 2), reference(27, 2), reference(28, 2));
+    verifyUsages(15, 14, reference(21, 20), reference(37, 2), reference(38, 2), reference(39, 2));
+    verifyUsages(16, 14, reference(26, 20), reference(48, 2), reference(49, 2), reference(50, 2));
   }
 
   @Test
@@ -1084,13 +1085,19 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testGenericTypeParameterConflicts() {
+  void testGenericTypeParameterNameConflict() {
     execute("generics/TypeParameterNameConflict.pas");
     verifyUsages(7, 14, reference(25, 8));
     verifyUsages(11, 14, reference(26, 6), reference(27, 9));
     verifyUsages(14, 11, reference(15, 11), reference(21, 19));
     verifyUsages(
         16, 19, reference(16, 33), reference(21, 27), reference(21, 35), reference(23, 10));
+  }
+
+  @Test
+  void testGenericTypeParameterConstructor() {
+    execute("generics/TypeParameterConstructor.pas");
+    verifyUsages(10, 19, reference(17, 20), reference(24, 21), reference(25, 23));
   }
 
   @Test

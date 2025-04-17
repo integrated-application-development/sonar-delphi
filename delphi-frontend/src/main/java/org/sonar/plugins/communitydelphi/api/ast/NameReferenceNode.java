@@ -39,6 +39,8 @@ public interface NameReferenceNode extends DelphiNode, Qualifiable, Typed {
 
   NameDeclaration getNameDeclaration();
 
+  NameReferenceNode getFirstName();
+
   NameReferenceNode getLastName();
 
   boolean isExplicitArrayConstructorInvocation();

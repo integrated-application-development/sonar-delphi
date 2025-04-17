@@ -156,6 +156,15 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
   }
 
   @Override
+  public NameReferenceNode getFirstName() {
+    NameReferenceNode result = this;
+    while (result.getParent() instanceof NameReferenceNode) {
+      result = (NameReferenceNode) result.getParent();
+    }
+    return result;
+  }
+
+  @Override
   public NameReferenceNode getLastName() {
     List<NameReferenceNode> flatNames = flatten();
     return flatNames.get(flatNames.size() - 1);
