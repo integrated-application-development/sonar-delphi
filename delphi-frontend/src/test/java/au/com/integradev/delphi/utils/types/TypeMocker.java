@@ -22,9 +22,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope.unknownScope;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
+import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
 import au.com.integradev.delphi.type.factory.HelperTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
@@ -53,10 +53,15 @@ public final class TypeMocker {
         type = mock(StructTypeImpl.class);
     }
 
-    when(type.typeScope()).thenReturn(unknownScope());
+    var typeScope = new TypeScopeImpl();
+    typeScope.setType(type);
+
+    when(type.typeScope()).thenReturn(typeScope);
     when(type.isStruct()).thenReturn(true);
+    when(type.isClass()).thenReturn(kind == StructKind.CLASS);
     when(type.isInterface()).thenReturn(kind == StructKind.INTERFACE);
     when(type.isRecord()).thenReturn(kind == StructKind.RECORD);
+    when(type.isClass()).thenReturn(kind == StructKind.CLASS);
     when(type.isHelper())
         .thenReturn(kind == StructKind.RECORD_HELPER || kind == StructKind.CLASS_HELPER);
     when(type.getImage()).thenReturn(image);

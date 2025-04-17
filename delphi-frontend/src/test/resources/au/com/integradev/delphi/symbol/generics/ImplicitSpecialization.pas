@@ -41,7 +41,7 @@ end;
 
 procedure TConsumer.Test(Consumables: array of TConsumable);
 var
-  DynamicConsumables: TArray<TConsumable>;
+  DynamicConsumables: array of TConsumable;
 begin
   DynamicConsumables := [TConsumable.Create];
 
