@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `ExhaustiveEnumCase` analysis rule, which flags `case` statements that do not handle all values in an enumeration.
 - **API:** `EnumeratorOccurrence` type.
 - **API:** `EnumeratorOccurrence::getGetEnumerator` method.
 - **API:** `EnumeratorOccurrence::getMoveNext` method.
