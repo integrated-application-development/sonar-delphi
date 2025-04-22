@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.msbuild.condition;
 
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import au.com.integradev.delphi.msbuild.utils.NumericUtils;
 import au.com.integradev.delphi.msbuild.utils.VersionUtils;
 import com.google.common.collect.ImmutableSortedSet;
@@ -78,7 +79,7 @@ public class StringExpression implements Expression {
       return getValue();
     }
     if (expandedValue == null) {
-      expandedValue = evaluator.expand(value);
+      expandedValue = evaluator.eval(value);
     }
     return Optional.of(expandedValue);
   }

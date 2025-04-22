@@ -35,12 +35,15 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DelphiProjectParserTest {
+class DelphiProjectFactoryTest {
 
   private static final String SIMPLE_PROJECT =
       "/au/com/integradev/delphi/projects/SimpleProject/dproj/SimpleDelphiProject.dproj";
 
   private static final String OPT_SET_PROJECT = "/au/com/integradev/delphi/msbuild/OptSet.dproj";
+
+  private static final String COMPLEX_SYNTAX_OPT_SET_PROJECT =
+      "/au/com/integradev/delphi/msbuild/ComplexSyntax.optset";
 
   private static final String BAD_OPT_SET_PROJECT =
       "/au/com/integradev/delphi/msbuild/BadOptSet.dproj";
@@ -61,13 +64,11 @@ class DelphiProjectParserTest {
       "/au/com/integradev/delphi/msbuild/BrowsingPath.dproj";
 
   private EnvironmentVariableProvider environmentVariableProvider;
-  private Path environmentProj;
 
-  private DelphiProject parse(String resource) {
+  private DelphiProject createProject(String resource) {
     Path dproj = DelphiUtils.getResource(resource).toPath();
-    DelphiProjectParser parser =
-        new DelphiProjectParser(dproj, environmentVariableProvider, environmentProj);
-    return parser.parse();
+    DelphiProjectFactory parser = new DelphiProjectFactory();
+    return parser.createProject(new MSBuildParser(dproj, environmentVariableProvider).parse());
   }
 
   @BeforeEach
@@ -75,12 +76,11 @@ class DelphiProjectParserTest {
     environmentVariableProvider = mock(EnvironmentVariableProvider.class);
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
-    environmentProj = null;
   }
 
   @Test
   void testSimpleProjectFile() {
-    DelphiProject project = parse(SIMPLE_PROJECT);
+    DelphiProject project = createProject(SIMPLE_PROJECT);
 
     assertThat(project.getSourceFiles()).hasSize(8);
 
@@ -124,29 +124,43 @@ class DelphiProjectParserTest {
 
   @Test
   void testOptSetProject() {
-    DelphiProject project = parse(OPT_SET_PROJECT);
+    DelphiProject project = createProject(OPT_SET_PROJECT);
     assertThat(project.getUnitAliases())
         .containsExactlyInAnyOrderEntriesOf(Map.of("WinProcs", "Windows", "WinTypes", "Windows"));
   }
 
   @Test
   void testBadOptSetProjectShouldContainValidOptsetValues() {
-    DelphiProject project = parse(BAD_OPT_SET_PROJECT);
+    DelphiProject project = createProject(BAD_OPT_SET_PROJECT);
     assertThat(project.getUnitAliases())
         .containsExactlyInAnyOrderEntriesOf(Map.of("WinProcs", "Windows", "WinTypes", "Windows"));
   }
 
   @Test
   void testBadUnitAliasProjectShouldContainValidAliases() {
-    DelphiProject project = parse(BAD_UNIT_ALIAS_PROJECT);
+    DelphiProject project = createProject(BAD_UNIT_ALIAS_PROJECT);
 
     assertThat(project.getUnitAliases())
         .containsExactlyInAnyOrderEntriesOf(Map.of("ValidAlias", "ValidUnit"));
   }
 
   @Test
+  void testComplexSyntax() {
+    DelphiProject project = createProject(COMPLEX_SYNTAX_OPT_SET_PROJECT);
+
+    assertThat(project.getUnitAliases())
+        .containsExactlyInAnyOrderEntriesOf(
+            Map.of("WinTypes", "Windows", "WinProcs", "Windows", "Foo", "Bar"));
+
+    var baseResourcePath = DelphiUtils.getResource("/au/com/integradev/delphi/msbuild").toPath();
+    assertThat(project.getSearchDirectories())
+        .containsExactlyInAnyOrder(
+            baseResourcePath, baseResourcePath.resolve("subdir/22.0mysuffix"));
+  }
+
+  @Test
   void testBadSearchPathProjectShouldContainValidSearchPaths() {
-    DelphiProject project = parse(BAD_SEARCH_PATH_PROJECT);
+    DelphiProject project = createProject(BAD_SEARCH_PATH_PROJECT);
 
     assertThat(project.getSearchDirectories())
         .containsOnly(DelphiUtils.getResource("/au/com/integradev/delphi/msbuild").toPath());
@@ -154,7 +168,7 @@ class DelphiProjectParserTest {
 
   @Test
   void testBadSourceFileProjectShouldContainValidSourceFiles() {
-    DelphiProject project = parse(BAD_SOURCE_FILE_PROJECT);
+    DelphiProject project = createProject(BAD_SOURCE_FILE_PROJECT);
 
     assertThat(project.getSourceFiles())
         .containsOnly(DelphiUtils.getResource("/au/com/integradev/delphi/file/Empty.pas").toPath());
@@ -162,7 +176,7 @@ class DelphiProjectParserTest {
 
   @Test
   void testLibraryPathProject() {
-    DelphiProject project = parse(LIBRARY_PATH_PROJECT);
+    DelphiProject project = createProject(LIBRARY_PATH_PROJECT);
 
     assertThat(project.getLibraryPathDirectories())
         .containsExactly(
@@ -172,7 +186,7 @@ class DelphiProjectParserTest {
 
   @Test
   void testBrowsingPathProject() {
-    DelphiProject project = parse(BROWSING_PATH_PROJECT);
+    DelphiProject project = createProject(BROWSING_PATH_PROJECT);
 
     assertThat(project.getBrowsingPathDirectories())
         .containsExactly(DelphiUtils.getResource("/au/com/integradev/delphi").toPath());

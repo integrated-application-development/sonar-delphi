@@ -24,14 +24,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.msbuild.condition.Token.TokenType;
-import java.nio.file.Path;
-import org.apache.commons.text.StringSubstitutor;
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 class BinaryExpressionTest {
-  @TempDir private Path tempDir;
-
   @Test
   void testInvalidOperatorShouldThrow() {
     BinaryExpression expression =
@@ -40,10 +36,8 @@ class BinaryExpressionTest {
             TokenType.END_OF_INPUT,
             new StringExpression("bar", false));
 
-    StringSubstitutor substitutor = mock(StringSubstitutor.class);
-    when(substitutor.replace(anyString())).thenAnswer(string -> string);
-
-    ExpressionEvaluator evaluator = new ExpressionEvaluator(tempDir, substitutor);
+    ExpressionEvaluator evaluator = mock(ExpressionEvaluator.class);
+    when(evaluator.eval(anyString())).thenAnswer(string -> string);
 
     assertThatThrownBy(() -> expression.boolEvaluate(evaluator))
         .isInstanceOf(InvalidExpressionException.class);

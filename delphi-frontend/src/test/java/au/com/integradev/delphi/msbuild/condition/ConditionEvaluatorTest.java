@@ -25,11 +25,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
-import au.com.integradev.delphi.msbuild.ProjectProperties;
+import au.com.integradev.delphi.msbuild.MSBuildState;
 import java.nio.file.Path;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ConditionEvaluatorTest {
   @TempDir private Path tempDir;
@@ -44,15 +46,41 @@ class ConditionEvaluatorTest {
     assertThatThrownBy(() -> evaluate("'foo'")).isInstanceOf(ConditionEvaluationError.class);
   }
 
-  private static ProjectProperties properties() {
+  @Test
+  void testLiteralTrueShouldEvaluateToTrue() {
+    assertThat(evaluate("true")).isTrue();
+  }
+
+  @Test
+  void testLiteralFalseShouldEvaluateToFalse() {
+    assertThat(evaluate("false")).isFalse();
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "'$(TrueProp)'=='true'",
+        "'$(FooProp)'=='bar'",
+        "HasTrailingSlash('foo/bar/')",
+        "HasTrailingSlash('foo\\bar\\')",
+        "'$(FooProp)' != 'foo'"
+      })
+  void testTrueCondition(String condition) {
+    assertThat(evaluate(condition)).isTrue();
+  }
+
+  private MSBuildState state() {
     var environmentVariableProvider = mock(EnvironmentVariableProvider.class);
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
-    return ProjectProperties.create(environmentVariableProvider, null);
+    var state = new MSBuildState(tempDir, tempDir, environmentVariableProvider);
+    state.setProperty("TrueProp", "true");
+    state.setProperty("FooProp", "bar");
+    return state;
   }
 
   private boolean evaluate(String condition) {
-    var evaluator = new ConditionEvaluator(properties(), tempDir);
+    var evaluator = new ConditionEvaluator(state());
     return evaluator.evaluate(condition);
   }
 }

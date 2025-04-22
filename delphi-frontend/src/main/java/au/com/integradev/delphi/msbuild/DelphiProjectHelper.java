@@ -30,6 +30,7 @@ import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.PredefinedConditionals;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.core.Delphi;
+import au.com.integradev.delphi.enviroment.EnvironmentProjVariableProvider;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.annotations.VisibleForTesting;
@@ -45,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +66,7 @@ public class DelphiProjectHelper {
   private final Configuration settings;
   private final FileSystem fs;
   private final EnvironmentVariableProvider environmentVariableProvider;
+  private final Supplier<EnvironmentVariableProvider> effectiveEnvironmentVariableProvider;
   private final List<DelphiProject> projects;
   private final Toolchain toolchain;
   private final CompilerVersion compilerVersion;
@@ -101,6 +104,9 @@ public class DelphiProjectHelper {
     this.conditionalDefines = getPredefinedConditionalDefines();
     this.unitScopeNames = getSetFromSettings(DelphiProperties.UNIT_SCOPE_NAMES_KEY);
     this.unitAliases = getUnitAliasesFromSettings();
+    this.effectiveEnvironmentVariableProvider =
+        () ->
+            new EnvironmentProjVariableProvider(environmentProjPath(), environmentVariableProvider);
   }
 
   private Set<String> getSetFromSettings(String key) {
@@ -243,17 +249,15 @@ public class DelphiProjectHelper {
   }
 
   private void indexProject(Path dprojFile) {
-    DelphiProjectParser parser =
-        new DelphiProjectParser(dprojFile, environmentVariableProvider, environmentProjPath());
-    DelphiProject newProject = parser.parse();
+    var state = new MSBuildParser(dprojFile, effectiveEnvironmentVariableProvider.get()).parse();
+    DelphiProject newProject = new DelphiProjectFactory().createProject(state);
     projects.add(newProject);
   }
 
   private void indexProjectGroup(Path projectGroup) {
-    DelphiProjectGroupParser parser =
-        new DelphiProjectGroupParser(
-            projectGroup, environmentVariableProvider, environmentProjPath());
-    projects.addAll(parser.parse());
+    var state = new MSBuildParser(projectGroup, effectiveEnvironmentVariableProvider.get()).parse();
+    projects.addAll(
+        DelphiMSBuildUtils.getProjects(state, effectiveEnvironmentVariableProvider.get()));
   }
 
   /**

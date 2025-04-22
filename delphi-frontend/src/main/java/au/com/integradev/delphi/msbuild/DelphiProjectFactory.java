@@ -22,7 +22,6 @@
  */
 package au.com.integradev.delphi.msbuild;
 
-import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSortedMap;
@@ -41,84 +40,75 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class DelphiProjectParser {
-  private static final Logger LOG = LoggerFactory.getLogger(DelphiProjectParser.class);
+final class DelphiProjectFactory {
+  private static final Logger LOG = LoggerFactory.getLogger(DelphiProjectFactory.class);
 
-  private final Path dproj;
-  private final EnvironmentVariableProvider environmentVariableProvider;
-  private final Path environmentProj;
+  public DelphiProject createProject(MSBuildState state) {
+    var sourceFiles = DelphiMSBuildUtils.getSourceFiles(state);
 
-  public DelphiProjectParser(
-      Path dproj, EnvironmentVariableProvider environmentVariableProvider, Path environmentProj) {
-    this.dproj = dproj;
-    this.environmentVariableProvider = environmentVariableProvider;
-    this.environmentProj = environmentProj;
-  }
-
-  public DelphiProject parse() {
-    var parser = new DelphiMSBuildParser(dproj, environmentVariableProvider, environmentProj);
-    DelphiMSBuildParser.Result result = parser.parse();
-
-    Path dprojDirectory = dproj.getParent();
+    Path dproj = state.getThisFilePath();
+    Path projectDirectory = dproj.getParent();
 
     DelphiProjectImpl project = new DelphiProjectImpl();
-    project.setDefinitions(createDefinitions(result.getProperties()));
-    project.setUnitScopeNames(createUnitScopeNames(result.getProperties()));
-    project.setSearchDirectories(createSearchDirectories(dprojDirectory, result.getProperties()));
-    project.setDebugSourceDirectories(createDebugSourceDirectories(result.getProperties()));
-    project.setLibraryPath(createLibraryPathDirectories(result.getProperties()));
-    project.setBrowsingPath(createBrowsingPathDirectories(result.getProperties()));
-    project.setUnitAliases(createUnitAliases(result.getProperties()));
-    project.setSourceFiles(result.getSourceFiles());
+    project.setDefinitions(createDefinitions(state));
+    project.setUnitScopeNames(createUnitScopeNames(state));
+    project.setSearchDirectories(
+        createSearchDirectories(projectDirectory, state, projectDirectory));
+    project.setDebugSourceDirectories(createDebugSourceDirectories(state, projectDirectory));
+    project.setLibraryPath(createLibraryPathDirectories(state, projectDirectory));
+    project.setBrowsingPath(createBrowsingPathDirectories(state, projectDirectory));
+    project.setUnitAliases(createUnitAliases(state));
+    project.setSourceFiles(sourceFiles);
 
     return project;
   }
 
-  private static Set<String> createDefinitions(ProjectProperties properties) {
-    return Set.copyOf(propertyList(properties.get("DCC_Define")));
+  private static Set<String> createDefinitions(MSBuildState state) {
+    return Set.copyOf(propertyList(state.getProperty("DCC_Define")));
   }
 
-  private static Set<String> createUnitScopeNames(ProjectProperties properties) {
-    return Set.copyOf(propertyList(properties.get("DCC_Namespace")));
+  private static Set<String> createUnitScopeNames(MSBuildState state) {
+    return Set.copyOf(propertyList(state.getProperty("DCC_Namespace")));
   }
 
-  private List<Path> createSearchDirectories(Path dprojDirectory, ProjectProperties properties) {
+  private List<Path> createSearchDirectories(
+      Path dprojDirectory, MSBuildState state, Path baseDir) {
     List<Path> result = new ArrayList<>();
 
     result.add(dprojDirectory);
-    result.addAll(createPathList(properties, "DCC_UnitSearchPath"));
+    result.addAll(createPathList(state, "DCC_UnitSearchPath", baseDir));
 
     return Collections.unmodifiableList(result);
   }
 
-  private List<Path> createDebugSourceDirectories(ProjectProperties properties) {
-    return createPathList(properties, "Debugger_DebugSourcePath");
+  private List<Path> createDebugSourceDirectories(MSBuildState state, Path baseDir) {
+    return createPathList(state, "Debugger_DebugSourcePath", baseDir);
   }
 
-  private List<Path> createLibraryPathDirectories(ProjectProperties properties) {
+  private List<Path> createLibraryPathDirectories(MSBuildState state, Path baseDir) {
     List<Path> result = new ArrayList<>();
 
-    result.addAll(createPathList(properties, "DelphiLibraryPath", false));
-    result.addAll(createPathList(properties, "DelphiTranslatedLibraryPath", false));
+    result.addAll(createPathList(state, "DelphiLibraryPath", baseDir, false));
+    result.addAll(createPathList(state, "DelphiTranslatedLibraryPath", baseDir, false));
 
     return Collections.unmodifiableList(result);
   }
 
-  private List<Path> createBrowsingPathDirectories(ProjectProperties properties) {
-    return createPathList(properties, "DelphiBrowsingPath", false);
+  private List<Path> createBrowsingPathDirectories(MSBuildState state, Path baseDir) {
+    return createPathList(state, "DelphiBrowsingPath", baseDir, false);
   }
 
-  private List<Path> createPathList(ProjectProperties properties, String propertyName) {
-    return createPathList(properties, propertyName, true);
+  private List<Path> createPathList(MSBuildState state, String propertyName, Path baseDir) {
+    return createPathList(state, propertyName, baseDir, true);
   }
 
   private List<Path> createPathList(
-      ProjectProperties properties, String propertyName, boolean emitWarnings) {
+      MSBuildState state, String propertyName, Path baseDir, boolean emitWarnings) {
     List<Path> result = new ArrayList<>();
-    propertyList(properties.get(propertyName))
+    propertyList(state.getProperty(propertyName))
         .forEach(
             pathString -> {
-              Path path = resolveDirectory(pathString);
+              Path path = resolveDirectory(pathString, baseDir);
               if (path != null) {
                 result.add(path);
               } else if (emitWarnings) {
@@ -129,10 +119,10 @@ final class DelphiProjectParser {
   }
 
   @Nullable
-  private Path resolveDirectory(String pathString) {
+  private Path resolveDirectory(String pathString, Path baseDir) {
     try {
       pathString = DelphiUtils.normalizeFileName(pathString);
-      Path path = DelphiUtils.resolvePathFromBaseDir(evaluationDirectory(), Path.of(pathString));
+      Path path = DelphiUtils.resolvePathFromBaseDir(baseDir, Path.of(pathString));
       if (Files.isDirectory(path)) {
         return path;
       }
@@ -142,9 +132,9 @@ final class DelphiProjectParser {
     return null;
   }
 
-  private static Map<String, String> createUnitAliases(ProjectProperties properties) {
+  private static Map<String, String> createUnitAliases(MSBuildState state) {
     Map<String, String> result = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-    propertyList(properties.get("DCC_UnitAlias"))
+    propertyList(state.getProperty("DCC_UnitAlias"))
         .forEach(
             item -> {
               if (StringUtils.countMatches(item, '=') != 1) {
@@ -164,10 +154,6 @@ final class DelphiProjectParser {
       return Collections.emptyList();
     }
     return Splitter.on(';').omitEmptyStrings().splitToList(value);
-  }
-
-  private Path evaluationDirectory() {
-    return dproj.getParent();
   }
 
   private static class DelphiProjectImpl implements DelphiProject {

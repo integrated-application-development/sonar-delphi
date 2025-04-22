@@ -18,15 +18,15 @@
  */
 package au.com.integradev.delphi.msbuild.condition;
 
-import au.com.integradev.delphi.msbuild.ProjectProperties;
-import java.nio.file.Path;
+import au.com.integradev.delphi.msbuild.MSBuildState;
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import java.util.List;
 
 public final class ConditionEvaluator {
   private final ExpressionEvaluator expressionEvaluator;
 
-  public ConditionEvaluator(ProjectProperties properties, Path evaluationDirectory) {
-    expressionEvaluator = new ExpressionEvaluator(evaluationDirectory, properties.substitutor());
+  public ConditionEvaluator(MSBuildState state) {
+    expressionEvaluator = new ExpressionEvaluator(state);
   }
 
   public boolean evaluate(String condition) {
