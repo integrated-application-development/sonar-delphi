@@ -67,6 +67,7 @@ public final class CheckList {
           EmptyVisibilitySectionCheck.class,
           EnumNameCheck.class,
           ExhaustiveEnumCaseCheck.class,
+          ExplicitBitwiseNotCheck.class,
           ExplicitDefaultPropertyReferenceCheck.class,
           ExplicitTObjectInheritanceCheck.class,
           FieldNameCheck.class,

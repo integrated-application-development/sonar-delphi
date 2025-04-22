@@ -1,0 +1,47 @@
+<h2>Why is this an issue?</h2>
+<p>
+  The Delphi bitwise <code>not</code> operator binds stronger than the <code>in</code> binary
+  operator, which can lead to subtly incorrect code. For example, in the code below the bitwise
+  <code>not</code> has been confused for a logical <code>not</code>, which has introduced a bug:
+</p>
+<pre>
+var MyByte: Byte := 3;
+
+if not MyByte in [252, 253, 254, 255] then
+  raise Exception.Create('MyByte must not be above 251!'); // This is raised!
+</pre>
+<p>
+  To avoid this pitfall, complex expressions involving <code>not</code> and <code>in</code> should
+  be parenthesized appropriately, so the precedence is obvious at a glance.
+</p>
+<h2>How to fix it</h2>
+<p>If the bitwise <code>not</code> is intentional, parenthesize it:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+var MyByte: Byte := 3;
+if not MyByte in [252] then
+  WriteLn('error: MyByte must not be 252!');
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+var MyByte: Byte := 3;
+if (not MyByte) in [252] then
+  WriteLn('error: MyByte must not be 3!');
+</pre>
+<p>Otherwise, parenthesize the binary expression that should be negated:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+var MyByte: Byte := 3;
+if not MyByte in [252] then
+  WriteLn('error: MyByte must not be 252!');
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+var MyByte: Byte := 3;
+if not (MyByte in [252]) then
+  WriteLn('error: MyByte must be 252!');
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Expressions_(Delphi)">
+      RAD Studio documentation: Expressions (Delphi)
+    </a>
+  </li>
+</ul>
