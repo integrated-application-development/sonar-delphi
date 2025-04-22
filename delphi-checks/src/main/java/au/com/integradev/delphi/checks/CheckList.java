@@ -66,6 +66,7 @@ public final class CheckList {
           EmptyRoutineCheck.class,
           EmptyVisibilitySectionCheck.class,
           EnumNameCheck.class,
+          ExhaustiveEnumCaseCheck.class,
           ExplicitDefaultPropertyReferenceCheck.class,
           ExplicitTObjectInheritanceCheck.class,
           FieldNameCheck.class,

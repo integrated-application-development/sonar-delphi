@@ -1,0 +1,82 @@
+<h2>Why is this an issue?</h2>
+<p>
+  When using a <code>case</code> statement to alternate between different values of an enumeration,
+  all values should be handled. This could be done explicitly by including all values in the
+  <code>case</code> arms, or implicitly by adding a <code>default</code> branch.
+</p>
+<p>
+  An exhaustive <code>case</code> statement makes it clear that all behaviour is intentionally
+  defined for all values, and guards against accidental omissions - for example, forgetting to
+  update the case statement when a new value is added to the enumeration.
+</p>
+<p>
+  Note that this rule currently ignores any <code>case</code> statement with a subrange
+  expression due to analysis constraints.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Add the missing enumeration values to the <code>case</code>:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+type
+  TBeverageKind = (bvCold, bvFrozen, bvHot, bvRoomTemp);
+
+procedure PrepareBeverage(Kind: TBeverageKind);
+begin
+  case Kind of
+    bvCold, bvFrozen:
+      Refrigerate;
+    bvHot:
+      Microwave;
+  end;
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+type
+  TBeverageKind = (bvCold, bvFrozen, bvHot, bvRoomTemp);
+
+procedure PrepareBeverage(Kind: TBeverageKind);
+begin
+  case Kind of
+    bvCold, bvFrozen:
+      Refrigerate;
+    bvHot:
+      Microwave;
+    bvRoomTemp:
+      // No action required
+  end;
+end;
+</pre>
+<p>
+  Alternatively, add an <code>else</code> block to implicitly handle all remaining values:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+type
+  TBeverageKind = (bvCold, bvFrozen, bvHot, bvRoomTemp);
+
+procedure PrepareBeverage(Kind: TBeverageKind);
+begin
+  case Kind of
+    bvCold, bvFrozen:
+      Refrigerate;
+    bvHot:
+      Microwave;
+  end;
+end;
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+type
+  TBeverageKind = (bvCold, bvFrozen, bvHot, bvRoomTemp);
+
+procedure PrepareBeverage(Kind: TBeverageKind);
+begin
+  case Kind of
+    bvCold, bvFrozen:
+      Refrigerate;
+    bvHot:
+      Microwave;
+  else
+    // No action required
+  end;
+end;
+</pre>
