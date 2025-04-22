@@ -1,0 +1,19 @@
+{
+  "title": "Ambiguous bitwise 'not' operations should be parenthesized",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "2min"
+  },
+  "code": {
+    "attribute": "LOGICAL",
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["suspicious"],
+  "defaultSeverity": "Minor",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

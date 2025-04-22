@@ -33,6 +33,7 @@
     "EmptyRoutine",
     "EmptyVisibilitySection",
     "EnumName",
+    "ExplicitBitwiseNot",
     "ExplicitDefaultPropertyReference",
     "FieldName",
     "FormatArgumentCount",
