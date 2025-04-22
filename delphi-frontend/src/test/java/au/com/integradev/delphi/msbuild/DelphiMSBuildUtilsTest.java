@@ -27,11 +27,11 @@ import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DelphiProjectGroupParserTest {
+class DelphiMSBuildUtilsTest {
   private static final String PROJECT_GROUP =
       "/au/com/integradev/delphi/msbuild/ProjectGroup.groupproj";
 
@@ -39,13 +39,10 @@ class DelphiProjectGroupParserTest {
       "/au/com/integradev/delphi/msbuild/ProjectGroupWithInvalidProjects.groupproj";
 
   private EnvironmentVariableProvider environmentVariableProvider;
-  private Path environmentProj;
 
-  private List<DelphiProject> parse(String resource) {
+  private MSBuildState parse(String resource) {
     Path groupproj = DelphiUtils.getResource(resource).toPath();
-    DelphiProjectGroupParser parser =
-        new DelphiProjectGroupParser(groupproj, environmentVariableProvider, environmentProj);
-    return parser.parse();
+    return new MSBuildParser(groupproj, environmentVariableProvider).parse();
   }
 
   @BeforeEach
@@ -53,16 +50,20 @@ class DelphiProjectGroupParserTest {
     environmentVariableProvider = mock(EnvironmentVariableProvider.class);
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
-    environmentProj = null;
   }
 
   @Test
-  void testProjectGroup() {
-    assertThat(parse(PROJECT_GROUP)).hasSize(3);
+  void testGetProjectsWithValidProjects() {
+    Assertions.assertThat(
+            DelphiMSBuildUtils.getProjects(parse(PROJECT_GROUP), environmentVariableProvider))
+        .hasSize(3);
   }
 
   @Test
-  void testProjectGroupWithInvalidProjects() {
-    assertThat(parse(PROJECT_GROUP_WITH_INVALID_PROJECTS)).hasSize(1);
+  void testGetProjectsWithInvalidProjects() {
+    assertThat(
+            DelphiMSBuildUtils.getProjects(
+                parse(PROJECT_GROUP_WITH_INVALID_PROJECTS), environmentVariableProvider))
+        .hasSize(1);
   }
 }

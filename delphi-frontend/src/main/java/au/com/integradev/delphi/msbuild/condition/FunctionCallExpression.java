@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.msbuild.condition;
 
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Splitter;
 import java.nio.file.Files;
@@ -57,7 +58,7 @@ public class FunctionCallExpression implements Expression {
       return false;
     }
 
-    Path baseDir = evaluator.getEvaluationDirectory();
+    Path baseDir = evaluator.getState().getThisFilePath().getParent();
     try {
       return Stream.of(StringUtils.split(value, ";"))
           .map(DelphiUtils::normalizeFileName)

@@ -192,7 +192,7 @@ public class ConditionLexer {
         break;
       }
 
-      if (character == '$' && peekChar() == '(') {
+      if (character == '$' || character == '@' || character == '%') {
         expandable = true;
       }
 

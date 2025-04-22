@@ -24,21 +24,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
-import au.com.integradev.delphi.msbuild.ProjectProperties;
+import au.com.integradev.delphi.msbuild.MSBuildState;
 import au.com.integradev.delphi.msbuild.condition.FunctionCallExpression.ArgumentCountMismatchException;
 import au.com.integradev.delphi.msbuild.condition.FunctionCallExpression.ScalarFunctionWithMultipleItemsException;
 import au.com.integradev.delphi.msbuild.condition.FunctionCallExpression.UnknownFunctionException;
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 class ExpressionEvaluationTest {
+  private @TempDir Path tempDir;
+
   static class BooleanArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
@@ -279,15 +283,14 @@ class ExpressionEvaluationTest {
     return parser.parse(tokens);
   }
 
-  private static ProjectProperties properties() {
+  private MSBuildState state() {
     var environmentVariableProvider = mock(EnvironmentVariableProvider.class);
     when(environmentVariableProvider.getenv()).thenReturn(Map.of("foo", "bar"));
     when(environmentVariableProvider.getenv("foo")).thenReturn("bar");
-    return ProjectProperties.create(environmentVariableProvider, null);
+    return new MSBuildState(tempDir, tempDir, environmentVariableProvider);
   }
 
-  private static ExpressionEvaluator expressionEvaluator() {
-    return new ExpressionEvaluator(
-        FileUtils.getTempDirectory().toPath(), properties().substitutor());
+  private ExpressionEvaluator expressionEvaluator() {
+    return new ExpressionEvaluator(state());
   }
 }

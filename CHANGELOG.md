@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for MSBuild item and item metadata expressions in project files.
 - `ExhaustiveEnumCase` analysis rule, which flags `case` statements that do not handle all values in an enumeration.
 - **API:** `EnumeratorOccurrence` type.
 - **API:** `ForInStatementNode::getEnumeratorOccurrence` method.
@@ -33,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Detect tab-indented multiline strings in `TabulationCharacter`.
 - Improve support for evaluating name references in compiler directive expressions.
 - Improve overload resolution in cases involving generic type parameter constraints.
+- Improve handling for MSBuild properties, items, and conditional evaluation. 
 
 ### Deprecated
 

@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.msbuild.condition;
 
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import au.com.integradev.delphi.msbuild.utils.NumericUtils;
 import au.com.integradev.delphi.msbuild.utils.VersionUtils;
 import java.util.Optional;

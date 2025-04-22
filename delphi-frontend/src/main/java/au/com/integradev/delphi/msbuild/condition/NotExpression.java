@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.msbuild.condition;
 
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import java.util.Optional;
 
 public class NotExpression implements Expression {

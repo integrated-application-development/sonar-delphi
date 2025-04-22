@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.msbuild.condition;
 
 import au.com.integradev.delphi.msbuild.condition.Token.TokenType;
+import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;

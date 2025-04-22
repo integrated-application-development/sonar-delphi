@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <BaseDir>subdir</BaseDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <Aliases Include="WinProcs=Windows;Foo=Bar"/>
+        <Root Include="C:\test\directory\22.0">
+            <Suffix>mysuffix</Suffix>
+        </Root>
+        <OtherDir Include="@(Root->'$(BaseDir)\%(Filename)%(Extension)%(Suffix)')"/>
+    </ItemGroup>
+    <PropertyGroup>
+        <DCC_UnitAlias>WinTypes=Windows;@(Aliases);$(DCC_UnitAlias)</DCC_UnitAlias>
+        <DCC_UnitSearchPath>@(OtherDir);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+    </PropertyGroup>
+</Project>

@@ -23,17 +23,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
-import au.com.integradev.delphi.utils.DelphiUtils;
 import java.nio.file.Path;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class ProjectPropertiesTest {
-  private static final String ENVIRONMENT_PROJ =
-      "/au/com/integradev/delphi/msbuild/environment.proj";
-
+class MSBuildStateTest {
   private EnvironmentVariableProvider environmentVariableProvider;
 
   @TempDir private Path tempDir;
@@ -47,30 +43,23 @@ class ProjectPropertiesTest {
 
   @Test
   void testProjectPropertiesConstructedFromEnvironmentVariables() {
-    var properties = ProjectProperties.create(environmentVariableProvider, null);
+    var state = new MSBuildState(tempDir, tempDir, environmentVariableProvider);
 
-    assertThat(properties.get("FOO")).isNull();
-    assertThat(properties.get("BAR")).isNull();
-    assertThat(properties.get("BAZ")).isEqualTo("flarp");
+    assertThat(state.getProperty("FOO")).isEmpty();
+    assertThat(state.getProperty("BAR")).isEmpty();
+    assertThat(state.getProperty("BAZ")).isEqualTo("flarp");
   }
 
   @Test
-  void testProjectPropertiesConstructedFromEnvironmentVariablesAndEnvironmentProj() {
-    Path environmentProj = DelphiUtils.getResource(ENVIRONMENT_PROJ).toPath();
-    var properties = ProjectProperties.create(environmentVariableProvider, environmentProj);
-
-    assertThat(properties.get("FOO")).isEqualTo("foo");
-    assertThat(properties.get("BAR")).isEqualTo("bar");
-    assertThat(properties.get("BAZ")).isEqualTo("flarp");
+  void testWellKnownProperties() {
+    var state = new MSBuildState(tempDir, tempDir, environmentVariableProvider);
+    assertThat(state.getProperty("MSBuildThisFileFullPath")).isEqualTo(tempDir.toString());
   }
 
   @Test
-  void testProjectPropertiesConstructedFromEnvironmentVariablesAndInvalidEnvironmentProj() {
-    Path environmentProj = tempDir.resolve("does_not_exist.proj");
-    var properties = ProjectProperties.create(environmentVariableProvider, environmentProj);
-
-    assertThat(properties.get("FOO")).isNull();
-    assertThat(properties.get("BAR")).isNull();
-    assertThat(properties.get("BAZ")).isEqualTo("flarp");
+  void testOverrideWellKnownProperties() {
+    var state = new MSBuildState(tempDir, tempDir, environmentVariableProvider);
+    state.setProperty("MSBuildThisFileFullPath", "bonk");
+    assertThat(state.getProperty("MSBuildThisFileFullPath")).isEqualTo("bonk");
   }
 }
