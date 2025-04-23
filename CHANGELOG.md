@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for MSBuild item and item metadata expressions in project files.
 - `ExhaustiveEnumCase` analysis rule, which flags `case` statements that do not handle all values in an enumeration.
+- `IterationPastHighBound` analysis rule, which flags `for` loops that iterate past the end of the collection.
 - **API:** `EnumeratorOccurrence` type.
 - **API:** `ForInStatementNode::getEnumeratorOccurrence` method.
 - **API:** `TypeOfTypeNode::getTypeReferenceNode` method.

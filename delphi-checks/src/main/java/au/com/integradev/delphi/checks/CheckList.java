@@ -104,6 +104,7 @@ public final class CheckList {
           InstanceInvokedConstructorCheck.class,
           InterfaceGuidCheck.class,
           InterfaceNameCheck.class,
+          IterationPastHighBoundCheck.class,
           LegacyInitializationSectionCheck.class,
           LoopExecutingAtMostOnceCheck.class,
           LowercaseKeywordCheck.class,
