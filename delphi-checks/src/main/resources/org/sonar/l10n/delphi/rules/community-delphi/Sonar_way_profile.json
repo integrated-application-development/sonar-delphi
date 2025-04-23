@@ -48,6 +48,7 @@
     "InlineDeclarationCapturedByAnonymousMethod",
     "InstanceInvokedConstructor",
     "InterfaceName",
+    "IterationPastHighBound",
     "LegacyInitializationSection",
     "LoopExecutingAtMostOnce",
     "LowercaseKeyword",

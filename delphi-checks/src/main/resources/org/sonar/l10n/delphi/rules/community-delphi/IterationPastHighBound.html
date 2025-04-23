@@ -1,0 +1,55 @@
+<h2>Why is this an issue?</h2>
+<p>
+  The upper range of <code>for</code> loops is inclusive in Delphi, meaning that a typical
+  zero-based collection iteration should start at 0 and end at one before the array length:
+</p>
+<pre>
+for I := 0 to Length(Array) - 1 do
+  WriteLn(Array[I]);
+</pre>
+<p>
+  Forgetting to subtract one from the length of the collection is a common mistake in Delphi code,
+  especially since in most other languages the convention is for the upper bound to be exclusive.
+  If forgotten, this may cause access violations, buffer overruns, and other memory issues.
+</p>
+<p>
+  When using non zero-based collections, the <code>Low</code> and <code>High</code> intrinsics
+  should be used instead of iterating based on length.
+</p>
+<p>
+  This rule catches suspicious cases of <code>System.Length</code> or <code>Count</code> properties
+  being used as an upper bound. Iterations over strings are excluded as they are typically
+  one-based.
+</p>
+<h2>How to fix it</h2>
+<p>
+  If the collection is zero-based, subtract one from the upper bound:
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+for I := 0 to Length(Array) do
+  WriteLn(Array[I]);
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+for I := 0 to Length(Array) - 1 do
+  WriteLn(Array[I]);
+</pre>
+<p>
+  If the collection is not zero-based, use the <code>Low</code> and <code>High</code> intrinsics
+  to iterate instead:
+</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+for I := 1 to Length(Array) do
+  WriteLn(Array[I]);
+</pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+for I := Low(Array) to High(Array) do
+  WriteLn(Array[I]);
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Type_Declarations">
+      Delphi's Object Pascal Style Guide: Type Declarations
+    </a>
+  </li>
+</ul>
