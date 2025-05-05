@@ -12,6 +12,9 @@ on:
       - 'LICENSE.txt'
       - 'NOTICE.txt'
 
+permissions:
+  contents: read
+
 jobs:
   install:
     runs-on: ubuntu-latest
