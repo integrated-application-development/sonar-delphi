@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `EnumeratorOccurrence` type.
-- **API:** `ForInStatementNode.getEnumeratorOccurrence` method.
+- **API:** `ForInStatementNode::getEnumeratorOccurrence` method.
 - **API:** `TypeOfTypeNode::getTypeReferenceNode` method.
 - **API:** `NameReferenceNode::getFirstName` method.
 - **API:** `DelphiTokenType.TYPE_CONSTRAINT` token type.
