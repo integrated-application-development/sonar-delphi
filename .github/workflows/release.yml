@@ -36,12 +36,12 @@ jobs:
         run: echo "version-without-v=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
       - name: Get changelog release info
         id: changelog
-        uses: release-flow/keep-a-changelog-action@v3
+        uses: release-flow/keep-a-changelog-action@74931dec7ecdbfc8e38ac9ae7e8dd84c08db2f32 # v3.0.0
         with:
           command: query
           version: ${{ steps.get-version.outputs.version-without-v }}
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
         with:
           name: ${{ steps.changelog.outputs.version }}
           body: ${{ steps.changelog.outputs.release-notes }}
