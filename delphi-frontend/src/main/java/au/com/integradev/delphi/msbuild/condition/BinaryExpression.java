@@ -45,12 +45,11 @@ class BinaryExpression implements Expression {
         return isEqual(evaluator);
       case NOT_EQUAL:
         return isEqual(evaluator).map(value -> !value);
-        // NOTE:
-        // When comparing numerics against versions, if the number is the same as the "major"
-        // version,
-        // then that means we are comparing something like "6.X.Y.Z" to "6".
-        // Version treats the objects with more dots as "larger" regardless of what those dots are
-        // (e.g. 6.0.0.0 > 6 is a true statement)
+      // NOTE:
+      // When comparing numerics against versions, if the number is the same as the "major" version,
+      // then that means we are comparing something like "6.X.Y.Z" to "6".
+      // Version treats the objects with more dots as "larger" regardless of what those dots are
+      // (e.g. 6.0.0.0 > 6 is a true statement)
       case GREATER_THAN:
         return compare(
             evaluator,
