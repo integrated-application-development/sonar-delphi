@@ -103,7 +103,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.min.version>3.3.9</maven.min.version>
-    <jdk.min.version>11</jdk.min.version>
+    <jdk.min.version>17</jdk.min.version>
     <skipITs>true</skipITs>
     <!-- SonarCloud scan -->
     <sonar.organization>integrated-application-development</sonar.organization>
@@ -463,7 +463,7 @@
         <configuration>
           <java>
             <googleJavaFormat>
-              <version>1.19.2</version>
+              <version>1.26.0</version>
               <style>GOOGLE</style>
               <reflowLongStrings>true</reflowLongStrings>
             </googleJavaFormat>
