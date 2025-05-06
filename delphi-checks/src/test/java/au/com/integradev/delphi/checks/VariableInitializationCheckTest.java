@@ -720,22 +720,22 @@ class VariableInitializationCheckTest {
   }
 
   @Test
-  void testFailOnUpgradeVarPassedToArrayProcVarOutParameterShouldAddIssue() {
+  void testFailOnUpgradePassedToArrayElementProceduralShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new VariableInitializationCheck())
         .onFile(
             new DelphiTestUnitBuilder()
                 .appendDecl("type")
-                .appendDecl("  TTestProc = reference to procedure(out Int: Integer);")
+                .appendDecl("  TTestProc = reference to procedure(Int: Integer);")
                 .appendDecl("procedure Foo(Int: Integer);")
                 .appendImpl("procedure Test(ProcArray: array of TTestProc);")
                 .appendImpl("var")
                 .appendImpl("  I: Integer;")
                 .appendImpl("begin")
-                .appendImpl("  ProcArray[0](I); // Noncompliant")
+                .appendImpl("  ProcArray[0](I);")
                 .appendImpl("  Foo(I);")
                 .appendImpl("end;"))
-        .verifyIssues();
+        .verifyNoIssues();
   }
 
   @Test
@@ -945,6 +945,24 @@ class VariableInitializationCheckTest {
                 .appendImpl("  UnknownRoutine(Foo(I));")
                 .appendImpl("end;"))
         .verifyNoIssues();
+  }
+
+  @Test
+  void testUninitializedArgumentToExplicitArrayConstructorShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("type")
+                .appendImpl("  TBar = array of Integer;")
+                .appendImpl("var")
+                .appendImpl("  Foo: Integer;")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Bar := TBar.Create(Foo); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
   }
 
   @Test
