@@ -29,6 +29,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
+import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public class InvocationArgument implements Typed {
@@ -55,7 +56,7 @@ public class InvocationArgument implements Typed {
   void resolve(Type parameterType) {
     if (resolver != null) {
       if (isRoutineReference(parameterType)) {
-        disambiguateRoutineReference(resolver, parameterType);
+        resolver.disambiguateRoutineReference((ProceduralType) parameterType);
       } else if (!resolver.isExplicitInvocation()) {
         resolver.disambiguateImplicitEmptyArgumentList();
       }
@@ -92,13 +93,12 @@ public class InvocationArgument implements Typed {
     Preconditions.checkNotNull(resolver);
 
     NameResolver clone = new NameResolver(resolver);
-    disambiguateRoutineReference(clone, parameterType);
-    return clone.getApproximateType();
-  }
+    clone.disambiguateRoutineReference((ProceduralType) parameterType);
+    if (!clone.isAmbiguous()) {
+      return clone.getApproximateType();
+    }
 
-  private static void disambiguateRoutineReference(NameResolver resolver, Type parameterType) {
-    resolver.disambiguateRoutineReference((ProceduralType) parameterType);
-    resolver.checkAmbiguity();
+    return TypeFactory.unknownType();
   }
 
   @Override

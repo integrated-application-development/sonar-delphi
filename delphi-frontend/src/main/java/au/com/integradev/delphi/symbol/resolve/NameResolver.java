@@ -25,7 +25,6 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.voidType;
 
 import au.com.integradev.delphi.antlr.ast.node.ArrayAccessorNodeImpl;
-import au.com.integradev.delphi.antlr.ast.node.DelphiNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.NameReferenceNodeImpl;
 import au.com.integradev.delphi.symbol.Search;
 import au.com.integradev.delphi.symbol.SearchMode;
@@ -200,8 +199,12 @@ public class NameResolver {
     return resolved;
   }
 
-  public void checkAmbiguity() {
-    if (declarations.size() > 1) {
+  public boolean isAmbiguous() {
+    return declarations.size() > 1;
+  }
+
+  private void checkAmbiguity() {
+    if (isAmbiguous()) {
       if (LOG.isWarnEnabled()) {
         LOG.warn(
             "Ambiguous declarations could not be resolved\n[Occurrence] {}\n{}",
@@ -288,19 +291,11 @@ public class NameResolver {
     }
 
     for (DelphiNode child : node.getChildren()) {
-      if (!readPrimaryExpressionPart(child)) {
-        break;
-      }
+      readPrimaryExpressionPart(child);
     }
   }
 
-  /**
-   * Reads part of a primary expression
-   *
-   * @param node part of a primary expression
-   * @return false if a name resolution failure occurs
-   */
-  private boolean readPrimaryExpressionPart(Node node) {
+  private void readPrimaryExpressionPart(Node node) {
     if (node instanceof NameReferenceNode) {
       readNameReference((NameReferenceNode) node);
     } else if (node instanceof ArgumentListNode) {
@@ -314,11 +309,13 @@ public class NameResolver {
     } else {
       handlePrimaryExpressionToken(node);
     }
-
-    return !nameResolutionFailed();
   }
 
   private void handlePrimaryExpressionToken(Node node) {
+    if (nameResolutionFailed()) {
+      return;
+    }
+
     switch (node.getTokenType()) {
       case DEREFERENCE:
         Type dereferenced = TypeUtils.dereference(getApproximateType());
@@ -389,9 +386,7 @@ public class NameResolver {
     int nextChild = ExpressionNodeUtils.isBareInherited(node) ? 1 : 2;
 
     for (int i = nextChild; i < node.getChildren().size(); ++i) {
-      if (!readPrimaryExpressionPart(node.getChild(i))) {
-        break;
-      }
+      readPrimaryExpressionPart(node.getChild(i));
     }
 
     return true;
@@ -520,8 +515,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
-      NameResolver resolver =
-          new NameResolver(((DelphiNodeImpl) typeReference).getTypeFactory(), searchMode);
+      NameResolver resolver = new NameResolver(typeFactory, searchMode);
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -540,8 +534,7 @@ public class NameResolver {
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
-      NameResolver resolver =
-          new NameResolver(((DelphiNodeImpl) typeNode).getTypeFactory(), searchMode);
+      NameResolver resolver = new NameResolver(typeFactory, searchMode);
       resolver.resolvedDeclarations.add(declaration);
       resolver.names.add(occurrence);
       resolver.addToSymbolTable();
@@ -576,6 +569,10 @@ public class NameResolver {
   }
 
   private void readNameReference(NameReferenceNode node, boolean inAttribute) {
+    if (nameResolutionFailed()) {
+      return;
+    }
+
     boolean couldBeUnitNameReference =
         currentScope == null
             || (!(currentScope instanceof UnknownScope) && currentScope.equals(node.getScope()));
@@ -709,7 +706,7 @@ public class NameResolver {
   }
 
   private void readPossibleUnitNameReference(NameReferenceNode node, boolean inAttribute) {
-    NameResolver unitNameResolver = new NameResolver(((DelphiNodeImpl) node).getTypeFactory());
+    NameResolver unitNameResolver = new NameResolver(typeFactory);
     if (unitNameResolver.readUnitNameReference(node, inAttribute)) {
       this.currentType = unknownType();
       this.names.clear();
@@ -781,6 +778,11 @@ public class NameResolver {
   }
 
   private void handleArrayAccessor(ArrayAccessorNode accessor) {
+    if (nameResolutionFailed()) {
+      resolveArgumentsBestEffort(accessor.getExpressions());
+      return;
+    }
+
     Type type = TypeUtils.findBaseType(getApproximateType());
     if (type.isPointer()) {
       Type dereferenced = TypeUtils.dereference(type);
@@ -921,6 +923,14 @@ public class NameResolver {
       }
     }
 
+    if (nameResolutionFailed()) {
+      resolveArgumentsBestEffort(
+          node.getArgumentNodes().stream()
+              .map(ArgumentNode::getExpression)
+              .collect(Collectors.toUnmodifiableList()));
+      return;
+    }
+
     if (handleExplicitArrayConstructorInvocation(node)
         || isTypeParameterConstructorInvocation(node)) {
       return;
@@ -1006,6 +1016,20 @@ public class NameResolver {
 
     updateType(proceduralType.returnType());
     return true;
+  }
+
+  private void resolveArgumentsBestEffort(List<ExpressionNode> argumentExpressions) {
+    for (ExpressionNode expression : argumentExpressions) {
+      getNameResolutionHelper().resolveSubExpressions(expression);
+      if (expression instanceof PrimaryExpressionNode) {
+        NameResolver resolver = new NameResolver(typeFactory, searchMode);
+        resolver.readPrimaryExpression((PrimaryExpressionNode) expression);
+        if (resolver.isAmbiguous()) {
+          resolver.declarations.clear();
+        }
+        resolver.addToSymbolTable();
+      }
+    }
   }
 
   private void disambiguateArguments(List<ExpressionNode> argumentExpressions, boolean explicit) {

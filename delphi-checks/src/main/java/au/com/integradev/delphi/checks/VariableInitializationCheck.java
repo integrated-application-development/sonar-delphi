@@ -194,7 +194,7 @@ public class VariableInitializationCheck extends DelphiCheck {
 
   private void searchForInitializationsByOutArgument(StatementNode statement) {
     findNameReferences(statement).stream()
-        .filter(VariableInitializationCheck::isOutArgument)
+        .filter(VariableInitializationCheck::isPotentiallyInitializingArgument)
         .map(this::getReferredInitializationState)
         .filter(Objects::nonNull)
         .forEach(InitializationState::assignedTo);
@@ -275,7 +275,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     }
 
     for (NameReferenceNode name : findNameReferences(assignmentStatement.getValue())) {
-      if (name.getNameDeclaration() == declaration && !isOutArgument(name)) {
+      if (name.getNameDeclaration() == declaration && !isPotentiallyInitializingArgument(name)) {
         return;
       }
     }
@@ -294,7 +294,7 @@ public class VariableInitializationCheck extends DelphiCheck {
     }
   }
 
-  private static boolean isOutArgument(NameReferenceNode name) {
+  private static boolean isPotentiallyInitializingArgument(NameReferenceNode name) {
     ArgumentNode argument = getArgument(name);
     if (argument == null) {
       return false;
@@ -303,7 +303,10 @@ public class VariableInitializationCheck extends DelphiCheck {
     ArgumentListNode argumentList = (ArgumentListNode) argument.getParent();
     ProceduralType procedural = getInvokedProcedural(argumentList);
     if (procedural == null) {
-      return false;
+      // If we can't find the procedural, it might mean:
+      // - an unresolved procedural reference (potentially initializing)
+      // - an explicit array constructor (not initializing)
+      return !isExplicitArrayConstructor(argumentList);
     }
 
     int argumentIndex = argumentList.getArgumentNodes().indexOf(argument);
@@ -398,6 +401,22 @@ public class VariableInitializationCheck extends DelphiCheck {
     }
 
     return (ProceduralType) type;
+  }
+
+  private static boolean isExplicitArrayConstructor(ArgumentListNode argumentList) {
+    Node previous = argumentList.getParent().getChild(argumentList.getChildIndex() - 1);
+    if (previous instanceof NameReferenceNode) {
+      NameReferenceNode name = ((NameReferenceNode) previous).getLastName();
+      NameReferenceNode prevName = name.prevName();
+      if (prevName != null) {
+        NameDeclaration arrayDeclaration = prevName.getNameDeclaration();
+        if (arrayDeclaration instanceof TypeNameDeclaration) {
+          return ((TypeNameDeclaration) arrayDeclaration).getType().isDynamicArray()
+              && name.simpleName().equalsIgnoreCase("Create");
+        }
+      }
+    }
+    return false;
   }
 
   private static RoutineNameDeclaration getRoutineDeclaration(ArgumentListNode argumentList) {

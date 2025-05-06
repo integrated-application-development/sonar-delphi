@@ -36,7 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Detect tab-indented multiline strings in `TabulationCharacter`.
 - Improve support for evaluating name references in compiler directive expressions.
 - Improve overload resolution in cases involving generic type parameter constraints.
-- Improve handling for MSBuild properties, items, and conditional evaluation. 
+- Improve handling for MSBuild properties, items, and conditional evaluation.
+- Perform best-effort name resolution of arguments to unresolved routines or array properties, which
+  improves analysis quality in cases where symbol information is incomplete.
 
 ### Deprecated
 
