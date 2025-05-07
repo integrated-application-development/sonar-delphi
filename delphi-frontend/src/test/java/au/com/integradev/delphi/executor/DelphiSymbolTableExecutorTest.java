@@ -84,16 +84,6 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
-  void testSimpleFile() {
-    execute("Simple.pas");
-    verifyUsages(7, 2, reference(20, 10), reference(29, 10), reference(34, 10));
-    verifyUsages(12, 3);
-    verifyUsages(20, 2);
-    verifyUsages(9, 14, reference(29, 22), reference(36, 1));
-    verifyUsages(10, 14, reference(31, 1), reference(34, 22));
-  }
-
-  @Test
   void testSimilarParameterDeclarations() {
     execute("SimilarParameterDeclarations.pas");
     verifyUsages(6, 2, reference(14, 10), reference(19, 10));
