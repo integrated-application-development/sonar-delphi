@@ -238,8 +238,8 @@ public class ExpressionEvaluator {
     }
 
     if (discard) {
-      // Whitespace is significant inside property expressions, but it's impossible to
-      // define properties with spaces, so expressions with spaces always evaluate to "".
+      // Whitespace is significant inside property expressions, but it's impossible to define
+      // properties with spaces, so expressions with spaces always evaluate to "".
       return Optional.of("");
     } else {
       return Optional.of(state.getProperty(ident.get()));
@@ -264,8 +264,8 @@ public class ExpressionEvaluator {
     }
 
     if (discard) {
-      // Whitespace is significant inside metadata expressions, but it's impossible to
-      // define metadata with spaces, so expressions with spaces always evaluate to "".
+      // Whitespace is significant inside metadata expressions, but it's impossible to define
+      // metadata with spaces, so expressions with spaces always evaluate to "".
       return Optional.of("");
     } else if (metadataProvider != null) {
       return Optional.of(metadataProvider.apply(ident.get()));
@@ -324,10 +324,9 @@ public class ExpressionEvaluator {
 
   private void unsupportedFeature(String feature) {
     // We don't know the relative importance of this expression - it could be an expression that
-    // SonarDelphi
-    // never needs to read. Making this a warning despite having a well-defined behaviour for when
-    // an unsupported
-    // feature is encountered (to interpret it literally) would probably be overkill.
+    // SonarDelphi never needs to read. Making this a warning despite having a well-defined
+    // behaviour for when an unsupported feature is encountered (to interpret it literally) would
+    // probably be overkill.
     LOG.debug("Unsupported MSBuild feature '{}' ignored in expression: {}", feature, text);
   }
 }
