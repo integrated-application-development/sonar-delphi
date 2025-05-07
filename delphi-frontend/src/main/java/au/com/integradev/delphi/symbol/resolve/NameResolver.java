@@ -203,6 +203,10 @@ public class NameResolver {
     return declarations.size() > 1;
   }
 
+  public boolean nameResolutionFailed() {
+    return names.size() != resolvedDeclarations.size() + Math.min(1, declarations.size());
+  }
+
   private void checkAmbiguity() {
     if (isAmbiguous()) {
       if (LOG.isWarnEnabled()) {
@@ -662,10 +666,6 @@ public class NameResolver {
     }
 
     return occurrence;
-  }
-
-  private boolean nameResolutionFailed() {
-    return names.size() != resolvedDeclarations.size() + Math.min(1, declarations.size());
   }
 
   private void specializeDeclarations(NameOccurrence occurrence) {
