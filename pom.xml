@@ -115,7 +115,7 @@
     <sonarqube.version>10.7.0.96327</sonarqube.version>
     <sonar-plugin-api.version>10.1.0.809</sonar-plugin-api.version>
     <sonar-analyzer-commons.version>2.13.0.3004</sonar-analyzer-commons.version>
-    <sonar-orchestrator.version>5.0.0.2065</sonar-orchestrator.version>
+    <sonar-orchestrator.version>5.6.1.2597</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
     <commons-text.version>1.12.0</commons-text.version>
     <jdom.version>2.0.6.1</jdom.version>
@@ -478,7 +478,7 @@
       <id>ci</id>
       <properties>
         <license.failIfMissing>true</license.failIfMissing>
-        <skipITs>true</skipITs>
+        <skipITs>false</skipITs>
       </properties>
     </profile>
 
