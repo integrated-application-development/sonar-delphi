@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for MSBuild item and item metadata expressions in project files.
+- Debug logging for name resolution failures (enabled with `sonar-scanner -X`).
 - `ExhaustiveEnumCase` analysis rule, which flags `case` statements that do not handle all values in an enumeration.
 - `IterationPastHighBound` analysis rule, which flags `for` loops that iterate past the end of the collection.
 - `ExplicitBitwiseNot` analysis rule, which flags potentially incorrect bitwise `not` operations.

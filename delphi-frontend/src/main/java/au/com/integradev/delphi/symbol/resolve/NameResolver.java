@@ -217,6 +217,18 @@ public class NameResolver {
     }
   }
 
+  private void checkNameResolutionFailed() {
+    if (LOG.isDebugEnabled() && nameResolutionFailed()) {
+      Node location = Iterables.getLast(names).getLocation();
+      LOG.debug(
+          "Name resolution failed on symbol '{}' ({} line {}:{})",
+          location.getImage(),
+          location.getUnitName(),
+          location.getBeginLine(),
+          location.getBeginColumn());
+    }
+  }
+
   void updateType(Type type) {
     currentType = type;
     ScopedType scopedType = extractScopedType(currentType);
@@ -233,6 +245,7 @@ public class NameResolver {
 
   public void addToSymbolTable() {
     addResolvedDeclaration();
+    checkNameResolutionFailed();
 
     for (int i = 0; i < resolvedDeclarations.size(); ++i) {
       NameOccurrenceImpl name = names.get(i);
