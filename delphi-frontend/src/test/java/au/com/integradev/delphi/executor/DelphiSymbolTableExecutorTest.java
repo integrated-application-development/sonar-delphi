@@ -119,9 +119,11 @@ class DelphiSymbolTableExecutorTest {
     // Alias getter
     verifyUsages(17, 13, reference(22, 33));
     // Index getter
-    verifyUsages(29, 13, reference(32, 41));
+    verifyUsages(29, 13, reference(33, 41));
     // Index setter
-    verifyUsages(30, 14, reference(32, 58));
+    verifyUsages(30, 14, reference(33, 58));
+    // Index storage
+    verifyUsages(31, 13, reference(33, 76));
   }
 
   @Test

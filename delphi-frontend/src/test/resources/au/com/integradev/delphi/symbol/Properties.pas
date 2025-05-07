@@ -28,8 +28,9 @@ type
 
     function GetMyField(Index: Integer): TObject;
     procedure SetMyField(Index: Integer; Value: TObject);
+    function IsStored(Index: Integer): Boolean;
   public
-    property Prop1: TObject index 0 read GetMyField write SetMyField;
+    property Prop1: TObject index 0 read GetMyField write SetMyField stored IsStored;
   end;
 
 implementation

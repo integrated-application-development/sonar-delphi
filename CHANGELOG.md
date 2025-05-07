@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Name resolution failures when accessing ancestors of enclosing types from nested type methods.
 - Name resolution failures on invocations of methods with generic open array parameters.
 - Name resolution failures around `Create` calls on types with `constructor` constraints.
-- Name resolution failures on `read` and `write` specifiers of indexed properties.
+- Name resolution failures on `read`, `write`, and `stored` specifiers of indexed properties.
 - Incorrect file position calculation for multiline string tokens.
 - Analysis errors around `type of` type declarations.
 

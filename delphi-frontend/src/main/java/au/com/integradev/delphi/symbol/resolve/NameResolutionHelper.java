@@ -32,6 +32,7 @@ import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
 import au.com.integradev.delphi.symbol.scope.RoutineScopeImpl;
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,6 +57,7 @@ import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyImplementsSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyStoredSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordExpressionItemNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
@@ -269,6 +271,14 @@ public class NameResolutionHelper {
     if (impl != null) {
       impl.getTypeReferences().stream().map(TypeReferenceNode::getNameNode).forEach(this::resolve);
     }
+
+    PropertyStoredSpecifierNode stored = property.getStoredSpecifier();
+    if (stored != null && stored.getExpression() instanceof PrimaryExpressionNode) {
+      NameResolver storedResolver = createNameResolver();
+      storedResolver.readPrimaryExpression((PrimaryExpressionNode) stored.getExpression());
+      storedResolver.disambiguateParameters(getStorageParameterTypes(property));
+      storedResolver.addToSymbolTable();
+    }
   }
 
   private List<Type> getGetterParameterTypes(PropertyNode property) {
@@ -288,6 +298,14 @@ public class NameResolutionHelper {
     }
     parameterTypes.add(property.getType());
     return parameterTypes;
+  }
+
+  private List<Type> getStorageParameterTypes(PropertyNode property) {
+    if (property.getIndexSpecifier() != null) {
+      return List.of(typeFactory.getIntrinsic(IntrinsicType.INTEGER));
+    } else {
+      return Collections.emptyList();
+    }
   }
 
   public void resolve(RoutineDeclarationNode routine) {
