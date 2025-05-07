@@ -255,7 +255,9 @@ public class NameResolutionHelper {
     if (read != null) {
       NameResolver readResolver = createNameResolver();
       readResolver.readPrimaryExpression(read.getExpression());
-      readResolver.disambiguateParameters(getGetterParameterTypes(property));
+      if (isResolvingRoutine(readResolver)) {
+        readResolver.disambiguateParameters(getGetterParameterTypes(property));
+      }
       readResolver.addToSymbolTable();
     }
 
@@ -263,7 +265,9 @@ public class NameResolutionHelper {
     if (write != null) {
       NameResolver writeResolver = createNameResolver();
       writeResolver.readPrimaryExpression(write.getExpression());
-      writeResolver.disambiguateParameters(getSetterParameterTypes(property));
+      if (isResolvingRoutine(writeResolver)) {
+        writeResolver.disambiguateParameters(getSetterParameterTypes(property));
+      }
       writeResolver.addToSymbolTable();
     }
 
@@ -276,9 +280,15 @@ public class NameResolutionHelper {
     if (stored != null && stored.getExpression() instanceof PrimaryExpressionNode) {
       NameResolver storedResolver = createNameResolver();
       storedResolver.readPrimaryExpression((PrimaryExpressionNode) stored.getExpression());
-      storedResolver.disambiguateParameters(getStorageParameterTypes(property));
+      if (isResolvingRoutine(storedResolver)) {
+        storedResolver.disambiguateParameters(getStorageParameterTypes(property));
+      }
       storedResolver.addToSymbolTable();
     }
+  }
+
+  private static boolean isResolvingRoutine(NameResolver resolver) {
+    return resolver.getDeclarations().stream().anyMatch(RoutineNameDeclaration.class::isInstance);
   }
 
   private List<Type> getGetterParameterTypes(PropertyNode property) {

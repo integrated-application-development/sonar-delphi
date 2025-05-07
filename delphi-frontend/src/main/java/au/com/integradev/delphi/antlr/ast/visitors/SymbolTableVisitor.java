@@ -102,7 +102,11 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ProcedureTypeHeadingNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyImplementsSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyReadSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyStoredSpecifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyWriteSpecifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.RecordVariantTagNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
@@ -515,6 +519,30 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     }
 
     return createDeclarationScope(node, data);
+  }
+
+  @Override
+  public Data visit(PropertyReadSpecifierNode node, Data data) {
+    // Already resolved by the PropertyNode visit.
+    return data;
+  }
+
+  @Override
+  public Data visit(PropertyWriteSpecifierNode node, Data data) {
+    // Already resolved by the PropertyNode visit.
+    return data;
+  }
+
+  @Override
+  public Data visit(PropertyImplementsSpecifierNode node, Data data) {
+    // Already resolved by the PropertyNode visit.
+    return data;
+  }
+
+  @Override
+  public Data visit(PropertyStoredSpecifierNode node, Data data) {
+    // Already resolved by the PropertyNode visit.
+    return data;
   }
 
   @Nullable
