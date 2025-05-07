@@ -104,6 +104,27 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testProperties() {
+    execute("Properties.pas");
+    // Field
+    verifyUsages(10, 4, reference(19, 33), reference(19, 46));
+    // Normal getter
+    verifyUsages(16, 13, reference(20, 33), reference(21, 33));
+    // Normal setter
+    verifyUsages(14, 14, reference(20, 50));
+    // Const setter
+    verifyUsages(12, 14, reference(21, 50));
+    // Alias setter
+    verifyUsages(13, 14, reference(22, 55));
+    // Alias getter
+    verifyUsages(17, 13, reference(22, 33));
+    // Index getter
+    verifyUsages(29, 13, reference(32, 41));
+    // Index setter
+    verifyUsages(30, 14, reference(32, 58));
+  }
+
+  @Test
   void testRecords() {
     execute("Records.pas");
     verifyUsages(6, 2, reference(16, 21));

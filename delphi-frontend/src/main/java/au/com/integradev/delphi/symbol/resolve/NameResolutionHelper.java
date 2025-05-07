@@ -81,6 +81,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
+import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
@@ -252,17 +253,15 @@ public class NameResolutionHelper {
     if (read != null) {
       NameResolver readResolver = createNameResolver();
       readResolver.readPrimaryExpression(read.getExpression());
-      readResolver.disambiguateParameters(property.getParameterTypes());
+      readResolver.disambiguateParameters(getGetterParameterTypes(property));
       readResolver.addToSymbolTable();
     }
 
     PropertyWriteSpecifierNode write = property.getWriteSpecifier();
     if (write != null) {
-      List<Type> parameterTypes = new ArrayList<>(property.getParameterTypes());
-      parameterTypes.add(property.getType());
       NameResolver writeResolver = createNameResolver();
       writeResolver.readPrimaryExpression(write.getExpression());
-      writeResolver.disambiguateParameters(parameterTypes);
+      writeResolver.disambiguateParameters(getSetterParameterTypes(property));
       writeResolver.addToSymbolTable();
     }
 
@@ -270,6 +269,25 @@ public class NameResolutionHelper {
     if (impl != null) {
       impl.getTypeReferences().stream().map(TypeReferenceNode::getNameNode).forEach(this::resolve);
     }
+  }
+
+  private List<Type> getGetterParameterTypes(PropertyNode property) {
+    if (property.getIndexSpecifier() == null) {
+      return property.getParameterTypes();
+    }
+
+    var parameterTypes = new ArrayList<>(property.getParameterTypes());
+    parameterTypes.add(typeFactory.getIntrinsic(IntrinsicType.INTEGER));
+    return parameterTypes;
+  }
+
+  private List<Type> getSetterParameterTypes(PropertyNode property) {
+    var parameterTypes = new ArrayList<>(property.getParameterTypes());
+    if (property.getIndexSpecifier() != null) {
+      parameterTypes.add(typeFactory.getIntrinsic(IntrinsicType.INTEGER));
+    }
+    parameterTypes.add(property.getType());
+    return parameterTypes;
   }
 
   public void resolve(RoutineDeclarationNode routine) {
