@@ -4,7 +4,7 @@ interface
 
 type
   TBaseBar = class(TObject)
-    property DefaultProperty[AIndex: Integer]: TBar; default;
+    property DefaultProperty[AIndex: Integer]: TBaseBar; default;
   end;
 
   TBar = class(TBaseBar)

@@ -4,17 +4,17 @@ interface
 
 implementation
 
-function Foo(Bar: AnsiChar);
+procedure Foo(Bar: AnsiChar);
 begin
   // Do nothing
 end;
 
-function Foo(Bar: WideChar);
+procedure Foo(Bar: WideChar);
 begin
   // Do nothing
 end;
 
-function TFoo.GetBar: TBar;
+procedure Bar;
 var
   NarrowString: AnsiString;
   RegularString: String;

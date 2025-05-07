@@ -325,8 +325,8 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testSelfInNestedProcedures() {
     execute("SelfInNestedProcedures.pas");
-    verifyUsages(17, 11, reference(34, 2));
-    verifyUsages(19, 11, reference(29, 4), reference(38, 4));
+    verifyUsages(17, 11, reference(37, 2));
+    verifyUsages(19, 11, reference(32, 4), reference(41, 4));
   }
 
   @Test
@@ -499,8 +499,8 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testCharTypeResolution() {
     execute("typeResolution/Chars.pas");
-    verifyUsages(7, 9, reference(22, 2));
-    verifyUsages(12, 9, reference(23, 2));
+    verifyUsages(7, 10, reference(22, 2));
+    verifyUsages(12, 10, reference(23, 2));
   }
 
   @Test
@@ -1073,10 +1073,10 @@ class DelphiSymbolTableExecutorTest {
         11,
         14,
         reference(16, 15),
-        reference(29, 2),
-        reference(30, 2),
-        reference(31, 2),
-        reference(32, 2));
+        reference(23, 2),
+        reference(24, 2),
+        reference(25, 2),
+        reference(26, 2));
   }
 
   @Test
@@ -1606,14 +1606,20 @@ class DelphiSymbolTableExecutorTest {
           "unit System;\n"
               + "interface\n"
               + "type\n"
+              + "  TArray<T> = array of T;\n"
               + "  TObject = class\n"
-              + "    constructor Create;"
+              + "    constructor Create;\n"
+              + "    procedure Free;\n"
               + "  end;\n"
               + "  IInterface = interface\n"
               + "  end;\n"
-              + "  TClassHelperBase = class\n"
+              + "  TInterfacedObject = class(TObject, IInterface)\n"
+              + "  end;\n"
+              + "  TClassHelperBase = class(TInterfacedObject, IInterface)\n"
               + "  end;\n"
               + "  TVarRec = record\n"
+              + "  end;\n"
+              + "  TCustomAttribute = class(TObject)\n"
               + "  end;\n"
               + "implementation\n"
               + "end.");
@@ -1716,7 +1722,7 @@ class DelphiSymbolTableExecutorTest {
               + "function MessageDlg(const Msg: string; DlgType: TMsgDlgType;\n"
               + "  Buttons: TMsgDlgButtons; HelpCtx: Longint): Integer;\n"
               + "begin\n"
-              + "  Result := MessageDlgPosHelp(Msg, DlgType, Buttons, HelpCtx, -1, -1, '');\n"
+              + "  // ...\n"
               + "end;\n"
               + "\n"
               + "end.");

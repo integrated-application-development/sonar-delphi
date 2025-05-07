@@ -22,6 +22,9 @@ implementation
 
 uses System.SysUtils;
 
+type
+  TProc<T> = reference to procedure(Arg: T);
+
 procedure TFoo.MyProc;
 
   procedure SubProc(Self: TBaz);

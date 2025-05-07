@@ -14,14 +14,8 @@ type
 implementation
 
 procedure TFoo.CompareAndPrintResult<T>(X, Y: T);
-var
-  Comparer : IComparer<T>;
 begin
-  Comparer := TComparer<T>.Default;
-  if Comparer.Compare(X, Y) = 0 then
-    WriteLn('Both members compare as equal')
-  else
-    WriteLn('Members do not compare as equal');
+  // ...
 end;
 
 procedure TFoo.Test;
