@@ -7,12 +7,7 @@ implementation
 uses
   System.SysUtils;
 
-function Foo: Boolean;
-begin
-  Result := HelperDependency.Bar.NONEXISTENT;
-end;
-
-function Bar: Boolean;
+function IsStringEmpty: Boolean;
 begin
   Result := ''.IsEmpty;
 end;

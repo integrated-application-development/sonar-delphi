@@ -3,7 +3,7 @@ unit BareInterfaceMethodReference;
 interface
 
 function Foo(Baz: Integer): Integer;
-function ExternalFunc(Result: Booelan): Boolean;
+function ExternalFunc(Result: Boolean): Boolean;
 
 implementation
 

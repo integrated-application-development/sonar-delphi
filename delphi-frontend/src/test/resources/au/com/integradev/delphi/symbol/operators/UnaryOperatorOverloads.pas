@@ -19,14 +19,14 @@ begin
   Result := True;
 end;
 
-class operator TFoo.Positive(Foo: TFoo): String;
-begin
-  Result := '';
-end;
-
-class operator TFoo.Negative(Foo: TFoo): Integer;
+class operator TFoo.Positive(Foo: TFoo): Integer;
 begin
   Result := 123;
+end;
+
+class operator TFoo.Negative(Foo: TFoo): String;
+begin
+  Result := '';
 end;
 
 procedure ExpectBoolean(Bool: Boolean);

@@ -15,15 +15,15 @@ type
 
 implementation
 
-procedure CallBaz(Meta: TMetaFoo);
+procedure AcceptFooType(Meta: TMetaFoo);
 begin
-  Baz.Baz;
+  // ...
 end;
 
 procedure Test;
 begin
-  CallBaz(TFoo);
-  CallBaz(TBar);
+  AcceptFooType(TFoo);
+  AcceptFooType(TBar);
 end;
 
 

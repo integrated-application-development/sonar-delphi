@@ -10,7 +10,7 @@ type
   protected
     FChar: Char;
   public
-    property CharProperty: Char read FToken;
+    property CharProperty: Char read FChar;
     function Test(TokenChar: TCharSet): Boolean;
   end;
 
