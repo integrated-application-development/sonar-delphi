@@ -374,6 +374,11 @@ public class NameResolver {
       disambiguateVisibility();
       disambiguateParameters(routine.getParameterTypes());
       addResolvedDeclaration();
+      if (nameResolutionFailed()) {
+        // We don't want to log name resolution failures for unresolved bare inherited expressions,
+        // as Delphi allows them (and even generates them in event handlers).
+        names.clear();
+      }
     } else {
       NameReferenceNode routineName = (NameReferenceNode) node.getChild(1);
       NameOccurrenceImpl occurrence = new NameOccurrenceImpl(routineName.getIdentifier());
