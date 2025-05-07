@@ -339,6 +339,13 @@ public class NameResolutionHelper {
     }
 
     resolver.disambiguateIsClassInvocable(routine.isClassMethod());
+
+    if (resolver.nameResolutionFailed() && !routine.getNameReferenceNode().isQualified()) {
+      // No interface declaration found, and not a qualified name so it can't be a method.
+      // It must be an implementation-local routine.
+      return;
+    }
+
     resolver.addToSymbolTable();
 
     completeTypeParameterReferences(routine);
