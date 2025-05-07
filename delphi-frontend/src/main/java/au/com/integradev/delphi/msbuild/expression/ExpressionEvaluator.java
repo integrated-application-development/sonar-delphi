@@ -126,12 +126,15 @@ public class ExpressionEvaluator {
   }
 
   private Optional<String> parseItem() {
-    if (nextChar() != '@') return Optional.empty();
-    if (nextChar() != '(') return Optional.empty();
+    if (nextChar() != '@' || nextChar() != '(') {
+      return Optional.empty();
+    }
 
     skipWhitespace();
     Optional<String> ident = parseIdentifier();
-    if (ident.isEmpty()) return Optional.empty();
+    if (ident.isEmpty()) {
+      return Optional.empty();
+    }
     skipWhitespace();
 
     Function<MSBuildItem, String> transform = MSBuildItem::getIdentity;
@@ -139,7 +142,9 @@ public class ExpressionEvaluator {
 
     if (peekChar() == '-') {
       var maybeTransform = parseItemTransform();
-      if (maybeTransform.isEmpty()) return Optional.empty();
+      if (maybeTransform.isEmpty()) {
+        return Optional.empty();
+      }
       transform = maybeTransform.get();
 
       skipWhitespace();
@@ -154,12 +159,16 @@ public class ExpressionEvaluator {
       nextChar();
       skipWhitespace();
       var maybeSeparator = parseSimpleString();
-      if (maybeSeparator.isEmpty()) return Optional.empty();
+      if (maybeSeparator.isEmpty()) {
+        return Optional.empty();
+      }
       separator = maybeSeparator.get();
       skipWhitespace();
     }
 
-    if (nextChar() != ')') return Optional.empty();
+    if (nextChar() != ')') {
+      return Optional.empty();
+    }
 
     return Optional.of(concatItems(ident.get(), transform, separator));
   }
@@ -170,8 +179,9 @@ public class ExpressionEvaluator {
   }
 
   private Optional<Function<MSBuildItem, String>> parseItemTransform() {
-    if (nextChar() != '-') return Optional.empty();
-    if (nextChar() != '>') return Optional.empty();
+    if (nextChar() != '-' || nextChar() != '>') {
+      return Optional.empty();
+    }
 
     return parseItemTransformExpression();
   }
@@ -182,9 +192,15 @@ public class ExpressionEvaluator {
       return Optional.empty();
     }
 
-    if (nextChar() != '\'') return Optional.empty();
+    if (nextChar() != '\'') {
+      return Optional.empty();
+    }
+
     String expression = parseTopLevel(true, false);
-    if (nextChar() != '\'') return Optional.empty();
+
+    if (nextChar() != '\'') {
+      return Optional.empty();
+    }
 
     return Optional.of(item -> expandMetadataValues(item, expression));
   }
@@ -196,8 +212,10 @@ public class ExpressionEvaluator {
   }
 
   private Optional<String> parseProperty() {
-    if (nextChar() != '$') return Optional.empty();
-    if (nextChar() != '(') return Optional.empty();
+    if (nextChar() != '$' || nextChar() != '(') {
+      return Optional.empty();
+    }
+
     if (peekChar() == '[') {
       unsupportedFeature("static property function");
       return Optional.empty();
@@ -215,7 +233,9 @@ public class ExpressionEvaluator {
     }
 
     discard = skipWhitespace() || discard;
-    if (nextChar() != ')') return Optional.empty();
+    if (nextChar() != ')') {
+      return Optional.empty();
+    }
 
     if (discard) {
       // Whitespace is significant inside property expressions, but it's impossible to
@@ -227,16 +247,21 @@ public class ExpressionEvaluator {
   }
 
   private Optional<String> parseMetadata() {
-    if (nextChar() != '%') return Optional.empty();
-    if (nextChar() != '(') return Optional.empty();
+    if (nextChar() != '%' || nextChar() != '(') {
+      return Optional.empty();
+    }
 
     var discard = skipWhitespace();
     Optional<String> ident = parseIdentifier();
-    if (ident.isEmpty()) return Optional.empty();
+    if (ident.isEmpty()) {
+      return Optional.empty();
+    }
 
     discard = skipWhitespace() || discard;
 
-    if (nextChar() != ')') return Optional.empty();
+    if (nextChar() != ')') {
+      return Optional.empty();
+    }
 
     if (discard) {
       // Whitespace is significant inside metadata expressions, but it's impossible to
@@ -258,7 +283,9 @@ public class ExpressionEvaluator {
   }
 
   private Optional<String> parseSimpleString() {
-    if (nextChar() != '\'') return Optional.empty();
+    if (nextChar() != '\'') {
+      return Optional.empty();
+    }
 
     StringBuilder builder = new StringBuilder();
 
@@ -271,7 +298,9 @@ public class ExpressionEvaluator {
   }
 
   private Optional<String> parseIdentifier() {
-    if (!isSimpleStringStart(peekChar())) return Optional.empty();
+    if (!isSimpleStringStart(peekChar())) {
+      return Optional.empty();
+    }
 
     StringBuilder builder = new StringBuilder();
 
