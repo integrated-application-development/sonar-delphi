@@ -38,11 +38,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.ArrayExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayIndicesNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
@@ -71,6 +74,8 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VarStatementNode;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
@@ -86,6 +91,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.RoutineScope;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.AliasType;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
@@ -517,23 +523,40 @@ public class NameResolutionHelper {
 
     if (parent instanceof AssignmentStatementNode) {
       ExpressionNode assignee = ((AssignmentStatementNode) parent).getAssignee();
-      if (expression == assignee) {
-        return false;
-      }
-
-      if (assignee.getType().isProcedural()) {
-        NameResolver clone = new NameResolver(resolver);
-        clone.disambiguateRoutineReference((ProceduralType) assignee.getType());
-        if (!clone.getDeclarations().isEmpty()) {
-          clone.addToSymbolTable();
-          return true;
-        }
-      }
+      return expression != assignee && handleRoutineReference(assignee.getType(), resolver);
+    } else if (parent instanceof VarDeclarationNode) {
+      return handleRoutineReference(((VarDeclarationNode) parent).getType(), resolver);
+    } else if (parent instanceof ConstDeclarationNode) {
+      return handleRoutineReference(((ConstDeclarationNode) parent).getTypeNode(), resolver);
+    } else if (parent instanceof VarStatementNode) {
+      return handleRoutineReference(((VarStatementNode) parent).getTypeNode(), resolver);
+    } else if (parent instanceof ConstStatementNode) {
+      return handleRoutineReference(((ConstStatementNode) parent).getTypeNode(), resolver);
+    } else if (parent instanceof ArrayExpressionNode) {
+      Type arrayType = ((ArrayExpressionNode) parent).getType();
+      return handleRoutineReference(((CollectionType) arrayType).elementType(), resolver);
     } else if (parent instanceof RecordExpressionItemNode) {
       resolver.addToSymbolTable();
       return true;
     }
 
+    return false;
+  }
+
+  private static boolean handleRoutineReference(TypeNode typeNode, NameResolver resolver) {
+    // You can't assign routine references unless a procedural type is explicitly declared.
+    return typeNode != null && handleRoutineReference(typeNode.getType(), resolver);
+  }
+
+  private static boolean handleRoutineReference(Type type, NameResolver resolver) {
+    if (type.isProcedural()) {
+      NameResolver clone = new NameResolver(resolver);
+      clone.disambiguateRoutineReference((ProceduralType) type);
+      if (!clone.getDeclarations().isEmpty()) {
+        clone.addToSymbolTable();
+        return true;
+      }
+    }
     return false;
   }
 

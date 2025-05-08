@@ -423,6 +423,27 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testRoutineReferenceAssignedToProcedural() {
+    execute("RoutineReferenceAssignedToProcedural.pas");
+    verifyUsages(
+        10,
+        9,
+        reference(21, 17),
+        reference(25, 35),
+        reference(27, 5),
+        reference(28, 10),
+        reference(32, 28));
+    verifyUsages(
+        15,
+        9,
+        reference(22, 19),
+        reference(25, 40),
+        reference(27, 10),
+        reference(28, 5),
+        reference(33, 31));
+  }
+
+  @Test
   void testClassReferenceMethodResolution() {
     execute("classReferences/MethodResolution.pas");
     verifyUsages(9, 14, reference(18, 6));
