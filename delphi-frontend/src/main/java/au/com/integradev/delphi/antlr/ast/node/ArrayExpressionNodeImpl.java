@@ -26,9 +26,13 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class ArrayExpressionNodeImpl extends ExpressionNodeImpl
     implements ArrayExpressionNode {
@@ -65,11 +69,32 @@ public final class ArrayExpressionNodeImpl extends ExpressionNodeImpl
   @Override
   @Nonnull
   protected Type createType() {
+    int nestingLevel = 0;
+    DelphiNode parent = this;
+    do {
+      ++nestingLevel;
+      parent = parent.getParent();
+    } while (parent instanceof ArrayExpressionNode);
+
     Type elementType = TypeFactory.unknownType();
-    List<ExpressionNode> elements = getElements();
-    if (!elements.isEmpty()) {
-      elementType = elements.get(0).getType();
+    if (parent instanceof Typed && !(parent instanceof TypeDeclarationNode)) {
+      elementType = ((Typed) parent).getType();
+      for (int i = 0; i < nestingLevel; ++i) {
+        if (!(elementType instanceof CollectionType)) {
+          elementType = TypeFactory.unknownType();
+          break;
+        }
+        elementType = ((CollectionType) elementType).elementType();
+      }
     }
+
+    if (elementType.isUnknown()) {
+      List<ExpressionNode> elements = getElements();
+      if (!elements.isEmpty()) {
+        elementType = elements.get(0).getType();
+      }
+    }
+
     return ((TypeFactoryImpl) getTypeFactory()).array(null, elementType, Set.of(ArrayOption.FIXED));
   }
 }
