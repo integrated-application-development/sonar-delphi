@@ -63,6 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Name resolution failures on invocations of methods with generic open array parameters.
 - Name resolution failures around `Create` calls on types with `constructor` constraints.
 - Name resolution failures on `read`, `write`, and `stored` specifiers of indexed properties.
+- Name resolution failures on routine references assigned to a `var`/`const` declaration.
+- Name resolution failures on routine references in constant arrays.
 - Type resolution failures on array expressions nested within multidimensional constant arrays.
 - Incorrect file position calculation for multiline string tokens.
 - Analysis errors around `type of` type declarations.
