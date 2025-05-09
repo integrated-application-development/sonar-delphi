@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type resolution failures on `as` casts where the type is returned from a routine invocation.
 - Inaccurate type resolution when calling a constructor on a class reference type.
 - Grammar ambiguity causing attributes to be misinterpreted as interface GUIDs.
+- Failure to resolve invocations of `System.IsManagedType` where a value is passed.
 
 ## [1.16.0] - 2025-05-09
 
