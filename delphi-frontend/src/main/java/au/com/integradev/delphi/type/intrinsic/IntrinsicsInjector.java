@@ -352,13 +352,13 @@ public final class IntrinsicsInjector {
         .param(ANY_STRING)
         .varParam(TypeFactory.untypedType())
         .varParam(ANY_32_BIT_INTEGER);
-    routine("VarArgStart").varParam(TypeFactory.untypedType());
+    routine("VarArgStart").varParam(systemType("TVarArgList"));
     routine("VarArgGetValue")
-        .varParam(TypeFactory.untypedType())
+        .varParam(systemType("TVarArgList"))
         .param(ANY_CLASS_REFERENCE)
         .returns(IntrinsicReturnType.classReferenceValue(1));
-    routine("VarArgCopy").varParam(TypeFactory.untypedType()).varParam(TypeFactory.untypedType());
-    routine("VarArgEnd").varParam(TypeFactory.untypedType());
+    routine("VarArgCopy").varParam(systemType("TVarArgList")).varParam(systemType("TVarArgList"));
+    routine("VarArgEnd").varParam(systemType("TVarArgList"));
     routine("VarArrayRedim").varParam(ANY_VARIANT).param(type(INTEGER));
     routine("VarCast").varParam(ANY_VARIANT).param(ANY_VARIANT).param(type(INTEGER));
     routine("VarClear").varParam(ANY_VARIANT);

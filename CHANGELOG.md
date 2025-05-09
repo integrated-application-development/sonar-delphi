@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for `AtomicCmpExchange128` intrinsic.
 
+### Changed
+
+- Improve `VarArg*` intrinsic signatures and make them stricter.
+
 ### Fixed
 
 - The `IsManagedType` intrinsic would only accept type references - it now accepts values.
