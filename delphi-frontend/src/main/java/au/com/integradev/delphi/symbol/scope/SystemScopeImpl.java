@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.symbol.scope;
 
-import au.com.integradev.delphi.type.intrinsic.IntrinsicsInjector;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
@@ -32,12 +31,6 @@ public class SystemScopeImpl extends FileScopeImpl implements SystemScope {
 
   public SystemScopeImpl(TypeFactory typeFactory) {
     super("System");
-    injectIntrinsics(typeFactory);
-  }
-
-  private void injectIntrinsics(TypeFactory typeFactory) {
-    IntrinsicsInjector injector = new IntrinsicsInjector(typeFactory);
-    injector.inject(this);
   }
 
   @Override

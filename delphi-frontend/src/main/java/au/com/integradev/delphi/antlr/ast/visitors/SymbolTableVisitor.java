@@ -54,6 +54,7 @@ import au.com.integradev.delphi.symbol.scope.WithScopeImpl;
 import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.factory.ClassReferenceTypeImpl;
 import au.com.integradev.delphi.type.factory.PointerTypeImpl;
+import au.com.integradev.delphi.type.intrinsic.IntrinsicsInjector;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import java.nio.file.Path;
@@ -263,6 +264,22 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
       public Data visit(DelphiAst node, Data data) {
         if (!node.isUnit()) {
           // Only units have interface sections.
+          return data;
+        }
+
+        return super.visit(node, data);
+      }
+
+      @Override
+      public Data visit(InterfaceSectionNode node, Data data) {
+        DelphiScope scope = Objects.requireNonNull(data.getUnitDeclaration()).getScope();
+
+        if (scope instanceof SystemScope) {
+          IntrinsicsInjector injector = new IntrinsicsInjector(data.typeFactory);
+          injector.injectTypes(scope);
+          injector.injectConstants(scope);
+          super.visit(node, data);
+          injector.injectRoutines(scope);
           return data;
         }
 
