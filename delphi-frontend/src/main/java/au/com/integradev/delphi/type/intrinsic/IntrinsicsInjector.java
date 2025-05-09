@@ -54,12 +54,13 @@ import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
+import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -67,25 +68,42 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class IntrinsicsInjector {
   private final TypeFactory typeFactory;
+  private final List<IntrinsicConstant> constants;
   private final List<IntrinsicRoutine.Builder> routines;
-  private DelphiScopeImpl scope;
 
   public IntrinsicsInjector(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
+    this.constants = new ArrayList<>();
     this.routines = new ArrayList<>();
 
+    buildConstants();
     buildRoutines();
   }
 
-  public void inject(DelphiScope scope) {
-    this.scope = (DelphiScopeImpl) scope;
-    injectTypes();
-    injectRoutines();
-    injectConstants();
+  public void injectTypes(DelphiScope scope) {
+    for (IntrinsicType type : IntrinsicType.values()) {
+      injectType(type, (DelphiScopeImpl) scope);
+    }
+  }
+
+  public void injectConstants(DelphiScope scope) {
+    for (IntrinsicConstant constant : constants) {
+      injectConstant(constant, (DelphiScopeImpl) scope);
+    }
+  }
+
+  public void injectRoutines(DelphiScope scope) {
+    for (IntrinsicRoutine.Builder routine : routines) {
+      injectRoutine(routine, (DelphiScopeImpl) scope);
+    }
   }
 
   private Type type(IntrinsicType type) {
     return typeFactory.getIntrinsic(type);
+  }
+
+  private Type systemType(String image) {
+    return UnresolvedTypeImpl.referenceTo(image);
   }
 
   private Type openArraySizeType() {
@@ -94,6 +112,16 @@ public final class IntrinsicsInjector {
 
   private Type dynamicArraySizeType() {
     return ((TypeFactoryImpl) typeFactory).dynamicArraySizeType();
+  }
+
+  private void buildConstants() {
+    constant("CompilerVersion", EXTENDED);
+    constant("MaxInt", INTEGER);
+    constant("MaxLongInt", LONGINT);
+    constant("True", BOOLEAN);
+    constant("False", BOOLEAN);
+    constant("ReturnAddress", POINTER);
+    constant("AddressOfReturnAddress", POINTER);
   }
 
   private void buildRoutines() {
@@ -120,6 +148,13 @@ public final class IntrinsicsInjector {
         .outParam(type(BOOLEAN))
         .required(3)
         .returns(typeFactory.untypedPointer());
+    routine("AtomicCmpExchange128")
+        .varParam(TypeFactory.untypedType())
+        .param(type(INT64))
+        .param(type(INT64))
+        .varParam(TypeFactory.untypedType())
+        .required(4)
+        .returns(type(BOOLEAN));
     routine("AtomicDecrement")
         .varParam(TypeFactory.untypedType())
         .param(TypeFactory.untypedType())
@@ -227,6 +262,7 @@ public final class IntrinsicsInjector {
     routine("FreeMem").varParam(ANY_POINTER).param(type(INTEGER)).required(1);
     routine("GetDir").param(type(BYTE)).varParam(ANY_STRING);
     routine("GetMem").varParam(ANY_POINTER).param(type(INTEGER));
+    routine("GetTypeKind").param(TypeFactory.untypedType()).returns(systemType("TTypeKind"));
     routine("Halt").param(type(INTEGER)).required(0);
     routine("HasWeakRef").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
     routine("Hi").param(type(INTEGER)).returns(type(BYTE));
@@ -243,7 +279,7 @@ public final class IntrinsicsInjector {
         .varParam(LIKE_DYNAMIC_ARRAY)
         .param(dynamicArraySizeType());
     routine("IsConstValue").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
-    routine("IsManagedType").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
+    routine("IsManagedType").param(TypeFactory.untypedType()).returns(type(BOOLEAN));
     routine("Length").param(type(SHORTSTRING)).returns(IntrinsicReturnType.length(typeFactory));
     routine("Length").param(type(ANSISTRING)).returns(IntrinsicReturnType.length(typeFactory));
     routine("Length").param(type(UNICODESTRING)).returns(IntrinsicReturnType.length(typeFactory));
@@ -317,13 +353,13 @@ public final class IntrinsicsInjector {
         .param(ANY_STRING)
         .varParam(TypeFactory.untypedType())
         .varParam(ANY_32_BIT_INTEGER);
-    routine("VarArgStart").varParam(TypeFactory.untypedType());
+    routine("VarArgStart").varParam(systemType("TVarArgList"));
     routine("VarArgGetValue")
-        .varParam(TypeFactory.untypedType())
+        .varParam(systemType("TVarArgList"))
         .param(ANY_CLASS_REFERENCE)
         .returns(IntrinsicReturnType.classReferenceValue(1));
-    routine("VarArgCopy").varParam(TypeFactory.untypedType()).varParam(TypeFactory.untypedType());
-    routine("VarArgEnd").varParam(TypeFactory.untypedType());
+    routine("VarArgCopy").varParam(systemType("TVarArgList")).varParam(systemType("TVarArgList"));
+    routine("VarArgEnd").varParam(systemType("TVarArgList"));
     routine("VarArrayRedim").varParam(ANY_VARIANT).param(type(INTEGER));
     routine("VarCast").varParam(ANY_VARIANT).param(ANY_VARIANT).param(type(INTEGER));
     routine("VarClear").varParam(ANY_VARIANT);
@@ -337,17 +373,17 @@ public final class IntrinsicsInjector {
     routine("WriteLn").variadic(TypeFactory.untypedType());
   }
 
+  private void constant(String name, IntrinsicType type) {
+    constants.add(new IntrinsicConstant(name, type));
+  }
+
   private IntrinsicRoutine.Builder routine(String name) {
     IntrinsicRoutine.Builder builder = IntrinsicRoutine.builder(name);
     routines.add(builder);
     return builder;
   }
 
-  private void injectTypes() {
-    Arrays.stream(IntrinsicType.values()).forEach(this::injectType);
-  }
-
-  private void injectType(IntrinsicType intrinsic) {
+  private void injectType(IntrinsicType intrinsic, DelphiScopeImpl scope) {
     SymbolicNode node = SymbolicNode.imaginary(intrinsic.simpleName(), scope);
     Type type = typeFactory.getIntrinsic(intrinsic);
     TypeNameDeclaration declaration =
@@ -356,12 +392,8 @@ public final class IntrinsicsInjector {
     scope.addDeclaration(declaration);
   }
 
-  private void injectRoutines() {
-    routines.forEach(this::injectRoutine);
-  }
-
-  private void injectRoutine(IntrinsicRoutine.Builder builder) {
-    IntrinsicRoutine routine = builder.build();
+  private void injectRoutine(IntrinsicRoutine.Builder builder, DelphiScopeImpl scope) {
+    IntrinsicRoutine routine = builder.build(scope);
     SymbolicNode node = SymbolicNode.imaginary(routine.simpleName(), scope);
     RoutineNameDeclaration declaration =
         RoutineNameDeclarationImpl.create(node, routine, typeFactory);
@@ -369,18 +401,11 @@ public final class IntrinsicsInjector {
     scope.addDeclaration(declaration);
   }
 
-  private void injectConstants() {
-    injectConstant("CompilerVersion", EXTENDED);
-    injectConstant("MaxInt", INTEGER);
-    injectConstant("MaxLongInt", LONGINT);
-    injectConstant("True", BOOLEAN);
-    injectConstant("False", BOOLEAN);
-    injectConstant("ReturnAddress", POINTER);
-    injectConstant("AddressOfReturnAddress", POINTER);
-  }
+  private void injectConstant(IntrinsicConstant constant, DelphiScopeImpl scope) {
+    String name = constant.getName();
+    Type type = type(constant.getType());
+    VariableNameDeclaration declaration = VariableNameDeclarationImpl.constant(name, type, scope);
 
-  private void injectConstant(String image, IntrinsicType intrinsic) {
-    var declaration = VariableNameDeclarationImpl.constant(image, type(intrinsic), scope);
     scope.addDeclaration(declaration);
   }
 }

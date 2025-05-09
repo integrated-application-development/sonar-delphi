@@ -25,6 +25,8 @@ import java.util.List;
 import org.sonar.plugins.communitydelphi.api.symbol.Qualifiable;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -123,8 +125,9 @@ public final class IntrinsicRoutine implements Qualifiable {
         return this;
       }
 
-      IntrinsicParameterData build() {
-        return new IntrinsicParameterData(type, isOut, isVar, isConst, hasDefaultValue);
+      IntrinsicParameterData build(DelphiScope scope) {
+        Type resolvedType = resolveType(type, scope);
+        return new IntrinsicParameterData(resolvedType, isOut, isVar, isConst, hasDefaultValue);
       }
     }
   }
@@ -185,26 +188,43 @@ public final class IntrinsicRoutine implements Qualifiable {
       return this;
     }
 
-    IntrinsicRoutine build() {
+    IntrinsicRoutine build(DelphiScope scope) {
       return new IntrinsicRoutine(
-          routineName, buildParameters(), returnType, variadicParameter != null);
+          routineName, buildParameters(scope), buildReturnType(scope), variadicParameter != null);
     }
 
-    private List<IntrinsicParameterData> buildParameters() {
+    private List<IntrinsicParameterData> buildParameters(DelphiScope scope) {
       List<IntrinsicParameterData> result = new ArrayList<>();
 
       for (int i = 0; i < parameters.size(); ++i) {
         IntrinsicParameterData.Builder paramBuilder = parameters.get(i);
         paramBuilder.hasDefaultValue(requiredParameters != -1 && i >= requiredParameters);
-        result.add(paramBuilder.build());
+        result.add(paramBuilder.build(scope));
       }
 
       if (variadicParameter != null) {
         variadicParameter.hasDefaultValue(true);
-        result.add(variadicParameter.build());
+        result.add(variadicParameter.build(scope));
       }
 
       return result;
     }
+
+    private Type buildReturnType(DelphiScope scope) {
+      return resolveType(returnType, scope);
+    }
+  }
+
+  private static Type resolveType(Type type, DelphiScope scope) {
+    if (type.isUnresolved()) {
+      String simpleName = type.getImage();
+      type =
+          scope.getTypeDeclarations().stream()
+              .filter(declaration -> declaration.getName().equalsIgnoreCase(simpleName))
+              .map(TypedDeclaration::getType)
+              .findFirst()
+              .orElse(type);
+    }
+    return type;
   }
 }
