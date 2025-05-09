@@ -611,6 +611,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testGetTypeKindIntrinsic() {
+    execute("intrinsics/GetTypeKindIntrinsic.pas");
+    verifyUsages(7, 10, reference(14, 2), reference(15, 2));
+  }
+
+  @Test
   void testBinaryOperatorIntrinsics() {
     execute("operators/BinaryOperatorIntrinsics.pas");
     verifyUsages(
@@ -1648,6 +1654,7 @@ class DelphiSymbolTableExecutorTest {
               + "  end;\n"
               + "  TVarArgList = record\n"
               + "  end;\n"
+              + "  TTypeKind = (tkUnknown);\n"
               + "implementation\n"
               + "end.");
 
