@@ -793,6 +793,12 @@ public class CheckVerifierImpl implements CheckVerifier {
               + "  TVarArgList = record\n"
               + "  end;\n"
               + "\n"
+              + "  TTypeKind = (\n"
+              + "    tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat, tkString, tkSet,\n"
+              + "    tkClass, tkMethod, tkWChar, tkLString, tkWString, tkVariant, tkArray,\n"
+              + "    tkClassRef, tkPointer, tkProcedure, tkMRecord\n"
+              + "  );\n"
+              + "\n"
               + "implementation\n"
               + "\n"
               + "end.");

@@ -262,6 +262,7 @@ public final class IntrinsicsInjector {
     routine("FreeMem").varParam(ANY_POINTER).param(type(INTEGER)).required(1);
     routine("GetDir").param(type(BYTE)).varParam(ANY_STRING);
     routine("GetMem").varParam(ANY_POINTER).param(type(INTEGER));
+    routine("GetTypeKind").param(TypeFactory.untypedType()).returns(systemType("TTypeKind"));
     routine("Halt").param(type(INTEGER)).required(0);
     routine("HasWeakRef").param(ANY_CLASS_REFERENCE).returns(type(BOOLEAN));
     routine("Hi").param(type(INTEGER)).returns(type(BYTE));
