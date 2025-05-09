@@ -605,6 +605,12 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testVarArgIntrinsics() {
+    execute("intrinsics/VarArgIntrinsics.pas");
+    verifyUsages(15, 2, reference(18, 21));
+  }
+
+  @Test
   void testBinaryOperatorIntrinsics() {
     execute("operators/BinaryOperatorIntrinsics.pas");
     verifyUsages(
@@ -1639,6 +1645,8 @@ class DelphiSymbolTableExecutorTest {
               + "  TVarRec = record\n"
               + "  end;\n"
               + "  TCustomAttribute = class(TObject)\n"
+              + "  end;\n"
+              + "  TVarArgList = record\n"
               + "  end;\n"
               + "implementation\n"
               + "end.");
