@@ -56,10 +56,10 @@ import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -67,21 +67,34 @@ import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class IntrinsicsInjector {
   private final TypeFactory typeFactory;
+  private final List<IntrinsicConstant> constants;
   private final List<IntrinsicRoutine.Builder> routines;
-  private DelphiScopeImpl scope;
 
   public IntrinsicsInjector(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
+    this.constants = new ArrayList<>();
     this.routines = new ArrayList<>();
 
+    buildConstants();
     buildRoutines();
   }
 
-  public void inject(DelphiScope scope) {
-    this.scope = (DelphiScopeImpl) scope;
-    injectTypes();
-    injectRoutines();
-    injectConstants();
+  public void injectTypes(DelphiScope scope) {
+    for (IntrinsicType type : IntrinsicType.values()) {
+      injectType(type, (DelphiScopeImpl) scope);
+    }
+  }
+
+  public void injectConstants(DelphiScope scope) {
+    for (IntrinsicConstant constant : constants) {
+      injectConstant(constant, (DelphiScopeImpl) scope);
+    }
+  }
+
+  public void injectRoutines(DelphiScope scope) {
+    for (IntrinsicRoutine.Builder routine : routines) {
+      injectRoutine(routine, (DelphiScopeImpl) scope);
+    }
   }
 
   private Type type(IntrinsicType type) {
@@ -94,6 +107,16 @@ public final class IntrinsicsInjector {
 
   private Type dynamicArraySizeType() {
     return ((TypeFactoryImpl) typeFactory).dynamicArraySizeType();
+  }
+
+  private void buildConstants() {
+    constant("CompilerVersion", EXTENDED);
+    constant("MaxInt", INTEGER);
+    constant("MaxLongInt", LONGINT);
+    constant("True", BOOLEAN);
+    constant("False", BOOLEAN);
+    constant("ReturnAddress", POINTER);
+    constant("AddressOfReturnAddress", POINTER);
   }
 
   private void buildRoutines() {
@@ -344,17 +367,17 @@ public final class IntrinsicsInjector {
     routine("WriteLn").variadic(TypeFactory.untypedType());
   }
 
+  private void constant(String name, IntrinsicType type) {
+    constants.add(new IntrinsicConstant(name, type));
+  }
+
   private IntrinsicRoutine.Builder routine(String name) {
     IntrinsicRoutine.Builder builder = IntrinsicRoutine.builder(name);
     routines.add(builder);
     return builder;
   }
 
-  private void injectTypes() {
-    Arrays.stream(IntrinsicType.values()).forEach(this::injectType);
-  }
-
-  private void injectType(IntrinsicType intrinsic) {
+  private void injectType(IntrinsicType intrinsic, DelphiScopeImpl scope) {
     SymbolicNode node = SymbolicNode.imaginary(intrinsic.simpleName(), scope);
     Type type = typeFactory.getIntrinsic(intrinsic);
     TypeNameDeclaration declaration =
@@ -363,11 +386,7 @@ public final class IntrinsicsInjector {
     scope.addDeclaration(declaration);
   }
 
-  private void injectRoutines() {
-    routines.forEach(this::injectRoutine);
-  }
-
-  private void injectRoutine(IntrinsicRoutine.Builder builder) {
+  private void injectRoutine(IntrinsicRoutine.Builder builder, DelphiScopeImpl scope) {
     IntrinsicRoutine routine = builder.build();
     SymbolicNode node = SymbolicNode.imaginary(routine.simpleName(), scope);
     RoutineNameDeclaration declaration =
@@ -376,18 +395,11 @@ public final class IntrinsicsInjector {
     scope.addDeclaration(declaration);
   }
 
-  private void injectConstants() {
-    injectConstant("CompilerVersion", EXTENDED);
-    injectConstant("MaxInt", INTEGER);
-    injectConstant("MaxLongInt", LONGINT);
-    injectConstant("True", BOOLEAN);
-    injectConstant("False", BOOLEAN);
-    injectConstant("ReturnAddress", POINTER);
-    injectConstant("AddressOfReturnAddress", POINTER);
-  }
+  private void injectConstant(IntrinsicConstant constant, DelphiScopeImpl scope) {
+    String name = constant.getName();
+    Type type = type(constant.getType());
+    VariableNameDeclaration declaration = VariableNameDeclarationImpl.constant(name, type, scope);
 
-  private void injectConstant(String image, IntrinsicType intrinsic) {
-    var declaration = VariableNameDeclarationImpl.constant(image, type(intrinsic), scope);
     scope.addDeclaration(declaration);
   }
 }
