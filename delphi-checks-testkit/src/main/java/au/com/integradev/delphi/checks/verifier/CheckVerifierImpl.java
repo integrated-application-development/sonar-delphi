@@ -790,6 +790,9 @@ public class CheckVerifierImpl implements CheckVerifier {
               + "  TCustomAttribute = class(TObject)\n"
               + "  end;\n"
               + "\n"
+              + "  TVarArgList = record\n"
+              + "  end;\n"
+              + "\n"
               + "implementation\n"
               + "\n"
               + "end.");

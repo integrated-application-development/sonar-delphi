@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Issue locations no longer span the entire routine declaration in `RoutineName`.
+- Improve type modeling around the `VarArg*` intrinsic routines.
 
 ### Deprecated
 
