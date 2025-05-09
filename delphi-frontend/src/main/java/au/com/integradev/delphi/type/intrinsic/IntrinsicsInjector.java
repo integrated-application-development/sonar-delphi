@@ -54,6 +54,7 @@ import au.com.integradev.delphi.symbol.declaration.RoutineNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.TypeNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.declaration.VariableNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.DelphiScopeImpl;
+import au.com.integradev.delphi.type.UnresolvedTypeImpl;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,10 @@ public final class IntrinsicsInjector {
 
   private Type type(IntrinsicType type) {
     return typeFactory.getIntrinsic(type);
+  }
+
+  private Type systemType(String image) {
+    return UnresolvedTypeImpl.referenceTo(image);
   }
 
   private Type openArraySizeType() {
@@ -387,7 +392,7 @@ public final class IntrinsicsInjector {
   }
 
   private void injectRoutine(IntrinsicRoutine.Builder builder, DelphiScopeImpl scope) {
-    IntrinsicRoutine routine = builder.build();
+    IntrinsicRoutine routine = builder.build(scope);
     SymbolicNode node = SymbolicNode.imaginary(routine.simpleName(), scope);
     RoutineNameDeclaration declaration =
         RoutineNameDeclarationImpl.create(node, routine, typeFactory);
