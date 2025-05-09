@@ -120,6 +120,13 @@ public final class IntrinsicsInjector {
         .outParam(type(BOOLEAN))
         .required(3)
         .returns(typeFactory.untypedPointer());
+    routine("AtomicCmpExchange128")
+        .varParam(TypeFactory.untypedType())
+        .param(type(INT64))
+        .param(type(INT64))
+        .varParam(TypeFactory.untypedType())
+        .required(4)
+        .returns(type(BOOLEAN));
     routine("AtomicDecrement")
         .varParam(TypeFactory.untypedType())
         .param(TypeFactory.untypedType())
