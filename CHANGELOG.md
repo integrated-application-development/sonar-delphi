@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for the `AtomicCmpExchange128` intrinsic routine.
 - **API:** `TypeParameterNode::getTypeParameters` method.
 - **API:** `InterfaceTypeNode::getGuidExpression` method.
 - **API:** `AttributeNode::getExpression` method.
