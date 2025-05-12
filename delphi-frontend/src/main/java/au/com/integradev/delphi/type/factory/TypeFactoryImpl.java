@@ -290,6 +290,8 @@ public class TypeFactoryImpl implements TypeFactory {
     addString(IntrinsicType.UNICODESTRING, pointerSize(), IntrinsicType.WIDECHAR);
     addString(IntrinsicType.SHORTSTRING, 256, IntrinsicType.ANSICHAR);
 
+    addWeakAlias(IntrinsicType.OPENSTRING, IntrinsicType.SHORTSTRING);
+
     if (isStringUnicode()) {
       addWeakAlias(IntrinsicType.STRING, IntrinsicType.UNICODESTRING);
       addWeakAlias(IntrinsicType.CHAR, IntrinsicType.WIDECHAR);
