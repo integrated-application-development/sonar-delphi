@@ -50,6 +50,7 @@ public enum IntrinsicType implements Qualifiable {
   WIDESTRING("WideString"),
   UNICODESTRING("UnicodeString"),
   SHORTSTRING("ShortString"),
+  OPENSTRING("OpenString"),
   STRING("String"),
   ANSICHAR("AnsiChar"),
   WIDECHAR("WideChar"),
