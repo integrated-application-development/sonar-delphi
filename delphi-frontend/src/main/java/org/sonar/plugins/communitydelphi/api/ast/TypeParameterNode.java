@@ -19,6 +19,7 @@
 package org.sonar.plugins.communitydelphi.api.ast;
 
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 
 public interface TypeParameterNode extends DelphiNode {
   List<NameDeclarationNode> getTypeParameterNameNodes();
@@ -30,4 +31,6 @@ public interface TypeParameterNode extends DelphiNode {
   List<TypeReferenceNode> getTypeConstraintNodes();
 
   List<ConstraintNode> getConstraintNodes();
+
+  List<TypeParameter> getTypeParameters();
 }

@@ -19,14 +19,18 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ConstraintNode;
+import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
+import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 
 public final class TypeParameterNodeImpl extends DelphiNodeImpl implements TypeParameterNode {
   public TypeParameterNodeImpl(Token token) {
@@ -60,5 +64,40 @@ public final class TypeParameterNodeImpl extends DelphiNodeImpl implements TypeP
   @Override
   public List<ConstraintNode> getConstraintNodes() {
     return findChildrenOfType(ConstraintNode.class);
+  }
+
+  @Override
+  public List<TypeParameter> getTypeParameters() {
+    List<Constraint> constraints =
+        getConstraintNodes().stream()
+            .map(ConstraintNode::getConstraint)
+            .collect(Collectors.toUnmodifiableList());
+
+    return getTypeParameterNameNodes().stream()
+        .map(
+            name ->
+                new TypeParameterImpl(
+                    name, TypeParameterTypeImpl.create(name.getImage(), constraints)))
+        .collect(Collectors.toList());
+  }
+
+  private static final class TypeParameterImpl implements TypeParameter {
+    private final NameDeclarationNode location;
+    private final TypeParameterType type;
+
+    public TypeParameterImpl(NameDeclarationNode location, TypeParameterType type) {
+      this.location = location;
+      this.type = type;
+    }
+
+    @Override
+    public NameDeclarationNode getLocation() {
+      return location;
+    }
+
+    @Override
+    public TypeParameterType getType() {
+      return type;
+    }
   }
 }

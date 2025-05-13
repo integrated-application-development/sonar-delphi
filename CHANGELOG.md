@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `TypeParameterNode::getTypeParameters` method.
+
+### Fixed
+
+- Name resolution failures on generic routine invocations where later type parameters are constrained by earlier type parameters.
+
 ## [1.16.0] - 2025-05-09
 
 ### Added
