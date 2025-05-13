@@ -88,7 +88,6 @@ import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
-import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode.TypeParameter;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
@@ -402,12 +401,14 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
             .map(TypeConstraintNodeImpl.class::cast)
             .map(TypeConstraintNodeImpl::getTypeNode)
             .forEach(data.nameResolutionHelper::resolve);
-      }
 
-      for (TypeParameter typeParameter : definition.getTypeParameters()) {
-        NameDeclarationNode location = typeParameter.getLocation();
-        var declaration = new TypeParameterNameDeclarationImpl(location, typeParameter.getType());
-        data.addDeclaration(declaration, location);
+        parameterNode
+            .getTypeParameters()
+            .forEach(
+                param ->
+                    data.addDeclaration(
+                        new TypeParameterNameDeclarationImpl(param.getLocation(), param.getType()),
+                        param.getLocation()));
       }
     }
   }

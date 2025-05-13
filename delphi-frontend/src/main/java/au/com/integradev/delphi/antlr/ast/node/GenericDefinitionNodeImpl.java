@@ -19,18 +19,12 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
-import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.ConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
-import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
-import org.sonar.plugins.communitydelphi.api.type.Constraint;
-import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 
 public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
     implements GenericDefinitionNode {
@@ -53,22 +47,10 @@ public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
   @Override
   public List<TypeParameter> getTypeParameters() {
     if (typeParameters == null) {
-      ImmutableList.Builder<TypeParameter> builder = ImmutableList.builder();
-
-      for (TypeParameterNode parameterNode : getTypeParameterNodes()) {
-        List<Constraint> constraints =
-            parameterNode.getConstraintNodes().stream()
-                .map(ConstraintNode::getConstraint)
-                .collect(Collectors.toUnmodifiableList());
-
-        for (NameDeclarationNode name : parameterNode.getTypeParameterNameNodes()) {
-          TypeParameterType type = TypeParameterTypeImpl.create(name.getImage(), constraints);
-          TypeParameter typeParameter = new TypeParameterImpl(name, type);
-          builder.add(typeParameter);
-        }
-      }
-
-      typeParameters = builder.build();
+      typeParameters =
+          getTypeParameterNodes().stream()
+              .flatMap(node -> node.getTypeParameters().stream())
+              .collect(Collectors.toList());
     }
 
     return typeParameters;
@@ -91,25 +73,5 @@ public final class GenericDefinitionNodeImpl extends DelphiNodeImpl
               + ">";
     }
     return image;
-  }
-
-  private static final class TypeParameterImpl implements TypeParameter {
-    private final NameDeclarationNode location;
-    private final TypeParameterType type;
-
-    private TypeParameterImpl(NameDeclarationNode location, TypeParameterType type) {
-      this.location = location;
-      this.type = type;
-    }
-
-    @Override
-    public NameDeclarationNode getLocation() {
-      return location;
-    }
-
-    @Override
-    public TypeParameterType getType() {
-      return type;
-    }
   }
 }
