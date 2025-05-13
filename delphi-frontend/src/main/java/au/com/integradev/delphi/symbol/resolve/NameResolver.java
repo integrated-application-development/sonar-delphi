@@ -564,10 +564,15 @@ public class NameResolver {
   }
 
   void readAttribute(AttributeNode node) {
-    readNameReference(node.getNameReference(), true);
+    NameReferenceNode nameReference = node.getNameReference();
+    if (nameReference == null) {
+      return;
+    }
+
+    readNameReference(nameReference, true);
     addResolvedDeclaration();
 
-    List<NameReferenceNode> references = node.getNameReference().flatten();
+    List<NameReferenceNode> references = nameReference.flatten();
     NameReferenceNode lastReference = references.get(references.size() - 1);
 
     var attributeNameOccurrence = (AttributeNameOccurrenceImpl) lastReference.getNameOccurrence();

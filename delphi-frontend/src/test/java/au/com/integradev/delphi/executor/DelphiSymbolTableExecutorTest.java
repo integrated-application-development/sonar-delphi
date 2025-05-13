@@ -417,6 +417,13 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testGuid() {
+    execute("Guid.pas");
+    verifyUsages(7, 2, reference(11, 5));
+    verifyUsages(15, 2, reference(20, 16));
+  }
+
+  @Test
   void testBestEffortArguments() {
     execute("BestEffortArguments.pas");
     verifyUsages(9, 2, reference(11, 6), reference(11, 11));

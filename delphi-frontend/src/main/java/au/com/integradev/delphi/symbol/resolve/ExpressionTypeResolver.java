@@ -21,6 +21,7 @@ package au.com.integradev.delphi.symbol.resolve;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 
 import au.com.integradev.delphi.operator.OperatorInvocableCollector;
+import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
 import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicReturnType;
 import com.google.common.collect.Iterables;
@@ -316,13 +317,15 @@ public final class ExpressionTypeResolver {
     if (declaration instanceof Typed) {
       Type type = ((Typed) declaration).getType();
 
-      if (declaration instanceof TypeNameDeclaration
-          || declaration instanceof TypeParameterNameDeclaration) {
-        type = typeFactory.classOf(null, type);
-      }
+      if (!(occurrence instanceof AttributeNameOccurrenceImpl)) {
+        if (declaration instanceof TypeNameDeclaration
+            || declaration instanceof TypeParameterNameDeclaration) {
+          type = typeFactory.classOf(null, type);
+        }
 
-      if (type.isProcedural() && occurrence.isExplicitInvocation()) {
-        type = ((ProceduralType) type).returnType();
+        if (type.isProcedural() && occurrence.isExplicitInvocation()) {
+          type = ((ProceduralType) type).returnType();
+        }
       }
 
       return type;

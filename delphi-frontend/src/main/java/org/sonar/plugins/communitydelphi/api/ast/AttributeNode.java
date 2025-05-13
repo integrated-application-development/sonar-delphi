@@ -32,14 +32,17 @@ public interface AttributeNode extends DelphiNode {
    */
   boolean isAssembly();
 
+  ExpressionNode getExpression();
+
+  @Nullable
   NameReferenceNode getNameReference();
+
+  @Nullable
+  ArgumentListNode getArgumentList();
 
   @Nullable
   NameOccurrence getTypeNameOccurrence();
 
   @Nullable
   NameOccurrence getConstructorNameOccurrence();
-
-  @Nullable
-  ArgumentListNode getArgumentList();
 }

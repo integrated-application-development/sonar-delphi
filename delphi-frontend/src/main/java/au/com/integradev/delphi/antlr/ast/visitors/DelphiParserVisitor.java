@@ -319,6 +319,7 @@ public interface DelphiParserVisitor<T> {
     return visit((DelphiNode) node, data);
   }
 
+  @SuppressWarnings("removal")
   default T visit(InterfaceGuidNode node, T data) {
     return visit((DelphiNode) node, data);
   }

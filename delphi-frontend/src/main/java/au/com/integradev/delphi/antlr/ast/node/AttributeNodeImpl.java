@@ -20,15 +20,25 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.occurrence.AttributeNameOccurrenceImpl;
+import com.google.common.base.Suppliers;
+import java.util.function.Supplier;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class AttributeNodeImpl extends DelphiNodeImpl implements AttributeNode {
+  private final Supplier<NameReferenceNode> nameReferenceSupplier =
+      Suppliers.memoize(this::findNameReference);
+  private final Supplier<ArgumentListNode> argumentListSupplier =
+      Suppliers.memoize(this::findArgumentList);
+
   public AttributeNodeImpl(Token token) {
     super(token);
   }
@@ -43,13 +53,31 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
   }
 
   @Override
+  public ExpressionNode getExpression() {
+    return (ExpressionNode) getChild(isAssembly() ? 1 : 0);
+  }
+
+  @Nullable
+  @Override
   public NameReferenceNode getNameReference() {
-    return (NameReferenceNode) getChild(isAssembly() ? 1 : 0);
+    return nameReferenceSupplier.get();
+  }
+
+  @Override
+  public ArgumentListNode getArgumentList() {
+    return argumentListSupplier.get();
   }
 
   @Override
   public NameOccurrence getTypeNameOccurrence() {
-    return getNameReference().getLastName().getNameOccurrence();
+    NameReferenceNode nameReference = getNameReference();
+    if (nameReference != null) {
+      NameOccurrence occurrence = nameReference.getLastName().getNameOccurrence();
+      if (occurrence instanceof AttributeNameOccurrenceImpl) {
+        return occurrence;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -62,21 +90,45 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
   }
 
   @Override
-  public ArgumentListNode getArgumentList() {
-    DelphiNode node = getChild(isAssembly() ? 2 : 1);
-    if (node instanceof ArgumentListNode) {
-      return (ArgumentListNode) node;
-    }
-    return null;
-  }
-
-  @Override
   public String getImage() {
-    return "[" + getNameReference().fullyQualifiedName() + "]";
+    DelphiNode imageNode = getNameReference();
+    if (imageNode == null) {
+      imageNode = getExpression();
+    }
+
+    String image = imageNode.getImage();
+    if (isAssembly()) {
+      image = "assembly " + image;
+    }
+
+    return image;
   }
 
   @Override
   public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
     return visitor.visit(this, data);
+  }
+
+  private NameReferenceNode findNameReference() {
+    ExpressionNode expression = getExpression();
+    if (expression instanceof PrimaryExpressionNode) {
+      DelphiNode child = expression.getChild(0);
+      if (child instanceof NameReferenceNode) {
+        return (NameReferenceNode) child;
+      }
+    }
+    return null;
+  }
+
+  private ArgumentListNode findArgumentList() {
+    NameReferenceNode nameReference = getNameReference();
+    if (nameReference != null) {
+      int index = nameReference.getChildIndex() + 1;
+      DelphiNode next = nameReference.getParent().getChild(index);
+      if (next instanceof ArgumentListNode) {
+        return (ArgumentListNode) next;
+      }
+    }
+    return null;
   }
 }

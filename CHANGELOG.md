@@ -10,12 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `TypeParameterNode::getTypeParameters` method.
+- **API:** `InterfaceTypeNode::getGuidExpression` method.
+- **API:** `AttributeNode::getExpression` method.
+
+### Deprecated
+
+- **API:** `InterfaceGuidNode` node type.
+- **API:** `InterfaceTypeNode::getGuid` method, use `getGuidExpression` instead.
+- **API:** `DelphiTokenType.GUID`, as the associated `InterfaceGuidNode` is no longer parsed.
 
 ### Fixed
 
 - Name resolution failures on generic routine invocations where later type parameters are constrained by earlier type parameters.
 - Type resolution failures on `as` casts where the type is returned from a routine invocation.
 - Inaccurate type resolution when calling a constructor on a class reference type.
+- Grammar ambiguity causing attributes to be misinterpreted as interface GUIDs.
 
 ## [1.16.0] - 2025-05-09
 

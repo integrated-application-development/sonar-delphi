@@ -170,7 +170,12 @@ public class NameResolutionHelper {
   public void resolve(AttributeNode attribute) {
     NameResolver resolver = createNameResolver();
     resolver.readAttribute(attribute);
-    resolver.addToSymbolTable();
+
+    if (resolver.getApproximateType().isDescendantOf("System.TCustomAttribute")) {
+      resolver.addToSymbolTable();
+    } else {
+      resolve(attribute.getExpression());
+    }
   }
 
   public void resolve(PrimaryExpressionNode expression) {
