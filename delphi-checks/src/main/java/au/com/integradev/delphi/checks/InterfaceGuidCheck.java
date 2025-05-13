@@ -34,7 +34,7 @@ public class InterfaceGuidCheck extends DelphiCheck {
   public DelphiCheckContext visit(TypeDeclarationNode typeDeclaration, DelphiCheckContext context) {
     if (typeDeclaration.isInterface()) {
       InterfaceTypeNode interfaceType = (InterfaceTypeNode) typeDeclaration.getTypeNode();
-      if (!interfaceType.isForwardDeclaration() && interfaceType.getGuid() == null) {
+      if (!interfaceType.isForwardDeclaration() && interfaceType.getGuidExpression() == null) {
         reportIssue(context, typeDeclaration.getTypeNameNode(), MESSAGE);
       }
     }

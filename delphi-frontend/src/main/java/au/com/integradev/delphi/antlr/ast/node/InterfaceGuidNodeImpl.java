@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceGuidNode;
 
+@SuppressWarnings("removal")
 public final class InterfaceGuidNodeImpl extends DelphiNodeImpl implements InterfaceGuidNode {
   public InterfaceGuidNodeImpl(Token token) {
     super(token);

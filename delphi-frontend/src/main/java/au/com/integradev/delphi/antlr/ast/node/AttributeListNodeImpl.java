@@ -25,10 +25,8 @@ import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
-import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public final class AttributeListNodeImpl extends DelphiNodeImpl implements AttributeListNode {
   public AttributeListNodeImpl(Token token) {
@@ -57,20 +55,9 @@ public final class AttributeListNodeImpl extends DelphiNodeImpl implements Attri
   @Override
   public List<Type> getAttributeTypes() {
     return getAttributes().stream()
-        .map(AttributeNode::getTypeNameOccurrence)
-        .map(
-            occurrence -> {
-              if (occurrence == null) {
-                return TypeFactory.unknownType();
-              }
-
-              NameDeclaration declaration = occurrence.getNameDeclaration();
-              if (!(declaration instanceof TypeNameDeclaration)) {
-                return TypeFactory.unknownType();
-              }
-
-              return ((TypeNameDeclaration) declaration).getType();
-            })
+        .map(AttributeNode::getExpression)
+        .map(ExpressionNode::getType)
+        .filter(type -> type.isUnknown() || type.isDescendantOf("System.TCustomAttribute"))
         .collect(Collectors.toList());
   }
 }

@@ -18,8 +18,18 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+import javax.annotation.Nullable;
+
 public interface InterfaceTypeNode extends StructTypeNode {
   boolean isForwardDeclaration();
 
+  /**
+   * @deprecated Use {@link InterfaceTypeNode#getGuidExpression} instead.
+   */
+  @SuppressWarnings("removal")
+  @Deprecated(forRemoval = true)
   InterfaceGuidNode getGuid();
+
+  @Nullable
+  ExpressionNode getGuidExpression();
 }

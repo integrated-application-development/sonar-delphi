@@ -19,11 +19,25 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.Iterables;
+import java.util.function.Supplier;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceGuidNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.PropertyNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.VisibilitySectionNode;
 
 public final class InterfaceTypeNodeImpl extends StructTypeNodeImpl implements InterfaceTypeNode {
+  private final Supplier<ExpressionNode> guid = Suppliers.memoize(this::findGuidExpression);
+
   public InterfaceTypeNodeImpl(Token token) {
     super(token);
   }
@@ -38,8 +52,54 @@ public final class InterfaceTypeNodeImpl extends StructTypeNodeImpl implements I
     return getChildren().isEmpty();
   }
 
+  @SuppressWarnings("removal")
   @Override
   public InterfaceGuidNode getGuid() {
-    return getFirstChildOfType(InterfaceGuidNode.class);
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public ExpressionNode getGuidExpression() {
+    return guid.get();
+  }
+
+  private ExpressionNode findGuidExpression() {
+    AttributeListNode attributeList = findFirstAttributeList();
+    if (attributeList != null) {
+      AttributeGroupNode attributeGroup = attributeList.getAttributeGroups().get(0);
+      AttributeNode attribute = Iterables.getLast(attributeGroup.getAttributes());
+      ExpressionNode expression = attribute.getExpression();
+      if (expression.getType().isString()) {
+        return expression;
+      }
+    }
+    return null;
+  }
+
+  private AttributeListNode findFirstAttributeList() {
+    for (DelphiNode child : getChildren()) {
+      if (child instanceof AttributeListNode) {
+        return (AttributeListNode) child;
+      }
+
+      if (child instanceof VisibilitySectionNode) {
+        return findFirstAttributeList((VisibilitySectionNode) child);
+      }
+    }
+    return null;
+  }
+
+  private AttributeListNode findFirstAttributeList(VisibilitySectionNode visibilitySection) {
+    for (DelphiNode child : visibilitySection.getChildren()) {
+      if (child instanceof RoutineDeclarationNode) {
+        return ((RoutineDeclarationNode) child).getRoutineHeading().getAttributeList();
+      }
+
+      if (child instanceof PropertyNode) {
+        return ((PropertyNode) child).getAttributeList();
+      }
+    }
+    return null;
   }
 }

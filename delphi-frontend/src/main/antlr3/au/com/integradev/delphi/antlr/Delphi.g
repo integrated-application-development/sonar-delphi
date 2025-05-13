@@ -11,6 +11,7 @@ tokens {
   // Deprecated tokens
   //----------------------------------------------------------------------------
   AMPERSAND__deprecated;
+  TkGuid__deprecated;
 
   //----------------------------------------------------------------------------
   // Imaginary tokens
@@ -25,7 +26,6 @@ tokens {
   TkRecordVariantItem;
   TkRecordVariantTag;
   TkRecordExpressionItem;
-  TkGuid;
   TkClassParents;
   TkLocalDeclarations;
   TkCaseItem;
@@ -708,9 +708,7 @@ fieldDecl                    : attributeList? nameDeclarationList ':' varType po
                              ;
 classHelperType              : CLASS<ClassHelperTypeNodeImpl>^ HELPER classParent? FOR typeReference visibilitySection* END
                              ;
-interfaceType                : (INTERFACE<InterfaceTypeNodeImpl>^ | DISPINTERFACE<InterfaceTypeNodeImpl>^) classParent? (interfaceGuid? interfaceItems? END)?
-                             ;
-interfaceGuid                : lbrack expression rbrack -> ^(TkGuid<InterfaceGuidNodeImpl> expression)
+interfaceType                : (INTERFACE<InterfaceTypeNodeImpl>^ | DISPINTERFACE<InterfaceTypeNodeImpl>^) classParent? ((interfaceItems | attributeList?)  END)?
                              ;
 interfaceItems               : interfaceItem+ -> ^(TkVisibilitySection<VisibilitySectionNodeImpl> interfaceItem+)
                              ;
@@ -913,8 +911,8 @@ attributeList                : attributeGroup+
 attributeGroup               : lbrack (attribute ','?)+ rbrack
                              -> ^(TkAttributeGroup<AttributeGroupNodeImpl> attribute+)
                              ;
-attribute                    : (ASSEMBLY ':')? nameReference argumentList? (':' nameReference argumentList?)*
-                             -> ^(TkAttribute<AttributeNodeImpl> ASSEMBLY? nameReference argumentList? (':' nameReference argumentList?)*)
+attribute                    : (ASSEMBLY ':')? expression (':' expression)*
+                             -> ^(TkAttribute<AttributeNodeImpl> ASSEMBLY? expression (':' expression)*)
                              ;
 
 //----------------------------------------------------------------------------

@@ -18,4 +18,5 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+@Deprecated(forRemoval = true)
 public interface InterfaceGuidNode extends DelphiNode {}

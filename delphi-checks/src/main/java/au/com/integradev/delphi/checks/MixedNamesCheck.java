@@ -118,7 +118,12 @@ public class MixedNamesCheck extends DelphiCheck {
 
   @Override
   public DelphiCheckContext visit(AttributeNode attributeNode, DelphiCheckContext context) {
-    List<NameReferenceNode> nameReferences = attributeNode.getNameReference().flatten();
+    NameReferenceNode reference = attributeNode.getNameReference();
+    if (reference == null) {
+      return super.visit(attributeNode, context);
+    }
+
+    List<NameReferenceNode> nameReferences = reference.flatten();
 
     for (int i = 0; i + 1 < nameReferences.size(); i++) {
       context = super.visit(nameReferences.get(i), context);

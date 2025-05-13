@@ -20,6 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSortedSet;
+import java.util.Objects;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -76,7 +77,8 @@ public class ForbiddenRoutineCheck extends DelphiCheck {
       NameDeclaration declaration = occurrence.getNameDeclaration();
       if (declaration instanceof RoutineNameDeclaration
           && routinesSet.contains(((RoutineNameDeclaration) declaration).fullyQualifiedName())) {
-        reportIssue(context, attribute.getNameReference().getIdentifier(), message);
+        NameReferenceNode reference = Objects.requireNonNull(attribute.getNameReference());
+        reportIssue(context, reference.getIdentifier(), message);
       }
     }
     return super.visit(attribute, context);

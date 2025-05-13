@@ -47,7 +47,7 @@ public final class AttributeGroupNodeImpl extends DelphiNodeImpl implements Attr
   @Override
   public String getImage() {
     return getAttributes().stream()
-        .map(attribute -> attribute.getNameReference().fullyQualifiedName())
+        .map(AttributeNode::getImage)
         .collect(Collectors.joining(", ", "[", "]"));
   }
 }
