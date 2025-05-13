@@ -458,7 +458,7 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testClassReferenceConstructorTypeResolution() {
     execute("classReferences/ConstructorTypeResolution.pas");
-    verifyUsages(15, 10, reference(22, 2));
+    verifyUsages(15, 10, reference(22, 2), reference(23, 2));
     verifyUsages(8, 16, reference(22, 11));
   }
 

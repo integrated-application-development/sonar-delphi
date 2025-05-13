@@ -20,6 +20,7 @@ end;
 procedure Test(Bar: Boolean; Baz: TMetaFoo);
 begin
   Proc(Baz.Create(Bar));
+  Proc(TMetaFoo.Create(Bar));
 end;
 
 end.
