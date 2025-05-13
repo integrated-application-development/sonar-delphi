@@ -26,6 +26,11 @@ interface
      procedure Test;
    end;
 
+   TMock = class(TObject)
+   public
+     class function Mock<I: IInterface; T: I>(out Raw: T): I;
+   end;
+
 implementation
 
 function TTest.SerializableClone: ISerializable;
@@ -60,4 +65,5 @@ var
 initialization
   Foo := TFoo<TTest>.Create(Test);
   Foo.Test;
+  TMock.Mock<ISerializable, TTest>(Test);
 end.
