@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.type.generic;
 
+import au.com.integradev.delphi.type.generic.constraint.TypeConstraintImpl;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.GenerifiableDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.TypeConstraint;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.TypeParameterType;
 import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
@@ -66,12 +69,24 @@ public final class TypeSpecializationContextImpl implements TypeSpecializationCo
     }
   }
 
-  private static boolean constraintViolated(Type parameter, Type argument) {
+  private boolean constraintViolated(Type parameter, Type argument) {
     return parameter.isTypeParameter()
         && ((TypeParameterType) parameter)
             .constraintItems().stream()
+                .map(this::specializeConstraint)
                 .map(constraint -> constraint.satisfiedBy(argument))
                 .anyMatch(s -> !s);
+  }
+
+  private Constraint specializeConstraint(Constraint constraint) {
+    if (constraint instanceof TypeConstraint) {
+      Type specializedType = getArgument(((TypeConstraint) constraint).type());
+      if (specializedType != null) {
+        return new TypeConstraintImpl(specializedType);
+      }
+    }
+
+    return constraint;
   }
 
   @Override

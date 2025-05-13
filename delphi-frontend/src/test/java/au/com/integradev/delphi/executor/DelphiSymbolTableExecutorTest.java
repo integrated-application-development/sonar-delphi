@@ -1100,7 +1100,8 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testGenericConstraints() {
     execute("generics/Constraint.pas");
-    verifyUsages(11, 14, reference(20, 25), reference(53, 8));
+    verifyUsages(11, 14, reference(20, 25), reference(58, 8));
+    verifyUsages(31, 20, reference(68, 8));
   }
 
   @Test
