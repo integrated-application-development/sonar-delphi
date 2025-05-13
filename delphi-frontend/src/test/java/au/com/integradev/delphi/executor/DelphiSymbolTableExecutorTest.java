@@ -517,7 +517,7 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testCastTypeResolution() {
     execute("typeResolution/Casts.pas");
-    verifyUsages(8, 14, reference(15, 12), reference(16, 16));
+    verifyUsages(8, 14, reference(22, 12), reference(23, 16), reference(24, 20));
   }
 
   @Test

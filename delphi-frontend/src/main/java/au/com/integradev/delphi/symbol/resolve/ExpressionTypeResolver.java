@@ -121,9 +121,14 @@ public final class ExpressionTypeResolver {
   }
 
   private static Type classReferenceValueType(Type type) {
+    if (type.isProcedural()) {
+      type = ((ProceduralType) type).returnType();
+    }
+
     if (type.isClassReference()) {
       return ((ClassReferenceType) type).classType();
     }
+
     return unknownType();
   }
 
