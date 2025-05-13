@@ -1103,17 +1103,27 @@ public class NameResolver {
   }
 
   private void resolveReturnType(Invocable invocable, List<InvocationArgument> arguments) {
-    if (!isConstructor((NameDeclaration) invocable)) {
-      Type returnType = invocable.getReturnType();
-      if (returnType instanceof IntrinsicReturnType) {
-        List<Type> argumentTypes =
-            arguments.stream()
-                .map(InvocationArgument::getType)
-                .collect(Collectors.toUnmodifiableList());
-        returnType = ((IntrinsicReturnType) returnType).getReturnType(argumentTypes);
+    // Constructors are a special case - they return the type they are invoked on
+    if (isConstructor((NameDeclaration) invocable)) {
+      if (currentType.isClassReference()) {
+        // Calling the constructor on a class reference type returns an instance of that class
+        updateType(((ClassReferenceType) currentType).classType());
       }
-      updateType(returnType);
+
+      return;
     }
+
+    Type returnType = invocable.getReturnType();
+
+    if (returnType instanceof IntrinsicReturnType) {
+      List<Type> argumentTypes =
+          arguments.stream()
+              .map(InvocationArgument::getType)
+              .collect(Collectors.toUnmodifiableList());
+      returnType = ((IntrinsicReturnType) returnType).getReturnType(argumentTypes);
+    }
+
+    updateType(returnType);
   }
 
   private void createCandidates(InvocationResolver resolver) {
