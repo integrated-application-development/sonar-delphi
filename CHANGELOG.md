@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Name resolution failures on generic routine invocations where later type parameters are constrained by earlier type parameters.
+- Type resolution failures on `as` casts where the type is returned from a routine invocation.
 
 ## [1.16.0] - 2025-05-09
 
