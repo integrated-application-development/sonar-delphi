@@ -23,16 +23,33 @@ import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
+import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
+import org.apache.commons.lang3.StringUtils;
 
 public final class DelphiFileUtils {
   private DelphiFileUtils() {
     // Utility class
+  }
+
+  public static DelphiFile parse(String... lines) {
+    try {
+      Path path = Files.createTempFile(null, ".pas");
+      Files.writeString(path, "\uFEFF" + StringUtils.join(lines, '\n'), StandardCharsets.UTF_8);
+      path.toFile().deleteOnExit();
+      return DelphiFile.from(path.toFile(), mockConfig());
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   public static DelphiFileConfig mockConfig() {
