@@ -18,5 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
+/**
+ * @deprecated Interface GUIDs are now parsed as {@link AttributeGroupNode}.
+ */
 @Deprecated(forRemoval = true)
 public interface InterfaceGuidNode extends DelphiNode {}
