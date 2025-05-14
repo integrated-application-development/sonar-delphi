@@ -98,7 +98,7 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
 
     String image = imageNode.getImage();
     if (isAssembly()) {
-      image = "assembly " + image;
+      image = "assembly : " + image;
     }
 
     return image;
