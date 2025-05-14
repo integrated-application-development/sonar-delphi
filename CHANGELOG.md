@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Name resolution failures on generic routine invocations where later type parameters are constrained by earlier type parameters.
+- Type resolution failures on property attribute lists.
+- Type resolution failures on implementation-local routine attribute lists.
 - Type resolution failures on `as` casts where the type is returned from a routine invocation.
 - Inaccurate type resolution when calling a constructor on a class reference type.
 - Grammar ambiguity causing attributes to be misinterpreted as interface GUIDs.

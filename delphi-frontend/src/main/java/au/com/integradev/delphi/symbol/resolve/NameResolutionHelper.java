@@ -167,6 +167,12 @@ public class NameResolutionHelper {
     resolver.addToSymbolTable();
   }
 
+  private void resolve(@Nullable AttributeListNode attributeList) {
+    if (attributeList != null) {
+      attributeList.getAttributes().forEach(this::resolve);
+    }
+  }
+
   public void resolve(AttributeNode attribute) {
     NameResolver resolver = createNameResolver();
     resolver.readAttribute(attribute);
@@ -255,6 +261,7 @@ public class NameResolutionHelper {
   }
 
   public void resolve(PropertyNode property) {
+    resolve(property.getAttributeList());
     resolve(property.getParameterListNode());
 
     TypeNode type = property.getTypeNode();
@@ -427,6 +434,7 @@ public class NameResolutionHelper {
   }
 
   private void resolveRoutine(RoutineNode routine) {
+    resolve(routine.getRoutineHeading().getAttributeList());
     SearchMode previousSearchMode = searchMode;
     try {
       searchMode = SearchMode.ROUTINE_HEADING;

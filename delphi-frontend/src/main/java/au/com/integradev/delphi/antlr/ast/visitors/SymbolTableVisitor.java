@@ -63,6 +63,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
+import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
@@ -111,6 +112,7 @@ import org.sonar.plugins.communitydelphi.api.ast.RecordVariantTagNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineBodyNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineHeadingNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineNode;
@@ -823,6 +825,23 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
                 arrayConstructor.getElements().forEach(element -> element.accept(this, data)));
     data.nameResolutionHelper.resolve(node);
     return data;
+  }
+
+  @Override
+  public Data visit(AttributeListNode node, Data data) {
+    DelphiNode parent = node.getParent();
+
+    if (parent instanceof PropertyNode) {
+      // Already resolved by the PropertyNode visit.
+      return data;
+    }
+
+    if (parent instanceof RoutineHeadingNode) {
+      // Already resolved by the RoutineNode visit.
+      return data;
+    }
+
+    return DelphiParserVisitor.super.visit(node, data);
   }
 
   @Override
