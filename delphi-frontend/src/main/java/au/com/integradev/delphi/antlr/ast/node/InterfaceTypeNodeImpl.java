@@ -84,20 +84,12 @@ public final class InterfaceTypeNodeImpl extends StructTypeNodeImpl implements I
       }
 
       if (child instanceof VisibilitySectionNode) {
-        return findFirstAttributeList((VisibilitySectionNode) child);
-      }
-    }
-    return null;
-  }
-
-  private AttributeListNode findFirstAttributeList(VisibilitySectionNode visibilitySection) {
-    for (DelphiNode child : visibilitySection.getChildren()) {
-      if (child instanceof RoutineDeclarationNode) {
-        return ((RoutineDeclarationNode) child).getRoutineHeading().getAttributeList();
-      }
-
-      if (child instanceof PropertyNode) {
-        return ((PropertyNode) child).getAttributeList();
+        DelphiNode declaration = child.getChild(0);
+        if (declaration instanceof RoutineDeclarationNode) {
+          return ((RoutineDeclarationNode) declaration).getRoutineHeading().getAttributeList();
+        } else if (declaration instanceof PropertyNode) {
+          return ((PropertyNode) declaration).getAttributeList();
+        }
       }
     }
     return null;
