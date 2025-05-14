@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `InterfaceTypeNode::getGuidExpression` method.
 - **API:** `AttributeNode::getExpression` method.
 
+### Changed
+
+- Issue locations no longer span the entire routine declaration in `RoutineName`.
+
 ### Deprecated
 
 - **API:** `InterfaceGuidNode` node type.

@@ -38,7 +38,7 @@ public class RoutineNameCheck extends DelphiCheck {
   @Override
   public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
     if (isViolation(routine) && !isExcluded(routine)) {
-      reportIssue(context, routine, MESSAGE);
+      reportIssue(context, routine.getRoutineNameNode(), MESSAGE);
     }
     return super.visit(routine, context);
   }
