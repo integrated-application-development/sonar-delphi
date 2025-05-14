@@ -21,7 +21,6 @@ package au.com.integradev.delphi.symbol.scope;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
-import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class SystemScopeImpl extends FileScopeImpl implements SystemScope {
   private TypeNameDeclaration objectDeclaration;
@@ -29,7 +28,7 @@ public class SystemScopeImpl extends FileScopeImpl implements SystemScope {
   private TypeNameDeclaration varRecDeclaration;
   private TypeNameDeclaration classHelperBase;
 
-  public SystemScopeImpl(TypeFactory typeFactory) {
+  public SystemScopeImpl() {
     super("System");
   }
 

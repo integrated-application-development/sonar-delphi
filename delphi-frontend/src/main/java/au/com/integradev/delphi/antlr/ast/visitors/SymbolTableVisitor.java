@@ -965,7 +965,7 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
     FileScope fileScope;
 
     if (name.equals("System")) {
-      fileScope = new SystemScopeImpl(data.typeFactory);
+      fileScope = new SystemScopeImpl();
     } else if (name.equals("SysInit")) {
       fileScope = new SysInitScopeImpl(name, data.systemScope);
     } else {
