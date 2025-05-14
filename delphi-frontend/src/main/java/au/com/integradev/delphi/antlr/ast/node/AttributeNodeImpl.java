@@ -91,16 +91,10 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
 
   @Override
   public String getImage() {
-    DelphiNode imageNode = getNameReference();
-    if (imageNode == null) {
-      imageNode = getExpression();
-    }
-
-    String image = imageNode.getImage();
+    String image = getExpression().getImage();
     if (isAssembly()) {
       image = "assembly : " + image;
     }
-
     return image;
   }
 
