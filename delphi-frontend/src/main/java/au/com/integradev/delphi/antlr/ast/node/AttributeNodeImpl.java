@@ -73,7 +73,7 @@ public final class AttributeNodeImpl extends DelphiNodeImpl implements Attribute
     NameReferenceNode nameReference = getNameReference();
     if (nameReference != null) {
       NameOccurrence occurrence = nameReference.getLastName().getNameOccurrence();
-      if (occurrence instanceof AttributeNameOccurrenceImpl) {
+      if (occurrence != null && occurrence.isAttributeReference()) {
         return occurrence;
       }
     }
