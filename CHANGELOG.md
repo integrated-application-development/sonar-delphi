@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Inaccurate handling of variant conversions, which resulted in overload resolution failures.
+
 ## [1.17.0] - 2025-05-15
 
 ### Added
