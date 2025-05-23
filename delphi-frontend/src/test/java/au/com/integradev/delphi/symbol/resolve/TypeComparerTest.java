@@ -25,7 +25,6 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_5;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_6;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_7;
-import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL_8;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EQUAL;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
@@ -323,7 +322,7 @@ class TypeComparerTest {
     compare(subrangeType, enumType, CONVERT_LEVEL_1);
     compare(subrangeType, enumType2, INCOMPATIBLE_TYPES);
     compare(enumType, enumType2, INCOMPATIBLE_TYPES);
-    compare(IntrinsicType.VARIANT, enumType, CONVERT_LEVEL_1);
+    compare(IntrinsicType.VARIANT, enumType, CONVERT_LEVEL_7);
     compare(IntrinsicType.INTEGER, enumType, INCOMPATIBLE_TYPES);
   }
 
@@ -334,7 +333,7 @@ class TypeComparerTest {
     SubrangeType subrangeOfEnum = subRange("5..6", enumeration("Enum"));
 
     compare(subrangeOfShortInt, strongAlias("Foo", subrangeOfShortInt), EQUAL);
-    compare(IntrinsicType.VARIANT, subrangeOfShortInt, CONVERT_LEVEL_8);
+    compare(IntrinsicType.VARIANT, subrangeOfShortInt, CONVERT_LEVEL_7);
     compare(subrangeOfShortInt, subrangeOfInteger, CONVERT_LEVEL_1);
     compare(subrangeOfInteger, subrangeOfShortInt, CONVERT_LEVEL_3);
     compare(subrangeOfShortInt, subrangeOfEnum, INCOMPATIBLE_TYPES);
@@ -391,8 +390,8 @@ class TypeComparerTest {
     compare(IntrinsicType.ANSICHAR, dynamicArray(null, IntrinsicType.ANSICHAR), CONVERT_LEVEL_1);
     compare(IntrinsicType.ANSICHAR, toDynamicArray, INCOMPATIBLE_TYPES);
 
-    compare(IntrinsicType.VARIANT, toDynamicArray, CONVERT_LEVEL_1);
-    compare(IntrinsicType.VARIANT, toOpenArray, CONVERT_LEVEL_8);
+    compare(IntrinsicType.VARIANT, toDynamicArray, CONVERT_LEVEL_7);
+    compare(IntrinsicType.VARIANT, toOpenArray, INCOMPATIBLE_TYPES);
 
     compare(unknownType(), toOpenArray, INCOMPATIBLE_TYPES);
     compare(unknownType(), toDynamicArray, INCOMPATIBLE_TYPES);
@@ -437,7 +436,7 @@ class TypeComparerTest {
     compare(stringConstructor, toOpenArray, INCOMPATIBLE_TYPES);
 
     compare(variantConstructor, toDynamicArray, CONVERT_LEVEL_6);
-    compare(variantConstructor, toIncompatibleDynamicArray, CONVERT_LEVEL_7);
+    compare(variantConstructor, toIncompatibleDynamicArray, INCOMPATIBLE_TYPES);
     compare(variantConstructor, toOpenArray, CONVERT_LEVEL_7);
 
     compare(byteConstructor, toArrayOfConst, EQUAL);
@@ -448,7 +447,7 @@ class TypeComparerTest {
   @Test
   void testArrayConstructorToSet() {
     CollectionType byteSet = set(IntrinsicType.BYTE);
-    CollectionType classSet = set(TypeMocker.struct("Foo", CLASS));
+    CollectionType iinterfaceSet = set(TypeMocker.struct("System.IInterface", INTERFACE));
 
     ArrayConstructorType emptyConstructor = arrayConstructor(emptyList());
     ArrayConstructorType byteConstructor = arrayConstructor(List.of(IntrinsicType.BYTE));
@@ -460,7 +459,7 @@ class TypeComparerTest {
     compare(byteConstructor, byteSet, CONVERT_LEVEL_2);
     compare(integerConstructor, byteSet, CONVERT_LEVEL_5);
     compare(variantConstructor, byteSet, CONVERT_LEVEL_6);
-    compare(variantConstructor, classSet, CONVERT_LEVEL_7);
+    compare(variantConstructor, iinterfaceSet, CONVERT_LEVEL_6);
     compare(stringConstructor, byteSet, INCOMPATIBLE_TYPES);
   }
 
@@ -530,7 +529,7 @@ class TypeComparerTest {
     compare(untypedPointer(), toClass, CONVERT_LEVEL_4);
     compare(nilPointer(), toClass, CONVERT_LEVEL_3);
     compare(classOf(fromInterface), toGUID, CONVERT_LEVEL_5);
-    compare(IntrinsicType.VARIANT, toClass, CONVERT_LEVEL_8);
+    compare(IntrinsicType.VARIANT, toClass, INCOMPATIBLE_TYPES);
     compare(untypedPointer(), toRecord, INCOMPATIBLE_TYPES);
     compare(nilPointer(), toRecord, INCOMPATIBLE_TYPES);
     compare(pointerTo(toClass), toClass, INCOMPATIBLE_TYPES);
@@ -625,17 +624,17 @@ class TypeComparerTest {
 
   @Test
   void testToVariant() {
-    Type interfaceType = TypeMocker.struct("Test", INTERFACE);
+    Type iinterface = TypeMocker.struct("System.IInterface", INTERFACE);
 
     compare(enumeration("Enum"), IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(dynamicArray("MyArray", unknownType()), IntrinsicType.VARIANT, CONVERT_LEVEL_1);
-    compare(interfaceType, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
+    compare(iinterface, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.INTEGER, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.DOUBLE, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.STRING, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.VARIANT, IntrinsicType.OLEVARIANT, CONVERT_LEVEL_1);
     compare(IntrinsicType.OLEVARIANT, IntrinsicType.VARIANT, CONVERT_LEVEL_1);
-    compare(unknownType(), IntrinsicType.VARIANT, CONVERT_LEVEL_8);
+    compare(unknownType(), IntrinsicType.VARIANT, INCOMPATIBLE_TYPES);
   }
 
   @Test
