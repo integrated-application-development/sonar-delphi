@@ -26,13 +26,16 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSICHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.ANSISTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BOOLEAN;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BYTE;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.BYTEBOOL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.CARDINAL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.CHAR;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.COMP;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.CURRENCY;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.DOUBLE;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.EXTENDED;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.INT64;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.INTEGER;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.LONGBOOL;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.LONGINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.LONGWORD;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEINT;
@@ -40,6 +43,7 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.NATIVEUIN
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PANSICHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.PWIDECHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.REAL;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.REAL48;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SHORTSTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SINGLE;
@@ -47,11 +51,13 @@ import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.SMALLINT;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UINT64;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.UNICODESTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.VARIANT;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDECHAR;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WIDESTRING;
 import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WORD;
+import static org.sonar.plugins.communitydelphi.api.type.IntrinsicType.WORDBOOL;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
-import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
@@ -59,6 +65,7 @@ import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import au.com.integradev.delphi.utils.types.TypeMocker;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,6 +92,14 @@ class InvocationResolverTest {
 
   private static Type type(IntrinsicType intrinsic) {
     return FACTORY.getIntrinsic(intrinsic);
+  }
+
+  private static Type subrange(String image, int min, int max) {
+    return FACTORY.subrange(image, BigInteger.valueOf(min), BigInteger.valueOf(max));
+  }
+
+  private static Type subrange(String image, Type type) {
+    return FACTORY.subrange(image, type);
   }
 
   private void assertResolved(
@@ -269,6 +284,13 @@ class InvocationResolverTest {
         List.of(type(UNICODESTRING), type(UNICODESTRING)),
         List.of(type(ANSISTRING), type(ANSISTRING)));
 
+    assertResolved(type(UNICODESTRING), type(VARIANT), type(ANSISTRING));
+    assertResolved(type(UNICODESTRING), type(VARIANT), type(SHORTSTRING));
+    assertResolved(type(WIDESTRING), type(VARIANT), type(ANSISTRING));
+    assertResolved(type(WIDESTRING), type(VARIANT), type(SHORTSTRING));
+    assertResolved(type(ANSISTRING), type(VARIANT), type(SHORTSTRING));
+    assertResolved(type(SHORTSTRING), type(ANSISTRING), type(VARIANT));
+
     assertResolved(type(PANSICHAR), type(ANSISTRING), FACTORY.ansiString(CodePages.CP_1252));
     assertResolved(type(PANSICHAR), FACTORY.ansiString(CodePages.CP_1252), type(UNICODESTRING));
     assertResolved(type(PANSICHAR), type(UNICODESTRING), type(WIDESTRING));
@@ -282,10 +304,14 @@ class InvocationResolverTest {
 
   @Test
   void testVariantTypes() {
-    Type variantIncompatibleType = TypeMocker.struct("MyRecord", RECORD);
+    Type incompatibleType = TypeMocker.struct("Incompatible", RECORD);
+    Type enumeration = ((TypeFactoryImpl) FACTORY).enumeration("E", DelphiScope.unknownScope());
+    Type dynamicArray =
+        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
+
     assertResolved(
-        List.of(type(UNICODESTRING), variantIncompatibleType, type(BOOLEAN)),
-        List.of(type(UNICODESTRING), variantIncompatibleType, type(VARIANT), type(BOOLEAN)),
+        List.of(type(UNICODESTRING), incompatibleType, type(BOOLEAN)),
+        List.of(type(UNICODESTRING), incompatibleType, type(VARIANT), type(BOOLEAN)),
         List.of(type(UNICODESTRING), type(VARIANT), type(BOOLEAN)));
     assertResolved(type(UNICODESTRING), type(VARIANT), type(ANSISTRING));
     assertResolved(type(UNICODESTRING), type(VARIANT), type(SHORTSTRING));
@@ -295,13 +321,74 @@ class InvocationResolverTest {
     assertResolved(type(ANSISTRING), FACTORY.ansiString(CodePages.CP_UTF8), type(VARIANT));
     assertResolved(type(ANSISTRING), FACTORY.ansiString(CodePages.CP_1252), type(VARIANT));
     assertResolved(FACTORY.ansiString(1251), FACTORY.ansiString(1252), type(VARIANT));
+
     assertResolved(
         List.of(type(VARIANT), type(BYTE)),
         List.of(type(UNICODESTRING), type(INTEGER)),
         List.of(type(ANSISTRING), type(INTEGER)));
-    assertResolved(type(VARIANT), type(INTEGER), type(INT64));
-    assertResolved(type(VARIANT), type(SINGLE), type(DOUBLE));
-    assertResolved(type(VARIANT), type(DOUBLE), type(EXTENDED));
+
+    Type iinterface = TypeMocker.struct("System.IInterface", INTERFACE);
+    assertResolved(type(VARIANT), iinterface, TypeFactory.untypedType());
+    assertIncompatible(type(VARIANT), TypeMocker.struct("System.NotIInterface", INTERFACE));
+
+    assertResolved(type(VARIANT), TypeFactory.untypedType(), type(EXTENDED));
+    assertResolved(type(VARIANT), TypeFactory.untypedType(), type(CURRENCY));
+    assertResolved(type(VARIANT), TypeFactory.untypedType(), type(COMP));
+    assertResolved(type(VARIANT), TypeFactory.untypedType(), type(UINT64));
+    assertResolved(type(VARIANT), TypeFactory.untypedType(), type(UNICODESTRING));
+    assertResolved(type(VARIANT), TypeFactory.untypedType(), type(BOOLEAN));
+
+    assertResolved(type(VARIANT), type(EXTENDED), type(CURRENCY));
+    assertResolved(type(VARIANT), type(CURRENCY), type(UINT64));
+    assertResolved(type(VARIANT), type(EXTENDED), type(COMP));
+    assertResolved(type(VARIANT), type(COMP), type(UINT64));
+
+    assertAmbiguous(type(VARIANT), type(CURRENCY), type(DOUBLE));
+    assertAmbiguous(type(VARIANT), type(COMP), type(DOUBLE));
+    assertAmbiguous(type(VARIANT), type(CURRENCY), type(COMP));
+
+    assertResolved(type(VARIANT), type(EXTENDED), type(DOUBLE));
+    assertResolved(type(VARIANT), type(DOUBLE), type(REAL48));
+    assertResolved(type(VARIANT), type(REAL48), type(SINGLE));
+    assertResolved(type(VARIANT), type(SINGLE), incompatibleType);
+
+    assertResolved(type(VARIANT), type(UINT64), type(INT64));
+    assertResolved(type(VARIANT), type(INT64), type(CARDINAL));
+    assertResolved(type(VARIANT), type(CARDINAL), type(INTEGER));
+    assertResolved(type(VARIANT), type(INTEGER), type(WORD));
+    assertResolved(type(VARIANT), type(SMALLINT), type(BYTE));
+    assertResolved(type(VARIANT), type(SHORTINT), subrange("ShorterInt", 1, 127));
+
+    assertResolved(type(VARIANT), subrange("A", 1, 10), subrange("B", 1, 9));
+    assertResolved(type(VARIANT), subrange("A", -2, 10), subrange("B", -1, 9));
+    assertResolved(type(VARIANT), subrange("A", 0, 10), subrange("B", -300, 9));
+    assertResolved(type(VARIANT), subrange("A", -300, 10), subrange("B", 0, 10));
+    assertAmbiguous(type(VARIANT), subrange("A", 0, 10), subrange("B", 1, 100000));
+
+    assertResolved(type(VARIANT), type(WIDESTRING), type(UNICODESTRING));
+    assertResolved(type(VARIANT), type(UNICODESTRING), type(ANSISTRING));
+    assertResolved(type(VARIANT), type(ANSISTRING), type(SHORTSTRING));
+    assertResolved(type(VARIANT), type(SHORTSTRING), incompatibleType);
+
+    assertResolved(type(VARIANT), type(BOOLEAN), incompatibleType);
+    assertAmbiguous(type(VARIANT), type(BOOLEAN), type(BYTEBOOL));
+    assertAmbiguous(type(VARIANT), type(BOOLEAN), type(WORDBOOL));
+    assertAmbiguous(type(VARIANT), type(BOOLEAN), type(LONGBOOL));
+    assertAmbiguous(type(VARIANT), type(BOOLEAN), type(INTEGER));
+
+    assertResolved(type(VARIANT), enumeration, incompatibleType);
+    assertAmbiguous(type(VARIANT), enumeration, subrange("S", enumeration));
+    assertAmbiguous(type(VARIANT), enumeration, type(EXTENDED));
+    assertAmbiguous(type(VARIANT), enumeration, type(UINT64));
+    assertAmbiguous(type(VARIANT), enumeration, type(WIDESTRING));
+
+    assertResolved(type(VARIANT), dynamicArray, incompatibleType);
+    assertAmbiguous(type(VARIANT), dynamicArray, type(EXTENDED));
+    assertAmbiguous(type(VARIANT), dynamicArray, type(UINT64));
+    assertAmbiguous(type(VARIANT), dynamicArray, type(WIDESTRING));
+
+    assertIncompatible(type(VARIANT), type(WIDECHAR));
+    assertIncompatible(type(VARIANT), type(ANSICHAR));
   }
 
   @Test
@@ -328,42 +415,5 @@ class InvocationResolverTest {
     assertResolvedVar(
         FACTORY.pointerTo(null, type(INTEGER)), FACTORY.pointerTo(null, type(SHORTINT)));
     assertResolvedVar(FACTORY.fileOf(type(INTEGER)), FACTORY.untypedFile());
-  }
-
-  @Test
-  void testSingleVariantArgument() {
-    Type arrayOfInteger =
-        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
-
-    assertResolved(type(VARIANT), type(VARIANT), type(INTEGER));
-    assertResolved(type(VARIANT), type(INTEGER), unknownType());
-    assertResolved(type(VARIANT), type(SINGLE), type(INT64));
-    assertResolved(type(VARIANT), type(DOUBLE), type(INT64));
-    assertResolved(type(VARIANT), type(CURRENCY), type(INT64));
-    assertResolved(type(VARIANT), type(EXTENDED), type(INT64));
-    assertResolved(type(VARIANT), type(LONGINT), type(INT64));
-    assertResolved(type(VARIANT), type(CARDINAL), type(INT64));
-    assertResolved(type(VARIANT), type(SMALLINT), type(LONGINT));
-    assertResolved(type(VARIANT), type(WORD), type(LONGINT));
-    assertResolved(type(VARIANT), type(SHORTINT), type(LONGINT));
-    assertResolved(type(VARIANT), type(BYTE), type(LONGINT));
-    assertResolved(type(VARIANT), type(BOOLEAN), type(CHAR));
-    assertResolved(type(VARIANT), untypedType(), type(CHAR));
-    assertResolved(type(VARIANT), type(BOOLEAN), type(ANSISTRING));
-    assertResolved(type(VARIANT), type(WIDESTRING), type(CHAR));
-    assertResolved(type(VARIANT), type(UNICODESTRING), type(CHAR));
-    assertResolved(type(VARIANT), type(ANSISTRING), type(CHAR));
-    assertResolved(type(VARIANT), type(SHORTSTRING), type(CHAR));
-    assertResolved(type(VARIANT), type(WIDESTRING), type(UNICODESTRING));
-    assertResolved(type(VARIANT), type(UNICODESTRING), type(ANSISTRING));
-    assertResolved(type(VARIANT), type(ANSISTRING), type(SHORTSTRING));
-    assertResolved(type(VARIANT), arrayOfInteger, type(SHORTSTRING));
-    assertResolved(
-        type(VARIANT),
-        ((TypeFactoryImpl) FACTORY).enumeration("MyEnum", DelphiScope.unknownScope()),
-        arrayOfInteger);
-
-    assertAmbiguous(type(VARIANT), type(SMALLINT), type(WORD));
-    assertIncompatible(type(VARIANT), unknownType());
   }
 }

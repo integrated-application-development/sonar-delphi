@@ -25,24 +25,6 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EQUAL;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.ANSISTRING;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.BYTE;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.CARDINAL;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.DOUBLE_CURRENCY;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.DYNAMIC_ARRAY;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.ENUM;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.EXTENDED;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.FORMAL_BOOLEAN;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.INTEGER;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.NO_CONVERSION_REQUIRED;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.SHORTINT;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.SHORTSTRING;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.SINGLE;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.SMALLINT;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.UNICODESTRING;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.WIDESTRING;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.WORD;
 import static java.lang.Math.abs;
 import static java.util.function.Predicate.not;
 
@@ -52,7 +34,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ComparisonChain;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.type.CodePages;
@@ -192,7 +176,7 @@ public class InvocationResolver {
     }
 
     checkCodePageDistance(candidate, argumentType, parameterType);
-    checkVariantConversions(candidate, argumentType, parameterType);
+    addVariantConversion(candidate, argumentType, parameterType);
 
     // When an ambiguous procedural type was changed to an invocation, an exact match is
     // downgraded to equal.
@@ -352,22 +336,15 @@ public class InvocationResolver {
     }
   }
 
-  // Keep track of implicit variant conversions
-  // Also invalidate candidates that would produce invalid variant conversions
-  private static void checkVariantConversions(
+  private static void addVariantConversion(
       InvocationCandidate candidate, Type argumentType, Type parameterType) {
-    argumentType = TypeUtils.findBaseType(argumentType);
-    parameterType = TypeUtils.findBaseType(parameterType);
-    VariantConversionType variantConversionType = NO_CONVERSION_REQUIRED;
-    if (argumentType.isVariant()) {
-      variantConversionType = VariantConversionType.fromType(parameterType);
-      if (variantConversionType == INCOMPATIBLE_VARIANT) {
-        candidate.setInvalid();
-      }
-    } else if (parameterType.isVariant()) {
-      variantConversionType = VariantConversionType.fromType(argumentType);
+    if (argumentType.isVariant() && !parameterType.isVariant()) {
+      candidate.addVariantConversion(parameterType);
+    } else if (parameterType.isVariant() && !argumentType.isVariant()) {
+      candidate.addVariantConversion(argumentType);
+    } else {
+      candidate.addVariantConversion(null);
     }
-    candidate.addVariantConversion(variantConversionType);
   }
 
   private static EqualityType varParameterAllowed(Type argType, Parameter parameter) {
@@ -537,117 +514,102 @@ public class InvocationResolver {
   private int getVariantDistance(InvocationCandidate candidate, InvocationCandidate bestCandidate) {
     int variantDistance = 0;
     for (int i = 0; i < arguments.size(); ++i) {
-      VariantConversionType currentVcl = candidate.getVariantConversionType(i);
-      VariantConversionType bestVcl = bestCandidate.getVariantConversionType(i);
-      variantDistance += isBetterVariantConversion(currentVcl, bestVcl);
+      Type current = candidate.getVariantConversionType(i);
+      Type best = bestCandidate.getVariantConversionType(i);
+      variantDistance += isBetterVariantConversion(current, best);
     }
     return variantDistance;
   }
 
-  /**
-   * Determines which variant conversion type takes precedence when converting a variant type
-   * argument to a parameter type.
-   *
-   * <p>Delphi precedence rules extracted from test programs:
-   *
-   * <ul>
-   *   <li>single > (char, currency, int64, shortstring, ansistring, widestring, unicodestring,
-   *       extended, double)
-   *   <li>double/currency > (char, int64, shortstring, ansistring, widestring, unicodestring,
-   *       extended)
-   *   <li>extended > (char, int64, shortstring, ansistring, widestring, unicodestring)
-   *   <li>longint/cardinal > (int64, shortstring, ansistring, widestring, unicodestring, extended,
-   *       double, single, char, currency)
-   *   <li>smallint > (longint, int64, shortstring, ansistring, widestring, unicodestring, extended,
-   *       double single, char, currency);
-   *   <li>word > (longint, cardinal, int64, shortstring, ansistring, widestring, unicodestring,
-   *       extended, double single, char, currency);
-   *   <li>shortint > (longint, smallint, int64, shortstring, ansistring, widestring, unicodestring,
-   *       extended, double, single, char, currency)
-   *   <li>byte > (longint, cardinal, word, smallint, int64, shortstring, ansistring, widestring,
-   *       unicodestring, extended, double, single, char, currency);
-   *   <li>boolean/formal > (char, int64, shortstring, ansistring, widestring, unicodestring)
-   *   <li>widestring > (char, int64, shortstring, ansistring, unicodestring)
-   *   <li>unicodestring > (char, int64, shortstring, ansistring)
-   *   <li>ansistring > (char, int64, shortstring)
-   *   <li>shortstring > (char, int64)
-   * </ul>
-   *
-   * <p>Relations not mentioned mean that they conflict: no decision possible
-   *
-   * @param currentVcl The conversion type we're checking
-   * @param bestVcl The best conversion type so far
-   * @return
-   *     <ul>
-   *       <li>> 0 when currentVcl is better than bestVcl
-   *       <li>< 0 when bestVcl is better than currentVcl
-   *       <li>= 0 when both are equal
-   *     </ul>
-   *
-   * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/htypechk.pas#L3367">
-   *     is_better_candidate_single_variant</a>
-   */
-  private static int isBetterVariantConversion(
-      VariantConversionType currentVcl, VariantConversionType bestVcl) {
-    if (currentVcl == bestVcl) {
+  private static int isBetterVariantConversion(Type current, Type best) {
+    if (current == null && best == null) {
       return 0;
-    } else if (currentVcl == INCOMPATIBLE_VARIANT || bestVcl == NO_CONVERSION_REQUIRED) {
-      return -1;
-    } else if (bestVcl == INCOMPATIBLE_VARIANT || currentVcl == NO_CONVERSION_REQUIRED) {
-      return 1;
-    } else if (currentVcl == FORMAL_BOOLEAN || bestVcl == FORMAL_BOOLEAN) {
-      if (currentVcl == FORMAL_BOOLEAN) {
-        return VariantConversionType.isChari64Str(bestVcl) ? 1 : 0;
-      } else {
-        return VariantConversionType.isChari64Str(currentVcl) ? -1 : 0;
-      }
-    } else if (currentVcl == BYTE || bestVcl == BYTE) {
-      return calculateRelation(currentVcl, bestVcl, BYTE, Set.of(SHORTINT));
-    } else if (currentVcl == SHORTINT || bestVcl == SHORTINT) {
-      return calculateRelation(currentVcl, bestVcl, SHORTINT, Set.of(WORD, CARDINAL));
-    } else if (currentVcl == WORD || bestVcl == WORD) {
-      return calculateRelation(currentVcl, bestVcl, WORD, Set.of(SMALLINT));
-    } else if (currentVcl == SMALLINT || bestVcl == SMALLINT) {
-      return calculateRelation(currentVcl, bestVcl, SMALLINT, Set.of(CARDINAL));
-    } else if (currentVcl == CARDINAL || bestVcl == CARDINAL) {
-      return calculateRelation(currentVcl, bestVcl, CARDINAL, Set.of(INTEGER));
-    } else if (currentVcl == INTEGER || bestVcl == INTEGER) {
-      return (bestVcl == INTEGER) ? -1 : 1;
-    } else if (currentVcl == SINGLE || bestVcl == SINGLE) {
-      return (bestVcl == SINGLE) ? -1 : 1;
-    } else if (currentVcl == DOUBLE_CURRENCY || bestVcl == DOUBLE_CURRENCY) {
-      return (bestVcl == DOUBLE_CURRENCY) ? -1 : 1;
-    } else if (currentVcl == EXTENDED || bestVcl == EXTENDED) {
-      return (bestVcl == EXTENDED) ? -1 : 1;
-    } else if (currentVcl == WIDESTRING || bestVcl == WIDESTRING) {
-      return (bestVcl == WIDESTRING) ? -1 : 1;
-    } else if (currentVcl == UNICODESTRING || bestVcl == UNICODESTRING) {
-      return (bestVcl == UNICODESTRING) ? -1 : 1;
-    } else if (currentVcl == ANSISTRING || bestVcl == ANSISTRING) {
-      return (bestVcl == ANSISTRING) ? -1 : 1;
-    } else if (currentVcl == SHORTSTRING || bestVcl == SHORTSTRING) {
-      return (bestVcl == SHORTSTRING) ? -1 : 1;
-    } else if (currentVcl == ENUM || bestVcl == ENUM) {
-      return (bestVcl == ENUM) ? -1 : 1;
-    } else if (currentVcl == DYNAMIC_ARRAY || bestVcl == DYNAMIC_ARRAY) {
-      return (bestVcl == DYNAMIC_ARRAY) ? -1 : 1;
     }
-
-    // All possibilities should have been checked now.
-    throw new AssertionError("Unhandled VariantConversionType!");
+    return ComparisonChain.start()
+        .compare(current, best, Comparator.comparing(Objects::isNull))
+        .compare(current, best, Comparator.comparing(InvocationResolver::isIInterface))
+        .compare(current, best, Comparator.comparing(Type::isUntyped))
+        .compare(current, best, InvocationResolver::compareNumericType)
+        .compare(current, best, InvocationResolver::compareRealSize)
+        .compare(current, best, InvocationResolver::compareIntegerRange)
+        .compare(current, best, InvocationResolver::compareStringType)
+        .result();
   }
 
-  private static int calculateRelation(
-      VariantConversionType currentVcl,
-      VariantConversionType bestVcl,
-      VariantConversionType testVcl,
-      Set<VariantConversionType> conflictTypes) {
-    if (conflictTypes.contains(bestVcl) || conflictTypes.contains(currentVcl)) {
-      return 0;
-    } else if (bestVcl == testVcl) {
+  private static boolean isIInterface(Type type) {
+    return TypeUtils.findBaseType(type).is("System.IInterface");
+  }
+
+  private static int compareNumericType(Type a, Type b) {
+    if (a.isReal() && b.isInteger()) {
+      return 1;
+    } else if (b.isReal() && a.isInteger()) {
       return -1;
     } else {
-      return 1;
+      return 0;
     }
+  }
+
+  private static int compareRealSize(Type a, Type b) {
+    if (!a.isReal() || !b.isReal()) {
+      return 0;
+    }
+    if (isCurrencyCompConflict(a, b) || isCurrencyCompConflict(b, a)) {
+      return 0;
+    }
+    return Objects.compare(a, b, Comparator.comparingInt(Type::size));
+  }
+
+  private static boolean isCurrencyCompConflict(Type currencyComp, Type real) {
+    currencyComp = TypeUtils.findBaseType(currencyComp);
+    return (currencyComp.is(IntrinsicType.CURRENCY) || currencyComp.is(IntrinsicType.COMP))
+        && real.isReal()
+        && currencyComp.size() >= real.size();
+  }
+
+  private static int compareIntegerRange(Type a, Type b) {
+    if (!a.isInteger() || !b.isInteger()) {
+      return 0;
+    }
+
+    IntegerType intA = (IntegerType) a;
+    IntegerType intB = (IntegerType) b;
+
+    if (valueRangesAreAmbiguous(intA, intB)) {
+      return 0;
+    }
+
+    return ComparisonChain.start()
+        .compare(intA, intB, Comparator.comparing(IntegerType::max))
+        .compare(intB, intA, Comparator.comparing(IntegerType::min))
+        .result();
+  }
+
+  private static boolean valueRangesAreAmbiguous(IntegerType a, IntegerType b) {
+    return a.isSigned() == b.isSigned()
+        && !(a.min().compareTo(b.min()) <= 0 && a.max().compareTo(b.max()) >= 0)
+        && !(b.min().compareTo(a.min()) <= 0 && b.max().compareTo(a.max()) >= 0);
+  }
+
+  private static int compareStringType(Type a, Type b) {
+    if (!a.isString() || !b.isString()) {
+      return 0;
+    }
+
+    return Comparator.<Type>comparingInt(
+            type -> {
+              type = TypeUtils.findBaseType(type);
+              if (type.is(IntrinsicType.WIDESTRING)) {
+                return 1;
+              } else if (type.is(IntrinsicType.UNICODESTRING)) {
+                return 2;
+              } else if (type.isAnsiString()) {
+                return 3;
+              } else {
+                return 4;
+              }
+            })
+        .reversed()
+        .compare(a, b);
   }
 }
