@@ -57,7 +57,7 @@ public final class InvocationCandidate {
   private int structMismatchCount;
   private int proceduralDistance;
   private int codePageDistance;
-  private final List<VariantConversionType> variantConversions;
+  private final List<Type> variantConversions;
   private boolean invalid;
 
   public InvocationCandidate(Invocable invocable) {
@@ -158,11 +158,11 @@ public final class InvocationCandidate {
     return codePageDistance;
   }
 
-  public void addVariantConversion(VariantConversionType variantConversionType) {
+  public void addVariantConversion(Type variantConversionType) {
     variantConversions.add(variantConversionType);
   }
 
-  public VariantConversionType getVariantConversionType(int argumentIndex) {
+  public Type getVariantConversionType(int argumentIndex) {
     return variantConversions.get(argumentIndex);
   }
 

@@ -29,8 +29,8 @@ import static au.com.integradev.delphi.symbol.resolve.EqualityType.CONVERT_LEVEL
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EQUAL;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.EXACT;
 import static au.com.integradev.delphi.symbol.resolve.EqualityType.INCOMPATIBLE_TYPES;
-import static au.com.integradev.delphi.symbol.resolve.VariantConversionType.INCOMPATIBLE_VARIANT;
 
+import au.com.integradev.delphi.type.TypeUtils;
 import au.com.integradev.delphi.type.intrinsic.IntrinsicArgumentMatcher;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Comparator;
@@ -118,9 +118,9 @@ final class TypeComparer {
     }
 
     if (result == INCOMPATIBLE_TYPES && (from.isVariant() || to.isVariant())) {
-      if (from.isVariant() && VariantConversionType.fromType(to) != INCOMPATIBLE_VARIANT) {
+      if (from.isVariant() && isConvertibleFromVariant(to)) {
         result = CONVERT_LEVEL_7;
-      } else {
+      } else if (to.isVariant() && isConvertibleToVariant(from)) {
         result = CONVERT_LEVEL_8;
       }
     }
@@ -476,7 +476,7 @@ final class TypeComparer {
     if (from.isSubrange()) {
       from = ((SubrangeType) from).hostType();
     }
-    if ((from.isEnum() && from.is(to)) || from.isVariant()) {
+    if ((from.isEnum() && from.is(to))) {
       return CONVERT_LEVEL_1;
     }
     return INCOMPATIBLE_TYPES;
@@ -488,7 +488,7 @@ final class TypeComparer {
       from = ((SubrangeType) from).hostType();
     }
 
-    if (from.is(to) || from.isVariant()) {
+    if (from.is(to)) {
       return CONVERT_LEVEL_1;
     } else {
       return INCOMPATIBLE_TYPES;
@@ -518,8 +518,6 @@ final class TypeComparer {
       return comparePointerToArray((PointerType) from, toArray);
     } else if (from.isChar()) {
       return compareCharToArray(from, toArray);
-    } else if (from.isVariant()) {
-      return compareVariantToArray(toArray);
     }
 
     return INCOMPATIBLE_TYPES;
@@ -720,10 +718,6 @@ final class TypeComparer {
     return ansiCharToArray ? CONVERT_LEVEL_1 : INCOMPATIBLE_TYPES;
   }
 
-  private static EqualityType compareVariantToArray(CollectionType to) {
-    return to.isDynamicArray() ? CONVERT_LEVEL_1 : INCOMPATIBLE_TYPES;
-  }
-
   private static EqualityType compareSet(Type from, Type to) {
     CollectionType toSet = ((CollectionType) to);
     if (from.isSet()) {
@@ -919,17 +913,28 @@ final class TypeComparer {
   }
 
   private static EqualityType compareVariant(Type from) {
-    if (from.isOleVariant() || isConvertibleToVariant(from)) {
+    if (from.isVariant() || isConvertibleToVariant(from)) {
       return CONVERT_LEVEL_1;
     }
     return INCOMPATIBLE_TYPES;
   }
 
   private static boolean isConvertibleToVariant(Type type) {
-    return type.isEnum()
+    return isVariantCompatible(type) || type.isChar();
+  }
+
+  private static boolean isConvertibleFromVariant(Type type) {
+    return isVariantCompatible(type) || type.isUntyped();
+  }
+
+  private static boolean isVariantCompatible(Type type) {
+    return type.isInteger()
+        || type.isReal()
+        || type.isString()
+        || type.isBoolean()
         || type.isDynamicArray()
-        || type.isInterface()
-        || VariantConversionType.fromType(type) != INCOMPATIBLE_VARIANT;
+        || TypeUtils.findBaseType(type).isEnum()
+        || type.is("System.IInterface");
   }
 
   private static EqualityType tryIntrinsicArgumentTypes(Type from, Type to) {
