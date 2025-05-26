@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `TypeParameterNode::getTypeParameters` method.
 - **API:** `InterfaceTypeNode::getGuidExpression` method.
 - **API:** `AttributeNode::getExpression` method.
+- **API:** `IntrinsicType.OPENSTRING` enum value.
 
 ### Changed
 
