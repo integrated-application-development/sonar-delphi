@@ -6,7 +6,8 @@
 
 SonarDelphi is a modern, performant, and fully-featured community code analyzer for the Delphi
 language. As a plugin for the [SonarQube](https://www.sonarqube.org) code analysis platform, it can
-be easily integrated into existing workflows.
+be easily integrated into existing workflows. It can also be used through the Delphi IDE using the
+[DelphiLint](https://github.com/integrated-application-development/delphilint) plugin.
 
 This project has three primary goals:
 
@@ -25,6 +26,7 @@ With SonarDelphi, you can:
 * Create custom rules in the SonarQube UI from templates
 * Import [NUnit](https://docs.nunit.org/articles/nunit/technical-notes/usage/Test-Result-XML-Format.html) test reports (compatible with [DUnitX](https://github.com/VSoftTechnologies/DUnitX))
 * Import test coverage reports (compatible with [DelphiCodeCoverage](https://github.com/DelphiCodeCoverage/DelphiCodeCoverage))
+* Run on-the-fly analysis in your local development environment using the [DelphiLint](https://github.com/integrated-application-development/delphilint) IDE plugin
 
 ### Semantic analysis
 
