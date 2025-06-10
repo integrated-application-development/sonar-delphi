@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.17.1] - 2025-06-10
+
 ### Fixed
 
 - Inaccurate handling of variant conversions, which resulted in overload resolution failures.
@@ -1621,7 +1623,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.17.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.17.1...HEAD
+[1.17.1]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.17.0...v1.17.1
 [1.17.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.14.1...v1.15.0
