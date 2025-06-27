@@ -60,6 +60,8 @@ import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
 import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.untypedType;
 
+import au.com.integradev.delphi.DelphiProperties;
+import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import au.com.integradev.delphi.type.parameter.FormalParameter;
@@ -72,7 +74,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.sonar.plugins.communitydelphi.api.ast.FormalParameterNode.FormalParameterData;
 import org.sonar.plugins.communitydelphi.api.symbol.Invocable;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
@@ -83,23 +88,28 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class InvocationResolverTest {
-  private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
+  private TypeFactory factory;
   private Set<InvocationCandidate> resolved;
+
+  @BeforeEach
+  void setup() {
+    factory = TypeFactoryUtils.defaultFactory();
+  }
 
   private void assertResolved(Type argumentType, Type winnerType, Type loserType) {
     assertResolved(List.of(argumentType), List.of(winnerType), List.of(loserType));
   }
 
-  private static Type type(IntrinsicType intrinsic) {
-    return FACTORY.getIntrinsic(intrinsic);
+  private Type type(IntrinsicType intrinsic) {
+    return factory.getIntrinsic(intrinsic);
   }
 
-  private static Type subrange(String image, int min, int max) {
-    return FACTORY.subrange(image, BigInteger.valueOf(min), BigInteger.valueOf(max));
+  private Type subrange(String image, int min, int max) {
+    return factory.subrange(image, BigInteger.valueOf(min), BigInteger.valueOf(max));
   }
 
-  private static Type subrange(String image, Type type) {
-    return FACTORY.subrange(image, type);
+  private Type subrange(String image, Type type) {
+    return factory.subrange(image, type);
   }
 
   private void assertResolved(
@@ -181,7 +191,7 @@ class InvocationResolverTest {
     assertResolved(type(INTEGER), type(WORD), type(BYTE));
     assertResolved(type(SHORTINT), type(NATIVEINT), type(NATIVEUINT));
 
-    Type hwnd = FACTORY.strongAlias("HWND", type(NATIVEUINT));
+    Type hwnd = factory.strongAlias("HWND", type(NATIVEUINT));
     assertResolved(
         List.of(hwnd, type(NATIVEUINT), type(SHORTINT), type(SHORTINT)),
         List.of(hwnd, type(NATIVEUINT), type(NATIVEINT), type(NATIVEINT)),
@@ -189,20 +199,28 @@ class InvocationResolverTest {
 
     assertResolved(type(BYTE), type(INTEGER), type(DOUBLE));
 
-    assertResolved(FACTORY.strongAlias("MyWord", type(LONGWORD)), type(INT64), type(INTEGER));
-    assertResolved(type(LONGWORD), FACTORY.strongAlias("MyInt64", type(INT64)), type(INTEGER));
+    assertResolved(factory.strongAlias("MyWord", type(LONGWORD)), type(INT64), type(INTEGER));
+    assertResolved(type(LONGWORD), factory.strongAlias("MyInt64", type(INT64)), type(INTEGER));
   }
 
-  @Test
-  void testFloatingPointTypes() {
+  @ParameterizedTest
+  @EnumSource(
+      value = Toolchain.class,
+      names = {"DCC32", "DCC64"})
+  void testRealTypes(Toolchain toolchain) {
+    factory = new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
     assertResolved(type(EXTENDED), type(DOUBLE), type(SINGLE));
     assertResolved(type(EXTENDED), type(REAL), type(SINGLE));
     assertResolved(type(DOUBLE), type(EXTENDED), type(SINGLE));
     assertResolved(type(REAL), type(EXTENDED), type(SINGLE));
   }
 
-  @Test
-  void testMixedToFloatingPointTypes() {
+  @ParameterizedTest
+  @EnumSource(
+      value = Toolchain.class,
+      names = {"DCC32", "DCC64"})
+  void testMixedToRealTypes(Toolchain toolchain) {
+    factory = new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
     assertResolved(
         List.of(type(EXTENDED), type(INTEGER)),
         List.of(type(EXTENDED), type(EXTENDED)),
@@ -217,8 +235,12 @@ class InvocationResolverTest {
         List.of(type(EXTENDED), type(EXTENDED)));
   }
 
-  @Test
-  void testIntegerToFloatingPointTypes() {
+  @ParameterizedTest
+  @EnumSource(
+      value = Toolchain.class,
+      names = {"DCC32", "DCC64"})
+  void testIntegerToRealTypes(Toolchain toolchain) {
+    factory = new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
     assertResolved(
         List.of(type(SHORTINT), type(SHORTINT)),
         List.of(type(INTEGER), type(INTEGER)),
@@ -236,12 +258,12 @@ class InvocationResolverTest {
   @Test
   void testTextTypes() {
     assertResolved(
-        FACTORY.strongAlias("MyString", type(UNICODESTRING)),
+        factory.strongAlias("MyString", type(UNICODESTRING)),
         type(UNICODESTRING),
         type(SHORTSTRING));
     assertResolved(
         type(UNICODESTRING),
-        FACTORY.strongAlias("MyString", type(UNICODESTRING)),
+        factory.strongAlias("MyString", type(UNICODESTRING)),
         type(SHORTSTRING));
     assertResolved(
         List.of(type(ANSICHAR), type(ANSICHAR)),
@@ -291,8 +313,8 @@ class InvocationResolverTest {
     assertResolved(type(ANSISTRING), type(VARIANT), type(SHORTSTRING));
     assertResolved(type(SHORTSTRING), type(ANSISTRING), type(VARIANT));
 
-    assertResolved(type(PANSICHAR), type(ANSISTRING), FACTORY.ansiString(CodePages.CP_1252));
-    assertResolved(type(PANSICHAR), FACTORY.ansiString(CodePages.CP_1252), type(UNICODESTRING));
+    assertResolved(type(PANSICHAR), type(ANSISTRING), factory.ansiString(CodePages.CP_1252));
+    assertResolved(type(PANSICHAR), factory.ansiString(CodePages.CP_1252), type(UNICODESTRING));
     assertResolved(type(PANSICHAR), type(UNICODESTRING), type(WIDESTRING));
     assertResolved(type(PANSICHAR), type(WIDESTRING), type(SHORTSTRING));
 
@@ -302,12 +324,17 @@ class InvocationResolverTest {
     assertIncompatible(type(PWIDECHAR), type(SHORTSTRING));
   }
 
-  @Test
-  void testVariantTypes() {
+  @ParameterizedTest
+  @EnumSource(
+      value = Toolchain.class,
+      names = {"DCC32", "DCC64"})
+  void testVariantTypes(Toolchain toolchain) {
+    factory = new TypeFactoryImpl(toolchain, DelphiProperties.COMPILER_VERSION_DEFAULT);
+
     Type incompatibleType = TypeMocker.struct("Incompatible", RECORD);
-    Type enumeration = ((TypeFactoryImpl) FACTORY).enumeration("E", DelphiScope.unknownScope());
+    Type enumeration = ((TypeFactoryImpl) factory).enumeration("E", DelphiScope.unknownScope());
     Type dynamicArray =
-        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
+        ((TypeFactoryImpl) factory).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
 
     assertResolved(
         List.of(type(UNICODESTRING), incompatibleType, type(BOOLEAN)),
@@ -318,9 +345,9 @@ class InvocationResolverTest {
     assertResolved(type(SHORTSTRING), type(ANSISTRING), type(VARIANT));
     assertResolved(type(ANSISTRING), type(VARIANT), type(SHORTSTRING));
     assertResolved(type(ANSISTRING), type(UNICODESTRING), type(VARIANT));
-    assertResolved(type(ANSISTRING), FACTORY.ansiString(CodePages.CP_UTF8), type(VARIANT));
-    assertResolved(type(ANSISTRING), FACTORY.ansiString(CodePages.CP_1252), type(VARIANT));
-    assertResolved(FACTORY.ansiString(1251), FACTORY.ansiString(1252), type(VARIANT));
+    assertResolved(type(ANSISTRING), factory.ansiString(CodePages.CP_UTF8), type(VARIANT));
+    assertResolved(type(ANSISTRING), factory.ansiString(CodePages.CP_1252), type(VARIANT));
+    assertResolved(factory.ansiString(1251), factory.ansiString(1252), type(VARIANT));
 
     assertResolved(
         List.of(type(VARIANT), type(BYTE)),
@@ -404,16 +431,16 @@ class InvocationResolverTest {
   @Test
   void testVarParameters() {
     Type openArray =
-        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.OPEN));
+        ((TypeFactoryImpl) factory).array(null, type(INTEGER), Set.of(ArrayOption.OPEN));
     Type dynamicArray =
-        ((TypeFactoryImpl) FACTORY).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
+        ((TypeFactoryImpl) factory).array(null, type(INTEGER), Set.of(ArrayOption.DYNAMIC));
 
     assertResolvedVar(type(INTEGER), untypedType());
     assertResolvedVar(dynamicArray, openArray);
     assertResolvedVar(type(INTEGER), openArray);
-    assertResolvedVar(FACTORY.untypedPointer(), FACTORY.untypedPointer());
+    assertResolvedVar(factory.untypedPointer(), factory.untypedPointer());
     assertResolvedVar(
-        FACTORY.pointerTo(null, type(INTEGER)), FACTORY.pointerTo(null, type(SHORTINT)));
-    assertResolvedVar(FACTORY.fileOf(type(INTEGER)), FACTORY.untypedFile());
+        factory.pointerTo(null, type(INTEGER)), factory.pointerTo(null, type(SHORTINT)));
+    assertResolvedVar(factory.fileOf(type(INTEGER)), factory.untypedFile());
   }
 }
