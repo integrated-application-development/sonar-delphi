@@ -530,7 +530,7 @@ public class InvocationResolver {
         .compare(current, best, Comparator.comparing(InvocationResolver::isIInterface))
         .compare(current, best, Comparator.comparing(Type::isUntyped))
         .compare(current, best, InvocationResolver::compareNumericType)
-        .compare(current, best, InvocationResolver::compareRealSize)
+        .compare(current, best, InvocationResolver::compareRealTypes)
         .compare(current, best, InvocationResolver::compareIntegerRange)
         .compare(current, best, InvocationResolver::compareStringType)
         .result();
@@ -550,14 +550,30 @@ public class InvocationResolver {
     }
   }
 
-  private static int compareRealSize(Type a, Type b) {
+  private static int compareRealTypes(Type a, Type b) {
     if (!a.isReal() || !b.isReal()) {
       return 0;
     }
+
     if (isCurrencyCompConflict(a, b) || isCurrencyCompConflict(b, a)) {
       return 0;
     }
-    return Objects.compare(a, b, Comparator.comparingInt(Type::size));
+
+    return Comparator.<Type>comparingInt(
+            type -> {
+              type = TypeUtils.findBaseType(type);
+              if (type.is(IntrinsicType.EXTENDED)) {
+                return 1;
+              } else if (type.is(IntrinsicType.DOUBLE)) {
+                return 2;
+              } else if (type.is(IntrinsicType.REAL48)) {
+                return 3;
+              } else {
+                return 4;
+              }
+            })
+        .reversed()
+        .compare(a, b);
   }
 
   private static boolean isCurrencyCompConflict(Type currencyComp, Type real) {
