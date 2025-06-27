@@ -365,9 +365,7 @@ class InvocationResolverTest {
     assertResolved(type(VARIANT), TypeFactory.untypedType(), type(UNICODESTRING));
     assertResolved(type(VARIANT), TypeFactory.untypedType(), type(BOOLEAN));
 
-    assertResolved(type(VARIANT), type(EXTENDED), type(CURRENCY));
     assertResolved(type(VARIANT), type(CURRENCY), type(UINT64));
-    assertResolved(type(VARIANT), type(EXTENDED), type(COMP));
     assertResolved(type(VARIANT), type(COMP), type(UINT64));
 
     assertAmbiguous(type(VARIANT), type(CURRENCY), type(DOUBLE));
@@ -416,6 +414,19 @@ class InvocationResolverTest {
 
     assertIncompatible(type(VARIANT), type(WIDECHAR));
     assertIncompatible(type(VARIANT), type(ANSICHAR));
+  }
+
+  @Test
+  void testVariantToExtendedCurrencyShouldResolveOnDcc32() {
+    assertResolved(type(VARIANT), type(EXTENDED), type(CURRENCY));
+    assertResolved(type(VARIANT), type(EXTENDED), type(COMP));
+  }
+
+  @Test
+  void testVariantToExtendedCurrencyShouldBeAmbiguousOnDcc64() {
+    factory = new TypeFactoryImpl(Toolchain.DCC64, DelphiProperties.COMPILER_VERSION_DEFAULT);
+    assertAmbiguous(type(VARIANT), type(EXTENDED), type(CURRENCY));
+    assertAmbiguous(type(VARIANT), type(EXTENDED), type(COMP));
   }
 
   @Test
