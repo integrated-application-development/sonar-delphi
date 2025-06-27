@@ -563,7 +563,6 @@ public class InvocationResolver {
   private static boolean isCurrencyCompConflict(Type currencyComp, Type real) {
     currencyComp = TypeUtils.findBaseType(currencyComp);
     return (currencyComp.is(IntrinsicType.CURRENCY) || currencyComp.is(IntrinsicType.COMP))
-        && real.isReal()
         && currencyComp.size() >= real.size();
   }
 
