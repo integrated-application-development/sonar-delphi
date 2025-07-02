@@ -148,7 +148,7 @@
     <source-plugin.version>3.3.0</source-plugin.version>
     <javadoc-plugin.version>3.6.3</javadoc-plugin.version>
     <gpg-plugin.version>3.1.0</gpg-plugin.version>
-    <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
+    <central-publishing-plugin.version>0.8.0</central-publishing-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -534,14 +534,14 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>${nexus-staging-plugin.version}</version>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${central-publishing-plugin.version}</version>
             <extensions>true</extensions>
             <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
             </configuration>
           </plugin>
         </plugins>
