@@ -27,7 +27,7 @@ package au.com.integradev.delphi.symbol.resolve;
  * @see <a href="https://github.com/fpc/FPCSource/blob/main/compiler/symconst.pas#L817">tequaltype
  *     </a>
  */
-enum EqualityType {
+public enum EqualityType {
   INCOMPATIBLE_TYPES,
   CONVERT_LEVEL_8,
   CONVERT_LEVEL_7,
