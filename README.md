@@ -126,4 +126,4 @@ Since 2019, the project has been actively developed and extensively rewritten by
 
 ## License
 
-Licensed under the [GNU Lesser General Public License, Version 3.0](http://www.gnu.org/licenses/lgpl.txt).
+Licensed under the [GNU Lesser General Public License, Version 3.0](https://www.gnu.org/licenses/lgpl.txt).

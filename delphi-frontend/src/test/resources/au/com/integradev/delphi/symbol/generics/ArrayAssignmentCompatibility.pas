@@ -1,7 +1,7 @@
 unit ArrayAssignmentCompatibility;
 
 // Example from the Embarcadero wiki
-// See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Overloads_and_Type_Compatibility_in_Generics
+// See: https://docwiki.embarcadero.com/RADStudio/Rio/en/Overloads_and_Type_Compatibility_in_Generics
 
 interface
 
