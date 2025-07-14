@@ -46,7 +46,7 @@ public class StructTypeImpl extends GenerifiableTypeImpl implements StructType {
   private Set<Type> ancestorList;
   private StructKind kind;
   private Type parent;
-  private List<Type> attributeTypes;
+  private final List<Type> attributeTypes;
 
   StructTypeImpl(
       List<ImagePart> imageParts,

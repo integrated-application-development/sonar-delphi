@@ -37,7 +37,6 @@ public class DelphiTokenStream extends TokenRewriteStream {
    *
    * @return Token list
    */
-  @SuppressWarnings("unchecked")
   @Override
   public List<Token> getTokens() {
     return tokens;

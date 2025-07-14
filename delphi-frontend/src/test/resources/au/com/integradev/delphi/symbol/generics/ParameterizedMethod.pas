@@ -1,7 +1,7 @@
 unit ParameterizedMethod;
 
 // Example from the Embarcadero wiki
-// See: http://docwiki.embarcadero.com/RADStudio/Rio/en/Declaring_Generics#Parameterized_Methods
+// See: https://docwiki.embarcadero.com/RADStudio/Rio/en/Declaring_Generics#Parameterized_Methods
 
 interface
 

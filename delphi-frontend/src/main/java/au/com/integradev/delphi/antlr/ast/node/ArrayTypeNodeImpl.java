@@ -46,6 +46,7 @@ public final class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNo
   }
 
   @Override
+  @Nonnull
   public TypeNode getElementTypeNode() {
     return (TypeNode) getChild(1);
   }

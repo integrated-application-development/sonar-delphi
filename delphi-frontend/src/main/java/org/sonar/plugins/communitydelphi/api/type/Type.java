@@ -580,7 +580,7 @@ public interface Type {
      * type argument to be assignment-compatible with TFoo.
      *
      * @return list of constraints
-     * @see <a href="http://docwiki.embarcadero.com/RADStudio/en/Constraints_in_Generics">
+     * @see <a href="https://docwiki.embarcadero.com/RADStudio/en/Constraints_in_Generics">
      *     Constraints in Generics</a>
      */
     List<Constraint> constraintItems();

@@ -253,7 +253,7 @@ public final class PredefinedConditionals {
    * @param toolchain The compiler toolchain
    * @param compilerVersion The compiler version
    * @return set of conditional symbols that are defined on this compiler toolchain
-   * @see <a href="http://bit.ly/delphi_predefined_conditionals">Predefined Conditionals</a>
+   * @see <a href="https://bit.ly/delphi_predefined_conditionals">Predefined Conditionals</a>
    */
   public static Set<String> getConditionalDefines(
       Toolchain toolchain, CompilerVersion compilerVersion) {

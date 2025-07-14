@@ -299,7 +299,6 @@ class TypeInferrerTest {
     return parenthesized;
   }
 
-  @SuppressWarnings("ObjectToString")
   private static <T extends DelphiNodeImpl> T makeSpy(T spied) {
     final T result = spy(spied);
 

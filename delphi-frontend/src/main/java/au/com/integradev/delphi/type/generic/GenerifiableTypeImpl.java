@@ -37,7 +37,7 @@ import org.sonar.plugins.communitydelphi.api.type.TypeSpecializationContext;
  *   <li>procedural types
  * </ul>
  *
- * @see <a href="http://docwiki.embarcadero.com/RADStudio/Rio/en/Declaring_Generics">Declaring
+ * @see <a href="https://docwiki.embarcadero.com/RADStudio/Rio/en/Declaring_Generics">Declaring
  *     Generics</a>
  */
 public abstract class GenerifiableTypeImpl extends TypeImpl {

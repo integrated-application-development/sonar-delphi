@@ -132,7 +132,7 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   private boolean isLong64Bit() {
-    // See: http://bit.ly/long-on-different-platforms
+    // See: https://bit.ly/long-on-different-platforms
     return compilerVersion.compareTo(VERSION_XE8) >= 0
         && toolchain.architecture == Architecture.X64
         && toolchain.platform != Platform.WINDOWS;
@@ -144,7 +144,7 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   private boolean isStringUnicode() {
-    // See: http://bit.ly/new-string-type-unicodestring
+    // See: https://bit.ly/new-string-type-unicodestring
     return compilerVersion.compareTo(VERSION_2009) >= 0;
   }
 
@@ -157,7 +157,7 @@ public class TypeFactoryImpl implements TypeFactory {
   }
 
   private int extendedSize() {
-    // See: http://bit.ly/extended-on-different-platforms
+    // See: https://bit.ly/extended-on-different-platforms
     switch (toolchain) {
       case DCCOSX:
       case DCCIOS32:

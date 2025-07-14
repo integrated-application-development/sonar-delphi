@@ -339,7 +339,7 @@ public final class ExpressionTypeResolver {
       case DEREFERENCE:
       case DOT:
         // Delphi Extended syntax is assumed.
-        // See: http://docwiki.embarcadero.com/RADStudio/en/Extended_syntax_(Delphi)
+        // See: https://docwiki.embarcadero.com/RADStudio/en/Extended_syntax_(Delphi)
         return TypeUtils.dereference(type);
 
       case STRING:

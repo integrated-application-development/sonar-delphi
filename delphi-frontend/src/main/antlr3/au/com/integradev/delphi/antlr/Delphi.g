@@ -1199,7 +1199,7 @@ dllName                      : {!input.LT(1).getText().equals("name")}? expressi
                              ;
 externalSpecifier            : NAME^ expression
                              | INDEX^ expression // specific to a platform
-                             | DELAYED // Use delayed loading (See: http://docwiki.embarcadero.com/RADStudio/en/Libraries_and_Packages_(Delphi))
+                             | DELAYED // Use delayed loading (See: https://docwiki.embarcadero.com/RADStudio/en/Libraries_and_Packages_(Delphi))
                              ;
 dispIDDirective              : DISPID expression
                              ;

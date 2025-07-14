@@ -25,7 +25,7 @@ force their analysis (not recommended).
 |---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
 | `sonar.delphi.installationPath` | Path to the Delphi installation folder.<br/><br/>:warning: **Note**: This must point to a valid Delphi IDE installation for the scan to succeed.                                                                                                       | `C:\Program Files (x86)\Embarcadero\Studio\22.0` |
 | `sonar.delphi.toolchain`        | The compiler toolchain.<br/>Options: `DCC32`, `DCC64`, `DCCOSX`, `DCCOSX64`, `DCCIOSARM`, `DCCIOSARM64`, `DCCIOS32`, `DCCAARM`, `DCCAARM64`, `DCCLINUX64`<br/>See: [Delphi Toolchains](https://docwiki.embarcadero.com/RADStudio/en/Delphi_Toolchains) | `DCC32`                                          |
-| `sonar.delphi.compilerVersion`  | The Delphi conditional symbol representing the compiler version.<br/>Format: `VER<nnn>`.<br/>See: [Compiler Versions](http://docwiki.embarcadero.com/RADStudio/en/Compiler_Versions)                                                                   | `VER350`                                         |
+| `sonar.delphi.compilerVersion`  | The Delphi conditional symbol representing the compiler version.<br/>Format: `VER<nnn>`.<br/>See: [Compiler Versions](https://docwiki.embarcadero.com/RADStudio/en/Compiler_Versions)                                                                  | `VER350`                                         |
 
 ### Project Options
 

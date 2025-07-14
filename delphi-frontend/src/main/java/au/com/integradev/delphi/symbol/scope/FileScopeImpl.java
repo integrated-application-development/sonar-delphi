@@ -100,7 +100,6 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
   @Override
   public Set<NameDeclaration> shallowFindDeclaration(NameOccurrence occurrence) {
     return super.findDeclaration(occurrence).stream()
-        .map(NameDeclaration.class::cast)
         .filter(not(NameDeclaration::isImplementationDeclaration))
         .filter(not(UnitImportNameDeclaration.class::isInstance))
         .collect(Collectors.toSet());

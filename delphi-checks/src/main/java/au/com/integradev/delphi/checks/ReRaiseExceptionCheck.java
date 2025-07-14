@@ -33,16 +33,6 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
-/**
- * This rule looks for exception blocks where the caught exception is explicitly re-raised. This is
- * a Bad Thing™ because the exception will be freed at the end of the handler, causing tricky access
- * errors
- *
- * @see <a href="https://bit.ly/2AQp1GW">On Delphi Exception raising, re-raising and try-except
- *     blocks</a>
- * @see <a href="http://delphi.org/2017/06/really-bad-exception-abuse/">Exceptionally Bad Exception
- *     Abuse</a>
- */
 @DeprecatedRuleKey(ruleKey = "ReRaiseExceptionRule", repositoryKey = "delph")
 @Rule(key = "ReRaiseException")
 public class ReRaiseExceptionCheck extends DelphiCheck {

@@ -19,5 +19,5 @@
 package au.com.integradev.delphi.utils;
 
 public interface LocatableException {
-  public int getLine();
+  int getLine();
 }

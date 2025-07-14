@@ -21,7 +21,8 @@ package org.sonar.plugins.communitydelphi.api.type;
 /**
  * Constants defining Windows code pages, commonly called <i>ANSI code pages</i>.
  *
- * @see <a href="http://docwiki.embarcadero.com/RADStudio/en/Character_Sets#Single-byte_Characters">
+ * @see <a
+ *     href="https://docwiki.embarcadero.com/RADStudio/en/Character_Sets#Single-byte_Characters">
  *     Character Sets: Single-byte Characters</a>
  * @see <a href="https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers">Code
  *     Page Identifiers</a>

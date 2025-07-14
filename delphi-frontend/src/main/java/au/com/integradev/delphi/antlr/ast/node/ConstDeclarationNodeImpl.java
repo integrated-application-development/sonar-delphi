@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
@@ -65,6 +66,7 @@ public final class ConstDeclarationNodeImpl extends DelphiNodeImpl implements Co
   }
 
   @Override
+  @Nonnull
   public Type getType() {
     TypeNode typeNode = getTypeNode();
     if (typeNode != null) {
