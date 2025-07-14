@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -328,7 +329,7 @@ public final class RoutineNameDeclarationImpl extends NameDeclarationImpl
   }
 
   @Override
-  public int compareTo(NameDeclaration other) {
+  public int compareTo(@Nonnull NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       RoutineNameDeclarationImpl that = (RoutineNameDeclarationImpl) other;

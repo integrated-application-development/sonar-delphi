@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import org.sonar.plugins.communitydelphi.api.ast.FileHeaderNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.UnitNameDeclaration;
@@ -114,7 +115,7 @@ public final class UnitNameDeclarationImpl extends QualifiedNameDeclarationImpl
   }
 
   @Override
-  public int compareTo(NameDeclaration other) {
+  public int compareTo(@Nonnull NameDeclaration other) {
     int result = super.compareTo(other);
     if (result == 0) {
       UnitNameDeclarationImpl that = (UnitNameDeclarationImpl) other;
