@@ -20,7 +20,7 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import org.antlr.runtime.Token;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 
 public final class IdentifierNodeImpl extends DelphiNodeImpl implements IdentifierNode {
@@ -38,7 +38,7 @@ public final class IdentifierNodeImpl extends DelphiNodeImpl implements Identifi
   @Override
   public String getImage() {
     if (normalizedImage == null) {
-      normalizedImage = StringUtils.removeStart(super.getImage(), "&");
+      normalizedImage = Strings.CS.removeStart(super.getImage(), "&");
     }
     return normalizedImage;
   }

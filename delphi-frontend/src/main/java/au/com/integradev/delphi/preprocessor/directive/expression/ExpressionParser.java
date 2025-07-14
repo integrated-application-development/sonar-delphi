@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class ExpressionParser {
   public static class ExpressionParserError extends RuntimeException {
@@ -283,7 +283,7 @@ public class ExpressionParser {
     }
 
     return lines.stream()
-        .map(line -> StringUtils.removeStart(line, indentation))
+        .map(line -> Strings.CS.removeStart(line, indentation))
         .collect(Collectors.joining(lineEnding));
   }
 

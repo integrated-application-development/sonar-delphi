@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.math.BigDecimal;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -47,6 +48,6 @@ public final class RealLiteralNodeImpl extends DelphiNodeImpl implements RealLit
   }
 
   private String getNormalizedImage() {
-    return StringUtils.remove(StringUtils.stripStart(getImage(), "&"), "_");
+    return Strings.CS.remove(StringUtils.stripStart(getImage(), "&"), "_");
   }
 }

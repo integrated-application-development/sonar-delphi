@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
@@ -133,7 +133,7 @@ public class IfThenShortCircuitCheck extends DelphiCheck {
             primaryImage -> {
               char nextChar = primaryImage.charAt(image.length());
               return (nextChar == '.' || nextChar == '^')
-                  && StringUtils.startsWithIgnoreCase(primaryImage, image);
+                  && Strings.CI.startsWith(primaryImage, image);
             });
   }
 

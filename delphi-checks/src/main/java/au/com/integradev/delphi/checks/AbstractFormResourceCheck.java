@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeDeclarationNode;
@@ -69,7 +69,7 @@ abstract class AbstractFormResourceCheck extends DelphiCheck {
 
   private boolean isFormResource(CompilerDirective directive) {
     return directive instanceof ResourceDirective
-        && StringUtils.endsWithIgnoreCase(
+        && Strings.CI.endsWith(
             ((ResourceDirective) directive).getResourceFile(), "." + getResourceFileExtension());
   }
 

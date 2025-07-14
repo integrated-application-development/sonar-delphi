@@ -22,6 +22,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import java.math.BigInteger;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
@@ -60,10 +61,10 @@ public final class IntegerLiteralNodeImpl extends DelphiNodeImpl implements Inte
     digits = StringUtils.remove(digits, '_');
     switch (getTokenType()) {
       case HEX_NUMBER:
-        digits = StringUtils.removeStart(digits, "$");
+        digits = Strings.CS.removeStart(digits, "$");
         break;
       case BINARY_NUMBER:
-        digits = StringUtils.removeStart(digits, "%");
+        digits = Strings.CS.removeStart(digits, "%");
         break;
       default:
         // do nothing

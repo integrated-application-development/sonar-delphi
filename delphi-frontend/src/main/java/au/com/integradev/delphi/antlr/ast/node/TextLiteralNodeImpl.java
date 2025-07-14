@@ -25,6 +25,7 @@ import java.util.Deque;
 import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
@@ -121,7 +122,7 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     }
 
     return lines.stream()
-        .map(line -> StringUtils.removeStart(line, indentation))
+        .map(line -> Strings.CS.removeStart(line, indentation))
         .collect(Collectors.joining(lineEnding));
   }
 

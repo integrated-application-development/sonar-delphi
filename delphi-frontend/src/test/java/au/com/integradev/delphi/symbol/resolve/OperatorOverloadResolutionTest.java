@@ -29,7 +29,7 @@ import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
 import com.google.common.collect.Iterables;
 import java.math.BigInteger;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
@@ -426,7 +426,7 @@ class OperatorOverloadResolutionTest {
     }
 
     if (name.endsWith("_Subrange")) {
-      var hostType = (IntegerType) getType(StringUtils.removeEnd(name, "_Subrange"));
+      var hostType = (IntegerType) getType(Strings.CS.removeEnd(name, "_Subrange"));
       BigInteger min;
       BigInteger max;
 
@@ -442,7 +442,7 @@ class OperatorOverloadResolutionTest {
     }
 
     if (name.endsWith("_Alias")) {
-      Type aliasedType = getType(StringUtils.removeEnd(name, "_Alias"));
+      Type aliasedType = getType(Strings.CS.removeEnd(name, "_Alias"));
       return TYPE_FACTORY.strongAlias(name, aliasedType);
     }
 
