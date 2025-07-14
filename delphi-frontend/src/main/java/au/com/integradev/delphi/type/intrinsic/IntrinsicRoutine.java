@@ -134,7 +134,7 @@ public final class IntrinsicRoutine implements Qualifiable {
 
   static final class Builder {
     private final String routineName;
-    private List<IntrinsicParameterData.Builder> parameters;
+    private final List<IntrinsicParameterData.Builder> parameters;
     private IntrinsicParameterData.Builder variadicParameter;
     private int requiredParameters;
     private Type returnType;
