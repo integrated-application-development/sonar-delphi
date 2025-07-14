@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.check.Rule;
@@ -249,11 +250,13 @@ public class CommentedOutCodeCheck extends DelphiCheck {
     }
 
     @Override
+    @Nonnull
     public CharSequence subSequence(int start, int end) {
       return new RegexTimeoutCharSequence(sequence.subSequence(start, end), deadline);
     }
 
     @Override
+    @Nonnull
     public String toString() {
       return sequence.toString();
     }

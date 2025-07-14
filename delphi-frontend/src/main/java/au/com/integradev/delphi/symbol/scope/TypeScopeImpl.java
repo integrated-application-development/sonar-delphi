@@ -23,6 +23,7 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType
 
 import au.com.integradev.delphi.type.generic.GenerifiableTypeImpl;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -105,7 +106,7 @@ public class TypeScopeImpl extends DelphiScopeImpl implements TypeScope {
     }
 
     @Override
-    public Set<NameDeclaration> addNameOccurrence(NameOccurrence occurrence) {
+    public Set<NameDeclaration> addNameOccurrence(@Nonnull NameOccurrence occurrence) {
       return ((DelphiScopeImpl) genericScope).addNameOccurrence(occurrence);
     }
   }
