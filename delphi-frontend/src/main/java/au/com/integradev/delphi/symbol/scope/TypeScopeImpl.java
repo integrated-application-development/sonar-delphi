@@ -95,7 +95,6 @@ public class TypeScopeImpl extends DelphiScopeImpl implements TypeScope {
     private SpecializedTypeScope(DelphiScope scope, TypeSpecializationContext context) {
       this.genericScope = scope;
       scope.getAllDeclarations().stream()
-          .map(NameDeclaration.class::cast)
           .map(declaration -> declaration.specialize(context))
           .forEach(super::addDeclaration);
     }
