@@ -37,7 +37,7 @@ public final class UntypedTypeImpl extends TypeImpl implements UntypedType {
   @Override
   public int size() {
     // SizeOf returns 0 when the argument is an untyped variable.
-    // See: http://docwiki.embarcadero.com/Libraries/en/System.SizeOf
+    // See: https://docwiki.embarcadero.com/Libraries/en/System.SizeOf
     return 0;
   }
 
