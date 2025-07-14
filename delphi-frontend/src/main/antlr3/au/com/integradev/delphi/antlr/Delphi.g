@@ -130,7 +130,7 @@ import au.com.integradev.delphi.utils.LocatableException;
 
 package au.com.integradev.delphi.antlr;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import au.com.integradev.delphi.utils.LocatableException;
 }
 
@@ -1589,9 +1589,9 @@ COMMENT                 :  '//' ~('\n'|'\r')*                          {$channel
 
                               if ($text.startsWith(start + "\$")) {
                                 $type = TkCompilerDirective;
-                                if (StringUtils.startsWithIgnoreCase($text, start + "\$endif") || StringUtils.startsWithIgnoreCase($text, start + "\$ifend")) {
+                                if (Strings.CI.startsWith($text, start + "\$endif") || Strings.CI.startsWith($text, start + "\$ifend")) {
                                   --directiveNesting;
-                                } else if (StringUtils.startsWithIgnoreCase($text, start + "\$if")) {
+                                } else if (Strings.CI.startsWith($text, start + "\$if")) {
                                   ++directiveNesting;
                                 }
                               }

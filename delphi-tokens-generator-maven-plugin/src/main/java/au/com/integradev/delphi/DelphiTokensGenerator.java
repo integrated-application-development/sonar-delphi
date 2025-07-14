@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class DelphiTokensGenerator {
   private static final Pattern TOKENS_LINE_PATTERN =
@@ -170,8 +170,8 @@ public class DelphiTokensGenerator {
   }
 
   private static String antlrNameToEnumName(String antlrName) {
-    antlrName = StringUtils.removeStart(antlrName, "Tk");
-    antlrName = StringUtils.removeEnd(antlrName, DEPRECATED_SUFFIX);
+    antlrName = Strings.CS.removeStart(antlrName, "Tk");
+    antlrName = Strings.CS.removeEnd(antlrName, DEPRECATED_SUFFIX);
 
     StringBuilder result = new StringBuilder();
     boolean nextCapitalIsNewWord = true;

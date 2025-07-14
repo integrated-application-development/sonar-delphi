@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -167,11 +168,11 @@ public final class Expressions {
       int radix;
       switch (text.charAt(0)) {
         case '$':
-          text = StringUtils.removeStart(text, "$");
+          text = Strings.CS.removeStart(text, "$");
           radix = 16;
           break;
         case '%':
-          text = StringUtils.removeStart(text, "%");
+          text = Strings.CS.removeStart(text, "%");
           radix = 2;
           break;
         default:

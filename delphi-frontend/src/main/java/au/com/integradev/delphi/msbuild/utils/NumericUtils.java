@@ -19,7 +19,7 @@
 package au.com.integradev.delphi.msbuild.utils;
 
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public final class NumericUtils {
   private NumericUtils() {
@@ -33,7 +33,7 @@ public final class NumericUtils {
       // do nothing
     }
 
-    if (value.length() > 2 && StringUtils.startsWithIgnoreCase(value, "0x")) {
+    if (value.length() > 2 && Strings.CI.startsWith(value, "0x")) {
       try {
         return Optional.of((double) Integer.parseInt(value.substring(2), 16));
       } catch (NumberFormatException e) {

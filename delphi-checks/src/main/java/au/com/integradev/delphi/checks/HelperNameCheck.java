@@ -25,7 +25,7 @@ import com.google.common.collect.Streams;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.FileTypeNode;
@@ -81,14 +81,14 @@ public class HelperNameCheck extends DelphiCheck {
 
   private boolean compliesWithNameRule(String helperName, String extendedTypeName) {
     if (!NameConventionUtils.compliesWithPrefix(helperName, helperPrefixesList)
-        || !StringUtils.endsWith(helperName, "Helper")) {
+        || !Strings.CS.endsWith(helperName, "Helper")) {
       return false;
     }
 
     return Streams.concat(
             extendedTypePrefixesList.stream()
                 .filter(extendedTypeName::startsWith)
-                .map(prefix -> StringUtils.removeStart(extendedTypeName, prefix)),
+                .map(prefix -> Strings.CS.removeStart(extendedTypeName, prefix)),
             Stream.of(extendedTypeName))
         .anyMatch(
             extendedNameNoPrefix ->

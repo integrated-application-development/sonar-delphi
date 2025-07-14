@@ -26,7 +26,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
@@ -139,7 +139,7 @@ public class MixedNamesCheck extends DelphiCheck {
         String actual = occurrence.getImage();
         String expected = declaration.getImage();
         if (actual.length() != expected.length()) {
-          expected = StringUtils.removeEndIgnoreCase(expected, "Attribute");
+          expected = Strings.CI.removeEnd(expected, "Attribute");
         }
 
         if (!actual.equals(expected)) {
@@ -195,7 +195,7 @@ public class MixedNamesCheck extends DelphiCheck {
       String unitName = originalDeclaration.fullyQualifiedName();
 
       // Only add violations on import names that are not aliases and do not match the original case
-      if (StringUtils.endsWithIgnoreCase(unitName, importName) && !unitName.endsWith(importName)) {
+      if (Strings.CI.endsWith(unitName, importName) && !unitName.endsWith(importName)) {
         String matchingSegment = unitName.substring(unitName.length() - importName.length());
 
         context
