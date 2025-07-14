@@ -29,6 +29,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -236,11 +238,14 @@ class CheckMetadataTest {
 
   private static List<Path> listMetadata(String extension) {
     String path = "/" + new MetadataResourcePathImpl().forRepository(CheckList.REPOSITORY_KEY);
-    return Stream.of(
-            DelphiUtils.getResource(path)
-                .listFiles((dir, name) -> name.toLowerCase().endsWith(extension)))
-        .map(File::toPath)
-        .collect(Collectors.toUnmodifiableList());
+    File resource = DelphiUtils.getResource(path);
+    try (Stream<Path> paths = Files.list(resource.toPath())) {
+      return paths
+          .filter(p -> p.getFileName().toString().toLowerCase().endsWith(extension))
+          .collect(Collectors.toUnmodifiableList());
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   private static JsonObject getMetadataForRuleKey(String ruleKey) throws Exception {
