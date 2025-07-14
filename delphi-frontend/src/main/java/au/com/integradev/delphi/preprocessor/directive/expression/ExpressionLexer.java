@@ -429,7 +429,7 @@ public class ExpressionLexer {
 
   private final class NumberReader {
     private TokenType type;
-    private StringBuilder value = new StringBuilder();
+    private final StringBuilder value = new StringBuilder();
     private Predicate<Character> isDigitCharacter;
     private boolean canBeReal;
 
