@@ -148,6 +148,7 @@ class DelphiPreprocessorTest {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             UTF_8.name(),
+            UTF_8,
             new DelphiPreprocessorFactory(
                 DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),
@@ -168,6 +169,7 @@ class DelphiPreprocessorTest {
         filename,
         DelphiFile.createConfig(
             UTF_8.name(),
+            UTF_8,
             new DelphiPreprocessorFactory(
                 DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             typeFactory,

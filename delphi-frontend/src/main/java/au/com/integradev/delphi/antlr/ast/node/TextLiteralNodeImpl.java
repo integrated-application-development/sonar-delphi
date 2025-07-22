@@ -20,6 +20,9 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
+import au.com.integradev.delphi.utils.CharsetUtils;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.stream.Collectors;
@@ -28,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -51,9 +55,15 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
 
   @Override
   public Type getType() {
-    IntrinsicType intrinsic =
-        (getValue().length() == 1) ? IntrinsicType.CHAR : IntrinsicType.STRING;
+    boolean isSingleCharacter = (getValue().length() == 1);
 
+    if (hasAnsiCharacterEscape()) {
+      return isSingleCharacter
+          ? getTypeFactory().getIntrinsic(IntrinsicType.ANSICHAR)
+          : getTypeFactory().getIntrinsic(IntrinsicType.ANSISTRING);
+    }
+
+    IntrinsicType intrinsic = isSingleCharacter ? IntrinsicType.CHAR : IntrinsicType.STRING;
     return getTypeFactory().getIntrinsic(intrinsic);
   }
 
@@ -167,7 +177,42 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     return imageBuilder.toString();
   }
 
-  private static char characterEscapeToChar(String image) {
+  private boolean isHighCharUnicode() {
+    return getAst()
+        .getDelphiFile()
+        .getCompilerSwitchRegistry()
+        .isActiveSwitch(SwitchKind.HIGHCHARUNICODE, getTokenIndex());
+  }
+
+  private boolean hasAnsiCharacterEscape() {
+    if (isHighCharUnicode()) {
+      return false;
+    }
+
+    return getChildren().stream()
+        .filter(child -> child.getTokenType() == DelphiTokenType.CHARACTER_ESCAPE_CODE)
+        .map(DelphiNode::getImage)
+        .mapToInt(TextLiteralNodeImpl::parseCharacterEscape)
+        .anyMatch(TextLiteralNodeImpl::isAnsiCodePoint);
+  }
+
+  private char characterEscapeToChar(String image) {
+    int codePoint = parseCharacterEscape(image);
+
+    if (!isHighCharUnicode() && isAnsiCodePoint(codePoint)) {
+      var buffer = ByteBuffer.allocate(1).put((byte) codePoint).flip();
+      return getAnsiCharset().decode(buffer).get();
+    }
+
+    return (char) codePoint;
+  }
+
+  private Charset getAnsiCharset() {
+    Charset ansiCharset = getAst().getDelphiFile().getAnsiCharset();
+    return ansiCharset != null ? ansiCharset : CharsetUtils.nativeCharset();
+  }
+
+  private static int parseCharacterEscape(String image) {
     image = image.substring(1);
     int radix = 10;
 
@@ -181,12 +226,15 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
         image = image.substring(1);
         break;
       default:
-        // do nothing
+        // Do nothing
     }
 
     image = StringUtils.remove(image, '_');
+    return Integer.parseInt(image, radix);
+  }
 
-    return (char) Integer.parseInt(image, radix);
+  private static boolean isAnsiCodePoint(int codePoint) {
+    return codePoint >= 128 && codePoint <= 255;
   }
 
   @Override

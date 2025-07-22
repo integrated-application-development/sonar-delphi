@@ -58,6 +58,7 @@ final class DelphiProjectFactory {
     project.setLibraryPath(createLibraryPathDirectories(state, projectDirectory));
     project.setBrowsingPath(createBrowsingPathDirectories(state, projectDirectory));
     project.setUnitAliases(createUnitAliases(state));
+    project.setCodePage(createCodePage(state));
     project.setSourceFiles(sourceFiles);
 
     return project;
@@ -149,6 +150,20 @@ final class DelphiProjectFactory {
     return Collections.unmodifiableMap(result);
   }
 
+  private static Integer createCodePage(MSBuildState state) {
+    String codePage = state.getProperty("DCC_CodePage");
+    if (codePage == null) {
+      return null;
+    }
+
+    try {
+      return Integer.parseInt(codePage);
+    } catch (NumberFormatException e) {
+      LOG.warn("Invalid DCC_CodePage value: {}", codePage);
+      return null;
+    }
+  }
+
   private static List<String> propertyList(String value) {
     if (value == null) {
       return Collections.emptyList();
@@ -165,6 +180,7 @@ final class DelphiProjectFactory {
     private List<Path> libraryPathDirectories = Collections.emptyList();
     private List<Path> browsingPathDirectories = Collections.emptyList();
     private Map<String, String> unitAliases = Collections.emptyMap();
+    private Integer codePage;
 
     private void setDefinitions(Set<String> definitions) {
       this.definitions = ImmutableSortedSet.copyOf(String.CASE_INSENSITIVE_ORDER, definitions);
@@ -197,6 +213,10 @@ final class DelphiProjectFactory {
 
     private void setUnitAliases(Map<String, String> unitAliases) {
       this.unitAliases = ImmutableSortedMap.copyOf(unitAliases, String.CASE_INSENSITIVE_ORDER);
+    }
+
+    private void setCodePage(Integer codePage) {
+      this.codePage = codePage;
     }
 
     @Override
@@ -237,6 +257,12 @@ final class DelphiProjectFactory {
     @Override
     public Map<String, String> getUnitAliases() {
       return unitAliases;
+    }
+
+    @Nullable
+    @Override
+    public Integer getCodePage() {
+      return codePage;
     }
   }
 }

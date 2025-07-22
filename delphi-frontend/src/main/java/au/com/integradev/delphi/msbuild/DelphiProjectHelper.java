@@ -32,6 +32,8 @@ import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.enviroment.EnvironmentProjVariableProvider;
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
+import au.com.integradev.delphi.utils.CharsetUtils;
+import au.com.integradev.delphi.utils.CharsetUtils.UnsupportedCodePageException;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
@@ -57,6 +59,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.scanner.ScannerSide;
+import org.sonar.plugins.communitydelphi.api.type.CodePages;
 import org.sonarsource.api.sonarlint.SonarLintSide;
 
 @ScannerSide
@@ -78,6 +81,7 @@ public class DelphiProjectHelper {
   private final Set<String> conditionalDefines;
   private final Set<String> unitScopeNames;
   private final Map<String, String> unitAliases;
+  private Charset ansiCharset;
   private boolean indexedProjects;
 
   /**
@@ -104,6 +108,7 @@ public class DelphiProjectHelper {
     this.conditionalDefines = getPredefinedConditionalDefines();
     this.unitScopeNames = getSetFromSettings(DelphiProperties.UNIT_SCOPE_NAMES_KEY);
     this.unitAliases = getUnitAliasesFromSettings();
+    this.ansiCharset = null;
     this.effectiveEnvironmentVariableProvider =
         () ->
             new EnvironmentProjVariableProvider(environmentProjPath(), environmentVariableProvider);
@@ -183,6 +188,79 @@ public class DelphiProjectHelper {
     return PredefinedConditionals.getConditionalDefines(toolchain, compilerVersion);
   }
 
+  private Integer getCodePageFromSettings() {
+    String codePage = settings.get(DelphiProperties.CODE_PAGE_KEY).orElse(null);
+    if (StringUtils.isBlank(codePage)) {
+      return null;
+    }
+
+    try {
+      return Integer.parseInt(codePage.trim());
+    } catch (NumberFormatException e) {
+      LOG.warn("Ignoring invalid {} value: {}", DelphiProperties.CODE_PAGE_KEY, codePage);
+      return null;
+    }
+  }
+
+  private Charset resolveAnsiCharset() {
+    Integer configuredCodePage = getCodePageFromSettings();
+    if (configuredCodePage != null) {
+      return charsetForCodePage(configuredCodePage);
+    }
+
+    List<Integer> codePages =
+        projects.stream()
+            .map(DelphiProject::getCodePage)
+            .map(codePage -> codePage == null ? CodePages.CP_ACP : codePage)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toUnmodifiableList());
+
+    List<Integer> explicitCodePages =
+        codePages.stream()
+            .filter(codePage -> !codePage.equals(CodePages.CP_ACP))
+            .collect(Collectors.toUnmodifiableList());
+
+    boolean useAcp =
+        codePages.isEmpty()
+            || codePages.stream().anyMatch(codePage -> codePage.equals(CodePages.CP_ACP));
+
+    boolean conflict = false;
+    Charset result = CharsetUtils.nativeCharset();
+
+    if (explicitCodePages.size() > 1) {
+      conflict = true;
+    } else if (explicitCodePages.size() == 1) {
+      Charset charset = charsetForCodePage(explicitCodePages.get(0));
+      if (useAcp) {
+        conflict = !charset.equals(result);
+      } else {
+        result = charset;
+      }
+    }
+
+    if (conflict) {
+      LOG.warn(
+          "Conflicting DCC_CodePage values found in dproj files: {}. Falling back to the system"
+              + " encoding. Set {} to choose the code page used for analysis.",
+          codePages,
+          DelphiProperties.CODE_PAGE_KEY);
+    }
+
+    return result;
+  }
+
+  private Charset charsetForCodePage(int codePage) {
+    try {
+      return CharsetUtils.charsetForCodePage(codePage);
+    } catch (UnsupportedCodePageException e) {
+      LOG.warn(
+          "Ignoring unsupported code page value: {}. Falling back to the system encoding.",
+          codePage);
+      return CharsetUtils.nativeCharset();
+    }
+  }
+
   private void indexProjects() {
     if (indexedProjects) {
       return;
@@ -221,6 +299,7 @@ public class DelphiProjectHelper {
 
     conditionalDefines.addAll(getSetFromSettings(DelphiProperties.CONDITIONAL_DEFINES_KEY));
     conditionalDefines.removeAll(getSetFromSettings(DelphiProperties.CONDITIONAL_UNDEFINES_KEY));
+    ansiCharset = resolveAnsiCharset();
 
     indexedProjects = true;
   }
@@ -375,6 +454,16 @@ public class DelphiProjectHelper {
   public Map<String, String> getUnitAliases() {
     indexProjects();
     return unitAliases;
+  }
+
+  /**
+   * Gets the charset for the ANSI code page specified in settings and project files
+   *
+   * @return ANSI charset
+   */
+  public Charset getAnsiCharset() {
+    indexProjects();
+    return ansiCharset;
   }
 
   public List<Path> getReferencedFiles() {

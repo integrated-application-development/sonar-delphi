@@ -35,6 +35,7 @@ import au.com.integradev.delphi.utils.DelphiUtils;
 import com.google.common.base.Splitter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,6 +63,8 @@ public interface DelphiFile {
 
   List<DelphiToken> getComments();
 
+  Charset getAnsiCharset();
+
   CompilerSwitchRegistry getCompilerSwitchRegistry();
 
   TextBlockLineEndingModeRegistry getTextBlockLineEndingModeRegistry();
@@ -85,6 +88,7 @@ public interface DelphiFile {
         config =
             DelphiFile.createConfig(
                 inputFile.charset().name(),
+                config.getAnsiCharset(),
                 config.getPreprocessorFactory(),
                 config.getTypeFactory(),
                 config.getSearchPath(),
@@ -109,15 +113,18 @@ public interface DelphiFile {
 
   static DelphiFileConfig createConfig(
       String encoding,
+      Charset ansiCharset,
       DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
       SearchPath searchPath,
       Set<String> definitions) {
-    return createConfig(encoding, preprocessorFactory, typeFactory, searchPath, definitions, false);
+    return createConfig(
+        encoding, ansiCharset, preprocessorFactory, typeFactory, searchPath, definitions, false);
   }
 
   static DelphiFileConfig createConfig(
       @Nullable String encoding,
+      Charset ansiCharset,
       DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
       SearchPath searchPath,
@@ -125,6 +132,7 @@ public interface DelphiFile {
       boolean shouldSkipImplementation) {
     return new DefaultDelphiFileConfig(
         encoding,
+        ansiCharset,
         preprocessorFactory,
         typeFactory,
         searchPath,
@@ -146,6 +154,7 @@ public interface DelphiFile {
       DelphiPreprocessor preprocessor = preprocess(fileStream, config);
       delphiFile.setSourceCodeFile(sourceFile);
       delphiFile.setSourceCodeEncoding(fileStream.getEncoding());
+      delphiFile.setAnsiCharset(config.getAnsiCharset());
       delphiFile.setTypeFactory(config.getTypeFactory());
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));
       delphiFile.setCompilerSwitchRegistry(preprocessor.getCompilerSwitchRegistry());

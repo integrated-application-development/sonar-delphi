@@ -276,6 +276,7 @@ class GrammarTest {
     fileConfig =
         DelphiFile.createConfig(
             StandardCharsets.UTF_8.name(),
+            StandardCharsets.UTF_8,
             new DelphiPreprocessorFactory(
                 DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
             TypeFactoryUtils.defaultFactory(),

@@ -30,7 +30,9 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.declaration.UnitImportNameDeclarationImpl;
 import au.com.integradev.delphi.symbol.scope.FileScopeImpl;
+import au.com.integradev.delphi.utils.CharsetUtils;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -73,6 +75,7 @@ public class SymbolTableBuilder {
   private final HashMap<String, UnitData> allUnitsByName = new HashMap<>();
   private final Set<Path> unitPaths = new HashSet<>();
   private String encoding;
+  private Charset ansiCharset = CharsetUtils.nativeCharset();
   private DelphiPreprocessorFactory preprocessorFactory;
   private TypeFactory typeFactory;
   private Path standardLibraryPath;
@@ -108,6 +111,11 @@ public class SymbolTableBuilder {
 
   public SymbolTableBuilder encoding(String encoding) {
     this.encoding = encoding;
+    return this;
+  }
+
+  public SymbolTableBuilder ansiCharset(Charset ansiCharset) {
+    this.ansiCharset = ansiCharset;
     return this;
   }
 
@@ -262,6 +270,7 @@ public class SymbolTableBuilder {
   private DelphiFileConfig createFileConfig(UnitData unit, boolean shouldSkipImplementation) {
     return DelphiFile.createConfig(
         sourceFileUnits.contains(unit) ? encoding : null,
+        ansiCharset,
         preprocessorFactory,
         typeFactory,
         searchPath,

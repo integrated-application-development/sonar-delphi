@@ -34,6 +34,7 @@ public final class DelphiProperties {
   public static final String COMPILER_TOOLCHAIN_KEY = "sonar.delphi.toolchain";
   public static final String COMPILER_VERSION_KEY = "sonar.delphi.compilerVersion";
   public static final String SEARCH_PATH_KEY = "sonar.delphi.searchPath";
+  public static final String CODE_PAGE_KEY = "sonar.delphi.codePage";
   public static final String CONDITIONAL_DEFINES_KEY = "sonar.delphi.conditionalDefines";
   public static final String CONDITIONAL_UNDEFINES_KEY = "sonar.delphi.conditionalUndefines";
   public static final String UNIT_SCOPE_NAMES_KEY = "sonar.delphi.unitScopeNames";
@@ -123,6 +124,15 @@ public final class DelphiProperties {
                 "List of directories to search for include files and unit imports."
                     + " Each path may be absolute or relative to the project base directory.")
             .multiValues(true)
+            .onQualifiers(Qualifiers.PROJECT)
+            .build(),
+        PropertyDefinition.builder(DelphiProperties.CODE_PAGE_KEY)
+            .category(DELPHI_CATEGORY)
+            .subCategory(PROJECT_OPTIONS_SUBCATEGORY)
+            .name("Code page")
+            .description(
+                " Code page to use when interpreting ANSI data. Use 0 for the system code page."
+                    + " Defaults to DCC_CodePage from project files.")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
         PropertyDefinition.builder(DelphiProperties.CONDITIONAL_DEFINES_KEY)

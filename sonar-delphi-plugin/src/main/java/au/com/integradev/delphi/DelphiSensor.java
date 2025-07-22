@@ -116,6 +116,7 @@ public class DelphiSensor implements Sensor {
             .sourceFiles(sourceFiles)
             .referencedFiles(referencedFiles)
             .encoding(delphiProjectHelper.encoding())
+            .ansiCharset(delphiProjectHelper.getAnsiCharset())
             .searchPath(searchPath)
             .conditionalDefines(delphiProjectHelper.getConditionalDefines())
             .unitScopeNames(delphiProjectHelper.getUnitScopeNames())
@@ -133,6 +134,7 @@ public class DelphiSensor implements Sensor {
     DelphiFileConfig config =
         DelphiFile.createConfig(
             delphiProjectHelper.encoding(),
+            delphiProjectHelper.getAnsiCharset(),
             preprocessorFactory,
             typeFactory,
             searchPath,
