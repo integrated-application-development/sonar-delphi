@@ -20,6 +20,8 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.stream.Collectors;
@@ -28,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -167,26 +170,38 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     return imageBuilder.toString();
   }
 
-  private static char characterEscapeToChar(String image) {
+  private boolean isHighCharUnicode() {
+    return getAst()
+        .getDelphiFile()
+        .getCompilerSwitchRegistry()
+        .isActiveSwitch(SwitchKind.HIGHCHARUNICODE, getTokenIndex());
+  }
+
+  public Charset getAnsiCharset() {
+    return Charset.forName(System.getProperty("native.encoding"));
+  }
+
+  private char characterEscapeToChar(String image) {
     image = image.substring(1);
     int radix = 10;
 
-    switch (image.charAt(0)) {
-      case '$':
-        radix = 16;
-        image = image.substring(1);
-        break;
-      case '%':
-        radix = 2;
-        image = image.substring(1);
-        break;
-      default:
-        // do nothing
+    if (image.charAt(0) == '$') {
+      radix = 16;
+      image = image.substring(1);
     }
 
     image = StringUtils.remove(image, '_');
+    char character = (char) Integer.parseInt(image, radix);
 
-    return (char) Integer.parseInt(image, radix);
+    if (isHighCharUnicode() || character > 255) {
+      // With HIGHCHARUNICODE ON, all escapes are interpreted as UTF-16.
+      // Escapes above 255 are always interpreted as UTF-16.
+      return character;
+    } else {
+      // With HIGHCHARUNICODE OFF, escapes between 0-255 are interpreted in the system code page.
+      var buffer = ByteBuffer.allocate(1).put((byte) character).flip();
+      return getAnsiCharset().decode(buffer).get();
+    }
   }
 
   @Override
