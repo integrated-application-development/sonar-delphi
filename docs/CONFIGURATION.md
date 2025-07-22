@@ -37,6 +37,7 @@ force their analysis (not recommended).
 | Key                                 | Value                                                                                                                                  | Default Value |
 |-------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | `sonar.delphi.searchPath`           | List of directories to search for include files and unit imports. Each path may be absolute or relative to the project base directory. | -             |
+| `sonar.delphi.codePage`             | Code page to use when interpreting ANSI data.                                                                                          | -             |
 | `sonar.delphi.conditionalDefines`   | List of conditional defines to consider defined while parsing the project.                                                             | -             |
 | `sonar.delphi.conditionalUndefines` | List of conditional defines to consider undefined while parsing the project.                                                           | -             |
 | `sonar.delphi.unitScopeNames`       | List of unit scope names, used for import resolution.                                                                                  | -             |

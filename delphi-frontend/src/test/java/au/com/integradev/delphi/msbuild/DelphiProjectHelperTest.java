@@ -36,12 +36,15 @@ import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import org.assertj.core.util.Arrays;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -58,9 +61,11 @@ class DelphiProjectHelperTest {
   private EnvironmentVariableProvider environmentVariableProvider;
   private String installationPath;
   private String standardLibraryPath;
+  private String originalNativeEncoding;
 
   @BeforeEach
   void setup() throws IOException {
+    originalNativeEncoding = System.getProperty("native.encoding");
     settings = mock(Configuration.class);
     fs = new DefaultFileSystem(BASE_DIR);
     environmentVariableProvider = mock(EnvironmentVariableProvider.class);
@@ -83,6 +88,15 @@ class DelphiProjectHelperTest {
     when(settings.getStringArray(DelphiProperties.CONDITIONAL_DEFINES_KEY)).thenReturn(defines);
   }
 
+  @AfterEach
+  void restoreNativeEncoding() {
+    if (originalNativeEncoding == null) {
+      System.clearProperty("native.encoding");
+    } else {
+      System.setProperty("native.encoding", originalNativeEncoding);
+    }
+  }
+
   @Test
   void testInvalidIncludesShouldBeSkipped() {
     String[] includes = {"EmptyProject/empty", "BadSyntaxProject", "BadPath/Spooky"};
@@ -96,14 +110,7 @@ class DelphiProjectHelperTest {
 
   @Test
   void testDprojProject() {
-    InputFile inputFile =
-        TestInputFileBuilder.create(
-                Delphi.KEY,
-                BASE_DIR,
-                DelphiUtils.getResource(
-                    PROJECTS_PATH + "SimpleProject/dproj/SimpleDelphiProject.dproj"))
-            .build();
-    fs.add(inputFile);
+    addInputFile(PROJECTS_PATH + "SimpleProject/dproj/SimpleDelphiProject.dproj");
 
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
@@ -136,13 +143,7 @@ class DelphiProjectHelperTest {
 
   @Test
   void testWorkgroupProject() {
-    InputFile inputFile =
-        TestInputFileBuilder.create(
-                Delphi.KEY,
-                BASE_DIR,
-                DelphiUtils.getResource(PROJECTS_PATH + "SimpleProject/workgroup/All.groupproj"))
-            .build();
-    fs.add(inputFile);
+    addInputFile(PROJECTS_PATH + "SimpleProject/workgroup/All.groupproj");
 
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
@@ -318,6 +319,110 @@ class DelphiProjectHelperTest {
   }
 
   @Test
+  void testProjectCodePageProvidesAnsiCharset() {
+    addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(StandardCharsets.UTF_8);
+  }
+
+  @Test
+  void testConfiguredCodePageOverridesProjectCodePage() {
+    addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
+    when(settings.get(DelphiProperties.CODE_PAGE_KEY)).thenReturn(Optional.of("1252"));
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset().name()).isEqualTo("windows-1252");
+  }
+
+  @Test
+  void testConfiguredAcpCodePageUsesNativeCharset() {
+    setNativeEncoding(StandardCharsets.ISO_8859_1.name());
+    when(settings.get(DelphiProperties.CODE_PAGE_KEY)).thenReturn(Optional.of("0"));
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(StandardCharsets.ISO_8859_1);
+  }
+
+  @Test
+  void testInvalidConfiguredCodePageFallsBackToProjectCodePage() {
+    addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
+    when(settings.get(DelphiProperties.CODE_PAGE_KEY)).thenReturn(Optional.of("not-a-number"));
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(StandardCharsets.UTF_8);
+  }
+
+  @Test
+  void testUnsupportedConfiguredCodePageFallsBackToNativeCharset() {
+    setNativeEncoding(StandardCharsets.ISO_8859_1.name());
+
+    when(settings.get(DelphiProperties.CODE_PAGE_KEY)).thenReturn(Optional.of("99999"));
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(StandardCharsets.ISO_8859_1);
+  }
+
+  @Test
+  void testNoConfiguredOrProjectCodePagesFallBackToNativeCharset() {
+    setNativeEncoding(StandardCharsets.ISO_8859_1.name());
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(StandardCharsets.ISO_8859_1);
+  }
+
+  @Test
+  void testConflictingProjectCodePagesFallBackToNativeCharset() {
+    setNativeEncoding(StandardCharsets.ISO_8859_1.name());
+
+    addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
+    addInputFile(PROJECTS_PATH + "CodePageProject/Windows1252.dproj");
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(StandardCharsets.ISO_8859_1);
+  }
+
+  @Test
+  void testMissingProjectCodePageFallsBackToNativeCharset() {
+    setNativeEncoding("windows-1252");
+
+    addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
+    addInputFile(PROJECTS_PATH + "SimpleProject/dproj/SimpleDelphiProject.dproj");
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(Charset.forName("windows-1252"));
+  }
+
+  @Test
+  void testAcpProjectCodePageUsesNativeCharsetWithoutConflictWhenItMatchesExplicitCodePage() {
+    setNativeEncoding("windows-1252");
+
+    addInputFile(PROJECTS_PATH + "CodePageProject/Acp.dproj");
+    addInputFile(PROJECTS_PATH + "CodePageProject/Windows1252.dproj");
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(Charset.forName("windows-1252"));
+  }
+
+  @Test
   void testNoFilesExist(@TempDir Path tempDir) {
     fs = new DefaultFileSystem(tempDir);
 
@@ -347,5 +452,16 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.inputFiles()).isEmpty();
+  }
+
+  private void addInputFile(String resourcePath) {
+    InputFile inputFile =
+        TestInputFileBuilder.create(Delphi.KEY, BASE_DIR, DelphiUtils.getResource(resourcePath))
+            .build();
+    fs.add(inputFile);
+  }
+
+  private static void setNativeEncoding(String encoding) {
+    System.setProperty("native.encoding", encoding);
   }
 }

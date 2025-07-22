@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public interface DelphiProject {
   Set<String> getConditionalDefines();
@@ -43,4 +44,7 @@ public interface DelphiProject {
   List<Path> getBrowsingPathDirectories();
 
   Map<String, String> getUnitAliases();
+
+  @Nullable
+  Integer getCodePage();
 }

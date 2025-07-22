@@ -581,9 +581,10 @@ class DelphiSymbolTableExecutorTest {
   @Test
   void testCharsTypeInference() {
     execute("typeInference/Chars.pas");
-    verifyUsages(15, 10, reference(47, 2), reference(49, 2), reference(50, 2));
-    verifyUsages(20, 10, reference(48, 2));
-    verifyUsages(30, 10, reference(52, 2), reference(53, 2));
+    verifyUsages(15, 10, reference(47, 2), reference(49, 2));
+    verifyUsages(20, 10, reference(48, 2), reference(50, 2));
+    verifyUsages(25, 10, reference(53, 2));
+    verifyUsages(30, 10, reference(51, 2), reference(52, 2));
   }
 
   @Test

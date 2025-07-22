@@ -20,6 +20,7 @@ package au.com.integradev.delphi.file;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
+import java.nio.charset.Charset;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -32,6 +33,13 @@ public interface DelphiFileConfig {
    */
   @Nullable
   String getEncoding();
+
+  /**
+   * Returns the charset that will be used for interpreting ANSI data in the source file
+   *
+   * @return ANSI charset
+   */
+  Charset getAnsiCharset();
 
   /**
    * Returns the preprocessor factory, which can be used to create a preprocessor for this platform

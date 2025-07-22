@@ -63,6 +63,9 @@ class DelphiProjectFactoryTest {
   private static final String BROWSING_PATH_PROJECT =
       "/au/com/integradev/delphi/msbuild/BrowsingPath.dproj";
 
+  private static final String CODE_PAGE_PROJECT =
+      "/au/com/integradev/delphi/projects/CodePageProject/Utf8.dproj";
+
   private EnvironmentVariableProvider environmentVariableProvider;
 
   private DelphiProject createProject(String resource) {
@@ -190,5 +193,12 @@ class DelphiProjectFactoryTest {
 
     assertThat(project.getBrowsingPathDirectories())
         .containsExactly(DelphiUtils.getResource("/au/com/integradev/delphi").toPath());
+  }
+
+  @Test
+  void testCodePageProject() {
+    DelphiProject project = createProject(CODE_PAGE_PROJECT);
+
+    assertThat(project.getCodePage()).isEqualTo(65001);
   }
 }

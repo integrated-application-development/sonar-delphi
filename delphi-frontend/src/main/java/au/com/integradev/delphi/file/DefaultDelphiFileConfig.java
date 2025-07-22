@@ -20,12 +20,14 @@ package au.com.integradev.delphi.file;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
+import java.nio.charset.Charset;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public class DefaultDelphiFileConfig implements DelphiFileConfig {
   private final String encoding;
+  private final Charset ansiCharset;
   private final DelphiPreprocessorFactory preprocessorFactory;
   private final TypeFactory typeFactory;
   private final SearchPath searchPath;
@@ -34,12 +36,14 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
 
   DefaultDelphiFileConfig(
       String encoding,
+      Charset ansiCharset,
       DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
       SearchPath searchPath,
       Set<String> definitions,
       boolean skipImplementation) {
     this.encoding = encoding;
+    this.ansiCharset = ansiCharset;
     this.preprocessorFactory = preprocessorFactory;
     this.typeFactory = typeFactory;
     this.searchPath = searchPath;
@@ -51,6 +55,11 @@ public class DefaultDelphiFileConfig implements DelphiFileConfig {
   @Override
   public String getEncoding() {
     return encoding;
+  }
+
+  @Override
+  public Charset getAnsiCharset() {
+    return ansiCharset;
   }
 
   @Override

@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for implicit `Self` in `Initialize` and `Finalize` operators, introduced in Delphi 13.
 - Support for `DCCARM64EC` toolchain, introduced in Delphi 13.1.
 - `NoreturnContract` analysis rule, which flags `noreturn` routines that return normally.
+- Full support for the `HIGHCHARUNICODE` compiler directive.
+- Support for the `DCC_CodePage` property in dproj files.
+- `sonar.delphi.codePage` property to specify the code page that will be used to interpret ANSI data.
 
 ### Changed
 
