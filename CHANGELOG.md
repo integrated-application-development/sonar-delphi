@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Full support for the `HIGHCHARUNICODE` compiler directive.
+
 ## [1.17.2] - 2025-07-03
 
 ### Fixed

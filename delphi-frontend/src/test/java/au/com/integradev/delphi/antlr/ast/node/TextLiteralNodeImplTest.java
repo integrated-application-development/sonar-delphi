@@ -20,17 +20,24 @@ package au.com.integradev.delphi.antlr.ast.node;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.antlr.DelphiLexer;
 import au.com.integradev.delphi.antlr.ast.DelphiAstImpl;
 import au.com.integradev.delphi.file.DelphiFile;
+import au.com.integradev.delphi.preprocessor.CompilerSwitchRegistry;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingMode;
 import au.com.integradev.delphi.preprocessor.TextBlockLineEndingModeRegistry;
+import java.nio.charset.Charset;
 import org.antlr.runtime.CommonToken;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 
 class TextLiteralNodeImplTest {
   @Test
@@ -59,9 +66,21 @@ class TextLiteralNodeImplTest {
     assertThat(node.isMultiline()).isTrue();
   }
 
-  @Test
-  void testGetImageWithCharacterEscapes() {
-    TextLiteralNodeImpl node = new TextLiteralNodeImpl(DelphiLexer.TkTextLiteral);
+  @ParameterizedTest(name = "HIGHCHARUNICODE = {0}")
+  @ValueSource(booleans = {true, false})
+  void testGetImageWithCharacterEscapes(boolean highCharUnicode) {
+    var registry = mock(CompilerSwitchRegistry.class);
+    when(registry.isActiveSwitch(eq(SwitchKind.HIGHCHARUNICODE), anyInt()))
+        .thenReturn(highCharUnicode);
+    var file = mock(DelphiFile.class);
+    when(file.getCompilerSwitchRegistry()).thenReturn(registry);
+    var ast = mock(DelphiAstImpl.class);
+    when(ast.getDelphiFile()).thenReturn(file);
+
+    TextLiteralNodeImpl node = spy(new TextLiteralNodeImpl(DelphiLexer.TkTextLiteral));
+    when(node.getAnsiCharset()).thenReturn(Charset.forName("windows-1252"));
+    node.setParent(ast);
+
     node.addChild(createNode(DelphiLexer.TkQuotedString, "'F'"));
     node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#111"));
     node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#111"));
@@ -69,12 +88,23 @@ class TextLiteralNodeImplTest {
     node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#$61"));
     node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#$72"));
     node.addChild(createNode(DelphiLexer.TkQuotedString, "'B'"));
-    node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#%01100001"));
-    node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#%01111010"));
+    node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#$80"));
+    node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#$98"));
+    node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#$A3"));
+    node.addChild(createNode(DelphiLexer.TkCharacterEscapeCode, "#$20AC"));
+    node.addChild(createNode(DelphiLexer.TkQuotedString, "'az'"));
 
-    assertThat(node.getImage()).isEqualTo("'F'#111#111'B'#$61#$72'B'#%01100001#%01111010");
-    assertThat(node.getValue()).isEqualTo(node.getImageWithoutQuotes()).isEqualTo("FooBarBaz");
     assertThat(node.isMultiline()).isFalse();
+    assertThat(node.getImage()).isEqualTo("'F'#111#111'B'#$61#$72'B'#$80#$98#$A3#$20AC'az'");
+    if (highCharUnicode) {
+      assertThat(node.getValue())
+          .isEqualTo(node.getImageWithoutQuotes())
+          .isEqualTo("FooBarB\u0080\u0098£€az");
+    } else {
+      assertThat(node.getValue())
+          .isEqualTo(node.getImageWithoutQuotes())
+          .isEqualTo("FooBarB€˜£€az");
+    }
   }
 
   @Test
