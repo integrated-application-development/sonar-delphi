@@ -61,6 +61,7 @@
     "NilComparison",
     "NoSonar",
     "NonLinearCast",
+    "ObjectPassedAsInterface",
     "ObjectType",
     "PascalStyleResult",
     "PlatformDependentCast",
