@@ -1,0 +1,102 @@
+<h2>Why is this an issue?</h2>
+<p>
+  In other languages, it is common to define a method with interface-type arguments so that
+  it can interact with a concrete object in an encapsulated way. In Delphi, if you
+  <strong>ever</strong> interact with an object through an interface, you should
+  <strong>always</strong> interact with that object through an interface so that reference
+  counting semantics are not unexpectedly violated.
+</p>
+<p>
+  Assigning an object reference to an interface-type variable in Delphi causes that object to become
+  reference counted (i.e. the object will be automatically destroyed when there are no longer any
+  in-scope references). Only references through interface-type variables increment and decrement the
+  reference count, so direct object references will not be counted.
+  When used carelessly, this can lead to memory issues and access violations. For example:
+</p>
+<pre>
+procedure ReadManualFor(Appliance: IAppliance);
+begin
+  // ...
+end;
+
+procedure Example;
+var
+  TV: TTelevision;
+begin
+  TV := TTelevision.Create;
+  ReadManualFor(TV);
+  WriteLn(TV.Brand); // Access violation!
+end;
+</pre>
+<h2>How to fix it</h2>
+<p>
+  The concrete-typed variable should be changed to an interface type if possible:
+</p>
+<pre data-diff-type="noncompliant" data-diff-id="1">
+procedure ReadManualFor(Appliance: IAppliance);
+
+procedure Example;
+var
+ TV: TTelevision;
+begin
+  TV := TTelevision.Create;
+  TV.ConnectAerial;
+  ReadManualFor(TV);
+  WriteLn(TV.Brand);
+end;
+</pre>
+<pre data-diff-type="compliant" data-diff-id="1">
+procedure ReadManualFor(Appliance: IAppliance);
+
+procedure Example;
+var
+ TV: IAppliance;
+begin
+  TV := TTelevision.Create;
+  TTelevision(TV).ConnectAerial;
+  ReadManualFor(TV);
+  WriteLn(TV.Brand);
+end;
+</pre>
+<p>
+  If keeping a direct object reference is really important, cast the variable to make the new semantics clear:
+</p>
+<pre data-diff-type="noncompliant" data-diff-id="2">
+procedure ReadManualFor(Appliance: IAppliance);
+
+procedure Example;
+var
+ TV: TTelevision;
+begin
+  TV := TTelevision.Create;
+  TV.ConnectAerial;
+  ReadManualFor(TV);
+  WriteLn(TV.Brand);
+end;
+</pre>
+<pre data-diff-type="compliant" data-diff-id="2">
+procedure ReadManualFor(Appliance: IAppliance);
+
+procedure Example;
+var
+ TV: TTelevision;
+begin
+  TV := TTelevision.Create;
+  TV.ConnectAerial;
+  ReadManualFor(IAppliance(TV));
+  WriteLn(TV.Brand);
+end;
+</pre>
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Memory_Management_of_Interface_Objects">
+      RAD Studio documentation: Memory Management of Interface Objects
+    </a>
+  </li>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/Alexandria/en/Using_Reference_Counting">
+      RAD Studio documentation: Using Reference Counting
+    </a>
+  </li>
+</ul>

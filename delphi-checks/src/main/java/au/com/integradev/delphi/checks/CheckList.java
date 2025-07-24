@@ -117,6 +117,7 @@ public final class CheckList {
           NilComparisonCheck.class,
           NoSonarCheck.class,
           NonLinearCastCheck.class,
+          ObjectPassedAsInterfaceCheck.class,
           ObjectTypeCheck.class,
           ParsingErrorCheck.class,
           PascalStyleResultCheck.class,

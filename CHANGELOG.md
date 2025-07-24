@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ObjectPassedAsInterface` analysis rule, which detects object references that are passed directly as
+  an interface to a routine.
+
 ### Changed
 
 - `EmptyBlock` now ignores all empty blocks containing an explanatory comment.
