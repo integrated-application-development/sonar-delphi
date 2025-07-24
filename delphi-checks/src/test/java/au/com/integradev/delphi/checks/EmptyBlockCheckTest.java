@@ -84,8 +84,8 @@ class EmptyBlockCheckTest {
                 .appendImpl("end;")
                 .appendImpl("procedure TEmptyProcs.Three;")
                 .appendImpl("begin")
-                .appendImpl("  if Foo then begin // Noncompliant")
-                .appendImpl("    // Do nothing")
+                .appendImpl("  if Foo then begin")
+                .appendImpl("    // This exists for X reason")
                 .appendImpl("  end;")
                 .appendImpl("end;")
                 .appendImpl("procedure GlobalProcedureFour;")
@@ -94,8 +94,11 @@ class EmptyBlockCheckTest {
                 .appendImpl("end;")
                 .appendImpl("procedure GlobalProcedureFive;")
                 .appendImpl("begin")
-                .appendImpl("  if Foo then begin // Noncompliant")
-                .appendImpl("    // Do nothing")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl("  if Foo then begin")
+                .appendImpl("  end")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl("  else begin")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
         .verifyIssues();
@@ -122,7 +125,7 @@ class EmptyBlockCheckTest {
   }
 
   @Test
-  void testEmptyBlocksInCaseStatementShouldNotAddIssue() {
+  void testNonEmptyBlocksInCaseStatementShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new EmptyBlockCheck())
         .onFile(
@@ -176,5 +179,52 @@ class EmptyBlockCheckTest {
                 .appendImpl("    end;")
                 .appendImpl("end;"))
         .verifyNoIssues();
+  }
+
+  @Test
+  void testEmptyExceptShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  try")
+                .appendImpl("    // Do risky stuff")
+                .appendImpl("  except")
+                .appendImpl("  end;")
+                .appendImpl("  try")
+                .appendImpl("    // Do risky stuff")
+                .appendImpl("  except")
+                .appendImpl("    on E: Exception do begin")
+                .appendImpl("   end;")
+                .appendImpl("    else begin")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNestedEmptyElsesShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new EmptyBlockCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl("  if Bar then begin")
+                .appendImpl("  end")
+                .appendImpl("  else begin")
+                .appendImpl("    // Noncompliant@+1")
+                .appendImpl("    if Baz then begin")
+                .appendImpl("    end")
+                .appendImpl("    // Noncompliant@+1")
+                .appendImpl("    else begin")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
+        .verifyIssues();
   }
 }

@@ -20,8 +20,6 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
-import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ElseBlockNode;
@@ -50,37 +48,31 @@ public class EmptyBlockCheck extends DelphiCheck {
   private static boolean shouldAddViolation(CompoundStatementNode block) {
     DelphiNode parent = block.getParent();
 
+    if (!block.getComments().isEmpty()) {
+      // An empty block is OK if it has an explanatory comment.
+      return false;
+    }
+
     if (parent instanceof RoutineBodyNode || parent instanceof AnonymousMethodNode) {
-      // Handled by EmptyRoutineRule
+      // Handled by EmptyRoutine
       return false;
     }
 
     if (parent instanceof ExceptItemNode) {
-      // Handled by SwallowedExceptionsRule
+      // Handled by SwallowedException
       return false;
-    }
-
-    if (parent instanceof CaseItemStatementNode) {
-      // Handling all cases in a case statement is a reasonable thing to do.
-      // With that being said, a comment is required.
-      return block.getComments().isEmpty();
     }
 
     if (parent instanceof StatementListNode) {
       StatementListNode statementList = (StatementListNode) parent;
-      DelphiNode grandparent = parent.getParent();
+      DelphiNode enclosing = statementList.getParent();
 
       if (statementList.getStatements().size() == 1) {
-        if (grandparent instanceof ElseBlockNode
-            && grandparent.getParent() instanceof CaseStatementNode) {
-          // Handling all cases in a case statement is a reasonable thing to do.
-          // With that being said, a comment is required.
-          return block.getComments().isEmpty();
+        if (enclosing instanceof ElseBlockNode) {
+          enclosing = enclosing.getParent();
         }
-
-        // Handled by SwallowedExceptionsRule
-        return !(grandparent instanceof ElseBlockNode)
-            || !(grandparent.getParent() instanceof ExceptBlockNode);
+        // Handled by SwallowedException
+        return !(enclosing instanceof ExceptBlockNode);
       }
     }
 
