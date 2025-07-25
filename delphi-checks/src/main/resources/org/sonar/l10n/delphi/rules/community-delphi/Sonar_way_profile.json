@@ -86,6 +86,7 @@
     "TabulationCharacter",
     "TooLargeRoutine",
     "TooLongLine",
+    "TooManyDefaultParameters",
     "TooManyNestedRoutines",
     "TooManyParameters",
     "TrailingCommaArgumentList",

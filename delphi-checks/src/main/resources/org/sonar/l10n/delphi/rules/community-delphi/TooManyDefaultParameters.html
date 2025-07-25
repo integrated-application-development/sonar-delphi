@@ -1,0 +1,19 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Though default parameters can be useful in cases when there is a sensible default value, they also damage API
+  interfaces when used to make a method's behaviour overly configurable. A method with too many default parameters
+  is confusing, unpredictable at a glance, unintuitive to use, and likely overloaded in functionality.
+</p>
+<p>
+  In most cases, using method overloads, multiple methods, or configuration objects is a more
+  appropriate solution.
+</p>
+<h2>How to fix it</h2>
+<p>
+  Refactor this routine by re-evaluating the need for the default values, and either:
+</p>
+<ul>
+  <li>Removing the unnecessary default values,</li>
+  <li>Adding multiple overloads with different groups of required parameters, or</li>
+  <li>Grouping related parameters into a configuration object</li>
+</ul>

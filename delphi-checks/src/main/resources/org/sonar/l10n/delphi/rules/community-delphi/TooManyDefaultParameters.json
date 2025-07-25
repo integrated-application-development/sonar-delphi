@@ -1,0 +1,19 @@
+{
+  "title": "Routines should not have too many default parameters",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "FOCUSED",
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["brain-overload"],
+  "defaultSeverity": "Major",
+  "scope": "MAIN",
+  "quickfix": "unknown"
+}
