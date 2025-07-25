@@ -147,6 +147,7 @@ public final class CheckList {
           TabulationCharacterCheck.class,
           TooLargeRoutineCheck.class,
           TooLongLineCheck.class,
+          TooManyDefaultParametersCheck.class,
           TooManyNestedRoutinesCheck.class,
           TooManyParametersCheck.class,
           TooManyVariablesCheck.class,
