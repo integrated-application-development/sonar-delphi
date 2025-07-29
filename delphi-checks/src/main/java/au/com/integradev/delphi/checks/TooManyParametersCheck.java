@@ -20,7 +20,9 @@ package au.com.integradev.delphi.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
+import org.sonar.plugins.communitydelphi.api.ast.RoutineNameNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
@@ -43,17 +45,44 @@ public class TooManyParametersCheck extends DelphiCheck {
   public int constructorMax = DEFAULT_MAXIMUM;
 
   @Override
+  public DelphiCheckContext visit(RoutineDeclarationNode routine, DelphiCheckContext context) {
+    checkRoutine(
+        routine.getRoutineNameNode(),
+        routine.getParameters().size(),
+        routine.isConstructor(),
+        context);
+    return super.visit(routine, context);
+  }
+
+  @Override
   public DelphiCheckContext visit(RoutineImplementationNode routine, DelphiCheckContext context) {
-    int count = routine.getParameters().size();
-    int limit = routine.isConstructor() ? constructorMax : max;
-    if (count > limit) {
+    var declaration = routine.getRoutineNameDeclaration();
+    if (declaration == null || !declaration.isImplementationDeclaration()) {
+      // Don't duplicate issues between the declaration and implementation
+      return super.visit(routine, context);
+    }
+
+    // A routine implementation's default parameters MUST match its declaration's, or not have any
+    // default parameters at all. This means that we need to check the declaration to get the
+    // authoritative number of default parameters.
+    checkRoutine(
+        routine.getRoutineNameNode(),
+        declaration.getParameters().size(),
+        routine.isConstructor(),
+        context);
+    return super.visit(routine, context);
+  }
+
+  private void checkRoutine(
+      RoutineNameNode node, int count, boolean isConstructor, DelphiCheckContext context) {
+    var thisMax = isConstructor ? constructorMax : max;
+    if (count > thisMax) {
       reportIssue(
           context,
-          routine.getRoutineNameNode(),
+          node,
           String.format(
               "%s has %d parameters, which is greater than %d authorized.",
-              routine.isConstructor() ? "Constructor" : "Routine", count, limit));
+              isConstructor ? "Constructor" : "Routine", count, thisMax));
     }
-    return super.visit(routine, context);
   }
 }

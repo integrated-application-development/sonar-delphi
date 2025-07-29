@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class TooManyParametersCheckTest {
   @Test
-  void testOneVariableShouldNotAddIssue() {
+  void testImplOkParamsShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TooManyParametersCheck())
         .onFile(
@@ -37,7 +37,7 @@ class TooManyParametersCheckTest {
   }
 
   @Test
-  void testTooManyVariablesShouldAddIssue() {
+  void testImplOnlyTooManyParamsShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new TooManyParametersCheck())
         .onFile(
@@ -55,6 +55,146 @@ class TooManyParametersCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  // do nothing")
                 .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testImplAndDeclTooManyParamsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo( // Noncompliant")
+                .appendDecl("  Param1: Boolean;")
+                .appendDecl("  Param2: Boolean;")
+                .appendDecl("  Param3: Boolean;")
+                .appendDecl("  Param4: Boolean;")
+                .appendDecl("  Param5: Boolean;")
+                .appendDecl("  Param6: Boolean;")
+                .appendDecl("  Param7: Boolean;")
+                .appendDecl("  Param8: Boolean")
+                .appendDecl(");")
+                .appendImpl("procedure Foo(")
+                .appendImpl("  Param1: Boolean;")
+                .appendImpl("  Param2: Boolean;")
+                .appendImpl("  Param3: Boolean;")
+                .appendImpl("  Param4: Boolean;")
+                .appendImpl("  Param5: Boolean;")
+                .appendImpl("  Param6: Boolean;")
+                .appendImpl("  Param7: Boolean;")
+                .appendImpl("  Param8: Boolean")
+                .appendImpl(");")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testImplAndDeclOkParamsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo(")
+                .appendDecl("  Param1: Boolean;")
+                .appendDecl("  Param2: Boolean")
+                .appendDecl(");")
+                .appendImpl("procedure Foo(")
+                .appendImpl("  Param1: Boolean;")
+                .appendImpl("  Param2: Boolean")
+                .appendImpl(");")
+                .appendImpl("begin")
+                .appendImpl("  // do nothing")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testDeclOnlyTooManyParamsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure Foo( // Noncompliant")
+                .appendDecl("  Param1: Boolean;")
+                .appendDecl("  Param2: Boolean;")
+                .appendDecl("  Param3: Boolean;")
+                .appendDecl("  Param4: Boolean;")
+                .appendDecl("  Param5: Boolean;")
+                .appendDecl("  Param6: Boolean;")
+                .appendDecl("  Param7: Boolean;")
+                .appendDecl("  Param8: Boolean")
+                .appendDecl(");"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testInterfaceTooManyParamsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type IMyIntf = interface")
+                .appendDecl("  procedure Foo( // Noncompliant")
+                .appendDecl("    Param1: Boolean;")
+                .appendDecl("    Param2: Boolean;")
+                .appendDecl("    Param3: Boolean;")
+                .appendDecl("    Param4: Boolean;")
+                .appendDecl("    Param5: Boolean;")
+                .appendDecl("    Param6: Boolean;")
+                .appendDecl("    Param7: Boolean;")
+                .appendDecl("    Param8: Boolean")
+                .appendDecl("  );")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testConstructorTooManyParamsShouldAddIssue() {
+    var check = new TooManyParametersCheck();
+    check.max = 9999;
+
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TMyObj = class(TObject)")
+                .appendDecl("  constructor Create( // Noncompliant")
+                .appendDecl("    Param1: Boolean;")
+                .appendDecl("    Param2: Boolean;")
+                .appendDecl("    Param3: Boolean;")
+                .appendDecl("    Param4: Boolean;")
+                .appendDecl("    Param5: Boolean;")
+                .appendDecl("    Param6: Boolean;")
+                .appendDecl("    Param7: Boolean;")
+                .appendDecl("    Param8: Boolean")
+                .appendDecl("  );")
+                .appendDecl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testNonConstructorTooManyParamsShouldAddIssue() {
+    var check = new TooManyParametersCheck();
+    check.constructorMax = 9999;
+
+    CheckVerifier.newVerifier()
+        .withCheck(new TooManyParametersCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type TMyObj = class(TObject)")
+                .appendDecl("  procedure Create( // Noncompliant")
+                .appendDecl("    Param1: Boolean;")
+                .appendDecl("    Param2: Boolean;")
+                .appendDecl("    Param3: Boolean;")
+                .appendDecl("    Param4: Boolean;")
+                .appendDecl("    Param5: Boolean;")
+                .appendDecl("    Param6: Boolean;")
+                .appendDecl("    Param7: Boolean;")
+                .appendDecl("    Param8: Boolean")
+                .appendDecl("  );")
+                .appendDecl("end;"))
         .verifyIssues();
   }
 }
