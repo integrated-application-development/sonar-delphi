@@ -11,10 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `ObjectPassedAsInterface` analysis rule, which detects object references that are passed directly as
   an interface to a routine.
+- `TooManyDefaultParameters` analysis rule, which flags routines with an excessive number of default parameters.
 
 ### Changed
 
 - `EmptyBlock` now ignores all empty blocks containing an explanatory comment.
+- `TooManyParameters` now flags routine declarations instead of implementations, improving support for methods
+that are virtual, abstract, or on an interface.
 
 ## [1.17.2] - 2025-07-03
 
