@@ -440,6 +440,21 @@ class InvocationResolverTest {
   }
 
   @Test
+  void testClassToInterfaceTypes() {
+    Type grandparent = TypeMocker.struct("Grandparent", CLASS);
+    Type parent = TypeMocker.struct("Parent", CLASS, grandparent);
+    Type child = TypeMocker.struct("Child", CLASS, parent);
+    Type intf = TypeMocker.struct("Intf", INTERFACE);
+
+    when(child.ancestorList()).thenReturn(Set.of(parent, intf));
+    when(child.isDescendantOf(grandparent)).thenReturn(true);
+    when(child.isDescendantOf(parent)).thenReturn(true);
+    when(child.isDescendantOf(intf)).thenReturn(true);
+
+    assertResolved(child, grandparent, intf);
+  }
+
+  @Test
   void testVarParameters() {
     Type openArray =
         ((TypeFactoryImpl) factory).array(null, type(INTEGER), Set.of(ArrayOption.OPEN));

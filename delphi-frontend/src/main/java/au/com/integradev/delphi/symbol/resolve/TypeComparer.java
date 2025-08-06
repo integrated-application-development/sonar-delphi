@@ -48,6 +48,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.Type.StringType;
+import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 import org.sonar.plugins.communitydelphi.api.type.Type.SubrangeType;
 
 final class TypeComparer {
@@ -780,7 +781,11 @@ final class TypeComparer {
 
   private static EqualityType compareObject(Type from, Type to) {
     if (from.isStruct() && from.isDescendantOf(to)) {
-      return CONVERT_LEVEL_1;
+      if (((StructType) from).kind() == ((StructType) to).kind()) {
+        return CONVERT_LEVEL_1;
+      } else {
+        return CONVERT_LEVEL_2;
+      }
     } else if (from.isPointer() && !to.isRecord()) {
       PointerType fromPointer = (PointerType) from;
       if (fromPointer.isUntypedPointer()) {
