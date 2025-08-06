@@ -67,7 +67,7 @@ public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
       return false;
     }
 
-    var declaration = ((NameReferenceNode) maybeName).getNameDeclaration();
+    var declaration = ((NameReferenceNode) maybeName).getLastName().getNameDeclaration();
     if (!(declaration instanceof VariableNameDeclaration)) {
       return false;
     }
