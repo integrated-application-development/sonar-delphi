@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Inaccurate type comparisons between class and interface types, where class-to-class upcasts were
   not always preferred over class-to-interface upcasts.
+- False-positives around qualified name references in `ObjectPassedAsInterface`.
 
 ## [1.18.0] - 2025-08-05
 

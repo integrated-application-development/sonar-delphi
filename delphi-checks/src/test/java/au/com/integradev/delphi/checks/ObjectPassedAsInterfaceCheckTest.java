@@ -68,6 +68,44 @@ class ObjectPassedAsInterfaceCheckTest {
   }
 
   @Test
+  void testInterfacePassedAsInterfaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectPassedAsInterfaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("procedure DoThing(Intf: IInterface);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Intf: IInterface;")
+                .appendImpl("begin")
+                .appendImpl("  Intf := TInterfacedObject.Create;")
+                .appendImpl("  DoThing(Intf);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testQualifiedInterfacePassedAsInterfaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectPassedAsInterfaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    property Intf: IInterface;")
+                .appendDecl("  end;")
+                .appendDecl("procedure DoThing(Intf: IInterface);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foo: TFoo;")
+                .appendImpl("begin")
+                .appendImpl("  Foo := TFoo.Create;")
+                .appendImpl("  DoThing(Foo.Intf);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
   void testObjectCastToInterfaceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ObjectPassedAsInterfaceCheck())
