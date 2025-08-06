@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Inaccurate type comparisons between class and interface types, where class-to-class upcasts were
+  not always preferred over class-to-interface upcasts.
+
 ## [1.18.0] - 2025-08-05
 
 ### Added
