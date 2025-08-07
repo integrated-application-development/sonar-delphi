@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.checks;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -87,7 +88,7 @@ public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
       return false;
     }
 
-    var maybeName = expression.getChild(0);
+    var maybeName = Iterables.getLast(expression.getChildren());
     if (!(maybeName instanceof NameReferenceNode)) {
       return false;
     }
