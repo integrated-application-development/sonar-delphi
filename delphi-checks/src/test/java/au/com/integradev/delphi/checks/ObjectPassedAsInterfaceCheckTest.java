@@ -93,6 +93,31 @@ class ObjectPassedAsInterfaceCheckTest {
   }
 
   @Test
+  void testComplexQualifiedObjectPassedAsInterfaceShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectPassedAsInterfaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TInterfacedObject, IInterface)")
+                .appendDecl("  end;")
+                .appendDecl("  IBar = interface")
+                .appendDecl("    property Foo: TFoo;")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = class(TInterfacedObject, IBar)")
+                .appendDecl("  end;")
+                .appendDecl("procedure DoThing(Obj: IInterface);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Intfs: TArray<IBar>;")
+                .appendImpl("begin")
+                .appendImpl("  Intfs := [TBar.Create];")
+                .appendImpl("  DoThing(Intfs[0].Foo); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
   void testInterfacePassedAsInterfaceShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new ObjectPassedAsInterfaceCheck())
@@ -126,6 +151,27 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendImpl("begin")
                 .appendImpl("  Foo := TFoo.Create;")
                 .appendImpl("  DoThing(Foo.Intf);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testComplexQualifiedInterfacePassedAsInterfaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectPassedAsInterfaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class")
+                .appendDecl("    property Intf: IInterface;")
+                .appendDecl("  end;")
+                .appendDecl("procedure DoThing(Intf: IInterface);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Foos: TArray<TFoo>;")
+                .appendImpl("begin")
+                .appendImpl("  Foos := [TFoo.Create];")
+                .appendImpl("  DoThing(Foos[0].Intf);")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
