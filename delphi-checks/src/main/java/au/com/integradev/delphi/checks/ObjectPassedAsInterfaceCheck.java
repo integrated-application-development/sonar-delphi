@@ -18,11 +18,14 @@
  */
 package au.com.integradev.delphi.checks;
 
+import com.google.common.base.Splitter;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -31,10 +34,30 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Type;
 
 @Rule(key = "ObjectPassedAsInterface")
 public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
   private static final String MESSAGE = "Do not pass this object reference as an interface.";
+
+  private static final String DEFAULT_EXCLUDED_TYPES =
+      "System.TNoRefCountObject,"
+          + "System.Generics.Defaults.TSingletonImplementation,"
+          + "System.Classes.TComponent";
+
+  @RuleProperty(
+      key = "excludedTypes",
+      description =
+          "Comma-delimited list of object types that this rule ignores. (case-insensitive)",
+      defaultValue = DEFAULT_EXCLUDED_TYPES)
+  public String excludedTypes = DEFAULT_EXCLUDED_TYPES;
+
+  private List<String> excludedTypesList;
+
+  @Override
+  public void start(DelphiCheckContext context) {
+    excludedTypesList = Splitter.on(',').trimResults().splitToList(excludedTypes);
+  }
 
   @Override
   public DelphiCheckContext visit(ArgumentListNode argumentList, DelphiCheckContext context) {
@@ -47,7 +70,7 @@ public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
 
       ExpressionNode expression = arguments.get(i).getExpression();
 
-      if (isVariableWithClassType(expression)) {
+      if (isObjectReferenceExpression(expression)) {
         reportIssue(context, expression, MESSAGE);
       }
     }
@@ -55,7 +78,7 @@ public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
     return super.visit(argumentList, context);
   }
 
-  private static boolean isVariableWithClassType(ExpressionNode expression) {
+  private boolean isObjectReferenceExpression(ExpressionNode expression) {
     expression = expression.skipParentheses();
 
     if (!(expression instanceof PrimaryExpressionNode)) {
@@ -72,7 +95,10 @@ public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
       return false;
     }
 
-    return ((VariableNameDeclaration) declaration).getType().isClass();
+    Type type = ((VariableNameDeclaration) declaration).getType();
+
+    return type.isClass()
+        && excludedTypesList.stream().noneMatch(e -> type.is(e) || type.isDescendantOf(e));
   }
 
   private static Set<Integer> getInterfaceParameterIndices(ArgumentListNode argumentList) {

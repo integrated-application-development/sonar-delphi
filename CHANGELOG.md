@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `excludedTypes` rule property to the `ObjectPassedAsInterface` rule.
+
+### Changed
+
+- Exclude common non-ref-counted interface implementations by default in `ObjectPassedAsInterface`.
+
 ### Fixed
 
 - Inaccurate type comparisons between class and interface types, where class-to-class upcasts were

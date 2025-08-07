@@ -32,7 +32,7 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFooIntf = interface")
                 .appendDecl("  end;")
-                .appendDecl("  TFooImpl = class(TObject, IFooIntf)")
+                .appendDecl("  TFooImpl = class(TInterfacedObject, IFooIntf)")
                 .appendDecl("  end;")
                 .appendDecl("procedure DoThing(Obj: TFooImpl);")
                 .appendImpl("procedure Test;")
@@ -54,7 +54,7 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFooIntf = interface")
                 .appendDecl("  end;")
-                .appendDecl("  TFooImpl = class(TObject, IFooIntf)")
+                .appendDecl("  TFooImpl = class(TInterfacedObject, IFooIntf)")
                 .appendDecl("  end;")
                 .appendDecl("procedure DoThing(Obj: IFooIntf);")
                 .appendImpl("procedure Test;")
@@ -114,7 +114,7 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFooIntf = interface")
                 .appendDecl("  end;")
-                .appendDecl("  TFooImpl = class(TObject, IFooIntf)")
+                .appendDecl("  TFooImpl = class(TInterfacedObject, IFooIntf)")
                 .appendDecl("  end;")
                 .appendDecl("procedure DoThing(Obj: IFooIntf);")
                 .appendImpl("procedure Test;")
@@ -136,7 +136,7 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFooIntf = interface")
                 .appendDecl("  end;")
-                .appendDecl("  TFooImpl = class(TObject, IFooIntf)")
+                .appendDecl("  TFooImpl = class(TInterfacedObject, IFooIntf)")
                 .appendDecl("  end;")
                 .appendDecl("procedure DoThing(Obj: IFooIntf);")
                 .appendImpl("procedure Test;")
@@ -155,7 +155,7 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendDecl("type")
                 .appendDecl("  IFooIntf = interface")
                 .appendDecl("  end;")
-                .appendDecl("  TFooParent = class(TObject)")
+                .appendDecl("  TFooParent = class(TInterfacedObject)")
                 .appendDecl("    procedure Bar(Foo: IFooIntf); virtual;")
                 .appendDecl("  end;")
                 .appendDecl("  TFooImpl = class(TFooParent, IFooIntf)")
@@ -169,5 +169,45 @@ class ObjectPassedAsInterfaceCheckTest {
                 .appendImpl("  inherited Bar(Obj); // Noncompliant")
                 .appendImpl("end;"))
         .verifyIssues();
+  }
+
+  @Test
+  void testExcludedTypePassedAsInterfaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectPassedAsInterfaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.Classes;")
+                .appendDecl("procedure DoThing(Obj: IInterface);")
+                .appendImpl("procedure Test(Obj: TComponent);")
+                .appendImpl("begin")
+                .appendImpl("  DoThing(Obj);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testExcludedTypeDescendentPassedAsInterfaceShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ObjectPassedAsInterfaceCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("uses")
+                .appendDecl("  System.Classes;")
+                .appendDecl("type")
+                .appendDecl("  IFooIntf = interface")
+                .appendDecl("  end;")
+                .appendDecl("  TFooImpl = class(TComponent, IFooIntf)")
+                .appendDecl("  end;")
+                .appendDecl("procedure DoThing(Obj: IFooIntf);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Obj: TFooImpl;")
+                .appendImpl("begin")
+                .appendImpl("  Obj := TFooImpl.Create;")
+                .appendImpl("  DoThing(Obj);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
   }
 }
