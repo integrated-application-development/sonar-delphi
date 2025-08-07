@@ -32,9 +32,11 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 @Rule(key = "ObjectPassedAsInterface")
 public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
@@ -91,11 +93,12 @@ public class ObjectPassedAsInterfaceCheck extends DelphiCheck {
     }
 
     var declaration = ((NameReferenceNode) maybeName).getLastName().getNameDeclaration();
-    if (!(declaration instanceof VariableNameDeclaration)) {
+    if (!(declaration instanceof VariableNameDeclaration
+        || declaration instanceof PropertyNameDeclaration)) {
       return false;
     }
 
-    Type type = ((VariableNameDeclaration) declaration).getType();
+    Type type = ((Typed) declaration).getType();
 
     return type.isClass()
         && excludedTypesList.stream().noneMatch(e -> type.is(e) || type.isDescendantOf(e));

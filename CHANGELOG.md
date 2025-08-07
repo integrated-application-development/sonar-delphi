@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Exclude common non-ref-counted interface implementations by default in `ObjectPassedAsInterface`.
+- Handle property references in `ObjectPassedAsInterface` (in addition to variables/fields).
 
 ### Fixed
 
