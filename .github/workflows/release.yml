@@ -46,3 +46,4 @@ jobs:
           name: ${{ steps.changelog.outputs.version }}
           body: ${{ steps.changelog.outputs.release-notes }}
           files: sonar-delphi-plugin/target/sonar-delphi-plugin-${{ steps.changelog.outputs.version }}.jar
+          fail_on_unmatched_files: true
