@@ -26,26 +26,59 @@ import org.sonar.api.server.rule.RulesDefinition.NewRule;
 import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.check.Rule;
 
+/**
+ * Utility class for reading and processing rule template annotations.
+ *
+ * <p>This class handles the configuration of SonarQube rules based on annotations found on rule
+ * classes, particularly {@link RuleTemplate} annotations.
+ */
 public final class RuleTemplateAnnotationReader {
+
+  /**
+   * Updates rule definitions in the repository based on rule template annotations.
+   *
+   * @param repository the rules repository to update
+   * @param ruleClasses the list of rule classes to process
+   * @throws IllegalArgumentException if repository or ruleClasses is null
+   */
   public void updateRulesByAnnotatedClass(
       RulesDefinition.NewRepository repository, List<Class<?>> ruleClasses) {
-    ruleClasses.forEach(ruleClass -> handleTemplateRule(repository, ruleClass));
+    if (repository == null) {
+      throw new IllegalArgumentException("Repository cannot be null");
+    }
+    if (ruleClasses == null) {
+      throw new IllegalArgumentException("Rule classes cannot be null");
+    }
+
+    ruleClasses.forEach(ruleClass -> processTemplateRule(repository, ruleClass));
   }
 
-  private static String ruleKey(Class<?> ruleClass) {
-    return AnnotationUtils.getAnnotation(ruleClass, Rule.class).key();
+  private static void processTemplateRule(NewRepository repository, Class<?> ruleClass) {
+    String key = extractRuleKey(ruleClass);
+    NewRule rule = Objects.requireNonNull(repository.rule(key), "Rule not found for key: " + key);
+
+    if (isTemplateRule(ruleClass)) {
+      rule.setTemplate(true);
+    } else {
+      // Remove scope parameter for non-template rules.
+      // The "scope" parameter is only relevant for template rules, as it allows users to configure
+      // the scope when instantiating a rule from a template. For non-template rules, the scope
+      // parameter is not applicable and should be removed to prevent confusion and ensure correct
+      // rule configuration in SonarQube.
+      rule.params().removeIf(param -> "scope".equals(param.key()));
+    }
+  }
+
+  private static String extractRuleKey(Class<?> ruleClass) {
+    Rule ruleAnnotation = AnnotationUtils.getAnnotation(ruleClass, Rule.class);
+    if (ruleAnnotation == null) {
+      throw new IllegalArgumentException(
+          "Rule class must have @Rule annotation: " + ruleClass.getName());
+    }
+    return ruleAnnotation.key();
   }
 
   private static boolean isTemplateRule(Class<?> ruleClass) {
     return AnnotationUtils.getAnnotation(ruleClass, RuleTemplate.class) != null;
-  }
-
-  private static void handleTemplateRule(NewRepository repository, Class<?> ruleClass) {
-    NewRule rule = Objects.requireNonNull(repository.rule(ruleKey(ruleClass)));
-    if (isTemplateRule(ruleClass)) {
-      rule.setTemplate(true);
-    } else {
-      rule.params().removeIf(param -> param.key().equals("scope"));
-    }
   }
 }

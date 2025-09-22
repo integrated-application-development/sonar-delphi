@@ -70,4 +70,26 @@ public class Token {
   public String getText() {
     return text;
   }
+
+  @Override
+  public String toString() {
+    return "Token{type=" + type + ", text='" + text + "'}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Token token = (Token) obj;
+    return type == token.type && java.util.Objects.equals(text, token.text);
+  }
+
+  @Override
+  public int hashCode() {
+    return java.util.Objects.hash(type, text);
+  }
 }

@@ -36,22 +36,52 @@ import java.nio.file.Path;
 import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Utility class for creating and configuring Delphi files for testing purposes.
+ *
+ * <p>This class provides convenient methods for parsing Delphi source code and creating mock
+ * configurations commonly used in unit tests.
+ */
 public final class DelphiFileUtils {
   private DelphiFileUtils() {
     // Utility class
   }
 
+  /**
+   * Parses the given lines of Delphi source code into a DelphiFile.
+   *
+   * <p>This method creates a temporary file with the provided content and parses it using a mock
+   * configuration. The temporary file is automatically deleted when the JVM exits.
+   *
+   * @param lines the lines of Delphi source code to parse
+   * @return a parsed DelphiFile instance
+   * @throws UncheckedIOException if an I/O error occurs during file creation or writing
+   */
   public static DelphiFile parse(String... lines) {
     try {
-      Path path = Files.createTempFile(null, ".pas");
+      Path path = Files.createTempFile("delphi-test-", ".pas");
       Files.writeString(path, "\uFEFF" + StringUtils.join(lines, '\n'), StandardCharsets.UTF_8);
       path.toFile().deleteOnExit();
       return DelphiFile.from(path.toFile(), mockConfig());
     } catch (IOException e) {
-      throw new UncheckedIOException(e);
+      throw new UncheckedIOException("Failed to create temporary Delphi file for parsing", e);
     }
   }
 
+  /**
+   * Creates a mock DelphiFileConfig with default settings suitable for testing.
+   *
+   * <p>The mock configuration includes:
+   *
+   * <ul>
+   *   <li>UTF-8 encoding
+   *   <li>Default compiler version and Windows platform
+   *   <li>Default type factory
+   *   <li>Empty search path and definitions
+   * </ul>
+   *
+   * @return a mock DelphiFileConfig instance
+   */
   public static DelphiFileConfig mockConfig() {
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
     when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
