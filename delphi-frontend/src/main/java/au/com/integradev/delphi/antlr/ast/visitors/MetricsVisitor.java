@@ -30,9 +30,21 @@ import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
+/**
+ * Visitor that collects various code metrics from Delphi source code.
+ *
+ * <p>This visitor traverses the AST and collects metrics including:
+ *
+ * <ul>
+ *   <li>Number of classes, routines, and statements
+ *   <li>Cyclomatic and cognitive complexity
+ *   <li>Code and comment line counts
+ * </ul>
+ */
 public class MetricsVisitor implements DelphiParserVisitor<Data> {
   private static final Pattern NEW_LINE_PATTERN = Pattern.compile("\r\n|\n|\r");
 
+  /** Data container for collected metrics. */
   public static class Data {
     private int classes;
     private int routines;
@@ -73,6 +85,17 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
 
   @Override
   public Data visit(DelphiAst ast, Data data) {
+    calculateComplexityMetrics(ast, data);
+    return DelphiParserVisitor.super.visit(ast, data);
+  }
+
+  /**
+   * Calculates both cyclomatic and cognitive complexity metrics for the given AST.
+   *
+   * @param ast the AST to analyze
+   * @param data the data container to populate with complexity metrics
+   */
+  private void calculateComplexityMetrics(DelphiAst ast, Data data) {
     var cyclomaticVisitor = new CyclomaticComplexityVisitor();
     var cyclomaticComplexity = cyclomaticVisitor.visit(ast, new CyclomaticComplexityVisitor.Data());
     data.complexity = cyclomaticComplexity.getComplexity();
@@ -80,8 +103,6 @@ public class MetricsVisitor implements DelphiParserVisitor<Data> {
     var cognitiveVisitor = new CognitiveComplexityVisitor();
     var cognitiveComplexity = cognitiveVisitor.visit(ast, new CognitiveComplexityVisitor.Data());
     data.cognitiveComplexity = cognitiveComplexity.getComplexity();
-
-    return DelphiParserVisitor.super.visit(ast, data);
   }
 
   @Override

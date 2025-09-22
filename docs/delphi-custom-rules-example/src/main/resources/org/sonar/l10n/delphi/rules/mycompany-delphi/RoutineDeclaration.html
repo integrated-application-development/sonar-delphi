@@ -1,10 +1,16 @@
 <h2>Why is this an issue?</h2>
-<p>My stupid rule to avoid routine declaration</p>
+<p>This rule detects routine declarations that should be avoided according to coding standards. 
+Routine declarations in certain contexts can lead to maintenance issues and reduced code readability.</p>
 <h3>Noncompliant Code Example</h3>
 <pre>
-TO DO
+procedure MyProcedure(); forward;  // Noncompliant - forward declaration usage
+
+function Calculate(X: Integer): Integer; external;  // Noncompliant - external routine
 </pre>
 <h3>Compliant Solution</h3>
 <pre>
-TO DO
+function Calculate(X: Integer): Integer;  // Compliant - proper implementation
+begin
+  Result := X * 2;
+end;
 </pre>

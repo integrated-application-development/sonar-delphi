@@ -4,11 +4,64 @@
   The cyclomatic complexity of routines should not be excessive, as complex code will be difficult
   to understand and maintain.
 </p>
+<p>
+  High cyclomatic complexity can lead to:
+</p>
+<ul>
+  <li>Increased difficulty in understanding the code</li>
+  <li>Higher chance of introducing bugs</li>
+  <li>More complex testing requirements</li>
+  <li>Reduced code maintainability</li>
+</ul>
+<h3>Noncompliant Code Example</h3>
+<pre>
+function ProcessValue(Value: Integer; Mode: String): Integer;
+begin
+  if Value > 0 then        // +1
+  begin
+    if Mode = 'ADD' then   // +1
+      Result := Value + 10
+    else if Mode = 'MUL' then  // +1
+      Result := Value * 2
+    else if Mode = 'DIV' then  // +1
+      Result := Value div 2
+    else
+      Result := Value;
+  end
+  else if Value < 0 then   // +1
+    Result := -Value
+  else
+    Result := 0;
+end;
+// Cyclomatic Complexity = 6
+</pre>
 <h2>How to fix it</h2>
 <p>
   Refactor this routine so it runs more linearly, for example by reducing the number of times
-  the control flow splits.
+  the control flow splits. Consider using polymorphism, strategy pattern, or breaking the routine
+  into smaller, more focused methods.
 </p>
+<h3>Compliant Solution</h3>
+<pre>
+function ProcessValue(Value: Integer; Mode: String): Integer;
+begin
+  if Value <= 0 then
+    Exit(Abs(Value));
+    
+  Result := ApplyMode(Value, Mode);
+end;
+
+function ApplyMode(Value: Integer; Mode: String): Integer;
+begin
+  case Mode of
+    'ADD': Result := Value + 10;
+    'MUL': Result := Value * 2;
+    'DIV': Result := Value div 2;
+  else
+    Result := Value;
+  end;
+end;
+</pre>
 <h2>Resources</h2>
 <ul>
   <li>
