@@ -60,7 +60,11 @@ public final class RuleTemplateAnnotationReader {
     if (isTemplateRule(ruleClass)) {
       rule.setTemplate(true);
     } else {
-      // Remove scope parameter for non-template rules
+      // Remove scope parameter for non-template rules.
+      // The "scope" parameter is only relevant for template rules, as it allows users to configure
+      // the scope when instantiating a rule from a template. For non-template rules, the scope
+      // parameter is not applicable and should be removed to prevent confusion and ensure correct
+      // rule configuration in SonarQube.
       rule.params().removeIf(param -> "scope".equals(param.key()));
     }
   }
