@@ -44,7 +44,21 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 public class MetricsVisitor implements DelphiParserVisitor<Data> {
   private static final Pattern NEW_LINE_PATTERN = Pattern.compile("\r\n|\n|\r");
 
-  /** Data container for collected metrics. */
+  /**
+   * Container class for metrics collected from Delphi source code.
+   *
+   * <p>This class holds various metrics gathered during AST traversal, including:
+   * <ul>
+   *   <li>Number of classes ({@code classes})</li>
+   *   <li>Number of routines ({@code routines})</li>
+   *   <li>Cyclomatic complexity ({@code complexity})</li>
+   *   <li>Cognitive complexity ({@code cognitiveComplexity})</li>
+   *   <li>Set of code line numbers ({@code codeLines})</li>
+   *   <li>Set of comment line numbers ({@code commentLines})</li>
+   *   <li>Number of statements ({@code statements})</li>
+   * </ul>
+   * <p>These metrics are used to assess code quality and complexity.
+   */
   public static class Data {
     private int classes;
     private int routines;
