@@ -1,5 +1,6 @@
 # ---- Maven
 target/
+*.class
 
 # ---- IntelliJ IDEA
 *.iws
