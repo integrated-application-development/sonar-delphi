@@ -7,7 +7,7 @@
   <parent>
     <groupId>au.com.integradev.delphi</groupId>
     <artifactId>delphi</artifactId>
-    <version>1.18.1</version>
+    <version>1.18.2</version>
   </parent>
 
   <artifactId>delphi-tokens-generator-maven-plugin</artifactId>
