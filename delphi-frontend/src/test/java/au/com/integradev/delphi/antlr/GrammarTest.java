@@ -360,4 +360,9 @@ class GrammarTest {
   void testGreaterThanEqualAmbiguity() {
     assertParsed("GreaterThanEqualAmbiguity.pas");
   }
+
+  @Test
+  void testQualifiedExports() {
+    assertParsed("QualifiedExports.dpk");
+  }
 }

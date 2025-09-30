@@ -1,0 +1,13 @@
+library QualifiedExports;
+
+procedure Foo; stdcall;
+begin
+  // ...
+end;
+
+exports
+  QualifiedExports.Foo;
+
+begin
+  // ...
+end.

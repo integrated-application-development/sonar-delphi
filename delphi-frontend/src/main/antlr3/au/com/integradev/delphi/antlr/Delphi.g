@@ -558,7 +558,7 @@ arrayVarValueSpec            : ABSOLUTE expression
 varValueSpec                 : ABSOLUTE expression
                              | '=' constExpression
                              ;
-exportsSection               : EXPORTS ident exportItem (',' ident exportItem)* ';'
+exportsSection               : EXPORTS nameReference exportItem (',' nameReference exportItem)* ';'
                              ;
 exportItem                   : ('(' formalParameterList ')')? (INDEX expression)? (NAME expression)? (RESIDENT)?
                              ;

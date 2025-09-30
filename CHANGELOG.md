@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Parsing errors on qualified name references within `exports` sections.
+
 ## [1.18.1] - 2025-08-07
 
 ### Added
