@@ -389,6 +389,7 @@ public class SymbolTableBuilder {
     return scope.getTypeDeclarations().stream()
         .map(TypeNameDeclaration::getType)
         .filter(Predicate.not(Type::isClassReference))
+        .filter(Predicate.not(Type::isAlias))
         .filter(ScopedType.class::isInstance)
         .map(ScopedType.class::cast)
         .map(ScopedType::typeScope)
