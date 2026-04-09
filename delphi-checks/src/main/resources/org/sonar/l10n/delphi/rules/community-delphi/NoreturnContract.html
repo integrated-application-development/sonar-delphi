@@ -1,0 +1,42 @@
+<h2>Why is this an issue?</h2>
+<p>
+  The <code>noreturn</code> directive tells the compiler that a routine will never return normally.
+  The compiler uses this information to optimize code and suppress warnings about unreachable code
+  after calls to the routine. If a routine marked <code>noreturn</code> can actually return normally,
+  the compiler's assumptions are violated, which can lead to incorrect code generation and
+  unpredictable behavior.
+</p>
+<p>
+  Every code path in a <code>noreturn</code> routine must end with a <code>raise</code> statement,
+  a call to <code>Halt</code>, or a call to another <code>noreturn</code> routine.
+</p>
+
+<h2>How to fix it</h2>
+<p>
+  Ensure that every code path in the routine ends by raising an exception, calling
+  <code>Halt</code>, or calling another <code>noreturn</code> routine. Alternatively, remove the
+  <code>noreturn</code> directive if the routine is intended to return normally.
+</p>
+
+<pre data-diff-id="1" data-diff-type="noncompliant">
+procedure FatalError(const Msg: string); noreturn;
+begin
+  WriteLn(Msg);
+end;
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+procedure FatalError(const Msg: string); noreturn;
+begin
+  WriteLn(Msg);
+  raise Exception.Create(Msg);
+end;
+</pre>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+    <a href="https://docwiki.embarcadero.com/RADStudio/en/Declarations_and_Statements_(Delphi)#The_noreturn_Directive">
+      RAD Studio documentation: The <code>noreturn</code> Directive
+    </a>
+  </li>
+</ul>

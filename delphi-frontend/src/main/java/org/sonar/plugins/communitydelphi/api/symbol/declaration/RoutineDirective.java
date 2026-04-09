@@ -47,6 +47,7 @@ public enum RoutineDirective {
   FAR(DelphiTokenType.FAR),
   LOCAL(DelphiTokenType.LOCAL),
   NEAR(DelphiTokenType.NEAR),
+  NORETURN(DelphiTokenType.NORETURN),
   DEPRECATED(DelphiTokenType.DEPRECATED),
   EXPERIMENTAL(DelphiTokenType.EXPERIMENTAL),
   PLATFORM(DelphiTokenType.PLATFORM),

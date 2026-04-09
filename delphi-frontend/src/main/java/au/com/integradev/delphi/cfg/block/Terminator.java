@@ -23,6 +23,7 @@ import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 
 public class Terminator {
@@ -43,7 +44,8 @@ public class Terminator {
       NameDeclaration nameDeclarationNode =
           ((NameReferenceNode) terminator).getLastName().getNameDeclaration();
       if (nameDeclarationNode instanceof RoutineNameDeclaration) {
-        switch (((RoutineNameDeclaration) nameDeclarationNode).fullyQualifiedName()) {
+        RoutineNameDeclaration routineDeclaration = (RoutineNameDeclaration) nameDeclarationNode;
+        switch (routineDeclaration.fullyQualifiedName()) {
           case "System.Exit":
             return TerminatorKind.EXIT;
           case "System.Break":
@@ -53,6 +55,9 @@ public class Terminator {
           case "System.Continue":
             return TerminatorKind.CONTINUE;
           default:
+            if (routineDeclaration.hasDirective(RoutineDirective.NORETURN)) {
+              return TerminatorKind.HALT;
+            }
             // fallthrough
         }
       }

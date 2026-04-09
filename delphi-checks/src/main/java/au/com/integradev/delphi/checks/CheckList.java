@@ -117,6 +117,7 @@ public final class CheckList {
           NilComparisonCheck.class,
           NoSonarCheck.class,
           NonLinearCastCheck.class,
+          NoreturnContractCheck.class,
           ObjectPassedAsInterfaceCheck.class,
           ObjectTypeCheck.class,
           ParsingErrorCheck.class,

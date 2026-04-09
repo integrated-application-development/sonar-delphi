@@ -1,0 +1,19 @@
+{
+  "title": "Routines marked 'noreturn' should not return normally",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "5min"
+  },
+  "code": {
+    "attribute": "COMPLETE",
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    }
+  },
+  "tags": ["confusing", "suspicious"],
+  "defaultSeverity": "Critical",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}

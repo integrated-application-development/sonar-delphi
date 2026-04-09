@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for `noreturn` routines, introduced in Delphi 13.
+- `NoreturnContract` analysis rule, which flags `noreturn` routines that return normally.
+
 ## [1.18.3] - 2025-11-11
 
 ### Fixed
