@@ -1159,6 +1159,7 @@ implDirective                : OVERLOAD
                              | dispIDDirective
                              | VARARGS // Only permitted for cdecl calling convention
                              | UNSAFE // .net?
+                             | NORETURN // Delphi 13+
                              ;
 interfaceDirective           : FORWARD
                              | externalDirective
@@ -1213,7 +1214,7 @@ ident                        : TkIdentifier
 keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | ASSEMBLY | AT | AUTOMATED | CDECL)
                              | (CONTAINS | DEFAULT | DELAYED | DEPRECATED | DISPID | DYNAMIC | EXPERIMENTAL | EXPORT)
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
-                             | (NEAR | NODEFAULT | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
+                             | (NEAR | NODEFAULT | NORETURN | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
                              | (PRIVATE | PROTECTED | PUBLIC | PUBLISHED | READ | READONLY | REFERENCE | REGISTER | REINTRODUCE)
                              | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
                              | (VARARGS | VIRTUAL | WINAPI | WRITE | WRITEONLY)
@@ -1225,7 +1226,7 @@ keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS |
                              | (ELSE | END | EXCEPT | EXPERIMENTAL | EXPORT | EXPORTS | EXTERNAL | FAR | FILE | FINAL)
                              | (FINALIZATION | FINALLY | FOR | FORWARD | FUNCTION | GOTO | HELPER | IF | IMPLEMENTATION)
                              | (IMPLEMENTS | IN | INDEX | INHERITED | INITIALIZATION | INLINE | INTERFACE | IS | LABEL)
-                             | (LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NOT | OBJECT | OF | ON)
+                             | (LIBRARY | LOCAL | MESSAGE | MOD | NAME | NEAR | NIL | NODEFAULT | NORETURN | NOT | OBJECT | OF | ON)
                              | (OPERATOR | OR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PACKED | PASCAL | PLATFORM | PRIVATE)
                              | (PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY)
                              | (RECORD | REFERENCE | REGISTER | REINTRODUCE | REPEAT | REQUIRES | RESIDENT)
@@ -1368,6 +1369,7 @@ NAME              : N A M E                     ;
 NEAR              : N E A R                     ;
 NIL               : N I L                       ;
 NODEFAULT         : N O D E F A U L T           ;
+NORETURN          : N O R E T U R N             ;
 NOT               : N O T                       ;
 OBJECT            : O B J E C T                 ;
 OF                : O F                         ;

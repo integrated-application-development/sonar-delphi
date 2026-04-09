@@ -92,6 +92,7 @@ public final class DelphiKeywords {
           DelphiTokenType.NEAR,
           DelphiTokenType.NIL,
           DelphiTokenType.NODEFAULT,
+          DelphiTokenType.NORETURN,
           DelphiTokenType.NOT,
           DelphiTokenType.OBJECT,
           DelphiTokenType.OF,

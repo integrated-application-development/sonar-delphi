@@ -71,6 +71,7 @@ import org.sonar.plugins.communitydelphi.api.ast.WhileStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.WithStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.utils.ExpressionNodeUtils;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineDirective;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonarsource.analyzer.commons.collections.ListUtils;
@@ -169,6 +170,13 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
       case "System.Continue":
         return buildControlFlowStatement(node, builder.getContinueTarget(), builder);
       default:
+        RoutineNameDeclaration routineDeclaration =
+            (RoutineNameDeclaration) node.getLastName().getNameDeclaration();
+        if (routineDeclaration.hasDirective(RoutineDirective.NORETURN)) {
+          builder.addBlock(
+              ProtoBlockFactory.unknownException(node, getUnknownExceptionTargets(builder)));
+          return builder;
+        }
         handleExceptionalPaths(builder);
         builder.addElement(node);
         break;
