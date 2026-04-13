@@ -18,34 +18,5 @@
  */
 package au.com.integradev.delphi.cfg.api;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-/**
- * A block which may alter the control flow with an exception, e.g., routine invocations in a
- * try-catch
- *
- * <p>Known exceptions with be directly specified with a {@code Linear} block to their target
- */
-public interface UnknownException extends Block {
-  /**
-   * Next block without exceptional circumstances
-   *
-   * @return the successor block without exceptions
-   */
-  Block getSuccessor();
-
-  /**
-   * Possible exit paths in exceptional circumstance
-   *
-   * @return the set of successor blocks that could be jumped to in the event of an exception
-   */
-  Set<Block> getExceptions();
-
-  @Override
-  default Set<Block> getSuccessors() {
-    return Stream.concat(Stream.of(getSuccessor()), getExceptions().stream())
-        .collect(Collectors.toSet());
-  }
-}
+/** A block representing a guaranteed exception with an unknown type. */
+public interface UnknownException extends Block, Terminated {}

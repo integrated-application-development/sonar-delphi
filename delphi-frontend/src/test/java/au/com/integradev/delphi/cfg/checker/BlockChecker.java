@@ -26,6 +26,7 @@ import au.com.integradev.delphi.cfg.api.Cases;
 import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Halt;
 import au.com.integradev.delphi.cfg.api.Linear;
+import au.com.integradev.delphi.cfg.api.PossibleException;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import au.com.integradev.delphi.cfg.api.UnknownException;
@@ -198,13 +199,36 @@ public class BlockChecker {
     this.successorChecker =
         new BlockDetailChecker(
             block -> {
-              UnknownException branch = assertBlockIsType(block, UnknownException.class);
+              PossibleException branch = assertBlockIsType(block, PossibleException.class);
               assertThat(getBlockId(branch.getSuccessor()))
                   .withFailMessage(
                       getBlockDisplay(block) + " is expected to have successor of B" + successor)
                   .isEqualTo(successor);
               Set<Integer> blockIds =
                   branch.getExceptions().stream()
+                      .map(BlockChecker::getBlockId)
+                      .collect(Collectors.toSet());
+              assertThat(blockIds)
+                  .withFailMessage(
+                      getBlockDisplay(block)
+                          + " is expected to have exception successors of ["
+                          + exceptions.stream()
+                              .map(id -> "B" + id)
+                              .collect(Collectors.joining(", "))
+                          + "]")
+                  .containsExactlyInAnyOrderElementsOf(exceptions);
+            });
+    return this;
+  }
+
+  public BlockChecker throwsTo(int... unknownExceptions) {
+    Set<Integer> exceptions = Arrays.stream(unknownExceptions).boxed().collect(Collectors.toSet());
+    this.successorChecker =
+        new BlockDetailChecker(
+            block -> {
+              UnknownException branch = assertBlockIsType(block, UnknownException.class);
+              Set<Integer> blockIds =
+                  branch.getSuccessors().stream()
                       .map(BlockChecker::getBlockId)
                       .collect(Collectors.toSet());
               assertThat(blockIds)

@@ -1202,7 +1202,7 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(0, 1),
-            block(element(RaiseStatementNode.class)).succeedsToWithExceptions(0)));
+            terminator(RaiseStatementNode.class, TerminatorKind.RAISE).throwsTo(0)));
   }
 
   @Test
@@ -1213,8 +1213,28 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(0, 0, 1),
-            block(element(NameDeclarationNode.class, "E"), element(RaiseStatementNode.class))
-                .succeedsToWithExceptions(0)));
+            block(element(NameDeclarationNode.class, "E"))
+                .withTerminator(RaiseStatementNode.class, TerminatorKind.RAISE)
+                .throwsTo(0)));
+  }
+
+  @Test
+  void testNoreturnRoutineInvocation() {
+    test(
+        Map.of("", List.of("procedure Boom; noreturn; begin end")),
+        "Boom;",
+        checker(terminator(NameReferenceNode.class, TerminatorKind.HALT).throwsTo(0)));
+  }
+
+  @Test
+  void testTryExceptNoreturnRoutineInvocation() {
+    test(
+        Map.of("", List.of("procedure Boom; noreturn; begin end", "procedure Foo; begin end")),
+        "try Boom except Foo end;",
+        checker(
+            block(element(TryStatementNode.class)).succeedsTo(2),
+            terminator(NameReferenceNode.class, TerminatorKind.HALT).throwsTo(1),
+            block(element(NameReferenceNode.class, "Foo")).succeedsTo(0)));
   }
 
   @Test
