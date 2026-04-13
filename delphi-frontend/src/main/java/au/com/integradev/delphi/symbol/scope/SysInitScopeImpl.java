@@ -24,6 +24,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.SystemScope;
 public class SysInitScopeImpl extends FileScopeImpl implements SysInitScope {
   private final SystemScope systemScope;
 
+  @SuppressWarnings("this-escape")
   public SysInitScopeImpl(String name, SystemScope systemScope) {
     super(name);
     this.systemScope = systemScope;

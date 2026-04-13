@@ -29,6 +29,7 @@ import org.sonar.plugins.communitydelphi.api.directive.CompilerDirective;
 public class BranchingDirective extends CompilerDirectiveImpl {
   private final Deque<BranchDirective> branches;
 
+  @SuppressWarnings("this-escape")
   public BranchingDirective(BranchDirective directive) {
     super(directive.getToken());
     branches = new ArrayDeque<>();

@@ -90,6 +90,7 @@ public class TypeFactoryImpl implements TypeFactory {
   private final FileType untypedFile;
   private final CollectionType emptySet;
 
+  @SuppressWarnings("this-escape")
   public TypeFactoryImpl(Toolchain toolchain, CompilerVersion compilerVersion) {
     this.toolchain = toolchain;
     this.compilerVersion = compilerVersion;

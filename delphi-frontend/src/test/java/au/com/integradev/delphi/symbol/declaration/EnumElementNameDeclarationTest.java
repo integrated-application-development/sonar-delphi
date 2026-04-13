@@ -78,7 +78,7 @@ class EnumElementNameDeclarationTest {
     DelphiFile delphiFile = mock(DelphiFile.class);
     when(delphiFile.getTypeFactory()).thenReturn(TypeFactoryUtils.defaultFactory());
 
-    var ast = spy(new DelphiAstImpl(delphiFile, null));
+    var ast = spy(DelphiAstImpl.create(delphiFile, null));
     ast.addChild(enumType);
 
     return new EnumElementNameDeclarationImpl(element);

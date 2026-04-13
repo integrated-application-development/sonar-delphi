@@ -55,6 +55,7 @@ public class ControlFlowGraphBuilder {
 
   private ProtoBlock currentBlock;
 
+  @SuppressWarnings("this-escape")
   public ControlFlowGraphBuilder() {
     ProtoBlock exitBlock = ProtoBlockFactory.exitBlock();
     addBlock(exitBlock);

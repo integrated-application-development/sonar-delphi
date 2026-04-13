@@ -25,6 +25,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.UnitScope;
 public class UnitScopeImpl extends FileScopeImpl implements UnitScope {
   private final SystemScope systemScope;
 
+  @SuppressWarnings("this-escape")
   public UnitScopeImpl(String name, SystemScope systemScope, SysInitScope sysInitScope) {
     super(name);
     this.systemScope = systemScope;
