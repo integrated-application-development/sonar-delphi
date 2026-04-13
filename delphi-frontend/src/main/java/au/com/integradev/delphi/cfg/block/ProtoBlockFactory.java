@@ -24,6 +24,7 @@ import au.com.integradev.delphi.cfg.api.Cases;
 import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Halt;
 import au.com.integradev.delphi.cfg.api.Linear;
+import au.com.integradev.delphi.cfg.api.PossibleException;
 import au.com.integradev.delphi.cfg.api.Terminus;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import au.com.integradev.delphi.cfg.api.UnknownException;
@@ -79,14 +80,23 @@ public final class ProtoBlockFactory {
                 .setData(terminator, blocks.get(target), blocks.get(withoutJump)));
   }
 
-  public static ProtoBlock withExceptions(ProtoBlock successor, Set<ProtoBlock> exceptions) {
+  public static ProtoBlock possibleExceptions(ProtoBlock successor, Set<ProtoBlock> exceptions) {
+    return new ProtoBlock(
+        PossibleExceptionImpl::new,
+        (blocks, block) ->
+            ((PossibleExceptionImpl) block)
+                .setData(
+                    blocks.get(successor),
+                    exceptions.stream().map(blocks::get).collect(Collectors.toSet())));
+  }
+
+  public static ProtoBlock unknownException(DelphiNode terminator, Set<ProtoBlock> exceptions) {
     return new ProtoBlock(
         UnknownExceptionImpl::new,
         (blocks, block) ->
             ((UnknownExceptionImpl) block)
                 .setData(
-                    blocks.get(successor),
-                    exceptions.stream().map(blocks::get).collect(Collectors.toSet())));
+                    terminator, exceptions.stream().map(blocks::get).collect(Collectors.toSet())));
   }
 
   public static ProtoBlock cases(
@@ -109,11 +119,11 @@ public final class ProtoBlockFactory {
     return "B" + ((BlockImpl) block).getId();
   }
 
-  static class UnknownExceptionImpl extends BlockImpl implements UnknownException {
+  static class PossibleExceptionImpl extends BlockImpl implements PossibleException {
     private Block successor;
     private Set<Block> exceptions;
 
-    public UnknownExceptionImpl(List<DelphiNode> elements) {
+    public PossibleExceptionImpl(List<DelphiNode> elements) {
       super(elements);
     }
 
@@ -145,6 +155,52 @@ public final class ProtoBlockFactory {
       return String.format(
           "%n\tjumps to: %s%n\texceptions to: %s",
           getBlockString(successor), getBlocksString(exceptions));
+    }
+
+    @Override
+    public String getBlockType() {
+      return "PossibleException";
+    }
+  }
+
+  static class UnknownExceptionImpl extends BlockImpl implements UnknownException {
+    private Set<Block> successors;
+    private Terminator terminator;
+
+    public UnknownExceptionImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
+    public void setData(DelphiNode terminator, Set<Block> successors) {
+      this.terminator = new Terminator(terminator);
+      this.successors = successors;
+    }
+
+    @Override
+    public Set<Block> getSuccessors() {
+      return successors;
+    }
+
+    @Override
+    public DelphiNode getTerminator() {
+      return terminator.getTerminatorNode();
+    }
+
+    @Override
+    public TerminatorKind getTerminatorKind() {
+      return terminator.getKind();
+    }
+
+    @Override
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      if (successors.remove(inactiveBlock)) {
+        successors.add(target);
+      }
+    }
+
+    @Override
+    public String getDescription() {
+      return String.format("%n\texceptions to: %s", getBlocksString(successors));
     }
 
     @Override

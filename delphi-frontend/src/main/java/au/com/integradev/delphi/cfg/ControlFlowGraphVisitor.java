@@ -194,7 +194,15 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     }
 
     Set<ProtoBlock> exceptions = builder.getAllCatchTargets();
-    builder.addBlock(ProtoBlockFactory.withExceptions(builder.getCurrentBlock(), exceptions));
+    builder.addBlock(ProtoBlockFactory.possibleExceptions(builder.getCurrentBlock(), exceptions));
+  }
+
+  private static Set<ProtoBlock> getUnknownExceptionTargets(ControlFlowGraphBuilder builder) {
+    Set<ProtoBlock> exceptions = builder.getAllCatchTargets();
+    if (exceptions.isEmpty()) {
+      return Set.of(builder.getExitBlock());
+    }
+    return exceptions;
   }
 
   // Overridden to ensure NodeDeclarations are added in the correct order
@@ -597,14 +605,13 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
 
   /*
    * `raise` statements jump directly to the handling exception or exit block. Bare raise statements
-   * have successors of all exceptional targets.
+   * represent guaranteed exceptions of unknown type.
    */
   @Override
   public ControlFlowGraphBuilder visit(RaiseStatementNode node, ControlFlowGraphBuilder builder) {
     if (node.getRaiseExpression() == null) {
-      Set<ProtoBlock> exceptions = builder.getAllCatchTargets();
-      builder.addBlock(ProtoBlockFactory.withExceptions(builder.getCurrentBlock(), exceptions));
-      builder.addElement(node);
+      builder.addBlock(
+          ProtoBlockFactory.unknownException(node, getUnknownExceptionTargets(builder)));
       return builder;
     }
 
