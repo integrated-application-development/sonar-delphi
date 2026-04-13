@@ -49,7 +49,7 @@ class TextLiteralNodeImplTest {
     when(delphiFile.getTextBlockLineEndingModeRegistry()).thenReturn(registry);
 
     TextLiteralNodeImpl node = new TextLiteralNodeImpl(DelphiLexer.TkTextLiteral);
-    node.setParent(new DelphiAstImpl(delphiFile, mock()));
+    node.setParent(DelphiAstImpl.create(delphiFile, mock()));
     node.addChild(createNode(DelphiLexer.TkMultilineString, image));
 
     assertThat(node.getImage()).isEqualTo(image);

@@ -198,7 +198,7 @@ public interface DelphiFile {
       root = (DelphiNode) parser.file().getTree();
     }
 
-    return new DelphiAstImpl(delphiFile, root);
+    return DelphiAstImpl.create(delphiFile, root);
   }
 
   private static List<String> getSourceCodeLines(DelphiFileStream fileStream) {

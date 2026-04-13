@@ -42,19 +42,17 @@ import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
   private final DelphiFile delphiFile;
 
-  /**
-   * Constructor.
-   *
-   * @param delphiFile The DelphiFile that this AST represents
-   * @param root The root node of the AST
-   */
-  public DelphiAstImpl(DelphiFile delphiFile, DelphiNode root) {
+  private DelphiAstImpl(DelphiFile delphiFile) {
     super(DelphiLexer.TkRootNode);
     this.delphiFile = delphiFile;
+  }
 
+  public static DelphiAstImpl create(DelphiFile delphiFile, DelphiNode root) {
+    DelphiAstImpl ast = new DelphiAstImpl(delphiFile);
     if (root != null) {
-      root.getChildren().forEach(this::addChild);
+      root.getChildren().forEach(ast::addChild);
     }
+    return ast;
   }
 
   @Override
