@@ -340,6 +340,28 @@ class PredefinedConditionalsTest {
             "WEAKINTFREF");
   }
 
+  void testDCCARM64EC() {
+    assertThat(PredefinedConditionals.getConditionalDefines(Toolchain.DCCARM64EC, VERSION_ATHENS))
+        .containsExactlyInAnyOrder(
+            "DCC",
+            "VER360",
+            "CONSOLE",
+            "NATIVECODE",
+            "MSWINDOWS",
+            "WIN64",
+            "ARM64EC",
+            "CPU64BITS",
+            "CPUARM",
+            "CPUARM64",
+            "EXTERNALLINKER",
+            "LLVM",
+            "UNICODE",
+            "CONDITIONALEXPRESSIONS",
+            "WEAKREF",
+            "WEAKINTFREF",
+            "WEAK_NATIVEINT");
+  }
+
   @Test
   void testDelphi2007ShouldBeBinaryCompatibleWithDelphi2006() {
     assertThat(PredefinedConditionals.getConditionalDefines(Toolchain.DCC32, VERSION_2007))
@@ -384,6 +406,7 @@ class PredefinedConditionalsTest {
         "DCCIOSSIMARM64",
         "DCCAARM",
         "DCCAARM64",
+        "DCCARM64EC",
         "DCCLINUX64"
       })
   void testLLVMToolchainsAfterDelphiAlexandriaShouldDefineLLVM(Toolchain toolchain) {
