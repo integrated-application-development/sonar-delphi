@@ -18,7 +18,7 @@
  */
 package au.com.integradev.delphi.type.generic.constraint;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
@@ -40,7 +40,7 @@ import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
-class RecordConstraintTest {
+class UnmanagedConstraintTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
 
   private static class SatisfiedArgumentsProvider implements ArgumentsProvider {
@@ -58,9 +58,10 @@ class RecordConstraintTest {
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.ANSICHAR)),
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.WIDECHAR)),
           Arguments.of(TypeMocker.struct("TFoo", RECORD)),
-          Arguments.of(TypeParameterTypeImpl.create("T", List.of(RecordConstraintImpl.instance()))),
           Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))));
+              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))),
+          Arguments.of(
+              TypeParameterTypeImpl.create("T", List.of(RecordConstraintImpl.instance()))));
     }
   }
 
@@ -76,30 +77,23 @@ class RecordConstraintTest {
           Arguments.of(
               TypeParameterTypeImpl.create("T", List.of(ConstructorConstraintImpl.instance()))),
           Arguments.of(
-              TypeParameterTypeImpl.create(
-                  "T",
-                  List.of(ClassConstraintImpl.instance(), ConstructorConstraintImpl.instance()))),
+              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))),
           Arguments.of(
               TypeParameterTypeImpl.create(
                   "T",
-                  List.of(
-                      RecordConstraintImpl.instance(),
-                      ConstructorConstraintImpl.instance(),
-                      ClassConstraintImpl.instance()))),
-          Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))));
+                  List.of(ClassConstraintImpl.instance(), ConstructorConstraintImpl.instance()))));
     }
   }
 
   @ParameterizedTest
   @ArgumentsSource(SatisfiedArgumentsProvider.class)
   void testSatisfied(Type argumentType) {
-    assertThat(RecordConstraintImpl.instance().satisfiedBy(argumentType)).isTrue();
+    assertThat(UnmanagedConstraintImpl.instance().satisfiedBy(argumentType)).isTrue();
   }
 
   @ParameterizedTest
   @ArgumentsSource(ViolatedArgumentsProvider.class)
   void testViolated(Type argumentType) {
-    assertThat(RecordConstraintImpl.instance().satisfiedBy(argumentType)).isFalse();
+    assertThat(UnmanagedConstraintImpl.instance().satisfiedBy(argumentType)).isFalse();
   }
 }

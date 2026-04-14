@@ -63,4 +63,16 @@ public class TypeConstraintImpl extends ConstraintImpl implements TypeConstraint
   protected ConstraintCheckResult check(RecordConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
   }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(InterfaceConstraint constraint) {
+    return ConstraintCheckResult.COMPATIBLE;
+  }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
+    return ConstraintCheckResult.COMPATIBLE;
+  }
 }

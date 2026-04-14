@@ -60,6 +60,18 @@ public class ConstructorConstraintImpl extends ConstraintImpl implements Constru
     return ConstraintCheckResult.VIOLATED;
   }
 
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(InterfaceConstraint constraint) {
+    return ConstraintCheckResult.COMPATIBLE;
+  }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
+    return ConstraintCheckResult.VIOLATED;
+  }
+
   private static boolean declaresPublicDefaultConstructor(Type type) {
     while (type.isClass()) {
       VisibilityType constructorVisibility =

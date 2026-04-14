@@ -18,20 +18,19 @@
  */
 package au.com.integradev.delphi.type.generic.constraint;
 
-import org.sonar.plugins.communitydelphi.api.type.Constraint.ClassConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.InterfaceConstraint;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 
-public class ClassConstraintImpl extends ConstraintImpl implements ClassConstraint {
-  private static final ClassConstraintImpl INSTANCE = new ClassConstraintImpl();
+public class InterfaceConstraintImpl extends ConstraintImpl implements InterfaceConstraint {
+  private static final InterfaceConstraintImpl INSTANCE = new InterfaceConstraintImpl();
 
-  private ClassConstraintImpl() {
+  private InterfaceConstraintImpl() {
     // Hide constructor
   }
 
   @Override
   protected ConstraintCheckResult check(Type type) {
-    if (type.isClass() || (type.isPointer() && ((PointerType) type).isNilPointer())) {
+    if (type.isInterface()) {
       return ConstraintCheckResult.SATISFIED;
     } else {
       return ConstraintCheckResult.VIOLATED;
@@ -39,16 +38,19 @@ public class ClassConstraintImpl extends ConstraintImpl implements ClassConstrai
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ClassConstraint constraint) {
-    return ConstraintCheckResult.SATISFIED;
+    return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ConstructorConstraint constraint) {
     return ConstraintCheckResult.COMPATIBLE;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(RecordConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
   }
@@ -56,7 +58,7 @@ public class ClassConstraintImpl extends ConstraintImpl implements ClassConstrai
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(InterfaceConstraint constraint) {
-    return ConstraintCheckResult.VIOLATED;
+    return ConstraintCheckResult.SATISFIED;
   }
 
   @Override
@@ -65,7 +67,7 @@ public class ClassConstraintImpl extends ConstraintImpl implements ClassConstrai
     return ConstraintCheckResult.VIOLATED;
   }
 
-  public static ClassConstraintImpl instance() {
+  public static InterfaceConstraintImpl instance() {
     return INSTANCE;
   }
 }

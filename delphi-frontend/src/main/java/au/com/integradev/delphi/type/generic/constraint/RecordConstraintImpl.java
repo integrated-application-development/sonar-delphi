@@ -58,6 +58,18 @@ public class RecordConstraintImpl extends ConstraintImpl implements RecordConstr
     return ConstraintCheckResult.SATISFIED;
   }
 
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(InterfaceConstraint constraint) {
+    return ConstraintCheckResult.VIOLATED;
+  }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
+    return ConstraintCheckResult.SATISFIED;
+  }
+
   public static RecordConstraintImpl instance() {
     return INSTANCE;
   }

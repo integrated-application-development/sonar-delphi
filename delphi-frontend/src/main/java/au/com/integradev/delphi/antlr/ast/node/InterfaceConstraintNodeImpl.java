@@ -16,22 +16,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.type;
+package au.com.integradev.delphi.antlr.ast.node;
 
-public interface Constraint {
-  boolean satisfiedBy(Type type);
+import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.type.generic.constraint.InterfaceConstraintImpl;
+import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceConstraintNode;
+import org.sonar.plugins.communitydelphi.api.type.Constraint;
 
-  interface ClassConstraint extends Constraint {}
+public final class InterfaceConstraintNodeImpl extends DelphiNodeImpl
+    implements InterfaceConstraintNode {
+  public InterfaceConstraintNodeImpl(Token token) {
+    super(token);
+  }
 
-  interface ConstructorConstraint extends Constraint {}
+  @Override
+  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
+    return visitor.visit(this, data);
+  }
 
-  interface RecordConstraint extends Constraint {}
-
-  interface InterfaceConstraint extends Constraint {}
-
-  interface UnmanagedConstraint extends Constraint {}
-
-  interface TypeConstraint extends Constraint {
-    Type type();
+  @Override
+  public Constraint getConstraint() {
+    return InterfaceConstraintImpl.instance();
   }
 }

@@ -83,7 +83,11 @@ class ClassConstraintTest {
                   List.of(
                       RecordConstraintImpl.instance(),
                       ConstructorConstraintImpl.instance(),
-                      ClassConstraintImpl.instance()))));
+                      ClassConstraintImpl.instance()))),
+          Arguments.of(
+              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))),
+          Arguments.of(
+              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))));
     }
   }
 

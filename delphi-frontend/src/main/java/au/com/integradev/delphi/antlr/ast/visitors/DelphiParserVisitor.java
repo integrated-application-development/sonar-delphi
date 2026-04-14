@@ -86,6 +86,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImportClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
+import org.sonar.plugins.communitydelphi.api.ast.InterfaceConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceGuidNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
@@ -158,6 +159,7 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnmanagedConstraintNode;
 import org.sonar.plugins.communitydelphi.api.ast.UsesClauseNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.VarSectionNode;
@@ -765,11 +767,19 @@ public interface DelphiParserVisitor<T> {
     return visit((ConstraintNode) node, data);
   }
 
+  default T visit(InterfaceConstraintNode node, T data) {
+    return visit((ConstraintNode) node, data);
+  }
+
   default T visit(RecordConstraintNode node, T data) {
     return visit((ConstraintNode) node, data);
   }
 
   default T visit(TypeConstraintNode node, T data) {
+    return visit((ConstraintNode) node, data);
+  }
+
+  default T visit(UnmanagedConstraintNode node, T data) {
     return visit((ConstraintNode) node, data);
   }
 }

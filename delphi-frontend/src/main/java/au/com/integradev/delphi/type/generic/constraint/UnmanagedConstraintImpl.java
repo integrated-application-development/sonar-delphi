@@ -18,20 +18,25 @@
  */
 package au.com.integradev.delphi.type.generic.constraint;
 
-import org.sonar.plugins.communitydelphi.api.type.Constraint.ClassConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.UnmanagedConstraint;
 import org.sonar.plugins.communitydelphi.api.type.Type;
-import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 
-public class ClassConstraintImpl extends ConstraintImpl implements ClassConstraint {
-  private static final ClassConstraintImpl INSTANCE = new ClassConstraintImpl();
+public class UnmanagedConstraintImpl extends ConstraintImpl implements UnmanagedConstraint {
+  private static final UnmanagedConstraintImpl INSTANCE = new UnmanagedConstraintImpl();
 
-  private ClassConstraintImpl() {
+  private UnmanagedConstraintImpl() {
     // Hide constructor
   }
 
   @Override
   protected ConstraintCheckResult check(Type type) {
-    if (type.isClass() || (type.isPointer() && ((PointerType) type).isNilPointer())) {
+    if (type.isRecord()
+        || type.isBoolean()
+        || type.isReal()
+        || type.isInteger()
+        || type.isEnum()
+        || type.isSubrange()
+        || type.isChar()) {
       return ConstraintCheckResult.SATISFIED;
     } else {
       return ConstraintCheckResult.VIOLATED;
@@ -39,18 +44,21 @@ public class ClassConstraintImpl extends ConstraintImpl implements ClassConstrai
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ClassConstraint constraint) {
-    return ConstraintCheckResult.SATISFIED;
-  }
-
-  @Override
-  protected ConstraintCheckResult check(ConstructorConstraint constraint) {
-    return ConstraintCheckResult.COMPATIBLE;
-  }
-
-  @Override
-  protected ConstraintCheckResult check(RecordConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
+  }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(ConstructorConstraint constraint) {
+    return ConstraintCheckResult.VIOLATED;
+  }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(RecordConstraint constraint) {
+    return ConstraintCheckResult.SATISFIED;
   }
 
   @Override
@@ -62,10 +70,10 @@ public class ClassConstraintImpl extends ConstraintImpl implements ClassConstrai
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
-    return ConstraintCheckResult.VIOLATED;
+    return ConstraintCheckResult.SATISFIED;
   }
 
-  public static ClassConstraintImpl instance() {
+  public static UnmanagedConstraintImpl instance() {
     return INSTANCE;
   }
 }

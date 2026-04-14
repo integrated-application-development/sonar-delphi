@@ -139,6 +139,7 @@ public final class DelphiKeywords {
           DelphiTokenType.TRY,
           DelphiTokenType.TYPE,
           DelphiTokenType.UNIT,
+          DelphiTokenType.UNMANAGED,
           DelphiTokenType.UNSAFE,
           DelphiTokenType.UNTIL,
           DelphiTokenType.USES,
