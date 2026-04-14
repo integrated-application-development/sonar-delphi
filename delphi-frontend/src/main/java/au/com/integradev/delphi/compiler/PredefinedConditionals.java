@@ -111,6 +111,16 @@ public final class PredefinedConditionals {
     return result;
   }
 
+  private Set<String> getToolchainConditionalDefines() {
+    Set<String> result = new HashSet<>();
+
+    if (toolchain == Toolchain.DCCARM64EC) {
+      result.add("ARM64EC");
+    }
+
+    return result;
+  }
+
   private Set<String> getCPUConditionalDefines() {
     Set<String> result = new HashSet<>();
     if (checkToolchain(Toolchain.DCC32, Toolchain.DCCOSX, Toolchain.DCCOSX64, Toolchain.DCCIOS32)) {
@@ -131,7 +141,8 @@ public final class PredefinedConditionals {
         Toolchain.DCCIOSARM64,
         Toolchain.DCCIOSSIMARM64,
         Toolchain.DCCAARM,
-        Toolchain.DCCAARM64)) {
+        Toolchain.DCCAARM64,
+        Toolchain.DCCARM64EC)) {
       result.add("CPUARM");
       result.add(selectByBitness("CPUARM32", "CPUARM64"));
     }
@@ -172,6 +183,7 @@ public final class PredefinedConditionals {
             Toolchain.DCCIOSSIMARM64,
             Toolchain.DCCAARM,
             Toolchain.DCCAARM64,
+            Toolchain.DCCARM64EC,
             Toolchain.DCCLINUX64);
 
     if (basedOnLLVM) {
@@ -238,6 +250,7 @@ public final class PredefinedConditionals {
     Set<String> result = new HashSet<>();
     result.addAll(getCompilerConditionalDefines());
     result.addAll(getPlatformConditionalDefines());
+    result.addAll(getToolchainConditionalDefines());
     result.addAll(getCPUConditionalDefines());
     result.addAll(getAvailabilityConditionalDefines());
     return result;
