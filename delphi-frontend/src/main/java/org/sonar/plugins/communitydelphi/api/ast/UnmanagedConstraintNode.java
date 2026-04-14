@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,22 +16,6 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.type;
+package org.sonar.plugins.communitydelphi.api.ast;
 
-public interface Constraint {
-  boolean satisfiedBy(Type type);
-
-  interface ClassConstraint extends Constraint {}
-
-  interface ConstructorConstraint extends Constraint {}
-
-  interface RecordConstraint extends Constraint {}
-
-  interface InterfaceConstraint extends Constraint {}
-
-  interface UnmanagedConstraint extends Constraint {}
-
-  interface TypeConstraint extends Constraint {
-    Type type();
-  }
-}
+public interface UnmanagedConstraintNode extends ConstraintNode {}

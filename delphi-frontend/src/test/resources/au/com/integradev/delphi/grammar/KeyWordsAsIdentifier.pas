@@ -63,6 +63,7 @@ var
   STDCALL: Boolean;
   STORED: Boolean;
   STRICT: Boolean;
+  UNMANAGED: Boolean;
   UNSAFE: Boolean;
   VARARGS: Boolean;
   VARIANT: Boolean;

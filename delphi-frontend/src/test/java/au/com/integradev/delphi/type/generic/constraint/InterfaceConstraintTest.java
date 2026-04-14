@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@ package au.com.integradev.delphi.type.generic.constraint;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS;
+import static org.sonar.plugins.communitydelphi.api.type.StructKind.INTERFACE;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD;
 
 import au.com.integradev.delphi.type.generic.TypeParameterTypeImpl;
@@ -38,26 +39,16 @@ import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
-class ClassConstraintTest {
+class InterfaceConstraintTest {
   private static final TypeFactory FACTORY = TypeFactoryUtils.defaultFactory();
 
   private static class SatisfiedArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
-          Arguments.of(TypeMocker.struct("TBar", CLASS)),
-          Arguments.of(TypeParameterTypeImpl.create("T", List.of(ClassConstraintImpl.instance()))),
+          Arguments.of(TypeMocker.struct("IFoo", INTERFACE)),
           Arguments.of(
-              TypeParameterTypeImpl.create(
-                  "T",
-                  List.of(ClassConstraintImpl.instance(), ConstructorConstraintImpl.instance()))),
-          Arguments.of(
-              TypeParameterTypeImpl.create(
-                  "T",
-                  List.of(
-                      new TypeConstraintImpl(TypeMocker.struct("TBar", CLASS)),
-                      ClassConstraintImpl.instance(),
-                      ConstructorConstraintImpl.instance()))));
+              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))));
     }
   }
 
@@ -67,39 +58,34 @@ class ClassConstraintTest {
       return Stream.of(
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.BYTE)),
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.STRING)),
+          Arguments.of(TypeMocker.struct("TFoo", CLASS)),
           Arguments.of(TypeMocker.struct("TFoo", RECORD)),
           Arguments.of(TypeParameterTypeImpl.create("T")),
           Arguments.of(TypeParameterTypeImpl.create("T", List.of(mock(Constraint.class)))),
+          Arguments.of(TypeParameterTypeImpl.create("T", List.of(ClassConstraintImpl.instance()))),
           Arguments.of(TypeParameterTypeImpl.create("T", List.of(RecordConstraintImpl.instance()))),
           Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(ConstructorConstraintImpl.instance()))),
-          Arguments.of(
-              TypeParameterTypeImpl.create(
-                  "T",
-                  List.of(RecordConstraintImpl.instance(), ConstructorConstraintImpl.instance()))),
+              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))),
           Arguments.of(
               TypeParameterTypeImpl.create(
                   "T",
                   List.of(
-                      RecordConstraintImpl.instance(),
-                      ConstructorConstraintImpl.instance(),
-                      ClassConstraintImpl.instance()))),
+                      InterfaceConstraintImpl.instance(), ConstructorConstraintImpl.instance()))),
           Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))),
-          Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))));
+              TypeParameterTypeImpl.create(
+                  "T", List.of(RecordConstraintImpl.instance(), ClassConstraintImpl.instance()))));
     }
   }
 
   @ParameterizedTest
   @ArgumentsSource(SatisfiedArgumentsProvider.class)
   void testSatisfied(Type argumentType) {
-    assertThat(ClassConstraintImpl.instance().satisfiedBy(argumentType)).isTrue();
+    assertThat(InterfaceConstraintImpl.instance().satisfiedBy(argumentType)).isTrue();
   }
 
   @ParameterizedTest
   @ArgumentsSource(ViolatedArgumentsProvider.class)
   void testViolated(Type argumentType) {
-    assertThat(ClassConstraintImpl.instance().satisfiedBy(argumentType)).isFalse();
+    assertThat(InterfaceConstraintImpl.instance().satisfiedBy(argumentType)).isFalse();
   }
 }
