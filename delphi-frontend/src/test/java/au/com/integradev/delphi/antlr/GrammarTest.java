@@ -365,4 +365,9 @@ class GrammarTest {
   void testQualifiedExports() {
     assertParsed("QualifiedExports.dpk");
   }
+
+  @Test
+  void testGenericConstraints() {
+    assertParsed("GenericConstraints.pas");
+  }
 }

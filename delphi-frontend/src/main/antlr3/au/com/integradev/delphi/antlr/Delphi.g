@@ -783,6 +783,8 @@ genericConstraint            : typeReference -> ^(TkTypeConstraint<TypeConstrain
                              | RECORD<RecordConstraintNodeImpl>^
                              | CLASS<ClassConstraintNodeImpl>^
                              | CONSTRUCTOR<ConstructorConstraintNodeImpl>^
+                             | INTERFACE<InterfaceConstraintNodeImpl>^
+                             | UNMANAGED<UnmanagedConstraintNodeImpl>^
                              ;
 genericArguments             : '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>'
                              -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>')
@@ -1216,7 +1218,7 @@ keywordsUsedAsNames          : (ABSOLUTE | ABSTRACT | ALIGN | ASSEMBLER | ASSEMB
                              | (EXTERNAL | FAR | FINAL | FORWARD | HELPER | IMPLEMENTS | INDEX | LOCAL | MESSAGE | NAME)
                              | (NEAR | NODEFAULT | NORETURN | ON | OPERATOR | OUT | OVERLOAD | OVERRIDE | PACKAGE | PASCAL | PLATFORM)
                              | (PRIVATE | PROTECTED | PUBLIC | PUBLISHED | READ | READONLY | REFERENCE | REGISTER | REINTRODUCE)
-                             | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNSAFE)
+                             | (REQUIRES | RESIDENT | SAFECALL | SEALED | STATIC | STDCALL | STORED | STRICT | UNMANAGED | UNSAFE)
                              | (VARARGS | VIRTUAL | WINAPI | WRITE | WRITEONLY)
                              | (LABEL) // Used to be allowed in Delphi.NET.
                              ;
@@ -1231,7 +1233,7 @@ keywords                     : (ABSOLUTE | ABSTRACT | AND | ALIGN | ARRAY | AS |
                              | (PROCEDURE | PROGRAM | PROPERTY | PROTECTED | PUBLIC | PUBLISHED | RAISE | READ | READONLY)
                              | (RECORD | REFERENCE | REGISTER | REINTRODUCE | REPEAT | REQUIRES | RESIDENT)
                              | (RESOURCESTRING | SAFECALL | SEALED | SET | SHL | SHR | STATIC | STDCALL | STORED | STRICT)
-                             | (STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNSAFE | UNTIL | USES | VAR | VARARGS)
+                             | (STRING | THEN | THREADVAR | TO | TRY | TYPE | UNIT | UNMANAGED | UNSAFE | UNTIL | USES | VAR | VARARGS)
                              | (VIRTUAL | WHILE | WINAPI | WITH | WRITE | WRITEONLY | XOR)
                              ;
 nameDeclarationList          : nameDeclaration (',' nameDeclaration)* -> ^(TkNameDeclarationList<NameDeclarationListNodeImpl> nameDeclaration (',' nameDeclaration)*)
@@ -1417,6 +1419,7 @@ TO                : T O                         ;
 TRY               : T R Y                       ;
 TYPE              : T Y P E                     ;
 UNIT              : U N I T                     ;
+UNMANAGED         : U N M A N A G E D           ;
 UNSAFE            : U N S A F E                 ;
 UNTIL             : U N T I L                   ;
 USES              : U S E S                     ;
