@@ -34,6 +34,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
@@ -91,6 +92,30 @@ public final class ExpressionTypeResolver {
     } else {
       return resolveOperatorType(operator, operand);
     }
+  }
+
+  public Type resolve(ConditionalExpressionNode expression) {
+    Type thenType = expression.getThenExpression().getType();
+    Type elseType = expression.getElseExpression().getType();
+
+    if (thenType.isUnknown()) {
+      return elseType;
+    }
+    if (elseType.isUnknown()) {
+      return thenType;
+    }
+
+    EqualityType thenToElse = TypeComparer.compare(thenType, elseType);
+    EqualityType elseToThen = TypeComparer.compare(elseType, thenType);
+
+    if (thenToElse.ordinal() >= elseToThen.ordinal()
+        && thenToElse != EqualityType.INCOMPATIBLE_TYPES) {
+      return elseType;
+    }
+    if (elseToThen != EqualityType.INCOMPATIBLE_TYPES) {
+      return thenType;
+    }
+    return thenType;
   }
 
   public Type resolve(PrimaryExpressionNode expression) {

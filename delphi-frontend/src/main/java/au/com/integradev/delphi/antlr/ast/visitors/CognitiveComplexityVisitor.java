@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
@@ -86,6 +87,19 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
         --data.nesting;
       }
     }
+
+    return data;
+  }
+
+  @Override
+  public Data visit(ConditionalExpressionNode expression, Data data) {
+    data.increaseComplexityByNesting();
+    expression.getGuardExpression().accept(this, data);
+
+    ++data.nesting;
+    expression.getThenExpression().accept(this, data);
+    expression.getElseExpression().accept(this, data);
+    --data.nesting;
 
     return data;
   }

@@ -142,6 +142,11 @@ class GrammarTest {
   }
 
   @Test
+  void testParseConditionalExpressions() {
+    assertParsed("ConditionalExpressions.pas");
+  }
+
+  @Test
   void testParseGenerics() {
     assertParsed("Generics.pas");
   }

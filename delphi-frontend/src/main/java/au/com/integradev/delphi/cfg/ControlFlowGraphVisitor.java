@@ -37,6 +37,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
@@ -273,6 +274,27 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     ProtoBlock thenBlock = builder.getCurrentBlock();
 
     // process condition
+    builder.addBlock(ProtoBlockFactory.branch(node, thenBlock, elseBlock));
+    return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
+  }
+
+  /*
+   * Modeled the same way as an `if` statement: the guard branches into two expressions that both
+   * merge back to the block following the conditional expression.
+   */
+  @Override
+  public ControlFlowGraphBuilder visit(
+      ConditionalExpressionNode node, ControlFlowGraphBuilder builder) {
+    ProtoBlock after = builder.getCurrentBlock();
+
+    builder.addBlockBefore(after);
+    build(node.getElseExpression(), builder);
+    ProtoBlock elseBlock = builder.getCurrentBlock();
+
+    builder.addBlockBefore(after);
+    build(node.getThenExpression(), builder);
+    ProtoBlock thenBlock = builder.getCurrentBlock();
+
     builder.addBlock(ProtoBlockFactory.branch(node, thenBlock, elseBlock));
     return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
   }
