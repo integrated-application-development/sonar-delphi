@@ -23,6 +23,7 @@ import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Terminated;
+import au.com.integradev.delphi.cfg.api.Terminus;
 import au.com.integradev.delphi.utils.ControlFlowGraphUtils;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -244,7 +245,7 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
         return true;
       }
       if ((search.getSuccessors().size() == 1 && search.getSuccessors().contains(jumpTarget))
-          || search.equals(cfg.getExitBlock())) {
+          || search instanceof Terminus) {
         return false;
       }
 

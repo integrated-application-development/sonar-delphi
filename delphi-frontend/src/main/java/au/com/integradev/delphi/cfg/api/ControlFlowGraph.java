@@ -30,13 +30,6 @@ public interface ControlFlowGraph {
   Block getEntryBlock();
 
   /**
-   * The final exit block of the control flow graph
-   *
-   * @return the final block of the control flow graph
-   */
-  Block getExitBlock();
-
-  /**
    * All the blocks within the control flow graph
    *
    * @return the list of all blocks in the control flow graph

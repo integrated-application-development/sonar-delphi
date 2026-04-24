@@ -73,8 +73,7 @@ public class ControlFlowGraphBuilder {
     }
 
     ControlFlowGraphImpl cfg =
-        new ControlFlowGraphImpl(
-            map.get(currentBlock), map.get(exitBlocks.peek()), new ArrayList<>(map.values()));
+        new ControlFlowGraphImpl(map.get(currentBlock), new ArrayList<>(map.values()));
     cfg.prune();
 
     populatePredecessors(cfg);

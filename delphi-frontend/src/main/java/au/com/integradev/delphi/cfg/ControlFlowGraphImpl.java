@@ -32,23 +32,16 @@ import java.util.Set;
 
 public class ControlFlowGraphImpl implements ControlFlowGraph {
   private Block entry;
-  private final Block exit;
   private final List<Block> blocks;
 
-  public ControlFlowGraphImpl(Block entry, Block exit, List<Block> blocks) {
+  public ControlFlowGraphImpl(Block entry, List<Block> blocks) {
     this.entry = entry;
-    this.exit = exit;
     this.blocks = blocks;
   }
 
   @Override
   public Block getEntryBlock() {
     return entry;
-  }
-
-  @Override
-  public Block getExitBlock() {
-    return exit;
   }
 
   @Override

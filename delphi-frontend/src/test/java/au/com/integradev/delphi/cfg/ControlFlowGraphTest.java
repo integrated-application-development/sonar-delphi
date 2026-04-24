@@ -29,7 +29,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Linear;
-import au.com.integradev.delphi.cfg.api.Terminus;
+import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
 import au.com.integradev.delphi.cfg.checker.GraphChecker;
 import au.com.integradev.delphi.cfg.checker.StatementTerminator;
@@ -247,9 +247,7 @@ class ControlFlowGraphTest {
     Block exit = entry.getSuccessors().iterator().next();
     assertThat(exit)
         .withFailMessage("Expecting entry block's successor to be the exit block")
-        .isEqualTo(cfg.getExitBlock())
-        .withFailMessage("Expecting entry block's successor to be of type Terminus.")
-        .isInstanceOf(Terminus.class);
+        .isInstanceOf(RoutineExit.class);
   }
 
   @Test
