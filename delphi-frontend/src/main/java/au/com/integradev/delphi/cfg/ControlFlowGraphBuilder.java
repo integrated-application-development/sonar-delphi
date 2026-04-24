@@ -109,6 +109,10 @@ public class ControlFlowGraphBuilder {
     return continueTargets.peek();
   }
 
+  public boolean isInLoop() {
+    return !continueTargets.isEmpty();
+  }
+
   public void pushLoopContext(ProtoBlock continueTarget, ProtoBlock breakTarget) {
     continueTargets.push(continueTarget);
     breakTargets.push(breakTarget);

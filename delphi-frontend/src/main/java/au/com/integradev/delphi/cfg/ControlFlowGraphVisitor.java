@@ -551,7 +551,10 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
             node.getFinallyBlock(), builder.getCurrentBlock(), builder.getExitBlock()));
 
     build(finallyNode.getStatementList(), builder);
-    builder.pushLoopContext(builder.getCurrentBlock(), builder.getCurrentBlock());
+    boolean inLoop = builder.isInLoop();
+    if (inLoop) {
+      builder.pushLoopContext(builder.getCurrentBlock(), builder.getCurrentBlock());
+    }
     builder.pushExitBlock(builder.getCurrentBlock());
 
     builder.addBlockBeforeCurrent();
@@ -565,6 +568,9 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     builder.addElement(node);
 
     builder.popExitBlock();
+    if (inLoop) {
+      builder.popLoopContext();
+    }
     return builder;
   }
 

@@ -53,6 +53,8 @@ import java.util.Map.Entry;
 import java.util.function.Consumer;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
@@ -777,18 +779,62 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "A")).succeedsTo(0)));
   }
 
-  @Test
-  void testBreakOutsideOfLoop() {
-    GraphChecker checker = checker();
-    assertThatThrownBy(() -> test("Break;", checker))
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "Break",
+        // for to
+        "Break; for I := Foo to Bar do;",
+        "for I := Foo to Bar do; Break;",
+        // for in
+        "Break; for I in Foo do;",
+        "for I in Foo do; Break;",
+        // while
+        "Break; while Foo do;",
+        "while Foo do; Break;",
+        // repeat until
+        "Break; repeat until Foo;",
+        "repeat until Foo; Break;",
+        // try finally
+        "Break; try finally end;",
+        "try Break finally end;",
+        "try finally Break end;",
+        "try finally end; Break;",
+        "try try Break finally end finally end;",
+        "try try finally Break end finally end;",
+      })
+  void testBreakOutsideOfLoop(String test) {
+    assertThatThrownBy(() -> buildCfg(test))
         .withFailMessage("'Break' statement not in loop statement.")
         .isInstanceOf(IllegalStateException.class);
   }
 
-  @Test
-  void testContinueOutsideOfLoop() {
-    GraphChecker checker = checker();
-    assertThatThrownBy(() -> test("Continue;", checker))
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "Continue",
+        // for to
+        "Continue; for I := Foo to Bar do;",
+        "for I := Foo to Bar do; Continue;",
+        // for in
+        "Continue; for I in Foo do;",
+        "for I in Foo do; Continue;",
+        // while
+        "Continue; while Foo do;",
+        "while Foo do; Continue;",
+        // repeat until
+        "Continue; repeat until Foo;",
+        "repeat until Foo; Continue;",
+        // try finally
+        "Continue; try finally end;",
+        "try Continue finally end;",
+        "try finally Continue end;",
+        "try finally end; Continue;",
+        "try try Continue finally end finally end;",
+        "try try finally Continue end finally end;",
+      })
+  void testContinueOutsideOfLoop(String test) {
+    assertThatThrownBy(() -> buildCfg(test))
         .withFailMessage("'Continue' statement not in loop statement.")
         .isInstanceOf(IllegalStateException.class);
   }
