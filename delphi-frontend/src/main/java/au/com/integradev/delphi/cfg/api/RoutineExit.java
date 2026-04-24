@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,13 +18,5 @@
  */
 package au.com.integradev.delphi.cfg.api;
 
-import java.util.Collections;
-import java.util.Set;
-
-/** A block that ends paths through a {@link ControlFlowGraph} */
-public interface Terminus extends Block {
-  @Override
-  default Set<Block> getSuccessors() {
-    return Collections.emptySet();
-  }
-}
+/** A block representing the end of a routine */
+public interface RoutineExit extends Terminus {}
