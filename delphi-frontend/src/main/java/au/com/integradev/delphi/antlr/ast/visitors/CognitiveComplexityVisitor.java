@@ -31,6 +31,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
@@ -86,6 +87,19 @@ public class CognitiveComplexityVisitor implements DelphiParserVisitor<Data> {
         --data.nesting;
       }
     }
+
+    return data;
+  }
+
+  @Override
+  public Data visit(IfExpressionNode expression, Data data) {
+    data.increaseComplexityByNesting();
+    expression.getGuardExpression().accept(this, data);
+
+    ++data.nesting;
+    expression.getThenExpression().accept(this, data);
+    expression.getElseExpression().accept(this, data);
+    --data.nesting;
 
     return data;
   }

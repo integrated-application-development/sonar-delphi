@@ -50,6 +50,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
@@ -273,6 +274,22 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     ProtoBlock thenBlock = builder.getCurrentBlock();
 
     // process condition
+    builder.addBlock(ProtoBlockFactory.branch(node, thenBlock, elseBlock));
+    return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
+  }
+
+  @Override
+  public ControlFlowGraphBuilder visit(IfExpressionNode node, ControlFlowGraphBuilder builder) {
+    ProtoBlock after = builder.getCurrentBlock();
+
+    builder.addBlockBefore(after);
+    build(node.getElseExpression(), builder);
+    ProtoBlock elseBlock = builder.getCurrentBlock();
+
+    builder.addBlockBefore(after);
+    build(node.getThenExpression(), builder);
+    ProtoBlock thenBlock = builder.getCurrentBlock();
+
     builder.addBlock(ProtoBlockFactory.branch(node, thenBlock, elseBlock));
     return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
   }

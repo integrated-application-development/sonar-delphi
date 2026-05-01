@@ -81,6 +81,7 @@ import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImportClauseNode;
@@ -619,6 +620,10 @@ public interface DelphiParserVisitor<T> {
   }
 
   default T visit(AnonymousMethodNode node, T data) {
+    return visit((ExpressionNode) node, data);
+  }
+
+  default T visit(IfExpressionNode node, T data) {
     return visit((ExpressionNode) node, data);
   }
 
