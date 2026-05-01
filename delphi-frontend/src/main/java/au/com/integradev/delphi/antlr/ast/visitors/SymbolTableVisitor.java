@@ -508,21 +508,35 @@ public abstract class SymbolTableVisitor implements DelphiParserVisitor<Data> {
 
   private static Type findSelfType(
       RoutineNode node, @Nullable RoutineNameDeclaration declaration, Data data) {
-    Type selfType = null;
-    TypeNameDeclaration routineType = node.getTypeDeclaration();
-    if (routineType != null) {
-      selfType = routineType.getType();
-      if (selfType.isHelper()) {
-        selfType = ((HelperType) selfType).extendedType();
-      }
-      if (node.isClassMethod()) {
-        selfType = data.typeFactory.classOf(null, selfType);
+    TypeNameDeclaration selfTypeDeclaration = node.getTypeDeclaration();
+    if (selfTypeDeclaration == null) {
+      return null;
+    }
+
+    Type selfType = selfTypeDeclaration.getType();
+    if (selfType.isHelper()) {
+      selfType = ((HelperType) selfType).extendedType();
+    }
+
+    if (node.isClassMethod()) {
+      if (node.isOperator()) {
+        if (!isOperatorWithSelf(node.simpleName())) {
+          selfType = null;
+        }
+      } else {
         if (declaration != null && declaration.hasDirective(RoutineDirective.STATIC)) {
           selfType = null;
+        } else {
+          selfType = data.typeFactory.classOf(null, selfType);
         }
       }
     }
+
     return selfType;
+  }
+
+  private static boolean isOperatorWithSelf(String name) {
+    return name.equalsIgnoreCase("Initialize") || name.equalsIgnoreCase("Finalize");
   }
 
   @Override

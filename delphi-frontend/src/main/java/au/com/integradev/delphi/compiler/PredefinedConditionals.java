@@ -44,14 +44,11 @@ public final class PredefinedConditionals {
     return Set.of(options).contains(toolchain);
   }
 
-  private <T> T selectByArchitecture(T x86, T x64) {
-    switch (toolchain.architecture) {
-      case X86:
-        return x86;
-      case X64:
-        return x64;
-      default:
-        throw new AssertionError("Unhandled Architecture");
+  private <T> T selectByBitness(T bit32, T bit64) {
+    if (toolchain.bitness() == Bitness.BIT_32) {
+      return bit32;
+    } else {
+      return bit64;
     }
   }
 
@@ -72,25 +69,25 @@ public final class PredefinedConditionals {
     switch (toolchain.platform) {
       case WINDOWS:
         result.add("MSWINDOWS");
-        result.add(selectByArchitecture("WIN32", "WIN64"));
+        result.add(selectByBitness("WIN32", "WIN64"));
         break;
       case LINUX:
         result.add("LINUX");
-        result.add(selectByArchitecture("LINUX32", "LINUX64"));
+        result.add(selectByBitness("LINUX32", "LINUX64"));
         break;
       case MACOS:
         result.add("OSX");
-        if (toolchain.architecture == Architecture.X64) {
+        if (toolchain.bitness() == Bitness.BIT_64) {
           result.add("OSX64");
         }
         break;
       case IOS:
         result.add("IOS");
-        result.add(selectByArchitecture("IOS32", "IOS64"));
+        result.add(selectByBitness("IOS32", "IOS64"));
         break;
       case ANDROID:
         result.add("ANDROID");
-        result.add(selectByArchitecture("ANDROID32", "ANDROID64"));
+        result.add(selectByBitness("ANDROID32", "ANDROID64"));
         break;
       default:
         // Do nothing
@@ -100,16 +97,26 @@ public final class PredefinedConditionals {
       // Indicates the target platform is an Apple Darwin OS (macOS or iOS).
       // Note: This symbol existed before Apple changed the name of OS X to macOS.
       result.add("MACOS");
-      result.add(selectByArchitecture("MACOS32", "MACOS64"));
+      result.add(selectByBitness("MACOS32", "MACOS64"));
     }
 
     if (toolchain.platform != Platform.WINDOWS) {
       result.add("POSIX");
-      result.add(selectByArchitecture("POSIX32", "POSIX64"));
+      result.add(selectByBitness("POSIX32", "POSIX64"));
     }
 
     result.add("CONSOLE");
     result.add("NATIVECODE");
+
+    return result;
+  }
+
+  private Set<String> getToolchainConditionalDefines() {
+    Set<String> result = new HashSet<>();
+
+    if (toolchain == Toolchain.DCCARM64EC) {
+      result.add("ARM64EC");
+    }
 
     return result;
   }
@@ -134,12 +141,13 @@ public final class PredefinedConditionals {
         Toolchain.DCCIOSARM64,
         Toolchain.DCCIOSSIMARM64,
         Toolchain.DCCAARM,
-        Toolchain.DCCAARM64)) {
+        Toolchain.DCCAARM64,
+        Toolchain.DCCARM64EC)) {
       result.add("CPUARM");
-      result.add(selectByArchitecture("CPUARM32", "CPUARM64"));
+      result.add(selectByBitness("CPUARM32", "CPUARM64"));
     }
 
-    result.add(selectByArchitecture("CPU32BITS", "CPU64BITS"));
+    result.add(selectByBitness("CPU32BITS", "CPU64BITS"));
 
     return result;
   }
@@ -175,6 +183,7 @@ public final class PredefinedConditionals {
             Toolchain.DCCIOSSIMARM64,
             Toolchain.DCCAARM,
             Toolchain.DCCAARM64,
+            Toolchain.DCCARM64EC,
             Toolchain.DCCLINUX64);
 
     if (basedOnLLVM) {
@@ -241,6 +250,7 @@ public final class PredefinedConditionals {
     Set<String> result = new HashSet<>();
     result.addAll(getCompilerConditionalDefines());
     result.addAll(getPlatformConditionalDefines());
+    result.addAll(getToolchainConditionalDefines());
     result.addAll(getCPUConditionalDefines());
     result.addAll(getAvailabilityConditionalDefines());
     return result;

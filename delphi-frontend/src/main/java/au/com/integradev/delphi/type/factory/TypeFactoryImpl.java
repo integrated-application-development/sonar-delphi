@@ -21,7 +21,7 @@ package au.com.integradev.delphi.type.factory;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.CLASS_HELPER;
 import static org.sonar.plugins.communitydelphi.api.type.StructKind.RECORD_HELPER;
 
-import au.com.integradev.delphi.compiler.Architecture;
+import au.com.integradev.delphi.compiler.Bitness;
 import au.com.integradev.delphi.compiler.CompilerVersion;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.compiler.Toolchain;
@@ -114,7 +114,7 @@ public class TypeFactoryImpl implements TypeFactory {
             BigInteger.ZERO,
             ((IntegerType) getIntrinsic(IntrinsicType.INTEGER)).max());
 
-    if (toolchain.architecture == Architecture.X86) {
+    if (toolchain.bitness() == Bitness.BIT_32) {
       this.openArraySizeType = (IntegerType) getIntrinsic(IntrinsicType.INTEGER);
       this.dynamicArraySizeType = (IntegerType) getIntrinsic(IntrinsicType.INTEGER);
     } else {
@@ -135,7 +135,7 @@ public class TypeFactoryImpl implements TypeFactory {
   private boolean isLong64Bit() {
     // See: https://bit.ly/long-on-different-platforms
     return compilerVersion.compareTo(VERSION_XE8) >= 0
-        && toolchain.architecture == Architecture.X64
+        && toolchain.bitness() == Bitness.BIT_64
         && toolchain.platform != Platform.WINDOWS;
   }
 
@@ -149,9 +149,9 @@ public class TypeFactoryImpl implements TypeFactory {
     return compilerVersion.compareTo(VERSION_2009) >= 0;
   }
 
-  private int sizeByArchitecture(int x86, int x64) {
-    if (toolchain.architecture == Architecture.X86) {
-      return x86;
+  private int sizeByBitness(int x32, int x64) {
+    if (toolchain.bitness() == Bitness.BIT_32) {
+      return x32;
     } else {
       return x64;
     }
@@ -176,11 +176,11 @@ public class TypeFactoryImpl implements TypeFactory {
       // See: https://stackoverflow.com/questions/7630781/delphi-2007-and-xe2-using-nativeint
       return 8;
     }
-    return sizeByArchitecture(4, 8);
+    return sizeByBitness(4, 8);
   }
 
   private int pointerSize() {
-    return sizeByArchitecture(4, 8);
+    return sizeByBitness(4, 8);
   }
 
   private int proceduralSize(ProceduralKind kind) {
@@ -267,7 +267,7 @@ public class TypeFactoryImpl implements TypeFactory {
     }
 
     if (isNativeIntWeakAlias()) {
-      if (toolchain.architecture == Architecture.X64) {
+      if (toolchain.bitness() == Bitness.BIT_64) {
         addWeakAlias(IntrinsicType.NATIVEINT, IntrinsicType.INT64);
         addWeakAlias(IntrinsicType.NATIVEUINT, IntrinsicType.UINT64);
       } else {
@@ -311,13 +311,13 @@ public class TypeFactoryImpl implements TypeFactory {
       addWeakAlias(IntrinsicType.PCHAR, IntrinsicType.PANSICHAR);
     }
 
-    int variantSize = sizeByArchitecture(16, 24);
+    int variantSize = sizeByBitness(16, 24);
     addVariant(IntrinsicType.VARIANT, variantSize, false);
     addVariant(IntrinsicType.OLEVARIANT, variantSize, true);
 
     intrinsicTypes.put(
         IntrinsicType.TEXT,
-        new FileTypeImpl(TypeFactory.untypedType(), sizeByArchitecture(730, 754)) {
+        new FileTypeImpl(TypeFactory.untypedType(), sizeByBitness(730, 754)) {
           @Override
           public String getImage() {
             return IntrinsicType.TEXT.fullyQualifiedName();
@@ -487,7 +487,7 @@ public class TypeFactoryImpl implements TypeFactory {
 
   @Override
   public FileType fileOf(Type type) {
-    return new FileTypeImpl(type, sizeByArchitecture(592, 616));
+    return new FileTypeImpl(type, sizeByBitness(592, 616));
   }
 
   @Override

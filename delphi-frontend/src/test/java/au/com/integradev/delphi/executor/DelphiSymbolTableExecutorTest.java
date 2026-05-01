@@ -313,6 +313,15 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testRecordInitializeFinalizeSelfTypes() {
+    execute("RecordInitializeFinalizeSelfTypes.pas");
+    verifyUsages(18, 10, reference(30, 2), reference(35, 2));
+    verifyUsages(28, 35, reference(30, 7));
+    verifyUsages(33, 35, reference(35, 7));
+    verifyUsages(23, 10, reference(40, 2), reference(45, 2));
+  }
+
+  @Test
   void testSelfInNestedProcedures() {
     execute("SelfInNestedProcedures.pas");
     verifyUsages(17, 11, reference(37, 2));

@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +18,7 @@
  */
 package au.com.integradev.delphi.compiler;
 
-public enum Architecture {
-  X86(Bitness.BIT_32),
-  X64(Bitness.BIT_64),
-  ARM32(Bitness.BIT_32),
-  ARM64(Bitness.BIT_64);
-
-  public final Bitness bitness;
-
-  Architecture(Bitness bitness) {
-    this.bitness = bitness;
-  }
+public enum Bitness {
+  BIT_32,
+  BIT_64;
 }

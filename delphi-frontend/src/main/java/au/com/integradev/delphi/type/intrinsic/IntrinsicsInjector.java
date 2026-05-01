@@ -296,6 +296,7 @@ public final class IntrinsicsInjector {
         .outParam(type(INT64))
         .required(3)
         .returns(type(INT64));
+    routine("NameOf").param(TypeFactory.untypedType()).returns(type(UNICODESTRING));
     routine("New").varParam(ANY_POINTER);
     routine("Odd").param(type(INTEGER)).returns(type(BOOLEAN));
     routine("Ord").param(ANY_ORDINAL).returns(type(BYTE));

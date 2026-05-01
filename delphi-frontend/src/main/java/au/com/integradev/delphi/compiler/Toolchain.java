@@ -21,15 +21,16 @@ package au.com.integradev.delphi.compiler;
 public enum Toolchain {
   DCC32(Architecture.X86, Platform.WINDOWS),
   DCC64(Architecture.X64, Platform.WINDOWS),
+  DCCARM64EC(Architecture.ARM64, Platform.WINDOWS),
   DCCOSX(Architecture.X86, Platform.MACOS),
   DCCOSX64(Architecture.X64, Platform.MACOS),
-  DCCOSXARM64(Architecture.X64, Platform.MACOS),
-  DCCIOSARM(Architecture.X86, Platform.IOS),
-  DCCIOSARM64(Architecture.X64, Platform.IOS),
+  DCCOSXARM64(Architecture.ARM64, Platform.MACOS),
+  DCCIOSARM(Architecture.ARM32, Platform.IOS),
+  DCCIOSARM64(Architecture.ARM64, Platform.IOS),
   DCCIOS32(Architecture.X86, Platform.IOS),
-  DCCIOSSIMARM64(Architecture.X64, Platform.IOS),
-  DCCAARM(Architecture.X86, Platform.ANDROID),
-  DCCAARM64(Architecture.X64, Platform.ANDROID),
+  DCCIOSSIMARM64(Architecture.ARM64, Platform.IOS),
+  DCCAARM(Architecture.ARM32, Platform.ANDROID),
+  DCCAARM64(Architecture.ARM64, Platform.ANDROID),
   DCCLINUX64(Architecture.X64, Platform.LINUX);
 
   public final Architecture architecture;
@@ -38,5 +39,9 @@ public enum Toolchain {
   Toolchain(Architecture architecture, Platform platform) {
     this.architecture = architecture;
     this.platform = platform;
+  }
+
+  public final Bitness bitness() {
+    return architecture.bitness;
   }
 }
