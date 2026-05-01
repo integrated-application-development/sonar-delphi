@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `noreturn` routines, introduced in Delphi 13.
 - Support for `NameOf` intrinsic, introduced in Delphi 13.
 - Support for implicit `Self` in `Initialize` and `Finalize` operators, introduced in Delphi 13.
+- Support for `DCCARM64EC` toolchain, introduced in Delphi 13.1.
 - `NoreturnContract` analysis rule, which flags `noreturn` routines that return normally.
 
 ## [1.18.3] - 2025-11-11
