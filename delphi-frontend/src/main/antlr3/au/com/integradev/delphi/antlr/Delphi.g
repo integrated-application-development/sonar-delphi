@@ -72,7 +72,7 @@ tokens {
   TkArgument;
   TkAnonymousMethod;
   TkAnonymousMethodHeading;
-  TkConditionalExpression;
+  TkIfExpression;
   TkLessThanEqual;
   TkGreaterThanEqual;
 }
@@ -921,10 +921,10 @@ attribute                    : (ASSEMBLY ':')? expression (':' expression)*
 //----------------------------------------------------------------------------
 expression                   : relationalExpression
                              | anonymousMethod
-                             | conditionalExpression
+                             | ifExpression
                              ;
-conditionalExpression        : IF expression THEN expression ELSE expression
-                             -> ^(TkConditionalExpression<ConditionalExpressionNodeImpl> IF expression THEN expression ELSE expression)
+ifExpression                 : IF expression THEN expression ELSE expression
+                             -> ^(TkIfExpression<IfExpressionNodeImpl> IF expression THEN expression ELSE expression)
                              ;
 // ANTLR sets the begin and end tokens for nested binary expression nodes
 // in relationalOperator, not relationalExpression, meaning that their

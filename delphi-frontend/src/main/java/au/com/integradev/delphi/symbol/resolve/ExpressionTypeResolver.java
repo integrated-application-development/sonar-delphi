@@ -34,9 +34,9 @@ import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayAccessorNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -94,7 +94,7 @@ public final class ExpressionTypeResolver {
     }
   }
 
-  public Type resolve(ConditionalExpressionNode expression) {
+  public Type resolve(IfExpressionNode expression) {
     Type thenType = expression.getThenExpression().getType();
     Type elseType = expression.getElseExpression().getType();
 
@@ -105,17 +105,45 @@ public final class ExpressionTypeResolver {
       return thenType;
     }
 
-    EqualityType thenToElse = TypeComparer.compare(thenType, elseType);
-    EqualityType elseToThen = TypeComparer.compare(elseType, thenType);
-
-    if (thenToElse.ordinal() >= elseToThen.ordinal()
-        && thenToElse != EqualityType.INCOMPATIBLE_TYPES) {
-      return elseType;
-    }
-    if (elseToThen != EqualityType.INCOMPATIBLE_TYPES) {
+    if (thenType.is(elseType)) {
       return thenType;
     }
-    return thenType;
+
+    EqualityType thenAsCommon = TypeComparer.compare(elseType, thenType);
+    EqualityType elseAsCommon = TypeComparer.compare(thenType, elseType);
+
+    if (thenAsCommon == EqualityType.INCOMPATIBLE_TYPES
+        && elseAsCommon == EqualityType.INCOMPATIBLE_TYPES) {
+      return findCommonAncestor(thenType, elseType);
+    }
+
+    if (thenAsCommon == EqualityType.INCOMPATIBLE_TYPES) {
+      return elseType;
+    }
+    if (elseAsCommon == EqualityType.INCOMPATIBLE_TYPES) {
+      return thenType;
+    }
+
+    return elseAsCommon.ordinal() >= thenAsCommon.ordinal() ? elseType : thenType;
+  }
+
+  private static Type findCommonAncestor(Type left, Type right) {
+    if (!left.isStruct() || !right.isStruct()) {
+      return unknownType();
+    }
+
+    for (Type leftAncestor = left.parent();
+        !leftAncestor.isUnknown();
+        leftAncestor = leftAncestor.parent()) {
+      for (Type rightAncestor = right.parent();
+          !rightAncestor.isUnknown();
+          rightAncestor = rightAncestor.parent()) {
+        if (leftAncestor.is(rightAncestor)) {
+          return leftAncestor;
+        }
+      }
+    }
+    return unknownType();
   }
 
   public Type resolve(PrimaryExpressionNode expression) {

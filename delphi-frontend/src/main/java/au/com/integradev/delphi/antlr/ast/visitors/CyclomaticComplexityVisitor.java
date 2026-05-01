@@ -22,8 +22,8 @@ import au.com.integradev.delphi.antlr.ast.visitors.CyclomaticComplexityVisitor.D
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
@@ -82,7 +82,7 @@ public class CyclomaticComplexityVisitor implements DelphiParserVisitor<Data> {
   }
 
   @Override
-  public Data visit(ConditionalExpressionNode expression, Data data) {
+  public Data visit(IfExpressionNode expression, Data data) {
     ++data.complexity;
     return DelphiParserVisitor.super.visit(expression, data);
   }

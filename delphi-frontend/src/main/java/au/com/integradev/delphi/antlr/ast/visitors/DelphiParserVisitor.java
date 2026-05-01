@@ -46,7 +46,6 @@ import org.sonar.plugins.communitydelphi.api.ast.ClassReferenceTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstArrayElementTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstSectionNode;
@@ -82,6 +81,7 @@ import org.sonar.plugins.communitydelphi.api.ast.GenericDefinitionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.HelperTypeNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImplementationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ImportClauseNode;
@@ -623,7 +623,7 @@ public interface DelphiParserVisitor<T> {
     return visit((ExpressionNode) node, data);
   }
 
-  default T visit(ConditionalExpressionNode node, T data) {
+  default T visit(IfExpressionNode node, T data) {
     return visit((ExpressionNode) node, data);
   }
 

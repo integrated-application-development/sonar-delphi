@@ -37,7 +37,6 @@ import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ConstStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExceptBlockNode;
@@ -51,6 +50,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
@@ -278,13 +278,8 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
   }
 
-  /*
-   * Modeled the same way as an `if` statement: the guard branches into two expressions that both
-   * merge back to the block following the conditional expression.
-   */
   @Override
-  public ControlFlowGraphBuilder visit(
-      ConditionalExpressionNode node, ControlFlowGraphBuilder builder) {
+  public ControlFlowGraphBuilder visit(IfExpressionNode node, ControlFlowGraphBuilder builder) {
     ProtoBlock after = builder.getCurrentBlock();
 
     builder.addBlockBefore(after);

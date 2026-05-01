@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2024 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,19 +22,18 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
 import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class ConditionalExpressionNodeImpl extends ExpressionNodeImpl
-    implements ConditionalExpressionNode {
+public final class IfExpressionNodeImpl extends ExpressionNodeImpl implements IfExpressionNode {
   private String image;
 
-  public ConditionalExpressionNodeImpl(Token token) {
+  public IfExpressionNodeImpl(Token token) {
     super(token);
   }
 
-  public ConditionalExpressionNodeImpl(int tokenType) {
+  public IfExpressionNodeImpl(int tokenType) {
     super(tokenType);
   }
 

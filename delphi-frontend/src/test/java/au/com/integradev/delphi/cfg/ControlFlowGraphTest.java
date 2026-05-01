@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
-import org.sonar.plugins.communitydelphi.api.ast.ConditionalExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
@@ -351,7 +351,7 @@ class ControlFlowGraphTest {
         checker(
             block(element(NameReferenceNode.class, "A"))
                 .branchesTo(3, 2)
-                .withTerminator(ConditionalExpressionNode.class),
+                .withTerminator(IfExpressionNode.class),
             block(element(NameReferenceNode.class, "Foo")).succeedsTo(1),
             block(element(NameReferenceNode.class, "Bar")).succeedsTo(1),
             block(element(NameReferenceNode.class, "X")).succeedsTo(0)));
