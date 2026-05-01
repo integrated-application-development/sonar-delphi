@@ -67,6 +67,14 @@ abstract class ConstraintImpl implements Constraint {
       return check((RecordConstraint) constraint);
     }
 
+    if (constraint instanceof InterfaceConstraint) {
+      return check((InterfaceConstraint) constraint);
+    }
+
+    if (constraint instanceof UnmanagedConstraint) {
+      return check((UnmanagedConstraint) constraint);
+    }
+
     return ConstraintCheckResult.VIOLATED;
   }
 
@@ -80,4 +88,10 @@ abstract class ConstraintImpl implements Constraint {
 
   @SuppressWarnings("overloads")
   protected abstract ConstraintCheckResult check(RecordConstraint constraint);
+
+  @SuppressWarnings("overloads")
+  protected abstract ConstraintCheckResult check(InterfaceConstraint constraint);
+
+  @SuppressWarnings("overloads")
+  protected abstract ConstraintCheckResult check(UnmanagedConstraint constraint);
 }

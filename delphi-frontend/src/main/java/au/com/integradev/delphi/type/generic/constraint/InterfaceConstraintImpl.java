@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,25 +18,19 @@
  */
 package au.com.integradev.delphi.type.generic.constraint;
 
-import org.sonar.plugins.communitydelphi.api.type.Constraint.RecordConstraint;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.InterfaceConstraint;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public class RecordConstraintImpl extends ConstraintImpl implements RecordConstraint {
-  private static final RecordConstraintImpl INSTANCE = new RecordConstraintImpl();
+public class InterfaceConstraintImpl extends ConstraintImpl implements InterfaceConstraint {
+  private static final InterfaceConstraintImpl INSTANCE = new InterfaceConstraintImpl();
 
-  private RecordConstraintImpl() {
+  private InterfaceConstraintImpl() {
     // Hide constructor
   }
 
   @Override
   protected ConstraintCheckResult check(Type type) {
-    if (type.isRecord()
-        || type.isBoolean()
-        || type.isReal()
-        || type.isInteger()
-        || type.isEnum()
-        || type.isSubrange()
-        || type.isChar()) {
+    if (type.isInterface()) {
       return ConstraintCheckResult.SATISFIED;
     } else {
       return ConstraintCheckResult.VIOLATED;
@@ -44,24 +38,27 @@ public class RecordConstraintImpl extends ConstraintImpl implements RecordConstr
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ClassConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ConstructorConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(RecordConstraint constraint) {
-    return ConstraintCheckResult.SATISFIED;
+    return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(InterfaceConstraint constraint) {
-    return ConstraintCheckResult.VIOLATED;
+    return ConstraintCheckResult.SATISFIED;
   }
 
   @Override
@@ -70,7 +67,7 @@ public class RecordConstraintImpl extends ConstraintImpl implements RecordConstr
     return ConstraintCheckResult.VIOLATED;
   }
 
-  public static RecordConstraintImpl instance() {
+  public static InterfaceConstraintImpl instance() {
     return INSTANCE;
   }
 }

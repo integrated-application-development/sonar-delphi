@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,44 +18,68 @@
  */
 package au.com.integradev.delphi.type.generic.constraint;
 
-import org.sonar.plugins.communitydelphi.api.type.Constraint.RecordConstraint;
+import java.util.HashSet;
+import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.VariableNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.type.Constraint.UnmanagedConstraint;
 import org.sonar.plugins.communitydelphi.api.type.Type;
+import org.sonar.plugins.communitydelphi.api.type.Type.ScopedType;
 
-public class RecordConstraintImpl extends ConstraintImpl implements RecordConstraint {
-  private static final RecordConstraintImpl INSTANCE = new RecordConstraintImpl();
+public class UnmanagedConstraintImpl extends ConstraintImpl implements UnmanagedConstraint {
+  private static final UnmanagedConstraintImpl INSTANCE = new UnmanagedConstraintImpl();
 
-  private RecordConstraintImpl() {
+  private UnmanagedConstraintImpl() {
     // Hide constructor
   }
 
   @Override
   protected ConstraintCheckResult check(Type type) {
-    if (type.isRecord()
-        || type.isBoolean()
+    return isUnmanaged(type, new HashSet<>())
+        ? ConstraintCheckResult.SATISFIED
+        : ConstraintCheckResult.VIOLATED;
+  }
+
+  private static boolean isUnmanaged(Type type, Set<Type> visited) {
+    if (type.isBoolean()
         || type.isReal()
         || type.isInteger()
         || type.isEnum()
         || type.isSubrange()
-        || type.isChar()) {
-      return ConstraintCheckResult.SATISFIED;
-    } else {
-      return ConstraintCheckResult.VIOLATED;
+        || type.isChar()
+        || type.isPointer()) {
+      return true;
     }
+    if (type.isRecord()) {
+      if (!visited.add(type)) {
+        return true;
+      }
+      for (VariableNameDeclaration field :
+          ((ScopedType) type).typeScope().getVariableDeclarations()) {
+        if (field.isField() && !field.isClassVar() && !isUnmanaged(field.getType(), visited)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ClassConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ConstructorConstraint constraint) {
     return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
+  @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(RecordConstraint constraint) {
-    return ConstraintCheckResult.SATISFIED;
+    return ConstraintCheckResult.VIOLATED;
   }
 
   @Override
@@ -67,10 +91,10 @@ public class RecordConstraintImpl extends ConstraintImpl implements RecordConstr
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
-    return ConstraintCheckResult.VIOLATED;
+    return ConstraintCheckResult.SATISFIED;
   }
 
-  public static RecordConstraintImpl instance() {
+  public static UnmanagedConstraintImpl instance() {
     return INSTANCE;
   }
 }

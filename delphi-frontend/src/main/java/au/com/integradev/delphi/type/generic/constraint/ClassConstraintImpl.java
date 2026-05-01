@@ -53,6 +53,18 @@ public class ClassConstraintImpl extends ConstraintImpl implements ClassConstrai
     return ConstraintCheckResult.VIOLATED;
   }
 
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(InterfaceConstraint constraint) {
+    return ConstraintCheckResult.VIOLATED;
+  }
+
+  @Override
+  @SuppressWarnings("overloads")
+  protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
+    return ConstraintCheckResult.VIOLATED;
+  }
+
   public static ClassConstraintImpl instance() {
     return INSTANCE;
   }
