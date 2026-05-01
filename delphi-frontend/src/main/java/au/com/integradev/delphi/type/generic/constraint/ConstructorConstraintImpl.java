@@ -63,7 +63,7 @@ public class ConstructorConstraintImpl extends ConstraintImpl implements Constru
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(InterfaceConstraint constraint) {
-    return ConstraintCheckResult.COMPATIBLE;
+    return ConstraintCheckResult.VIOLATED;
   }
 
   @Override

@@ -67,7 +67,7 @@ public class RecordConstraintImpl extends ConstraintImpl implements RecordConstr
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
-    return ConstraintCheckResult.SATISFIED;
+    return ConstraintCheckResult.VIOLATED;
   }
 
   public static RecordConstraintImpl instance() {

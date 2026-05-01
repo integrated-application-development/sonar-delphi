@@ -21,12 +21,6 @@ type
   TMultipleConstraints<T: class, constructor> = class
   end;
 
-  TInterfaceAndConstructor<T: interface, constructor> = class
-  end;
-
-  TUnmanagedAndRecord<T: record, unmanaged> = class
-  end;
-
 implementation
 
 end.

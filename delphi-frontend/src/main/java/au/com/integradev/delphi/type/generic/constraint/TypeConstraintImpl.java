@@ -73,6 +73,6 @@ public class TypeConstraintImpl extends ConstraintImpl implements TypeConstraint
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(UnmanagedConstraint constraint) {
-    return ConstraintCheckResult.COMPATIBLE;
+    return ConstraintCheckResult.VIOLATED;
   }
 }

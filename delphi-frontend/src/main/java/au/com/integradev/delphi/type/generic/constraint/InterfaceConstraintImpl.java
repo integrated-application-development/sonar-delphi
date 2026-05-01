@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,7 +46,7 @@ public class InterfaceConstraintImpl extends ConstraintImpl implements Interface
   @Override
   @SuppressWarnings("overloads")
   protected ConstraintCheckResult check(ConstructorConstraint constraint) {
-    return ConstraintCheckResult.COMPATIBLE;
+    return ConstraintCheckResult.VIOLATED;
   }
 
   @Override

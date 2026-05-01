@@ -58,9 +58,8 @@ class RecordConstraintTest {
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.ANSICHAR)),
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.WIDECHAR)),
           Arguments.of(TypeMocker.struct("TFoo", RECORD)),
-          Arguments.of(TypeParameterTypeImpl.create("T", List.of(RecordConstraintImpl.instance()))),
           Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))));
+              TypeParameterTypeImpl.create("T", List.of(RecordConstraintImpl.instance()))));
     }
   }
 
@@ -75,6 +74,8 @@ class RecordConstraintTest {
           Arguments.of(TypeParameterTypeImpl.create("T", List.of(ClassConstraintImpl.instance()))),
           Arguments.of(
               TypeParameterTypeImpl.create("T", List.of(ConstructorConstraintImpl.instance()))),
+          Arguments.of(
+              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))),
           Arguments.of(
               TypeParameterTypeImpl.create(
                   "T",

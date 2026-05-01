@@ -122,7 +122,9 @@ class ConstructorConstraintTest {
           Arguments.of(
               TypeParameterTypeImpl.create("T", List.of(new TypeConstraintImpl(mockClass())))),
           Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))));
+              TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))),
+          Arguments.of(
+              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))));
     }
   }
 

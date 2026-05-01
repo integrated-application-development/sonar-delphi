@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,12 +48,7 @@ class InterfaceConstraintTest {
       return Stream.of(
           Arguments.of(TypeMocker.struct("IFoo", INTERFACE)),
           Arguments.of(
-              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))),
-          Arguments.of(
-              TypeParameterTypeImpl.create(
-                  "T",
-                  List.of(
-                      InterfaceConstraintImpl.instance(), ConstructorConstraintImpl.instance()))));
+              TypeParameterTypeImpl.create("T", List.of(InterfaceConstraintImpl.instance()))));
     }
   }
 
@@ -71,6 +66,11 @@ class InterfaceConstraintTest {
           Arguments.of(TypeParameterTypeImpl.create("T", List.of(RecordConstraintImpl.instance()))),
           Arguments.of(
               TypeParameterTypeImpl.create("T", List.of(UnmanagedConstraintImpl.instance()))),
+          Arguments.of(
+              TypeParameterTypeImpl.create(
+                  "T",
+                  List.of(
+                      InterfaceConstraintImpl.instance(), ConstructorConstraintImpl.instance()))),
           Arguments.of(
               TypeParameterTypeImpl.create(
                   "T", List.of(RecordConstraintImpl.instance(), ClassConstraintImpl.instance()))));
