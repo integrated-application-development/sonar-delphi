@@ -86,6 +86,7 @@ class ControlFlowGraphTest {
   private static final Logger LOG = LoggerFactory.getLogger(ControlFlowGraphTest.class);
 
   private static final int EXIT_ID = 0;
+  private static final int EXCEPTION_EXIT_ID = -1;
 
   private ControlFlowGraph buildCfg(String input) {
     return buildCfg(Collections.emptyMap(), input);
@@ -869,7 +870,7 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(1, 1),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(EXIT_ID, EXIT_ID)));
+                .succeedsToWithExit(EXIT_ID, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -883,7 +884,7 @@ class ControlFlowGraphTest {
                 .jumpsTo(1, 1),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(EXIT_ID, EXIT_ID)));
+                .succeedsToWithExit(EXIT_ID, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -895,7 +896,7 @@ class ControlFlowGraphTest {
             terminator(StatementTerminator.EXIT).jumpsTo(1, 1),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(EXIT_ID, EXIT_ID)));
+                .succeedsToWithExit(EXIT_ID, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -910,7 +911,7 @@ class ControlFlowGraphTest {
             terminator(StatementTerminator.BREAK).jumpsTo(1, 1),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(4, EXIT_ID)));
+                .succeedsToWithExit(4, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -925,7 +926,7 @@ class ControlFlowGraphTest {
             terminator(StatementTerminator.CONTINUE).jumpsTo(1, 1),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(4, EXIT_ID)));
+                .succeedsToWithExit(4, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -937,7 +938,7 @@ class ControlFlowGraphTest {
             terminator(StatementTerminator.HALT).isSink(),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(EXIT_ID, EXIT_ID)));
+                .succeedsToWithExit(EXIT_ID, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -957,7 +958,7 @@ class ControlFlowGraphTest {
             terminator(StatementTerminator.CONTINUE).jumpsTo(2, 2),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(1, EXIT_ID),
+                .succeedsToWithExit(1, EXCEPTION_EXIT_ID),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, EXIT_ID)
                 .withTerminator(ForToStatementNode.class)));
@@ -980,7 +981,7 @@ class ControlFlowGraphTest {
             terminator(StatementTerminator.BREAK).jumpsTo(2, 2),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(1, EXIT_ID),
+                .succeedsToWithExit(1, EXCEPTION_EXIT_ID),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, EXIT_ID)
                 .withTerminator(ForToStatementNode.class)));
@@ -1002,7 +1003,7 @@ class ControlFlowGraphTest {
             block(element(TryStatementNode.class)).succeedsTo(3),
             terminator(StatementTerminator.EXIT).jumpsTo(2, 2),
             block(element(NameReferenceNode.class, "Bar"))
-                .succeedsToWithExit(1, EXIT_ID)
+                .succeedsToWithExit(1, EXCEPTION_EXIT_ID)
                 .withTerminator(FinallyBlockNode.class),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, EXIT_ID)
@@ -1025,7 +1026,7 @@ class ControlFlowGraphTest {
             block(element(TryStatementNode.class)).succeedsTo(3),
             terminator(StatementTerminator.HALT).isSink(),
             block(element(NameReferenceNode.class, "Bar"))
-                .succeedsToWithExit(1, EXIT_ID)
+                .succeedsToWithExit(1, EXCEPTION_EXIT_ID)
                 .withTerminator(FinallyBlockNode.class),
             block(element(NameDeclarationNode.class, "A"))
                 .branchesTo(4, EXIT_ID)
@@ -1042,7 +1043,7 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(1, 1),
             block(element(NameReferenceNode.class, "Bar"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(EXIT_ID, EXIT_ID)));
+                .succeedsToWithExit(EXIT_ID, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -1068,7 +1069,8 @@ class ControlFlowGraphTest {
             + "end;",
         checker(
             block(element(TryStatementNode.class)).succeedsTo(3),
-            block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(EXIT_ID, EXIT_ID, 1, 2),
+            block(element(NameReferenceNode.class, "Foo"))
+                .succeedsToWithExceptions(EXIT_ID, EXCEPTION_EXIT_ID, 1, 2),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Bar"))
                 .succeedsTo(EXIT_ID),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Baz"))
@@ -1095,7 +1097,7 @@ class ControlFlowGraphTest {
             block(
                     element(TextLiteralNode.class, "''"),
                     element(NameReferenceNode.class, "EAbort.Create"))
-                .succeedsToWithExceptions(3, EXIT_ID, 1, 2),
+                .succeedsToWithExceptions(3, EXCEPTION_EXIT_ID, 1, 2),
             terminator(RaiseStatementNode.class, TerminatorKind.RAISE).jumpsTo(2, EXIT_ID),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Bar"))
                 .succeedsTo(EXIT_ID),
@@ -1123,7 +1125,7 @@ class ControlFlowGraphTest {
             block(
                     element(TextLiteralNode.class, "''"),
                     element(NameReferenceNode.class, "Exception.Create"))
-                .succeedsToWithExceptions(3, EXIT_ID, 1, 2),
+                .succeedsToWithExceptions(3, EXCEPTION_EXIT_ID, 1, 2),
             terminator(RaiseStatementNode.class, TerminatorKind.RAISE).jumpsTo(1, EXIT_ID),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Bar"))
                 .succeedsTo(EXIT_ID),
@@ -1201,7 +1203,7 @@ class ControlFlowGraphTest {
                 .succeedsToWithExceptions(1, 1),
             block(element(NameReferenceNode.class, "Baz"))
                 .withTerminator(FinallyBlockNode.class)
-                .succeedsToWithExit(EXIT_ID, EXIT_ID)));
+                .succeedsToWithExit(EXIT_ID, EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -1218,9 +1220,10 @@ class ControlFlowGraphTest {
             block(element(TryStatementNode.class)).succeedsTo(6),
             block(element(TryStatementNode.class)).succeedsTo(5),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(4, 4),
-            block(element(NameReferenceNode.class, "Bar")).succeedsToWithExceptions(3, EXIT_ID, 1),
-            terminator(FinallyBlockNode.class).succeedsToWithExit(2, EXIT_ID),
-            block().succeedsToWithExceptions(EXIT_ID, EXIT_ID, 1),
+            block(element(NameReferenceNode.class, "Bar"))
+                .succeedsToWithExceptions(3, EXCEPTION_EXIT_ID, 1),
+            terminator(FinallyBlockNode.class).succeedsToWithExit(2, EXCEPTION_EXIT_ID),
+            block().succeedsToWithExceptions(EXIT_ID, EXCEPTION_EXIT_ID, 1),
             block(element(NameDeclarationNode.class, "E"), element(NameReferenceNode.class, "Baz"))
                 .succeedsTo(EXIT_ID)));
   }
@@ -1248,7 +1251,8 @@ class ControlFlowGraphTest {
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
             block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(EXIT_ID, 1),
-            terminator(RaiseStatementNode.class, TerminatorKind.RAISE).throwsTo(EXIT_ID)));
+            terminator(RaiseStatementNode.class, TerminatorKind.RAISE)
+                .throwsTo(EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -1258,10 +1262,11 @@ class ControlFlowGraphTest {
         "try Foo except on E: Exception do raise; end;",
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
-            block(element(NameReferenceNode.class, "Foo")).succeedsToWithExceptions(EXIT_ID, EXIT_ID, 1),
+            block(element(NameReferenceNode.class, "Foo"))
+                .succeedsToWithExceptions(EXIT_ID, EXCEPTION_EXIT_ID, 1),
             block(element(NameDeclarationNode.class, "E"))
                 .withTerminator(RaiseStatementNode.class, TerminatorKind.RAISE)
-                .throwsTo(EXIT_ID)));
+                .throwsTo(EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -1269,7 +1274,8 @@ class ControlFlowGraphTest {
     test(
         Map.of("", List.of("procedure Boom; noreturn; begin end")),
         "Boom;",
-        checker(terminator(NameReferenceNode.class, TerminatorKind.HALT).throwsTo(EXIT_ID)));
+        checker(
+            terminator(NameReferenceNode.class, TerminatorKind.HALT).throwsTo(EXCEPTION_EXIT_ID)));
   }
 
   @Test
@@ -1298,7 +1304,7 @@ class ControlFlowGraphTest {
         "try finally end; A",
         checker(
             block(element(TryStatementNode.class)).succeedsTo(2),
-            terminator(FinallyBlockNode.class).succeedsToWithExit(1, EXIT_ID),
+            terminator(FinallyBlockNode.class).succeedsToWithExit(1, EXCEPTION_EXIT_ID),
             block(element(NameReferenceNode.class, "A")).succeedsTo(EXIT_ID)));
   }
 
@@ -1308,7 +1314,7 @@ class ControlFlowGraphTest {
         "raise A;",
         checker(
             block(element(NameReferenceNode.class, "A"))
-                .jumpsTo(EXIT_ID, EXIT_ID)
+                .jumpsTo(EXCEPTION_EXIT_ID, EXIT_ID)
                 .withTerminator(RaiseStatementNode.class, TerminatorKind.RAISE)));
   }
 
@@ -1479,7 +1485,9 @@ class ControlFlowGraphTest {
 
   @Test
   void testBareInherited() {
-    test("inherited;", checker(block(element(CommonDelphiNode.class, "inherited")).succeedsTo(EXIT_ID)));
+    test(
+        "inherited;",
+        checker(block(element(CommonDelphiNode.class, "inherited")).succeedsTo(EXIT_ID)));
   }
 
   @Test
@@ -1661,7 +1669,7 @@ class ControlFlowGraphTest {
                 .succeedsTo(2),
             block(element(TextLiteralNode.class, "'b'"), element(NameReferenceNode.class, "X"))
                 .succeedsTo(2),
-            terminator(FinallyBlockNode.class).succeedsToWithExit(12, EXIT_ID),
+            terminator(FinallyBlockNode.class).succeedsToWithExit(12, EXCEPTION_EXIT_ID),
             block(element(NameReferenceNode.class, "Foo4")).succeedsTo(EXIT_ID)));
   }
 }

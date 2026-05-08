@@ -21,6 +21,7 @@ package au.com.integradev.delphi.cfg.block;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.Cases;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Halt;
 import au.com.integradev.delphi.cfg.api.Linear;
@@ -43,6 +44,10 @@ public final class ProtoBlockFactory {
 
   public static ProtoBlock exitBlock() {
     return new ProtoBlock(RoutineExitImpl::new, (blocks, block) -> {});
+  }
+
+  public static ProtoBlock exceptionalExitBlock() {
+    return new ProtoBlock(ExceptionalRoutineExitImpl::new, (blocks, block) -> {});
   }
 
   public static ProtoBlock halt(DelphiNode terminator) {
@@ -461,6 +466,29 @@ public final class ProtoBlockFactory {
     @Override
     public String getBlockType() {
       return "RoutineExit";
+    }
+  }
+
+  private static class ExceptionalRoutineExitImpl extends BlockImpl
+      implements ExceptionalRoutineExit {
+
+    public ExceptionalRoutineExitImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
+    @Override
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      // Block has no successors
+    }
+
+    @Override
+    public String getDescription() {
+      return String.format("%n\t(ExceptionalExit)");
+    }
+
+    @Override
+    public String getBlockType() {
+      return "ExceptionalExit";
     }
   }
 

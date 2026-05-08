@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.block.BlockImpl;
 import au.com.integradev.delphi.cfg.block.ProtoBlock;
@@ -48,6 +49,7 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 public class ControlFlowGraphBuilder {
   private final List<ProtoBlock> blocks = new ArrayList<>();
   private final Deque<ProtoBlock> exitBlocks = new ArrayDeque<>();
+  private final Deque<ProtoBlock> exceptionalExitBlocks = new ArrayDeque<>();
   private final Deque<ProtoBlock> breakTargets = new ArrayDeque<>();
   private final Deque<ProtoBlock> continueTargets = new ArrayDeque<>();
   private final Map<String, ProtoBlock> labelTargets = new HashMap<>();
@@ -58,9 +60,14 @@ public class ControlFlowGraphBuilder {
 
   @SuppressWarnings("this-escape")
   public ControlFlowGraphBuilder() {
+    ProtoBlock exceptionalExitBlock = ProtoBlockFactory.exceptionalExitBlock();
+    addBlock(exceptionalExitBlock);
+    exceptionalExitBlocks.add(exceptionalExitBlock);
+
     ProtoBlock exitBlock = ProtoBlockFactory.exitBlock();
     addBlock(exitBlock);
     exitBlocks.add(exitBlock);
+
     addBlockBefore(exitBlock);
   }
 
@@ -94,10 +101,13 @@ public class ControlFlowGraphBuilder {
   private static void populateIds(ControlFlowGraph cfg) {
     List<Block> blocks = Lists.reverse(cfg.getBlocks());
     int blockId = 0;
-    for(Block block : blocks) {
+    for (Block block : blocks) {
       if (block instanceof RoutineExit) {
         // Ensure `RoutineExit` is always id 0
         ((BlockImpl) block).setId(0);
+      } else if (block instanceof ExceptionalRoutineExit) {
+        // Ensure `ExceptionalRoutineExit` is always id -1
+        ((BlockImpl) block).setId(-1);
       } else {
         ((BlockImpl) block).setId(++blockId);
       }
@@ -106,6 +116,10 @@ public class ControlFlowGraphBuilder {
 
   public ProtoBlock getExitBlock() {
     return exitBlocks.peek();
+  }
+
+  public ProtoBlock getExceptionalExitBlock() {
+    return exceptionalExitBlocks.peek();
   }
 
   public ProtoBlock getBreakTarget() {
@@ -132,10 +146,12 @@ public class ControlFlowGraphBuilder {
 
   public void pushExitBlock(ProtoBlock target) {
     exitBlocks.push(target);
+    exceptionalExitBlocks.push(target);
   }
 
   public void popExitBlock() {
     exitBlocks.pop();
+    exceptionalExitBlocks.pop();
   }
 
   private static class UnresolvedLabel {
@@ -203,7 +219,7 @@ public class ControlFlowGraphBuilder {
 
   public ProtoBlock getCatchTarget(Type exceptionType) {
     if (tryContexts.isEmpty()) {
-      return getExitBlock();
+      return getExceptionalExitBlock();
     }
     TryContext tryContext = tryContexts.peek();
     return tryContext.catches.keySet().stream()
@@ -211,7 +227,7 @@ public class ControlFlowGraphBuilder {
         .findFirst()
         .map(tryContext.catches::get)
         .or(() -> Optional.ofNullable(tryContext.elseBlock))
-        .orElse(getExitBlock());
+        .orElse(getExceptionalExitBlock());
   }
 
   private static boolean isCompatibleType(Type exceptionType, Type catchType) {
@@ -224,7 +240,7 @@ public class ControlFlowGraphBuilder {
     }
     TryContext context = tryContexts.peek();
     Stream<ProtoBlock> elseOrExit =
-        Stream.of(Optional.ofNullable(context.elseBlock).orElse(getExitBlock()));
+        Stream.of(Optional.ofNullable(context.elseBlock).orElse(getExceptionalExitBlock()));
     return Stream.concat(context.catches.values().stream(), elseOrExit)
         .filter(Objects::nonNull)
         .collect(Collectors.toSet());

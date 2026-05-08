@@ -20,7 +20,9 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.Finally;
+import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import au.com.integradev.delphi.utils.ControlFlowGraphUtils;
@@ -134,7 +136,11 @@ public class RedundantJumpCheck extends DelphiCheck {
       }
       if (!finallyBlock.getSuccessor().equals(finallyBlock.getExceptionSuccessor())) {
         // multiple paths after the finally corresponds to code that would be skipped from the jump
-        return false;
+        if (!(finallyBlock.getSuccessor() instanceof RoutineExit
+            && finallyBlock.getExceptionSuccessor() instanceof ExceptionalRoutineExit)) {
+          // if both of the paths are routine exits, then they are effectively equivalent
+          return false;
+        }
       }
     }
     // if no invalidating try-finally blocks are found, the use is a violation
