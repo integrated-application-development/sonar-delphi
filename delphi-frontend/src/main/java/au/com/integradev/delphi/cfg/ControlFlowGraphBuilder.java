@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.block.BlockImpl;
 import au.com.integradev.delphi.cfg.block.ProtoBlock;
 import au.com.integradev.delphi.cfg.block.ProtoBlockFactory;
@@ -92,8 +93,14 @@ public class ControlFlowGraphBuilder {
 
   private static void populateIds(ControlFlowGraph cfg) {
     List<Block> blocks = Lists.reverse(cfg.getBlocks());
-    for (int blockId = 0; blockId < blocks.size(); blockId++) {
-      ((BlockImpl) blocks.get(blockId)).setId(blockId);
+    int blockId = 0;
+    for(Block block : blocks) {
+      if (block instanceof RoutineExit) {
+        // Ensure `RoutineExit` is always id 0
+        ((BlockImpl) block).setId(0);
+      } else {
+        ((BlockImpl) block).setId(++blockId);
+      }
     }
   }
 
