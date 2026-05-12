@@ -20,6 +20,7 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.PossibleException;
 import au.com.integradev.delphi.cfg.api.RoutineExit;
@@ -87,6 +88,6 @@ public class NoreturnContractCheck extends DelphiCheck {
   }
 
   private static boolean notFinallyOrExit(Block block) {
-    return !(block instanceof Finally || block instanceof RoutineExit);
+    return !(block instanceof Finally || block instanceof ExceptionalRoutineExit);
   }
 }

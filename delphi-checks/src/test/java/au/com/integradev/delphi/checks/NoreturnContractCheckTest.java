@@ -341,7 +341,7 @@ class NoreturnContractCheckTest {
   }
 
   @Test
-  void testFailOnUpgradeNoreturnRoutineWithRaiseToSpecificEmptyExceptShouldNotAddIssue() {
+  void testNoreturnRoutineWithRaiseToSpecificEmptyExceptShouldAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(new NoreturnContractCheck())
         .onFile(
@@ -349,7 +349,7 @@ class NoreturnContractCheckTest {
                 .appendImpl("uses")
                 .appendImpl("  System.SysUtils;")
                 .appendImpl("")
-                .appendImpl("procedure RaiseToSpecificExcept; noreturn;")
+                .appendImpl("procedure RaiseToSpecificExcept; noreturn; // Noncompliant")
                 .appendImpl("begin")
                 .appendImpl("  try")
                 .appendImpl("    raise Exception.Create('Error');")
@@ -359,6 +359,6 @@ class NoreturnContractCheckTest {
                 .appendImpl("    end;")
                 .appendImpl("  end;")
                 .appendImpl("end;"))
-        .verifyNoIssues();
+        .verifyIssues();
   }
 }
