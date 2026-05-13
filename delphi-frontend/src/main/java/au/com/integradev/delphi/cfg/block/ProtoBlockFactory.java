@@ -21,11 +21,12 @@ package au.com.integradev.delphi.cfg.block;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.Cases;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.Halt;
 import au.com.integradev.delphi.cfg.api.Linear;
 import au.com.integradev.delphi.cfg.api.PossibleException;
-import au.com.integradev.delphi.cfg.api.Terminus;
+import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import au.com.integradev.delphi.cfg.api.UnknownException;
 import java.util.Collection;
@@ -42,7 +43,11 @@ public final class ProtoBlockFactory {
   }
 
   public static ProtoBlock exitBlock() {
-    return new ProtoBlock(TerminusImpl::new, (blocks, block) -> {});
+    return new ProtoBlock(RoutineExitImpl::new, (blocks, block) -> {});
+  }
+
+  public static ProtoBlock exceptionalExitBlock() {
+    return new ProtoBlock(ExceptionalRoutineExitImpl::new, (blocks, block) -> {});
   }
 
   public static ProtoBlock halt(DelphiNode terminator) {
@@ -442,9 +447,9 @@ public final class ProtoBlockFactory {
     }
   }
 
-  private static class TerminusImpl extends BlockImpl implements Terminus {
+  private static class RoutineExitImpl extends BlockImpl implements RoutineExit {
 
-    public TerminusImpl(List<DelphiNode> elements) {
+    public RoutineExitImpl(List<DelphiNode> elements) {
       super(elements);
     }
 
@@ -460,7 +465,30 @@ public final class ProtoBlockFactory {
 
     @Override
     public String getBlockType() {
-      return "Terminus";
+      return "RoutineExit";
+    }
+  }
+
+  private static class ExceptionalRoutineExitImpl extends BlockImpl
+      implements ExceptionalRoutineExit {
+
+    public ExceptionalRoutineExitImpl(List<DelphiNode> elements) {
+      super(elements);
+    }
+
+    @Override
+    public void replaceInactiveSuccessor(Block inactiveBlock, Block target) {
+      // Block has no successors
+    }
+
+    @Override
+    public String getDescription() {
+      return String.format("%n\t(ExceptionalExit)");
+    }
+
+    @Override
+    public String getBlockType() {
+      return "ExceptionalExit";
     }
   }
 

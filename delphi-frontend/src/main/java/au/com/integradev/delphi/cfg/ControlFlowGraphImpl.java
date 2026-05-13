@@ -20,6 +20,7 @@ package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
 import au.com.integradev.delphi.cfg.block.BlockImpl;
@@ -32,23 +33,16 @@ import java.util.Set;
 
 public class ControlFlowGraphImpl implements ControlFlowGraph {
   private Block entry;
-  private final Block exit;
   private final List<Block> blocks;
 
-  public ControlFlowGraphImpl(Block entry, Block exit, List<Block> blocks) {
+  public ControlFlowGraphImpl(Block entry, List<Block> blocks) {
     this.entry = entry;
-    this.exit = exit;
     this.blocks = blocks;
   }
 
   @Override
   public Block getEntryBlock() {
     return entry;
-  }
-
-  @Override
-  public Block getExitBlock() {
-    return exit;
   }
 
   @Override
@@ -75,6 +69,20 @@ public class ControlFlowGraphImpl implements ControlFlowGraph {
 
       blocks.forEach(inactiveBlocks::remove);
     } while (!inactiveBlocks.isEmpty());
+
+    // Remove the exceptional exit if there are no paths to it
+    Block exceptionalExitBlock =
+        Lists.reverse(blocks).stream()
+            .filter(ExceptionalRoutineExit.class::isInstance)
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException("Couldn't find the exceptional exit block"));
+
+    if (blocks.stream()
+        .flatMap(block -> block.getSuccessors().stream())
+        .noneMatch(successor -> successor.equals(exceptionalExitBlock))) {
+      blocks.remove(exceptionalExitBlock);
+    }
   }
 
   private boolean isInactive(Block block) {

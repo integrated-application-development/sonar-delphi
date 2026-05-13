@@ -20,8 +20,10 @@ package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
 import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.PossibleException;
+import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.UnknownException;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
@@ -50,11 +52,11 @@ public class NoreturnContractCheck extends DelphiCheck {
 
   private static boolean canReturnNormally(RoutineImplementationNode routine) {
     ControlFlowGraph cfg = ControlFlowGraphUtils.findContainingCFG(routine);
-    return cfg != null && canReturnNormally(cfg, cfg.getEntryBlock());
+    return cfg != null && canReturnNormally(cfg.getEntryBlock());
   }
 
-  private static boolean canReturnNormally(ControlFlowGraph cfg, Block block) {
-    if (block.equals(cfg.getExitBlock())) {
+  private static boolean canReturnNormally(Block block) {
+    if (block instanceof RoutineExit) {
       return true;
     }
 
@@ -63,18 +65,20 @@ public class NoreturnContractCheck extends DelphiCheck {
     if (isGuaranteedException(block)) {
       successors =
           block.getSuccessors().stream()
-              .filter(s -> notFinallyOrExit(cfg, s))
+              .filter(NoreturnContractCheck::notFinallyOrExit)
               .collect(Collectors.toSet());
     } else if (block instanceof PossibleException) {
       successors = new HashSet<>();
       successors.add(((PossibleException) block).getSuccessor());
       ((PossibleException) block)
-          .getExceptions().stream().filter(s -> notFinallyOrExit(cfg, s)).forEach(successors::add);
+          .getExceptions().stream()
+              .filter(NoreturnContractCheck::notFinallyOrExit)
+              .forEach(successors::add);
     } else {
       successors = block.getSuccessors();
     }
 
-    return successors.stream().anyMatch(s -> canReturnNormally(cfg, s));
+    return successors.stream().anyMatch(NoreturnContractCheck::canReturnNormally);
   }
 
   private static boolean isGuaranteedException(Block block) {
@@ -83,7 +87,7 @@ public class NoreturnContractCheck extends DelphiCheck {
             && ((Terminated) block).getTerminatorKind() == TerminatorKind.RAISE);
   }
 
-  private static boolean notFinallyOrExit(ControlFlowGraph cfg, Block block) {
-    return !(block instanceof Finally || block.equals(cfg.getExitBlock()));
+  private static boolean notFinallyOrExit(Block block) {
+    return !(block instanceof Finally || block instanceof ExceptionalRoutineExit);
   }
 }

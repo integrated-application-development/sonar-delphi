@@ -208,7 +208,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   private static Set<ProtoBlock> getUnknownExceptionTargets(ControlFlowGraphBuilder builder) {
     Set<ProtoBlock> exceptions = builder.getAllCatchTargets();
     if (exceptions.isEmpty()) {
-      return Set.of(builder.getExitBlock());
+      return Set.of(builder.getExceptionalExitBlock());
     }
     return exceptions;
   }
@@ -548,10 +548,13 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     FinallyBlockNode finallyNode = node.getFinallyBlock();
     builder.addBlock(
         ProtoBlockFactory.finallyBlock(
-            node.getFinallyBlock(), builder.getCurrentBlock(), builder.getExitBlock()));
+            node.getFinallyBlock(), builder.getCurrentBlock(), builder.getExceptionalExitBlock()));
 
     build(finallyNode.getStatementList(), builder);
-    builder.pushLoopContext(builder.getCurrentBlock(), builder.getCurrentBlock());
+    boolean inLoop = builder.isInLoop();
+    if (inLoop) {
+      builder.pushLoopContext(builder.getCurrentBlock(), builder.getCurrentBlock());
+    }
     builder.pushExitBlock(builder.getCurrentBlock());
 
     builder.addBlockBeforeCurrent();
@@ -565,6 +568,9 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     builder.addElement(node);
 
     builder.popExitBlock();
+    if (inLoop) {
+      builder.popLoopContext();
+    }
     return builder;
   }
 

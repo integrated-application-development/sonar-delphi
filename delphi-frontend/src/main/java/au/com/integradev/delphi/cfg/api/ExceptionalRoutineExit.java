@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,21 +18,5 @@
  */
 package au.com.integradev.delphi.cfg.api;
 
-import java.util.List;
-
-/** A graph representation of all paths that could be traversed in the execution of code */
-public interface ControlFlowGraph {
-  /**
-   * The entry block to the control flow graph
-   *
-   * @return the starting block of the control flow graph
-   */
-  Block getEntryBlock();
-
-  /**
-   * All the blocks within the control flow graph
-   *
-   * @return the list of all blocks in the control flow graph
-   */
-  List<Block> getBlocks();
-}
+/** A block representing an exceptional end of a routine, e.g., an uncaught exception */
+public interface ExceptionalRoutineExit extends Terminus {}

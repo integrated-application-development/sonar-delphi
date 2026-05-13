@@ -21,7 +21,7 @@ package au.com.integradev.delphi.cfg.api;
 import java.util.Collections;
 import java.util.Set;
 
-/** A block which has no successors by nature, e.g., the end of a routine */
+/** A block that ends paths through a {@link ControlFlowGraph} */
 public interface Terminus extends Block {
   @Override
   default Set<Block> getSuccessors() {

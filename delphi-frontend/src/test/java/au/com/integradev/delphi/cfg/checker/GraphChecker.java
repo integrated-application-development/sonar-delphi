@@ -22,6 +22,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
+import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.block.BlockImpl;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,19 +43,28 @@ public class GraphChecker {
   }
 
   public void check(final ControlFlowGraph cfg) {
-    assertThat(cfg.getBlocks()).as("block count").hasSize(checkers.size() + 1);
+    List<Block> blocks = new ArrayList<>(cfg.getBlocks());
+    List<Block> exitBlocks = new ArrayList<>();
+    for (int i = blocks.size() - 1; i >= 0; i--) {
+      Block block = blocks.get(i);
+      if (block instanceof RoutineExit || block instanceof ExceptionalRoutineExit) {
+        exitBlocks.add(block);
+        blocks.remove(i);
+      }
+    }
+
+    assertThat(blocks).as("block count").hasSize(checkers.size());
     final Iterator<BlockChecker> checkerIterator = checkers.iterator();
 
-    List<Block> blocks = new ArrayList<>(cfg.getBlocks());
-    final Block exitBlock = blocks.remove(blocks.size() - 1);
     for (Block block : blocks) {
       checkerIterator.next().check(block);
       int blockId = ((BlockImpl) block).getId();
       checkLinkedBlocks("Successor of B" + blockId, cfg.getBlocks(), block.getSuccessors());
       checkLinkedBlocks("Predecessor of B" + blockId, cfg.getBlocks(), block.getPredecessors());
     }
-    assertThat(exitBlock.getElements()).isEmpty();
-    assertThat(exitBlock.getSuccessors()).isEmpty();
+
+    assertThat(exitBlocks.stream().map(Block::getElements)).allMatch(List::isEmpty);
+    assertThat(exitBlocks.stream().map(Block::getSuccessors)).allMatch(Set::isEmpty);
     assertThat(cfg.getBlocks())
         .withFailMessage("CFG entry block is no longer in the list of blocks!")
         .contains(cfg.getEntryBlock());
