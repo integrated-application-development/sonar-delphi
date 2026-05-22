@@ -23,6 +23,7 @@ import au.com.integradev.delphi.antlr.ast.visitors.MetricsVisitor.Data;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import java.io.Serializable;
 import java.util.Set;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -41,6 +42,10 @@ public class DelphiMetricsExecutor implements Executor {
 
   @Override
   public void execute(Context context, DelphiInputFile file) {
+    if (file.getInputFile().type() != InputFile.Type.MAIN) {
+      return;
+    }
+
     this.context = context.sensorContext();
     this.file = file;
 
