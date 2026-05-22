@@ -21,7 +21,9 @@ package au.com.integradev.delphi.executor;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -141,7 +143,24 @@ class DelphiMetricsExecutorTest {
     checkCodeLines(Set.of(1, 3, 5, 6, 7, 8, 9, 10, 12, 14, 15, 20, 21, 22, 23, 24, 25, 27), 27);
   }
 
+  @Test
+  void testTestFileShouldNotReportMetrics() {
+    execute(GLOBALS_TEST, InputFile.Type.TEST);
+    checkMetricNotReported(CoreMetrics.CLASSES);
+    checkMetricNotReported(CoreMetrics.FUNCTIONS);
+    checkMetricNotReported(CoreMetrics.COMPLEXITY);
+    checkMetricNotReported(CoreMetrics.COMMENT_LINES);
+    checkMetricNotReported(CoreMetrics.STATEMENTS);
+    checkMetricNotReported(CoreMetrics.NCLOC);
+    checkMetricNotReported(CoreMetrics.COGNITIVE_COMPLEXITY);
+    verify(fileLinesContext, never()).setIntValue(any(), anyInt(), anyInt());
+  }
+
   private void execute(String resourcePath) {
+    execute(resourcePath, InputFile.Type.MAIN);
+  }
+
+  private void execute(String resourcePath, InputFile.Type inputFileType) {
     try {
       File resource = DelphiUtils.getResource(resourcePath);
       DelphiInputFile file =
@@ -149,7 +168,7 @@ class DelphiMetricsExecutorTest {
               TestInputFileBuilder.create("moduleKey", ROOT_DIR, resource)
                   .setContents(FileUtils.readFileToString(resource, UTF_8.name()))
                   .setLanguage(Delphi.KEY)
-                  .setType(InputFile.Type.MAIN)
+                  .setType(inputFileType)
                   .build(),
               mockConfig());
       componentKey = file.getInputFile().key();
@@ -163,6 +182,10 @@ class DelphiMetricsExecutorTest {
     assertThat(sensorContext.measure(componentKey, metric).value())
         .as(metric.getDescription())
         .isEqualTo(value);
+  }
+
+  private <T extends Serializable> void checkMetricNotReported(Metric<T> metric) {
+    assertThat(sensorContext.measure(componentKey, metric)).as(metric.getDescription()).isNull();
   }
 
   void checkCodeLines(Set<Integer> codeLines, int totalLines) {
