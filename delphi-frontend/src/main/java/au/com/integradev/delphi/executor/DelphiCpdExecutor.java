@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.executor;
 
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
@@ -29,6 +30,13 @@ public class DelphiCpdExecutor extends DelphiTokenExecutor {
   static final String NUMERIC_LITERAL = "NUMERIC_LITERAL";
 
   private NewCpdTokens cpdTokens;
+
+  @Override
+  public void execute(Context context, DelphiInputFile delphiFile) {
+    if (delphiFile.getInputFile().type() == InputFile.Type.MAIN) {
+      super.execute(context, delphiFile);
+    }
+  }
 
   @Override
   public void onFile(SensorContext context, DelphiInputFile delphiFile) {
