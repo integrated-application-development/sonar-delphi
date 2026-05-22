@@ -32,7 +32,6 @@ import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.coverage.DelphiCodeCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
-import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.util.UUID;
@@ -49,7 +48,6 @@ class DelphiCoverageSensorTest {
 
   private final DefaultFileSystem fileSystem = new DefaultFileSystem(BASE_DIR);
   private final SensorContextTester context = SensorContextTester.create(fileSystem.baseDir());
-  private final DelphiProjectHelper delphiProjectHelper = mock(DelphiProjectHelper.class);
   private final DelphiCoverageParserFactory coverageParserFactory =
       mock(DelphiCoverageParserFactory.class);
   private final DelphiCoverageParser coverageParser = mock(DelphiCodeCoverageParser.class);
@@ -58,8 +56,7 @@ class DelphiCoverageSensorTest {
 
   @BeforeEach
   void setupSensor() {
-    sensor = new DelphiCoverageSensor(delphiProjectHelper, coverageParserFactory);
-    when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
+    sensor = new DelphiCoverageSensor(coverageParserFactory);
     when(coverageParserFactory.create()).thenReturn(coverageParser);
   }
 

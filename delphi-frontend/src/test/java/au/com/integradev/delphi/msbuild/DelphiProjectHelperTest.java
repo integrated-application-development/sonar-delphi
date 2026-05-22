@@ -325,7 +325,6 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.inputFiles()).isEmpty();
-    assertThat(delphiProjectHelper.shouldExecuteOnProject()).isFalse();
   }
 
   @Test
@@ -337,7 +336,6 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.inputFiles()).isEmpty();
-    assertThat(delphiProjectHelper.shouldExecuteOnProject()).isFalse();
   }
 
   @Test
@@ -349,6 +347,5 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.inputFiles()).isEmpty();
-    assertThat(delphiProjectHelper.shouldExecuteOnProject()).isFalse();
   }
 }

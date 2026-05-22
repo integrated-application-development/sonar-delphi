@@ -21,12 +21,9 @@ package au.com.integradev.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -61,7 +58,6 @@ class DelphiSensorTest {
     baseDir = Files.createTempDirectory("baseDir");
 
     sensor = new DelphiSensor(delphiProjectHelper, executor);
-    when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
     when(delphiProjectHelper.getToolchain())
         .thenReturn(DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT);
     when(delphiProjectHelper.getCompilerVersion())
@@ -171,24 +167,6 @@ class DelphiSensorTest {
     willThrow(expectedException).given(executor).setup();
 
     assertThatThrownBy(() -> sensor.execute(mock())).isEqualTo(expectedException);
-  }
-
-  @Test
-  void testWhenShouldExecuteOnProjectReturnsFalseThenExecutorIsNotCalled() {
-    when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(false);
-
-    sensor.execute(mock());
-
-    verify(executor, never()).execute(any(), any());
-  }
-
-  @Test
-  void testWhenShouldExecuteOnProjectReturnsTrueThenExecutorIsCalled() {
-    when(delphiProjectHelper.shouldExecuteOnProject()).thenReturn(true);
-
-    sensor.execute(mock());
-
-    verify(executor, times(1)).execute(any(), any());
   }
 
   @Test
