@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `DCCARM64EC` toolchain, introduced in Delphi 13.1.
 - `NoreturnContract` analysis rule, which flags `noreturn` routines that return normally.
 
+### Changed
+
+- Coverage data is no longer reported on test sources.
+
 ### Fixed
 
 - Quick fixes removing too much surrounding code in `RedundantInherited`.

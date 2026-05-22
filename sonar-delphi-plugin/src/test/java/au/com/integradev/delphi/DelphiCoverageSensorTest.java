@@ -20,7 +20,6 @@ package au.com.integradev.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -37,8 +36,9 @@ import java.io.File;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 class DelphiCoverageSensorTest {
@@ -68,13 +68,13 @@ class DelphiCoverageSensorTest {
 
   @Test
   void testDescribe() {
-    final SensorDescriptor mockDescriptor = mock(SensorDescriptor.class);
-    when(mockDescriptor.onlyOnLanguage(anyString())).thenReturn(mockDescriptor);
+    final DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
 
-    sensor.describe(mockDescriptor);
+    sensor.describe(descriptor);
 
-    verify(mockDescriptor).onlyOnLanguage(Delphi.KEY);
-    verify(mockDescriptor).name("DelphiCoverageSensor");
+    assertThat(descriptor.name()).isEqualTo("DelphiCoverageSensor");
+    assertThat(descriptor.languages()).containsExactly(Delphi.KEY);
+    assertThat(descriptor.type()).isEqualTo(InputFile.Type.MAIN);
   }
 
   @Test
