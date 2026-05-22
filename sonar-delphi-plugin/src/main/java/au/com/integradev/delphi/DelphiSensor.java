@@ -86,11 +86,9 @@ public class DelphiSensor implements Sensor {
   /** The actual sensor code. */
   @Override
   public void execute(@Nonnull SensorContext context) {
-    if (shouldExecuteOnProject()) {
-      executor.setup();
-      executeOnFiles(context);
-      executor.complete();
-    }
+    executor.setup();
+    executeOnFiles(context);
+    executor.complete();
   }
 
   private void executeOnFiles(SensorContext sensorContext) {
@@ -210,10 +208,6 @@ public class DelphiSensor implements Sensor {
     searchPathDirectories.addAll(delphiProjectHelper.getLibraryPathDirectories());
     searchPathDirectories.addAll(delphiProjectHelper.getBrowsingPathDirectories());
     return SearchPath.create(searchPathDirectories);
-  }
-
-  private boolean shouldExecuteOnProject() {
-    return delphiProjectHelper.shouldExecuteOnProject();
   }
 
   @Override

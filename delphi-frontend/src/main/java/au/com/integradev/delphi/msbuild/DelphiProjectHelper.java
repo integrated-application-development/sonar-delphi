@@ -387,10 +387,6 @@ public class DelphiProjectHelper {
     return fs.inputFiles(p.and(p.hasLanguage(Delphi.KEY)));
   }
 
-  public boolean shouldExecuteOnProject() {
-    return fs.hasFiles(fs.predicates().hasLanguage(Delphi.KEY));
-  }
-
   public InputFile getFile(String path) {
     return fs.inputFile(fs.predicates().hasURI(Paths.get(path).toUri()));
   }

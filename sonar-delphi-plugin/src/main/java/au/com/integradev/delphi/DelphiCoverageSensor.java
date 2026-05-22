@@ -21,7 +21,6 @@ package au.com.integradev.delphi;
 import au.com.integradev.delphi.core.Delphi;
 import au.com.integradev.delphi.coverage.DelphiCoverageParser;
 import au.com.integradev.delphi.coverage.DelphiCoverageParserFactory;
-import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -31,6 +30,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -38,33 +38,30 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 public class DelphiCoverageSensor implements Sensor {
   private static final Logger LOG = LoggerFactory.getLogger(DelphiCoverageSensor.class);
 
-  private final DelphiProjectHelper delphiProjectHelper;
   private final DelphiCoverageParserFactory coverageParserFactory;
 
   /**
    * Dependency-injection constructor
    *
-   * @param delphiProjectHelper Helper class for navigating delphi projects
    * @param coverageParserFactory Provides a coverage parsers
    */
-  public DelphiCoverageSensor(
-      DelphiProjectHelper delphiProjectHelper, DelphiCoverageParserFactory coverageParserFactory) {
-    this.delphiProjectHelper = delphiProjectHelper;
+  public DelphiCoverageSensor(DelphiCoverageParserFactory coverageParserFactory) {
     this.coverageParserFactory = coverageParserFactory;
   }
 
   /** Populate {@link SensorDescriptor} of this sensor. */
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguage(Delphi.KEY).name("DelphiCoverageSensor");
+    descriptor
+        .onlyOnLanguage(Delphi.KEY)
+        .onlyOnFileType(InputFile.Type.MAIN)
+        .name("DelphiCoverageSensor");
   }
 
   /** The actual sensor code. */
   @Override
   public void execute(@Nonnull SensorContext context) {
-    if (shouldExecuteOnProject()) {
-      addCoverage(context);
-    }
+    addCoverage(context);
   }
 
   private void addCoverage(SensorContext context) {
@@ -93,10 +90,6 @@ public class DelphiCoverageSensor implements Sensor {
     } catch (IOException | InvalidPathException e) {
       LOG.error("Error while parsing coverage reports:", e);
     }
-  }
-
-  private boolean shouldExecuteOnProject() {
-    return delphiProjectHelper.shouldExecuteOnProject();
   }
 
   @Override
