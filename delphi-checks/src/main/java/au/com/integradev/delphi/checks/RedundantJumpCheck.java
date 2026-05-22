@@ -134,17 +134,19 @@ public class RedundantJumpCheck extends DelphiCheck {
         // if the finally block cannot be found, we have traversed outside the scope of the cfg
         break;
       }
-      if (!finallyBlock.getSuccessor().equals(finallyBlock.getExceptionSuccessor())) {
-        // multiple paths after the finally corresponds to code that would be skipped from the jump
-        if (!(finallyBlock.getSuccessor() instanceof RoutineExit
-            && finallyBlock.getExceptionSuccessor() instanceof ExceptionalRoutineExit)) {
-          // if both of the paths are routine exits, then they are effectively equivalent
-          return false;
-        }
+
+      if (isNotFinallyAtEndOfRoutine(finallyBlock)) {
+        return false;
       }
     }
     // if no invalidating try-finally blocks are found, the use is a violation
     return true;
+  }
+
+  private static boolean isNotFinallyAtEndOfRoutine(Finally finallyBlock) {
+    return !finallyBlock.getSuccessor().equals(finallyBlock.getExceptionSuccessor())
+        && !(finallyBlock.getSuccessor() instanceof RoutineExit
+            && finallyBlock.getExceptionSuccessor() instanceof ExceptionalRoutineExit);
   }
 
   private static Finally findFinallyBlock(ControlFlowGraph cfg, FinallyBlockNode element) {
