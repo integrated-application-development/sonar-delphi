@@ -37,10 +37,10 @@ import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -65,29 +65,29 @@ class DelphiCoverageToolParserTest {
   private static final String MAIN_WINDOW_FILE_KEY = ":" + MAIN_WINDOW_FILENAME;
 
   private SensorContextTester context;
-  private EnvironmentVariableProvider environmentVariableProvider;
   private File baseDir;
   private DelphiProjectHelper delphiProjectHelper;
   private DelphiCodeCoverageParser parser;
 
   private static final String ROOT_NAME = "/au/com/integradev/delphi/projects/SimpleProject";
 
-  private void addFile(String fileName) throws IOException {
+  private void addFile(String fileName, InputFile.Type type) throws IOException {
     File file = DelphiUtils.getResource(fileName);
     final InputFile inputFile =
         TestInputFileBuilder.create("", baseDir, file)
             .setLanguage(Delphi.KEY)
+            .setType(type)
             .setContents(FileUtils.readFileToString(file, delphiProjectHelper.encoding()))
             .build();
     context.fileSystem().add(inputFile);
   }
 
-  @BeforeEach
-  void setup() throws IOException {
+  private void setup(InputFile.Type inputFileType) {
     baseDir = DelphiUtils.getResource(ROOT_NAME);
     context = SensorContextTester.create(baseDir);
 
-    environmentVariableProvider = mock(EnvironmentVariableProvider.class);
+    EnvironmentVariableProvider environmentVariableProvider =
+        mock(EnvironmentVariableProvider.class);
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
 
@@ -95,14 +95,20 @@ class DelphiCoverageToolParserTest {
         new DelphiProjectHelper(
             context.config(), context.fileSystem(), environmentVariableProvider);
 
-    addFile(ROOT_NAME + "/" + GLOBALS_FILENAME);
-    addFile(ROOT_NAME + "/" + MAIN_WINDOW_FILENAME);
+    try {
+      addFile(ROOT_NAME + "/" + GLOBALS_FILENAME, inputFileType);
+      addFile(ROOT_NAME + "/" + MAIN_WINDOW_FILENAME, inputFileType);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
 
     parser = new DelphiCodeCoverageParser(delphiProjectHelper);
   }
 
   @Test
   void testWhenValidReportLineHitsAreExtracted() {
+    setup(InputFile.Type.MAIN);
+
     parser.parse(context, DelphiUtils.getResource(NORMAL_COVERAGE));
 
     assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo((Integer) 1);
@@ -119,6 +125,8 @@ class DelphiCoverageToolParserTest {
 
   @Test
   void testLineHitsFromDifferentReportsAreMerged() {
+    setup(InputFile.Type.MAIN);
+
     parser.parse(context, DelphiUtils.getResource(NORMAL_COVERAGE));
     parser.parse(context, DelphiUtils.getResource(NORMAL_COVERAGE_PART_2));
 
@@ -129,6 +137,8 @@ class DelphiCoverageToolParserTest {
 
   @Test
   void testMismatchedCasingAllowed() {
+    setup(InputFile.Type.MAIN);
+
     parser.parse(context, DelphiUtils.getResource(MISMATCHED_CASING_COVERAGE));
 
     assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo(1);
@@ -143,6 +153,20 @@ class DelphiCoverageToolParserTest {
     assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 40)).isEqualTo(1);
   }
 
+  @Test
+  void testCoverageIsNotReportedForTestInputFiles() {
+    setup(InputFile.Type.TEST);
+
+    parser.parse(context, DelphiUtils.getResource(NORMAL_COVERAGE));
+
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isNull();
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 17)).isNull();
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 23)).isNull();
+
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 31)).isNull();
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 36)).isNull();
+  }
+
   void testReportFileIsIgnored(File file) {
     SensorContext mockContext = mock(SensorContext.class);
     assertThatCode(() -> parser.parse(mockContext, file)).doesNotThrowAnyException();
@@ -151,11 +175,15 @@ class DelphiCoverageToolParserTest {
 
   @Test
   void testInvalidXmlReportIsIgnored() {
+    setup(InputFile.Type.MAIN);
+
     testReportFileIsIgnored(DelphiUtils.getResource(INVALID_STRUCTURE));
   }
 
   @Test
   void testBadExistentFileIsIgnored() {
+    setup(InputFile.Type.MAIN);
+
     File file = mock(File.class);
     when(file.exists()).thenReturn(true);
     testReportFileIsIgnored(file);
@@ -163,16 +191,22 @@ class DelphiCoverageToolParserTest {
 
   @Test
   void testNonExistentReportIsIgnored() {
+    setup(InputFile.Type.MAIN);
+
     testReportFileIsIgnored(new File(UUID.randomUUID().toString()));
   }
 
   @Test
   void testReportWithNoLineHitsIsIgnored() {
+    setup(InputFile.Type.MAIN);
+
     testReportFileIsIgnored(DelphiUtils.getResource(NO_LINE_HITS));
   }
 
   @Test
   void testWhenPartiallyValidReportOnlyValidLineHitsAreRecorded() {
+    setup(InputFile.Type.MAIN);
+
     parser.parse(context, DelphiUtils.getResource(INVALID_LINE_HITS));
 
     assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo((Integer) 1);

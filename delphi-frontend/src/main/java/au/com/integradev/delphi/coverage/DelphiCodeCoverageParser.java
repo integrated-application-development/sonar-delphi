@@ -109,6 +109,10 @@ public class DelphiCodeCoverageParser implements DelphiCoverageParser {
       return;
     }
 
+    if (sourceFile.type() == InputFile.Type.TEST) {
+      return;
+    }
+
     LOG.debug("Parsing line hit information for file: {}", fileName);
 
     NewCoverage newCoverage = sensorContext.newCoverage();
