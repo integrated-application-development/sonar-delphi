@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
@@ -60,16 +61,14 @@ public class RedundantInheritedCheck extends DelphiCheck {
 
   private static List<QuickFix> getQuickFixes(
       DelphiNode violationNode, DelphiCheckContext context) {
-    DelphiNode violationStatement = violationNode;
-    DelphiNode parent = violationNode.getParent();
-    while (!(parent instanceof StatementListNode)) {
-      violationStatement = parent;
-      parent = parent.getParent();
-      if (parent == null) {
-        return Collections.emptyList();
-      }
+    StatementNode violationStatement = violationNode.getFirstParentOfType(StatementNode.class);
+
+    if (!(violationStatement.getParent() instanceof StatementListNode)) {
+      return quickFix(
+          QuickFixEdit.delete(getDirectStatementDeleteRange(violationNode, violationStatement)));
     }
-    StatementListNode statementListNode = (StatementListNode) parent;
+
+    StatementListNode statementListNode = (StatementListNode) violationStatement.getParent();
     int statementIndex = statementListNode.getStatements().indexOf(violationStatement);
 
     int startLine = violationStatement.getBeginLine();
@@ -90,10 +89,30 @@ public class RedundantInheritedCheck extends DelphiCheck {
       startCol = lastDeletableToken.getEndColumn();
     }
 
-    return List.of(
-        QuickFix.newFix("Remove redundant inherited call")
-            .withEdit(
-                QuickFixEdit.delete(FilePosition.from(startLine, startCol, endLine, endCol))));
+    return quickFix(QuickFixEdit.delete(FilePosition.from(startLine, startCol, endLine, endCol)));
+  }
+
+  private static List<QuickFix> quickFix(QuickFixEdit edit) {
+    return List.of(QuickFix.newFix("Remove redundant inherited call").withEdit(edit));
+  }
+
+  private static FilePosition getDirectStatementDeleteRange(
+      DelphiNode violationNode, StatementNode violationStatement) {
+    DelphiNode parent = violationStatement.getParent();
+    if (parent instanceof IfStatementNode) {
+      IfStatementNode ifStatement = (IfStatementNode) parent;
+      if (ifStatement.getElseStatement() == violationStatement) {
+        DelphiNode elseToken = parent.getFirstChildWithTokenType(DelphiTokenType.ELSE);
+
+        return FilePosition.from(
+            elseToken.getBeginLine(),
+            elseToken.getBeginColumn(),
+            violationStatement.getEndLine(),
+            violationStatement.getEndColumn());
+      }
+    }
+
+    return FilePosition.from(violationNode);
   }
 
   private static DelphiToken nextNonWhitespaceToken(
