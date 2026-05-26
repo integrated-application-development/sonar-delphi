@@ -30,6 +30,7 @@ import au.com.integradev.delphi.enviroment.DefaultEnvironmentVariableProvider;
 import au.com.integradev.delphi.executor.DelphiChecksExecutor;
 import au.com.integradev.delphi.executor.DelphiCpdExecutor;
 import au.com.integradev.delphi.executor.DelphiHighlightExecutor;
+import au.com.integradev.delphi.executor.DelphiIssueResolutionExecutor;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.executor.DelphiMetricsExecutor;
 import au.com.integradev.delphi.executor.DelphiNoSonarExecutor;
@@ -38,8 +39,11 @@ import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarProduct;
+import org.sonar.api.utils.Version;
 
 public class DelphiPlugin implements Plugin {
+  static final Version ISSUE_RESOLUTION_MIN_API_VERSION = Version.create(13, 5);
+
   @Override
   public String toString() {
     return getClass().getSimpleName();
@@ -87,6 +91,13 @@ public class DelphiPlugin implements Plugin {
           DelphiMetricsExecutor.class,
           // Core helpers
           DelphiCoverageParserFactory.class);
+
+      if (context
+          .getRuntime()
+          .getApiVersion()
+          .isGreaterThanOrEqual(ISSUE_RESOLUTION_MIN_API_VERSION)) {
+        builder.add(DelphiIssueResolutionExecutor.class);
+      }
     }
 
     context.addExtensions(builder.build());

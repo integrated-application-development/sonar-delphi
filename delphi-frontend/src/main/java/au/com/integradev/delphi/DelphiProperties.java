@@ -63,6 +63,9 @@ public final class DelphiProperties {
     // hide public constructor
   }
 
+  // Qualifiers and onQualifiers can't be replaced with ConfigScope and onConfigScopes until we
+  // increase the minimum plugin API version to 10.13+.
+  @SuppressWarnings("removal")
   public static List<PropertyDefinition> getProperties() {
     return List.of(
         PropertyDefinition.builder(Delphi.FILE_SUFFIXES_KEY)

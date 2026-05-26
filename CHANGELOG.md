@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support for
+  [resolving issues in code](https://docs.sonarsource.com/sonarqube-server/user-guide/issues/managing#resolving-in-code)
+  with `sonar-resolve` comments.
 - Support for `if` expressions, introduced in Delphi 13.
 - **API:** `IfExpressionNode` node type.
 
