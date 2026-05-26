@@ -183,6 +183,44 @@ class RedundantInheritedCheckTest {
   }
 
   @Test
+  void testAsmRoutineShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("asm")
+                .appendImpl("  MOV EAX, 1")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testEmptyRoutineShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testNonMethodShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Foo;")
+                .appendImpl("begin")
+                .appendImpl("  inherited; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
   void testNotOverridingMethodShouldAddIssues() {
     CheckVerifier.newVerifier()
         .withCheck(new RedundantInheritedCheck())
@@ -271,6 +309,45 @@ class RedundantInheritedCheckTest {
                 .appendImpl("  // Fix qf1@[+1:2 to +1:13] <<>>")
                 .appendImpl("  inherited; // Noncompliant")
                 .appendImpl("  A := 2;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testInheritedWithTrailingExtraSemicolonShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject);")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("    procedure MyProcedure;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TChild.MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+1:2 to +1:14] <<>>")
+                .appendImpl("  inherited; ; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testInheritedWithTrailingExtraSemicolonBeforeNextStatementShouldAddQuickFix() {
+    CheckVerifier.newVerifier()
+        .withCheck(new RedundantInheritedCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBase = class(TObject);")
+                .appendDecl("  TChild = class(TBase)")
+                .appendDecl("    procedure MyProcedure;")
+                .appendDecl("  end;")
+                .appendImpl("procedure TChild.MyProcedure;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+1:2 to +1:15] <<>>")
+                .appendImpl("  inherited; ; // Noncompliant")
+                .appendImpl("  A := 1;")
                 .appendImpl("end;"))
         .verifyIssues();
   }
