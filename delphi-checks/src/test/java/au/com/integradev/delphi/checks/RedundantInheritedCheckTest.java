@@ -39,11 +39,11 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("  begin")
-                .appendImpl("    inherited; // Compliant")
+                .appendImpl("    inherited;")
                 .appendImpl("  end;")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -63,11 +63,11 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("  begin")
-                .appendImpl("    inherited; // Compliant")
+                .appendImpl("    inherited;")
                 .appendImpl("  end;")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -90,11 +90,11 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TGrandChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("  begin")
-                .appendImpl("    inherited; // Compliant")
+                .appendImpl("    inherited;")
                 .appendImpl("  end;")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -115,11 +115,11 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TGrandChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("  begin")
-                .appendImpl("    inherited; // Compliant")
+                .appendImpl("    inherited;")
                 .appendImpl("  end;")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -139,7 +139,7 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TChild.MyProcedure;")
                 .appendImpl("begin")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
@@ -177,7 +177,7 @@ class RedundantInheritedCheckTest {
                 .appendDecl("  end;")
                 .appendImpl("procedure TFoo.Handler;")
                 .appendImpl("begin")
-                .appendImpl("  inherited; // Compliant")
+                .appendImpl("  inherited;")
                 .appendImpl("end;"))
         .verifyNoIssues();
   }
