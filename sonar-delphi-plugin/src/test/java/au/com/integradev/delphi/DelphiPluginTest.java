@@ -24,6 +24,7 @@ package au.com.integradev.delphi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import au.com.integradev.delphi.executor.DelphiIssueResolutionExecutor;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,7 @@ import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
 class DelphiPluginTest {
+  private static final Version OLD_PLUGIN_API_VERSION = Version.parse("9.14.0.375");
 
   private DelphiPlugin plugin;
 
@@ -49,14 +51,36 @@ class DelphiPluginTest {
   }
 
   @Test
-  void testExtensions() {
+  void testExtensionsWithoutIssueResolutionOnOlderRuntime() {
     SonarRuntime runtime =
         SonarRuntimeImpl.forSonarQube(
-            Version.create(1, 0), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+            OLD_PLUGIN_API_VERSION, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
 
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat((List<?>) context.getExtensions()).hasSize(36);
+    assertThat(getExtensions(context))
+        .hasSize(36)
+        .doesNotContain(DelphiIssueResolutionExecutor.class);
+  }
+
+  @Test
+  void testExtensionsWithIssueResolutionOnSupportedRuntime() {
+    SonarRuntime runtime =
+        SonarRuntimeImpl.forSonarQube(
+            DelphiPlugin.ISSUE_RESOLUTION_MIN_API_VERSION,
+            SonarQubeSide.SCANNER,
+            SonarEdition.COMMUNITY);
+
+    Plugin.Context context = new Plugin.Context(runtime);
+    plugin.define(context);
+
+    assertThat(getExtensions(context)).hasSize(37).contains(DelphiIssueResolutionExecutor.class);
+  }
+
+  private static List<Object> getExtensions(Plugin.Context context) {
+    @SuppressWarnings("unchecked")
+    List<Object> extensions = context.getExtensions();
+    return extensions;
   }
 }

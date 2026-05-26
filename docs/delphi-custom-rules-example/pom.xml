@@ -49,8 +49,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.delphi.version>1.19.0</sonar.delphi.version>
-    <sonar.plugin.api.version>10.1.0.809</sonar.plugin.api.version>
-    <sonar.analyzer.commons.version>2.29.0.5138</sonar.analyzer.commons.version>
+    <sonar.plugin.api.version>13.5.0.4319</sonar.plugin.api.version>
+    <sonar.analyzer.commons.version>2.27.0.5007</sonar.analyzer.commons.version>
     <slf4j.version>1.7.36</slf4j.version>
     <junit.version>5.14.4</junit.version>
     <assertj.version>3.27.7</assertj.version>
