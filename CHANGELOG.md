@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for `noreturn` routines, introduced in Delphi 13.
+- Support for `unmanaged` generic constraint, introduced in Delphi 13.
+- Support for `interface` generic constraint, introduced in Delphi 13.
 - Support for `NameOf` intrinsic, introduced in Delphi 13.
 - Support for implicit `Self` in `Initialize` and `Finalize` operators, introduced in Delphi 13.
 - Support for `DCCARM64EC` toolchain, introduced in Delphi 13.1.
