@@ -74,7 +74,7 @@ public class SymbolTableBuilder {
   private final Set<UnitData> sourceFileUnits = new HashSet<>();
   private final HashMap<String, UnitData> allUnitsByName = new HashMap<>();
   private final Set<Path> unitPaths = new HashSet<>();
-  private String encoding;
+  private Charset charset = CharsetUtils.nativeCharset();
   private Charset ansiCharset = CharsetUtils.nativeCharset();
   private DelphiPreprocessorFactory preprocessorFactory;
   private TypeFactory typeFactory;
@@ -109,8 +109,8 @@ public class SymbolTableBuilder {
     return this;
   }
 
-  public SymbolTableBuilder encoding(String encoding) {
-    this.encoding = encoding;
+  public SymbolTableBuilder charset(Charset charset) {
+    this.charset = charset;
     return this;
   }
 
@@ -267,9 +267,9 @@ public class SymbolTableBuilder {
     return allUnitsByName.get(importName.toLowerCase());
   }
 
-  private DelphiFileConfig createFileConfig(UnitData unit, boolean shouldSkipImplementation) {
+  private DelphiFileConfig createFileConfig(boolean shouldSkipImplementation) {
     return DelphiFile.createConfig(
-        sourceFileUnits.contains(unit) ? encoding : null,
+        charset,
         ansiCharset,
         preprocessorFactory,
         typeFactory,
@@ -293,7 +293,7 @@ public class SymbolTableBuilder {
       }
 
       boolean shouldSkipImplementation = (resolutionLevel != ResolutionLevel.COMPLETE);
-      DelphiFileConfig fileConfig = createFileConfig(unit, shouldSkipImplementation);
+      DelphiFileConfig fileConfig = createFileConfig(shouldSkipImplementation);
       DelphiFile delphiFile = DelphiFile.from(unit.unitFile.toFile(), fileConfig);
 
       if (unit.resolved == ResolutionLevel.NONE) {

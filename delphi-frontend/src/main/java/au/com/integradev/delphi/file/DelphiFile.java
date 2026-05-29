@@ -39,7 +39,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
 import org.antlr.runtime.BufferedTokenStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
@@ -55,7 +54,7 @@ public interface DelphiFile {
 
   List<String> getSourceCodeFileLines();
 
-  String getSourceCodeFileEncoding();
+  Charset getSourceCodeFileCharset();
 
   DelphiAst getAst();
 
@@ -84,10 +83,10 @@ public interface DelphiFile {
 
     private static DelphiFileConfig useInputFileEncoding(
         InputFile inputFile, DelphiFileConfig config) {
-      if (inputFile.charset() != null && !inputFile.charset().name().equals(config.getEncoding())) {
+      if (inputFile.charset() != null && !inputFile.charset().equals(config.getCharset())) {
         config =
             DelphiFile.createConfig(
-                inputFile.charset().name(),
+                inputFile.charset(),
                 config.getAnsiCharset(),
                 config.getPreprocessorFactory(),
                 config.getTypeFactory(),
@@ -112,18 +111,18 @@ public interface DelphiFile {
   }
 
   static DelphiFileConfig createConfig(
-      String encoding,
+      Charset charset,
       Charset ansiCharset,
       DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
       SearchPath searchPath,
       Set<String> definitions) {
     return createConfig(
-        encoding, ansiCharset, preprocessorFactory, typeFactory, searchPath, definitions, false);
+        charset, ansiCharset, preprocessorFactory, typeFactory, searchPath, definitions, false);
   }
 
   static DelphiFileConfig createConfig(
-      @Nullable String encoding,
+      Charset charset,
       Charset ansiCharset,
       DelphiPreprocessorFactory preprocessorFactory,
       TypeFactory typeFactory,
@@ -131,7 +130,7 @@ public interface DelphiFile {
       Set<String> definitions,
       boolean shouldSkipImplementation) {
     return new DefaultDelphiFileConfig(
-        encoding,
+        charset,
         ansiCharset,
         preprocessorFactory,
         typeFactory,
@@ -150,10 +149,10 @@ public interface DelphiFile {
       DefaultDelphiFile delphiFile, File sourceFile, DelphiFileConfig config) {
     try {
       String filePath = sourceFile.getAbsolutePath();
-      DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
+      DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getCharset());
       DelphiPreprocessor preprocessor = preprocess(fileStream, config);
       delphiFile.setSourceCodeFile(sourceFile);
-      delphiFile.setSourceCodeEncoding(fileStream.getEncoding());
+      delphiFile.setSourceCodeCharset(fileStream.getCharset());
       delphiFile.setAnsiCharset(config.getAnsiCharset());
       delphiFile.setTypeFactory(config.getTypeFactory());
       delphiFile.setAst(createAST(delphiFile, preprocessor.getTokenStream(), config));

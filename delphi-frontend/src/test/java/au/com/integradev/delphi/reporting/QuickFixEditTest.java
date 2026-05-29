@@ -56,7 +56,7 @@ class QuickFixEditTest {
   private static DelphiFileStream getTestStream() {
     try {
       return new DelphiFileStream(
-          DelphiUtils.getResource(TEST_UNIT_PATH).getAbsolutePath(), StandardCharsets.UTF_8.name());
+          DelphiUtils.getResource(TEST_UNIT_PATH).getAbsolutePath(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
@@ -144,7 +144,7 @@ class QuickFixEditTest {
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
 
     DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);
-    when(fileConfig.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(fileConfig.getCharset()).thenReturn(StandardCharsets.UTF_8);
     when(fileConfig.getPreprocessorFactory()).thenReturn(preprocessorFactory);
     when(fileConfig.getTypeFactory()).thenReturn(typeFactory);
     when(fileConfig.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));

@@ -256,7 +256,7 @@ public final class DelphiIssueBuilderImpl implements DelphiIssueBuilder {
   private static DelphiFileStream getDelphiFileStream(DelphiFile delphiFile) {
     try {
       return new DelphiFileStream(
-          delphiFile.getSourceCodeFile().getAbsolutePath(), delphiFile.getSourceCodeFileEncoding());
+          delphiFile.getSourceCodeFile().getAbsolutePath(), delphiFile.getSourceCodeFileCharset());
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

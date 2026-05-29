@@ -32,9 +32,12 @@ import au.com.integradev.delphi.executor.DelphiMasterExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -58,10 +61,20 @@ class DelphiSensorTest {
     baseDir = Files.createTempDirectory("baseDir");
 
     sensor = new DelphiSensor(delphiProjectHelper, executor);
+    when(delphiProjectHelper.getCharset()).thenReturn(StandardCharsets.UTF_8);
+    when(delphiProjectHelper.getAnsiCharset()).thenReturn(StandardCharsets.UTF_8);
     when(delphiProjectHelper.getToolchain())
         .thenReturn(DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT);
     when(delphiProjectHelper.getCompilerVersion())
         .thenReturn(DelphiProperties.COMPILER_VERSION_DEFAULT);
+    when(delphiProjectHelper.getConditionalDefines()).thenReturn(Set.of());
+    when(delphiProjectHelper.getReferencedFiles()).thenReturn(List.of());
+    when(delphiProjectHelper.getSearchDirectories()).thenReturn(List.of());
+    when(delphiProjectHelper.getDebugSourceDirectories()).thenReturn(List.of());
+    when(delphiProjectHelper.getLibraryPathDirectories()).thenReturn(List.of());
+    when(delphiProjectHelper.getBrowsingPathDirectories()).thenReturn(List.of());
+    when(delphiProjectHelper.getUnitScopeNames()).thenReturn(Set.of());
+    when(delphiProjectHelper.getUnitAliases()).thenReturn(Map.of());
 
     Path standardLibraryPath = Files.createDirectories(baseDir.resolve("bds/source"));
 

@@ -29,34 +29,30 @@ import org.apache.commons.io.input.BOMInputStream;
 
 public class DelphiFileStream extends ANTLRStringStream {
   private final String fileName;
-  private final String encoding;
+  private final Charset charset;
 
-  public DelphiFileStream(String fileName, String encoding) throws IOException {
+  public DelphiFileStream(String fileName, Charset charset) throws IOException {
     this.fileName = fileName;
-    this.encoding = this.load(fileName, encoding);
+    this.charset = this.load(fileName, charset);
   }
 
-  private String load(String fileName, String encoding) throws IOException {
+  private Charset load(String fileName, Charset charset) throws IOException {
     if (fileName != null) {
       File f = new File(fileName);
       int size = (int) f.length();
       try (BOMInputStream input = bomInputStream(fileName).get()) {
         ByteOrderMark bom = input.getBOM();
         if (bom != null) {
-          encoding = bom.getCharsetName();
+          charset = Charset.forName(bom.getCharsetName());
         }
 
-        if (encoding == null) {
-          encoding = Charset.defaultCharset().name();
-        }
-
-        try (InputStreamReader reader = new InputStreamReader(input, encoding)) {
+        try (InputStreamReader reader = new InputStreamReader(input, charset)) {
           this.data = new char[size];
           super.n = reader.read(this.data);
         }
       }
     }
-    return encoding;
+    return charset;
   }
 
   @Override
@@ -64,8 +60,8 @@ public class DelphiFileStream extends ANTLRStringStream {
     return this.fileName;
   }
 
-  public String getEncoding() {
-    return this.encoding;
+  public Charset getCharset() {
+    return this.charset;
   }
 
   private static BOMInputStream.Builder bomInputStream(String fileName) throws IOException {

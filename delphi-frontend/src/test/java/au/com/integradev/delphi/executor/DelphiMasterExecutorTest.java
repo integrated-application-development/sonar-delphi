@@ -179,7 +179,7 @@ class DelphiMasterExecutorTest {
         new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
-    when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(mock.getCharset()).thenReturn(StandardCharsets.UTF_8);
     when(mock.getPreprocessorFactory())
         .thenReturn(
             new DelphiPreprocessorFactory(

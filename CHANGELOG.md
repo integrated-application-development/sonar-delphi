@@ -22,12 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The ANSI encoding configured by `sonar.delphi.codePage` or inferred from `DCC_CodePage` is now
+  preferred over the system encoding when parsing source files.
 - Metrics are no longer reported on test sources.
 - Duplications are no longer reported on test sources.
 - Coverage data is no longer reported on test sources.
 
 ### Fixed
 
+- The configured `sonar.sourceEncoding` was never used for search path units.
 - Quick fixes removing too much surrounding code in `RedundantInherited`.
 
 ## [1.18.3] - 2025-11-11

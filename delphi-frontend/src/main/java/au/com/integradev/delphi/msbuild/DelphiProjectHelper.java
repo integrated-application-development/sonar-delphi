@@ -66,6 +66,8 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
 @SonarLintSide
 public class DelphiProjectHelper {
   private static final Logger LOG = LoggerFactory.getLogger(DelphiProjectHelper.class);
+  private static final String SOURCE_ENCODING_KEY = "sonar.sourceEncoding";
+
   private final Configuration settings;
   private final FileSystem fs;
   private final EnvironmentVariableProvider environmentVariableProvider;
@@ -480,7 +482,10 @@ public class DelphiProjectHelper {
     return fs.inputFile(fs.predicates().hasURI(Paths.get(path).toUri()));
   }
 
-  public String encoding() {
-    return fs != null ? fs.encoding().name() : Charset.defaultCharset().name();
+  public Charset getCharset() {
+    if (fs != null && settings.get(SOURCE_ENCODING_KEY).isPresent()) {
+      return fs.encoding();
+    }
+    return getAnsiCharset();
   }
 }
