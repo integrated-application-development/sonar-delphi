@@ -133,7 +133,7 @@ class DelphiPreprocessorTest {
     String filePath =
         DelphiUtils.getResource(BASE_DIR + "includeTest/SameNameBacktrack.pas").getAbsolutePath();
     DelphiFileConfig config = DelphiFileUtils.mockConfig();
-    DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
+    DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getCharset());
 
     DelphiLexer lexer = new DelphiLexer(fileStream);
     DelphiPreprocessor preprocessor =
@@ -147,7 +147,7 @@ class DelphiPreprocessorTest {
   private static void executeWithDefines(String filename, String... defines) {
     DelphiFileConfig config =
         DelphiFile.createConfig(
-            UTF_8.name(),
+            UTF_8,
             UTF_8,
             new DelphiPreprocessorFactory(
                 DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
@@ -168,7 +168,7 @@ class DelphiPreprocessorTest {
     execute(
         filename,
         DelphiFile.createConfig(
-            UTF_8.name(),
+            UTF_8,
             UTF_8,
             new DelphiPreprocessorFactory(
                 DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS),
@@ -184,7 +184,7 @@ class DelphiPreprocessorTest {
   private static void execute(String filename, DelphiFileConfig config) {
     try {
       String filePath = DelphiUtils.getResource(BASE_DIR + filename).getAbsolutePath();
-      DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getEncoding());
+      DelphiFileStream fileStream = new DelphiFileStream(filePath, config.getCharset());
 
       DelphiLexer lexer = new DelphiLexer(fileStream);
       DelphiPreprocessor preprocessor =

@@ -54,7 +54,7 @@ public final class DelphiFileUtils {
 
   public static DelphiFileConfig mockConfig() {
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
-    when(mock.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+    when(mock.getCharset()).thenReturn(StandardCharsets.UTF_8);
     when(mock.getPreprocessorFactory())
         .thenReturn(
             new DelphiPreprocessorFactory(

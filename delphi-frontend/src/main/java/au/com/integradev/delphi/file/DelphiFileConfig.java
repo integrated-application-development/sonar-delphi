@@ -22,17 +22,15 @@ import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import java.nio.charset.Charset;
 import java.util.Set;
-import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 public interface DelphiFileConfig {
   /**
-   * Returns the encoding that the source file is expected to be
+   * Returns the charset that the source file is expected to be read with
    *
-   * @return Name of encoding
+   * @return Source charset
    */
-  @Nullable
-  String getEncoding();
+  Charset getCharset();
 
   /**
    * Returns the charset that will be used for interpreting ANSI data in the source file

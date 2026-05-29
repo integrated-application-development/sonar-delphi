@@ -231,7 +231,7 @@ class DelphiTokenExecutorTest {
               DelphiProperties.COMPILER_VERSION_DEFAULT);
 
       DelphiFileConfig fileConfig = mock(DelphiFileConfig.class);
-      when(fileConfig.getEncoding()).thenReturn(StandardCharsets.UTF_8.name());
+      when(fileConfig.getCharset()).thenReturn(StandardCharsets.UTF_8);
       when(fileConfig.getPreprocessorFactory())
           .thenReturn(
               new DelphiPreprocessorFactory(

@@ -55,6 +55,7 @@ import org.sonar.api.config.Configuration;
 
 class DelphiProjectHelperTest {
   private static final String PROJECTS_PATH = "/au/com/integradev/delphi/projects/";
+  private static final String SOURCE_ENCODING_KEY = "sonar.sourceEncoding";
   private static final File BASE_DIR = DelphiUtils.getResource(PROJECTS_PATH);
   private Configuration settings;
   private DefaultFileSystem fs;
@@ -78,6 +79,7 @@ class DelphiProjectHelperTest {
 
     when(settings.get(DelphiProperties.INSTALLATION_PATH_KEY))
         .thenReturn(Optional.of(installationPath));
+    when(settings.get(SOURCE_ENCODING_KEY)).thenReturn(Optional.empty());
     when(environmentVariableProvider.getenv()).thenReturn(Collections.emptyMap());
     when(environmentVariableProvider.getenv(anyString())).thenReturn(null);
 
@@ -331,12 +333,12 @@ class DelphiProjectHelperTest {
   @Test
   void testConfiguredCodePageOverridesProjectCodePage() {
     addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
-    when(settings.get(DelphiProperties.CODE_PAGE_KEY)).thenReturn(Optional.of("1252"));
+    when(settings.get(DelphiProperties.CODE_PAGE_KEY)).thenReturn(Optional.of("1251"));
 
     DelphiProjectHelper delphiProjectHelper =
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
-    assertThat(delphiProjectHelper.getAnsiCharset().name()).isEqualTo("windows-1252");
+    assertThat(delphiProjectHelper.getAnsiCharset().name()).isEqualTo("windows-1251");
   }
 
   @Test
@@ -420,6 +422,28 @@ class DelphiProjectHelperTest {
         new DelphiProjectHelper(settings, fs, environmentVariableProvider);
 
     assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(Charset.forName("windows-1252"));
+  }
+
+  @Test
+  void testConfiguredSourceEncodingProvidesCharset() {
+    fs.setEncoding(StandardCharsets.UTF_16LE);
+    when(settings.get(SOURCE_ENCODING_KEY)).thenReturn(Optional.of("UTF-16LE"));
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getCharset()).isEqualTo(StandardCharsets.UTF_16LE);
+  }
+
+  @Test
+  void testMissingSourceEncodingFallsBackToAnsiCharset() {
+    addInputFile(PROJECTS_PATH + "CodePageProject/Windows1252.dproj");
+    fs.setEncoding(StandardCharsets.UTF_8);
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getCharset().name()).isEqualTo("windows-1252");
   }
 
   @Test

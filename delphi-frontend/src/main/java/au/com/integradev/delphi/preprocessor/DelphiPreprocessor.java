@@ -260,7 +260,7 @@ public class DelphiPreprocessor {
   }
 
   private List<Token> preprocessIncludeFile(DelphiToken location, Path path) throws IOException {
-    var fileStream = new DelphiFileStream(path.toAbsolutePath().toString(), config.getEncoding());
+    var fileStream = new DelphiFileStream(path.toAbsolutePath().toString(), config.getCharset());
     DelphiLexer includeLexer = new DelphiIncludeLexer(fileStream, location);
 
     DelphiPreprocessor preprocessor =

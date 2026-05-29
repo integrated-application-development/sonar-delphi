@@ -323,7 +323,7 @@ public class CheckVerifierImpl implements CheckVerifier {
           try {
             return new DelphiFileStream(
                 delphiFile.getSourceCodeFile().getAbsolutePath(),
-                delphiFile.getSourceCodeFileEncoding());
+                delphiFile.getSourceCodeFileCharset());
           } catch (IOException e) {
             throw new UncheckedIOException(e);
           }

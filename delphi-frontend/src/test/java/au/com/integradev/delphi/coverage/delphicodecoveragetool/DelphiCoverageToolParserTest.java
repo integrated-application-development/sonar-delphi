@@ -77,7 +77,7 @@ class DelphiCoverageToolParserTest {
         TestInputFileBuilder.create("", baseDir, file)
             .setLanguage(Delphi.KEY)
             .setType(type)
-            .setContents(FileUtils.readFileToString(file, delphiProjectHelper.encoding()))
+            .setContents(FileUtils.readFileToString(file, delphiProjectHelper.getCharset()))
             .build();
     context.fileSystem().add(inputFile);
   }

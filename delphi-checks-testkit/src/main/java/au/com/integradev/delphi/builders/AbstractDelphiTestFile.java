@@ -85,7 +85,7 @@ abstract class AbstractDelphiTestFile<T extends AbstractDelphiTestFile<T>>
         new TypeFactoryImpl(
             DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT, DelphiProperties.COMPILER_VERSION_DEFAULT);
     DelphiFileConfig mock = mock(DelphiFileConfig.class);
-    when(mock.getEncoding()).thenReturn(UTF_8.name());
+    when(mock.getCharset()).thenReturn(UTF_8);
     when(mock.getTypeFactory()).thenReturn(typeFactory);
     when(mock.getSearchPath()).thenReturn(SearchPath.create(Collections.emptyList()));
     when(mock.getDefinitions()).thenReturn(Collections.emptySet());

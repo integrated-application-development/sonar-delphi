@@ -36,7 +36,7 @@ class DefaultDelphiFile implements DelphiFile {
   private CompilerSwitchRegistry switchRegistry;
   private TextBlockLineEndingModeRegistry textBlockLineEndingModeRegistry;
   private TypeFactory typeFactory;
-  private String encoding;
+  private Charset charset;
   private Charset ansiCharset;
 
   DefaultDelphiFile() {
@@ -54,8 +54,8 @@ class DefaultDelphiFile implements DelphiFile {
   }
 
   @Override
-  public String getSourceCodeFileEncoding() {
-    return encoding;
+  public Charset getSourceCodeFileCharset() {
+    return charset;
   }
 
   @Override
@@ -101,8 +101,8 @@ class DefaultDelphiFile implements DelphiFile {
     this.sourceCodeLines = List.copyOf(sourceCodeLines);
   }
 
-  void setSourceCodeEncoding(String encoding) {
-    this.encoding = encoding;
+  void setSourceCodeCharset(Charset charset) {
+    this.charset = charset;
   }
 
   void setAnsiCharset(Charset ansiCharset) {

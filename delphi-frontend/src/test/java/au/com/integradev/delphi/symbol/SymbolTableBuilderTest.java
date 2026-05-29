@@ -30,8 +30,10 @@ import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
 import au.com.integradev.delphi.preprocessor.search.SearchPath;
 import au.com.integradev.delphi.symbol.SymbolTableBuilder.SymbolTableConstructionException;
+import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.types.TypeFactoryUtils;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -261,6 +263,44 @@ class SymbolTableBuilderTest {
             .searchPath(SearchPath.create(List.of(includePath)));
 
     assertThatCode(symbolTable::build).doesNotThrowAnyException();
+  }
+
+  @Test
+  void testSearchPathImportsUseConfiguredCharset(
+      @TempDir Path standardLibraryPath, @TempDir Path tempDir) throws IOException {
+    createStandardLibrary(standardLibraryPath);
+
+    Path searchPathRoot = tempDir.resolve("include");
+    Files.createDirectories(searchPathRoot);
+
+    Path importUnitPath = searchPathRoot.resolve("Consts.pas");
+    Files.copy(
+        DelphiUtils.getResource("/au/com/integradev/delphi/file/ShiftJis.pas").toPath(),
+        importUnitPath);
+
+    Path sourceFilePath = tempDir.resolve("SourceFile.pas");
+    Files.writeString(
+        sourceFilePath,
+        "unit SourceFile;\n"
+            + "interface\n"
+            + "uses\n"
+            + "  Consts;\n"
+            + "implementation\n"
+            + "end.");
+
+    SymbolTable symbolTable =
+        SymbolTable.builder()
+            .charset(Charset.forName("windows-31j"))
+            .preprocessorFactory(
+                new DelphiPreprocessorFactory(
+                    DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS))
+            .typeFactory(TypeFactoryUtils.defaultFactory())
+            .standardLibraryPath(standardLibraryPath)
+            .sourceFiles(List.of(sourceFilePath))
+            .searchPath(SearchPath.create(List.of(searchPathRoot)))
+            .build();
+
+    assertThat(symbolTable.getUnitByPath(importUnitPath.toString())).isNotNull();
   }
 
   private static void createStandardLibrary(Path path) throws IOException {
