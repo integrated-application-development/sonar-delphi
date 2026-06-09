@@ -66,6 +66,12 @@ class DelphiProjectFactoryTest {
   private static final String CODE_PAGE_PROJECT =
       "/au/com/integradev/delphi/projects/CodePageProject/Utf8.dproj";
 
+  private static final String BLANK_CODE_PAGE_PROJECT =
+      "/au/com/integradev/delphi/projects/CodePageProject/Blank.dproj";
+
+  private static final String PADDED_CODE_PAGE_PROJECT =
+      "/au/com/integradev/delphi/projects/CodePageProject/Padded.dproj";
+
   private EnvironmentVariableProvider environmentVariableProvider;
 
   private DelphiProject createProject(String resource) {
@@ -200,5 +206,19 @@ class DelphiProjectFactoryTest {
     DelphiProject project = createProject(CODE_PAGE_PROJECT);
 
     assertThat(project.getCodePage()).isEqualTo(65001);
+  }
+
+  @Test
+  void testBlankCodePageProject() {
+    DelphiProject project = createProject(BLANK_CODE_PAGE_PROJECT);
+
+    assertThat(project.getCodePage()).isNull();
+  }
+
+  @Test
+  void testWhitespacePaddedCodePageProjectIsInvalid() {
+    DelphiProject project = createProject(PADDED_CODE_PAGE_PROJECT);
+
+    assertThat(project.getCodePage()).isNull();
   }
 }

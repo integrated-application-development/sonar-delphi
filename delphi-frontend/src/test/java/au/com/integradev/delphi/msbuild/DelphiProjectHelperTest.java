@@ -412,6 +412,19 @@ class DelphiProjectHelperTest {
   }
 
   @Test
+  void testBlankProjectCodePageFallsBackToNativeCharset() {
+    setNativeEncoding("windows-1252");
+
+    addInputFile(PROJECTS_PATH + "CodePageProject/Utf8.dproj");
+    addInputFile(PROJECTS_PATH + "CodePageProject/Blank.dproj");
+
+    DelphiProjectHelper delphiProjectHelper =
+        new DelphiProjectHelper(settings, fs, environmentVariableProvider);
+
+    assertThat(delphiProjectHelper.getAnsiCharset()).isEqualTo(Charset.forName("windows-1252"));
+  }
+
+  @Test
   void testAcpProjectCodePageUsesNativeCharsetWithoutConflictWhenItMatchesExplicitCodePage() {
     setNativeEncoding("windows-1252");
 

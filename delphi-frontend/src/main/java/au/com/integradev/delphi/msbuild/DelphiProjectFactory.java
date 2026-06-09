@@ -152,7 +152,7 @@ final class DelphiProjectFactory {
 
   private static Integer createCodePage(MSBuildState state) {
     String codePage = state.getProperty("DCC_CodePage");
-    if (codePage == null) {
+    if (codePage.isEmpty()) {
       return null;
     }
 
