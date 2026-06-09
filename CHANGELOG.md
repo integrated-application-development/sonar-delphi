@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full support for the `HIGHCHARUNICODE` compiler directive.
 - Support for the `DCC_CodePage` property in dproj files.
 - `sonar.delphi.codePage` property to specify the code page that will be used to interpret ANSI data.
+- Support for `if` expressions (e.g. `X := if Foo then Bar else Baz;`), introduced in Delphi 13.
 
 ### Changed
 

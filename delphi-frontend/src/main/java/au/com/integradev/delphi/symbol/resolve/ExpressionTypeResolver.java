@@ -36,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -57,6 +58,7 @@ import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.ClassReferenceType;
 import org.sonar.plugins.communitydelphi.api.type.Type.CollectionType;
+import org.sonar.plugins.communitydelphi.api.type.Type.IntegerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.Type.ProceduralType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -91,6 +93,136 @@ public final class ExpressionTypeResolver {
     } else {
       return resolveOperatorType(operator, operand);
     }
+  }
+
+  public Type resolve(IfExpressionNode expression) {
+    return commonType(
+        expression.getThenExpression().getType(), expression.getElseExpression().getType());
+  }
+
+  /**
+   * Resolves the type of an {@code if} expression as the "least upper bound" of its {@code then}
+   * and {@code else} branch types, mirroring the type combinations accepted by the Delphi compiler.
+   *
+   * @see <a href="https://docwiki.embarcadero.com/RADStudio/en/Conditional_Operators_(Delphi)">
+   *     Conditional Operators (Delphi)</a>
+   */
+  private Type commonType(Type thenType, Type elseType) {
+    if (thenType.isUnknown()) {
+      return elseType;
+    }
+    if (elseType.isUnknown()) {
+      return thenType;
+    }
+    if (thenType.is(elseType)) {
+      return thenType;
+    }
+    if (thenType.isInteger() && elseType.isInteger()) {
+      return integerCommonType((IntegerType) thenType, (IntegerType) elseType);
+    }
+    if (isNumeric(thenType) && isNumeric(elseType)) {
+      return realCommonType(thenType, elseType);
+    }
+    if (isTextual(thenType) && isTextual(elseType)) {
+      return textualCommonType(thenType, elseType);
+    }
+    if (thenType.isStruct() && elseType.isStruct()) {
+      return structCommonType(thenType, elseType);
+    }
+    return unknownType();
+  }
+
+  /**
+   * Two integers widen to at least {@code Integer}; mixing a 32-bit unsigned ({@code Cardinal})
+   * with any signed integer, or involving any 64-bit integer, widens to {@code Int64}.
+   */
+  private Type integerCommonType(IntegerType thenType, IntegerType elseType) {
+    boolean any64Bit = thenType.size() >= 8 || elseType.size() >= 8;
+    boolean unsigned32Bit =
+        (!thenType.isSigned() && thenType.size() == 4)
+            || (!elseType.isSigned() && elseType.size() == 4);
+    boolean anySigned = thenType.isSigned() || elseType.isSigned();
+
+    if (any64Bit || (unsigned32Bit && anySigned)) {
+      return typeFactory.getIntrinsic(IntrinsicType.INT64);
+    }
+    return typeFactory.getIntrinsic(IntrinsicType.INTEGER);
+  }
+
+  /**
+   * A real combined with another real or an integer collapses to {@code Double}, unless both sides
+   * are integer-valued ({@code Comp}, {@code Currency}, or an integer), in which case it is {@code
+   * Comp}.
+   */
+  private Type realCommonType(Type thenType, Type elseType) {
+    if (isIntegerValued(thenType) && isIntegerValued(elseType)) {
+      return typeFactory.getIntrinsic(IntrinsicType.COMP);
+    }
+    return typeFactory.getIntrinsic(IntrinsicType.DOUBLE);
+  }
+
+  private boolean isIntegerValued(Type type) {
+    return type.isInteger()
+        || type.is(typeFactory.getIntrinsic(IntrinsicType.COMP))
+        || type.is(typeFactory.getIntrinsic(IntrinsicType.CURRENCY));
+  }
+
+  /**
+   * Characters and strings that involve a {@code UnicodeString} promote to {@code UnicodeString};
+   * other combinations are left unknown.
+   */
+  private Type textualCommonType(Type thenType, Type elseType) {
+    Type unicodeString = typeFactory.getIntrinsic(IntrinsicType.UNICODESTRING);
+    if (thenType.is(unicodeString) || elseType.is(unicodeString)) {
+      return unicodeString;
+    }
+    return unknownType();
+  }
+
+  /**
+   * When one struct is assignable to the other (e.g. a descendant and its ancestor), the less
+   * derived type wins; otherwise the nearest shared ancestor is used.
+   */
+  private static Type structCommonType(Type thenType, Type elseType) {
+    boolean thenToElse =
+        TypeComparer.compare(thenType, elseType) != EqualityType.INCOMPATIBLE_TYPES;
+    boolean elseToThen =
+        TypeComparer.compare(elseType, thenType) != EqualityType.INCOMPATIBLE_TYPES;
+
+    if (thenToElse && !elseToThen) {
+      return elseType;
+    }
+    if (elseToThen && !thenToElse) {
+      return thenType;
+    }
+    return findCommonAncestor(thenType, elseType);
+  }
+
+  private static boolean isNumeric(Type type) {
+    return type.isInteger() || type.isReal();
+  }
+
+  private static boolean isTextual(Type type) {
+    return type.isChar() || type.isString();
+  }
+
+  private static Type findCommonAncestor(Type left, Type right) {
+    if (!left.isStruct() || !right.isStruct()) {
+      return unknownType();
+    }
+
+    for (Type leftAncestor = left.parent();
+        !leftAncestor.isUnknown();
+        leftAncestor = leftAncestor.parent()) {
+      for (Type rightAncestor = right.parent();
+          !rightAncestor.isUnknown();
+          rightAncestor = rightAncestor.parent()) {
+        if (leftAncestor.is(rightAncestor)) {
+          return leftAncestor;
+        }
+      }
+    }
+    return unknownType();
   }
 
   public Type resolve(PrimaryExpressionNode expression) {
