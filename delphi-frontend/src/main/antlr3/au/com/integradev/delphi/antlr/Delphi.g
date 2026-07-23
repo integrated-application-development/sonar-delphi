@@ -922,6 +922,7 @@ attribute                    : (ASSEMBLY ':')? expression (':' expression)*
 //----------------------------------------------------------------------------
 expression                   : relationalExpression
                              | anonymousMethod
+                             | ifExpression
                              ;
 // ANTLR sets the begin and end tokens for nested binary expression nodes
 // in relationalOperator, not relationalExpression, meaning that their
@@ -983,6 +984,11 @@ anonymousMethodHeading       : PROCEDURE routineParameters? ((';')? interfaceDir
                              -> ^(TkAnonymousMethodHeading<AnonymousMethodHeadingNodeImpl> PROCEDURE routineParameters? ((';')? interfaceDirective)*)
                              | FUNCTION routineParameters? routineReturnType ((';')? interfaceDirective)*
                              -> ^(TkAnonymousMethodHeading<AnonymousMethodHeadingNodeImpl> FUNCTION routineParameters? routineReturnType ((';')? interfaceDirective)*)
+                             ;
+// Conditional expression ("inline if"), introduced in Delphi 13.
+// Unlike ifStatement, both branches are required since the construct must always yield a value.
+// See: https://docwiki.embarcadero.com/RADStudio/Florence/en/Conditional_Operators_(Delphi)
+ifExpression                 : IF<IfExpressionNodeImpl>^ expression THEN expression ELSE expression
                              ;
 expressionOrRange            : expression ('..'<RangeExpressionNodeImpl>^ expression)?
                              ;

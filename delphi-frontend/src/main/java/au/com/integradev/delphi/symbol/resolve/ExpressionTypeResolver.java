@@ -36,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -90,6 +91,47 @@ public final class ExpressionTypeResolver {
       return typeFactory.untypedPointer();
     } else {
       return resolveOperatorType(operator, operand);
+    }
+  }
+
+  public Type resolve(IfExpressionNode expression) {
+    Type thenType = expression.getThenExpression().getType();
+    Type elseType = expression.getElseExpression().getType();
+    return findLeastUpperBoundType(thenType, elseType);
+  }
+
+  /**
+   * Determines the "least upper bound" (LUB) type of an {@link IfExpressionNode}'s branches - the
+   * common type that both the {@code then} and {@code else} expressions' types can be implicitly
+   * converted to. If neither type can be converted to the other, the types are incompatible and the
+   * resulting type is unknown.
+   */
+  private static Type findLeastUpperBoundType(Type thenType, Type elseType) {
+    if (thenType.isUnknown() || elseType.isUnknown()) {
+      return unknownType();
+    }
+
+    if (thenType.is(elseType)) {
+      return thenType;
+    }
+
+    EqualityType thenToElse = TypeComparer.compare(thenType, elseType);
+    EqualityType elseToThen = TypeComparer.compare(elseType, thenType);
+
+    if (thenToElse == EqualityType.INCOMPATIBLE_TYPES
+        && elseToThen == EqualityType.INCOMPATIBLE_TYPES) {
+      return unknownType();
+    }
+
+    if (thenToElse.ordinal() > elseToThen.ordinal()) {
+      // "then" converts more cleanly onto "else" than vice versa, so "else" is the wider type.
+      return elseType;
+    } else if (elseToThen.ordinal() > thenToElse.ordinal()) {
+      return thenType;
+    } else {
+      // Conversion quality is a tie (e.g. equally-sized, unrelated types) - fall back to picking
+      // the larger type, mirroring the widening behaviour used for array constructor elements.
+      return thenType.size() >= elseType.size() ? thenType : elseType;
     }
   }
 

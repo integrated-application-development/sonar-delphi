@@ -50,6 +50,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
@@ -121,6 +122,13 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   public ControlFlowGraphBuilder visit(RangeExpressionNode node, ControlFlowGraphBuilder builder) {
     build(node.getHighExpression(), builder);
     return build(node.getLowExpression(), builder);
+  }
+
+  @Override
+  public ControlFlowGraphBuilder visit(IfExpressionNode node, ControlFlowGraphBuilder builder) {
+    build(node.getElseExpression(), builder);
+    build(node.getThenExpression(), builder);
+    return build(node.getConditionExpression(), builder);
   }
 
   @Override
