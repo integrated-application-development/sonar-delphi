@@ -65,6 +65,7 @@ import org.sonar.plugins.communitydelphi.api.ast.FinallyBlockNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForInStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
@@ -343,6 +344,20 @@ class ControlFlowGraphTest {
                 .branchesTo(1, 1)
                 .withTerminator(IfStatementNode.class),
             block(element(NameReferenceNode.class, "A")).succeedsTo(EXIT_ID)));
+  }
+
+  @Test
+  void testIfExpression() {
+    test(
+        List.of("X: Integer"),
+        "X := if A then Foo else Bar;",
+        checker(
+            block(element(NameReferenceNode.class, "A"))
+                .branchesTo(3, 2)
+                .withTerminator(IfExpressionNode.class),
+            block(element(NameReferenceNode.class, "Foo")).succeedsTo(1),
+            block(element(NameReferenceNode.class, "Bar")).succeedsTo(1),
+            block(element(NameReferenceNode.class, "X")).succeedsTo(0)));
   }
 
   @Test

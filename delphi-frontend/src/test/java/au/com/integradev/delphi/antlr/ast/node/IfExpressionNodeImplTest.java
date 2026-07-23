@@ -34,7 +34,7 @@ class IfExpressionNodeImplTest {
             "  Result := if True then 1 else 2;",
             "end;");
 
-    assertThat(node.getConditionExpression().getImage()).isEqualTo("True");
+    assertThat(node.getGuardExpression().getImage()).isEqualTo("True");
     assertThat(node.getThenExpression().getImage()).isEqualTo("1");
     assertThat(node.getElseExpression().getImage()).isEqualTo("2");
   }

@@ -39,7 +39,7 @@ public final class IfExpressionNodeImpl extends ExpressionNodeImpl implements If
   }
 
   @Override
-  public ExpressionNode getConditionExpression() {
+  public ExpressionNode getGuardExpression() {
     return (ExpressionNode) getChild(0);
   }
 
@@ -58,7 +58,7 @@ public final class IfExpressionNodeImpl extends ExpressionNodeImpl implements If
     if (image == null) {
       image =
           "if "
-              + getConditionExpression().getImage()
+              + getGuardExpression().getImage()
               + " then "
               + getThenExpression().getImage()
               + " else "

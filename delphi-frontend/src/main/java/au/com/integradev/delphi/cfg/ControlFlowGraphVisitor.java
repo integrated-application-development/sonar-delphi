@@ -124,11 +124,28 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     return build(node.getLowExpression(), builder);
   }
 
+  /*
+   * Modeled the same way as an `if` statement: only one branch is actually evaluated at runtime,
+   * so the guard's two outcomes are mutually-exclusive paths rather than a single linear block.
+   *
+   *              ┌─> true ──> `ThenBlock` ─┐
+   * `Guard` ─────┤                         ├─> after
+   *              └─> false ─> `ElseBlock` ─┘
+   */
   @Override
   public ControlFlowGraphBuilder visit(IfExpressionNode node, ControlFlowGraphBuilder builder) {
+    ProtoBlock after = builder.getCurrentBlock();
+
+    builder.addBlockBefore(after);
     build(node.getElseExpression(), builder);
+    ProtoBlock elseBlock = builder.getCurrentBlock();
+
+    builder.addBlockBefore(after);
     build(node.getThenExpression(), builder);
-    return build(node.getConditionExpression(), builder);
+    ProtoBlock thenBlock = builder.getCurrentBlock();
+
+    builder.addBlock(ProtoBlockFactory.branch(node, thenBlock, elseBlock));
+    return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
   }
 
   @Override

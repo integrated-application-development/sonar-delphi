@@ -35,7 +35,7 @@ package org.sonar.plugins.communitydelphi.api.ast;
  *     Conditional Operators (Delphi)</a>
  */
 public interface IfExpressionNode extends ExpressionNode {
-  ExpressionNode getConditionExpression();
+  ExpressionNode getGuardExpression();
 
   ExpressionNode getThenExpression();
 
