@@ -36,6 +36,7 @@ import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.Node;
 import org.sonar.plugins.communitydelphi.api.ast.PrimaryExpressionNode;
@@ -64,9 +65,11 @@ import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class ExpressionTypeResolver {
   private final TypeFactory typeFactory;
+  private final CommonTypeResolver commonTypeResolver;
 
   public ExpressionTypeResolver(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
+    this.commonTypeResolver = new CommonTypeResolver(typeFactory);
   }
 
   public Type resolve(BinaryExpressionNode expression) {
@@ -91,6 +94,11 @@ public final class ExpressionTypeResolver {
     } else {
       return resolveOperatorType(operator, operand);
     }
+  }
+
+  public Type resolve(IfExpressionNode expression) {
+    return commonTypeResolver.commonType(
+        expression.getThenExpression().getType(), expression.getElseExpression().getType());
   }
 
   public Type resolve(PrimaryExpressionNode expression) {

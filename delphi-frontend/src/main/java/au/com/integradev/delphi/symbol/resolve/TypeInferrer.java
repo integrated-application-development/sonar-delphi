@@ -37,11 +37,11 @@ import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class TypeInferrer {
   private final TypeFactory typeFactory;
-  private final ArrayElementTypeResolver elementResolver;
+  private final ArrayElementInferredTypeResolver elementResolver;
 
   public TypeInferrer(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
-    this.elementResolver = new ArrayElementTypeResolver(typeFactory);
+    this.elementResolver = new ArrayElementInferredTypeResolver(typeFactory);
   }
 
   public Type infer(Typed typed) {

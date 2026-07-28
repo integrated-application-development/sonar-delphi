@@ -34,10 +34,11 @@ import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.Type.StructType;
 
-class ArrayElementTypeResolverTest {
+class ArrayElementInferredTypeResolverTest {
   private static final TypeFactoryImpl FACTORY =
       (TypeFactoryImpl) TypeFactoryUtils.defaultFactory();
-  private static final ArrayElementTypeResolver RESOLVER = new ArrayElementTypeResolver(FACTORY);
+  private static final ArrayElementInferredTypeResolver RESOLVER =
+      new ArrayElementInferredTypeResolver(FACTORY);
 
   @ParameterizedTest
   @CsvSource({

@@ -27,6 +27,10 @@ import static org.sonar.plugins.communitydelphi.api.type.TypeFactory.unknownType
 import au.com.integradev.delphi.symbol.scope.TypeScopeImpl;
 import au.com.integradev.delphi.type.factory.HelperTypeImpl;
 import au.com.integradev.delphi.type.factory.StructTypeImpl;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 import org.sonar.plugins.communitydelphi.api.type.Parameter;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -37,11 +41,7 @@ public final class TypeMocker {
     // Utility class
   }
 
-  public static StructType struct(String image, StructKind kind) {
-    return struct(image, kind, unknownType());
-  }
-
-  public static StructType struct(String image, StructKind kind, Type parent) {
+  public static StructType struct(String image, StructKind kind, Type... ancestors) {
     StructType type;
 
     switch (kind) {
@@ -56,12 +56,18 @@ public final class TypeMocker {
     var typeScope = new TypeScopeImpl();
     typeScope.setType(type);
 
+    Set<Type> ancestorList = new LinkedHashSet<>(List.of(ancestors));
+    Type parent =
+        ancestorList.stream()
+            .filter(ancestor -> kind == StructKind.INTERFACE || !ancestor.isInterface())
+            .findFirst()
+            .orElse(unknownType());
+
     when(type.typeScope()).thenReturn(typeScope);
     when(type.isStruct()).thenReturn(true);
     when(type.isClass()).thenReturn(kind == StructKind.CLASS);
     when(type.isInterface()).thenReturn(kind == StructKind.INTERFACE);
     when(type.isRecord()).thenReturn(kind == StructKind.RECORD);
-    when(type.isClass()).thenReturn(kind == StructKind.CLASS);
     when(type.isHelper())
         .thenReturn(kind == StructKind.RECORD_HELPER || kind == StructKind.CLASS_HELPER);
     when(type.getImage()).thenReturn(image);
@@ -71,13 +77,18 @@ public final class TypeMocker {
         .thenAnswer(
             arguments -> image.equalsIgnoreCase(((Type) arguments.getArgument(0)).getImage()));
     when(type.kind()).thenReturn(kind);
-    when(type.isDescendantOf(anyString()))
-        .thenAnswer(invocation -> isImageOrParentType(invocation.getArgument(0), image, parent));
-    when(type.isDescendantOf(any(Type.class)))
-        .thenAnswer(
-            invocation ->
-                isImageOrParentType(((Type) invocation.getArgument(0)).getImage(), image, parent));
+    when(type.ancestorList()).thenReturn(ancestorList);
     when(type.parent()).thenReturn(parent);
+    Predicate<String> descendsFrom =
+        ancestorImage ->
+            ancestorList.stream()
+                .anyMatch(
+                    ancestor ->
+                        ancestor.is(ancestorImage) || ancestor.isDescendantOf(ancestorImage));
+    when(type.isDescendantOf(anyString()))
+        .thenAnswer(invocation -> descendsFrom.test(invocation.getArgument(0)));
+    when(type.isDescendantOf(any(Type.class)))
+        .thenAnswer(invocation -> descendsFrom.test(((Type) invocation.getArgument(0)).getImage()));
 
     return type;
   }
@@ -87,9 +98,5 @@ public final class TypeMocker {
     when(parameter.getImage()).thenReturn("_");
     when(parameter.getType()).thenReturn(type);
     return parameter;
-  }
-
-  private static boolean isImageOrParentType(String typeToCheck, String image, Type parent) {
-    return image.equalsIgnoreCase(typeToCheck) || parent.is(typeToCheck);
   }
 }
