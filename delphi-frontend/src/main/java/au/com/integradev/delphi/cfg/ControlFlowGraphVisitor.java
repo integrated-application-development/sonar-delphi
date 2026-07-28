@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentListNode;
 import org.sonar.plugins.communitydelphi.api.ast.ArgumentNode;
@@ -50,6 +51,7 @@ import org.sonar.plugins.communitydelphi.api.ast.ForLoopVarReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ForToStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
+import org.sonar.plugins.communitydelphi.api.ast.IfExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IfStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
@@ -260,21 +262,41 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
    */
   @Override
   public ControlFlowGraphBuilder visit(IfStatementNode node, ControlFlowGraphBuilder builder) {
+    return buildBranches(
+        node, node.getGuardExpression(), node.getThenStatement(), node.getElseStatement(), builder);
+  }
+
+  @Override
+  public ControlFlowGraphBuilder visit(IfExpressionNode node, ControlFlowGraphBuilder builder) {
+    return buildBranches(
+        node,
+        node.getGuardExpression(),
+        node.getThenExpression(),
+        node.getElseExpression(),
+        builder);
+  }
+
+  private ControlFlowGraphBuilder buildBranches(
+      DelphiNode node,
+      ExpressionNode guard,
+      @Nullable DelphiNode thenNode,
+      @Nullable DelphiNode elseNode,
+      ControlFlowGraphBuilder builder) {
     ProtoBlock after = builder.getCurrentBlock();
 
     // process `else`
     builder.addBlockBefore(after);
-    build(node.getElseStatement(), builder);
+    build(elseNode, builder);
     ProtoBlock elseBlock = builder.getCurrentBlock();
 
     // process `then`
     builder.addBlockBefore(after);
-    build(node.getThenStatement(), builder);
+    build(thenNode, builder);
     ProtoBlock thenBlock = builder.getCurrentBlock();
 
     // process condition
     builder.addBlock(ProtoBlockFactory.branch(node, thenBlock, elseBlock));
-    return buildCondition(builder, node.getGuardExpression(), thenBlock, elseBlock);
+    return buildCondition(builder, guard, thenBlock, elseBlock);
   }
 
   private ControlFlowGraphBuilder buildCondition(

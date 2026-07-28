@@ -31,10 +31,10 @@ import org.sonar.plugins.communitydelphi.api.type.Type.PointerType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 /** Resolves the element type the compiler infers for an array literal. */
-final class ArrayElementTypeResolver {
+final class ArrayElementInferredTypeResolver {
   private final TypeFactory typeFactory;
 
-  ArrayElementTypeResolver(TypeFactory typeFactory) {
+  ArrayElementInferredTypeResolver(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
   }
 

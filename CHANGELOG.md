@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for `if` expressions, introduced in Delphi 13.
+- **API:** `IfExpressionNode` node type.
+
 ### Fixed
 
 - Incorrect array literal type inference around mixed...

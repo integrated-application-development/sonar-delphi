@@ -127,6 +127,28 @@ class CyclomaticComplexityVisitorTest {
         .isEqualTo(15);
   }
 
+  @Test
+  void testIfExpression() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n" // 1
+                    + "begin\n"
+                    + "  Result := if X then 1 else 2;\n" // 2
+                    + "end;\n"))
+        .isEqualTo(2);
+  }
+
+  @Test
+  void testChainedIfExpression() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n" // 1
+                    + "begin\n"
+                    + "  Result := if X then 1 else if Y then 2 else 3;\n" // 2 3
+                    + "end;\n"))
+        .isEqualTo(3);
+  }
+
   private int getComplexity(String function) {
     Path path = tempDir.resolve("SourceFile.pas");
     try {

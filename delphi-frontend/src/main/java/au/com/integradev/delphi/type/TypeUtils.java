@@ -30,12 +30,18 @@ public final class TypeUtils {
   }
 
   public static Type findBaseType(Type type) {
-    while (type.isAlias()) {
-      type = ((AliasType) type).aliasedType();
-    }
+    type = findAliasedType(type);
 
     if (type.isSubrange()) {
       type = ((SubrangeType) type).hostType();
+    }
+
+    return type;
+  }
+
+  public static Type findAliasedType(Type type) {
+    while (type.isAlias()) {
+      type = ((AliasType) type).aliasedType();
     }
 
     return type;

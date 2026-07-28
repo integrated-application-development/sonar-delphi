@@ -127,6 +127,66 @@ class CognitiveComplexityVisitorTest {
         .isEqualTo(4);
   }
 
+  @Test
+  void testIfExpression() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  Result := if Bar then 1 else 2;\n" // <2> 1
+                    + "end;\n"))
+        .isEqualTo(2);
+  }
+
+  @Test
+  void testNestedIfExpression() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  Result := if Bar then 1 else if Baz then 2 else 3;\n"
+                    + "end;\n"))
+        .isEqualTo(3);
+  }
+
+  @Test
+  void testParenthesizedElseIfExpression() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  Result := if Bar then 1 else ((if Baz then 2 else 3));\n"
+                    + "end;\n"))
+        .isEqualTo(3);
+  }
+
+  @Test
+  void testChainedIfExpression() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  Result := if Bar then 1\n" // <1> 1
+                    + "    else if Baz then 2\n" // <2> 1
+                    + "    else if Flarp then 3\n" // <3> 1
+                    + "    else 4;\n" // <4> 1
+                    + "end;\n"))
+        .isEqualTo(4);
+  }
+
+  @Test
+  void testIfExpressionInsideIfStatement() {
+    assertThat(
+            getComplexity(
+                "function Foo: Integer;\n"
+                    + "begin\n"
+                    + "  if Bar then begin\n" // <1> 1
+                    + "    Result := if Baz then 1 else 2;\n" // <4> 3
+                    + "  end;\n"
+                    + "end;\n"))
+        .isEqualTo(4);
+  }
+
   private int getComplexity(String function) {
     Path path = tempDir.resolve("SourceFile.pas");
     try {
