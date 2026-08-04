@@ -31,6 +31,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
@@ -47,14 +48,16 @@ class TypeFactoryTest {
 
   static class RealSizeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(Arguments.of(VERSION_3, 6), Arguments.of(VERSION_4, 8));
     }
   }
 
   static class ExtendedSizeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(Toolchain.DCCOSX, 16),
           Arguments.of(Toolchain.DCCIOS32, 16),
@@ -70,7 +73,8 @@ class TypeFactoryTest {
 
   static class LongSizeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(Toolchain.DCC32, VERSION_XE7, 4),
           Arguments.of(Toolchain.DCC64, VERSION_XE7, 4),
@@ -85,7 +89,8 @@ class TypeFactoryTest {
 
   static class NativeSizeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(Toolchain.DCC32, VERSION_2007, 8),
           Arguments.of(Toolchain.DCC64, VERSION_2007, 8),
@@ -96,14 +101,16 @@ class TypeFactoryTest {
 
   static class PointerSizeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(Arguments.of(Toolchain.DCC32, 4), Arguments.of(Toolchain.DCC64, 8));
     }
   }
 
   static class StringTypeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(VERSION_2007, "System.AnsiString"),
           Arguments.of(VERSION_2009, "System.UnicodeString"));
@@ -112,7 +119,8 @@ class TypeFactoryTest {
 
   static class CharTypeArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(VERSION_2007, "System.AnsiChar"),
           Arguments.of(VERSION_2009, "System.WideChar"));

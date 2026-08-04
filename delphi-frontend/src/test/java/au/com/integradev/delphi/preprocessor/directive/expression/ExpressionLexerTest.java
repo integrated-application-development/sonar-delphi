@@ -31,11 +31,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 
 class ExpressionLexerTest {
   static class NumberTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("12345", TokenType.INTEGER),
           Arguments.of("123_456_789", TokenType.INTEGER),
@@ -53,7 +55,8 @@ class ExpressionLexerTest {
 
   static class IdentifierTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("MyIdentifier", TokenType.IDENTIFIER),
           Arguments.of("_MyIdentifier", TokenType.IDENTIFIER),
@@ -64,7 +67,8 @@ class ExpressionLexerTest {
 
   static class SyntaxTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(".", TokenType.DOT),
           Arguments.of(",", TokenType.COMMA),
@@ -79,7 +83,8 @@ class ExpressionLexerTest {
 
   static class OperatorTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("<>", TokenType.NOT_EQUALS),
           Arguments.of("<=", TokenType.LESS_THAN_EQUAL),
@@ -90,7 +95,8 @@ class ExpressionLexerTest {
 
   static class StringTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("'My string'", TokenType.STRING),
           Arguments.of("'Escaped '' single-quotes'", TokenType.STRING),
@@ -101,7 +107,8 @@ class ExpressionLexerTest {
 
   static class CommentTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("// foo", TokenType.COMMENT),
           Arguments.of("{bar}", TokenType.COMMENT),
@@ -111,7 +118,8 @@ class ExpressionLexerTest {
 
   static class DirectiveTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("{$i foo.inc}", TokenType.DIRECTIVE),
           Arguments.of("(*$i bar.inc*)", TokenType.DIRECTIVE),

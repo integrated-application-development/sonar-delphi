@@ -27,13 +27,15 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.RuleScope;
 
 class ScopeMetadataLoaderTest {
   static class ValidMetadataArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("AllScope", RuleScope.ALL),
           Arguments.of("DefaultScope", RuleScope.MAIN),

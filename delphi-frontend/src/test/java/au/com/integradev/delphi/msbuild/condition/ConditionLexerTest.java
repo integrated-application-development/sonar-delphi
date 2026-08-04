@@ -31,11 +31,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 
 class ConditionLexerTest {
   static class NumberTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("123", TokenType.NUMERIC),
           Arguments.of("+123", TokenType.NUMERIC),
@@ -52,7 +54,8 @@ class ConditionLexerTest {
 
   static class SyntaxTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(",", TokenType.COMMA),
           Arguments.of("(", TokenType.LPAREN),
@@ -62,7 +65,8 @@ class ConditionLexerTest {
 
   static class OperatorTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("<", TokenType.LESS_THAN),
           Arguments.of(">", TokenType.GREATER_THAN),
@@ -78,7 +82,8 @@ class ConditionLexerTest {
 
   static class StringTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("'My quoted string'", TokenType.STRING),
           Arguments.of("'$1.00'", TokenType.STRING),
@@ -92,7 +97,8 @@ class ConditionLexerTest {
 
   static class PropertyTokensArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("$(FOO)", TokenType.PROPERTY), Arguments.of("'$(FOO)'", TokenType.STRING));
     }

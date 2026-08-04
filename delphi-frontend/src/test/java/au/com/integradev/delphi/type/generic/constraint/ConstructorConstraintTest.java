@@ -39,6 +39,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
@@ -57,7 +58,8 @@ class ConstructorConstraintTest {
 
   private static class SatisfiedArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       var defaultConstructor = constructor("Create", VisibilityType.PUBLIC);
       var lowercaseDefaultConstructor = constructor("create", VisibilityType.PUBLIC);
       return Stream.of(
@@ -82,7 +84,8 @@ class ConstructorConstraintTest {
 
   private static class ViolatedArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       var defaultConstructor = constructor("Create", VisibilityType.PUBLIC);
       var classWithDefaultConstructor = addDeclaration(mockClass(), defaultConstructor);
 

@@ -27,12 +27,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 
 class MSBuildWellKnownPropertyHelperTest {
 
   private static class WellKnownPropertyArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("MSBuildProjectFullPath", "C:\\Source\\Repos\\ConsoleApp1.dproj"),
           Arguments.of("MSBuildProjectFile", "ConsoleApp1.dproj"),

@@ -39,13 +39,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 
 class ExpressionEvaluationTest {
   private @TempDir Path tempDir;
 
   static class BooleanArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("true", true),
           Arguments.of("on", true),
@@ -151,7 +153,8 @@ class ExpressionEvaluationTest {
 
   static class NumericArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("0", 0.0),
           Arguments.of("12.34", 12.34),
@@ -168,7 +171,8 @@ class ExpressionEvaluationTest {
 
   static class VersionArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("1", null),
           Arguments.of("1.2", new Version(1, 2)),
@@ -183,7 +187,8 @@ class ExpressionEvaluationTest {
 
   static class UnexpandedStringProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("foo", "foo"),
           Arguments.of("'foo'", "foo"),
@@ -199,7 +204,8 @@ class ExpressionEvaluationTest {
 
   static class InvalidExpressionProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("!'foo'", InvalidExpressionException.class),
           Arguments.of("'foo' and 'bar'", InvalidExpressionException.class),
@@ -222,7 +228,8 @@ class ExpressionEvaluationTest {
 
   static class ExpandedStringProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("foo", "foo"),
           Arguments.of("'foo'", "foo"),

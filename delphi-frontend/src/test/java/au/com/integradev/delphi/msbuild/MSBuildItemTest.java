@@ -31,13 +31,15 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 
 class MSBuildItemTest {
   private static final String PROJECT_DIR = "C:\\project";
 
   static class SupportedWellKnownMetadataArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("FullPath", "C:\\foo\\bar\\baz.qux", "C:\\foo\\bar\\baz.qux"),
           Arguments.of("FullPath", "foo", "C:\\project\\foo"),
@@ -61,7 +63,8 @@ class MSBuildItemTest {
 
   static class CustomMetadataArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("FooMetadata", "foometadata", "foo value"),
           Arguments.of("FooMetadata", "FooMetadata", "foo value"),
