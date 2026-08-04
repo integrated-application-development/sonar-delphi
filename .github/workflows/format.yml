@@ -1,7 +1,6 @@
 name: Format
 
 on:
-  push:
     branches:
       - 'master'
     paths:
@@ -18,6 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
       - uses: axel-op/googlejavaformat-action@c1134ebd196c4cbffb077f9476585b0be8b6afcd # v4.0.0
         with:
           release-name: v1.26.0
