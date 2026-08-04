@@ -16,7 +16,7 @@
   <name>SonarDelphi :: Delphi Tokens Generator Maven Plugin</name>
 
   <properties>
-    <maven.version>3.8.6</maven.version>
+    <maven.version>3.9.16</maven.version>
   </properties>
 
   <dependencies>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <version>3.15.0</version>
+      <version>${maven-plugin-plugin.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -51,6 +51,11 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -69,7 +74,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>${maven-plugin-plugin.version}</version>
         <executions>
           <execution>
             <id>mojo-descriptor</id>

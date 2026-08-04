@@ -102,7 +102,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.min.version>3.3.9</maven.min.version>
+    <maven.min.version>3.6.3</maven.min.version>
     <jdk.min.version>25</jdk.min.version>
     <skipITs>true</skipITs>
     <!-- SonarCloud scan -->
@@ -114,41 +114,43 @@
     <!-- Dependency versions -->
     <sonarqube.version>10.7.0.96327</sonarqube.version>
     <sonar-plugin-api.version>10.1.0.809</sonar-plugin-api.version>
-    <sonar-analyzer-commons.version>2.13.0.3004</sonar-analyzer-commons.version>
-    <sonar-orchestrator.version>5.6.1.2597</sonar-orchestrator.version>
+    <sonar-analyzer-commons.version>2.29.0.5138</sonar-analyzer-commons.version>
+    <sonar-orchestrator.version>6.4.0.4580</sonar-orchestrator.version>
     <antlr-runtime.version>3.5.3</antlr-runtime.version>
-    <commons-text.version>1.12.0</commons-text.version>
+    <commons-text.version>1.15.0</commons-text.version>
     <jdom.version>2.0.6.1</jdom.version>
-    <gson.version>2.11.0</gson.version>
+    <gson.version>2.14.0</gson.version>
     <jsr305.version>3.0.2</jsr305.version>
-    <guava.version>33.3.0-jre</guava.version>
-    <commons-lang.version>3.18.0</commons-lang.version>
-    <commons-io.version>2.17.0</commons-io.version>
-    <byte-buddy.version>1.15.1</byte-buddy.version>
-    <junit.version>5.11.0</junit.version>
-    <junit-platform-suite-engine.version>1.11.0</junit-platform-suite-engine.version>
+    <guava.version>33.6.0-jre</guava.version>
+    <commons-lang.version>3.20.0</commons-lang.version>
+    <commons-io.version>2.22.0</commons-io.version>
+    <byte-buddy.version>1.18.11</byte-buddy.version>
+    <junit.version>5.14.4</junit.version>
+    <junit-platform-suite-engine.version>1.14.4</junit-platform-suite-engine.version>
     <assertj.version>3.27.7</assertj.version>
-    <mockito.version>5.13.0</mockito.version>
-    <archunit.version>1.3.0</archunit.version>
-    <errorprone.version>2.32.0</errorprone.version>
-    <slf4j.version>1.7.30</slf4j.version>
+    <mockito.version>5.23.0</mockito.version>
+    <archunit.version>1.5.0</archunit.version>
+    <errorprone.version>2.50.0</errorprone.version>
+    <slf4j.version>1.7.36</slf4j.version>
     <!-- Plugin versions -->
-    <compiler-plugin.version>3.13.0</compiler-plugin.version>
-    <jacoco-plugin.version>0.8.12</jacoco-plugin.version>
-    <surefire-plugin.version>3.5.0</surefire-plugin.version>
-    <enforcer-plugin.version>3.5.0</enforcer-plugin.version>
+    <compiler-plugin.version>3.15.0</compiler-plugin.version>
+    <jacoco-plugin.version>0.8.15</jacoco-plugin.version>
+    <surefire-plugin.version>3.5.6</surefire-plugin.version>
+    <enforcer-plugin.version>3.6.3</enforcer-plugin.version>
     <sonar-packaging-plugin.version>1.23.0.740</sonar-packaging-plugin.version>
-    <spotless-plugin.version>2.43.0</spotless-plugin.version>
+    <spotless-plugin.version>3.9.0</spotless-plugin.version>
+    <google-java-format.version>1.36.1</google-java-format.version>
     <antlr3-plugin.version>3.5.3</antlr3-plugin.version>
-    <build-helper-plugin.version>3.6.0</build-helper-plugin.version>
+    <build-helper-plugin.version>3.6.1</build-helper-plugin.version>
     <replacer-plugin.version>1.5.3</replacer-plugin.version>
-    <shade-plugin.version>3.5.1</shade-plugin.version>
-    <versions-plugin.version>2.17.1</versions-plugin.version>
+    <shade-plugin.version>3.6.2</shade-plugin.version>
+    <versions-plugin.version>2.21.0</versions-plugin.version>
     <keepachangelog-plugin.version>2.1.1</keepachangelog-plugin.version>
-    <source-plugin.version>3.3.0</source-plugin.version>
-    <javadoc-plugin.version>3.6.3</javadoc-plugin.version>
-    <gpg-plugin.version>3.1.0</gpg-plugin.version>
-    <central-publishing-plugin.version>0.8.0</central-publishing-plugin.version>
+    <maven-plugin-plugin.version>3.15.2</maven-plugin-plugin.version>
+    <source-plugin.version>3.4.0</source-plugin.version>
+    <javadoc-plugin.version>3.12.0</javadoc-plugin.version>
+    <gpg-plugin.version>3.2.8</gpg-plugin.version>
+    <central-publishing-plugin.version>0.11.0</central-publishing-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -372,9 +374,10 @@
           <fork>true</fork>
           <compilerArgs>
             <arg>-XDcompilePolicy=simple</arg>
+            <arg>--should-stop=ifError=FLOW</arg>
             <arg>-Werror</arg>
             <arg>-Xlint:all,-serial,-processing,-classfile,-path</arg>
-            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:StringCaseLocaleUsage:OFF -Xep:EnumOrdinal:OFF</arg>
+            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/generated-sources/.* -Xep:UnicodeInCode:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:StringCaseLocaleUsage:OFF -Xep:EnumOrdinal:OFF -Xep:ReferenceEquality:OFF -Xep:EffectivelyPrivate:OFF -Xep:FormatStringShouldUsePlaceholders:OFF -Xep:AssignmentExpression:OFF</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
             <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
@@ -463,7 +466,7 @@
         <configuration>
           <java>
             <googleJavaFormat>
-              <version>1.26.0</version>
+              <version>${google-java-format.version}</version>
               <style>GOOGLE</style>
               <reflowLongStrings>true</reflowLongStrings>
             </googleJavaFormat>

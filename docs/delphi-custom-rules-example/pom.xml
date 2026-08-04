@@ -50,17 +50,17 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.delphi.version>1.19.0</sonar.delphi.version>
     <sonar.plugin.api.version>10.1.0.809</sonar.plugin.api.version>
-    <sonar.analyzer.commons.version>2.13.0.3004</sonar.analyzer.commons.version>
-    <slf4j.version>1.7.30</slf4j.version>
-    <junit.version>5.11.0</junit.version>
+    <sonar.analyzer.commons.version>2.29.0.5138</sonar.analyzer.commons.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <junit.version>5.14.4</junit.version>
     <assertj.version>3.27.7</assertj.version>
-    <mockito.version>5.13.0</mockito.version>
-    <compiler.plugin.version>3.13.0</compiler.plugin.version>
-    <jacoco.plugin.version>0.8.12</jacoco.plugin.version>
-    <fmt.plugin.version>2.24</fmt.plugin.version>
-    <license.plugin.version>4.5</license.plugin.version>
+    <mockito.version>5.23.0</mockito.version>
+    <compiler.plugin.version>3.15.0</compiler.plugin.version>
+    <jacoco.plugin.version>0.8.15</jacoco.plugin.version>
+    <fmt.plugin.version>2.29</fmt.plugin.version>
+    <license.plugin.version>5.1.1</license.plugin.version>
     <sonar.packaging.plugin.version>1.23.0.740</sonar.packaging.plugin.version>
-    <shade.plugin.version>3.5.1</shade.plugin.version>
+    <shade.plugin.version>3.6.2</shade.plugin.version>
   </properties>
 
   <dependencies>
