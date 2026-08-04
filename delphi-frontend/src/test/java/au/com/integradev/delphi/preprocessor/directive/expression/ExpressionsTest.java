@@ -43,6 +43,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
@@ -50,7 +51,8 @@ class ExpressionsTest {
 
   static class NumericExpressionArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("$26E", 622),
           Arguments.of("%10011_01110", 622),
@@ -64,7 +66,8 @@ class ExpressionsTest {
 
   static class IntegerMathArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("1 + 2", 3),
           Arguments.of("1 - 2", -1),
@@ -81,7 +84,8 @@ class ExpressionsTest {
 
   static class RealMathArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("1 + 2", 3.0),
           Arguments.of("5 / 2", 2.5),
@@ -95,7 +99,8 @@ class ExpressionsTest {
 
   static class StringArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("'My string'", "My string"),
           Arguments.of("'Escaped '' single-quotes'", "Escaped ' single-quotes"),
@@ -106,7 +111,8 @@ class ExpressionsTest {
 
   static class StringConcatenationArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("'abc' + '123'", "abc123"),
           Arguments.of("'abc' + ''", "abc"),
@@ -116,7 +122,8 @@ class ExpressionsTest {
 
   static class EqualityArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("1 = 1", true),
           Arguments.of("1 = 2", false),
@@ -160,7 +167,8 @@ class ExpressionsTest {
 
   static class ComparisonArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("1 > 1", false),
           Arguments.of("2 > 1", true),
@@ -209,7 +217,8 @@ class ExpressionsTest {
 
   static class LogicalOperatorsArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("1 in [1, 2, 3]", true),
           Arguments.of("1 in [2, 3]", false),
@@ -237,7 +246,8 @@ class ExpressionsTest {
 
   static class UnaryEvaluationArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of("+1", 1),
           Arguments.of("-1", -1),
@@ -255,7 +265,8 @@ class ExpressionsTest {
 
   static class DefinedArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return addSystemQualifier(
           Stream.of(
               Arguments.of("Defined(TEST_DEFINE)", true),
@@ -267,7 +278,8 @@ class ExpressionsTest {
 
   static class SizeOfArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return addSystemQualifier(
           Stream.of(
               Arguments.of("SizeOf(Byte)", size(IntrinsicType.BYTE)),
@@ -290,7 +302,8 @@ class ExpressionsTest {
 
   static class CompilerVersionArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return addSystemQualifier(Stream.of(Arguments.of("CompilerVersion", 30.0)));
     }
   }

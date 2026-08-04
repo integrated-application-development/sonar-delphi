@@ -33,6 +33,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.plugins.communitydelphi.api.type.Constraint;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.Type;
@@ -43,7 +44,8 @@ class ClassConstraintTest {
 
   private static class SatisfiedArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(TypeMocker.struct("TBar", CLASS)),
           Arguments.of(TypeParameterTypeImpl.create("T", List.of(ClassConstraintImpl.instance()))),
@@ -63,7 +65,8 @@ class ClassConstraintTest {
 
   private static class ViolatedArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.BYTE)),
           Arguments.of(FACTORY.getIntrinsic(IntrinsicType.STRING)),

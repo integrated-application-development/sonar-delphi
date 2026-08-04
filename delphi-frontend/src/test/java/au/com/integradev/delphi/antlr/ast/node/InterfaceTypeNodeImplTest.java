@@ -29,6 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InterfaceTypeNode;
 
@@ -37,7 +38,8 @@ class InterfaceTypeNodeImplTest {
 
   private static class GuidArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(
               Named.of(
@@ -75,7 +77,8 @@ class InterfaceTypeNodeImplTest {
 
   private static class NoGuidArgumentsProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(
               Named.of(

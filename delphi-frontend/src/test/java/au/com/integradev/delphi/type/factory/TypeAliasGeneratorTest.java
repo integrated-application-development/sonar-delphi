@@ -39,6 +39,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.type.IntrinsicType;
 import org.sonar.plugins.communitydelphi.api.type.StructKind;
@@ -77,7 +78,8 @@ class TypeAliasGeneratorTest {
 
   static class AliasedTypeProvider implements ArgumentsProvider {
     @Override
-    public Stream<Arguments> provideArguments(ExtensionContext context) {
+    public Stream<Arguments> provideArguments(
+        ParameterDeclarations parameters, ExtensionContext context) {
       return Stream.of(
           Arguments.of(FACTORY.set(BYTE), CollectionType.class),
           Arguments.of(TypeMocker.struct(ALIASED_NAME, StructKind.CLASS), StructType.class),
