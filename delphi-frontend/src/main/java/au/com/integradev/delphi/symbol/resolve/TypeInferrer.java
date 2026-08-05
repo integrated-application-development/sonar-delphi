@@ -20,7 +20,9 @@ package au.com.integradev.delphi.symbol.resolve;
 
 import au.com.integradev.delphi.type.factory.ArrayOption;
 import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.plugins.communitydelphi.api.ast.ArrayConstructorNode;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.IntegerLiteralNode;
@@ -35,9 +37,11 @@ import org.sonar.plugins.communitydelphi.api.type.Typed;
 
 public final class TypeInferrer {
   private final TypeFactory typeFactory;
+  private final ArrayElementTypeResolver elementResolver;
 
   public TypeInferrer(TypeFactory typeFactory) {
     this.typeFactory = typeFactory;
+    this.elementResolver = new ArrayElementTypeResolver(typeFactory);
   }
 
   public Type infer(Typed typed) {
@@ -67,12 +71,15 @@ public final class TypeInferrer {
   }
 
   private Type inferArrayConstructor(ArrayConstructorNode arrayConstructor) {
-    Type element =
+    List<Type> elements =
         arrayConstructor.getElements().stream()
             .map(this::infer)
-            .max(TypeInferrer::compareTypeSize)
-            .orElse(TypeFactory.voidType());
+            .collect(Collectors.toUnmodifiableList());
 
+    Type element = elementResolver.elementType(elements);
+    if (element.isUnknown()) {
+      return TypeFactory.unknownType();
+    }
     return ((TypeFactoryImpl) typeFactory).array(null, element, Set.of(ArrayOption.DYNAMIC));
   }
 
@@ -96,17 +103,5 @@ public final class TypeInferrer {
       type = typeFactory.getIntrinsic(IntrinsicType.EXTENDED);
     }
     return type;
-  }
-
-  private static int compareTypeSize(Type a, Type b) {
-    if (a.size() > b.size()) {
-      return 1;
-    } else if (a.size() < b.size()) {
-      return -1;
-    } else if (a instanceof IntegerType && b instanceof IntegerType) {
-      return ((IntegerType) a).max().compareTo(((IntegerType) b).max());
-    } else {
-      return 0;
-    }
   }
 }

@@ -58,7 +58,7 @@ class TypeInferrerTest {
     @Override
     public Stream<Arguments> provideArguments(ExtensionContext context) {
       return Stream.of(
-          Arguments.of(arrayConstructor(), dynamicArrayType(TypeFactory.voidType())),
+          Arguments.of(arrayConstructor(), TypeFactory.unknownType()),
           Arguments.of(
               arrayConstructor(integerLiteral("127")), dynamicArrayType(IntrinsicType.INTEGER)),
           Arguments.of(
@@ -111,7 +111,7 @@ class TypeInferrerTest {
                   integerLiteral("32768"),
                   integerLiteral("2147483647"),
                   integerLiteral("2147483648")),
-              dynamicArrayType(IntrinsicType.CARDINAL)),
+              dynamicArrayType(IntrinsicType.INT64)),
           Arguments.of(
               arrayConstructor(
                   integerLiteral("127"),
@@ -123,7 +123,7 @@ class TypeInferrerTest {
                   integerLiteral("2147483647"),
                   integerLiteral("2147483648"),
                   integerLiteral("4294967295")),
-              dynamicArrayType(IntrinsicType.CARDINAL)),
+              dynamicArrayType(IntrinsicType.INT64)),
           Arguments.of(
               arrayConstructor(
                   integerLiteral("127"),
