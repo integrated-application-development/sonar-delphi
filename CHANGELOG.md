@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Incorrect array literal type inference around mixed...
+  - integer elements
+  - boolean elements
+  - character elements
+  - class elements
+  - interface elements
+
 ## [1.19.0] - 2026-06-09
 
 ### Added
