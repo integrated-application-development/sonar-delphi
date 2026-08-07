@@ -1,6 +1,7 @@
 name: Format
 
 on:
+  push:
     branches:
       - 'master'
     paths:
