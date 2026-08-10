@@ -37,6 +37,7 @@ public enum BinaryOperator implements Operator {
   LESS_THAN_EQUAL(DelphiTokenType.LESS_THAN_EQUAL, "LessThanOrEqual"),
   NOT_EQUAL(DelphiTokenType.NOT_EQUAL, "NotEqual"),
   IN(DelphiTokenType.IN),
+  NOT_IN(DelphiTokenType.NOT_IN),
   ADD(DelphiTokenType.PLUS, "Add"),
   SUBTRACT(DelphiTokenType.MINUS, "Subtract"),
   MULTIPLY(DelphiTokenType.MULTIPLY, "Multiply"),
@@ -46,6 +47,7 @@ public enum BinaryOperator implements Operator {
   SHL(DelphiTokenType.SHL, "LeftShift"),
   SHR(DelphiTokenType.SHR, "RightShift"),
   IS(DelphiTokenType.IS),
+  IS_NOT(DelphiTokenType.IS_NOT),
   AS(DelphiTokenType.AS);
 
   private static final Map<DelphiTokenType, BinaryOperator> TOKEN_TYPE_MAP =

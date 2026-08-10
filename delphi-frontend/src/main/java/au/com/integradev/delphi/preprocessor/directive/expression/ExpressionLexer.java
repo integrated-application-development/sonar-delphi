@@ -61,6 +61,7 @@ public class ExpressionLexer {
     OPERATOR_IDENTIFIERS.put("shl", TokenType.SHL);
     OPERATOR_IDENTIFIERS.put("shr", TokenType.SHR);
     OPERATOR_IDENTIFIERS.put("in", TokenType.IN);
+    OPERATOR_IDENTIFIERS.put("is", TokenType.IS);
     OPERATOR_IDENTIFIERS.put("not", TokenType.NOT);
     OPERATOR_IDENTIFIERS.put("and", TokenType.AND);
     OPERATOR_IDENTIFIERS.put("or", TokenType.OR);

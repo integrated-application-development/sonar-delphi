@@ -39,6 +39,18 @@ class ExpressionParserTest {
   void testRelational() {
     assertThat(parse("1 > 2")).isInstanceOf(BinaryExpression.class);
     assertThat(parse("1 > 3 = False")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("1 not in [1, 2]")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("1 is 2")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("1 is not 2")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("Foo is TBar<Integer>")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("(Foo is TBar<Integer>) and False")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("Foo is not TBar<Integer>")).isInstanceOf(BinaryExpression.class);
+    assertThat(parse("Foo is Bars.TDict<Bars.TKey<Integer>, TValue>"))
+        .isInstanceOf(BinaryExpression.class);
+    assertThat(parse("Foo is TBar < Integer")).isInstanceOf(BinaryExpression.class);
+    assertThatThrownBy(() -> parse("(1 not 2)"))
+        .isInstanceOf(ExpressionParserError.class)
+        .hasMessageEndingWith("Got 'not'");
   }
 
   @Test

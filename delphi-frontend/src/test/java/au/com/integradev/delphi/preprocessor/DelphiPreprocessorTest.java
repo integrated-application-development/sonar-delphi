@@ -124,6 +124,11 @@ class DelphiPreprocessorTest {
   }
 
   @Test
+  void testIsExpressionsShouldSelectCompilerBranches() {
+    assertThatCode(() -> execute("IsExpressions.pas")).doesNotThrowAnyException();
+  }
+
+  @Test
   void testPseudoExpressionsShouldNotThrowException() {
     assertThatCode(() -> execute("PseudoExpressions.pas")).doesNotThrowAnyException();
   }

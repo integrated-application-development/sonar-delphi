@@ -376,4 +376,14 @@ class GrammarTest {
   void testIfExpressions() {
     assertParsed("IfExpressions.pas");
   }
+
+  @Test
+  void testIsNotOperator() {
+    assertParsed("IsNotOperator.pas");
+  }
+
+  @Test
+  void testNotInOperator() {
+    assertParsed("NotInOperator.pas");
+  }
 }

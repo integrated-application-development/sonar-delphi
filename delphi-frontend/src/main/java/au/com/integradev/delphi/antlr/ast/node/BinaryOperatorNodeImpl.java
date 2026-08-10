@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2019 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,24 +19,21 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.symbol.resolve.ExpressionTypeResolver;
-import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.runtime.Token;
-import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryOperatorNode;
-import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
-import org.sonar.plugins.communitydelphi.api.type.Type;
 
-public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl
-    implements BinaryExpressionNode {
+public final class BinaryOperatorNodeImpl extends DelphiNodeImpl implements BinaryOperatorNode {
   private String image;
 
-  public BinaryExpressionNodeImpl(Token token) {
+  public BinaryOperatorNodeImpl(Token token) {
     super(token);
   }
 
-  public BinaryExpressionNodeImpl(int tokenType) {
+  public BinaryOperatorNodeImpl(int tokenType) {
     super(tokenType);
   }
 
@@ -46,37 +43,22 @@ public final class BinaryExpressionNodeImpl extends ExpressionNodeImpl
   }
 
   @Override
-  public ExpressionNode getLeft() {
-    return (ExpressionNode) getChild(0);
-  }
-
-  @Override
-  public BinaryOperatorNode getOperatorNode() {
-    return (BinaryOperatorNode) getChild(1);
-  }
-
-  @Override
-  public ExpressionNode getRight() {
-    return (ExpressionNode) getChild(2);
-  }
-
-  @Override
   public BinaryOperator getOperator() {
-    return getOperatorNode().getOperator();
+    return BinaryOperator.fromTokenType(getTokenType());
   }
 
   @Override
   public String getImage() {
     if (image == null) {
-      image =
-          getLeft().getImage() + " " + getOperatorNode().getImage() + " " + getRight().getImage();
+      List<DelphiNode> children = getChildren();
+      if (children.isEmpty()) {
+        // Single-token operator
+        image = getToken().getImage();
+      } else {
+        // Multi-token operator
+        image = children.stream().map(DelphiNode::getImage).collect(Collectors.joining(" "));
+      }
     }
     return image;
-  }
-
-  @Override
-  @Nonnull
-  protected Type createType() {
-    return new ExpressionTypeResolver(getTypeFactory()).resolve(this);
   }
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,12 +18,8 @@
  */
 package org.sonar.plugins.communitydelphi.api.ast;
 
-import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
+import org.sonar.plugins.communitydelphi.api.operator.Operator;
 
-public interface UnaryExpressionNode extends ExpressionNode {
-  UnaryOperatorNode getOperatorNode();
-
-  UnaryOperator getOperator();
-
-  ExpressionNode getOperand();
+public interface OperatorNode extends DelphiNode {
+  Operator getOperator();
 }

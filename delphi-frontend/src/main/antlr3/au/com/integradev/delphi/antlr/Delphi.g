@@ -74,6 +74,10 @@ tokens {
   TkAnonymousMethodHeading;
   TkLessThanEqual;
   TkGreaterThanEqual;
+  TkIsNot;
+  TkNotIn;
+  TkBinaryExpression;
+  TkUnaryExpression;
 }
 
 @header
@@ -362,6 +366,17 @@ import au.com.integradev.delphi.utils.LocatableException;
     result.setStartIndex(firstToken.getStartIndex());
     result.setLine(firstToken.getLine());
     result.setCharPositionInLine(firstToken.getCharPositionInLine());
+    if (firstToken.getInputStream() == lastToken.getInputStream()) {
+      // A null text makes CommonToken#getText() recompute the image from the start/stop indexes.
+      result.setText(null);
+    } else {
+      // The tokens straddle an include file boundary, so there is no single source span to read.
+      StringBuilder text = new StringBuilder(count);
+      for (int i = count; i > 0; --i) {
+        text.append(input.LT(-i).getText());
+      }
+      result.setText(text.toString());
+    }
     return result;
   }
 
@@ -372,9 +387,8 @@ import au.com.integradev.delphi.utils.LocatableException;
     return new CommonToken(other);
   }
 
-  private BinaryExpressionNodeImpl createBinaryExpression(Object operator) {
-    Token token = adaptor.getToken(operator);
-    return new BinaryExpressionNodeImpl(token);
+  private BinaryOperatorNodeImpl createBinaryOperator(Object operatorNode) {
+    return new BinaryOperatorNodeImpl(adaptor.getToken(operatorNode));
   }
 
   @Override
@@ -400,20 +414,6 @@ import au.com.integradev.delphi.utils.LocatableException;
   @Override
   public String getErrorHeader(RecognitionException e) {
     return "line " + e.line + ":" + e.charPositionInLine;
-  }
-
-  private void resetBinaryExpressionTokens(Object rootExpression) {
-    if (!(rootExpression instanceof BinaryExpressionNodeImpl)) {
-      return;
-    }
-
-    var binaryExpression = (BinaryExpressionNodeImpl) rootExpression;
-
-    binaryExpression.setFirstToken(null);
-    binaryExpression.setLastToken(null);
-
-    resetBinaryExpressionTokens(binaryExpression.getLeft());
-    resetBinaryExpressionTokens(binaryExpression.getRight());
   }
 
   public static class ParserException extends RuntimeException implements LocatableException {
@@ -924,18 +924,23 @@ expression                   : relationalExpression
                              | anonymousMethod
                              | ifExpression
                              ;
-// ANTLR sets the begin and end tokens for nested binary expression nodes
-// in relationalOperator, not relationalExpression, meaning that their
-// token range only contains the operator. resetBinaryExpressionTokens is needed
-// to reset the start and end tokens so that they must be recalculated
-// when retrieved (i.e., after their children have been correctly assigned).
-relationalExpression         : additiveExpression (relationalOperator^ additiveExpression)* { resetBinaryExpressionTokens(root_0); }
+relationalExpression         : (lhs=additiveExpression -> $lhs)
+                               ( op=relationalOperator rhs=additiveExpression
+                               -> ^(TkBinaryExpression<BinaryExpressionNodeImpl> $relationalExpression $op $rhs)
+                               )*
                              ;
-additiveExpression           : multiplicativeExpression (addOperator^ multiplicativeExpression)* { resetBinaryExpressionTokens(root_0); }
+additiveExpression           : (lhs=multiplicativeExpression -> $lhs)
+                               ( op=addOperator rhs=multiplicativeExpression
+                               -> ^(TkBinaryExpression<BinaryExpressionNodeImpl> $additiveExpression $op $rhs)
+                               )*
                              ;
-multiplicativeExpression     : unaryExpression (multOperator^ unaryExpression)* { resetBinaryExpressionTokens(root_0); }
+multiplicativeExpression     : (lhs=unaryExpression -> $lhs)
+                               ( op=multOperator rhs=unaryExpression
+                               -> ^(TkBinaryExpression<BinaryExpressionNodeImpl> $multiplicativeExpression $op $rhs)
+                               )*
                              ;
-unaryExpression              : unaryOperator^ unaryExpression
+unaryExpression              : op=unaryOperator operand=unaryExpression
+                             -> ^(TkUnaryExpression<UnaryExpressionNodeImpl> $op $operand)
                              | primaryExpression
                              ;
 primaryExpression            : atom -> ^(TkPrimaryExpression<PrimaryExpressionNodeImpl> atom)
@@ -1009,33 +1014,35 @@ nilLiteral                   : NIL<NilLiteralNodeImpl>
 arrayConstructor             : lbrack expressionOrRangeList? rbrack
                              -> ^(TkArrayConstructor<ArrayConstructorNodeImpl> lbrack expressionOrRangeList? rbrack)
                              ;
-addOperator                  : '+'<BinaryExpressionNodeImpl>
-                             | '-'<BinaryExpressionNodeImpl>
-                             | OR<BinaryExpressionNodeImpl>
-                             | XOR<BinaryExpressionNodeImpl>
+addOperator                  : '+'<BinaryOperatorNodeImpl>
+                             | '-'<BinaryOperatorNodeImpl>
+                             | OR<BinaryOperatorNodeImpl>
+                             | XOR<BinaryOperatorNodeImpl>
                              ;
-multOperator                 : '*'<BinaryExpressionNodeImpl>
-                             | '/'<BinaryExpressionNodeImpl>
-                             | DIV<BinaryExpressionNodeImpl>
-                             | MOD<BinaryExpressionNodeImpl>
-                             | AND<BinaryExpressionNodeImpl>
-                             | SHL<BinaryExpressionNodeImpl>
-                             | SHR<BinaryExpressionNodeImpl>
-                             | AS<BinaryExpressionNodeImpl>
+multOperator                 : '*'<BinaryOperatorNodeImpl>
+                             | '/'<BinaryOperatorNodeImpl>
+                             | DIV<BinaryOperatorNodeImpl>
+                             | MOD<BinaryOperatorNodeImpl>
+                             | AND<BinaryOperatorNodeImpl>
+                             | SHL<BinaryOperatorNodeImpl>
+                             | SHR<BinaryOperatorNodeImpl>
+                             | AS<BinaryOperatorNodeImpl>
                              ;
-unaryOperator                : NOT<UnaryExpressionNodeImpl>
-                             | '+'<UnaryExpressionNodeImpl>
-                             | '-'<UnaryExpressionNodeImpl>
-                             | '@'<UnaryExpressionNodeImpl>
+unaryOperator                : NOT<UnaryOperatorNodeImpl>
+                             | '+'<UnaryOperatorNodeImpl>
+                             | '-'<UnaryOperatorNodeImpl>
+                             | '@'<UnaryOperatorNodeImpl>
                              ;
-relationalOperator           : '='<BinaryExpressionNodeImpl>
-                             | '>'<BinaryExpressionNodeImpl>
-                             | '<'<BinaryExpressionNodeImpl>
-                             | op=lessThanEqualOperator -> {createBinaryExpression(op.getTree())}
-                             | op=greaterThanEqualOperator -> {createBinaryExpression(op.getTree())}
-                             | '<>'<BinaryExpressionNodeImpl>
-                             | IN<BinaryExpressionNodeImpl>
-                             | IS<BinaryExpressionNodeImpl>
+relationalOperator           : '='<BinaryOperatorNodeImpl>
+                             | op=lessThanEqualOperator -> {createBinaryOperator(op.getTree())}
+                             | op=greaterThanEqualOperator -> {createBinaryOperator(op.getTree())}
+                             | '>'<BinaryOperatorNodeImpl>
+                             | '<'<BinaryOperatorNodeImpl>
+                             | '<>'<BinaryOperatorNodeImpl>
+                             | NOT IN -> ^(TkNotIn<BinaryOperatorNodeImpl> NOT IN)
+                             | IN<BinaryOperatorNodeImpl>
+                             | IS NOT -> ^(TkIsNot<BinaryOperatorNodeImpl> IS NOT)
+                             | IS<BinaryOperatorNodeImpl>
                              ;
 // We're only doing this for symmetry with greaterThanEqualOperator. (see comment below)
 lessThanEqualOperator        : '<' '=' -> ^({combineLastNTokens(TkLessThanEqual, 2)})
