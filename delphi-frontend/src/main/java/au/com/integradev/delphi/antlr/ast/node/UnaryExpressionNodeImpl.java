@@ -24,16 +24,20 @@ import javax.annotation.Nonnull;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnaryOperatorNode;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl
     implements UnaryExpressionNode {
-  private UnaryOperator operator;
   private String image;
 
   public UnaryExpressionNodeImpl(Token token) {
     super(token);
+  }
+
+  public UnaryExpressionNodeImpl(int tokenType) {
+    super(tokenType);
   }
 
   @Override
@@ -42,22 +46,24 @@ public final class UnaryExpressionNodeImpl extends ExpressionNodeImpl
   }
 
   @Override
+  public UnaryOperatorNode getOperatorNode() {
+    return (UnaryOperatorNode) getChild(0);
+  }
+
+  @Override
   public UnaryOperator getOperator() {
-    if (operator == null) {
-      operator = UnaryOperator.fromTokenType(getTokenType());
-    }
-    return operator;
+    return getOperatorNode().getOperator();
   }
 
   @Override
   public ExpressionNode getOperand() {
-    return (ExpressionNode) getChild(0);
+    return (ExpressionNode) getChild(1);
   }
 
   @Override
   public String getImage() {
     if (image == null) {
-      image = getToken().getImage() + " " + getOperand().getImage();
+      image = getOperatorNode().getImage() + " " + getOperand().getImage();
     }
     return image;
   }

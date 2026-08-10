@@ -165,11 +165,13 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
 
   private DelphiToken findFirstToken() {
     DelphiToken result = this.token;
-    int index = result.getIndex();
 
-    for (int i = 0; i < getChildren().size(); ++i) {
-      DelphiToken childToken = getChild(i).getFirstToken();
-      if (!childToken.isImaginary() && childToken.getIndex() < index) {
+    for (DelphiNode child : getChildren()) {
+      DelphiToken childToken = child.getFirstToken();
+      if (childToken.isImaginary()) {
+        continue;
+      }
+      if (result.isImaginary() || childToken.getIndex() < result.getIndex()) {
         result = childToken;
       }
     }
@@ -179,11 +181,13 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
 
   private DelphiToken findLastToken() {
     DelphiToken result = this.getFirstToken();
-    int index = result.getIndex();
 
     for (DelphiNode child : getChildren()) {
       DelphiToken childToken = child.getLastToken();
-      if (!childToken.isImaginary() && childToken.getIndex() > index) {
+      if (childToken.isImaginary()) {
+        continue;
+      }
+      if (result.isImaginary() || childToken.getIndex() > result.getIndex()) {
         result = childToken;
       }
     }

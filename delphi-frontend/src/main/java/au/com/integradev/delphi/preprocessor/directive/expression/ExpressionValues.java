@@ -224,6 +224,18 @@ final class ExpressionValues {
     return unknownValue();
   }
 
+  static ExpressionValue notIn(ExpressionValue left, ExpressionValue right) {
+    return not(in(left, right));
+  }
+
+  static ExpressionValue is(ExpressionValue left, ExpressionValue right) {
+    return nonConstantValue();
+  }
+
+  static ExpressionValue isNot(ExpressionValue left, ExpressionValue right) {
+    return nonConstantValue();
+  }
+
   static ExpressionValue and(ExpressionValue left, ExpressionValue right) {
     if (left.type() == BOOLEAN && !left.asBoolean()) {
       return createBoolean(false);

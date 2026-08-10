@@ -51,6 +51,15 @@ class OperatorInvocableCollectorTest {
   }
 
   @Test
+  void testVariantShouldCollectNotInOperator() {
+    TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
+    Type variant = typeFactory.getIntrinsic(IntrinsicType.VARIANT);
+
+    OperatorInvocableCollector collector = new OperatorInvocableCollector(typeFactory);
+    assertThat(collector.collect(BinaryOperator.NOT_IN, variant, variant)).hasSize(1);
+  }
+
+  @Test
   void testSetShouldCollectAddOperator() {
     TypeFactory typeFactory = TypeFactoryUtils.defaultFactory();
     Type set = typeFactory.emptySet();

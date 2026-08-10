@@ -642,35 +642,36 @@ class DelphiSymbolTableExecutorTest {
         reference(55, 2),
         reference(56, 2),
         reference(57, 2),
-        reference(115, 2));
+        reference(58, 2),
+        reference(116, 2),
+        reference(117, 2));
     verifyUsages(
         15,
         10,
-        reference(60, 2),
         reference(61, 2),
         reference(62, 2),
         reference(63, 2),
         reference(64, 2),
-        reference(68, 2),
+        reference(65, 2),
         reference(69, 2),
-        reference(77, 2),
+        reference(70, 2),
         reference(78, 2),
         reference(79, 2),
         reference(80, 2),
         reference(81, 2),
-        reference(133, 2));
+        reference(82, 2),
+        reference(135, 2));
     verifyUsages(
         20,
         10,
-        reference(65, 2),
         reference(66, 2),
         reference(67, 2),
-        reference(70, 2),
+        reference(68, 2),
         reference(71, 2),
         reference(72, 2),
         reference(73, 2),
         reference(74, 2),
-        reference(82, 2),
+        reference(75, 2),
         reference(83, 2),
         reference(84, 2),
         reference(85, 2),
@@ -679,11 +680,11 @@ class DelphiSymbolTableExecutorTest {
         reference(88, 2),
         reference(89, 2),
         reference(90, 2),
-        reference(91, 2));
+        reference(91, 2),
+        reference(92, 2));
     verifyUsages(
         25,
         10,
-        reference(92, 2),
         reference(93, 2),
         reference(94, 2),
         reference(95, 2),
@@ -700,11 +701,12 @@ class DelphiSymbolTableExecutorTest {
         reference(106, 2),
         reference(107, 2),
         reference(108, 2),
-        reference(134, 2),
-        reference(135, 2),
-        reference(136, 2));
-    verifyUsages(30, 10, reference(111, 2), reference(112, 2));
-    verifyUsages(35, 10, reference(116, 2), reference(117, 2), reference(118, 2));
+        reference(109, 2),
+        reference(136, 2),
+        reference(137, 2),
+        reference(138, 2));
+    verifyUsages(30, 10, reference(112, 2), reference(113, 2));
+    verifyUsages(35, 10, reference(118, 2), reference(119, 2), reference(120, 2));
   }
 
   @Test

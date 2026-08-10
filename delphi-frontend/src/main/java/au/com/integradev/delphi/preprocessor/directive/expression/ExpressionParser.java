@@ -27,6 +27,8 @@ import static au.com.integradev.delphi.preprocessor.directive.expression.Token.T
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.GREATER_THAN;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.GREATER_THAN_EQUAL;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.IN;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.IS;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.IS_NOT;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.LESS_THAN;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.LESS_THAN_EQUAL;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.MINUS;
@@ -34,6 +36,7 @@ import static au.com.integradev.delphi.preprocessor.directive.expression.Token.T
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.MULTIPLY;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.NOT;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.NOT_EQUALS;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.NOT_IN;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.OR;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.PLUS;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Token.TokenType.SHL;
@@ -66,7 +69,7 @@ public class ExpressionParser {
 
   private static final ImmutableSet<TokenType> RELATIONAL_OPERATORS =
       Sets.immutableEnumSet(
-          EQUALS, GREATER_THAN, LESS_THAN, GREATER_THAN_EQUAL, LESS_THAN_EQUAL, NOT_EQUALS, IN);
+          EQUALS, GREATER_THAN, LESS_THAN, GREATER_THAN_EQUAL, LESS_THAN_EQUAL, NOT_EQUALS, IN, IS);
 
   private static final ImmutableSet<TokenType> ADD_OPERATORS =
       Sets.immutableEnumSet(PLUS, MINUS, OR, XOR);
@@ -119,19 +122,97 @@ public class ExpressionParser {
 
   private Expression parseRelational() {
     Expression result = parseAddition();
-    Token token;
 
-    while ((token = peekToken()) != END_OF_INPUT) {
-      TokenType type = token.getType();
-      if (!RELATIONAL_OPERATORS.contains(type)) {
-        break;
+    while (true) {
+      TokenType operator = nextRelationalOperator();
+      if (operator == null) {
+        return result;
       }
 
-      getToken();
-      result = Expressions.binary(result, type, parseAddition());
+      Expression right;
+      if ((operator == IS || operator == IS_NOT) && peekToken().getType() == TokenType.IDENTIFIER) {
+        right = parseTypeReference();
+      } else {
+        right = parseAddition();
+      }
+
+      result = Expressions.binary(result, operator, right);
+    }
+  }
+
+  private Expression parseTypeReference() {
+    StringBuilder name = new StringBuilder();
+
+    while (peekToken().getType() == TokenType.IDENTIFIER) {
+      name.append(getToken().getText());
+      if (peekToken().getType() != TokenType.DOT) {
+        break;
+      }
+      name.append(getToken().getText());
     }
 
-    return result;
+    if (peekToken().getType() == LESS_THAN) {
+      int startPosition = position;
+      String typeArguments = readTypeArguments();
+      if (typeArguments == null) {
+        position = startPosition;
+      } else {
+        name.append(typeArguments);
+      }
+    }
+
+    return Expressions.nameReference(name.toString());
+  }
+
+  // The operand of `is` is never evaluated, so generic type arguments only have to be consumed,
+  // not understood. Anything unbalanced is left for the surrounding expression to parse.
+  @Nullable
+  private String readTypeArguments() {
+    StringBuilder result = new StringBuilder();
+    int depth = 0;
+
+    do {
+      switch (peekToken().getType()) {
+        case LESS_THAN:
+          ++depth;
+          break;
+        case GREATER_THAN:
+          --depth;
+          break;
+        case IDENTIFIER:
+        case DOT:
+        case COMMA:
+          break;
+        default:
+          return null;
+      }
+      result.append(getToken().getText());
+    } while (depth > 0);
+
+    return result.toString();
+  }
+
+  @Nullable
+  private TokenType nextRelationalOperator() {
+    int startPosition = position;
+    TokenType type = getToken().getType();
+
+    if (type == NOT && peekToken().getType() == IN) {
+      getToken();
+      return NOT_IN;
+    }
+
+    if (type == IS && peekToken().getType() == NOT) {
+      getToken();
+      return IS_NOT;
+    }
+
+    if (RELATIONAL_OPERATORS.contains(type)) {
+      return type;
+    }
+
+    position = startPosition;
+    return null;
   }
 
   private Expression parseAddition() {

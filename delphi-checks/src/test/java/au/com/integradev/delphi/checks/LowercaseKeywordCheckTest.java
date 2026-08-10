@@ -46,6 +46,69 @@ class LowercaseKeywordCheckTest {
   }
 
   @Test
+  void testUppercaseKeywordPairOperatorsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo(Obj: TObject; B: Byte): Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+1:16 to +1:18] <<is>>")
+                .appendImpl("  Result := Obj IS not TObject; // Noncompliant")
+                .appendImpl("  // Fix qf2@[+1:19 to +1:22] <<not>>")
+                .appendImpl("  Result := Obj is NOT TObject; // Noncompliant")
+                .appendImpl("  // Fix qf3@[+1:18 to +1:20] <<in>>")
+                .appendImpl("  Result := B not IN [1, 2]; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testFullyUppercaseKeywordPairShouldAddIssues() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo(Obj: TObject): Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+4:16 to +4:18] <<is>>")
+                .appendImpl("  // Fix qf2@[+3:19 to +3:22] <<not>>")
+                .appendImpl("  // Noncompliant@+2")
+                .appendImpl("  // Noncompliant@+1")
+                .appendImpl("  Result := Obj IS NOT TObject;")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testLowercaseKeywordPairOperatorsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo(Obj: TObject; B: Byte): Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  Result := Obj is not TObject;")
+                .appendImpl("  Result := B not in [1, 2];")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testUppercaseKeywordPairWithCommentBetweenKeywordsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(createCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("function Foo(Obj: TObject): Boolean;")
+                .appendImpl("begin")
+                .appendImpl("  // Fix qf1@[+1:16 to +1:18] <<is>>")
+                .appendImpl("  Result := Obj IS {comment} not TObject; // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
   void testAsmBlockShouldNotAddIssue() {
     CheckVerifier.newVerifier()
         .withCheck(createCheck())

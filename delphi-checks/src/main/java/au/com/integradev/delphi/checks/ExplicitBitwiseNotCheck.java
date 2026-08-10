@@ -24,7 +24,6 @@ import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
-import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.reporting.QuickFix;
@@ -51,7 +50,7 @@ public class ExplicitBitwiseNotCheck extends DelphiCheck {
     if (isBitwiseNot(unaryNode)) {
       context
           .newIssue()
-          .onFilePosition(FilePosition.from(unaryNode.getToken()))
+          .onNode(unaryNode.getOperatorNode())
           .withMessage("Parenthesize this bitwise 'not' operation.")
           .withQuickFixes(
               QuickFix.newFix("Parenthesize bitwise 'not'")

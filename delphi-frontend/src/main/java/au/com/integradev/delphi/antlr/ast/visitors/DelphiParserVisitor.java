@@ -38,6 +38,7 @@ import org.sonar.plugins.communitydelphi.api.ast.AttributeGroupNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeListNode;
 import org.sonar.plugins.communitydelphi.api.ast.AttributeNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.BinaryOperatorNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseItemStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.ClassConstraintNode;
@@ -101,6 +102,7 @@ import org.sonar.plugins.communitydelphi.api.ast.NameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.ObjectTypeNode;
+import org.sonar.plugins.communitydelphi.api.ast.OperatorNode;
 import org.sonar.plugins.communitydelphi.api.ast.PackageDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.ParenthesizedExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.PointerTypeNode;
@@ -158,6 +160,7 @@ import org.sonar.plugins.communitydelphi.api.ast.TypeParameterNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeReferenceNode;
 import org.sonar.plugins.communitydelphi.api.ast.TypeSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnaryExpressionNode;
+import org.sonar.plugins.communitydelphi.api.ast.UnaryOperatorNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnitImportNode;
 import org.sonar.plugins.communitydelphi.api.ast.UnmanagedConstraintNode;
@@ -639,6 +642,18 @@ public interface DelphiParserVisitor<T> {
 
   default T visit(IfExpressionNode node, T data) {
     return visit((ExpressionNode) node, data);
+  }
+
+  default T visit(OperatorNode node, T data) {
+    return visit((DelphiNode) node, data);
+  }
+
+  default T visit(BinaryOperatorNode node, T data) {
+    return visit((OperatorNode) node, data);
+  }
+
+  default T visit(UnaryOperatorNode node, T data) {
+    return visit((OperatorNode) node, data);
   }
 
   default T visit(ParenthesizedExpressionNode node, T data) {

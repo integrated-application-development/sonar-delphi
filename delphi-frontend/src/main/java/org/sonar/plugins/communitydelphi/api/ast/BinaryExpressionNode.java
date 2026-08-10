@@ -23,6 +23,8 @@ import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 public interface BinaryExpressionNode extends ExpressionNode {
   ExpressionNode getLeft();
 
+  BinaryOperatorNode getOperatorNode();
+
   ExpressionNode getRight();
 
   BinaryOperator getOperator();

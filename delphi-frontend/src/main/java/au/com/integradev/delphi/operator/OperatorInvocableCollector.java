@@ -87,7 +87,10 @@ public class OperatorInvocableCollector {
       result.addAll(collectOperatorOverloads((StructType) type, operator));
     } else if (type.isPointer()) {
       result.addAll(createPointerMath((PointerType) type, operator));
-    } else if (type.isVariant() && operator != BinaryOperator.IN && operator != BinaryOperator.AS) {
+    } else if (type.isVariant()
+        && operator != BinaryOperator.IN
+        && operator != BinaryOperator.NOT_IN
+        && operator != BinaryOperator.AS) {
       result.add(createVariantBinary(operator));
     } else if (type.isSet() || type.isArrayConstructor()) {
       result.addAll(createSetLike(type, operator));
@@ -123,6 +126,7 @@ public class OperatorInvocableCollector {
         result.add(createComparison("NotEqual"));
         break;
       case IN:
+      case NOT_IN:
         result.add(createIn());
         break;
       default:

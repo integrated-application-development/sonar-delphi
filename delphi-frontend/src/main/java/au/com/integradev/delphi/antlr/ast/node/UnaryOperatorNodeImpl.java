@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,14 +16,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.ast;
+package au.com.integradev.delphi.antlr.ast.node;
 
+import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.UnaryOperatorNode;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 
-public interface UnaryExpressionNode extends ExpressionNode {
-  UnaryOperatorNode getOperatorNode();
+public final class UnaryOperatorNodeImpl extends DelphiNodeImpl implements UnaryOperatorNode {
+  public UnaryOperatorNodeImpl(Token token) {
+    super(token);
+  }
 
-  UnaryOperator getOperator();
+  @Override
+  public <T> T accept(DelphiParserVisitor<T> visitor, T data) {
+    return visitor.visit(this, data);
+  }
 
-  ExpressionNode getOperand();
+  @Override
+  public UnaryOperator getOperator() {
+    return UnaryOperator.fromTokenType(getTokenType());
+  }
 }

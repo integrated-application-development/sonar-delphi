@@ -55,6 +55,7 @@ begin
   ExpectBool(1 >= 3);
   ExpectBool(1 <= 3);
   ExpectBool(Obj is TObject);
+  ExpectBool(Obj is not TObject);
 
   // bitwise operators
   ExpectNumber(1 and 2);
@@ -113,6 +114,7 @@ begin
 
   // set operators
   ExpectBool(1 in [1, 2, 3, 4, 5]);
+  ExpectBool(1 not in [1, 2, 3, 4, 5]);
   ExpectSet([1, 2, 3, 4, 5] + [3, 4, 5]);
   ExpectSet([1, 2, 3, 4, 5] - [3, 4, 5]);
   ExpectSet([1, 2, 3, 4, 5] * [3, 4, 5]);

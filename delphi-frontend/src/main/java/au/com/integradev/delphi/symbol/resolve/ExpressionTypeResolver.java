@@ -80,6 +80,7 @@ public final class ExpressionTypeResolver {
       case AS:
         return classReferenceValueType(right.getType());
       case IS:
+      case IS_NOT:
         return typeFactory.getIntrinsic(IntrinsicType.BOOLEAN);
       default:
         return resolveOperatorType(operator, left, right);

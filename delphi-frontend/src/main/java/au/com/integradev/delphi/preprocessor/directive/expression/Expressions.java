@@ -106,6 +106,9 @@ public final class Expressions {
       EVALUATORS.put(TokenType.LESS_THAN_EQUAL, ExpressionValues::lessThanEqual);
       EVALUATORS.put(TokenType.NOT_EQUALS, ExpressionValues::notEqual);
       EVALUATORS.put(TokenType.IN, ExpressionValues::in);
+      EVALUATORS.put(TokenType.NOT_IN, ExpressionValues::notIn);
+      EVALUATORS.put(TokenType.IS, ExpressionValues::is);
+      EVALUATORS.put(TokenType.IS_NOT, ExpressionValues::isNot);
       EVALUATORS.put(TokenType.AND, ExpressionValues::and);
       EVALUATORS.put(TokenType.OR, ExpressionValues::or);
       EVALUATORS.put(TokenType.XOR, ExpressionValues::xor);
