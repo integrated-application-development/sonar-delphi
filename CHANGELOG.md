@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.0] - 2026-08-12
+
 ### Added
 
 - Support for
@@ -1717,7 +1719,8 @@ that are virtual, abstract, or on an interface.
 - False-positives in 13 rules.
 - Logic errors in existing "semantic analysis" that caused scan failures.
 
-[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.19.0...HEAD
+[Unreleased]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.20.0...HEAD
+[1.20.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.19.0...v1.20.0
 [1.19.0]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.18.3...v1.19.0
 [1.18.3]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.18.2...v1.18.3
 [1.18.2]: https://github.com/integrated-application-development/sonar-delphi/compare/v1.18.1...v1.18.2
