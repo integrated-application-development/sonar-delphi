@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.preprocessor.directive.expression;
 
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.NON_CONSTANT;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.UNKNOWN;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expressions.binary;
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expressions.literal;
@@ -136,16 +137,16 @@ class ExpressionsTest {
           Arguments.of("$ = 0", true),
           Arguments.of("%_ = 0", true),
           Arguments.of("$_ = 0", true),
-          Arguments.of("_ = 0", UNKNOWN),
+          Arguments.of("_ = 0", NON_CONSTANT),
           Arguments.of("'my string' = 'my string'", true),
           Arguments.of("'my string' = 'MY STRING'", false),
           Arguments.of("'1' = 1", false),
           Arguments.of("'1.0' = 1.0", false),
           Arguments.of("[1, 2, 3] = [1, 2, 3]", true),
           Arguments.of("[1, 2, 3] = [4, 5, 6]", false),
-          Arguments.of("UNKNOWN = 5", UNKNOWN),
-          Arguments.of("5 = UNKNOWN", UNKNOWN),
-          Arguments.of("UNKNOWN = UNKNOWN", UNKNOWN),
+          Arguments.of("UNKNOWN = 5", NON_CONSTANT),
+          Arguments.of("5 = UNKNOWN", NON_CONSTANT),
+          Arguments.of("UNKNOWN = UNKNOWN", NON_CONSTANT),
           Arguments.of("1 <> 1", false),
           Arguments.of("1 <> 2", true),
           Arguments.of("1 <> 1.0", false),
@@ -159,9 +160,9 @@ class ExpressionsTest {
           Arguments.of("'1.0' <> 1.0", true),
           Arguments.of("[1, 2, 3] <> [1, 2, 3]", false),
           Arguments.of("[1, 2, 3] <> [4, 5, 6]", true),
-          Arguments.of("UNKNOWN <> 5", UNKNOWN),
-          Arguments.of("5 <> UNKNOWN", UNKNOWN),
-          Arguments.of("UNKNOWN <> UNKNOWN", UNKNOWN));
+          Arguments.of("UNKNOWN <> 5", NON_CONSTANT),
+          Arguments.of("5 <> UNKNOWN", NON_CONSTANT),
+          Arguments.of("UNKNOWN <> UNKNOWN", NON_CONSTANT));
     }
   }
 
@@ -224,6 +225,9 @@ class ExpressionsTest {
           Arguments.of("1 in [2, 3]", false),
           Arguments.of("1 in []", false),
           Arguments.of("1 in 1", UNKNOWN),
+          Arguments.of("not Foo", UNKNOWN),
+          Arguments.of("Foo = 1", NON_CONSTANT),
+          Arguments.of("False and 1", false),
           Arguments.of("True and System.True", true),
           Arguments.of("True and False", false),
           Arguments.of("False and System.False", false),
@@ -233,7 +237,7 @@ class ExpressionsTest {
           Arguments.of("False or True", true),
           Arguments.of("True or False", true),
           Arguments.of("False or False", false),
-          Arguments.of("True or 1", UNKNOWN),
+          Arguments.of("True or 1", true),
           Arguments.of("1 or True", UNKNOWN),
           Arguments.of("True xor True", false),
           Arguments.of("True xor False", true),
@@ -370,8 +374,8 @@ class ExpressionsTest {
 
     ExpressionValue value = expression.evaluate(preprocessor);
 
-    if (expected == UNKNOWN) {
-      assertThat(value.type()).isEqualTo(UNKNOWN);
+    if (expected == UNKNOWN || expected == NON_CONSTANT) {
+      assertThat(value.type()).isEqualTo(expected);
     } else if (expected instanceof String) {
       assertThat(value.asString()).isEqualTo(expected);
     } else if (expected instanceof Integer) {
