@@ -163,6 +163,9 @@ final class ExpressionValues {
     if (isNumeric(left) && isNumeric(right)) {
       return createBoolean(left.asDouble() > right.asDouble());
     }
+    if (left.type() == STRING && right.type() == STRING) {
+      return createBoolean(left.asString().compareTo(right.asString()) > 0);
+    }
     return unknownValue();
   }
 
@@ -172,6 +175,9 @@ final class ExpressionValues {
     }
     if (isNumeric(left) && isNumeric(right)) {
       return createBoolean(left.asDouble() < right.asDouble());
+    }
+    if (left.type() == STRING && right.type() == STRING) {
+      return createBoolean(left.asString().compareTo(right.asString()) < 0);
     }
     return unknownValue();
   }
@@ -184,6 +190,8 @@ final class ExpressionValues {
       return createBoolean(left.asDouble() >= right.asDouble());
     } else if (left.type() == SET && right.type() == SET) {
       return createBoolean(left.asSet().containsAll(right.asSet()));
+    } else if (left.type() == STRING && right.type() == STRING) {
+      return createBoolean(left.asString().compareTo(right.asString()) >= 0);
     }
     return unknownValue();
   }
@@ -196,6 +204,8 @@ final class ExpressionValues {
       return createBoolean(left.asDouble() <= right.asDouble());
     } else if (left.type() == SET && right.type() == SET) {
       return createBoolean(right.asSet().containsAll(left.asSet()));
+    } else if (left.type() == STRING && right.type() == STRING) {
+      return createBoolean(left.asString().compareTo(right.asString()) <= 0);
     }
     return unknownValue();
   }
