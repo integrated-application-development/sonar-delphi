@@ -19,15 +19,21 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.cfg.lva.LiveVariable;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
+import org.sonar.plugins.communitydelphi.api.ast.ExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.GenericArgumentsNode;
 import org.sonar.plugins.communitydelphi.api.ast.IdentifierNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import org.sonar.plugins.communitydelphi.api.check.FilePosition;
 import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.QualifiedName;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
@@ -37,7 +43,8 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
-public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameReferenceNode {
+public final class NameReferenceNodeImpl extends DelphiNodeImpl
+    implements NameReferenceNode, LiveVariable {
   private NameDeclaration declaration;
   private NameOccurrence occurrence;
   private List<NameReferenceNode> names;
@@ -135,6 +142,21 @@ public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameR
       declaration = getNameOccurrence().getNameDeclaration();
     }
     return declaration;
+  }
+
+  @Override
+  public FilePosition getFilePosition() {
+    return FilePosition.from(this);
+  }
+
+  @Nullable
+  @Override
+  public ExpressionNode getExpressionNode() {
+    StatementNode parent = getFirstParentOfType(StatementNode.class);
+    if (parent instanceof AssignmentStatementNode) {
+      return ((AssignmentStatementNode) parent).getValue();
+    }
+    return null;
   }
 
   @Override
