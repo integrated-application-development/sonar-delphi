@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Incorrect branch selection around `{$IF}` conditions that can't be evaluated at compile time.
+
 ## [1.20.0] - 2026-08-12
 
 ### Added

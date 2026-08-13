@@ -30,7 +30,10 @@ public interface Expression {
   ExpressionValue evaluate(DelphiPreprocessor preprocessor);
 
   enum ConstExpressionType {
+    // Indicates a badly-formed expression or an unresolvable reference.
     UNKNOWN,
+    // Indicates a well-formed expression that can never be folded to a constant.
+    NON_CONSTANT,
     STRING,
     INTEGER,
     REAL,

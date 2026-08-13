@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.preprocessor.directive;
 
 import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.BOOLEAN;
+import static au.com.integradev.delphi.preprocessor.directive.expression.Expression.ConstExpressionType.NON_CONSTANT;
 
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessor;
 import au.com.integradev.delphi.preprocessor.directive.expression.Expression;
@@ -36,6 +37,9 @@ class ElseIfDirective extends BranchDirective {
   @Override
   public boolean isSuccessfulBranch(DelphiPreprocessor preprocessor) {
     ExpressionValue value = expression.evaluate(preprocessor);
-    return value.type() == BOOLEAN && value.asBoolean();
+    if (value.type() == BOOLEAN) {
+      return value.asBoolean();
+    }
+    return value.type() == NON_CONSTANT;
   }
 }
