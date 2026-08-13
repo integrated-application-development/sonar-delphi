@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.antlr.ast.node;
 
+import au.com.integradev.delphi.cfg.lva.LiveVariable;
 import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,7 @@ import org.sonar.plugins.communitydelphi.api.symbol.NameOccurrence;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 
 public abstract class NameDeclarationNodeImpl extends DelphiNodeImpl
-    implements NameDeclarationNode {
+    implements NameDeclarationNode, LiveVariable {
   private NameDeclaration declaration;
   private List<NameOccurrence> usages;
 
