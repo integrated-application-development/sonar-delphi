@@ -676,6 +676,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   @Override
   public ControlFlowGraphBuilder visit(
       AssignmentStatementNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
     build(node.getAssignee(), builder);
     return build(node.getValue(), builder);
   }

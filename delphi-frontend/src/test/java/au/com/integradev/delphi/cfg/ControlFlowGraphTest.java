@@ -39,6 +39,7 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
@@ -219,7 +220,8 @@ class ControlFlowGraphTest {
                 .withTerminator(IfExpressionNode.class),
             block(element(NameReferenceNode.class, "A")).succeedsTo(1),
             block(element(NameReferenceNode.class, "B")).succeedsTo(1),
-            block(element(NameReferenceNode.class, "X")).succeedsTo(0)));
+            block(element(NameReferenceNode.class, "X"), element(AssignmentStatementNode.class))
+                .succeedsTo(0)));
   }
 
   @Test
@@ -1228,7 +1230,8 @@ class ControlFlowGraphTest {
                 .branchesTo(2, 1)
                 .withTerminator(BinaryExpressionNode.class),
             block(element(NameReferenceNode.class, "B")).succeedsTo(1),
-            block(element(NameReferenceNode.class, "Foo")).succeedsTo(EXIT_ID)));
+            block(element(NameReferenceNode.class, "Foo"), element(AssignmentStatementNode.class))
+                .succeedsTo(EXIT_ID)));
   }
 
   @Test
@@ -1241,7 +1244,8 @@ class ControlFlowGraphTest {
                     element(NameReferenceNode.class, "A"),
                     element(RealLiteralNode.class, "1.1"),
                     element(BinaryExpressionNode.class),
-                    element(NameReferenceNode.class, "Foo"))
+                    element(NameReferenceNode.class, "Foo"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
@@ -1261,7 +1265,8 @@ class ControlFlowGraphTest {
                     element(BinaryExpressionNode.class)
                         .withCheck(binaryOpTest(BinaryOperator.MULTIPLY)),
                     element(BinaryExpressionNode.class).withCheck(binaryOpTest(BinaryOperator.ADD)),
-                    element(NameReferenceNode.class, "Foo"))
+                    element(NameReferenceNode.class, "Foo"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
@@ -1276,7 +1281,8 @@ class ControlFlowGraphTest {
                     element(IntegerLiteralNode.class, "3"),
                     element(IntegerLiteralNode.class, "4"),
                     element(IntegerLiteralNode.class, "5"),
-                    element(NameReferenceNode.class, "Foo"))
+                    element(NameReferenceNode.class, "Foo"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
@@ -1459,7 +1465,9 @@ class ControlFlowGraphTest {
   void testAnonymousRoutinesAreIgnored() {
     test(
         "A := procedure begin Foo; Bar; end;",
-        checker(block(element(NameReferenceNode.class, "A")).succeedsTo(EXIT_ID)));
+        checker(
+            block(element(NameReferenceNode.class, "A"), element(AssignmentStatementNode.class))
+                .succeedsTo(EXIT_ID)));
   }
 
   @Test
@@ -1556,9 +1564,15 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "E"))
                 .branchesTo(4, 3)
                 .withTerminator(IfStatementNode.class),
-            block(element(TextLiteralNode.class, "'a'"), element(NameReferenceNode.class, "X"))
+            block(
+                    element(TextLiteralNode.class, "'a'"),
+                    element(NameReferenceNode.class, "X"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(2),
-            block(element(TextLiteralNode.class, "'b'"), element(NameReferenceNode.class, "X"))
+            block(
+                    element(TextLiteralNode.class, "'b'"),
+                    element(NameReferenceNode.class, "X"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(2),
             terminator(FinallyBlockNode.class).succeedsToWithExit(12, EXCEPTION_EXIT_ID),
             block(element(NameReferenceNode.class, "Foo4")).succeedsTo(EXIT_ID)));
