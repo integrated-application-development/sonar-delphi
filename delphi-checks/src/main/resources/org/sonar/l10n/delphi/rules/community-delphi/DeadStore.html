@@ -1,0 +1,37 @@
+<h2>Why is this an issue?</h2>
+<p>
+  Dead stores refer to assignments made to local variables that are subsequently never used or immediately overwritten.
+  Such assignments are unnecessary and impact the clarity and potentially performance of the code. Removing them
+  improves clarity, intentionality, and readability.
+</p>
+<p>
+  There are cases where a clean removal isn't known to be safe. For example, if a variable is assigned to the result of
+  a function, it is unknown if the function has side effects. If the function is pure, it is safe to remove.
+</p>
+<h3>Exceptions</h3>
+<p>
+    This rule ignores initializations to <code>-1</code>, <code>0</code>, <code>1</code>, <code>nil</code>,
+    <code>True</code>, <code>False</code>, <code>[]</code>, and <code>''</code>.
+</p>
+
+<h2>How to fix it</h2>
+<p>
+  Remove the unnecessary assignment.
+</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+function Test(Y: Integer): Integer;
+begin
+  var I := 100; // Noncompliant
+  I := 150; // Noncompliant
+  I := 200;
+  Exit(I + Y);
+end;
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+function Test(Y: Integer): Integer;
+begin
+  var I := 200; // Compliant: no unnecessary assignment
+  Exit(I + Y);
+end;
+</pre>
