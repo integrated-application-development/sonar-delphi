@@ -39,6 +39,7 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
 import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
@@ -1462,11 +1463,14 @@ class ControlFlowGraphTest {
   }
 
   @Test
-  void testAnonymousRoutinesAreIgnored() {
+  void testAnonymousRoutinesAreAnElement() {
     test(
         "A := procedure begin Foo; Bar; end;",
         checker(
-            block(element(NameReferenceNode.class, "A"), element(AssignmentStatementNode.class))
+            block(
+                    element(AnonymousMethodNode.class),
+                    element(NameReferenceNode.class, "A"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
