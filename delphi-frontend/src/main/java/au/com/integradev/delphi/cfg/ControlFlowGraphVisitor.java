@@ -120,6 +120,14 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   }
 
   @Override
+  public ControlFlowGraphBuilder visit(AnonymousMethodNode node, ControlFlowGraphBuilder builder) {
+    // Anonymous methods get their own dedicated CFG, but we still add them as an element in the
+    // parent block.
+    builder.addElement(node);
+    return builder;
+  }
+
+  @Override
   public ControlFlowGraphBuilder visit(RangeExpressionNode node, ControlFlowGraphBuilder builder) {
     build(node.getHighExpression(), builder);
     return build(node.getLowExpression(), builder);
@@ -750,15 +758,6 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   }
 
   // Exclusions
-
-  /*
-   * Anonymous methods have their own associated control flow graph. One that is separate to the
-   * current one being constructed.
-   */
-  @Override
-  public ControlFlowGraphBuilder visit(AnonymousMethodNode node, ControlFlowGraphBuilder builder) {
-    return builder;
-  }
 
   // Assembly control flow graphs are not supported.
   @Override
