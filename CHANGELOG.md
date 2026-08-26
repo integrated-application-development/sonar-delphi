@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **API:** `RaiseStatementNode::getRaiseLocation` method.
+
 ## [1.21.0] - 2026-09-04
 
 ### Added
