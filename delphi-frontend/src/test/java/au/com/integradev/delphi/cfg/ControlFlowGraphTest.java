@@ -1213,6 +1213,19 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testRaiseAtOutsideTry() {
+    test(
+        "var Addr: Pointer; raise A at Addr;",
+        checker(
+            block(
+                    element(SimpleNameDeclarationNode.class, "Addr"),
+                    element(NameReferenceNode.class, "Addr"),
+                    element(NameReferenceNode.class, "A"))
+                .jumpsTo(EXCEPTION_EXIT_ID, EXIT_ID)
+                .withTerminator(RaiseStatementNode.class, TerminatorKind.RAISE)));
+  }
+
+  @Test
   void testCompoundStatement() {
     test(
         "begin Foo; end; begin Bar; end;",
