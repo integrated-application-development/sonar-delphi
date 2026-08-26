@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `BinaryOperator.NOT_IN` enum value.
 - **API:** `BinaryExpressionNode.getOperatorNode` method.
 - **API:** `UnaryExpressionNode.getOperatorNode` method.
+- **API:** `RaiseStatementNode::getRaiseLocation` method.
 - Support for string ordering comparisons in conditional directive expressions.
 
 ### Changed

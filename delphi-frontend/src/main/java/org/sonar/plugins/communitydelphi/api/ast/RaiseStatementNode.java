@@ -23,4 +23,7 @@ import javax.annotation.Nullable;
 public interface RaiseStatementNode extends StatementNode {
   @Nullable
   ExpressionNode getRaiseExpression();
+
+  @Nullable
+  ExpressionNode getRaiseLocation();
 }
