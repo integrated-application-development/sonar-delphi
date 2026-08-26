@@ -654,6 +654,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   @Override
   public ControlFlowGraphBuilder visit(RaiseStatementNode node, ControlFlowGraphBuilder builder) {
     if (node.getRaiseExpression() == null) {
+      // Bare `raise`
       builder.addBlock(
           ProtoBlockFactory.unknownException(node, getUnknownExceptionTargets(builder)));
       return builder;
@@ -662,7 +663,11 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     Type raiseType = node.getRaiseExpression().getType();
     ProtoBlock jumpTarget = builder.getCatchTarget(raiseType);
     builder.addBlock(ProtoBlockFactory.jump(node, jumpTarget, builder.getCurrentBlock()));
-    return build(node.getRaiseExpression(), builder);
+    // `raise ...` expression
+    build(node.getRaiseExpression(), builder);
+
+    // `at ...` expression
+    return build(node.getRaiseLocation(), builder);
   }
 
   // Label statements create a new block as they allow for the control flow to jump to them.
