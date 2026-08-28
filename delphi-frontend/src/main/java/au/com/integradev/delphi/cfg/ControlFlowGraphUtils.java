@@ -16,11 +16,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.utils;
+package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.RoutineImplementationNodeImpl;
-import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import java.util.function.Supplier;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
@@ -43,7 +42,8 @@ public final class ControlFlowGraphUtils {
       return ((AnonymousMethodNodeImpl) node)::getControlFlowGraph;
     }
     if (node instanceof CompoundStatementNode && node.getParent() instanceof DelphiAst) {
-      return () -> ControlFlowGraphFactory.create((CompoundStatementNode) node);
+      return () ->
+          ControlFlowGraphFactory.create(((CompoundStatementNode) node).getStatementList());
     }
     if (node instanceof StatementListNode
         && (node.getParent() instanceof InitializationSectionNode
