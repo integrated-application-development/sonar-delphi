@@ -19,11 +19,10 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
-import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.cfg.ControlFlowGraphProvider;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
-import com.google.common.base.Suppliers;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
@@ -38,21 +37,8 @@ import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 
 public final class RoutineImplementationNodeImpl extends RoutineNodeImpl
-    implements RoutineImplementationNode {
+    implements RoutineImplementationNode, ControlFlowGraphProvider {
   private TypeNameDeclaration typeDeclaration;
-  private final Supplier<ControlFlowGraph> cfgSupplier =
-      Suppliers.memoize(
-          () -> {
-            RoutineBodyNode routineBody = getRoutineBody();
-            if (routineBody == null) {
-              return null;
-            }
-            CompoundStatementNode block = routineBody.getStatementBlock();
-            if (block == null) {
-              return null;
-            }
-            return ControlFlowGraphFactory.create(block);
-          });
 
   public RoutineImplementationNodeImpl(Token token) {
     super(token);
@@ -144,9 +130,16 @@ public final class RoutineImplementationNodeImpl extends RoutineNodeImpl
     return getRoutineNameNode().getNameReferenceNode();
   }
 
+  @Override
   @Nullable
   public ControlFlowGraph getControlFlowGraph() {
-    return cfgSupplier.get();
+    return Optional.ofNullable(getRoutineBody())
+        .map(RoutineBodyNode::getStatementBlock)
+        .map(CompoundStatementNode::getStatementList)
+        .filter(StatementListNodeImpl.class::isInstance)
+        .map(StatementListNodeImpl.class::cast)
+        .map(StatementListNodeImpl::getControlFlowGraph)
+        .orElse(null);
   }
 
   @Override

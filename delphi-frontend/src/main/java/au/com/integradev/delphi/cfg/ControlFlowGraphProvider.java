@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2025 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,24 +19,10 @@
 package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
-import com.google.common.collect.Lists;
-import java.util.List;
-import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
-import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
+import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
-public final class ControlFlowGraphFactory {
-  private ControlFlowGraphFactory() {
-    // Utility class
-  }
-
-  public static ControlFlowGraph create(StatementListNode statements) {
-    return create(statements.getStatements());
-  }
-
-  public static ControlFlowGraph create(List<StatementNode> statements) {
-    ControlFlowGraphBuilder builder = new ControlFlowGraphBuilder();
-    ControlFlowGraphVisitor visitor = new ControlFlowGraphVisitor();
-    Lists.reverse(statements).forEach(statement -> statement.accept(visitor, builder));
-    return builder.build();
-  }
+public interface ControlFlowGraphProvider extends DelphiNode {
+  @Nullable
+  ControlFlowGraph getControlFlowGraph();
 }
