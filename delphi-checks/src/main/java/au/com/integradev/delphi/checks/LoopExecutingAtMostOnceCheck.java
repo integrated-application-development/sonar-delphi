@@ -19,12 +19,12 @@
 package au.com.integradev.delphi.checks;
 
 import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.cfg.ControlFlowGraphUtils;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.Terminus;
-import au.com.integradev.delphi.utils.ControlFlowGraphUtils;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;

@@ -78,14 +78,20 @@ public class ControlFlowGraphTestUtils {
     return buildCfgFromUnit(content.toString(), "TestFunc");
   }
 
-  public static ControlFlowGraph buildCfgFromUnit(String unit, String routineName) {
+  public static String stringFromLines(String... lines) {
+    StringBuilder content = new StringBuilder();
+    for (String line : lines) {
+      content.append(line).append("\n");
+    }
+    return content.toString();
+  }
+
+  public static DelphiFile buildUnit(String... lines) {
     try {
       var tempFile = File.createTempFile("CfgTest-", ".pas");
       tempFile.deleteOnExit();
 
-      LOG.info("Test file:");
-      LOG.info(unit);
-      Files.write(tempFile.toPath(), unit.getBytes(StandardCharsets.UTF_8));
+      Files.write(tempFile.toPath(), stringFromLines(lines).getBytes(StandardCharsets.UTF_8));
 
       DelphiFileConfig config = DelphiFileUtils.mockConfig();
       var file = DelphiFile.from(tempFile, config);
@@ -108,22 +114,32 @@ public class ControlFlowGraphTestUtils {
 
       new SymbolAssociationVisitor()
           .visit(file.getAst(), new SymbolAssociationVisitor.Data(symbolTable));
-
-      var routineImplementation =
-          file.getAst().findDescendantsOfType(RoutineImplementationNode.class).stream()
-              .filter(
-                  impl ->
-                      Objects.equals(impl.getNameReferenceNode().fullyQualifiedName(), routineName))
-              .findFirst()
-              .orElseThrow();
-
-      var cfg = ControlFlowGraphFactory.create(routineImplementation);
-      LOG.info(ControlFlowGraphDebug.toString(cfg));
-
-      return cfg;
+      return file;
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+  }
+
+  public static ControlFlowGraph buildCfgFromUnit(String unit, String routineName) {
+    LOG.info("Test file:");
+    LOG.info(unit);
+
+    DelphiFile file = buildUnit(unit);
+
+    var routineImplementation =
+        file.getAst().findDescendantsOfType(RoutineImplementationNode.class).stream()
+            .filter(
+                impl ->
+                    Objects.equals(impl.getNameReferenceNode().fullyQualifiedName(), routineName))
+            .findFirst()
+            .orElseThrow();
+
+    var cfg =
+        ControlFlowGraphFactory.create(
+            routineImplementation.getRoutineBody().getStatementBlock().getStatementList());
+    LOG.info(ControlFlowGraphDebug.toString(cfg));
+
+    return cfg;
   }
 
   private static Path createStandardLibrary() {
