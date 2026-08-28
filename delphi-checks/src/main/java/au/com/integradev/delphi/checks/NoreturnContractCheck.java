@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.cfg.ControlFlowGraphUtils;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
@@ -27,7 +28,6 @@ import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.UnknownException;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
-import au.com.integradev.delphi.utils.ControlFlowGraphUtils;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -16,12 +16,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.utils;
+package au.com.integradev.delphi.cfg;
 
+import static au.com.integradev.delphi.cfg.ControlFlowGraphTestUtils.buildUnit;
 import static org.assertj.core.api.Assertions.*;
 
-import au.com.integradev.delphi.builders.DelphiTestProgramBuilder;
-import au.com.integradev.delphi.builders.DelphiTestUnitBuilder;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.file.DelphiFile;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,8 @@ import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
 class ControlFlowGraphUtilsTest {
   private static final String NAME_TO_FIND = "ABC123";
 
-  private static void testFindCfg(DelphiFile unit) {
+  private static void testFindCfg(String... unitLines) {
+    DelphiFile unit = buildUnit(unitLines);
     DelphiNode node =
         unit.getAst().findDescendantsOfType(NameReferenceNode.class).stream()
             .filter(n -> n.getIdentifier().getImage().equals(NAME_TO_FIND))
@@ -47,60 +47,67 @@ class ControlFlowGraphUtilsTest {
   @Test
   void testFindCfgInRoutine() {
     testFindCfg(
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .appendImpl("end;")
-            .delphiFile());
+        "unit Test;",
+        "interface",
+        "implementation",
+        "procedure Test;",
+        "begin",
+        String.format("  %s;", NAME_TO_FIND),
+        "end;",
+        "end.");
   }
 
   @Test
   void testFindCfgInAnonymousRoutine() {
     testFindCfg(
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .appendImpl(String.format("  var Proc := procedure begin %s; end;", NAME_TO_FIND))
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .appendImpl("end;")
-            .delphiFile());
+        "unit Test;",
+        "interface",
+        "implementation",
+        "procedure Test;",
+        "begin",
+        String.format("  %s;", NAME_TO_FIND),
+        String.format("  var Proc := procedure begin %s; end;", NAME_TO_FIND),
+        String.format("  %s;", NAME_TO_FIND),
+        "end;",
+        "end.");
   }
 
   @Test
   void testFindCfgInUnitBegin() {
     testFindCfg(
-        new DelphiTestUnitBuilder()
-            .appendImpl("begin")
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .delphiFile());
+        "unit Test;",
+        "interface",
+        "implementation",
+        "begin",
+        String.format("  %s;", NAME_TO_FIND),
+        "end.");
   }
 
   @Test
   void testFindCfgInInitialization() {
     testFindCfg(
-        new DelphiTestUnitBuilder()
-            .appendImpl("initialization")
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .delphiFile());
+        "unit Test;",
+        "interface",
+        "implementation",
+        "initialization",
+        String.format("  %s;", NAME_TO_FIND),
+        "end.");
   }
 
   @Test
   void testFindCfgInFinalization() {
     testFindCfg(
-        new DelphiTestUnitBuilder()
-            .appendImpl("initialization")
-            .appendImpl("finalization")
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .delphiFile());
+        "unit Test;",
+        "interface",
+        "implementation",
+        "initialization",
+        "finalization",
+        String.format("  %s;", NAME_TO_FIND),
+        "end.");
   }
 
   @Test
   void testFindCfgInProgram() {
-    testFindCfg(
-        new DelphiTestProgramBuilder()
-            .appendImpl(String.format("  %s;", NAME_TO_FIND))
-            .delphiFile());
+    testFindCfg("program Test;", "begin", String.format("  %s;", NAME_TO_FIND), "end.");
   }
 }

@@ -18,6 +18,7 @@
  */
 package au.com.integradev.delphi.checks;
 
+import au.com.integradev.delphi.cfg.ControlFlowGraphUtils;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.ExceptionalRoutineExit;
@@ -25,7 +26,6 @@ import au.com.integradev.delphi.cfg.api.Finally;
 import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.api.Terminated;
 import au.com.integradev.delphi.cfg.api.UnconditionalJump;
-import au.com.integradev.delphi.utils.ControlFlowGraphUtils;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import org.sonar.check.Rule;
