@@ -27,8 +27,9 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.FileScope;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public final class SymbolicNode implements Node {
-  private static final AtomicInteger IMAGINARY_TOKEN_INDEX = new AtomicInteger(Integer.MIN_VALUE);
+  private static final AtomicInteger IMAGINARY_NODE_ID = new AtomicInteger(Integer.MIN_VALUE);
   private final DelphiTokenType tokenType;
+  private final int nodeId;
   private final int tokenIndex;
   private final String image;
   private final int beginLine;
@@ -44,6 +45,7 @@ public final class SymbolicNode implements Node {
 
   public SymbolicNode(DelphiNode node, DelphiScope scope) {
     this(
+        node.getNodeId(),
         node.getTokenType(),
         node.getTokenIndex(),
         node.getImage(),
@@ -56,6 +58,7 @@ public final class SymbolicNode implements Node {
   }
 
   private SymbolicNode(
+      int nodeId,
       DelphiTokenType tokenType,
       int tokenIndex,
       String image,
@@ -65,6 +68,7 @@ public final class SymbolicNode implements Node {
       int endColumn,
       DelphiScope scope,
       boolean isIncludedNode) {
+    this.nodeId = nodeId;
     this.tokenType = tokenType;
     this.tokenIndex = tokenIndex;
     this.image = image;
@@ -78,8 +82,9 @@ public final class SymbolicNode implements Node {
 
   public static SymbolicNode imaginary(String image, DelphiScope scope) {
     return new SymbolicNode(
+        IMAGINARY_NODE_ID.incrementAndGet(),
         DelphiTokenType.INVALID,
-        IMAGINARY_TOKEN_INDEX.incrementAndGet(),
+        -1,
         image,
         0,
         0,
@@ -91,6 +96,7 @@ public final class SymbolicNode implements Node {
 
   public static SymbolicNode fromRange(String image, DelphiNode begin, DelphiNode end) {
     return new SymbolicNode(
+        begin.getNodeId(),
         begin.getTokenType(),
         begin.getTokenIndex(),
         image,
@@ -100,6 +106,11 @@ public final class SymbolicNode implements Node {
         end.getEndColumn(),
         begin.getScope(),
         begin.getFirstToken().isIncludedToken() || end.getFirstToken().isIncludedToken());
+  }
+
+  @Override
+  public int getNodeId() {
+    return nodeId;
   }
 
   @Override

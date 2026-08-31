@@ -22,10 +22,17 @@ import org.sonar.plugins.communitydelphi.api.symbol.scope.DelphiScope;
 import org.sonar.plugins.communitydelphi.api.token.DelphiTokenType;
 
 public interface Node {
+  /**
+   * Returns the node's unique id
+   *
+   * @return Node id
+   */
+  int getNodeId();
+
   DelphiTokenType getTokenType();
 
   /**
-   * Returns the node's unique token index
+   * Returns the token index of this node's first concrete token
    *
    * @return Token index
    */
