@@ -146,7 +146,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    * @param scope The scope we want to associate the node to
    */
   public void registerScope(Node node, DelphiScope scope) {
-    registeredScopes.put(node.getTokenIndex(), scope);
+    registeredScopes.put(node.getNodeId(), scope);
   }
 
   /**
@@ -156,7 +156,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    * @param declaration The declaration we are registering
    */
   public void registerDeclaration(Node node, NameDeclaration declaration) {
-    registeredDeclarations.put(node.getTokenIndex(), declaration);
+    registeredDeclarations.put(node.getNodeId(), declaration);
   }
 
   /**
@@ -166,7 +166,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    * @param occurrence The occurrence we are registering
    */
   public void registerOccurrence(Node node, NameOccurrence occurrence) {
-    registeredOccurrences.put(node.getTokenIndex(), occurrence);
+    registeredOccurrences.put(node.getNodeId(), occurrence);
   }
 
   /**
@@ -177,7 +177,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    * @param occurrence The occurrence we are registering
    */
   public void registerOccurrence(ForInStatementNode node, EnumeratorOccurrence occurrence) {
-    registeredEnumeratorOccurrences.put(node.getTokenIndex(), occurrence);
+    registeredEnumeratorOccurrences.put(node.getNodeId(), occurrence);
   }
 
   /**
@@ -186,7 +186,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    * @param node The node which we want to attach symbol information to
    */
   public void attach(MutableDelphiNode node) {
-    node.setScope(registeredScopes.get(node.getTokenIndex()));
+    node.setScope(registeredScopes.get(node.getNodeId()));
   }
 
   /**
@@ -196,7 +196,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    */
   public void attach(NameDeclarationNode node) {
     ((NameDeclarationNodeImpl) node)
-        .setNameDeclaration(registeredDeclarations.get(node.getTokenIndex()));
+        .setNameDeclaration(registeredDeclarations.get(node.getNodeId()));
   }
 
   /**
@@ -205,7 +205,9 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    * @param node The node which we want to attach symbol information to
    */
   public void attach(RoutineNameNode node) {
-    var declaration = (RoutineNameDeclaration) registeredDeclarations.get(node.getTokenIndex());
+    NameDeclarationNode nameNode = node.getNameDeclarationNode();
+    int nodeId = nameNode == null ? node.getNodeId() : nameNode.getNodeId();
+    var declaration = (RoutineNameDeclaration) registeredDeclarations.get(nodeId);
     ((RoutineNameNodeImpl) node).setRoutineNameDeclaration(declaration);
   }
 
@@ -232,7 +234,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    */
   public void attach(NameReferenceNode node) {
     ((NameReferenceNodeImpl) node)
-        .setNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+        .setNameOccurrence(registeredOccurrences.get(node.getIdentifier().getNodeId()));
   }
 
   /**
@@ -242,7 +244,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    */
   public void attach(ArrayAccessorNode node) {
     ((ArrayAccessorNodeImpl) node)
-        .setImplicitNameOccurrence(registeredOccurrences.get(node.getTokenIndex()));
+        .setImplicitNameOccurrence(registeredOccurrences.get(node.getNodeId()));
   }
 
   /**
@@ -252,7 +254,7 @@ public abstract class FileScopeImpl extends DelphiScopeImpl implements FileScope
    */
   public void attach(ForInStatementNode node) {
     ((ForInStatementNodeImpl) node)
-        .setEnumeratorOccurrence(registeredEnumeratorOccurrences.get(node.getTokenIndex()));
+        .setEnumeratorOccurrence(registeredEnumeratorOccurrences.get(node.getNodeId()));
   }
 
   @Override
