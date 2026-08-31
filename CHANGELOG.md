@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Incorrect token image on `>=` and `<=` operators.
 - Incorrect branch selection around `{$IF}` conditions that can't be evaluated at compile time.
+- Obscure bug where name resolution could occur in the wrong lexical scope.
 
 ## [1.20.0] - 2026-08-12
 

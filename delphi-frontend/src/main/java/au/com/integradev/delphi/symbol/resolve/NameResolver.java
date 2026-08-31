@@ -532,7 +532,7 @@ public class NameResolver {
     for (int i = 0; i < typeParameters.size(); ++i) {
       TypedDeclaration declaration = typeParameters.get(i);
       NameReferenceNode typeReference = typeReferences.get(i).getNameNode();
-      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference);
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference.getIdentifier());
 
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
@@ -552,7 +552,7 @@ public class NameResolver {
       NameDeclaration declaration = new TypeParameterNameDeclarationImpl(typeReference, type);
       ((DelphiScopeImpl) routineScope).addDeclaration(declaration);
 
-      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference);
+      NameOccurrenceImpl occurrence = new NameOccurrenceImpl(typeReference.getIdentifier());
       occurrence.setNameDeclaration(declaration);
       ((NameReferenceNodeImpl) typeReference).setNameOccurrence(occurrence);
 
@@ -784,7 +784,7 @@ public class NameResolver {
     SymbolicNode symbolicNode =
         SymbolicNode.fromRange(
             referenceImage.toString(),
-            node,
+            node.getIdentifier(),
             references.get(declarationParts.size() - 1).getIdentifier());
 
     NameOccurrenceImpl occurrence = new NameOccurrenceImpl(symbolicNode);
