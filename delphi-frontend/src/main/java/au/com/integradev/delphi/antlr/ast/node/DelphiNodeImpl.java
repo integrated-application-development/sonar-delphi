@@ -44,6 +44,7 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
   protected DelphiNode parent;
   private List<DelphiNode> children;
   private int childIndex;
+  private int nodeId = -1;
   private DelphiToken firstToken;
   private DelphiToken lastToken;
   private DelphiScope scope;
@@ -143,6 +144,11 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
   }
 
   @Override
+  public final int getNodeId() {
+    return nodeId;
+  }
+
+  @Override
   public DelphiToken getToken() {
     return token;
   }
@@ -192,6 +198,20 @@ public abstract class DelphiNodeImpl implements MutableDelphiNode {
       }
     }
     return result;
+  }
+
+  protected final void initializeNodeIds() {
+    assignNodeIds(0);
+  }
+
+  private int assignNodeIds(int nextNodeId) {
+    this.nodeId = nextNodeId++;
+
+    for (DelphiNode child : getChildren()) {
+      nextNodeId = ((DelphiNodeImpl) child).assignNodeIds(nextNodeId);
+    }
+
+    return nextNodeId;
   }
 
   @Override

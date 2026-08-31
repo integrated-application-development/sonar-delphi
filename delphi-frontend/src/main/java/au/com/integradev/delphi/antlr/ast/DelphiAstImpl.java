@@ -52,6 +52,7 @@ public class DelphiAstImpl extends DelphiNodeImpl implements DelphiAst {
     if (root != null) {
       root.getChildren().forEach(ast::addChild);
     }
+    ast.initializeNodeIds();
     return ast;
   }
 

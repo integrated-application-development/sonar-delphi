@@ -30,6 +30,9 @@ import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
 import au.com.integradev.delphi.file.DelphiFile;
 import au.com.integradev.delphi.utils.DelphiUtils;
 import au.com.integradev.delphi.utils.files.DelphiFileUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
@@ -51,10 +54,42 @@ class DelphiAstTest {
     checkTypes(ast);
   }
 
+  @Test
+  void testNodeIdsAreUniqueAndStableAcrossEquivalentBuilds() {
+    DelphiAst reparsed =
+        DelphiFile.from(DelphiUtils.getResource(TEST_FILE), DelphiFileUtils.mockConfig()).getAst();
+
+    List<DelphiNode> originalNodes = flatten(ast);
+    List<DelphiNode> reparsedNodes = flatten(reparsed);
+    List<Integer> tokenIndices =
+        originalNodes.stream().map(DelphiNode::getTokenIndex).collect(Collectors.toList());
+
+    assertThat(originalNodes).hasSameSizeAs(reparsedNodes);
+    assertThat(tokenIndices.stream().distinct().count()).isLessThan(tokenIndices.size());
+    assertThat(originalNodes).extracting(DelphiNode::getNodeId).doesNotHaveDuplicates();
+    assertThat(originalNodes.stream().map(DelphiNode::getNodeId).collect(Collectors.toList()))
+        .containsExactlyElementsOf(
+            reparsedNodes.stream().map(DelphiNode::getNodeId).collect(Collectors.toList()));
+  }
+
   private static void checkTypes(DelphiNode node) {
     assertThat(node).isInstanceOf(DelphiNode.class);
     for (DelphiNode child : node.getChildren()) {
       checkTypes(child);
+    }
+  }
+
+  private static List<DelphiNode> flatten(DelphiNode node) {
+    List<DelphiNode> nodes = new ArrayList<>();
+    flatten(node, nodes);
+    return nodes;
+  }
+
+  private static void flatten(DelphiNode node, List<DelphiNode> nodes) {
+    nodes.add(node);
+
+    for (DelphiNode child : node.getChildren()) {
+      flatten(child, nodes);
     }
   }
 }
