@@ -115,6 +115,7 @@ public class NameOccurrenceImpl implements NameOccurrence {
     return isExplicitInvocation == that.isExplicitInvocation
         && isGeneric == that.isGeneric
         && location.equals(that.location)
+        && Objects.equals(image, that.image)
         && Objects.equals(declaration, that.declaration)
         && typeParameters.equals(that.typeParameters);
   }
