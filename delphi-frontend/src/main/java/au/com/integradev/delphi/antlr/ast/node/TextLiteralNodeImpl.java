@@ -58,9 +58,8 @@ public final class TextLiteralNodeImpl extends DelphiNodeImpl implements TextLit
     boolean isSingleCharacter = (getValue().length() == 1);
 
     if (hasAnsiCharacterEscape()) {
-      return isSingleCharacter
-          ? getTypeFactory().getIntrinsic(IntrinsicType.ANSICHAR)
-          : getTypeFactory().getIntrinsic(IntrinsicType.ANSISTRING);
+      return getTypeFactory()
+          .getIntrinsic(isSingleCharacter ? IntrinsicType.ANSICHAR : IntrinsicType.ANSISTRING);
     }
 
     IntrinsicType intrinsic = isSingleCharacter ? IntrinsicType.CHAR : IntrinsicType.STRING;
