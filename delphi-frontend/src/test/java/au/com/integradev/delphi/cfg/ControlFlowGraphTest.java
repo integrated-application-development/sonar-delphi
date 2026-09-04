@@ -18,14 +18,13 @@
  */
 package au.com.integradev.delphi.cfg;
 
+import static au.com.integradev.delphi.cfg.ControlFlowGraphTestUtils.buildCfg;
 import static au.com.integradev.delphi.cfg.checker.BlockChecker.block;
 import static au.com.integradev.delphi.cfg.checker.BlockChecker.terminator;
 import static au.com.integradev.delphi.cfg.checker.ElementChecker.element;
 import static au.com.integradev.delphi.cfg.checker.GraphChecker.checker;
 import static org.assertj.core.api.Assertions.*;
 
-import au.com.integradev.delphi.DelphiProperties;
-import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import au.com.integradev.delphi.cfg.api.Linear;
@@ -33,30 +32,15 @@ import au.com.integradev.delphi.cfg.api.RoutineExit;
 import au.com.integradev.delphi.cfg.block.TerminatorKind;
 import au.com.integradev.delphi.cfg.checker.GraphChecker;
 import au.com.integradev.delphi.cfg.checker.StatementTerminator;
-import au.com.integradev.delphi.compiler.Platform;
-import au.com.integradev.delphi.file.DelphiFile;
-import au.com.integradev.delphi.file.DelphiFileConfig;
-import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
-import au.com.integradev.delphi.symbol.SymbolTable;
-import au.com.integradev.delphi.type.factory.TypeFactoryImpl;
-import au.com.integradev.delphi.utils.files.DelphiFileUtils;
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Consumer;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
+import org.sonar.plugins.communitydelphi.api.ast.AssignmentStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.BinaryExpressionNode;
 import org.sonar.plugins.communitydelphi.api.ast.CaseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.CommonDelphiNode;
@@ -74,7 +58,6 @@ import org.sonar.plugins.communitydelphi.api.ast.NilLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.RaiseStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.RealLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.RepeatStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.SimpleNameDeclarationNode;
 import org.sonar.plugins.communitydelphi.api.ast.TextLiteralNode;
 import org.sonar.plugins.communitydelphi.api.ast.TryStatementNode;
@@ -84,82 +67,8 @@ import org.sonar.plugins.communitydelphi.api.operator.BinaryOperator;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 
 class ControlFlowGraphTest {
-  private static final Logger LOG = LoggerFactory.getLogger(ControlFlowGraphTest.class);
-
   private static final int EXIT_ID = 0;
   private static final int EXCEPTION_EXIT_ID = -1;
-
-  private ControlFlowGraph buildCfg(String input) {
-    return buildCfg(Collections.emptyMap(), input);
-  }
-
-  private ControlFlowGraph buildCfg(List<String> variables, String input) {
-    return buildCfg(Map.of("var", variables), input);
-  }
-
-  private ControlFlowGraph buildCfg(Map<String, List<String>> sections, String input) {
-    try {
-      var tempFile = File.createTempFile("CfgTest-", ".pas");
-      tempFile.deleteOnExit();
-
-      StringBuilder content = new StringBuilder();
-      content
-          .append("unit Test;\n")
-          .append("interface\n")
-          .append("uses System.SysUtils;\n")
-          .append("implementation\n")
-          .append("procedure TestProc;\n");
-      for (Entry<String, List<String>> section : sections.entrySet()) {
-        if (!section.getKey().isEmpty()) {
-          content.append(section.getKey()).append("\n");
-        }
-        for (String declaration : section.getValue()) {
-          content.append("  ").append(declaration).append(";\n");
-        }
-      }
-      content.append("begin\n").append(input).append("\nend;\n").append("end.");
-
-      LOG.info("Test file:");
-      LOG.info(content.toString());
-      Files.write(tempFile.toPath(), content.toString().getBytes(StandardCharsets.UTF_8));
-
-      DelphiFileConfig config = DelphiFileUtils.mockConfig();
-      var file = DelphiFile.from(tempFile, config);
-
-      Path standardLibraryPath = createStandardLibrary();
-      SymbolTable symbolTable =
-          SymbolTable.builder()
-              .preprocessorFactory(
-                  new DelphiPreprocessorFactory(
-                      DelphiProperties.COMPILER_VERSION_DEFAULT, Platform.WINDOWS))
-              .typeFactory(
-                  new TypeFactoryImpl(
-                      DelphiProperties.COMPILER_TOOLCHAIN_DEFAULT,
-                      DelphiProperties.COMPILER_VERSION_DEFAULT))
-              .standardLibraryPath(standardLibraryPath)
-              .sourceFiles(List.of(file.getSourceCodeFile().toPath()))
-              .build();
-
-      FileUtils.deleteQuietly(standardLibraryPath.toFile());
-
-      new SymbolAssociationVisitor()
-          .visit(file.getAst(), new SymbolAssociationVisitor.Data(symbolTable));
-
-      var statementList =
-          file.getAst().findDescendantsOfType(RoutineImplementationNode.class).stream()
-              .filter(impl -> impl.getRoutineBody() != null)
-              .map(impl -> impl.getRoutineBody().getStatementBlock().getStatementList())
-              .findFirst()
-              .orElseThrow();
-
-      var cfg = ControlFlowGraphFactory.create(statementList);
-      LOG.info(ControlFlowGraphDebug.toString(cfg));
-
-      return cfg;
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
-  }
 
   private void test(String input, GraphChecker checker) {
     test(Collections.emptyMap(), input, checker);
@@ -171,51 +80,6 @@ class ControlFlowGraphTest {
 
   private void test(Map<String, List<String>> sections, String input, GraphChecker checker) {
     checker.check(buildCfg(sections, input));
-  }
-
-  private static Path createStandardLibrary() {
-    try {
-      Path bds = Files.createTempDirectory("bds");
-
-      var hook = new Thread(() -> FileUtils.deleteQuietly(bds.toFile()));
-      Runtime.getRuntime().addShutdownHook(hook);
-
-      Path standardLibraryPath = Files.createDirectories(bds.resolve("source"));
-      Files.writeString(
-          standardLibraryPath.resolve("SysInit.pas"),
-          "unit SysInit;\ninterface\nimplementation\nend.");
-      Files.writeString(
-          standardLibraryPath.resolve("System.pas"),
-          "unit System;\n"
-              + "interface\n"
-              + "type\n"
-              + "  TObject = class\n"
-              + "    constructor Create;\n"
-              + "  end;\n"
-              + "  IInterface = interface\n"
-              + "  end;\n"
-              + "  TClassHelperBase = class\n"
-              + "  end;\n"
-              + "  TVarRec = record\n"
-              + "  end;\n"
-              + "implementation\n"
-              + "end.");
-      Files.writeString(
-          standardLibraryPath.resolve("System.SysUtils.pas"),
-          "unit System.SysUtils;\n"
-              + "interface\n"
-              + "type\n"
-              + "  Exception = class\n"
-              + "    constructor Create(Message: String);\n"
-              + "  end;\n"
-              + "  EAbort = class(Exception);\n"
-              + "implementation\n"
-              + "end.");
-
-      return bds;
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
   }
 
   private Consumer<DelphiNode> binaryOpTest(BinaryOperator operator) {
@@ -357,7 +221,8 @@ class ControlFlowGraphTest {
                 .withTerminator(IfExpressionNode.class),
             block(element(NameReferenceNode.class, "A")).succeedsTo(1),
             block(element(NameReferenceNode.class, "B")).succeedsTo(1),
-            block(element(NameReferenceNode.class, "X")).succeedsTo(0)));
+            block(element(NameReferenceNode.class, "X"), element(AssignmentStatementNode.class))
+                .succeedsTo(0)));
   }
 
   @Test
@@ -1348,6 +1213,19 @@ class ControlFlowGraphTest {
   }
 
   @Test
+  void testRaiseAtOutsideTry() {
+    test(
+        "var Addr: Pointer; raise A at Addr;",
+        checker(
+            block(
+                    element(SimpleNameDeclarationNode.class, "Addr"),
+                    element(NameReferenceNode.class, "Addr"),
+                    element(NameReferenceNode.class, "A"))
+                .jumpsTo(EXCEPTION_EXIT_ID, EXIT_ID)
+                .withTerminator(RaiseStatementNode.class, TerminatorKind.RAISE)));
+  }
+
+  @Test
   void testCompoundStatement() {
     test(
         "begin Foo; end; begin Bar; end;",
@@ -1366,7 +1244,8 @@ class ControlFlowGraphTest {
                 .branchesTo(2, 1)
                 .withTerminator(BinaryExpressionNode.class),
             block(element(NameReferenceNode.class, "B")).succeedsTo(1),
-            block(element(NameReferenceNode.class, "Foo")).succeedsTo(EXIT_ID)));
+            block(element(NameReferenceNode.class, "Foo"), element(AssignmentStatementNode.class))
+                .succeedsTo(EXIT_ID)));
   }
 
   @Test
@@ -1379,7 +1258,8 @@ class ControlFlowGraphTest {
                     element(NameReferenceNode.class, "A"),
                     element(RealLiteralNode.class, "1.1"),
                     element(BinaryExpressionNode.class),
-                    element(NameReferenceNode.class, "Foo"))
+                    element(NameReferenceNode.class, "Foo"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
@@ -1399,7 +1279,8 @@ class ControlFlowGraphTest {
                     element(BinaryExpressionNode.class)
                         .withCheck(binaryOpTest(BinaryOperator.MULTIPLY)),
                     element(BinaryExpressionNode.class).withCheck(binaryOpTest(BinaryOperator.ADD)),
-                    element(NameReferenceNode.class, "Foo"))
+                    element(NameReferenceNode.class, "Foo"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
@@ -1414,7 +1295,8 @@ class ControlFlowGraphTest {
                     element(IntegerLiteralNode.class, "3"),
                     element(IntegerLiteralNode.class, "4"),
                     element(IntegerLiteralNode.class, "5"),
-                    element(NameReferenceNode.class, "Foo"))
+                    element(NameReferenceNode.class, "Foo"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(EXIT_ID)));
   }
 
@@ -1594,10 +1476,15 @@ class ControlFlowGraphTest {
   }
 
   @Test
-  void testAnonymousRoutinesAreIgnored() {
+  void testAnonymousRoutinesAreAnElement() {
     test(
         "A := procedure begin Foo; Bar; end;",
-        checker(block(element(NameReferenceNode.class, "A")).succeedsTo(EXIT_ID)));
+        checker(
+            block(
+                    element(AnonymousMethodNode.class),
+                    element(NameReferenceNode.class, "A"),
+                    element(AssignmentStatementNode.class))
+                .succeedsTo(EXIT_ID)));
   }
 
   @Test
@@ -1694,9 +1581,15 @@ class ControlFlowGraphTest {
             block(element(NameReferenceNode.class, "E"))
                 .branchesTo(4, 3)
                 .withTerminator(IfStatementNode.class),
-            block(element(TextLiteralNode.class, "'a'"), element(NameReferenceNode.class, "X"))
+            block(
+                    element(TextLiteralNode.class, "'a'"),
+                    element(NameReferenceNode.class, "X"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(2),
-            block(element(TextLiteralNode.class, "'b'"), element(NameReferenceNode.class, "X"))
+            block(
+                    element(TextLiteralNode.class, "'b'"),
+                    element(NameReferenceNode.class, "X"),
+                    element(AssignmentStatementNode.class))
                 .succeedsTo(2),
             terminator(FinallyBlockNode.class).succeedsToWithExit(12, EXCEPTION_EXIT_ID),
             block(element(NameReferenceNode.class, "Foo4")).succeedsTo(EXIT_ID)));

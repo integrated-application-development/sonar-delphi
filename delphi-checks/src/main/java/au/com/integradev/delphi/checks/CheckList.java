@@ -53,6 +53,7 @@ public final class CheckList {
           ConstructorWithoutInheritedCheck.class,
           CyclomaticComplexityRoutineCheck.class,
           DateFormatSettingsCheck.class,
+          DeadStoreCheck.class,
           DestructorNameCheck.class,
           DestructorWithoutInheritedCheck.class,
           DigitGroupingCheck.class,

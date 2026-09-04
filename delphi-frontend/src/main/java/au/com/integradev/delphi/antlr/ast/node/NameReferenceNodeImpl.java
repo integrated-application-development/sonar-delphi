@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.cfg.lva.LiveVariable;
 import au.com.integradev.delphi.symbol.QualifiedNameImpl;
 import com.google.common.collect.Iterables;
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ import org.sonar.plugins.communitydelphi.api.type.Type;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 import org.sonar.plugins.communitydelphi.api.type.Typed;
 
-public final class NameReferenceNodeImpl extends DelphiNodeImpl implements NameReferenceNode {
+public final class NameReferenceNodeImpl extends DelphiNodeImpl
+    implements NameReferenceNode, LiveVariable {
   private NameDeclaration declaration;
   private NameOccurrence occurrence;
   private List<NameReferenceNode> names;

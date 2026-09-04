@@ -21,6 +21,7 @@
     "ConstantName",
     "ConstructorName",
     "CyclomaticComplexityRoutine",
+    "DeadStore",
     "DestructorName",
     "DestructorWithoutInherited",
     "DigitGrouping",

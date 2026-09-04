@@ -306,6 +306,10 @@ public final class VariableNameDeclarationImpl extends NameDeclarationImpl
     return kind == Kind.RESULT;
   }
 
+  public boolean isExceptItem() {
+    return kind == Kind.EXCEPT_ITEM;
+  }
+
   @Override
   protected NameDeclaration doSpecialization(TypeSpecializationContext context) {
     return new VariableNameDeclarationImpl(node, type.specialize(context), visibility, kind);

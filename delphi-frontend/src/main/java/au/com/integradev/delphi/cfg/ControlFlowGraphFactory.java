@@ -21,27 +21,12 @@ package au.com.integradev.delphi.cfg;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import com.google.common.collect.Lists;
 import java.util.List;
-import org.sonar.plugins.communitydelphi.api.ast.AnonymousMethodNode;
-import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
-import org.sonar.plugins.communitydelphi.api.ast.RoutineImplementationNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
 public final class ControlFlowGraphFactory {
   private ControlFlowGraphFactory() {
     // Utility class
-  }
-
-  public static ControlFlowGraph create(RoutineImplementationNode routine) {
-    return create(routine.getRoutineBody().getStatementBlock());
-  }
-
-  public static ControlFlowGraph create(AnonymousMethodNode anonymousMethod) {
-    return create(anonymousMethod.getFirstDescendantOfType(CompoundStatementNode.class));
-  }
-
-  public static ControlFlowGraph create(CompoundStatementNode initialNode) {
-    return create(initialNode.getStatementList());
   }
 
   public static ControlFlowGraph create(StatementListNode statements) {

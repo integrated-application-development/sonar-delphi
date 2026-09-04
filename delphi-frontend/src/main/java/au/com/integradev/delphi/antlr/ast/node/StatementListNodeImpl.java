@@ -19,15 +19,24 @@
 package au.com.integradev.delphi.antlr.ast.node;
 
 import au.com.integradev.delphi.antlr.ast.visitors.DelphiParserVisitor;
+import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.cfg.ControlFlowGraphProvider;
+import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
+import com.google.common.base.Suppliers;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.antlr.runtime.Token;
 import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.ast.StatementNode;
 
-public final class StatementListNodeImpl extends DelphiNodeImpl implements StatementListNode {
+public final class StatementListNodeImpl extends DelphiNodeImpl
+    implements StatementListNode, ControlFlowGraphProvider {
   private List<StatementNode> statements;
   private List<StatementNode> descendantStatements;
+  private final Supplier<ControlFlowGraph> cfgSupplier =
+      Suppliers.memoize(() -> ControlFlowGraphFactory.create(this));
 
   public StatementListNodeImpl(Token token) {
     super(token);
@@ -91,5 +100,11 @@ public final class StatementListNodeImpl extends DelphiNodeImpl implements State
   @Override
   public int getEndColumn() {
     return getParent().getEndColumn();
+  }
+
+  @Override
+  @Nullable
+  public ControlFlowGraph getControlFlowGraph() {
+    return cfgSupplier.get();
   }
 }

@@ -16,48 +16,48 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package au.com.integradev.delphi.utils;
+package au.com.integradev.delphi.cfg;
 
 import au.com.integradev.delphi.antlr.ast.node.AnonymousMethodNodeImpl;
 import au.com.integradev.delphi.antlr.ast.node.RoutineImplementationNodeImpl;
-import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
+import au.com.integradev.delphi.antlr.ast.node.StatementListNodeImpl;
 import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
-import java.util.function.Supplier;
 import org.sonar.plugins.communitydelphi.api.ast.CompoundStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.FinalizationSectionNode;
 import org.sonar.plugins.communitydelphi.api.ast.InitializationSectionNode;
-import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
 public final class ControlFlowGraphUtils {
   private ControlFlowGraphUtils() {
     // Utility class
   }
 
-  private static Supplier<ControlFlowGraph> getCFGSupplier(DelphiNode node) {
+  private static ControlFlowGraphProvider getCFGProvider(DelphiNode node) {
     if (node instanceof RoutineImplementationNodeImpl) {
-      return ((RoutineImplementationNodeImpl) node)::getControlFlowGraph;
+      return (ControlFlowGraphProvider) node;
     }
     if (node instanceof AnonymousMethodNodeImpl) {
-      return ((AnonymousMethodNodeImpl) node)::getControlFlowGraph;
+      return (ControlFlowGraphProvider) node;
     }
-    if (node instanceof CompoundStatementNode && node.getParent() instanceof DelphiAst) {
-      return () -> ControlFlowGraphFactory.create((CompoundStatementNode) node);
+    if (node instanceof CompoundStatementNode
+        && node.getParent() instanceof DelphiAst
+        && ((CompoundStatementNode) node).getStatementList() instanceof StatementListNodeImpl) {
+      return (ControlFlowGraphProvider) ((CompoundStatementNode) node).getStatementList();
     }
-    if (node instanceof StatementListNode
+    if (node instanceof StatementListNodeImpl
         && (node.getParent() instanceof InitializationSectionNode
             || node.getParent() instanceof FinalizationSectionNode)) {
-      return () -> ControlFlowGraphFactory.create((StatementListNode) node);
+      return (ControlFlowGraphProvider) node;
     }
     return null;
   }
 
   public static ControlFlowGraph findContainingCFG(DelphiNode node) {
     while (node != null) {
-      Supplier<ControlFlowGraph> cfgSupplier = getCFGSupplier(node);
+      ControlFlowGraphProvider cfgSupplier = getCFGProvider(node);
       if (cfgSupplier != null) {
-        return cfgSupplier.get();
+        return cfgSupplier.getControlFlowGraph();
       }
       node = node.getParent();
     }

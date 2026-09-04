@@ -119,6 +119,16 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     return builder;
   }
 
+  /*
+   * Anonymous methods have their own associated control flow graph. One that is separate to the
+   * current one being constructed. It does impact live variables, though, so it must be added as an element.
+   */
+  @Override
+  public ControlFlowGraphBuilder visit(AnonymousMethodNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
+    return builder;
+  }
+
   @Override
   public ControlFlowGraphBuilder visit(RangeExpressionNode node, ControlFlowGraphBuilder builder) {
     build(node.getHighExpression(), builder);
@@ -646,6 +656,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   @Override
   public ControlFlowGraphBuilder visit(RaiseStatementNode node, ControlFlowGraphBuilder builder) {
     if (node.getRaiseExpression() == null) {
+      // Bare `raise`
       builder.addBlock(
           ProtoBlockFactory.unknownException(node, getUnknownExceptionTargets(builder)));
       return builder;
@@ -654,7 +665,11 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
     Type raiseType = node.getRaiseExpression().getType();
     ProtoBlock jumpTarget = builder.getCatchTarget(raiseType);
     builder.addBlock(ProtoBlockFactory.jump(node, jumpTarget, builder.getCurrentBlock()));
-    return build(node.getRaiseExpression(), builder);
+    // `raise ...` expression
+    build(node.getRaiseExpression(), builder);
+
+    // `at ...` expression
+    return build(node.getRaiseLocation(), builder);
   }
 
   // Label statements create a new block as they allow for the control flow to jump to them.
@@ -676,6 +691,7 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   @Override
   public ControlFlowGraphBuilder visit(
       AssignmentStatementNode node, ControlFlowGraphBuilder builder) {
+    builder.addElement(node);
     build(node.getAssignee(), builder);
     return build(node.getValue(), builder);
   }
@@ -749,15 +765,6 @@ class ControlFlowGraphVisitor implements DelphiParserVisitor<ControlFlowGraphBui
   }
 
   // Exclusions
-
-  /*
-   * Anonymous methods have their own associated control flow graph. One that is separate to the
-   * current one being constructed.
-   */
-  @Override
-  public ControlFlowGraphBuilder visit(AnonymousMethodNode node, ControlFlowGraphBuilder builder) {
-    return builder;
-  }
 
   // Assembly control flow graphs are not supported.
   @Override

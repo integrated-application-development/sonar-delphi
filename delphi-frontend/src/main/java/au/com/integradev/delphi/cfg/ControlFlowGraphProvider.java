@@ -1,6 +1,6 @@
 /*
  * Sonar Delphi Plugin
- * Copyright (C) 2023 Integrated Application Development
+ * Copyright (C) 2026 Integrated Application Development
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,14 +16,13 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.communitydelphi.api.ast;
+package au.com.integradev.delphi.cfg;
 
+import au.com.integradev.delphi.cfg.api.ControlFlowGraph;
 import javax.annotation.Nullable;
+import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 
-public interface RaiseStatementNode extends StatementNode {
+public interface ControlFlowGraphProvider extends DelphiNode {
   @Nullable
-  ExpressionNode getRaiseExpression();
-
-  @Nullable
-  ExpressionNode getRaiseLocation();
+  ControlFlowGraph getControlFlowGraph();
 }

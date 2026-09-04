@@ -1,0 +1,19 @@
+{
+  "title": "Redundant assignments should be removed.",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant/Issue",
+    "constantCost": "1min"
+  },
+  "code": {
+    "attribute": "CLEAR",
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    }
+  },
+  "tags": ["clumsy"],
+  "defaultSeverity": "Major",
+  "scope": "ALL",
+  "quickfix": "unknown"
+}
