@@ -30,12 +30,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
 public class ControlFlowGraphImpl implements ControlFlowGraph {
+  private final StatementListNode statementListNode;
   private Block entry;
   private final List<Block> blocks;
 
-  public ControlFlowGraphImpl(Block entry, List<Block> blocks) {
+  public ControlFlowGraphImpl(
+      StatementListNode statementListNode, Block entry, List<Block> blocks) {
+    this.statementListNode = statementListNode;
     this.entry = entry;
     this.blocks = blocks;
   }
@@ -48,6 +52,11 @@ public class ControlFlowGraphImpl implements ControlFlowGraph {
   @Override
   public List<Block> getBlocks() {
     return Collections.unmodifiableList(Lists.reverse(blocks));
+  }
+
+  @Override
+  public StatementListNode getStatementListNode() {
+    return statementListNode;
   }
 
   /** Removes redundant blocks from the graph and updates their neighbouring blocks. */

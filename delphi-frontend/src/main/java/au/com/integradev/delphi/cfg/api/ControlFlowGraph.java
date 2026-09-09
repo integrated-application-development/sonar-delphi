@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.cfg.api;
 
 import java.util.List;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 
 /** A graph representation of all paths that could be traversed in the execution of code */
 public interface ControlFlowGraph {
@@ -35,4 +36,11 @@ public interface ControlFlowGraph {
    * @return the list of all blocks in the control flow graph
    */
   List<Block> getBlocks();
+
+  /**
+   * The `StatementListNode` from which this control flow graph was constructed
+   *
+   * @return the node this CFG was constructed from
+   */
+  StatementListNode getStatementListNode();
 }
