@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.checks;
 
-import au.com.integradev.delphi.cfg.ControlFlowGraphFactory;
 import au.com.integradev.delphi.cfg.ControlFlowGraphUtils;
 import au.com.integradev.delphi.cfg.api.Block;
 import au.com.integradev.delphi.cfg.api.Branch;
@@ -153,7 +152,7 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
     if (loop == null) {
       return false;
     }
-    ControlFlowGraph cfg = getCFG(loop);
+    ControlFlowGraph cfg = ControlFlowGraphUtils.findContainingCFG(loop);
     Block loopBlock =
         getTerminatorBlock(cfg, loop)
             .orElseThrow(
@@ -184,6 +183,9 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
   }
 
   private static Optional<Block> getTerminatorBlock(ControlFlowGraph cfg, DelphiNode terminator) {
+    if (cfg == null) {
+      return Optional.empty();
+    }
     return cfg.getBlocks().stream()
         .filter(Terminated.class::isInstance)
         .filter(terminated -> terminator.equals(((Terminated) terminated).getTerminator()))
@@ -274,13 +276,5 @@ public class LoopExecutingAtMostOnceCheck extends DelphiCheck {
       parent = parent.getParent();
     }
     return false;
-  }
-
-  private static ControlFlowGraph getCFG(DelphiNode loop) {
-    ControlFlowGraph cfg = ControlFlowGraphUtils.findContainingCFG(loop);
-    if (cfg == null) {
-      return ControlFlowGraphFactory.create(loop.findChildrenOfType(StatementNode.class));
-    }
-    return cfg;
   }
 }
