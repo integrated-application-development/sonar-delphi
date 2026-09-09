@@ -44,6 +44,7 @@ import org.sonar.plugins.communitydelphi.api.ast.DelphiNode;
 import org.sonar.plugins.communitydelphi.api.ast.GotoStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.LabelStatementNode;
 import org.sonar.plugins.communitydelphi.api.ast.NameReferenceNode;
+import org.sonar.plugins.communitydelphi.api.ast.StatementListNode;
 import org.sonar.plugins.communitydelphi.api.type.Type;
 
 public class ControlFlowGraphBuilder {
@@ -71,7 +72,7 @@ public class ControlFlowGraphBuilder {
     addBlockBefore(exitBlock);
   }
 
-  public ControlFlowGraph build() {
+  public ControlFlowGraph build(StatementListNode statementListNode) {
     Map<ProtoBlock, Block> map = new LinkedHashMap<>();
     for (ProtoBlock block : blocks) {
       map.put(block, block.createBlock());
@@ -81,7 +82,8 @@ public class ControlFlowGraphBuilder {
     }
 
     ControlFlowGraphImpl cfg =
-        new ControlFlowGraphImpl(map.get(currentBlock), new ArrayList<>(map.values()));
+        new ControlFlowGraphImpl(
+            statementListNode, map.get(currentBlock), new ArrayList<>(map.values()));
     cfg.prune();
 
     populatePredecessors(cfg);

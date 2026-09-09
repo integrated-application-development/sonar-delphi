@@ -32,6 +32,6 @@ public final class ControlFlowGraphFactory {
     ControlFlowGraphVisitor visitor = new ControlFlowGraphVisitor();
     Lists.reverse(statements.getStatements())
         .forEach(statement -> statement.accept(visitor, builder));
-    return builder.build();
+    return builder.build(statements);
   }
 }
