@@ -49,18 +49,16 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalContinueShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    Continue; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    Continue; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
@@ -68,37 +66,33 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalBreakShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    Break; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    Break; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalBreakShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    if A then")
-            .appendImpl("      Break; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    if A then")
+                .appendImpl("      Break; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
@@ -106,37 +100,33 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalExitShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    Exit; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    Exit; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalExitShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    if A then")
-            .appendImpl("      Exit; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    if A then")
+                .appendImpl("      Exit; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
@@ -144,37 +134,33 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalHaltShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    Halt; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    Halt; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalHaltShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    if A then")
-            .appendImpl("      Halt; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    if A then")
+                .appendImpl("      Halt; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
@@ -182,37 +168,33 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalRaiseShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    raise E; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    raise E; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalRaiseShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    if A then")
-            .appendImpl("      raise B; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    if A then")
+                .appendImpl("      raise B; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
@@ -220,447 +202,403 @@ class LoopExecutingAtMostOnceCheckTest {
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalGotoBeforeShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("  label before;")
-            .appendImpl("begin")
-            .appendImpl("  before:")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    goto before; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("  label before;")
+                .appendImpl("begin")
+                .appendImpl("  before:")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    goto before; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testUnconditionalGotoAfterShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("  label after;")
-            .appendImpl("begin")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    goto after; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("  after:")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("  label after;")
+                .appendImpl("begin")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    goto after; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("  after:")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testConditionalGotoShouldNotAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("  label before;")
-            .appendImpl("begin")
-            .appendImpl("  before:")
-            .appendImpl(format("  %s // Compliant", loopType.loopHeader))
-            .appendImpl("    if A then")
-            .appendImpl("      goto before; // Compliant")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("  label before;")
+                .appendImpl("begin")
+                .appendImpl("  before:")
+                .appendImpl(format("  %s // Compliant", loopType.loopHeader))
+                .appendImpl("    if A then")
+                .appendImpl("      goto before; // Compliant")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testGotoBeforeExitShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("  label before;")
-            .appendImpl("begin")
-            .appendImpl("  before:")
-            .appendImpl("  Exit;")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    goto before; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("  label before;")
+                .appendImpl("begin")
+                .appendImpl("  before:")
+                .appendImpl("  Exit;")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    goto before; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testGotoMultiBlockInfiniteLoopShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("  label before, middle;")
-            .appendImpl("begin")
-            .appendImpl("  before:")
-            .appendImpl("  Writeln('A');")
-            .appendImpl("  middle:")
-            .appendImpl("  goto before;")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    goto middle; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("  label before, middle;")
+                .appendImpl("begin")
+                .appendImpl("  before:")
+                .appendImpl("  Writeln('A');")
+                .appendImpl("  middle:")
+                .appendImpl("  goto before;")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    goto middle; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testGotoSameBlockInfiniteLoopShouldAddIssue(LoopType loopType) {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("  label before;")
-            .appendImpl("begin")
-            .appendImpl("  before:")
-            .appendImpl("  goto before;")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    goto before; // Secondary")
-            .appendImpl(format("  %s", loopType.loopFooter))
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("  label before;")
+                .appendImpl("begin")
+                .appendImpl("  before:")
+                .appendImpl("  goto before;")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    goto before; // Secondary")
+                .appendImpl(format("  %s", loopType.loopFooter))
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   // Mixed
   @Test
   void testIfBreakElseExitShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (4)")
-            .appendImpl("    if A then")
-            .appendImpl("      Break // Compliant")
-            .appendImpl("    else")
-            .appendImpl("      Exit; // Secondary")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (4)")
+                .appendImpl("    if A then")
+                .appendImpl("      Break // Compliant")
+                .appendImpl("    else")
+                .appendImpl("      Exit; // Secondary")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testIfBreakElseIfExitShouldNotAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Compliant")
-            .appendImpl("    if A then")
-            .appendImpl("      Break // Compliant")
-            .appendImpl("    else if B then")
-            .appendImpl("      Exit; // Compliant")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Compliant")
+                .appendImpl("    if A then")
+                .appendImpl("      Break // Compliant")
+                .appendImpl("    else if B then")
+                .appendImpl("      Exit; // Compliant")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @Test
   void testIfExitElseIfBreakThenExitShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (5)")
-            .appendImpl("    if A then")
-            .appendImpl("      Exit // Compliant")
-            .appendImpl("    else if B then")
-            .appendImpl("      Break // Compliant")
-            .appendImpl("    Exit; // Secondary")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (5)")
+                .appendImpl("    if A then")
+                .appendImpl("      Exit // Compliant")
+                .appendImpl("    else if B then")
+                .appendImpl("      Break // Compliant")
+                .appendImpl("    Exit; // Secondary")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testIfContinueElseExitShouldNotAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Compliant")
-            .appendImpl("    if A then")
-            .appendImpl("      Continue // Compliant")
-            .appendImpl("    else")
-            .appendImpl("      Exit; // Compliant")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Compliant")
+                .appendImpl("    if A then")
+                .appendImpl("      Continue // Compliant")
+                .appendImpl("    else")
+                .appendImpl("      Exit; // Compliant")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @Test
   void testCaseBreakShouldNotAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Compliant")
-            .appendImpl("    case True of")
-            .appendImpl("      True: Break; // Compliant")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Compliant")
+                .appendImpl("    case True of")
+                .appendImpl("      True: Break; // Compliant")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @Test
   void testCaseBreakElseBreakShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (2) (4)")
-            .appendImpl("    case True of")
-            .appendImpl("      True: Break; // Secondary")
-            .appendImpl("    else")
-            .appendImpl("      Break; // Secondary")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (2) (4)")
+                .appendImpl("    case True of")
+                .appendImpl("      True: Break; // Secondary")
+                .appendImpl("    else")
+                .appendImpl("      Break; // Secondary")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testIfNestedShouldNotAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Compliant")
-            .appendImpl("    if A then begin")
-            .appendImpl("      if B then")
-            .appendImpl("        Break // Compliant")
-            .appendImpl("      else")
-            .appendImpl("        Exit; // Compliant")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Compliant")
+                .appendImpl("    if A then begin")
+                .appendImpl("      if B then")
+                .appendImpl("        Break // Compliant")
+                .appendImpl("      else")
+                .appendImpl("        Exit; // Compliant")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyNoIssues();
   }
 
   @Test
   void testElseNestedShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (7)")
-            .appendImpl("    if A then begin")
-            .appendImpl("      Break // Compliant")
-            .appendImpl("    end else begin")
-            .appendImpl("      if B then")
-            .appendImpl("        Break // Compliant")
-            .appendImpl("      else")
-            .appendImpl("        Exit; // Secondary")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (7)")
+                .appendImpl("    if A then begin")
+                .appendImpl("      Break // Compliant")
+                .appendImpl("    end else begin")
+                .appendImpl("      if B then")
+                .appendImpl("        Break // Compliant")
+                .appendImpl("      else")
+                .appendImpl("        Exit; // Secondary")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testConditionalBreakAndUnconditionalExitShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (3)")
-            .appendImpl("    if B then")
-            .appendImpl("      Break; // Compliant")
-            .appendImpl("    Exit; // Secondary")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (3)")
+                .appendImpl("    if B then")
+                .appendImpl("      Break; // Compliant")
+                .appendImpl("    Exit; // Secondary")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testIfExitElseBreakAndUnconditionalBreakShouldAddIssues() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (4) (5)")
-            .appendImpl("    if A then")
-            .appendImpl("      Exit // Compliant")
-            .appendImpl("    else")
-            .appendImpl("      Break; // Secondary")
-            .appendImpl("    Exit; // Secondary")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (4) (5)")
+                .appendImpl("    if A then")
+                .appendImpl("      Exit // Compliant")
+                .appendImpl("    else")
+                .appendImpl("      Break; // Secondary")
+                .appendImpl("    Exit; // Secondary")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testInnerNestedLoopViolationShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Compliant")
-            .appendImpl("    while A do begin // Noncompliant (4)")
-            .appendImpl("      if A then")
-            .appendImpl("        Exit // Compliant")
-            .appendImpl("      else")
-            .appendImpl("        Break; // Secondary")
-            .appendImpl("    end;")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Compliant")
+                .appendImpl("    while A do begin // Noncompliant (4)")
+                .appendImpl("      if A then")
+                .appendImpl("        Exit // Compliant")
+                .appendImpl("      else")
+                .appendImpl("        Break; // Secondary")
+                .appendImpl("    end;")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @Test
   void testOuterNestedLoopViolationShouldAddIssue() {
-    DelphiTestUnitBuilder unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("procedure Test;")
-            .appendImpl("begin")
-            .appendImpl("  while A do begin // Noncompliant (7)")
-            .appendImpl("    while A do begin // Noncompliant (4)")
-            .appendImpl("      if A then")
-            .appendImpl("        Exit // Compliant")
-            .appendImpl("      else")
-            .appendImpl("        Exit; // Inner secondary")
-            .appendImpl("    end;")
-            .appendImpl("  Break; // Outer secondary")
-            .appendImpl("  end;")
-            .appendImpl("end;");
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  while A do begin // Noncompliant (7)")
+                .appendImpl("    while A do begin // Noncompliant (4)")
+                .appendImpl("      if A then")
+                .appendImpl("        Exit // Compliant")
+                .appendImpl("      else")
+                .appendImpl("        Exit; // Inner secondary")
+                .appendImpl("    end;")
+                .appendImpl("  Break; // Outer secondary")
+                .appendImpl("  end;")
+                .appendImpl("end;"))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testCfgInProgramShouldAddIssue(LoopType loopType) {
-    var programBuilder =
-        new DelphiTestProgramBuilder()
-            .appendImpl("A := True;")
-            .appendImpl(format("%s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("  Break;")
-            .appendImpl(format("%s", loopType.loopFooter));
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(programBuilder)
+        .onFile(
+            new DelphiTestProgramBuilder()
+                .appendImpl("A := True;")
+                .appendImpl(format("%s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("  Break;")
+                .appendImpl(format("%s", loopType.loopFooter)))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testCfgInInitializationShouldAddIssue(LoopType loopType) {
-    var unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("initialization")
-            .appendImpl("  A := True;")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    Break;")
-            .appendImpl(format("  %s", loopType.loopFooter));
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("initialization")
+                .appendImpl("  A := True;")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    Break;")
+                .appendImpl(format("  %s", loopType.loopFooter)))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testCfgInUnitBeginShouldAddIssue(LoopType loopType) {
-    var unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("begin")
-            .appendImpl("  A := True;")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    Break;")
-            .appendImpl(format("  %s", loopType.loopFooter));
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("begin")
+                .appendImpl("  A := True;")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    Break;")
+                .appendImpl(format("  %s", loopType.loopFooter)))
         .verifyIssues();
   }
 
   @ParameterizedTest
   @EnumSource(value = LoopType.class)
   void testCfgInFinalizationShouldAddIssue(LoopType loopType) {
-    var unitBuilder =
-        new DelphiTestUnitBuilder()
-            .appendImpl("initialization")
-            .appendImpl("finalization")
-            .appendImpl("  A := True;")
-            .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
-            .appendImpl("    Break;")
-            .appendImpl(format("  %s", loopType.loopFooter));
-
     CheckVerifier.newVerifier()
         .withCheck(new LoopExecutingAtMostOnceCheck())
-        .onFile(unitBuilder)
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendImpl("initialization")
+                .appendImpl("finalization")
+                .appendImpl("  A := True;")
+                .appendImpl(format("  %s // Noncompliant (1)", loopType.loopHeader))
+                .appendImpl("    Break;")
+                .appendImpl(format("  %s", loopType.loopFooter)))
         .verifyIssues();
   }
 }
