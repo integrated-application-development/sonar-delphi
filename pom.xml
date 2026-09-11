@@ -136,6 +136,7 @@
     <compiler-plugin.version>3.15.0</compiler-plugin.version>
     <jacoco-plugin.version>0.8.15</jacoco-plugin.version>
     <surefire-plugin.version>3.5.6</surefire-plugin.version>
+    <dependency-plugin.version>3.11.0</dependency-plugin.version>
     <enforcer-plugin.version>3.6.3</enforcer-plugin.version>
     <sonar-packaging-plugin.version>1.23.0.740</sonar-packaging-plugin.version>
     <spotless-plugin.version>3.9.0</spotless-plugin.version>
@@ -311,6 +312,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${dependency-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>${enforcer-plugin.version}</version>
         </plugin>
@@ -412,6 +418,18 @@
             <id>report</id>
             <goals>
               <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>dependency-properties</id>
+            <goals>
+              <goal>properties</goal>
             </goals>
           </execution>
         </executions>

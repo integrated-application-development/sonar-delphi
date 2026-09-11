@@ -68,6 +68,13 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar} -Xshare:off</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>${project.groupId}</groupId>
         <artifactId>license-maven-plugin</artifactId>
         <version>${project.version}</version>
