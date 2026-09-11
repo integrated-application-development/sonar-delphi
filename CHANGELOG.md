@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **API:** `RaiseStatementNode::getRaiseLocation` method.
+- **API:** `VariableNameDeclaration::isExceptItem` method.
 
 ## [1.21.0] - 2026-09-04
 

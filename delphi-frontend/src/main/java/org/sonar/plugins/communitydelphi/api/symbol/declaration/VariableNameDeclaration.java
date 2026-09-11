@@ -36,4 +36,6 @@ public interface VariableNameDeclaration extends TypedDeclaration, Visibility {
   boolean isSelf();
 
   boolean isResult();
+
+  boolean isExceptItem();
 }
