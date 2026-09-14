@@ -154,6 +154,50 @@ class DelphiCoverageToolParserTest {
   }
 
   @Test
+  void testDuplicateFileNamesAreSkipped() {
+    setup(InputFile.Type.MAIN);
+
+    context
+        .fileSystem()
+        .add(
+            TestInputFileBuilder.create("", "duplicate/" + MAIN_WINDOW_FILENAME)
+                .setLanguage(Delphi.KEY)
+                .setType(InputFile.Type.MAIN)
+                .setContents("unit MainWindow;")
+                .build());
+
+    assertThatCode(() -> parser.parse(context, DelphiUtils.getResource(NORMAL_COVERAGE)))
+        .doesNotThrowAnyException();
+
+    // Globals.pas keeps a unique name, so its coverage is still recorded...
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo(1);
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 17)).isEqualTo(1);
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 23)).isZero();
+
+    // ...while the ambiguous name is skipped.
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 31)).isNull();
+  }
+
+  @Test
+  void testDuplicateTestFileNamesDoNotCauseAmbiguity() {
+    setup(InputFile.Type.MAIN);
+
+    context
+        .fileSystem()
+        .add(
+            TestInputFileBuilder.create("", "test/" + MAIN_WINDOW_FILENAME)
+                .setLanguage(Delphi.KEY)
+                .setType(InputFile.Type.TEST)
+                .setContents("unit MainWindow;")
+                .build());
+
+    parser.parse(context, DelphiUtils.getResource(NORMAL_COVERAGE));
+
+    assertThat(context.lineHits(GLOBALS_FILE_KEY, 16)).isEqualTo(1);
+    assertThat(context.lineHits(MAIN_WINDOW_FILE_KEY, 31)).isEqualTo(1);
+  }
+
+  @Test
   void testCoverageIsNotReportedForTestInputFiles() {
     setup(InputFile.Type.TEST);
 
