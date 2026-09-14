@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Parsing errors on attributes preceding visibility sections.
 - Parsing errors on attributes preceding `var` sections in type bodies.
+- Errors when parsing coverage reports if duplicate file names were present in the project.
 
 ## [1.21.0] - 2026-09-04
 
