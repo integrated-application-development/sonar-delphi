@@ -25,9 +25,11 @@ package au.com.integradev.delphi.coverage;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import com.google.common.base.Splitter;
 import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableSortedMap;
 import java.io.File;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Supplier;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -54,11 +56,32 @@ public class DelphiCodeCoverageParser implements DelphiCoverageParser {
   }
 
   private Map<String, InputFile> indexInputFiles() {
-    var builder = ImmutableSortedMap.<String, InputFile>orderedBy(String.CASE_INSENSITIVE_ORDER);
+    // Coverage reports identify source files by their bare file name, so this index is
+    // keyed by file name. Several source files may legitimately share one name (for
+    // instance MainForm.pas, or one SvcDefinitionsImpl.pas per service), which makes
+    // those entries impossible to resolve.
+    //
+    // Such a collision used to throw from the immutable map builder, discarding the
+    // whole report over a handful of ambiguous names. Ambiguous names are now dropped
+    // from the index and reported, so coverage is still recorded for every file whose
+    // name is unique.
+    Map<String, InputFile> byFileName = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    Set<String> ambiguousNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
     for (InputFile inputFile : delphiProjectHelper.inputFiles()) {
-      builder.put(inputFile.filename(), inputFile);
+      String fileName = inputFile.filename();
+      if (byFileName.put(fileName, inputFile) != null) {
+        ambiguousNames.add(fileName);
+      }
     }
-    return builder.build();
+    ambiguousNames.forEach(byFileName::remove);
+    if (!ambiguousNames.isEmpty()) {
+      LOG.warn(
+          "Coverage data skipped for {} ambiguous file name(s), shared by more than one source"
+              + " file: {}",
+          ambiguousNames.size(),
+          ambiguousNames);
+    }
+    return byFileName;
   }
 
   @Override
