@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `RaiseStatementNode::getRaiseLocation` method.
 - **API:** `VariableNameDeclaration::isExceptItem` method.
 
+### Fixed
+
+- Parsing errors on attributes preceding visibility sections.
+- Parsing errors on attributes preceding `var` sections in type bodies.
+
 ## [1.21.0] - 2026-09-04
 
 ### Added

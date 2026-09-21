@@ -696,6 +696,7 @@ visibilitySectionItem        : fieldSection
                              | property
                              | constSection
                              | innerTypeSection
+                             | attributeList
                              ;
 fieldSectionKey              : VAR
                              | THREADVAR
