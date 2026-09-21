@@ -92,6 +92,11 @@ class GrammarTest {
   }
 
   @Test
+  void testAttributesOnVisibilitySections() {
+    assertParsed("AttributesOnVisibilitySections.pas");
+  }
+
+  @Test
   void testAttributesProgram() {
     assertParsed("AttributesProgram.dpr");
   }
