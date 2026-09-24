@@ -129,6 +129,10 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
           return createWarnDirective();
         case TEXTBLOCK:
           return createTextBlockDirective();
+        case PUSHOPT:
+          return new PushOptDirectiveImpl(token);
+        case POPOPT:
+          return new PopOptDirectiveImpl(token);
         default:
           return new ParameterDirectiveImpl(token, kind);
       }
@@ -223,13 +227,16 @@ public class CompilerDirectiveParserImpl implements CompilerDirectiveParser {
       character = nextChar();
     }
     String switchName = readName();
-    if (switchName.length() == 1) {
-      Optional<SwitchKind> switchKind = SwitchKind.find(switchName);
-      if (switchKind.isPresent()) {
-        Optional<Boolean> switchValue = readShortSwitchValue();
-        if (switchValue.isPresent()) {
-          return new IfOptDirective(token, switchKind.get(), switchValue.get());
-        }
+    Optional<SwitchKind> switchKind = SwitchKind.find(switchName);
+    if (switchKind.isPresent()) {
+      Optional<Boolean> switchValue;
+      if (switchName.length() == 1) {
+        switchValue = readShortSwitchValue();
+      } else {
+        switchValue = readLongSwitchValue();
+      }
+      if (switchValue.isPresent()) {
+        return new IfOptDirective(token, switchKind.get(), switchValue.get());
       }
     }
     return null;

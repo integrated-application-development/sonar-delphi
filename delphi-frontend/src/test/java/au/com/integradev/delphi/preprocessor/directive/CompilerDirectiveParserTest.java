@@ -168,6 +168,40 @@ class CompilerDirectiveParserTest {
   }
 
   @Test
+  void testCreateIfOptLongName() {
+    CompilerDirective directive = parse("{$IFOPT RANGECHECKS ON}");
+
+    assertThat(directive).isInstanceOf(IfOptDirective.class);
+    assertThat(((ConditionalDirective) directive).kind())
+        .isEqualTo(ConditionalDirective.ConditionalKind.IFOPT);
+  }
+
+  @Test
+  void testCreateIfOptLongNameOff() {
+    CompilerDirective directive = parse("{$IFOPT RANGECHECKS OFF}");
+
+    assertThat(directive).isInstanceOf(IfOptDirective.class);
+  }
+
+  @Test
+  void testCreateIfOptLongNameInvalid() {
+    CompilerDirective directive = parse("{$IFOPT RANGECHECKS INVALID}");
+
+    assertThat(directive).isNull();
+  }
+
+  @Test
+  void testCreateIfOptShortNameStillWorks() {
+    CompilerDirective directive = parse("{$IFOPT R+}");
+
+    assertThat(directive).isInstanceOf(IfOptDirective.class);
+
+    directive = parse("{$IFOPT R-}");
+
+    assertThat(directive).isInstanceOf(IfOptDirective.class);
+  }
+
+  @Test
   void testCreateUndefineDirective() {
     CompilerDirective directive = parse("{$undef _DEBUG}");
 
@@ -280,6 +314,22 @@ class CompilerDirectiveParserTest {
 
     directive = parse("{$elseif {$i foo.inc}}");
     assertThat(directive).isInstanceOf(ElseIfDirective.class);
+  }
+
+  @Test
+  void testCreatePushOptDirective() {
+    CompilerDirective directive = parse("{$PUSHOPT}");
+
+    assertThat(directive).isInstanceOf(ParameterDirective.class);
+    assertThat(((ParameterDirective) directive).kind()).isEqualTo(ParameterKind.PUSHOPT);
+  }
+
+  @Test
+  void testCreatePopOptDirective() {
+    CompilerDirective directive = parse("{$POPOPT}");
+
+    assertThat(directive).isInstanceOf(ParameterDirective.class);
+    assertThat(((ParameterDirective) directive).kind()).isEqualTo(ParameterKind.POPOPT);
   }
 
   @Test
