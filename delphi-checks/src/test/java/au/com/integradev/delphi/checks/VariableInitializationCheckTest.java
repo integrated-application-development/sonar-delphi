@@ -504,6 +504,174 @@ class VariableInitializationCheckTest {
         .verifyNoIssues();
   }
 
+  // See: https://github.com/integrated-application-development/sonar-delphi/issues/468
+  @Test
+  void testCustomManagedRecordWithInitializeOperatorShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Code: Integer;")
+                .appendDecl("    Name: string;")
+                .appendDecl("    class operator Initialize(out Dest: TBar);")
+                .appendDecl("    class operator Finalize(var Dest: TBar);")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(const Bar: TBar);")
+                .appendImpl("class operator TBar.Initialize(out Dest: TBar);")
+                .appendImpl("begin")
+                .appendImpl("  Dest.Code := 0;")
+                .appendImpl("  Dest.Name := '';")
+                .appendImpl("end;")
+                .appendImpl("class operator TBar.Finalize(var Dest: TBar);")
+                .appendImpl("begin")
+                .appendImpl("  Dest.Name := '';")
+                .appendImpl("end;")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Bar.Name := 'Example';")
+                .appendImpl("  Foo(Bar);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testCustomManagedRecordWithParameterlessInitializeOperatorShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    class operator Initialize;")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(Bar: TBar);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Foo(Bar);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testInlineCustomManagedRecordWithInitializeOperatorShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    class operator Initialize(out Dest: TBar);")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(Bar: TBar);")
+                .appendImpl("procedure Test;")
+                .appendImpl("begin")
+                .appendImpl("  var Bar: TBar;")
+                .appendImpl("  Foo(Bar);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testRecordWithCustomManagedRecordFieldShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBaz = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    class operator Initialize(out Dest: TBaz);")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    Baz: TBaz;")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(Bar: TBar);")
+                .appendDecl("procedure Flarp(Int: Integer);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Flarp(Bar.Baz.Int);")
+                .appendImpl("  Bar.Int := 123;")
+                .appendImpl("  Foo(Bar);")
+                .appendImpl("end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testRecordWithCustomManagedRecordFieldAndUninitializedFieldShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBaz = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    class operator Initialize(out Dest: TBaz);")
+                .appendDecl("  end;")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    Baz: TBaz;")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(Bar: TBar);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Foo(Bar); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testCustomManagedRecordWithOnlyFinalizeOperatorShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    class operator Finalize(var Dest: TBar);")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(Bar: TBar);")
+                .appendImpl("procedure Test;")
+                .appendImpl("var")
+                .appendImpl("  Bar: TBar;")
+                .appendImpl("begin")
+                .appendImpl("  Foo(Bar); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
+  @Test
+  void testCustomManagedRecordOutParameterShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new VariableInitializationCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TBar = record")
+                .appendDecl("    Int: Integer;")
+                .appendDecl("    class operator Initialize(out Dest: TBar);")
+                .appendDecl("  end;")
+                .appendDecl("procedure Foo(Bar: TBar);")
+                .appendImpl("procedure Test(out Bar: TBar);")
+                .appendImpl("begin")
+                .appendImpl("  Foo(Bar); // Noncompliant")
+                .appendImpl("end;"))
+        .verifyIssues();
+  }
+
   @Test
   void testUninitializedRecordFieldAssignedToVariableShouldAddIssue() {
     CheckVerifier.newVerifier()

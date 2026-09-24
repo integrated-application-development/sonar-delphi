@@ -56,6 +56,7 @@ import org.sonar.plugins.communitydelphi.api.check.DelphiCheckContext;
 import org.sonar.plugins.communitydelphi.api.operator.UnaryOperator;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.NameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.PropertyNameDeclaration;
+import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypeNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.TypedDeclaration;
@@ -689,7 +690,22 @@ public class VariableInitializationCheck extends DelphiCheck {
   }
 
   private static boolean isUnmanagedType(Type type) {
-    return !type.isString() && !type.isArray() && !type.isVariant() && !type.isInterface();
+    return !type.isString()
+        && !type.isArray()
+        && !type.isVariant()
+        && !type.isInterface()
+        && !hasInitializeOperator(type);
+  }
+
+  private static boolean hasInitializeOperator(Type type) {
+    // Custom managed records are initialized automatically by their Initialize operator.
+    return type.isRecord()
+        && ((StructType) type)
+            .typeScope().getRoutineDeclarations().stream()
+                .anyMatch(
+                    routine ->
+                        routine.getRoutineKind() == RoutineKind.OPERATOR
+                            && routine.getName().equalsIgnoreCase("Initialize"));
   }
 
   private interface InitializationState {
