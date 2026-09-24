@@ -49,6 +49,8 @@ public interface ParameterDirective extends CompilerDirective {
     NODEFINE("nodefine"),
     NOINCLUDE("noinclude"),
     OBJTYPENAME("objtypename"),
+    POPOPT("popopt"),
+    PUSHOPT("pushopt"),
     SETPEFLAGS("setpeflags"),
     SETPEOPTFLAGS("setpeoptflags"),
     SETPEOSVERSION("setpeosversion"),

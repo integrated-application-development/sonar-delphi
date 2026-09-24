@@ -20,6 +20,7 @@ package au.com.integradev.delphi.preprocessor;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -41,9 +42,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.BufferedTokenStream;
+import org.antlr.runtime.Token;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.communitydelphi.api.directive.SwitchDirective.SwitchKind;
 import org.sonar.plugins.communitydelphi.api.type.TypeFactory;
 
 class DelphiPreprocessorTest {
@@ -180,6 +184,65 @@ class DelphiPreprocessorTest {
             typeFactory,
             searchPath,
             emptySet()));
+  }
+
+  @Test
+  void testPopOptRestoresSwitchesSavedByPushOpt() {
+    DelphiPreprocessor preprocessor = preprocess("{$R+} A {$PUSHOPT} B {$R-} C {$POPOPT} D");
+
+    assertThat(isRangeCheckingActive(preprocessor, "A")).isTrue();
+    assertThat(isRangeCheckingActive(preprocessor, "B")).isTrue();
+    assertThat(isRangeCheckingActive(preprocessor, "C")).isFalse();
+    assertThat(isRangeCheckingActive(preprocessor, "D")).isTrue();
+  }
+
+  @Test
+  void testPopOptEndsSwitchesEnabledAfterPushOpt() {
+    DelphiPreprocessor preprocessor = preprocess("A {$PUSHOPT} B {$R+} C {$POPOPT} D");
+
+    assertThat(isRangeCheckingActive(preprocessor, "A")).isFalse();
+    assertThat(isRangeCheckingActive(preprocessor, "B")).isFalse();
+    assertThat(isRangeCheckingActive(preprocessor, "C")).isTrue();
+    assertThat(isRangeCheckingActive(preprocessor, "D")).isFalse();
+  }
+
+  @Test
+  void testNestedPushOptAndPopOpt() {
+    DelphiPreprocessor preprocessor =
+        preprocess("{$PUSHOPT} {$R+} A {$PUSHOPT} {$R-} B {$POPOPT} C {$POPOPT} D");
+
+    assertThat(isRangeCheckingActive(preprocessor, "A")).isTrue();
+    assertThat(isRangeCheckingActive(preprocessor, "B")).isFalse();
+    assertThat(isRangeCheckingActive(preprocessor, "C")).isTrue();
+    assertThat(isRangeCheckingActive(preprocessor, "D")).isFalse();
+  }
+
+  @Test
+  void testPopOptWithoutPushOptIsIgnored() {
+    DelphiPreprocessor preprocessor = preprocess("{$R+} A {$POPOPT} B");
+
+    assertThat(isRangeCheckingActive(preprocessor, "A")).isTrue();
+    assertThat(isRangeCheckingActive(preprocessor, "B")).isTrue();
+  }
+
+  private static DelphiPreprocessor preprocess(String source) {
+    DelphiFileConfig config = DelphiFileUtils.mockConfig();
+    DelphiLexer lexer = new DelphiLexer(new ANTLRStringStream(source));
+    DelphiPreprocessor preprocessor =
+        config.getPreprocessorFactory().createPreprocessor(lexer, config);
+    preprocessor.process();
+    return preprocessor;
+  }
+
+  private static boolean isRangeCheckingActive(DelphiPreprocessor preprocessor, String text) {
+    Token token =
+        preprocessor.getTokenStream().getTokens().stream()
+            .filter(t -> t.getText().equals(text))
+            .findFirst()
+            .orElseThrow();
+    return preprocessor
+        .getCompilerSwitchRegistry()
+        .isActiveSwitch(SwitchKind.RANGECHECKS, token.getTokenIndex());
   }
 
   private static void execute(String filename) {

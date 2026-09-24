@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `DeadStore` analysis rule, which flags redundant assignments.
+- Support for the `{$PUSHOPT}` and `{$POPOPT}` compiler directives, introduced in Delphi 13.
+- Support for long switch names in the `{$IFOPT}` compiler directive, introduced in Delphi 13.
 - **API:** `RaiseStatementNode::getRaiseLocation` method.
 - **API:** `VariableNameDeclaration::isExceptItem` method.
+- **API:** `ParameterDirective.ParameterKind.PUSHOPT` enum value.
+- **API:** `ParameterDirective.ParameterKind.POPOPT` enum value.
 
 ### Fixed
 
