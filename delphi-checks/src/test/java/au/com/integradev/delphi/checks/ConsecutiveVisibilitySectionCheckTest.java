@@ -240,4 +240,36 @@ class ConsecutiveVisibilitySectionCheckTest {
                 .appendDecl("  end;"))
         .verifyNoIssues();
   }
+
+  @Test
+  void testConsecutivePublicAndAutomatedVisibilitySectionsShouldNotAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ConsecutiveVisibilitySectionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  public")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  automated")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  end;"))
+        .verifyNoIssues();
+  }
+
+  @Test
+  void testConsecutiveAutomatedVisibilitySectionsShouldAddIssue() {
+    CheckVerifier.newVerifier()
+        .withCheck(new ConsecutiveVisibilitySectionCheck())
+        .onFile(
+            new DelphiTestUnitBuilder()
+                .appendDecl("type")
+                .appendDecl("  TFoo = class(TObject)")
+                .appendDecl("  automated")
+                .appendDecl("    procedure Foo;")
+                .appendDecl("  automated // Noncompliant")
+                .appendDecl("    procedure Bar;")
+                .appendDecl("  end;"))
+        .verifyIssues();
+  }
 }

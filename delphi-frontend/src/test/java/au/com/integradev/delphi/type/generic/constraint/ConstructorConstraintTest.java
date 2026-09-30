@@ -62,8 +62,10 @@ class ConstructorConstraintTest {
         ParameterDeclarations parameters, ExtensionContext context) {
       var defaultConstructor = constructor("Create", VisibilityType.PUBLIC);
       var lowercaseDefaultConstructor = constructor("create", VisibilityType.PUBLIC);
+      var automatedConstructor = constructor("Create", VisibilityType.AUTOMATED);
       return Stream.of(
           Arguments.of(addDeclaration(mockClass(), defaultConstructor)),
+          Arguments.of(addDeclaration(mockClass(), automatedConstructor)),
           Arguments.of(addDeclaration(mockClass(), lowercaseDefaultConstructor)),
           Arguments.of(mockClass(addDeclaration(mockClass(), defaultConstructor))),
           Arguments.of(
