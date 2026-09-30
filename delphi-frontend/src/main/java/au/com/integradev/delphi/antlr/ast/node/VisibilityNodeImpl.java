@@ -42,6 +42,8 @@ public final class VisibilityNodeImpl extends DelphiNodeImpl implements Visibili
         return VisibilityType.PUBLISHED;
       case PUBLIC:
         return VisibilityType.PUBLIC;
+      case AUTOMATED:
+        return VisibilityType.AUTOMATED;
       case PROTECTED:
         return strict() ? VisibilityType.STRICT_PROTECTED : VisibilityType.PROTECTED;
       case PRIVATE:

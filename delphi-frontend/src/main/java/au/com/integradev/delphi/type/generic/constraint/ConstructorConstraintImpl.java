@@ -18,7 +18,6 @@
  */
 package au.com.integradev.delphi.type.generic.constraint;
 
-import org.sonar.plugins.communitydelphi.api.ast.Visibility.VisibilityType;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineKind;
 import org.sonar.plugins.communitydelphi.api.symbol.declaration.RoutineNameDeclaration;
 import org.sonar.plugins.communitydelphi.api.type.Constraint.ConstructorConstraint;
@@ -74,16 +73,15 @@ public class ConstructorConstraintImpl extends ConstraintImpl implements Constru
 
   private static boolean declaresPublicDefaultConstructor(Type type) {
     while (type.isClass()) {
-      VisibilityType constructorVisibility =
+      RoutineNameDeclaration constructor =
           ((ScopedType) type)
               .typeScope().getRoutineDeclarations().stream()
                   .filter(ConstructorConstraintImpl::isDefaultConstructor)
-                  .map(RoutineNameDeclaration::getVisibility)
                   .findFirst()
                   .orElse(null);
 
-      if (constructorVisibility != null) {
-        return constructorVisibility == VisibilityType.PUBLIC;
+      if (constructor != null) {
+        return constructor.isPublic();
       }
 
       type = type.parent();

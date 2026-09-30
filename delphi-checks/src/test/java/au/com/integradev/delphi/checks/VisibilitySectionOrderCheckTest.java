@@ -33,6 +33,8 @@ class VisibilitySectionOrderCheckTest {
     "protected,strict protected",
     "published,public",
     "published,private",
+    "automated,private",
+    "published,automated",
   })
   void testOutOfOrderSectionsShouldAddIssue(String firstVisibility, String secondVisibility) {
     CheckVerifier.newVerifier()
@@ -58,6 +60,10 @@ class VisibilitySectionOrderCheckTest {
     "strict protected,protected",
     "public,published",
     "private,published",
+    "private,automated",
+    "public,automated",
+    "automated,public",
+    "automated,published",
   })
   void testOrderedSectionsShouldNotAddIssue(String firstVisibility, String secondVisibility) {
     CheckVerifier.newVerifier()

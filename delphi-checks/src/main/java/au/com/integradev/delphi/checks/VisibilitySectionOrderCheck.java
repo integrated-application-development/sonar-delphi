@@ -60,6 +60,8 @@ public class VisibilitySectionOrderCheck extends DelphiCheck {
               VisibilityType.STRICT_PROTECTED, 3,
               VisibilityType.PROTECTED, 4,
               VisibilityType.PUBLIC, 5,
+              // Automated members are as visible as public ones, so they share its rank
+              VisibilityType.AUTOMATED, 5,
               VisibilityType.PUBLISHED, 6));
 
   @Override

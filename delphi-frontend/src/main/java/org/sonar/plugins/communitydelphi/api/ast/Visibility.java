@@ -23,6 +23,7 @@ public interface Visibility {
     IMPLICIT_PUBLISHED,
     PUBLISHED,
     PUBLIC,
+    AUTOMATED,
     PROTECTED,
     STRICT_PROTECTED,
     PRIVATE,
@@ -40,7 +41,11 @@ public interface Visibility {
   }
 
   default boolean isPublic() {
-    return getVisibility() == VisibilityType.PUBLIC;
+    return getVisibility() == VisibilityType.PUBLIC || isAutomated();
+  }
+
+  default boolean isAutomated() {
+    return getVisibility() == VisibilityType.AUTOMATED;
   }
 
   default boolean isProtected() {

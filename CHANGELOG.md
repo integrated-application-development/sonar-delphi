@@ -12,12 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `DeadStore` analysis rule, which flags redundant assignments.
 - **API:** `RaiseStatementNode::getRaiseLocation` method.
 - **API:** `VariableNameDeclaration::isExceptItem` method.
+- **API:** `VisibilityType.AUTOMATED` enum value.
+- **API:** `Visibility::isAutomated` method.
 
 ### Fixed
 
 - Parsing errors on attributes preceding visibility sections.
 - Parsing errors on attributes preceding `var` sections in type bodies.
 - Errors when parsing coverage reports if duplicate file names were present in the project.
+- Crash when analyzing code containing an `automated` visibility section.
 
 ## [1.21.0] - 2026-09-04
 
