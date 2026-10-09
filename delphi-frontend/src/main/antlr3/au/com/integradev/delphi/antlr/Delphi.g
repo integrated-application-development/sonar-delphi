@@ -722,8 +722,12 @@ recordType                   : RECORD<RecordTypeNodeImpl>^ visibilitySection* re
                              ;
 recordVariantSection         : CASE<RecordVariantSectionNodeImpl>^ recordVariantTag OF recordVariant+
                              ;
-recordVariantTag             : (nameDeclaration ':')? typeReference
-                             -> ^(TkRecordVariantTag<RecordVariantTagNodeImpl> nameDeclaration? typeReference)
+recordVariantTag             : (nameDeclaration ':')? recordVariantTagType
+                             -> ^(TkRecordVariantTag<RecordVariantTagNodeImpl> nameDeclaration? recordVariantTagType)
+                             ;
+recordVariantTagType         : enumType
+                             | subRangeType
+                             | typeReference
                              ;
 recordVariant                : expressionList ':' '(' fieldDecl* recordVariantSection? ')' ';'?
                              -> ^(TkRecordVariantItem<RecordVariantItemNodeImpl> expressionList fieldDecl* recordVariantSection? ';'?)
@@ -787,8 +791,13 @@ genericConstraint            : typeReference -> ^(TkTypeConstraint<TypeConstrain
                              | INTERFACE<InterfaceConstraintNodeImpl>^
                              | UNMANAGED<UnmanagedConstraintNodeImpl>^
                              ;
-genericArguments             : '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>'
-                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' typeReferenceOrStringOrFile (',' typeReferenceOrStringOrFile)* '>')
+genericArguments             : '<' genericArgument (',' genericArgument)* '>'
+                             -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' genericArgument (',' genericArgument)* '>')
+                             ;
+genericArgument              : arrayType
+                             | setType
+                             | procedureType
+                             | typeReferenceOrStringOrFile
                              ;
 routineNameGenericArguments  : '<' typeReferenceOrStringOrFile (commaOrSemicolon typeReferenceOrStringOrFile)* '>'
                              -> ^(TkGenericArguments<GenericArgumentsNodeImpl> '<' typeReferenceOrStringOrFile (commaOrSemicolon typeReferenceOrStringOrFile)* '>')
