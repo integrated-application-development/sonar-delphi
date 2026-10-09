@@ -138,6 +138,21 @@ class DelphiSymbolTableExecutorTest {
   }
 
   @Test
+  void testRecordVariantAnonymousTagType() {
+    execute("RecordVariantAnonymousTagType.pas");
+    verifyUsages(7, 9, reference(18, 6));
+    verifyUsages(7, 16, reference(8, 6));
+    verifyUsages(7, 23, reference(9, 6), reference(18, 14));
+  }
+
+  @Test
+  void testAnonymousArrayGenericArgument() {
+    execute("AnonymousArrayGenericArgument.pas");
+    verifyUsages(6, 2, reference(12, 23));
+    verifyUsages(7, 2, reference(12, 34));
+  }
+
+  @Test
   void testInheritedInvocations() {
     execute("InheritedInvocations.pas");
     verifyUsages(7, 14, reference(38, 14), reference(50, 14));

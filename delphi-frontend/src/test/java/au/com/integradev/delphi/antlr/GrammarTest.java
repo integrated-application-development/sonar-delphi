@@ -363,6 +363,11 @@ class GrammarTest {
   }
 
   @Test
+  void testAnonymousTypeGenericArguments() {
+    assertParsed("AnonymousTypeGenericArguments.pas");
+  }
+
+  @Test
   void testGreaterThanEqualAmbiguity() {
     assertParsed("GreaterThanEqualAmbiguity.pas");
   }
