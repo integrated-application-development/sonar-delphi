@@ -254,4 +254,106 @@ class MSBuildParserTest {
     var parser = new MSBuildParser(mainFile, environmentVariableProvider);
     assertThatNoException().isThrownBy(parser::parse);
   }
+
+  @Test
+  void testTargetConditionsAreNotEvaluated() {
+    var file =
+        createFile(
+            "targetCondition.proj",
+            "<Project>",
+            "  <Target Name=\"AndroidOnly\" Condition=\"'$(MinSdkVersion)' &lt; '24'\">",
+            "    <PropertyGroup>",
+            "      <TargetProp>set inside target</TargetProp>",
+            "    </PropertyGroup>",
+            "  </Target>",
+            "  <PropertyGroup>",
+            "    <FooProp>Blomp</FooProp>",
+            "  </PropertyGroup>",
+            "</Project>");
+    var state = new MSBuildParser(file, environmentVariableProvider).parse();
+
+    assertThat(state.getProperties())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("FooProp", "Blomp"));
+  }
+
+  @Test
+  void testPropertyGroupWithUnevaluableConditionIsSkipped() {
+    var file =
+        createFile(
+            "unevaluablePropertyGroup.proj",
+            "<Project>",
+            "  <PropertyGroup Condition=\"'$(Undefined)' &lt; '24'\">",
+            "    <SkippedProp>skipped</SkippedProp>",
+            "  </PropertyGroup>",
+            "  <PropertyGroup>",
+            "    <FooProp>Blomp</FooProp>",
+            "  </PropertyGroup>",
+            "</Project>");
+    var state = new MSBuildParser(file, environmentVariableProvider).parse();
+
+    assertThat(state.getProperties())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("FooProp", "Blomp"));
+  }
+
+  @Test
+  void testPropertyWithUnevaluableConditionIsSkipped() {
+    var file =
+        createFile(
+            "unevaluableProperty.proj",
+            "<Project>",
+            "  <PropertyGroup>",
+            "    <SkippedProp Condition=\"'$(Undefined)' &lt; '24'\">skipped</SkippedProp>",
+            "    <FooProp>Blomp</FooProp>",
+            "  </PropertyGroup>",
+            "</Project>");
+    var state = new MSBuildParser(file, environmentVariableProvider).parse();
+
+    assertThat(state.getProperties())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("FooProp", "Blomp"));
+  }
+
+  @Test
+  void testItemGroupWithUnevaluableConditionIsSkipped() {
+    var file =
+        createFile(
+            "unevaluableItemGroup.proj",
+            "<Project>",
+            "  <ItemGroup Condition=\"'$(Undefined)' &lt; '24'\">",
+            "    <BazItem Include=\"Skipped\"/>",
+            "  </ItemGroup>",
+            "  <ItemGroup>",
+            "    <BazItem Include=\"Alpha\"/>",
+            "  </ItemGroup>",
+            "</Project>");
+    var state = new MSBuildParser(file, environmentVariableProvider).parse();
+
+    assertThat(state.getItems("BazItem"))
+        .extracting(MSBuildItem::getIdentity)
+        .containsExactly("Alpha");
+  }
+
+  @Test
+  void testImportWithUnevaluableConditionIsSkipped() {
+    createFile(
+        "skippedImport.proj",
+        "<Project>",
+        "  <PropertyGroup>",
+        "    <SkippedProp>skipped</SkippedProp>",
+        "  </PropertyGroup>",
+        "</Project>");
+
+    var mainFile =
+        createFile(
+            "unevaluableImport.proj",
+            "<Project>",
+            "  <Import Project=\"skippedImport.proj\" Condition=\"'$(Undefined)' &lt; '24'\"/>",
+            "  <PropertyGroup>",
+            "    <FooProp>Blomp</FooProp>",
+            "  </PropertyGroup>",
+            "</Project>");
+    var state = new MSBuildParser(mainFile, environmentVariableProvider).parse();
+
+    assertThat(state.getProperties())
+        .containsExactlyInAnyOrderEntriesOf(Map.of("FooProp", "Blomp"));
+  }
 }

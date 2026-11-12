@@ -19,6 +19,7 @@
 package au.com.integradev.delphi.msbuild;
 
 import au.com.integradev.delphi.enviroment.EnvironmentVariableProvider;
+import au.com.integradev.delphi.msbuild.condition.ConditionEvaluationError;
 import au.com.integradev.delphi.msbuild.condition.ConditionEvaluator;
 import au.com.integradev.delphi.msbuild.expression.ExpressionEvaluator;
 import au.com.integradev.delphi.utils.DelphiUtils;
@@ -79,9 +80,7 @@ public class MSBuildParser {
     final Document dom;
     try {
       dom = builder.build(thisFilePath.toFile());
-      dom.getRootElement().getChildren().stream()
-          .filter(this::isConditionMet)
-          .forEach(this::parseTopLevelElement);
+      dom.getRootElement().getChildren().forEach(this::parseTopLevelElement);
     } catch (JDOMException | IOException e) {
       LOG.error("Error while parsing {}: ", thisFilePath.toAbsolutePath(), e);
     }
@@ -106,6 +105,9 @@ public class MSBuildParser {
   }
 
   private void parsePropertyGroup(Element element) {
+    if (!isConditionMet(element)) {
+      return;
+    }
     element.getChildren().stream().filter(this::isConditionMet).forEach(this::parseProperty);
   }
 
@@ -114,6 +116,9 @@ public class MSBuildParser {
   }
 
   private void parseItemGroup(Element element) {
+    if (!isConditionMet(element)) {
+      return;
+    }
     element.getChildren().stream().filter(this::isConditionMet).forEach(this::parseItem);
   }
 
@@ -201,7 +206,17 @@ public class MSBuildParser {
 
   private boolean isConditionMet(Element element) {
     ConditionEvaluator evaluator = new ConditionEvaluator(state);
-    return evaluator.evaluate(element.getAttributeValue("Condition"));
+    try {
+      return evaluator.evaluate(element.getAttributeValue("Condition"));
+    } catch (ConditionEvaluationError e) {
+      LOG.warn(
+          "Skipping <{}> element in {}: {} ({})",
+          element.getName(),
+          thisFilePath.toAbsolutePath(),
+          e.getMessage(),
+          e.getCause() == null ? "unknown cause" : e.getCause().getMessage());
+      return false;
+    }
   }
 
   private Stream<Path> resolvePathsFromElementAttribute(Element element, String attribute) {
