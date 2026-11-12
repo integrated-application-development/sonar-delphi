@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **API:** `VisibilityType.AUTOMATED` enum value.
 - **API:** `Visibility::isAutomated` method.
 
+### Changed
+
+- An MSBuild condition that cannot be evaluated now prints a warning instead of failing the scan.
+
 ### Fixed
 
 - Parsing errors on attributes preceding visibility sections.
@@ -23,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parsing errors on anonymous array, set and procedural types in generic arguments.
 - Errors when parsing coverage reports if duplicate file names were present in the project.
 - Crash when analyzing code containing an `automated` visibility section.
+- Analysis failure on Delphi 13.2 projects due to an unevaluatable condition in `CodeGear.Common.Targets`.
 
 ## [1.21.0] - 2026-09-04
 
