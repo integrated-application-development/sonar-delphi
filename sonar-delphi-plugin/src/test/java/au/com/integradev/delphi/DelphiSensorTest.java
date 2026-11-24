@@ -27,8 +27,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import au.com.integradev.delphi.check.MasterCheckRegistrar;
+import au.com.integradev.delphi.check.MetadataResourcePathImpl;
+import au.com.integradev.delphi.checks.CheckList;
 import au.com.integradev.delphi.core.Delphi;
+import au.com.integradev.delphi.core.DelphiFeatures;
+import au.com.integradev.delphi.core.DelphiFeatures.Feature;
+import au.com.integradev.delphi.executor.DelphiChecksExecutor;
 import au.com.integradev.delphi.executor.DelphiMasterExecutor;
+import au.com.integradev.delphi.executor.DelphiNoSonarExecutor;
+import au.com.integradev.delphi.executor.DelphiSymbolTableExecutor;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -43,11 +51,18 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.SonarEdition;
+import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.rule.RuleKey;
 
 class DelphiSensorTest {
   private final DelphiMasterExecutor executor = mock(DelphiMasterExecutor.class);
@@ -180,6 +195,54 @@ class DelphiSensorTest {
     willThrow(expectedException).given(executor).setup();
 
     assertThatThrownBy(() -> sensor.execute(mock())).isEqualTo(expectedException);
+  }
+
+  @Test
+  void testCommunityCheckReportsIssueWhenCommercialPluginOwnsSymbolPublication() {
+    setupFile(
+        "unit SourceFile;\ninterface\nimplementation\n"
+            + "procedure Run;\nbegin\n  begin\n  end;\nend;\nend.");
+
+    var ruleKey = RuleKey.of(CheckList.REPOSITORY_KEY, "EmptyBlock");
+    var activeRules = new ActiveRulesBuilder();
+    activeRules.addRule(
+        new NewActiveRule.Builder()
+            .setRuleKey(ruleKey)
+            .setName("Empty blocks should be removed")
+            .setSeverity("MAJOR")
+            .setLanguage(Delphi.KEY)
+            .build());
+    var context = SensorContextTester.create(baseDir);
+    context.setActiveRules(activeRules.build());
+    var checkRegistrar =
+        new MasterCheckRegistrar(
+            new CheckFactory(context.activeRules()),
+            new DelphiCheckRegistrar[] {new DelphiCheckRegistrar(new MetadataResourcePathImpl())});
+    var runtime =
+        SonarRuntimeImpl.forSonarQube(
+            DelphiPlugin.ISSUE_RESOLUTION_MIN_API_VERSION,
+            SonarQubeSide.SCANNER,
+            SonarEdition.ENTERPRISE);
+    var features = new DelphiFeatures(Set.of(Feature.SYMBOL_PUBLICATION));
+    var checksExecutor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, runtime);
+    var masterExecutor =
+        new DelphiMasterExecutor(
+            checksExecutor,
+            new DelphiSymbolTableExecutor(features),
+            new DelphiNoSonarExecutor(mock()));
+
+    new DelphiSensor(delphiProjectHelper, masterExecutor).execute(context);
+
+    assertThat(checksExecutor.dependencies())
+        .containsExactlyInAnyOrder(DelphiSymbolTableExecutor.class, DelphiNoSonarExecutor.class);
+    assertThat(context.allIssues())
+        .singleElement()
+        .satisfies(
+            issue -> {
+              assertThat(issue.ruleKey()).isEqualTo(ruleKey);
+              assertThat(issue.primaryLocation().message())
+                  .isEqualTo("Either remove or fill this block of code.");
+            });
   }
 
   @Test
