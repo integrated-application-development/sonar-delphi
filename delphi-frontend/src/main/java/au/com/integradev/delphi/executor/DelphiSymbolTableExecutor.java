@@ -21,6 +21,8 @@ package au.com.integradev.delphi.executor;
 import au.com.integradev.delphi.antlr.ast.visitors.SonarSymbolTableVisitor;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor;
 import au.com.integradev.delphi.antlr.ast.visitors.SymbolAssociationVisitor.Data;
+import au.com.integradev.delphi.core.DelphiFeatures;
+import au.com.integradev.delphi.core.DelphiFeatures.Feature;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 
@@ -28,15 +30,23 @@ public class DelphiSymbolTableExecutor implements Executor {
   private static final SymbolAssociationVisitor ASSOCIATE_VISITOR = new SymbolAssociationVisitor();
   private static final SonarSymbolTableVisitor SONAR_VISITOR = new SonarSymbolTableVisitor();
 
+  private final boolean publishSymbols;
+
+  public DelphiSymbolTableExecutor(DelphiFeatures features) {
+    publishSymbols = features.isEnabled(Feature.SYMBOL_PUBLICATION);
+  }
+
   @Override
   public void execute(Context context, DelphiInputFile file) {
     // Attach AST nodes to scopes, declarations, and occurrences from the symbol table.
     ASSOCIATE_VISITOR.visit(file.getAst(), new Data(context.symbolTable()));
 
-    // Provide symbol information to the Sonar API, which can be viewed in the web interface.
-    NewSymbolTable sonarSymbolTable =
-        context.sensorContext().newSymbolTable().onFile(file.getInputFile());
-    SONAR_VISITOR.visit(file.getAst(), sonarSymbolTable);
-    sonarSymbolTable.save();
+    if (publishSymbols) {
+      // Provide symbol information to the Sonar API, which can be viewed in the web interface.
+      NewSymbolTable sonarSymbolTable =
+          context.sensorContext().newSymbolTable().onFile(file.getInputFile());
+      SONAR_VISITOR.visit(file.getAst(), sonarSymbolTable);
+      sonarSymbolTable.save();
+    }
   }
 }

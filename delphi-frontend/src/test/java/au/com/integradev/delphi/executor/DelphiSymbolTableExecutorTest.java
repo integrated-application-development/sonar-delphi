@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.Delphi;
+import au.com.integradev.delphi.core.DelphiFeatures;
+import au.com.integradev.delphi.core.DelphiFeatures.Feature;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -67,7 +69,7 @@ class DelphiSymbolTableExecutorTest {
 
   private DelphiInputFile mainFile;
   private SymbolTable symbolTable;
-  private DelphiSymbolTableExecutor executor;
+  private DelphiMasterExecutor executor;
   private SensorContextTester context;
   private Set<String> unitScopeNames;
   private Map<String, String> unitAliases;
@@ -76,7 +78,8 @@ class DelphiSymbolTableExecutorTest {
 
   @BeforeEach
   void setup(@TempDir Path tempDir) {
-    executor = new DelphiSymbolTableExecutor();
+    executor =
+        new DelphiMasterExecutor(new DelphiSymbolTableExecutor(new DelphiFeatures(Set.of())));
     context = SensorContextTester.create(DelphiUtils.getResource(ROOT_PATH));
     unitScopeNames = new HashSet<>();
     unitAliases = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -91,6 +94,17 @@ class DelphiSymbolTableExecutorTest {
     verifyUsages(8, 19);
     verifyUsages(9, 14, reference(19, 15), reference(16, 2));
     verifyUsages(9, 19);
+  }
+
+  @Test
+  void testSymbolAssociationWithoutSymbolPublication() {
+    var features = new DelphiFeatures(Set.of(Feature.SYMBOL_PUBLICATION));
+    executor = new DelphiMasterExecutor(new DelphiSymbolTableExecutor(features));
+
+    execute("SimilarParameterDeclarations.pas");
+
+    assertThat(mainFile.getAst().getScope()).isNotNull();
+    assertThat(context.referencesForSymbolAt(componentKey, 6, 2)).isNull();
   }
 
   @Test

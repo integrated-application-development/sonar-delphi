@@ -20,25 +20,31 @@ package au.com.integradev.delphi.executor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.check.MasterCheckRegistrar;
 import au.com.integradev.delphi.compiler.Toolchain;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.msbuild.DelphiProjectHelper;
+import java.io.File;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.rule.RuleScope;
 import org.sonar.plugins.communitydelphi.api.ast.DelphiAst;
 import org.sonar.plugins.communitydelphi.api.check.DelphiCheck;
+import org.sonar.plugins.communitydelphi.api.token.DelphiToken;
 
 class DelphiChecksExecutorTest {
   private DelphiChecksExecutor executor;
@@ -56,6 +62,42 @@ class DelphiChecksExecutorTest {
 
     executor = new DelphiChecksExecutor(delphiProjectHelper, checkRegistrar, sonarRuntime);
     executor.setup();
+  }
+
+  @Test
+  void testRegistersNoSonarLinesBeforeRunningChecks() {
+    NoSonarFilter noSonarFilter = mock();
+    var masterExecutor =
+        new DelphiMasterExecutor(
+            executor,
+            new DelphiNoSonarExecutor(noSonarFilter),
+            mock(DelphiSymbolTableExecutor.class));
+    DelphiCheck check = mockDelphiCheck(RuleScope.ALL);
+    DelphiInputFile file = mockDelphiFile(InputFile.Type.MAIN);
+    DelphiToken markedComment = mock();
+    when(markedComment.getImage()).thenReturn("// NOSONAR");
+    when(markedComment.getBeginLine()).thenReturn(12);
+    DelphiToken otherComment = mock();
+    when(otherComment.getImage()).thenReturn("// ordinary comment");
+    when(file.getComments()).thenReturn(List.of(markedComment, otherComment));
+
+    masterExecutor.execute(mock(), file);
+
+    var order = inOrder(noSonarFilter, check);
+    order.verify(noSonarFilter).noSonarInFile(file.getInputFile(), Set.of(12));
+    order.verify(check).start(any());
+  }
+
+  @Test
+  void testSkipsChecksWhenRequiredNoSonarExecutorIsMissing() {
+    var masterExecutor = new DelphiMasterExecutor(executor, mock(DelphiSymbolTableExecutor.class));
+    DelphiCheck check = mockDelphiCheck(RuleScope.ALL);
+    DelphiInputFile file = mockDelphiFile(InputFile.Type.MAIN);
+    when(file.getSourceCodeFile()).thenReturn(new File("Source.pas"));
+
+    masterExecutor.execute(mock(), file);
+
+    verifyNoInteractions(check);
   }
 
   @Test

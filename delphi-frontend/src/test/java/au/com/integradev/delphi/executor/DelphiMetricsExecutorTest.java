@@ -21,15 +21,16 @@ package au.com.integradev.delphi.executor;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import au.com.integradev.delphi.DelphiProperties;
 import au.com.integradev.delphi.compiler.Platform;
 import au.com.integradev.delphi.core.Delphi;
+import au.com.integradev.delphi.core.DelphiFeatures;
+import au.com.integradev.delphi.core.DelphiFeatures.Feature;
 import au.com.integradev.delphi.file.DelphiFile.DelphiInputFile;
 import au.com.integradev.delphi.file.DelphiFileConfig;
 import au.com.integradev.delphi.preprocessor.DelphiPreprocessorFactory;
@@ -65,7 +66,7 @@ class DelphiMetricsExecutorTest {
 
   private static final File ROOT_DIR = DelphiUtils.getResource(ROOT_PATH);
 
-  private DelphiMetricsExecutor executor;
+  private FileLinesContextFactory fileLinesContextFactory;
   private SensorContextTester sensorContext;
   private FileLinesContext fileLinesContext;
   private ExecutorContext context;
@@ -73,11 +74,10 @@ class DelphiMetricsExecutorTest {
 
   @BeforeEach
   void setup() {
-    FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
+    fileLinesContextFactory = mock(FileLinesContextFactory.class);
     fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
-    executor = new DelphiMetricsExecutor(fileLinesContextFactory);
     sensorContext = SensorContextTester.create(ROOT_DIR);
     context = new ExecutorContext(sensorContext, mock(SymbolTable.class));
   }
@@ -145,22 +145,31 @@ class DelphiMetricsExecutorTest {
 
   @Test
   void testTestFileShouldNotReportMetrics() {
-    execute(GLOBALS_TEST, InputFile.Type.TEST);
-    checkMetricNotReported(CoreMetrics.CLASSES);
-    checkMetricNotReported(CoreMetrics.FUNCTIONS);
-    checkMetricNotReported(CoreMetrics.COMPLEXITY);
-    checkMetricNotReported(CoreMetrics.COMMENT_LINES);
-    checkMetricNotReported(CoreMetrics.STATEMENTS);
-    checkMetricNotReported(CoreMetrics.NCLOC);
-    checkMetricNotReported(CoreMetrics.COGNITIVE_COMPLEXITY);
-    verify(fileLinesContext, never()).setIntValue(any(), anyInt(), anyInt());
+    execute(GLOBALS_TEST, InputFile.Type.TEST, Set.of());
+    assertThat(sensorContext.measures(componentKey)).isEmpty();
+    verifyNoInteractions(fileLinesContextFactory, fileLinesContext);
+  }
+
+  @Test
+  void testFileMetricsCanBeReportedWithoutNclocData() {
+    execute(COMMENTS_TEST, InputFile.Type.MAIN, Set.of(Feature.NCLOC_DATA));
+    checkMetric(CoreMetrics.NCLOC, 15);
+    verifyNoInteractions(fileLinesContextFactory, fileLinesContext);
+  }
+
+  @Test
+  void testNclocDataCanBeReportedWithoutFileMetrics() {
+    execute(COMMENTS_TEST, InputFile.Type.MAIN, Set.of(Feature.FILE_METRICS));
+    checkCodeLines(Set.of(1, 3, 6, 7, 8, 11, 14, 15, 16, 17, 21, 23, 24, 38, 42), 42);
+    assertThat(sensorContext.measures(componentKey)).isEmpty();
   }
 
   private void execute(String resourcePath) {
-    execute(resourcePath, InputFile.Type.MAIN);
+    execute(resourcePath, InputFile.Type.MAIN, Set.of());
   }
 
-  private void execute(String resourcePath, InputFile.Type inputFileType) {
+  private void execute(
+      String resourcePath, InputFile.Type inputFileType, Set<Feature> disabledFeatures) {
     try {
       File resource = DelphiUtils.getResource(resourcePath);
       DelphiInputFile file =
@@ -172,6 +181,8 @@ class DelphiMetricsExecutorTest {
                   .build(),
               mockConfig());
       componentKey = file.getInputFile().key();
+      var executor =
+          new DelphiMetricsExecutor(fileLinesContextFactory, new DelphiFeatures(disabledFeatures));
       executor.execute(context, file);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -184,15 +195,12 @@ class DelphiMetricsExecutorTest {
         .isEqualTo(value);
   }
 
-  private <T extends Serializable> void checkMetricNotReported(Metric<T> metric) {
-    assertThat(sensorContext.measure(componentKey, metric)).as(metric.getDescription()).isNull();
-  }
-
   void checkCodeLines(Set<Integer> codeLines, int totalLines) {
     for (int i = 1; i <= totalLines; i++) {
       verify(fileLinesContext)
           .setIntValue(CoreMetrics.NCLOC_DATA_KEY, i, codeLines.contains(i) ? 1 : 0);
     }
+    verify(fileLinesContext).save();
   }
 
   private static DelphiFileConfig mockConfig() {
